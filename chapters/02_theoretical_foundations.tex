@@ -738,10 +738,60 @@ $\R^d$ において「有界な列は収束部分列を持つ」（Bolzano--Weie
 \end{example}
 
 %% ============================================================
-%%  2.2 Monge 問題の概要
+%%  2.2 最適割当問題と Monge 問題
 %% ============================================================
-\section{Monge 問題の概要}
+\section{最適割当問題と Monge 問題}
 \label{sec:monge-overview}
+
+%% --- 2.2.1 最適割当問題 ---
+\subsection{最適割当問題}
+\label{subsec:assignment}
+
+Monge 問題を定式化する前に，その特殊な場合である最適割当問題を導入する．
+
+\begin{definition}{置換}{permutation}
+  有限集合 $\range{n} = \{1, \ldots, n\}$ 上の\textbf{置換}（permutation）とは，
+  $\range{n}$ から $\range{n}$ への全単射 $\sigma \colon \range{n} \to \range{n}$ をいう．
+  $\range{n}$ 上のすべての置換の集合を $\Perm(n)$ と記す．
+  $\Perm(n)$ の元の個数は $n!$ である．
+\end{definition}
+
+\begin{definition}{置換行列}{permutation-matrix}
+  置換 $\sigma \in \Perm(n)$ に対して，\textbf{置換行列} $\mathbf{P}_\sigma \in \{0, 1\}^{n \times n}$ を
+  \[
+    (\mathbf{P}_\sigma)_{i,j} =
+    \begin{cases}
+      1 & j = \sigma(i), \\
+      0 & j \neq \sigma(i)
+    \end{cases}
+  \]
+  で定義する．置換行列は各行・各列にちょうど1つの $1$ を持つ行列であり，
+  $\mathbf{P}_\sigma \ones_n = \ones_n$ かつ $\mathbf{P}_\sigma^\top \ones_n = \ones_n$ を満たす．
+\end{definition}
+
+\begin{setting}{最適割当問題}{assignment}
+  コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
+  \textbf{最適割当問題}（optimal assignment problem）とは，
+  \[
+    \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^n C_{i, \sigma(i)}
+  \]
+  を求める問題である．
+  これは $n$ 個のソースと $n$ 個のターゲットの間に
+  1対1対応を見つけ，総コストを最小化する問題である．
+\end{setting}
+
+\begin{remark}{}{assignment-complexity}
+  置換の全探索は $n!$ 通りの列挙を要し，$n = 70$ でも $n! > 10^{100}$ となるため
+  実用上不可能である．
+  効率的な解法（オークションアルゴリズムやハンガリアン法など）は第3章で扱う．
+\end{remark}
+
+最適割当問題は，$n$ 個の点が等しい重み $1/n$ を持つ場合の最適輸送問題であり，
+より一般的な Monge 問題の特殊な場合と見なせる．
+
+%% --- 2.2.2 Monge 問題 ---
+\subsection{Monge 問題}
+\label{subsec:monge}
 
 最適輸送の出発点は，Monge (1781) による次の問題である：
 ソース分布 $\alpha$ をターゲット分布 $\beta$ に「移す」写像 $T$ のうち，
@@ -1126,4 +1176,329 @@ Monge 問題と Kantorovich 問題の関係を明確にしておく．
   \]
   すなわち，Wasserstein 距離は\textbf{点間の距離を確率測度の距離に自然に持ち上げる}．
 \end{example}
+
+%% ============================================================
+%%  2.5 双対問題
+%% ============================================================
+\section{双対問題}
+\label{sec:dual}
+
+Kantorovich 問題は線形計画問題であるから，線形計画の双対理論が適用できる．
+双対問題は最適輸送の理論的理解と計算手法の両面で重要な役割を果たす．
+
+%% --- 2.5.1 離散版の双対 ---
+\subsection{離散版の双対問題}
+\label{subsec:discrete-dual}
+
+\begin{definition}{双対実行可能集合}{dual-feasible}
+  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対して，
+  \textbf{Kantorovich 双対ポテンシャル}の実行可能集合を
+  \[
+    \mathbf{R}(\mathbf{C}) \defeq
+    \left\{ (\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m \;\middle|\;
+    \forall\, (i, j), \; f_i + g_j \leq C_{i,j} \right\}
+  \]
+  で定義する．ベクトル $\mathbf{f}$, $\mathbf{g}$ を\textbf{双対変数}
+  または\textbf{Kantorovich ポテンシャル}と呼ぶ．
+\end{definition}
+
+\begin{theorem}{Kantorovich 双対定理（離散版）}{kantorovich-duality-discrete}
+  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$ と
+  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対して，
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \max_{(\mathbf{f}, \mathbf{g}) \in \mathbf{R}(\mathbf{C})}
+    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+  すなわち，Kantorovich 問題（主問題）の最適値は双対問題の最適値に等しい．
+\end{theorem}
+
+\begin{proof}
+  Kantorovich 問題の主問題は
+  \[
+    \min_{\mathbf{P} \geq 0} \left\{
+    \inner{\mathbf{C}}{\mathbf{P}} \;\middle|\;
+    \mathbf{P} \ones_m = \mathbf{a}, \;
+    \mathbf{P}^\top \ones_n = \mathbf{b}
+    \right\}
+  \]
+  である．等式制約 $\mathbf{P} \ones_m = \mathbf{a}$，
+  $\mathbf{P}^\top \ones_n = \mathbf{b}$ に対するラグランジュ乗数を
+  $\mathbf{f} \in \R^n$，$\mathbf{g} \in \R^m$ とおくと，ラグランジュ関数は
+  \[
+    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
+    = \inner{\mathbf{C}}{\mathbf{P}}
+    + \inner{\mathbf{f}}{\mathbf{a} - \mathbf{P} \ones_m}
+    + \inner{\mathbf{g}}{\mathbf{b} - \mathbf{P}^\top \ones_n}
+  \]
+  となる．これを整理すると，
+  \[
+    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+    + \inner{\mathbf{C} - \mathbf{f} \ones_m^\top - \ones_n \mathbf{g}^\top}{\mathbf{P}}.
+  \]
+  $\mathbf{P} \geq 0$ のもとで $L$ を $\mathbf{P}$ について最小化すると，
+  $C_{i,j} - f_i - g_j \geq 0$（すなわち $f_i + g_j \leq C_{i,j}$）のとき
+  最小値は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ であり，
+  そうでなければ $-\infty$ となる．
+  したがって双対問題は
+  \[
+    \max_{(\mathbf{f}, \mathbf{g}) \in \mathbf{R}(\mathbf{C})}
+    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+  \]
+  となる．主問題は有界な実行可能領域を持つ線形計画であるから，
+  強双対性が成り立ち，主問題と双対問題の最適値は一致する．
+\end{proof}
+
+\begin{proposition}{主双対最適性条件}{primal-dual-optimality}
+  $\mathbf{P}^*$ と $(\mathbf{f}^*, \mathbf{g}^*)$ がそれぞれ主問題と双対問題の最適解ならば，
+  \textbf{相補性条件}（complementary slackness）
+  \[
+    P^*_{i,j} > 0 \implies f^*_i + g^*_j = C_{i,j}
+  \]
+  が成り立つ．すなわち，最適輸送計画で正の質量が輸送される経路 $(i, j)$ では，
+  双対ポテンシャルの和がコストに一致する．
+\end{proposition}
+
+\begin{proof}
+  強双対性から $\inner{\mathbf{C}}{\mathbf{P}^*}
+  = \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}$ が成り立つ．
+  主問題の制約から
+  $\inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+  = \inner{\mathbf{f}^* \ones_m^\top + \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*}$ であるから，
+  \[
+    \inner{\mathbf{C} - \mathbf{f}^* \ones_m^\top - \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*} = 0.
+  \]
+  $\mathbf{P}^* \geq 0$ かつ $C_{i,j} - f^*_i - g^*_j \geq 0$ であるから，
+  各成分の積が非負でその和が $0$ となるためには，
+  $P^*_{i,j} (C_{i,j} - f^*_i - g^*_j) = 0$ が
+  すべての $(i, j)$ で成り立たなければならない．
+\end{proof}
+
+\begin{remark}{双対問題の経済学的解釈}{dual-economic}
+  双対問題は次のように解釈できる．
+  輸送業者が，倉庫 $i$ での集荷に $f_i$，工場 $j$ への配送に $g_j$ の料金を設定し，
+  元の輸送会社に代わってすべての輸送を引き受けるとする．
+  輸送業者の収入は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ である．
+
+  輸送会社がこの契約を受け入れるためには，
+  どの経路 $(i, j)$ についても輸送業者の料金が自前の輸送コスト以下でなければならない：
+  $f_i + g_j \leq C_{i,j}$．
+  この条件のもとで輸送業者が収入を最大化する問題が双対問題であり，
+  その最適値が最適輸送コストに一致する．
+\end{remark}
+
+%% --- 2.5.2 連続版の双対 ---
+\subsection{連続版の双対問題}
+\label{subsec:continuous-dual}
+
+\begin{definition}{$c$-変換}{c-transform}
+  コスト関数 $c \colon \X \times \Y \to \R \cup \{+\infty\}$ と
+  関数 $f \colon \X \to \R \cup \{-\infty\}$ に対して，
+  $f$ の\textbf{$c$-変換}（$c$-transform）$f^c \colon \Y \to \R \cup \{-\infty\}$ を
+  \[
+    f^c(y) \defeq \inf_{x \in \X} \left[ c(x, y) - f(x) \right]
+  \]
+  で定義する．同様に，$g \colon \Y \to \R \cup \{-\infty\}$ の
+  $\bar{c}$-変換 $g^{\bar{c}} \colon \X \to \R \cup \{-\infty\}$ を
+  \[
+    g^{\bar{c}}(x) \defeq \inf_{y \in \Y} \left[ c(x, y) - g(y) \right]
+  \]
+  で定義する．関数 $f$ が $f = g^{\bar{c}}$ なる $g$ をもつとき，
+  $f$ は\textbf{$c$-凸}（$c$-convex）であるという．
+\end{definition}
+
+\begin{remark}{$c$-変換と凸共役}{c-transform-legendre}
+  $c(x, y) = \inner{x}{y}$（$\X = \Y = \R^d$）のとき，
+  $f^c(y) = \inf_x [\inner{x}{y} - f(x)]= -\sup_x [f(x) - \inner{x}{y}] = -f^*(y)$
+  となる．ここで $f^*(y) = \sup_x [\inner{x}{y} - f(x)]$ は凸解析における
+  ルジャンドル--フェンシェル変換（Legendre--Fenchel transform）である．
+  すなわち，$c$-変換はルジャンドル変換のコスト関数 $c$ への一般化である．
+\end{remark}
+
+\begin{theorem}{Kantorovich 双対定理（連続版）}{kantorovich-duality-continuous}
+  ポーランド空間 $\X, \Y$ 上の確率測度 $\alpha, \beta$ と
+  下半連続なコスト関数 $c \colon \X \times \Y \to \R_+ \cup \{+\infty\}$ に対して，
+  \[
+    \MK_c(\alpha, \beta)
+    = \sup_{\substack{f \in L^1(\alpha),\; g \in L^1(\beta) \\ f(x) + g(y) \leq c(x,y)}}
+    \int_\X f \, \d\alpha + \int_\Y g \, \d\beta.
+  \]
+  さらに，双対問題の最適解 $(f^*, g^*)$ が存在し，$g^* = {f^*}^c$ と取れる．
+\end{theorem}
+
+%% ============================================================
+%%  2.6 特殊な場合
+%% ============================================================
+\section{特殊な場合}
+\label{sec:special-cases}
+
+最適輸送は一般には計算が困難であるが，
+特定の設定では閉じた形の解や効率的な計算法が得られる．
+
+%% --- 2.6.1 1次元の場合 ---
+\subsection{1次元の場合}
+\label{subsec:one-dimensional}
+
+$\X = \Y = \R$ の場合，最適輸送には美しい閉じた形の解が存在する．
+この結果は累積分布関数と分位関数を用いて述べられる．
+
+\begin{definition}{累積分布関数}{cdf}
+  $\R$ 上の確率測度 $\alpha$ に対して，
+  \textbf{累積分布関数}（cumulative distribution function; CDF）を
+  \[
+    F_\alpha(x) \defeq \alpha((-\infty, x]) = \int_{-\infty}^x \d\alpha
+  \]
+  で定義する．$F_\alpha$ は右連続かつ単調非減少であり，
+  $\lim_{x \to -\infty} F_\alpha(x) = 0$，$\lim_{x \to +\infty} F_\alpha(x) = 1$ を満たす．
+\end{definition}
+
+\begin{definition}{分位関数}{quantile}
+  累積分布関数 $F_\alpha$ に対して，
+  \textbf{分位関数}（quantile function）または\textbf{一般化逆関数}を
+  \[
+    F_\alpha^{-1}(r) \defeq \inf \left\{ x \in \R \;\middle|\; F_\alpha(x) \geq r \right\}
+    \qquad (r \in (0, 1])
+  \]
+  で定義する．$F_\alpha$ が狭義単調増加であるとき，$F_\alpha^{-1}$ は通常の逆関数に一致する．
+\end{definition}
+
+\begin{theorem}{1次元の最適輸送}{ot-one-dimensional}
+  $\R$ 上の確率測度 $\alpha, \beta$ と $p \geq 1$ に対して，
+  \[
+    \Wass_p(\alpha, \beta)^p
+    = \int_0^1 \abs{F_\alpha^{-1}(r) - F_\beta^{-1}(r)}^p \, \d r.
+  \]
+  さらに，最適な Monge 写像は $T = F_\beta^{-1} \circ F_\alpha$ で与えられる．
+\end{theorem}
+
+\begin{remark}{}{one-dim-remark}
+  1次元では，Wasserstein 距離は分位関数の $L^p$ ノルムの差として表される．
+  この等長性は高次元では成り立たず，1次元特有の性質である．
+  最適な Monge 写像は「$\alpha$ の $r$-分位点を $\beta$ の $r$-分位点に送る」
+  という自然な対応である．
+\end{remark}
+
+\begin{example}{1次元の離散的な場合}{one-dim-discrete}
+  $\alpha = \frac{1}{n}\sum_{i=1}^n \delta_{x_i}$，
+  $\beta = \frac{1}{n}\sum_{i=1}^n \delta_{y_i}$
+  （$x_1 \leq \cdots \leq x_n$，$y_1 \leq \cdots \leq y_n$ と整列済み）のとき，
+  最適な割当は $\sigma(i) = i$（順序を保つ対応）であり，
+  \[
+    \Wass_p(\alpha, \beta)^p = \frac{1}{n} \sum_{i=1}^n \abs{x_i - y_i}^p.
+  \]
+\end{example}
+
+%% --- 2.6.2 ガウス分布の場合 ---
+\subsection{ガウス分布の場合}
+\label{subsec:gaussian}
+
+多次元ガウス分布間の $\Wass_2$ 距離には閉じた形の公式が存在する．
+
+\begin{definition}{多次元ガウス分布}{gaussian}
+  $\R^d$ 上の\textbf{ガウス分布}（Gaussian distribution）
+  $\mathcal{N}(\mathbf{m}, \mathbf{\Sigma})$ は，
+  平均ベクトル $\mathbf{m} \in \R^d$ と
+  正定値対称行列である共分散行列 $\mathbf{\Sigma} \in \R^{d \times d}$ によって定まる確率分布であり，
+  密度関数
+  \[
+    \rho(x) = \frac{1}{(2\pi)^{d/2} \det(\mathbf{\Sigma})^{1/2}}
+    \exp\!\left( -\frac{1}{2} (x - \mathbf{m})^\top \mathbf{\Sigma}^{-1} (x - \mathbf{m}) \right)
+  \]
+  を持つ．
+\end{definition}
+
+\begin{theorem}{ガウス分布間の Wasserstein 距離}{wasserstein-gaussian}
+  $\alpha = \mathcal{N}(\mathbf{m}_\alpha, \mathbf{\Sigma}_\alpha)$，
+  $\beta = \mathcal{N}(\mathbf{m}_\beta, \mathbf{\Sigma}_\beta)$ に対して，
+  \[
+    \Wass_2(\alpha, \beta)^2
+    = \norm{\mathbf{m}_\alpha - \mathbf{m}_\beta}_2^2
+    + \mathcal{B}(\mathbf{\Sigma}_\alpha, \mathbf{\Sigma}_\beta)^2
+  \]
+  が成り立つ．ここで $\mathcal{B}$ は\textbf{Bures 距離}であり，
+  \[
+    \mathcal{B}(\mathbf{\Sigma}_\alpha, \mathbf{\Sigma}_\beta)^2
+    \defeq \tr\!\left(
+    \mathbf{\Sigma}_\alpha + \mathbf{\Sigma}_\beta
+    - 2 \left( \mathbf{\Sigma}_\alpha^{1/2} \mathbf{\Sigma}_\beta \mathbf{\Sigma}_\alpha^{1/2} \right)^{1/2}
+    \right)
+  \]
+  で定義される．また，最適な Monge 写像は線形写像
+  \[
+    T(x) = \mathbf{m}_\beta + \mathbf{A}(x - \mathbf{m}_\alpha), \quad
+    \mathbf{A} = \mathbf{\Sigma}_\alpha^{-1/2}
+    \left( \mathbf{\Sigma}_\alpha^{1/2} \mathbf{\Sigma}_\beta \mathbf{\Sigma}_\alpha^{1/2} \right)^{1/2}
+    \mathbf{\Sigma}_\alpha^{-1/2}
+  \]
+  で与えられる．
+\end{theorem}
+
+\begin{remark}{}{gaussian-remark}
+  ガウス分布間の Wasserstein 距離は，平均の差のユークリッドノルムと
+  共分散行列の差を測る Bures 距離に分解される．
+  1次元（$d = 1$）では $\mathbf{\Sigma}_\alpha = \sigma_\alpha^2$，
+  $\mathbf{\Sigma}_\beta = \sigma_\beta^2$ であるから，
+  \[
+    \Wass_2(\alpha, \beta)^2 = (m_\alpha - m_\beta)^2 + (\sigma_\alpha - \sigma_\beta)^2
+  \]
+  となり，平均-標準偏差平面上のユークリッド距離に一致する．
+\end{remark}
+
+%% ============================================================
+%%  2.7 Brenier の定理
+%% ============================================================
+\section{Brenier の定理}
+\label{sec:brenier}
+
+Monge 問題と Kantorovich 問題の関係について，
+二次コストの場合に両者が同値であるという深い結果を述べる．
+
+\begin{definition}{凸関数}{convex-function}
+  $\R^d$ 上の関数 $\varphi \colon \R^d \to \R \cup \{+\infty\}$ が\textbf{凸}（convex）であるとは，
+  任意の $x, y \in \R^d$ と $t \in [0, 1]$ に対して
+  \[
+    \varphi(tx + (1-t)y) \leq t\varphi(x) + (1-t)\varphi(y)
+  \]
+  が成り立つことをいう．
+\end{definition}
+
+\begin{definition}{凸関数の勾配}{gradient-convex}
+  凸関数 $\varphi \colon \R^d \to \R$ が点 $x$ で微分可能であるとき，
+  その\textbf{勾配}（gradient）$\nabla\varphi(x) \in \R^d$ は
+  \[
+    \varphi(y) \geq \varphi(x) + \inner{\nabla\varphi(x)}{y - x}
+    \qquad (\forall\, y \in \R^d)
+  \]
+  を満たす．凸関数はほとんどいたるところ微分可能である（Rademacher の定理）．
+\end{definition}
+
+\begin{theorem}{Brenier の定理}{brenier}
+  $\alpha, \beta \in \Mm_+^1(\R^d)$ をコスト $c(x, y) = \norm{x - y}_2^2$ に対する
+  最適輸送問題の入力とする．
+  $\alpha$ がルベーグ測度に関して密度を持つ（すなわち $\alpha \ll \d x$）と仮定する．
+  このとき，以下が成り立つ：
+  \begin{enumerate}
+    \item 最適なカップリング $\pi^*$ は\textbf{一意的}であり，
+      Monge 写像によって誘導される：$\pi^* = (\operatorname{Id}, T)\pushforward \alpha$．
+    \item 最適な Monge 写像 $T$ は凸関数 $\varphi \colon \R^d \to \R$ の勾配として表される：
+      $T(x) = \nabla\varphi(x)$（$\alpha$-a.e.）．
+    \item この $\varphi$ は $\alpha$-a.e.\ の意味で一意的であり，
+      $(\nabla\varphi)\pushforward \alpha = \beta$ を満たす．
+  \end{enumerate}
+\end{theorem}
+
+\begin{remark}{}{brenier-significance}
+  Brenier の定理の意義は以下の点にある：
+  \begin{itemize}
+    \item Kantorovich 緩和が\textbf{タイト}である：
+      最適カップリングは Monge 写像のグラフ上に集中しており，
+      質量の分割は起こらない．
+    \item 最適写像が凸関数の勾配で特徴づけられるため，
+      最適輸送と\textbf{凸解析}の間に深い関係が成立する．
+    \item ソース測度 $\alpha$ が密度を持つという条件は本質的である．
+      $\alpha$ が離散測度の場合，最適な Monge 写像が存在するとは限らない
+      （\ref{subsec:monge}~節の例~\ref{ex:monge-nonexistence} を参照）．
+  \end{itemize}
+\end{remark}
 
