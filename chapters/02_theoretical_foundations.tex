@@ -1013,6 +1013,19 @@ Monge の決定論的な輸送写像 $T$ を\textbf{確率的な輸送計画}に
   はフロベニウス内積である．
 \end{setting}
 
+\begin{remark}{確率論的解釈}{probabilistic-interpretation}
+  Kantorovich 問題は確率論の言葉で次のように述べられる．
+  確率変数 $X \sim \alpha$，$Y \sim \beta$ の同時分布 $(X, Y)$ のうち，
+  周辺分布がそれぞれ $\alpha$, $\beta$ に一致するものを考えて，
+  \[
+    \MK_c(\alpha, \beta) = \inf_{\substack{(X, Y) \\ X \sim \alpha,\; Y \sim \beta}}
+    \E\bigl[c(X, Y)\bigr].
+  \]
+  すなわち，周辺分布を固定したもとでの輸送コストの期待値を最小化する問題である．
+  カップリング $\pi$ は同時分布に対応し，
+  周辺分布の制約は $X \sim \alpha$，$Y \sim \beta$ に対応する．
+\end{remark}
+
 Kantorovich 緩和が Monge の定式化より優れている理由を整理する．
 
 \begin{remark}{Kantorovich 緩和の利点}{kantorovich-advantages}
@@ -1233,6 +1246,19 @@ Monge 問題と Kantorovich 問題の関係を明確にしておく．
   \]
   すなわち，Wasserstein 距離は\textbf{点間の距離を確率測度の距離に自然に持ち上げる}．
 \end{example}
+
+\begin{proposition}{Wasserstein 距離と弱収束}{wasserstein-weak-convergence}
+  $(X, d)$ をポーランド空間，$p \geq 1$ とする．
+  確率測度の列 $(\alpha_k)_{k \geq 1} \subset \Mm_+^{1,p}(X)$ と
+  $\alpha \in \Mm_+^{1,p}(X)$ に対して，以下は同値である：
+  \begin{enumerate}
+    \item $\Wass_p(\alpha_k, \alpha) \to 0$．
+    \item $\alpha_k$ が $\alpha$ に弱収束し，
+      かつ $p$ 次モーメントが収束する：
+      $\int_X d(x, x_0)^p \, \d\alpha_k(x) \to \int_X d(x, x_0)^p \, \d\alpha(x)$．
+  \end{enumerate}
+  特に $(X, d)$ がコンパクトならば，$\Wass_p$ による収束と弱収束は同値である．
+\end{proposition}
 
 %% ============================================================
 %%  2.5 双対問題
