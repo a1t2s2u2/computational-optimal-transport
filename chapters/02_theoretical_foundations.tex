@@ -1172,8 +1172,42 @@ Monge 問題と Kantorovich 問題の関係を明確にしておく．
     \item $\Wass_p(\alpha, \beta) = \Wass_p(\beta, \alpha)$．
     \item $\Wass_p(\alpha, \gamma) \leq \Wass_p(\alpha, \beta) + \Wass_p(\beta, \gamma)$．
   \end{enumerate}
-  証明は省略する．
 \end{proposition}
+
+\begin{proof}
+  \textbf{(1) 同一性}：
+  $\alpha = \beta$ ならば $\pi = (\operatorname{Id}, \operatorname{Id})\pushforward \alpha$
+  （対角線上に集中したカップリング）が $\Couplings(\alpha, \alpha)$ の元であり，
+  $\int d(x,y)^p \, \d\pi = \int d(x,x)^p \, \d\alpha = 0$ であるから $\Wass_p(\alpha, \alpha) = 0$．
+  逆に $\Wass_p(\alpha, \beta) = 0$ ならば，最適カップリング $\pi^*$ に対して
+  $\int d(x,y)^p \, \d\pi^* = 0$ であるから，$\pi^*$ は $\{(x,y) \mid x = y\}$ 上に集中し，
+  $\alpha = (P_\X)\pushforward \pi^* = (P_\Y)\pushforward \pi^* = \beta$ が従う．
+
+  \textbf{(2) 対称性}：
+  写像 $S(x, y) = (y, x)$ による押し出しは $\Couplings(\alpha, \beta)$ と $\Couplings(\beta, \alpha)$
+  の間の全単射を与え，$d(x,y) = d(y,x)$ から $\Wass_p(\alpha, \beta) = \Wass_p(\beta, \alpha)$ が従う．
+
+  \textbf{(3) 三角不等式}：
+  $\pi_1 \in \Couplings(\alpha, \beta)$ と $\pi_2 \in \Couplings(\beta, \gamma)$ を
+  それぞれ $\Wass_p(\alpha, \beta)$ と $\Wass_p(\beta, \gamma)$ の最適カップリングとする．
+  \textbf{糊付け補題}（gluing lemma）により，
+  $\X \times \Y \times \X$ 上の測度 $\mu$ であって，
+  $(\X \times \Y)$ への周辺が $\pi_1$ に，$(\Y \times \X)$ への周辺が $\pi_2$ に
+  一致するものが存在する．
+  $(P_1, P_3)\pushforward \mu \in \Couplings(\alpha, \gamma)$
+  （$P_1, P_3$ はそれぞれ第1・第3成分への射影）を
+  $\alpha$ と $\gamma$ のカップリングとして用いると，
+  ミンコフスキーの不等式から
+  \begin{align*}
+    \Wass_p(\alpha, \gamma)
+    &\leq \left( \int d(x, z)^p \, \d\mu(x, y, z) \right)^{1/p} \\
+    &\leq \left( \int d(x, y)^p \, \d\mu(x, y, z) \right)^{1/p}
+    + \left( \int d(y, z)^p \, \d\mu(x, y, z) \right)^{1/p} \\
+    &= \Wass_p(\alpha, \beta) + \Wass_p(\beta, \gamma)
+  \end{align*}
+  が得られる．2行目では距離の三角不等式 $d(x,z) \leq d(x,y) + d(y,z)$ と
+  $L^p$ 空間のミンコフスキーの不等式を用いた．
+\end{proof}
 
 \begin{remark}{Wasserstein 距離の意義}{wasserstein-significance}
   Wasserstein 距離は，確率測度の空間に\textbf{基底空間の幾何学を反映した}距離を与える．
