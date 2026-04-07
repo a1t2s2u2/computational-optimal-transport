@@ -1,0 +1,310 @@
+\chapter{アルゴリズムの基礎}
+\label{ch:algorithmic-foundations}
+
+本章では，離散最適輸送問題を解くためのアルゴリズムを扱う．
+第2章で定式化した Kantorovich 問題の離散版
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+  \inner{\mathbf{C}}{\mathbf{P}}
+\]
+およびその双対問題を，組合せ最適化と線形計画法の手法で解くことが目標である．
+
+これらのアルゴリズムの起源は第二次世界大戦前後にまで遡る．
+Tolstoi (1930)，Hitchcock (1941)，Kantorovich (1942) による輸送問題の定式化に対し，
+Dantzig の単体法（1947）が厳密な解法を初めて与えた．
+最適輸送問題は線形計画の特殊なケースであるが，
+最小コストフロー問題と等価であるという構造を持ち，
+この構造を利用した効率的なアルゴリズムが開発されてきた．
+
+%% ============================================================
+%%  3.1 標準形への変換
+%% ============================================================
+\section{Kantorovich 問題の標準形}
+\label{sec:standard-form}
+
+Kantorovich 問題を線形計画の標準形に変換する．
+行列 $\mathbf{P} \in \R^{n \times m}$ を列ごとに並べたベクトル
+$\mathbf{p} \in \R^{nm}$（$\mathbf{p}$ の第 $i + n(j-1)$ 成分が $P_{i,j}$）を用いると，
+周辺分布の制約は
+\[
+  \mathbf{A} \mathbf{p}
+  = \begin{bmatrix} \mathbf{a} \\ \mathbf{b} \end{bmatrix},
+  \quad
+  \mathbf{A} =
+  \begin{bmatrix}
+    \ones_n^\top \otimes \Identity_m \\
+    \Identity_n \otimes \ones_m^\top
+  \end{bmatrix}
+  \in \R^{(n+m) \times nm}
+\]
+と書ける．ここで $\otimes$ はクロネッカー積である．
+コスト行列 $\mathbf{C}$ も同様にベクトル $\mathbf{c} \in \R^{nm}$ に並べると，
+Kantorovich 問題は標準形の線形計画
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
+  \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
+  \mathbf{c}^\top \mathbf{p}
+\]
+と表される．
+
+\begin{definition}{クロネッカー積}{kronecker}
+  行列 $\mathbf{A} \in \R^{p \times q}$ と $\mathbf{B} \in \R^{r \times s}$ の
+  \textbf{クロネッカー積}（Kronecker product）$\mathbf{A} \otimes \mathbf{B} \in \R^{pr \times qs}$
+  を，$(i, j)$ ブロックが $A_{i,j} \mathbf{B}$ であるブロック行列として定義する：
+  \[
+    \mathbf{A} \otimes \mathbf{B} =
+    \begin{pmatrix}
+      A_{1,1}\mathbf{B} & \cdots & A_{1,q}\mathbf{B} \\
+      \vdots & \ddots & \vdots \\
+      A_{p,1}\mathbf{B} & \cdots & A_{p,q}\mathbf{B}
+    \end{pmatrix}.
+  \]
+\end{definition}
+
+\begin{remark}{制約の冗長性}{constraint-redundancy}
+  行列 $\mathbf{A}$ の $n + m$ 本の行のうち1本は冗長である．
+  実際，最初の $n$ 行の和と残りの $m$ 行の和はいずれも $\ones_{nm}^\top$ に等しく，
+  これは $\sum_i a_i = \sum_j b_j = 1$ という条件に対応する．
+  したがって $\mathbf{A}$ の階数は $n + m - 1$ であり，
+  線形計画の基底解は最大 $n + m - 1$ 個の非零成分を持つ．
+\end{remark}
+
+%% ============================================================
+%%  3.2 輸送多面体の頂点
+%% ============================================================
+\section{輸送多面体の頂点}
+\label{sec:vertices}
+
+線形計画の最適解は実行可能領域の\textbf{頂点}（端点）で達成される．
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点の構造を理解することは，
+アルゴリズムの設計に不可欠である．
+
+\begin{definition}{二部グラフ}{bipartite-graph}
+  ソース節点の集合 $V = \{1, \ldots, n\}$ と
+  ターゲット節点の集合 $V' = \{1', \ldots, m'\}$ に対して，
+  $V$ と $V'$ の間のすべての辺 $\{(i, j') \mid i \in \range{n},\, j \in \range{m}\}$ から成る
+  グラフを\textbf{完全二部グラフ}（complete bipartite graph）と呼ぶ．
+  輸送計画 $\mathbf{P}$ の\textbf{台グラフ}（support graph）を，
+  $P_{i,j} > 0$ なる辺 $(i, j')$ から成るグラフ
+  $G(\mathbf{P}) = (V \cup V',\, S(\mathbf{P}))$ で定義する．
+\end{definition}
+
+\begin{definition}{閉路}{cycle}
+  グラフにおいて，相異なる節点 $v_1, v_2, \ldots, v_k$ と辺
+  $(v_1, v_2), (v_2, v_3), \ldots, (v_{k-1}, v_k), (v_k, v_1)$ から成る経路を
+  \textbf{閉路}（cycle）と呼ぶ．閉路を持たないグラフを\textbf{森}（forest）といい，
+  連結な森を\textbf{木}（tree）という．
+\end{definition}
+
+\begin{proposition}{頂点の木構造}{extremal-tree}
+  $\mathbf{P}$ が $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点ならば，
+  台グラフ $G(\mathbf{P})$ は閉路を持たない（すなわち森である）．
+  特に，$\mathbf{P}$ の非零成分の数は $n + m - 1$ 以下である．
+\end{proposition}
+
+\begin{proof}
+  背理法による．$\mathbf{P}$ が頂点であり，かつ $G(\mathbf{P})$ が
+  閉路 $(i_1, j_1'), (i_2, j_1'), (i_2, j_2'), \ldots, (i_k, j_k'), (i_1, j_k')$ を
+  含むと仮定する．
+
+  閉路に沿って交互に $+\varepsilon$，$-\varepsilon$ の摂動を加えた行列
+  $\mathbf{E}$ を構成する．
+  $\varepsilon > 0$ を閉路上の $\mathbf{P}$ の最小値より小さく取れば，
+  $\mathbf{Q} = \mathbf{P} + \mathbf{E}$ および $\mathbf{R} = \mathbf{P} - \mathbf{E}$ は
+  いずれも非負である．
+  $\mathbf{E}$ の各行和・各列和は $0$ であるから，
+  $\mathbf{Q}, \mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ である．
+  $\mathbf{P} = (\mathbf{Q} + \mathbf{R}) / 2$ かつ $\mathbf{Q} \neq \mathbf{P}$ であるから，
+  $\mathbf{P}$ が頂点であることに矛盾する．
+
+  $k$ 個の節点を持つ閉路のないグラフの辺数は $k - 1$ 以下であるから，
+  $n + m$ 個の節点を持つ $G(\mathbf{P})$ の辺数（$= \mathbf{P}$ の非零成分数）は
+  $n + m - 1$ 以下である．
+\end{proof}
+
+%% ============================================================
+%%  3.3 北西隅法
+%% ============================================================
+\section{北西隅法}
+\label{sec:northwest}
+
+ネットワーク単体法などの反復法を初期化するには，
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点を1つ求める必要がある．
+\textbf{北西隅法}（north-west corner rule）は，高々 $n + m$ 回の演算で
+頂点を構成する単純なヒューリスティックである．
+
+\begin{algorithm}{alg:northwest}
+  \textbf{Input:} $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$ \\
+  \textbf{Output:} $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点 $\mathbf{P}$ \\[4pt]
+  1. $i \leftarrow 1$, $j \leftarrow 1$, $r \leftarrow a_1$, $c \leftarrow b_1$ \\
+  2. \textbf{while} $i \leq n$ かつ $j \leq m$ \textbf{do}: \\
+  3. \quad $t \leftarrow \min(r, c)$, \quad $P_{i,j} \leftarrow t$ \\
+  4. \quad $r \leftarrow r - t$, \quad $c \leftarrow c - t$ \\
+  5. \quad \textbf{if} $r = 0$: $i \leftarrow i + 1$, $r \leftarrow a_i$（$i \leq n$ のとき） \\
+  6. \quad \textbf{if} $c = 0$: $j \leftarrow j + 1$, $c \leftarrow b_j$（$j \leq m$ のとき）
+\end{algorithm}
+
+\begin{example}{北西隅法の実行例}{northwest-example}
+  $\mathbf{a} = (0.2, 0.5, 0.3)$，$\mathbf{b} = (0.5, 0.1, 0.4)$ のとき：
+  \[
+    \begin{pmatrix} 0.2 & 0 & 0 \\ 0.3 & 0.1 & 0.1 \\ 0 & 0 & 0.3 \end{pmatrix}.
+  \]
+  非零成分は $5 = 3 + 3 - 1$ 個であり，
+  台グラフは閉路を持たないので，これは $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点である．
+\end{example}
+
+%% ============================================================
+%%  3.4 ネットワーク単体法
+%% ============================================================
+\section{ネットワーク単体法}
+\label{sec:network-simplex}
+
+\textbf{ネットワーク単体法}（network simplex）は，
+最適輸送問題に特化した単体法の変種であり，
+輸送多面体の頂点間を移動しながら最適解を探索する．
+以下の3つの操作を反復する．
+
+\subsection{相補的な双対変数の構成}
+\label{subsec:dual-from-primal}
+
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点 $\mathbf{P}$ が与えられたとき，
+$\mathbf{P}$ と\textbf{相補的}（complementary）な双対変数 $(\mathbf{f}, \mathbf{g})$ を求める．
+すなわち，$P_{i,j} > 0$ なるすべての $(i, j)$ に対して $f_i + g_j = C_{i,j}$ を満たす
+$(\mathbf{f}, \mathbf{g})$ を構成する．
+
+命題~\ref{prop:extremal-tree} から，$G(\mathbf{P})$ は森であり辺数は $n + m - 1$ 以下である．
+各連結成分（木）において，1つの節点の双対変数を $0$ に設定し，
+木の幅優先探索（または深さ優先探索）により残りの変数を
+$f_i + g_j = C_{i,j}$ から逐次的に定める．
+
+\subsection{最適性の判定と更新}
+
+得られた $(\mathbf{f}, \mathbf{g})$ が\textbf{双対実行可能}（$f_i + g_j \leq C_{i,j}$, $\forall i, j$）
+であれば，主双対最適性条件（命題~\ref{prop:primal-dual-optimality}）から
+$\mathbf{P}$ は最適であり，アルゴリズムは終了する．
+
+双対実行可能でない場合，$f_i + g_j > C_{i,j}$ となる辺 $(i, j')$ が存在する．
+この辺を $G(\mathbf{P})$ に追加すると，以下の2つの場合が起こりうる：
+
+\begin{enumerate}
+  \item \textbf{閉路が生じない場合}：
+    $G$ は依然として森であり，$(\mathbf{f}, \mathbf{g})$ を再計算する．
+    $\mathbf{P}$ は変更されない（退化ステップ）．
+  \item \textbf{閉路が生じる場合}：
+    閉路に沿って流量を調整する．
+    閉路上の「正方向」の辺では $P_{i,j}$ を $\theta$ だけ増加させ，
+    「負方向」の辺では $\theta$ だけ減少させる．
+    $\theta$ は負方向の辺の最小流量に等しく，
+    流量が $0$ になった辺を $G$ から除去する．
+\end{enumerate}
+
+\subsection{コストの改善}
+
+閉路が生じた場合のコストの変化は
+\[
+  \inner{\tilde{\mathbf{P}}}{\mathbf{C}} - \inner{\mathbf{P}}{\mathbf{C}}
+  = \theta (C_{i,j} - f_i - g_j) < 0
+\]
+であり，$\theta > 0$ ならばコストは厳密に減少する．
+
+\begin{remark}{計算量}{network-simplex-complexity}
+  ネットワーク単体法は多項式時間で停止することが Orlin (1997) により証明された．
+  Tarjan (1997) は効率的なデータ構造を用いて
+  $O\bigl((n+m)nm \log(n+m) \log((n+m)\norm{\mathbf{C}}_\infty)\bigr)$
+  の計算量を達成した．
+\end{remark}
+
+%% ============================================================
+%%  3.5 オークションアルゴリズム
+%% ============================================================
+\section{オークションアルゴリズム}
+\label{sec:auction}
+
+\textbf{オークションアルゴリズム}（auction algorithm）は
+Bertsekas (1981) により提案された，
+最適割当問題（$n = m$，均一重み）に特化した双対的手法である．
+
+\subsection{$\varepsilon$-相補性条件}
+
+最適割当問題（設定~\ref{set:assignment}）の最適解 $\sigma^*$ と
+最適双対変数 $\mathbf{g}^*$ は
+\[
+  C_{i, \sigma^*(i)} - g^*_{\sigma^*(i)} = \min_{j} (C_{i,j} - g^*_j)
+  \qquad (\forall\, i \in \range{n})
+\]
+を満たす（$c$-変換と相補性条件から従う）．
+
+オークションアルゴリズムはこの条件の\textbf{近似版}を用いる．
+
+\begin{definition}{$\varepsilon$-相補性条件}{epsilon-cs}
+  部分割当 $(S, \xi)$（$S \subset \range{n}$，$\xi \colon S \to \range{n}$ は単射）と
+  双対変数 $\mathbf{g} \in \R^n$ が
+  \textbf{$\varepsilon$-相補性条件}（$\varepsilon$-complementary slackness; $\varepsilon$-CS）
+  を満たすとは，すべての $i \in S$ に対して
+  \[
+    C_{i, \xi(i)} - g_{\xi(i)} \leq \varepsilon + \min_{j} (C_{i,j} - g_j)
+  \]
+  が成り立つことをいう．
+\end{definition}
+
+\subsection{アルゴリズムの更新規則}
+
+未割当の $i \notin S$ に対して，調整コスト $C_{i,j} - g_j$ の
+最小値と第2最小値を達成する添字を
+\[
+  j_i^1 \in \argmin_{j} (C_{i,j} - g_j), \qquad
+  j_i^2 \in \argmin_{j \neq j_i^1} (C_{i,j} - g_j)
+\]
+とする．以下の更新を行う：
+
+\begin{enumerate}
+  \item \textbf{$\mathbf{g}$ の更新}：
+    \[
+      g_{j_i^1} \leftarrow g_{j_i^1}
+      - \Bigl[\bigl(C_{i, j_i^2} - g_{j_i^2}\bigr) - \bigl(C_{i, j_i^1} - g_{j_i^1}\bigr) + \varepsilon\Bigr].
+    \]
+    括弧内は第2最小値と最小値の差に $\varepsilon$ を加えたものであり，常に $\geq \varepsilon > 0$ である．
+  \item \textbf{$S$ と $\xi$ の更新}：
+    $j_i^1$ に既に割当てられている $i'$（$\xi(i') = j_i^1$）があれば
+    $S$ から $i'$ を除去する．$\xi(i) = j_i^1$ として $i$ を $S$ に追加する．
+\end{enumerate}
+
+\begin{proposition}{$\varepsilon$-CS の保存}{auction-eps-cs}
+  各反復後も $\varepsilon$-CS 条件は保たれる．
+\end{proposition}
+
+\begin{proof}
+  更新前に $\varepsilon$-CS が成り立つとする．
+  更新後の双対変数を $\mathbf{g}^{\mathrm{n}}$ と書く．
+  $\mathbf{g}^{\mathrm{n}}$ は $\mathbf{g}$ から $j_i^1$ 成分のみ減少させたものであるから
+  $\mathbf{g}^{\mathrm{n}} \leq \mathbf{g}$（成分ごと）が成り立つ．
+
+  新たに追加された $i$ について，更新の定義から
+  $C_{i, j_i^1} - g^{\mathrm{n}}_{j_i^1} = \varepsilon + (C_{i, j_i^2} - g_{j_i^2})
+  = \varepsilon + \min_{j \neq j_i^1}(C_{i,j} - g_j)$ であるから，
+  $\mathbf{g}^{\mathrm{n}} \leq \mathbf{g}$ より
+  $C_{i, j_i^1} - g^{\mathrm{n}}_{j_i^1}
+  \leq \varepsilon + \min_j (C_{i,j} - g^{\mathrm{n}}_j)$ が成り立つ．
+
+  $i' \neq i$（$i' \in S$）について，割当は変わらず $\mathbf{g}^{\mathrm{n}} \leq \mathbf{g}$ であるから
+  $C_{i', \xi(i')} - g^{\mathrm{n}}_{\xi(i')}
+  = C_{i', \xi(i')} - g_{\xi(i')}
+  \leq \varepsilon + \min_j (C_{i',j} - g_j)
+  \leq \varepsilon + \min_j (C_{i',j} - g^{\mathrm{n}}_j)$ が成り立つ．
+\end{proof}
+
+\begin{proposition}{反復回数の上界}{auction-iterations}
+  オークションアルゴリズムは最大 $n \norm{\mathbf{C}}_\infty / \varepsilon$ 回の反復で停止する．
+\end{proposition}
+
+\begin{proposition}{近似最適性}{auction-suboptimality}
+  オークションアルゴリズムの出力する割当のコストは，
+  最適値に対して $n\varepsilon$ 以内の近似解である．
+\end{proposition}
+
+\begin{remark}{$\varepsilon$-スケーリング}{epsilon-scaling}
+  $\varepsilon$ を徐々に減少させる\textbf{$\varepsilon$-スケーリング}を用いると，
+  計算量は $O(n^3 \log \norm{\mathbf{C}}_\infty)$ に改善される．
+\end{remark}
