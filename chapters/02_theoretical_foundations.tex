@@ -10,7 +10,57 @@
 本節では，距離空間，測度，確率測度，コスト関数などの基本概念を定義し，
 以降の議論で用いる記法を定める．
 
-%% --- 2.1.1 距離空間 ---
+%% --- 2.1.1 基本的な記法と概念 ---
+\subsection{基本的な記法と概念}
+\label{subsec:basic-notation}
+
+\begin{definition}{非負実数の空間}{nonneg-reals}
+  $\R_+ \defeq \{x \in \R \mid x \geq 0\}$ と記す．
+  $\R_+^n$ は $n$ 次元ベクトルで全成分が非負であるものの集合を表す．
+\end{definition}
+
+\begin{definition}{凸集合}{convex-set}
+  $\R^n$ の部分集合 $S$ が\textbf{凸}（convex）であるとは，
+  任意の $x, y \in S$ と $t \in [0, 1]$ に対して
+  $tx + (1-t)y \in S$ が成り立つことをいう．
+  すなわち，$S$ の任意の2点を結ぶ線分が $S$ に含まれる．
+\end{definition}
+
+\begin{definition}{凸包}{convex-hull}
+  集合 $A \subset \R^n$ の\textbf{凸包}（convex hull）$\operatorname{conv}(A)$ とは，
+  $A$ を含む最小の凸集合をいう．
+  同値な定義として，$A$ の有限個の点の凸結合全体：
+  \[
+    \operatorname{conv}(A) = \left\{
+    \sum_{i=1}^k \lambda_i x_i \;\middle|\;
+    k \in \N,\; x_i \in A,\; \lambda_i \geq 0,\; \sum_{i=1}^k \lambda_i = 1
+    \right\}.
+  \]
+\end{definition}
+
+\begin{definition}{端点}{extreme-point}
+  凸集合 $S$ の点 $x \in S$ が\textbf{端点}（extreme point）であるとは，
+  $x = \frac{y + z}{2}$ かつ $y, z \in S$ ならば $x = y = z$ が成り立つことをいう．
+  すなわち，$x$ は $S$ の他の2点の中点としては表せない．
+\end{definition}
+
+\begin{definition}{ほとんどいたるところ}{almost-everywhere}
+  測度 $\mu$ に関して，性質 $P(x)$ が
+  \textbf{ほとんどいたるところ}（almost everywhere; a.e.）成り立つとは，
+  $P(x)$ が成り立たない点の集合 $\{x \mid \lnot P(x)\}$ が $\mu$-零集合
+  （$\mu(\{x \mid \lnot P(x)\}) = 0$）であることをいう．
+  $\mu$ がルベーグ測度の場合は単に「a.e.」と書く．
+\end{definition}
+
+\begin{definition}{下半連続}{lower-semicontinuous}
+  距離空間 $(X, d)$ 上の関数 $f \colon X \to \R \cup \{+\infty\}$ が
+  \textbf{下半連続}（lower semicontinuous）であるとは，
+  任意の $x \in X$ と $x_n \to x$ なる任意の列に対して
+  $f(x) \leq \liminf_{n \to \infty} f(x_n)$ が成り立つことをいう．
+  連続関数は下半連続であるが，逆は成り立たない．
+\end{definition}
+
+%% --- 2.1.2 距離空間 ---
 \subsection{距離空間}
 \label{subsec:metric-space}
 
@@ -377,6 +427,27 @@ $\supp(\mu)^c$ は開集合である．
   \]
   が成り立つことをいう．
 \end{definition}
+
+弱収束に関する基本的な特徴づけとして，以下の定理がある．
+
+\begin{theorem}{Portmanteau の定理}{portmanteau}
+  ポーランド空間 $X$ 上の確率測度の列 $(\mu_n)$ と確率測度 $\mu$ に対して，
+  以下は同値である：
+  \begin{enumerate}
+    \item $\mu_n$ が $\mu$ に弱収束する．
+    \item すべての閉集合 $F \subset X$ に対して
+      $\limsup_{n \to \infty} \mu_n(F) \leq \mu(F)$．
+    \item すべての開集合 $U \subset X$ に対して
+      $\liminf_{n \to \infty} \mu_n(U) \geq \mu(U)$．
+  \end{enumerate}
+\end{theorem}
+
+\begin{remark}{}{portmanteau-remark}
+  (2) と (3) は互いに補集合を取れば同値であることがわかる．
+  Portmanteau の定理は，弱収束が「閉集合上では測度が増えない」
+  「開集合上では測度が減らない」という直感的な性質と同値であることを述べている．
+  この定理は Prokhorov の定理の証明（定理~\ref{thm:prokhorov}）で用いる．
+\end{remark}
 
 弱収束する部分列を取るためには，
 測度の質量が無限遠に「逃げない」ことが必要である．
@@ -1187,7 +1258,31 @@ Monge 問題と Kantorovich 問題の関係を明確にしておく．
   \end{enumerate}
 \end{proposition}
 
+三角不等式の証明には以下の補題が必要である．
+
+\begin{proposition}{糊付け補題}{gluing-lemma}
+  ポーランド空間 $X, Y, Z$ 上の確率測度に対して，
+  $\pi_1 \in \Couplings(\alpha, \beta)$（$X \times Y$ 上）と
+  $\pi_2 \in \Couplings(\beta, \gamma)$（$Y \times Z$ 上）が与えられたとき，
+  $X \times Y \times Z$ 上の確率測度 $\mu$ であって，
+  $(X \times Y)$ への周辺分布が $\pi_1$ に，
+  $(Y \times Z)$ への周辺分布が $\pi_2$ に一致するものが存在する．
+\end{proposition}
+
 \begin{proof}
+  $\pi_1$ の $Y$ 上の条件付き分布を $\pi_1(\cdot \mid y)$，
+  $\pi_2$ の $Y$ 上の条件付き分布を $\pi_2(\cdot \mid y)$ と書くと，
+  $\mu$ を
+  \[
+    \d\mu(x, y, z) = \d\pi_1(x \mid y) \, \d\beta(y) \, \d\pi_2(z \mid y)
+  \]
+  で定義すればよい．
+  $(X \times Y)$ への周辺は $\d\pi_1(x \mid y) \d\beta(y) = \d\pi_1(x, y)$，
+  $(Y \times Z)$ への周辺は $\d\beta(y) \d\pi_2(z \mid y) = \d\pi_2(y, z)$
+  となり，所望の性質を持つ．
+\end{proof}
+
+\begin{proof}[命題~\ref{prop:wasserstein-metric} の証明]
   \textbf{(1) 同一性}：
   $\alpha = \beta$ ならば $\pi = (\operatorname{Id}, \operatorname{Id})\pushforward \alpha$
   （対角線上に集中したカップリング）が $\Couplings(\alpha, \alpha)$ の元であり，
