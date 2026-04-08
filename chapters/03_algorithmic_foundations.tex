@@ -72,7 +72,89 @@ Kantorovich 問題は標準形の線形計画
 \end{remark}
 
 %% ============================================================
-%%  3.2 輸送多面体の頂点
+%%  3.2 離散 C-変換
+%% ============================================================
+\section{離散 $C$-変換}
+\label{sec:discrete-c-transform}
+
+第2章で連続版の $c$-変換（定義~\ref{def:c-transform}）を導入した．
+ここではその離散版を定義し，双対問題を1変数の最適化に帰着させる性質を示す．
+
+\begin{definition}{離散 $C$-変換}{discrete-c-transform}
+  コスト行列 $\mathbf{C} \in \R^{n \times m}$ とベクトル $\mathbf{f} \in \R^n$ に対して，
+  $\mathbf{f}$ の\textbf{$C$-変換} $\mathbf{f}^{\,C} \in \R^m$ を
+  \[
+    (\mathbf{f}^{\,C})_j \defeq \min_{i \in \range{n}} (C_{i,j} - f_i)
+  \]
+  で定義する．同様に，$\mathbf{g} \in \R^m$ の $\bar{C}$-変換 $\mathbf{g}^{\,\bar{C}} \in \R^n$ を
+  \[
+    (\mathbf{g}^{\,\bar{C}})_i \defeq \min_{j \in \range{m}} (C_{i,j} - g_j)
+  \]
+  で定義する．
+\end{definition}
+
+$\mathbf{f}$ を固定したとき，$f_i + g_j \leq C_{i,j}$（$\forall\, i, j$）を満たす
+$\mathbf{g}$ のうち最大のものが $\mathbf{f}^{\,C}$ である．
+したがって，双対問題は $\mathbf{f}$ のみの最大化問題に帰着される：
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \max_{\mathbf{f} \in \R^n}
+  \left[ \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{f}^{\,C}}{\mathbf{b}} \right].
+\]
+この定式化は\textbf{半双対}（semi-dual）と呼ばれる．
+
+$C$-変換と $\bar{C}$-変換の交互適用には以下の性質がある．
+
+\begin{proposition}{$C$-変換の性質}{c-transform-properties}
+  以下が成り立つ（不等号はすべて成分ごと）：
+  \begin{enumerate}
+    \item \textbf{単調性の反転}：$\mathbf{f} \leq \mathbf{f}' \implies \mathbf{f}^{\,C} \geq \mathbf{f}'^{\,C}$．
+    \item \textbf{拡大性}：$\mathbf{f}^{\,C\bar{C}} \geq \mathbf{f}$，
+      $\mathbf{g}^{\,\bar{C}C} \geq \mathbf{g}$．
+    \item \textbf{冪等性}：$\mathbf{f}^{\,C\bar{C}C} = \mathbf{f}^{\,C}$．
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  \textbf{(1)}
+  $\mathbf{f} \leq \mathbf{f}'$ ならば各 $j$ に対して
+  $C_{i,j} - f_i \geq C_{i,j} - f'_i$ であるから，
+  $\min_i (C_{i,j} - f_i) \geq \min_i (C_{i,j} - f'_i)$，
+  すなわち $(\mathbf{f}^{\,C})_j \geq (\mathbf{f}'^{\,C})_j$ が成り立つ．
+
+  \textbf{(2)}
+  $C\bar{C}$-変換の定義を展開すると，
+  \[
+    (\mathbf{f}^{\,C\bar{C}})_i
+    = \min_{j} \left( C_{i,j} - (\mathbf{f}^{\,C})_j \right)
+    = \min_{j} \left( C_{i,j} - \min_{i'} (C_{i',j} - f_{i'}) \right).
+  \]
+  $-\min_{i'} (C_{i',j} - f_{i'}) \geq -(C_{i,j} - f_i) = f_i - C_{i,j}$ であるから，
+  \[
+    (\mathbf{f}^{\,C\bar{C}})_i \geq \min_{j} (C_{i,j} + f_i - C_{i,j}) = f_i.
+  \]
+  $\mathbf{g}^{\,\bar{C}C} \geq \mathbf{g}$ も同様．
+
+  \textbf{(3)}
+  $\mathbf{g} = \mathbf{f}^{\,C}$ とおくと，(2) より
+  $\mathbf{g}^{\,\bar{C}} = \mathbf{f}^{\,C\bar{C}} \geq \mathbf{f}$ が成り立つ．
+  (1) を適用すると $\mathbf{f}^{\,C\bar{C}C} \leq \mathbf{f}^{\,C}$ が得られる．
+  一方，(2) より $\mathbf{f}^{\,C\bar{C}C} \geq \mathbf{f}^{\,C}$ であるから，
+  $\mathbf{f}^{\,C\bar{C}C} = \mathbf{f}^{\,C}$ が成り立つ．
+\end{proof}
+
+\begin{remark}{}{c-transform-plateau}
+  性質 (3) は，$C$-変換と $\bar{C}$-変換を交互に適用しても
+  2回目以降は改善が得られないことを意味する．
+  すなわち，$\mathbf{f} \to \mathbf{f}^{\,C} \to \mathbf{f}^{\,C\bar{C}}
+  \to \mathbf{f}^{\,C\bar{C}C} = \mathbf{f}^{\,C} \to \cdots$
+  と停滞する．
+  したがって，$C$-変換の交互適用だけでは最適解には到達できず，
+  ネットワーク単体法やオークションアルゴリズムなどの手法が必要となる．
+\end{remark}
+
+%% ============================================================
+%%  3.3 輸送多面体の頂点
 %% ============================================================
 \section{輸送多面体の頂点}
 \label{sec:vertices}
