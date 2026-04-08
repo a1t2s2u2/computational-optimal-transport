@@ -177,6 +177,13 @@
   $\R$ 自身は有界でないためコンパクトでない．
 \end{example}
 
+\begin{definition}{全有界}{totally-bounded}
+  距離空間 $(X, d)$ の部分集合 $S$ が\textbf{全有界}（totally bounded）であるとは，
+  任意の $\varepsilon > 0$ に対して有限個の点 $x_1, \ldots, x_N \in S$ が存在して
+  $S \subset \bigcup_{i=1}^N B(x_i, \varepsilon)$ が成り立つことをいう．
+  完備距離空間では，$S$ がコンパクトであることと，$S$ が閉かつ全有界であることは同値である．
+\end{definition}
+
 \begin{definition}{可算集合}{countable}
   集合 $A$ が\textbf{可算}（countable）であるとは，
   $A$ から自然数全体 $\N$ への単射が存在することをいう．
@@ -317,12 +324,130 @@
   $\Bb(X)$ の元を\textbf{ボレル集合}（Borel set）と呼ぶ．
 \end{definition}
 
-\begin{remark}{}{borel-remark}
-  ボレル $\sigma$-代数は開集合・閉集合を含み，
-  それらの可算回の合併・交差・補集合操作で得られるすべての集合を含む．
-  $\R^d$ のボレル $\sigma$-代数 $\Bb(\R^d)$ は，
+\begin{remark}{ボレル集合の直感的理解}{borel-remark}
+  ボレル $\sigma$-代数 $\Bb(X)$ は，開集合を「種」として
+  $\sigma$-代数の操作を繰り返し適用することで得られる集合族である．
+  具体的には，以下の\textbf{ボレル階層}（Borel hierarchy）を形成する：
+  \begin{enumerate}
+    \item \textbf{出発点}：距離空間 $(X,d)$ の開集合と閉集合（$=$ 開集合の補集合）．
+    \item \textbf{$G_\delta$ 集合}：開集合の可算交差 $\bigcap_{k=1}^\infty U_k$．
+    \item \textbf{$F_\sigma$ 集合}：閉集合の可算合併 $\bigcup_{k=1}^\infty F_k$．
+    \item さらに操作を重ねて $G_{\delta\sigma}$，$F_{\sigma\delta}$，$\ldots$ と続く．
+  \end{enumerate}
+  これらすべての段階の集合を合わせたものが $\Bb(X)$ である．
+
+  直感的には，ボレル $\sigma$-代数は「開集合と閉集合を基本ブロックとして，
+  可算回の集合演算で構成できるすべての集合」の族と理解できる．
+  この族は確率や統計で扱うほぼすべての集合を含んでおり，
+  $\R^d$ のボレル $\sigma$-代数 $\Bb(\R^d)$ は
   距離空間上の確率論や測度論の標準的な枠組みとなる．
   以降，距離空間上の測度は常にボレル $\sigma$-代数に関して定義されるものとする．
+\end{remark}
+
+% --- ボレル階層の図 ---
+\begin{center}
+\begin{tikzpicture}[scale=0.85,
+    every node/.style={font=\small},
+    layer/.style={thick, rounded corners=8pt},
+  ]
+  % 最外層: B(X)
+  \draw[layer, red!50!black, fill=red!4]
+    (-5.5,-0.6) rectangle (5.5,5.8);
+  \node[anchor=north east, font=\small\bfseries, red!50!black]
+    at (5.3,5.6) {ボレル $\sigma$-代数 $\Bb(X)$};
+
+  % 第3層: Gδσ, Fσδ, ...
+  \draw[layer, orange!50!black, fill=orange!5]
+    (-4.8,-0.2) rectangle (4.8,4.9);
+  \node[anchor=north east, font=\scriptsize, orange!50!black]
+    at (4.6,4.7) {$G_{\delta\sigma},\; F_{\sigma\delta},\;\ldots$};
+
+  % 第2層左: Gδ
+  \draw[layer, blue!40!black, fill=blue!6]
+    (-4.6,2.1) rectangle (-0.3,4.2);
+  \node[font=\small\bfseries, blue!40!black] at (-2.45,3.75) {$G_\delta$ 集合};
+  \node[font=\scriptsize] at (-2.45,3.2) {開集合の可算交差};
+  \node[font=\scriptsize, gray!70!black] at (-2.45,2.7) {例: 無理数の集合};
+
+  % 第2層右: Fσ
+  \draw[layer, green!40!black, fill=green!6]
+    (0.3,2.1) rectangle (4.6,4.2);
+  \node[font=\small\bfseries, green!40!black] at (2.45,3.75) {$F_\sigma$ 集合};
+  \node[font=\scriptsize] at (2.45,3.2) {閉集合の可算合併};
+  \node[font=\scriptsize, gray!70!black] at (2.45,2.7) {例: $\Q$（有理数全体）};
+
+  % 第1層左: 開集合
+  \draw[layer, blue!60!black, fill=blue!12]
+    (-4.6,0.1) rectangle (-0.3,1.8);
+  \node[font=\small\bfseries, blue!60!black] at (-2.45,1.35) {開集合};
+  \node[font=\scriptsize, gray!70!black] at (-2.45,0.75) {例: 開区間 $(a,b)$};
+
+  % 第1層右: 閉集合
+  \draw[layer, green!60!black, fill=green!12]
+    (0.3,0.1) rectangle (4.6,1.8);
+  \node[font=\small\bfseries, green!60!black] at (2.45,1.35) {閉集合};
+  \node[font=\scriptsize, gray!70!black] at (2.45,0.75) {例: $[a,b]$，$\{x\}$};
+
+  % 包含関係の矢印
+  \draw[-{Stealth}, thick, blue!50!black]
+    (-2.45,1.8) -- (-2.45,2.1);
+  \draw[-{Stealth}, thick, green!50!black]
+    (2.45,1.8) -- (2.45,2.1);
+
+  % 補集合の関係
+  \draw[<->, densely dashed, gray!60!black]
+    (-0.3,0.95) -- (0.3,0.95)
+    node[midway, above, font=\scriptsize] {補集合};
+  \draw[<->, densely dashed, gray!60!black]
+    (-0.3,3.15) -- (0.3,3.15)
+    node[midway, above, font=\scriptsize] {補集合};
+\end{tikzpicture}
+\end{center}
+
+\begin{example}{$\R$ のボレル集合の具体例}{borel-examples}
+  実数直線 $\R$ 上で，ボレル集合の具体例をボレル階層に沿って示す．
+
+  \textbf{（1）開集合と閉集合（出発点）}
+
+  開区間 $(a,b)$ や開集合の合併 $(0,1) \cup (2,3)$ は開集合であり，
+  閉区間 $[a,b]$ や一点集合 $\{x\}$ は閉集合である．
+  これらはすべてボレル集合である．
+
+  \textbf{（2）$F_\sigma$ 集合：閉集合の可算合併}
+
+  有理数全体の集合 $\Q$ を考える．各有理数 $q_k$ に対して
+  一点集合 $\{q_k\}$ は閉集合であるから，
+  \[
+    \Q = \bigcup_{k=1}^{\infty} \{q_k\}
+  \]
+  は閉集合の可算合併であり，$F_\sigma$ 集合，したがってボレル集合である．
+  ただし $\Q$ 自身は開集合でも閉集合でもない．
+
+  \textbf{（3）$G_\delta$ 集合：開集合の可算交差}
+
+  無理数全体の集合 $\R \setminus \Q$ は $\Q$ の補集合である．
+  $\Q$ が $F_\sigma$ 集合であるから，その補集合 $\R \setminus \Q$ は $G_\delta$ 集合であり，
+  \[
+    \R \setminus \Q
+    = \bigcap_{k=1}^{\infty} (\R \setminus \{q_k\})
+  \]
+  と表せる．各 $\R \setminus \{q_k\}$ は開集合であり，
+  その可算交差として $G_\delta$ 集合，したがってボレル集合である．
+
+  \textbf{（4）その他の典型的なボレル集合}
+
+  半開区間 $[a,b) = \bigcap_{n=1}^{\infty} (a - 1/n,\, b)$ は
+  開集合の可算交差（$G_\delta$ 集合）としてボレル集合である．
+  カントール集合は閉集合であるからボレル集合である．
+\end{example}
+
+\begin{remark}{ボレル集合でない集合}{non-borel}
+  ボレル $\sigma$-代数 $\Bb(X)$ は巨大な集合族であるが，
+  $X$ のべき集合 $2^X$ と一致するとは限らない．
+  実際，$\Bb(\R) \subsetneq 2^\R$ であり，
+  ボレル集合でない $\R$ の部分集合が（選択公理のもとで）存在することが知られている．
+  しかし，確率や統計，最適輸送で自然に現れる集合は
+  ほぼすべてボレル集合であるため，実用上は $\Bb(X)$ で十分である．
 \end{remark}
 
 %% --- 2.1.4 測度と確率測度 ---
