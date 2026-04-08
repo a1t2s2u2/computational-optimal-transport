@@ -94,7 +94,14 @@ Kantorovich 問題は標準形の線形計画
 \end{definition}
 
 $\mathbf{f}$ を固定したとき，$f_i + g_j \leq C_{i,j}$（$\forall\, i, j$）を満たす
-$\mathbf{g}$ のうち最大のものが $\mathbf{f}^{\,C}$ である．
+$\mathbf{g}$ のうち成分ごとに最大のものが $\mathbf{f}^{\,C}$ である．
+実際，$f_i + g_j \leq C_{i,j}$ がすべての $i$ で成り立つことは
+$g_j \leq \min_i (C_{i,j} - f_i) = (\mathbf{f}^{\,C})_j$ と同値であるから，
+制約を満たす最大の $g_j$ は $(\mathbf{f}^{\,C})_j$ に他ならない．
+さらに，任意の実行可能な $(\mathbf{f}, \mathbf{g})$ に対して
+$\mathbf{g} \leq \mathbf{f}^{\,C}$ であるから
+$\inner{\mathbf{g}}{\mathbf{b}} \leq \inner{\mathbf{f}^{\,C}}{\mathbf{b}}$
+（$\mathbf{b} \geq 0$ による）が成り立つ．
 したがって，双対問題は $\mathbf{f}$ のみの最大化問題に帰着される：
 \[
   \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
@@ -284,12 +291,23 @@ $\mathbf{P}$ は最適であり，アルゴリズムは終了する．
 
 \subsection{コストの改善}
 
-閉路が生じた場合のコストの変化は
+閉路が生じた場合にコストが改善されることを示す．
+閉路を $(i_1, j_1'), (j_1', i_2), (i_2, j_2'), \ldots, (i_l, j_l'), (j_l', i_1)$ と書き，
+$i_1 = i$，$j_1 = j$（追加した辺）とする．
+更新後の $\tilde{\mathbf{P}}$ は正方向の辺で $\theta$ 増加，負方向の辺で $\theta$ 減少するから，
 \[
   \inner{\tilde{\mathbf{P}}}{\mathbf{C}} - \inner{\mathbf{P}}{\mathbf{C}}
-  = \theta (C_{i,j} - f_i - g_j) < 0
+  = \theta \left( \sum_{k=1}^l C_{i_k, j_k} - \sum_{k=1}^l C_{i_{k+1}, j_k} \right).
 \]
-であり，$\theta > 0$ ならばコストは厳密に減少する．
+$(\mathbf{f}, \mathbf{g})$ は $\mathbf{P}$ に相補的であるから，
+既存の辺 $(i_k, j_k')$（$k \geq 2$）と $(i_{k+1}, j_k')$ について
+$f_{i_k} + g_{j_k} = C_{i_k, j_k}$ および $f_{i_{k+1}} + g_{j_k} = C_{i_{k+1}, j_k}$ が成り立つ．
+これらを代入すると，差は打ち消し合い
+\[
+  \sum_{k=1}^l C_{i_k, j_k} - \sum_{k=1}^l C_{i_{k+1}, j_k} = C_{i,j} - (f_i + g_j)
+\]
+が得られる．$(i, j)$ は $f_i + g_j > C_{i,j}$ なる辺として選ばれたから，
+$C_{i,j} - (f_i + g_j) < 0$ であり，$\theta > 0$ ならばコストは厳密に減少する．
 
 \begin{remark}{計算量}{network-simplex-complexity}
   ネットワーク単体法は多項式時間で停止することが Orlin (1997) により証明された．
@@ -381,10 +399,48 @@ Bertsekas (1981) により提案された，
   オークションアルゴリズムは最大 $n \norm{\mathbf{C}}_\infty / \varepsilon$ 回の反復で停止する．
 \end{proposition}
 
+\begin{proof}
+  アルゴリズムが $T > n\norm{\mathbf{C}}_\infty / \varepsilon$ 回反復して停止しないと仮定する．
+  すると，$\xi$ の像に入っていない添字 $j$（一度も割当先にならなかった）が存在し，
+  $g_j = 0$ のままである．
+  一方，ある添字 $j'$ が $n$ 回以上更新されたとすると，
+  各更新で $g_{j'}$ は少なくとも $\varepsilon$ 減少するから
+  $g_{j'} \leq -n\varepsilon < -\norm{\mathbf{C}}_\infty$ となる．
+  このとき，任意の $i$ に対して
+  $C_{i,j'} - g_{j'} > \norm{\mathbf{C}}_\infty + \norm{\mathbf{C}}_\infty
+  \geq C_{i,j} + \norm{\mathbf{C}}_\infty > C_{i,j} - g_j$ であるから，
+  $j'$ が $j_i^1 = \argmin_j (C_{i,j} - g_j)$ となることはない．
+  これは $j'$ がさらに更新されることに矛盾する．
+  したがって，各添字の更新回数は $\norm{\mathbf{C}}_\infty / \varepsilon$ 以下であり，
+  全体の反復回数は $n\norm{\mathbf{C}}_\infty / \varepsilon$ 以下である．
+\end{proof}
+
 \begin{proposition}{近似最適性}{auction-suboptimality}
   オークションアルゴリズムの出力する割当のコストは，
   最適値に対して $n\varepsilon$ 以内の近似解である．
 \end{proposition}
+
+\begin{proof}
+  最適割当を $\sigma^*$，最適双対変数を $\mathbf{g}^*$ とし，最適値を
+  $t^* = \sum_i C_{i,\sigma^*(i)} = \sum_i \min_j (C_{i,j} - g^*_j) + \sum_j g^*_j$
+  と書く．
+  アルゴリズム終了時の割当 $\xi$ と双対変数 $\mathbf{g}$ に対して，
+  $\mathbf{g}$ の双対実行可能性（$\mathbf{g} \leq \mathbf{g}^*$ の意味での劣最適性）から
+  \[
+    t^* \geq \sum_i \min_j (C_{i,j} - g_j) + \sum_j g_j.
+  \]
+  $\varepsilon$-CS 条件 $C_{i,\xi(i)} - g_{\xi(i)} \leq \varepsilon + \min_j (C_{i,j} - g_j)$ を用いると，
+  \[
+    \sum_i \min_j (C_{i,j} - g_j)
+    \geq \sum_i \left( C_{i,\xi(i)} - g_{\xi(i)} - \varepsilon \right).
+  \]
+  $\xi$ は全単射であるから $\sum_i g_{\xi(i)} = \sum_j g_j$ が成り立ち，
+  \[
+    t^* \geq \sum_i C_{i,\xi(i)} - n\varepsilon.
+  \]
+  一方 $\sum_i C_{i,\xi(i)} \geq t^*$（$\xi$ は一般に最適でないから）より，
+  $t^* \leq \sum_i C_{i,\xi(i)} \leq t^* + n\varepsilon$ が得られる．
+\end{proof}
 
 \begin{remark}{$\varepsilon$-スケーリング}{epsilon-scaling}
   $\varepsilon$ を徐々に減少させる\textbf{$\varepsilon$-スケーリング}を用いると，
