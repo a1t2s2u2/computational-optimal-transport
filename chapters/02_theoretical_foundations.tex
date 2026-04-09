@@ -1299,6 +1299,35 @@ Monge 問題と Kantorovich 問題の関係を明確にしておく．
   特に $(X, d)$ がコンパクトならば，$\Wass_p$ による収束と弱収束は同値である．
 \end{proposition}
 
+\begin{remark}{$\Wass_\infty$ 距離}{wasserstein-infinity}
+  $p \to \infty$ の極限として，\textbf{$\Wass_\infty$ 距離}を
+  \[
+    \Wass_\infty(\alpha, \beta) \defeq
+    \inf_{\pi \in \Couplings(\alpha, \beta)}
+    \sup_{(x,y) \in \supp(\pi)} d(x, y)
+  \]
+  で定義する（より正確には $\pi$ に関する本質的上限を取る）．
+  $\Wass_\infty$ は台の間の Hausdorff 距離と関連するが，
+  有限 $p$ の場合と異なり非凸最適化問題となる．
+\end{remark}
+
+\begin{remark}{平行移動の分解}{translation-decomposition}
+  $X = \R^d$，$c(x,y) = \norm{x - y}_2^2$ のとき，
+  確率測度 $\alpha$ の\textbf{平均}を
+  $\bar{x}_\alpha \defeq \int_{\R^d} x \, \d\alpha(x)$
+  と定め，$\tilde{\alpha}$ を $\alpha$ を平均が原点になるよう平行移動した測度とする．
+  すなわち，$\tilde{\alpha} \defeq (x \mapsto x - \bar{x}_\alpha)\pushforward \alpha$ とすると，
+  \[
+    \Wass_2(\alpha, \beta)^2
+    = \Wass_2(\tilde{\alpha}, \tilde{\beta})^2
+    + \norm{\bar{x}_\alpha - \bar{x}_\beta}_2^2
+  \]
+  が成り立つ．Wasserstein 距離は「平均の差」と「平均を揃えた後の分布形状の差」に
+  直交分解される．
+  この分解はガウス分布の場合（定理~\ref{thm:wasserstein-gaussian}）の
+  平均項と Bures 距離項への分解の一般化である．
+\end{remark}
+
 %% ============================================================
 %%  2.5 双対問題
 %% ============================================================
@@ -1509,6 +1538,19 @@ $c$-変換により，双対問題を2つの関数 $(f, g)$ ではなく
   さらに，双対問題の最適解 $(f^*, g^*)$ が存在し，$g^* = {f^*}^c$ と取れる．
 \end{theorem}
 
+\begin{remark}{制約なし双対}{unconstrained-dual}
+  $c$-変換を用いると，双対問題を $f$ のみの制約なし最適化として書き直せる：
+  \[
+    \MK_c(\alpha, \beta)
+    = \sup_{f}
+    \left\{
+    \int_\X f \, \d\alpha + \int_\Y f^c \, \d\beta
+    \right\}.
+  \]
+  制約 $f(x) + g(y) \leq c(x, y)$ は $g = f^c$ と置くことで自動的に満たされる．
+  この定式化はエントロピー正則化（第4章）や半離散最適輸送の計算において重要な役割を果たす．
+\end{remark}
+
 %% ============================================================
 %%  2.6 特殊な場合
 %% ============================================================
@@ -1518,7 +1560,29 @@ $c$-変換により，双対問題を2つの関数 $(f, g)$ ではなく
 最適輸送は一般には計算が困難であるが，
 特定の設定では閉じた形の解や効率的な計算法が得られる．
 
-%% --- 2.6.1 1次元の場合 ---
+%% --- 2.6.1 全変動距離との関係 ---
+\subsection{全変動距離との関係}
+\label{subsec:total-variation}
+
+コスト関数の選び方によって，最適輸送コストは既知の確率分布間の距離と一致する．
+
+\begin{remark}{Kronecker コスト関数と全変動}{kronecker-tv}
+  有限集合 $X = \{x_1, \ldots, x_n\}$ 上の2つのヒストグラム
+  $\mathbf{a}, \mathbf{b} \in \simplex_n$ を考える．
+  コスト行列を $C_{i,j} = 1 - \delta_{i,j}$
+  （$i = j$ のとき $0$，$i \neq j$ のとき $1$）と取ると，
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \frac{1}{2}\norm{\mathbf{a} - \mathbf{b}}_1
+    = \frac{1}{2}\sum_{i=1}^n \abs{a_i - b_i}.
+  \]
+  右辺は\textbf{全変動距離}（total variation distance）に等しい．
+  すなわち，移動先を区別しないコスト（同じ場所なら $0$，異なれば $1$）のもとでの
+  最適輸送コストは，どれだけの質量を「動かす必要があるか」のみを測り，
+  基底空間の幾何学的構造は反映しない．
+\end{remark}
+
+%% --- 2.6.2 1次元の場合 ---
 \subsection{1次元の場合}
 \label{subsec:one-dimensional}
 
@@ -1733,5 +1797,20 @@ Monge 問題と Kantorovich 問題の関係について，
       $\alpha$ が離散測度の場合，最適な Monge 写像が存在するとは限らない
       （\ref{subsec:monge}~節の例~\ref{ex:monge-nonexistence} を参照）．
   \end{itemize}
+\end{remark}
+
+\begin{remark}{Monge--Amp\`{e}re 方程式}{monge-ampere}
+  $\alpha, \beta$ がともに密度 $\rho_\alpha, \rho_\beta$ を持つとき，
+  Brenier の定理における凸関数 $\varphi$ は
+  \textbf{Monge--Amp\`{e}re 方程式}
+  \[
+    \det(\partial^2 \varphi(x)) \, \rho_\beta(\nabla\varphi(x)) = \rho_\alpha(x)
+  \]
+  を満たす．ここで $\partial^2 \varphi(x) \in \R^{d \times d}$ は $\varphi$ のヘッセ行列である．
+  これは変位 $\varphi = \frac{\norm{\cdot}^2}{2} + \varepsilon\psi$ が小さいとき
+  $\det(\partial^2\varphi) \approx 1 + \varepsilon\Delta\psi$ と線形化されることから，
+  Monge--Amp\`{e}re 作用素は非線形の退化ラプラシアンとみなせる．
+  一般の測度に対しては古典的な意味の解が存在しないため，
+  Alexandrov 解の枠組みが必要となる．
 \end{remark}
 
