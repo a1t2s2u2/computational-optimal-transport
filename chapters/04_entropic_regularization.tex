@@ -1,0 +1,355 @@
+\chapter{エントロピー正則化}
+\label{ch:entropic}
+
+第3章で扱った古典的アルゴリズム（ネットワーク単体法，オークションアルゴリズム）は
+厳密解を与えるが，問題サイズが大きくなると計算コストが高い．
+\textbf{エントロピー正則化}（entropic regularization）は，
+最適輸送問題にエントロピー項を加えることで問題を厳密に凸化し，
+行列スケーリングの反復（Sinkhorn アルゴリズム）で効率的に近似解を得る手法である．
+この手法は GPU 並列化と相性が良く，
+大規模な最適輸送の計算を実用的にした鍵となる技術である．
+
+%% ============================================================
+%%  4.1 エントロピー正則化
+%% ============================================================
+\section{エントロピー正則化}
+\label{sec:entropic-reg}
+
+\begin{definition}{離散エントロピー}{discrete-entropy}
+  行列 $\mathbf{P} \in \R_+^{n \times m}$ の\textbf{離散エントロピー}（discrete entropy）を
+  \[
+    \Hb(\mathbf{P}) \defeq - \sum_{i,j} P_{i,j} (\log P_{i,j} - 1)
+  \]
+  で定義する．ただし $0 \log 0 = 0$ と約束する．
+  $P_{i,j} < 0$ となる成分が存在する場合は $\Hb(\mathbf{P}) = -\infty$ と定める．
+\end{definition}
+
+$\Hb$ は厳密凹関数であり，そのヘッセ行列は
+$\partial^2 \Hb(\mathbf{P}) = -\diag(1/P_{i,j})$ である．
+
+\begin{setting}{正則化された最適輸送}{regularized-ot}
+  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$，
+  コスト行列 $\mathbf{C} \in \R_+^{n \times m}$，
+  および正則化パラメータ $\varepsilon > 0$ に対して，
+  \textbf{エントロピー正則化された最適輸送問題}を
+  \[
+    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    \defeq
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+  \]
+  で定義する．
+  目的関数は $\varepsilon$-強凸であるから，最適解 $\mathbf{P}_\varepsilon$ は一意的に存在する．
+\end{setting}
+
+\begin{remark}{$\varepsilon$ の役割}{epsilon-role}
+  正則化パラメータ $\varepsilon$ は以下のように2つの極限を補間する：
+  \begin{itemize}
+    \item $\varepsilon \to 0$ のとき，$\mathbf{P}_\varepsilon$ は
+      非正則化問題 $\MKD_{\mathbf{C}}$ の最適解のうち
+      エントロピーが最大のものに収束する．
+    \item $\varepsilon \to +\infty$ のとき，$\mathbf{P}_\varepsilon$ は
+      積測度 $\mathbf{a} \mathbf{b}^\top$ に収束する
+      （ソースとターゲットを独立に結合するカップリング）．
+  \end{itemize}
+\end{remark}
+
+\subsection{KL ダイバージェンスによる定式化}
+
+\begin{definition}{Kullback--Leibler ダイバージェンス}{kl-divergence}
+  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  \textbf{KL ダイバージェンス}（Kullback--Leibler divergence）を
+  \[
+    \KLD(\mathbf{P} \| \mathbf{K})
+    \defeq \sum_{i,j} \left(
+    P_{i,j} \log \frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}
+    \right)
+  \]
+  で定義する．$\KLD(\mathbf{P} \| \mathbf{K}) \geq 0$ であり，
+  等号は $\mathbf{P} = \mathbf{K}$ のときかつそのときに限る．
+\end{definition}
+
+\begin{definition}{Gibbs カーネル}{gibbs-kernel}
+  コスト行列 $\mathbf{C}$ と正則化パラメータ $\varepsilon > 0$ に対して，
+  \textbf{Gibbs カーネル}を
+  \[
+    K_{i,j} \defeq e^{-C_{i,j}/\varepsilon}
+  \]
+  で定義する．$\varepsilon$ が小さいほど，コストが大きい成分は
+  指数的に小さくなる．
+\end{definition}
+
+Gibbs カーネルを用いると，正則化問題は KL 射影として書き直せる：
+\[
+  \mathbf{P}_\varepsilon
+  = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+  \KLD(\mathbf{P} \| \mathbf{K}).
+\]
+すなわち，$\mathbf{P}_\varepsilon$ は Gibbs カーネル $\mathbf{K}$ から
+カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ への KL 射影である．
+
+%% ============================================================
+%%  4.2 Sinkhorn アルゴリズム
+%% ============================================================
+\section{Sinkhorn アルゴリズム}
+\label{sec:sinkhorn}
+
+\subsection{最適解の構造}
+
+\begin{proposition}{スケーリング形式}{scaling-form}
+  正則化問題の最適解 $\mathbf{P}_\varepsilon$ は
+  \[
+    (P_\varepsilon)_{i,j} = u_i \, K_{i,j} \, v_j
+  \]
+  の形で表される．ここで $\mathbf{u} \in \R_{+}^n$，$\mathbf{v} \in \R_{+}^m$ は
+  正のスケーリングベクトルである．
+  行列形式では $\mathbf{P}_\varepsilon = \diag(\mathbf{u}) \, \mathbf{K} \, \diag(\mathbf{v})$ と書ける．
+\end{proposition}
+
+\begin{proof}
+  ラグランジュ関数を
+  \[
+    \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})
+    = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+    - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
+    - \inner{\mathbf{g}}{\mathbf{P}^\top \ones_n - \mathbf{b}}
+  \]
+  とおく．$P_{i,j} > 0$（エントロピー項が $P_{i,j} = 0$ を排除する）における
+  一次条件 $\partial \mathcal{L} / \partial P_{i,j} = 0$ は
+  \[
+    C_{i,j} + \varepsilon \log P_{i,j} - f_i - g_j = 0
+  \]
+  であり，これを解くと
+  $P_{i,j} = e^{f_i/\varepsilon} \, e^{-C_{i,j}/\varepsilon} \, e^{g_j/\varepsilon}
+  = u_i \, K_{i,j} \, v_j$
+  が得られる．ここで $u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ とおいた．
+\end{proof}
+
+\subsection{Sinkhorn の反復}
+
+周辺分布の制約 $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$
+にスケーリング形式を代入すると，
+\[
+  \mathbf{u} \odot (\mathbf{K} \mathbf{v}) = \mathbf{a}, \qquad
+  \mathbf{v} \odot (\mathbf{K}^\top \mathbf{u}) = \mathbf{b}
+\]
+が得られる（$\odot$ はアダマール積）．
+Sinkhorn アルゴリズムは，この2つの条件を\textbf{交互}に満たすよう
+$\mathbf{u}$ と $\mathbf{v}$ を更新する．
+
+\begin{algorithm}{alg:sinkhorn}
+  \textbf{Input:} $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$,
+  $\mathbf{K} = e^{-\mathbf{C}/\varepsilon}$, 反復回数 $L$ \\
+  \textbf{Output:} スケーリングベクトル $\mathbf{u}, \mathbf{v}$ \\[4pt]
+  1. $\mathbf{v}^{(0)} \leftarrow \ones_m$ \\
+  2. \textbf{for} $\ell = 0, 1, \ldots, L-1$ \textbf{do}: \\
+  3. \quad $\mathbf{u}^{(\ell+1)} \leftarrow \mathbf{a} \oslash (\mathbf{K} \mathbf{v}^{(\ell)})$ \\
+  4. \quad $\mathbf{v}^{(\ell+1)} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top \mathbf{u}^{(\ell+1)})$ \\[4pt]
+  ここで $\oslash$ は成分ごとの除算を表す．
+\end{algorithm}
+
+各反復は行列ベクトル積 $\mathbf{K}\mathbf{v}$ および $\mathbf{K}^\top \mathbf{u}$ を
+計算するだけであり，$O(nm)$ の計算量で済む．
+
+\begin{remark}{Bregman 射影としての解釈}{bregman-projection}
+  Sinkhorn の各ステップは，KL ダイバージェンスに関する交互射影と解釈できる．
+  すなわち，
+  \begin{align*}
+    \mathbf{P}^{(\ell+1/2)}
+      &= \argmin_{\mathbf{P}\ones_m = \mathbf{a}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell)}),
+    \\
+    \mathbf{P}^{(\ell+1)}
+      &= \argmin_{\mathbf{P}^\top \ones_n = \mathbf{b}}
+      \KLD(\mathbf{P} \| \mathbf{P}^{(\ell+1/2)})
+  \end{align*}
+  であり，行制約と列制約への KL 射影を交互に行うことに対応する．
+\end{remark}
+
+\begin{remark}{GPU 並列化}{gpu-parallelization}
+  複数の入力対 $(\mathbf{a}_1, \mathbf{b}_1), \ldots, (\mathbf{a}_N, \mathbf{b}_N)$ に対して
+  同一コスト行列 $\mathbf{C}$ のもとでの計算は，
+  行列 $\mathbf{A} = [\mathbf{a}_1, \ldots, \mathbf{a}_N]$，
+  $\mathbf{B} = [\mathbf{b}_1, \ldots, \mathbf{b}_N]$ を用いて
+  \[
+    \mathbf{U}^{(\ell+1)} = \mathbf{A} \oslash (\mathbf{K} \mathbf{V}^{(\ell)}), \qquad
+    \mathbf{V}^{(\ell+1)} = \mathbf{B} \oslash (\mathbf{K}^\top \mathbf{U}^{(\ell+1)})
+  \]
+  と行列--行列積でバッチ化でき，GPU 上で効率的に実行できる．
+\end{remark}
+
+%% ============================================================
+%%  4.3 収束性
+%% ============================================================
+\section{収束性}
+\label{sec:sinkhorn-convergence}
+
+Sinkhorn アルゴリズムの収束は Hilbert 射影距離を用いて解析される．
+
+\begin{definition}{Hilbert 射影距離}{hilbert-metric}
+  正ベクトル $\mathbf{u}, \mathbf{u}' \in \R_{++}^n$ に対して，
+  \textbf{Hilbert 射影距離}（Hilbert projective metric）を
+  \[
+    \mathrm{Hilbert}(\mathbf{u}, \mathbf{u}')
+    \defeq \log \max_{i,j} \frac{u_i \, u'_j}{u_j \, u'_i}
+  \]
+  で定義する．$\mathrm{Hilbert}(\mathbf{u}, \mathbf{u}') = 0$ は
+  $\mathbf{u}$ と $\mathbf{u}'$ が定数倍の関係にあることと同値である．
+  これは射影空間 $\R_{++}^n / {\sim}$ 上の距離となる．
+\end{definition}
+
+\begin{theorem}{Birkhoff の縮小定理}{birkhoff-contraction}
+  正行列 $\mathbf{K} \in \R_{++}^{n \times m}$ に対して，
+  \[
+    \mathrm{Hilbert}(\mathbf{K}\mathbf{v}, \mathbf{K}\mathbf{v}')
+    \leq \lambda(\mathbf{K}) \, \mathrm{Hilbert}(\mathbf{v}, \mathbf{v}')
+  \]
+  が成り立つ．ここで $\lambda(\mathbf{K}) \in [0, 1)$ は
+  \textbf{Birkhoff 縮小率}であり，
+  \[
+    \lambda(\mathbf{K}) = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1}, \qquad
+    \eta(\mathbf{K}) = \max_{i,j,k,\ell}
+    \frac{K_{i,k} \, K_{j,\ell}}{K_{j,k} \, K_{i,\ell}}
+  \]
+  で定義される．Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ に対しては
+  $\eta(\mathbf{K}) = e^{2\norm{\mathbf{C}}_\infty / \varepsilon}$ であり，
+  $\varepsilon$ が大きいほど $\lambda(\mathbf{K})$ は小さくなる（収束が速い）．
+\end{theorem}
+
+\begin{proposition}{Sinkhorn の線形収束}{sinkhorn-convergence}
+  Sinkhorn アルゴリズムのスケーリングベクトルは，
+  Hilbert 距離の意味で最適スケーリング $(\mathbf{u}^*, \mathbf{v}^*)$ に線形収束する：
+  \[
+    \mathrm{Hilbert}(\mathbf{u}^{(\ell)}, \mathbf{u}^*)
+    = O(\lambda(\mathbf{K})^{2\ell}).
+  \]
+  停止条件として，\textbf{周辺分布の制約違反}
+  $\norm{\mathbf{P}^{(\ell)} \ones_m - \mathbf{a}}_1$ の監視が実用的である．
+\end{proposition}
+
+%% ============================================================
+%%  4.4 数値安定性と対数領域計算
+%% ============================================================
+\section{数値安定性と対数領域計算}
+\label{sec:log-domain}
+
+$\varepsilon$ が小さいとき，Gibbs カーネルの成分 $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ は
+機械精度のアンダーフローを起こしうる．
+この問題は，\textbf{対数領域}（log-domain）で計算を行うことで回避できる．
+
+\subsection{正則化問題の双対}
+
+\begin{proposition}{エントロピー正則化の双対問題}{entropic-dual}
+  エントロピー正則化された最適輸送の双対問題は
+  \[
+    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    = \max_{\mathbf{f} \in \R^n,\, \mathbf{g} \in \R^m}
+    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+    - \varepsilon \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}
+  \]
+  で与えられる．ここで $(\mathbf{f}, \mathbf{g})$ とスケーリング変数の関係は
+  $u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ である．
+\end{proposition}
+
+\subsection{対数領域 Sinkhorn}
+
+対数領域では，Sinkhorn の反復を $(\mathbf{f}, \mathbf{g})$ に対する更新として書ける：
+\begin{align*}
+  f_i^{(\ell+1)}
+    &= \varepsilon \log a_i - \varepsilon \log \sum_j e^{(g_j^{(\ell)} - C_{i,j})/\varepsilon},
+  \\
+  g_j^{(\ell+1)}
+    &= \varepsilon \log b_j - \varepsilon \log \sum_i e^{(f_i^{(\ell+1)} - C_{i,j})/\varepsilon}.
+\end{align*}
+これはプリミティブな Sinkhorn 反復
+$\mathbf{u}^{(\ell+1)} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v}^{(\ell)})$ と
+$f_i = \varepsilon \log u_i$, $g_j = \varepsilon \log v_j$ を通じて等価である．
+
+\subsection{ソフト最小値と log-sum-exp}
+
+対数領域の反復は\textbf{ソフト最小値}（soft minimum）演算子を用いて簡潔に表現できる．
+
+\begin{definition}{ソフト最小値}{soft-minimum}
+  ベクトル $\mathbf{z} \in \R^n$ に対して，
+  \textbf{ソフト最小値}を
+  \[
+    \smin_\varepsilon \mathbf{z}
+    \defeq -\varepsilon \log \sum_{i=1}^n e^{-z_i / \varepsilon}
+  \]
+  で定義する．$\varepsilon \to 0$ のとき $\smin_\varepsilon \mathbf{z} \to \min_i z_i$ となる．
+\end{definition}
+
+ソフト最小値を行方向・列方向に適用する演算子を
+$\mathrm{smin}^{\mathrm{r}}_\varepsilon$，$\mathrm{smin}^{\mathrm{c}}_\varepsilon$ と書くと，
+対数領域 Sinkhorn は
+\begin{align*}
+  f_i^{(\ell+1)}
+    &= \mathrm{smin}^{\mathrm{r}}_\varepsilon
+    (\mathbf{C} - \ones_n (\mathbf{g}^{(\ell)})^\top)_i + \varepsilon \log a_i,
+  \\
+  g_j^{(\ell+1)}
+    &= \mathrm{smin}^{\mathrm{c}}_\varepsilon
+    (\mathbf{C} - \mathbf{f}^{(\ell+1)} \ones_m^\top)_j + \varepsilon \log b_j
+\end{align*}
+と書ける．
+
+\begin{remark}{log-sum-exp の安定化}{log-sum-exp-trick}
+  $\smin_\varepsilon$ の計算では，指数関数のオーバーフローを避けるために
+  \textbf{log-sum-exp トリック}を用いる：
+  \[
+    \smin_\varepsilon \mathbf{z}
+    = \underline{z} - \varepsilon \log \sum_i e^{-(z_i - \underline{z})/\varepsilon}
+  \]
+  ここで $\underline{z} = \min_i z_i$ である．
+  指数関数の引数が非正となるため，オーバーフローが回避される．
+\end{remark}
+
+\begin{remark}{対数領域計算のトレードオフ}{log-domain-tradeoff}
+  対数領域 Sinkhorn は任意の $\varepsilon > 0$ で安定であるが，
+  各反復で $nm$ 回の指数関数計算を要する．
+  プリミティブな Sinkhorn（行列ベクトル積のみ）と比較して
+  定数倍遅くなるが，$\varepsilon$ が小さい場合には不可欠である．
+\end{remark}
+
+%% ============================================================
+%%  4.5 正則化された輸送コストの近似
+%% ============================================================
+\section{正則化された輸送コストの近似}
+\label{sec:sinkhorn-divergence}
+
+$\MKD_{\mathbf{C}}^\varepsilon$ は正則化によりバイアスを含む．
+実用上は，双対変数からの上界・下界を用いて
+非正則化コスト $\MKD_{\mathbf{C}}$ を近似する．
+
+\begin{proposition}{双対変数からの下界}{dual-lower-bound}
+  エントロピー正則化問題の最適双対変数 $(\mathbf{f}^*, \mathbf{g}^*)$ は
+  $\PotentialsD(\mathbf{C})$ に属し，
+  \[
+    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+    \leq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  \]
+  が成り立つ．すなわち，正則化双対変数の目的関数値は
+  非正則化問題の最適値の\textbf{下界}を与える．
+\end{proposition}
+
+これを利用して，2種類の\textbf{Sinkhorn ダイバージェンス}を定義する：
+\begin{align*}
+  \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{dual}}(\mathbf{a}, \mathbf{b})
+    &\defeq \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+    &&(\text{下界}),
+  \\
+  \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{primal}}(\mathbf{a}, \mathbf{b})
+    &\defeq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+    &&(\text{上界}).
+\end{align*}
+両者の差は
+$\mathrm{S}^{\varepsilon,\,\mathrm{primal}} - \mathrm{S}^{\varepsilon,\,\mathrm{dual}}
+= \varepsilon(\Hb(\mathbf{P}_\varepsilon) + 1)$
+であり，$\varepsilon \to 0$ で消失する．
+
+\begin{remark}{$(\mathbf{a}, \mathbf{b})$ に関する凸性}{convexity-in-marginals}
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ は $(\mathbf{a}, \mathbf{b})$ に関して
+  凸であり，$\varepsilon > 0$ のとき微分可能で
+  $\nabla_{\mathbf{a}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{f}^*$，
+  $\nabla_{\mathbf{b}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{g}^*$
+  が成り立つ．この性質は Wasserstein 重心の計算などで重要である．
+\end{remark}
