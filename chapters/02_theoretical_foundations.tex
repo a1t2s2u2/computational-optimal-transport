@@ -27,22 +27,81 @@
 \end{definition}
 
 \begin{definition}{凸包}{convex-hull}
-  集合 $A \subset \R^n$ の\textbf{凸包}（convex hull）$\operatorname{conv}(A)$ とは，
-  $A$ を含む最小の凸集合をいう．
-  同値な定義として，$A$ の有限個の点の凸結合全体：
+  集合 $A \subset \R^n$ の\textbf{凸包}（convex hull）とは，
+  $A$ を含むすべての凸集合の共通部分をいい，$\operatorname{conv}(A)$ と表す：
+  \[
+    \operatorname{conv}(A) \defeq \bigcap \{ S \subset \R^n \mid A \subset S,\; S \text{ は凸} \}.
+  \]
+\end{definition}
+
+\begin{proposition}{凸包の特徴づけ}{convex-hull-char}
+  集合 $A \subset \R^n$ に対して，
   \[
     \operatorname{conv}(A) = \left\{
     \sum_{i=1}^k \lambda_i x_i \;\middle|\;
     k \in \N,\; x_i \in A,\; \lambda_i \geq 0,\; \sum_{i=1}^k \lambda_i = 1
     \right\}.
   \]
-\end{definition}
+  すなわち，凸包は $A$ の有限個の点の凸結合全体に一致する．
+\end{proposition}
+
+\begin{proof}
+  右辺を $C$ とおく．
+
+  \textbf{$C$ は凸集合である：}
+  $x = \sum_{i=1}^k \lambda_i x_i \in C$，$y = \sum_{j=1}^l \mu_j y_j \in C$ と $t \in [0,1]$ に対して，
+  \[
+    tx + (1-t)y = \sum_{i=1}^k t\lambda_i x_i + \sum_{j=1}^l (1-t)\mu_j y_j
+  \]
+  は係数の総和が $t + (1-t) = 1$ であり，各係数は非負なので $C$ に属する．
+
+  \textbf{$A \subset C$：}
+  各 $x \in A$ は $k=1$，$\lambda_1 = 1$ として $C$ の元である．
+
+  \textbf{$C$ は最小である：}
+  $A$ を含む任意の凸集合 $S$ に対して，$S$ は凸結合で閉じているから $C \subset S$．
+
+  以上より $C = \operatorname{conv}(A)$ が成り立つ．
+\end{proof}
 
 \begin{definition}{端点}{extreme-point}
   凸集合 $S$ の点 $x \in S$ が\textbf{端点}（extreme point）であるとは，
   $x = \frac{y + z}{2}$ かつ $y, z \in S$ ならば $x = y = z$ が成り立つことをいう．
   すなわち，$x$ は $S$ の他の2点の中点としては表せない．
 \end{definition}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=1.2]
+    % 三角形の頂点
+    \coordinate (A) at (0, 0);
+    \coordinate (B) at (3, 0);
+    \coordinate (C) at (1.5, 2.6);
+
+    % 三角形の内部（塗りつぶし）
+    \fill[blue!8] (A) -- (B) -- (C) -- cycle;
+    % 三角形の辺
+    \draw[thick] (A) -- (B) -- (C) -- cycle;
+
+    % 端点（頂点）
+    \fill (A) circle (2.5pt) node[below left] {$x_1$};
+    \fill (B) circle (2.5pt) node[below right] {$x_2$};
+    \fill (C) circle (2.5pt) node[above] {$x_3$};
+
+    % 辺上の点（端点でない）
+    \coordinate (P) at ($(A)!0.35!(B)$);
+    \fill[white] (P) circle (2.5pt);
+    \draw (P) circle (2.5pt) node[below] {$p$};
+
+    % 凸包の注釈
+    \node[right] at (3.5, 1.3) {$S = \operatorname{conv}(x_1, x_2, x_3)$};
+    \node[right] at (3.5, 0.7) {端点：$x_1, x_2, x_3$};
+    \node[right, text width=5cm] at (3.5, 0.0) {辺上・内部の点は端点でない\\（例：$p = tx_1 + (1-t)x_2$）};
+  \end{tikzpicture}
+  \caption{凸集合・凸包・端点の例．三角形 $S$ は3点 $x_1, x_2, x_3$ の凸包であり，凸集合である．
+  頂点 $x_1, x_2, x_3$ は $S$ の端点であるが，辺上の点 $p$ や内部の点は $S$ 内の他の2点の中点として表せるため端点ではない．}
+  \label{fig:convex-hull-extreme}
+\end{figure}
 
 \begin{definition}{ほとんどいたるところ}{almost-everywhere}
   測度 $\mu$ に関して，性質 $P(x)$ が
