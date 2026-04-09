@@ -333,48 +333,12 @@
   完備かつ可分な距離空間を\textbf{ポーランド空間}（Polish space）と呼ぶ．
 \end{definition}
 
-\begin{proposition}{ポーランド空間の例}{polish-examples}
-  以下はいずれもポーランド空間である．
-  \begin{enumerate}
-    \item $\R^d$（ユークリッド距離）．
-    \item 任意のコンパクト距離空間．
-    \item 任意の可分バナッハ空間（ノルムから誘導される距離について）．
-  \end{enumerate}
-\end{proposition}
-
-\begin{proof}
-  各場合について，完備性と可分性を確認する．
-
-  \textbf{(1)}
-  $\R^d$ の完備性は解析学の基本定理である（コーシー列が収束すること）．
-  可分性は，$\Q^d$ が可算稠密部分集合であることから従う
+\begin{example}{$\R^d$ はポーランド空間}{rd-polish}
+  ユークリッド距離を備えた $\R^d$ はポーランド空間である．
+  完備性は解析学の基本定理であり，
+  可分性は $\Q^d$ が可算稠密部分集合であることから従う
   （例~\ref{ex:separable-example}）．
-
-  \textbf{(2)}
-  コンパクト距離空間 $(X, d)$ が完備であることを示す．
-  $(x_n)$ を $X$ のコーシー列とする．$X$ はコンパクトであるから，
-  収束する部分列 $x_{n_k} \to x \in X$ が存在する．
-  コーシー列の部分列が収束するとき，元の列全体も同じ極限に収束する．
-  実際，任意の $\varepsilon > 0$ に対して，
-  $d(x_n, x_m) < \varepsilon/2$（$n, m \geq N_1$）かつ
-  $d(x_{n_k}, x) < \varepsilon/2$（$n_k \geq N_2$）となる $N_1, N_2$ が取れるので，
-  $n \geq \max(N_1, N_2)$ に対して $n_k \geq \max(N_1, N_2)$ なる $k$ を選べば
-  $d(x_n, x) \leq d(x_n, x_{n_k}) + d(x_{n_k}, x) < \varepsilon$ となる．
-
-  可分性を示す．各 $k \in \N$ に対して，
-  $X$ の開被覆 $\{B(x, 1/k) \mid x \in X\}$ を考える
-  （$B(x, r)$ は中心 $x$，半径 $r$ の開球）．
-  $X$ はコンパクトであるから有限部分被覆
-  $X = \bigcup_{i=1}^{N_k} B(x_i^{(k)}, 1/k)$ が存在する．
-  $D = \bigcup_{k=1}^{\infty} \{x_1^{(k)}, \ldots, x_{N_k}^{(k)}\}$ とおけば，
-  $D$ は可算集合であり，任意の $x \in X$ と任意の $\varepsilon > 0$ に対して
-  $1/k < \varepsilon$ なる $k$ を選べば $d(x, x_i^{(k)}) < 1/k < \varepsilon$
-  なる $x_i^{(k)} \in D$ が存在するので，$D$ は稠密である．
-
-  \textbf{(3)}
-  バナッハ空間はノルムから誘導される距離に関して定義により完備である．
-  可分性は仮定として課されている．
-\end{proof}
+\end{example}
 
 ポーランド空間を導入する理由は，この空間上で確率測度の集合に良いコンパクト性が成り立ち，
 最適輸送問題の解の存在が保証されるためである．
