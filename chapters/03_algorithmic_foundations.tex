@@ -447,3 +447,56 @@ Bertsekas (1981) により提案された，
   $\varepsilon$ を徐々に減少させる\textbf{$\varepsilon$-スケーリング}を用いると，
   計算量は $O(n^3 \log \norm{\mathbf{C}}_\infty)$ に改善される．
 \end{remark}
+
+%% ============================================================
+%%  3.6 双対上昇法
+%% ============================================================
+\section{双対上昇法}
+\label{sec:dual-ascent}
+
+ネットワーク単体法が主問題の頂点を更新するのに対し，
+\textbf{双対上昇法}（dual ascent method）は双対変数 $(\mathbf{f}, \mathbf{g})$ を
+直接改善する手法であり，その起源は Borchardt (1865) にまで遡る．
+K\"{o}nig--Egerv\'{a}ry の定理や Kuhn (1955) による\textbf{ハンガリアン法}
+（Hungarian algorithm）はこの枠組みの代表例である．
+
+\subsection{均衡辺と不活性辺}
+
+双対変数 $(\mathbf{f}, \mathbf{g}) \in \PotentialsD(\mathbf{C})$ が与えられたとき，
+辺 $(i, j)$ が\textbf{均衡}（balanced）であるとは $f_i + g_j = C_{i,j}$ が成り立つことをいい，
+$f_i + g_j < C_{i,j}$ のとき\textbf{不活性}（inactive）であるという．
+均衡辺から成る部分グラフを $G_{\mathbf{f}, \mathbf{g}}$ と記す．
+
+\subsection{双対上昇ステップ}
+
+$(\mathbf{f}, \mathbf{g})$ が最適でない場合，
+双対目的関数 $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ を
+改善する方向が存在する．
+
+集合 $S \subset \range{n}$，$S' \subset \range{m}$ を，
+均衡辺グラフ $G_{\mathbf{f}, \mathbf{g}}$ における\textbf{到達可能性}から定める．
+具体的には，$S$ 内のソース節点 $i$ から出る均衡辺の
+ターゲット側の節点がすべて $S'$ に含まれるように $S, S'$ を選ぶ．
+このとき，$\varepsilon > 0$ を十分小さく取れば，摂動した双対変数
+\[
+  (\tilde{\mathbf{f}}, \tilde{\mathbf{g}})
+  = (\mathbf{f}, \mathbf{g})
+  + \varepsilon(\ones_S, -\ones_{S'})
+\]
+は双対実行可能である．ここで $(\ones_S)_i = 1$（$i \in S$），$0$（$i \notin S$）である．
+双対目的関数の変化量は
+\[
+  \varepsilon \left( \sum_{i \in S} a_i - \sum_{j \in S'} b_j \right)
+\]
+であり，$\sum_{i \in S} a_i > \sum_{j \in S'} b_j$ となる $S, S'$ を選べば改善が得られる．
+このような $S, S'$ は，均衡辺グラフ上の最大フロー（Ford--Fulkerson アルゴリズム等）から
+構成できる．
+
+\begin{remark}{ネットワーク単体法との比較}{dual-ascent-vs-simplex}
+  ネットワーク単体法は主問題の\textbf{実行可能}な頂点を維持し，
+  最適性条件（双対実行可能性）は収束時にのみ達成される．
+  双対上昇法は逆に，双対実行可能性を維持しつつ，
+  主問題の実行可能性（周辺分布制約）は収束時にのみ達成される．
+  割当問題（$n = m$，均一重み）の場合，双対上昇法は
+  ハンガリアン法に帰着する．
+\end{remark}
