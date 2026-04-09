@@ -123,6 +123,48 @@
   両者が一致するとき通常の極限 $\lim a_n$ が存在してその値に等しい．
 \end{definition}
 
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[scale=0.85]
+    \draw[->] (0, 0) -- (11.5, 0) node[right] {$n$};
+    \draw[->] (0, -0.3) -- (0, 4.8);
+
+    % 数列の値（振動しながら収束，中心 2.0）
+    % 折れ線で繋いで一つの数列であることを明示
+    \draw[thin, gray]
+      (0.75, 3.5) -- (1.5, 1.2) -- (2.25, 3.6) -- (3.0, 0.8) --
+      (3.75, 3.1) -- (4.5, 1.4) -- (5.25, 2.8) -- (6.0, 1.5) --
+      (6.75, 2.6) -- (7.5, 1.7) -- (8.25, 2.4) -- (9.0, 1.8) --
+      (9.75, 2.3) -- (10.5, 1.9);
+    \foreach \n/\val in {1/3.5, 2/1.2, 3/3.6, 4/0.8, 5/3.1, 6/1.4, 7/2.8, 8/1.5, 9/2.6, 10/1.7, 11/2.4, 12/1.8, 13/2.3, 14/1.9} {
+      \fill (0.75*\n, \val) circle (2pt);
+    }
+    \node at (10.5, 1.9) [above right] {$a_n$};
+
+    % sup_{k>=n} の折れ線（上から下降）
+    \draw[thick, red, dashed]
+      (0.75, 3.6) -- (2.25, 3.6) -- (3.75, 3.1) -- (5.25, 2.8) --
+      (6.75, 2.6) -- (8.25, 2.4) -- (9.75, 2.3) -- (10.5, 2.3);
+    \node[red, right] at (10.5, 2.5) {$\sup_{k \geq n} a_k$};
+
+    % inf_{k>=n} の折れ線（下から上昇）
+    \draw[thick, blue, dashed]
+      (0.75, 0.8) -- (3.0, 0.8) -- (4.5, 1.4) -- (6.0, 1.5) --
+      (7.5, 1.7) -- (9.0, 1.8) -- (10.5, 1.9);
+    \node[blue, right] at (10.5, 1.5) {$\inf_{k \geq n} a_k$};
+
+    % limsup, liminf の水平線
+    \draw[red, thin, dotted] (0, 2.0) -- (11, 2.0);
+    \node[red, left] at (0, 2.1) {$\limsup a_n$};
+    \draw[blue, thin, dotted] (0, 2.0) -- (11, 2.0);
+    \node[blue, left] at (0, 1.7) {$\liminf a_n$};
+  \end{tikzpicture}
+  \caption{上極限と下極限．黒点が数列 $(a_n)$ の各項を表す．
+  $\sup_{k \geq n} a_k$ は単調減少，$\inf_{k \geq n} a_k$ は単調増加であり，
+  それぞれの極限が $\limsup a_n$，$\liminf a_n$ を与える．}
+  \label{fig:limsup-liminf}
+\end{figure}
+
 \begin{definition}{下半連続}{lower-semicontinuous}
   距離空間 $(X, d)$ 上の関数 $f \colon X \to \R \cup \{+\infty\}$ が
   \textbf{下半連続}（lower semicontinuous）であるとは，
