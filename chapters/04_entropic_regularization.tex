@@ -24,8 +24,11 @@
   $P_{i,j} < 0$ となる成分が存在する場合は $\Hb(\mathbf{P}) = -\infty$ と定める．
 \end{definition}
 
-$\Hb$ は厳密凹関数であり，そのヘッセ行列は
-$\partial^2 \Hb(\mathbf{P}) = -\diag(1/P_{i,j})$ である．
+$-\Hb$ は凸関数（定義~\ref{def:convex-function}）であり，
+そのヘッセ行列は $\partial^2 (-\Hb)(\mathbf{P}) = \diag(1/P_{i,j})$ である．
+したがって $-\varepsilon\Hb$ を加えた目的関数のヘッセ行列は
+$\mathbf{C}$ の項（線形なので $0$）に $\varepsilon \diag(1/P_{i,j})$ が加わり，
+$\mathbf{P} > 0$ の範囲で正定値となる．
 
 \begin{setting}{正則化された最適輸送}{regularized-ot}
   ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$，
@@ -39,7 +42,8 @@ $\partial^2 \Hb(\mathbf{P}) = -\diag(1/P_{i,j})$ である．
     \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
   \]
   で定義する．
-  目的関数は $\varepsilon$-強凸であるから，最適解 $\mathbf{P}_\varepsilon$ は一意的に存在する．
+  上述のように目的関数は $\mathbf{P} > 0$ で狭義凸であるから，
+  最適解 $\mathbf{P}_\varepsilon$ は一意的に存在する．
 \end{setting}
 
 \begin{remark}{$\varepsilon$ の役割}{epsilon-role}
