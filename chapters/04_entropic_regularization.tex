@@ -24,11 +24,11 @@
   $P_{i,j} < 0$ となる成分が存在する場合は $\Hb(\mathbf{P}) = -\infty$ と定める．
 \end{definition}
 
-$-\Hb$ は凸関数（定義~\ref{def:convex-function}）であり，
-そのヘッセ行列は $\partial^2 (-\Hb)(\mathbf{P}) = \diag(1/P_{i,j})$ である．
-したがって $-\varepsilon\Hb$ を加えた目的関数のヘッセ行列は
-$\mathbf{C}$ の項（線形なので $0$）に $\varepsilon \diag(1/P_{i,j})$ が加わり，
-$\mathbf{P} > 0$ の範囲で正定値となる．
+$-\Hb$ は狭義凸関数である．
+実際，$\mathbf{P}, \mathbf{Q} \in \R_{+}^{n \times m}$（$\mathbf{P} \neq \mathbf{Q}$）と
+$t \in (0, 1)$ に対して，$-x(\log x - 1)$ の狭義凸性から
+$-\Hb(t\mathbf{P} + (1-t)\mathbf{Q}) < -t\Hb(\mathbf{P}) - (1-t)\Hb(\mathbf{Q})$
+が成り立つ．
 
 \begin{setting}{正則化された最適輸送}{regularized-ot}
   ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$，

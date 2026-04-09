@@ -1806,7 +1806,10 @@ Monge 問題と Kantorovich 問題の関係について，
   \[
     \det(\partial^2 \varphi(x)) \, \rho_\beta(\nabla\varphi(x)) = \rho_\alpha(x)
   \]
-  を満たす．ここで $\partial^2 \varphi(x) \in \R^{d \times d}$ は $\varphi$ のヘッセ行列である．
+  を満たす．ここで $\partial^2 \varphi(x) \in \R^{d \times d}$ は
+  $\varphi$ の二階偏導関数を成分とする行列
+  $(\partial^2 \varphi)_{k,l} = \frac{\partial^2 \varphi}{\partial x_k \partial x_l}$
+  である．
   これは変位 $\varphi = \frac{\norm{\cdot}^2}{2} + \varepsilon\psi$ が小さいとき
   $\det(\partial^2\varphi) \approx 1 + \varepsilon\Delta\psi$ と線形化されることから，
   Monge--Amp\`{e}re 作用素は非線形の退化ラプラシアンとみなせる．
