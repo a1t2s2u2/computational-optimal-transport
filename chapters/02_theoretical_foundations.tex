@@ -198,61 +198,8 @@
     = \left(\sum_{i=1}^n \abs{x_i - y_i}^p\right)^{1/p}
   \]
   で定義する．特に $p = 2$ のときユークリッド距離となる．
-  これが距離の公理を満たすことを確認する．
-
-  \textbf{同一性}：
-  $d_p(x, y) = 0$ ならば $\abs{x_i - y_i}^p = 0$，すなわち $x_i = y_i$ が
-  すべての $i$ で成り立つから $x = y$ である．逆は定義から直ちに従う．
-
-  \textbf{対称性}：
-  $\abs{x_i - y_i} = \abs{y_i - x_i}$ が各 $i$ で成り立つから，
-  $d_p(x, y) = d_p(y, x)$ である．
-
-  \textbf{三角不等式}：
-  $\norm{x - z}_p \leq \norm{x - y}_p + \norm{y - z}_p$ は
-  \textbf{ミンコフスキーの不等式}（Minkowski's inequality）として知られる．
-\end{example}
-
-\begin{example}{離散距離空間}{metric-discrete}
-  有限集合 $X = \{x_1, \ldots, x_n\}$ 上に距離 $d$ が定まっているとき，
-  $D_{i,j} = d(x_i, x_j)$ を成分とする $n \times n$ 行列 $\mathbf{D}$ を
-  \textbf{距離行列}（distance matrix）と呼ぶ．
-  $\mathbf{D}$ は距離の公理から，$D_{i,j} \geq 0$，$D_{i,i} = 0$，
-  $D_{i,j} = D_{j,i}$，$D_{i,k} \leq D_{i,j} + D_{j,k}$ を満たす．
-
-  例として $X = \{x_1, x_2, x_3, x_4\}$ の4点から成る離散距離空間を考える．
-  各辺に付された数値が2点間の距離 $d(x_i, x_j)$ を表す．
-
-  \begin{center}
-  \begin{tikzpicture}[
-    node distance=2.5cm,
-    point/.style={circle, draw, fill=blue!15, minimum size=8mm, inner sep=0pt, font=\small}
-  ]
-    \node[point] (x1) {$x_1$};
-    \node[point, right of=x1] (x2) {$x_2$};
-    \node[point, below of=x2] (x3) {$x_3$};
-    \node[point, below of=x1] (x4) {$x_4$};
-
-    \draw[thick] (x1) -- node[above] {$2$} (x2);
-    \draw[thick] (x2) -- node[right] {$3$} (x3);
-    \draw[thick] (x3) -- node[below] {$1$} (x4);
-    \draw[thick] (x4) -- node[left]  {$4$} (x1);
-    \draw[thick] (x1) -- node[above right, pos=0.3] {$3$} (x3);
-    \draw[thick] (x2) -- node[above left, pos=0.3]  {$4$} (x4);
-  \end{tikzpicture}
-  \end{center}
-
-  この場合の距離行列は
-  \[
-    \mathbf{D} =
-    \begin{pmatrix}
-      0 & 2 & 3 & 4 \\
-      2 & 0 & 3 & 4 \\
-      3 & 3 & 0 & 1 \\
-      4 & 4 & 1 & 0
-    \end{pmatrix}
-  \]
-  である．
+  同一性と対称性は定義から直ちに従い，
+  三角不等式はミンコフスキーの不等式（Minkowski's inequality）から成り立つ．
 \end{example}
 
 \begin{definition}{コーシー列}{cauchy-sequence}
@@ -371,20 +318,6 @@
   （すなわち $x_n \in F$，$x_n \to x$ ならば $x \in F$）と同値である．
 \end{definition}
 
-\begin{example}{$\R$ における開集合と閉集合}{open-closed-example}
-  $\R$ 上の通常の距離 $d(x,y) = \abs{x-y}$ を考える．
-  \begin{itemize}
-    \item 開区間 $(a, b) = \{x \in \R \mid a < x < b\}$ は開集合である．
-      任意の $x \in (a, b)$ に対して $r = \min(x - a, b - x) > 0$ と取れば
-      $B(x, r) \subset (a, b)$ となる．
-    \item 閉区間 $[a, b] = \{x \in \R \mid a \leq x \leq b\}$ は閉集合である．
-      $[a, b]$ の点列 $x_n \to x$ ならば $a \leq x \leq b$ であるから $x \in [a, b]$ となる．
-    \item 半開区間 $[a, b)$ は開集合でも閉集合でもない．
-      点 $a$ のまわりに $[a, b)$ に含まれる開球は取れず（$a - r < a$ となる点を含めない），
-      また列 $b - 1/n \to b$ に対して $b \notin [a, b)$ であるから閉でもない．
-  \end{itemize}
-\end{example}
-
 \begin{definition}{$\sigma$-代数}{sigma-algebra}
   集合 $X$ の部分集合族 $\Bb \subset 2^X$ が\textbf{$\sigma$-代数}
   （$\sigma$-algebra）であるとは，以下の3条件を満たすことをいう：
@@ -403,131 +336,10 @@
   $\Bb(X)$ の元を\textbf{ボレル集合}（Borel set）と呼ぶ．
 \end{definition}
 
-\begin{remark}{ボレル集合の直感的理解}{borel-remark}
-  ボレル $\sigma$-代数 $\Bb(X)$ は，開集合を「種」として
-  $\sigma$-代数の操作を繰り返し適用することで得られる集合族である．
-  具体的には，以下の\textbf{ボレル階層}（Borel hierarchy）を形成する：
-  \begin{enumerate}
-    \item \textbf{出発点}：距離空間 $(X,d)$ の開集合と閉集合（$=$ 開集合の補集合）．
-    \item \textbf{$G_\delta$ 集合}：開集合の可算交差 $\bigcap_{k=1}^\infty U_k$．
-    \item \textbf{$F_\sigma$ 集合}：閉集合の可算合併 $\bigcup_{k=1}^\infty F_k$．
-    \item さらに操作を重ねて $G_{\delta\sigma}$，$F_{\sigma\delta}$，$\ldots$ と続く．
-  \end{enumerate}
-  これらすべての段階の集合を合わせたものが $\Bb(X)$ である．
-
-  直感的には，ボレル $\sigma$-代数は「開集合と閉集合を基本ブロックとして，
-  可算回の集合演算で構成できるすべての集合」の族と理解できる．
-  この族は確率や統計で扱うほぼすべての集合を含んでおり，
-  $\R^d$ のボレル $\sigma$-代数 $\Bb(\R^d)$ は
-  距離空間上の確率論や測度論の標準的な枠組みとなる．
-  以降，距離空間上の測度は常にボレル $\sigma$-代数に関して定義されるものとする．
-\end{remark}
-
-% --- ボレル階層の図 ---
-\begin{center}
-\begin{tikzpicture}[scale=0.85,
-    every node/.style={font=\small},
-    layer/.style={thick, rounded corners=8pt},
-  ]
-  % 最外層: B(X)
-  \draw[layer, red!50!black, fill=red!4]
-    (-5.5,-0.6) rectangle (5.5,5.8);
-  \node[anchor=north east, font=\small\bfseries, red!50!black]
-    at (5.3,5.6) {ボレル $\sigma$-代数 $\Bb(X)$};
-
-  % 第3層: Gδσ, Fσδ, ...
-  \draw[layer, orange!50!black, fill=orange!5]
-    (-4.8,-0.2) rectangle (4.8,4.9);
-  \node[anchor=north east, font=\scriptsize, orange!50!black]
-    at (4.6,4.7) {$G_{\delta\sigma},\; F_{\sigma\delta},\;\ldots$};
-
-  % 第2層左: Gδ
-  \draw[layer, blue!40!black, fill=blue!6]
-    (-4.6,2.1) rectangle (-0.3,4.2);
-  \node[font=\small\bfseries, blue!40!black] at (-2.45,3.75) {$G_\delta$ 集合};
-  \node[font=\scriptsize] at (-2.45,3.2) {開集合の可算交差};
-  \node[font=\scriptsize, gray!70!black] at (-2.45,2.7) {例: 無理数の集合};
-
-  % 第2層右: Fσ
-  \draw[layer, green!40!black, fill=green!6]
-    (0.3,2.1) rectangle (4.6,4.2);
-  \node[font=\small\bfseries, green!40!black] at (2.45,3.75) {$F_\sigma$ 集合};
-  \node[font=\scriptsize] at (2.45,3.2) {閉集合の可算合併};
-  \node[font=\scriptsize, gray!70!black] at (2.45,2.7) {例: $\Q$（有理数全体）};
-
-  % 第1層左: 開集合
-  \draw[layer, blue!60!black, fill=blue!12]
-    (-4.6,0.1) rectangle (-0.3,1.8);
-  \node[font=\small\bfseries, blue!60!black] at (-2.45,1.35) {開集合};
-  \node[font=\scriptsize, gray!70!black] at (-2.45,0.75) {例: 開区間 $(a,b)$};
-
-  % 第1層右: 閉集合
-  \draw[layer, green!60!black, fill=green!12]
-    (0.3,0.1) rectangle (4.6,1.8);
-  \node[font=\small\bfseries, green!60!black] at (2.45,1.35) {閉集合};
-  \node[font=\scriptsize, gray!70!black] at (2.45,0.75) {例: $[a,b]$，$\{x\}$};
-
-  % 包含関係の矢印
-  \draw[-{Stealth}, thick, blue!50!black]
-    (-2.45,1.8) -- (-2.45,2.1);
-  \draw[-{Stealth}, thick, green!50!black]
-    (2.45,1.8) -- (2.45,2.1);
-
-  % 補集合の関係
-  \draw[<->, densely dashed, gray!60!black]
-    (-0.3,0.95) -- (0.3,0.95)
-    node[midway, above, font=\scriptsize] {補集合};
-  \draw[<->, densely dashed, gray!60!black]
-    (-0.3,3.15) -- (0.3,3.15)
-    node[midway, above, font=\scriptsize] {補集合};
-\end{tikzpicture}
-\end{center}
-
-\begin{example}{$\R$ のボレル集合の具体例}{borel-examples}
-  実数直線 $\R$ 上で，ボレル集合の具体例をボレル階層に沿って示す．
-
-  \textbf{（1）開集合と閉集合（出発点）}
-
-  開区間 $(a,b)$ や開集合の合併 $(0,1) \cup (2,3)$ は開集合であり，
-  閉区間 $[a,b]$ や一点集合 $\{x\}$ は閉集合である．
-  これらはすべてボレル集合である．
-
-  \textbf{（2）$F_\sigma$ 集合：閉集合の可算合併}
-
-  有理数全体の集合 $\Q$ を考える．各有理数 $q_k$ に対して
-  一点集合 $\{q_k\}$ は閉集合であるから，
-  \[
-    \Q = \bigcup_{k=1}^{\infty} \{q_k\}
-  \]
-  は閉集合の可算合併であり，$F_\sigma$ 集合，したがってボレル集合である．
-  ただし $\Q$ 自身は開集合でも閉集合でもない．
-
-  \textbf{（3）$G_\delta$ 集合：開集合の可算交差}
-
-  無理数全体の集合 $\R \setminus \Q$ は $\Q$ の補集合である．
-  $\Q$ が $F_\sigma$ 集合であるから，その補集合 $\R \setminus \Q$ は $G_\delta$ 集合であり，
-  \[
-    \R \setminus \Q
-    = \bigcap_{k=1}^{\infty} (\R \setminus \{q_k\})
-  \]
-  と表せる．各 $\R \setminus \{q_k\}$ は開集合であり，
-  その可算交差として $G_\delta$ 集合，したがってボレル集合である．
-
-  \textbf{（4）その他の典型的なボレル集合}
-
-  半開区間 $[a,b) = \bigcap_{n=1}^{\infty} (a - 1/n,\, b)$ は
-  開集合の可算交差（$G_\delta$ 集合）としてボレル集合である．
-  カントール集合は閉集合であるからボレル集合である．
-\end{example}
-
-\begin{remark}{ボレル集合でない集合}{non-borel}
-  ボレル $\sigma$-代数 $\Bb(X)$ は巨大な集合族であるが，
-  $X$ のべき集合 $2^X$ と一致するとは限らない．
-  実際，$\Bb(\R) \subsetneq 2^\R$ であり，
-  ボレル集合でない $\R$ の部分集合が（選択公理のもとで）存在することが知られている．
-  しかし，確率や統計，最適輸送で自然に現れる集合は
-  ほぼすべてボレル集合であるため，実用上は $\Bb(X)$ で十分である．
-\end{remark}
+直感的には，ボレル $\sigma$-代数は「開集合と閉集合を基本ブロックとして，
+可算回の集合演算で構成できるすべての集合」の族と理解できる．
+確率や統計，最適輸送で自然に現れる集合はほぼすべてボレル集合であり，
+以降，距離空間上の測度は常にボレル $\sigma$-代数に関して定義されるものとする．
 
 %% --- 2.1.4 測度と確率測度 ---
 \subsection{測度と確率測度}
