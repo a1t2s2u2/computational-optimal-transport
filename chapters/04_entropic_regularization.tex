@@ -24,6 +24,21 @@
   $P_{i,j} < 0$ となる成分が存在する場合は $\Hb(\mathbf{P}) = -\infty$ と定める．
 \end{definition}
 
+\begin{remark}{定義の動機}{entropy-motivation}
+  通常の Shannon エントロピー $-\sum_{i,j} P_{i,j} \log P_{i,j}$ との違いは
+  $\sum_{i,j} P_{i,j}$ の項のみである．
+  $P_{i,j}(\log P_{i,j} - 1)$ という形を採用する理由は主に2つある．
+  第一に，対応する負エントロピー $-\Hb$ の勾配が
+  $\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$
+  と簡潔になり，KKT 条件から最適解の構造が直接読み取れる．
+  第二に，この形式は非正規化測度に対しても自然に定義される
+  一般化 KL ダイバージェンス（定義~\ref{def:kl-divergence}）と整合する．
+  Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ は
+  一般に $\sum_{i,j} K_{i,j} \neq 1$ であるため，
+  正則化問題を KL 射影として書き直す（\ref{sec:kl-formulation}節）際に
+  この一般化が本質的に必要となる．
+\end{remark}
+
 $-\Hb$ は狭義凸関数である．
 実際，$\mathbf{P}, \mathbf{Q} \in \R_{+}^{n \times m}$（$\mathbf{P} \neq \mathbf{Q}$）と
 $t \in (0, 1)$ に対して，$-x(\log x - 1)$ の狭義凸性から
@@ -59,6 +74,7 @@ $-\Hb(t\mathbf{P} + (1-t)\mathbf{Q}) < -t\Hb(\mathbf{P}) - (1-t)\Hb(\mathbf{Q})$
 \end{remark}
 
 \subsection{KL ダイバージェンスによる定式化}
+\label{sec:kl-formulation}
 
 \begin{definition}{Kullback--Leibler ダイバージェンス}{kl-divergence}
   非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
