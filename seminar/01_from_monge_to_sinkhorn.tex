@@ -155,6 +155,9 @@ Monge の定式化には2つの深刻な問題がある．
 \end{definition*}
 
 \noindent\textbf{困難1：実行可能集合は凸とは限らない．}
+以下では $\Y$ がベクトル空間の場合（例：$\Y = \R^d$）を考える．
+このとき写像空間 $\Y^{\X}$ にベクトル空間の構造が入り，
+$\mathcal{T}(\alpha,\beta)$ の凸性が意味を持つ．
 Monge 問題の実行可能集合は
 \[
   \mathcal{T}(\alpha, \beta)
@@ -162,6 +165,12 @@ Monge 問題の実行可能集合は
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
 である．この集合は\textbf{凸とは限らない}．
+
+\begin{memo*}
+  ここでは $\Y$ がベクトル空間の場合に限り凸性を議論した．
+  $\Y$ が一般の距離空間の場合，凸結合の代わりに2点間の測地線を用いた
+  \textbf{測地線凸性}（geodesic convexity）で同様の議論が展開できるらしい．
+\end{memo*}
 
 \begin{example*}{$\mathcal{T}(\alpha,\beta)$ の非凸性}
   $\alpha = \beta = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_1$ とする．

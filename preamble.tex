@@ -21,9 +21,9 @@
 \newtcbtheorem[number within=section]{definition}{定義}{
   colback=blue!5, colframe=blue!40!black, fonttitle=\bfseries, breakable
 }{def}
-% 命題: 緑系
+% 命題: オレンジ系
 \newtcbtheorem[use counter from=definition]{proposition}{命題}{
-  colback=green!5, colframe=green!35!black, fonttitle=\bfseries, breakable
+  colback=orange!5, colframe=orange!50!black, fonttitle=\bfseries, breakable
 }{prop}
 % 定理: 赤系
 \newtcbtheorem[use counter from=definition]{theorem}{定理}{
@@ -41,6 +41,12 @@
 \newtcbtheorem[use counter from=definition]{setting}{設定}{
   colback=purple!5, colframe=purple!40!black, fonttitle=\bfseries, breakable
 }{set}
+% メモ: 薄い黒系（例より薄く、番号なし、発展的補足）
+\newtcolorbox{memo*}{
+  colback=black!7, colframe=black!40,
+  fonttitle=\bfseries, title={メモ},
+  breakable
+}
 % 証明環境の装飾
 \tcolorboxenvironment{proof}{
   colback=white, colframe=black!20,
