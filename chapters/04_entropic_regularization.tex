@@ -77,16 +77,20 @@ $-\Hb(t\mathbf{P} + (1-t)\mathbf{Q}) < -t\Hb(\mathbf{P}) - (1-t)\Hb(\mathbf{Q})$
 \label{sec:kl-formulation}
 
 \begin{definition}{Kullback--Leibler ダイバージェンス}{kl-divergence}
-  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  非負ベクトル $\mathbf{p}, \mathbf{q} \in \R_+^{d}$ に対して，
   \textbf{KL ダイバージェンス}（Kullback--Leibler divergence）を
   \[
-    \KLD(\mathbf{P} \| \mathbf{K})
-    \defeq \sum_{i,j} \left(
-    P_{i,j} \log \frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}
+    \KLD(\mathbf{p} \| \mathbf{q})
+    \defeq \sum_{k} \left(
+    p_{k} \log \frac{p_{k}}{q_{k}} - p_{k} + q_{k}
     \right)
   \]
-  で定義する．$\KLD(\mathbf{P} \| \mathbf{K}) \geq 0$ であり，
-  等号は $\mathbf{P} = \mathbf{K}$ のときかつそのときに限る．
+  で定義する．ただし $0 \log 0 = 0$，$0 \log(0/0) = 0$ と約束する．
+  $\KLD(\mathbf{p} \| \mathbf{q}) \geq 0$ であり，
+  等号は $\mathbf{p} = \mathbf{q}$ のときかつそのときに限る．
+  行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対しては，
+  成分を一列に並べたベクトルに対する KL ダイバージェンスとして
+  $\KLD(\mathbf{P} \| \mathbf{K})$ を定める．
 \end{definition}
 
 \begin{definition}{Gibbs カーネル}{gibbs-kernel}
