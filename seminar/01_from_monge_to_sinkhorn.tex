@@ -1,0 +1,704 @@
+\chapter{Monge問題からSinkhornアルゴリズムへ}
+\label{ch:seminar-01}
+%% ============================================================
+%%  1. Monge 問題
+%% ============================================================
+\section{Monge 問題}
+\label{sec:sem-monge}
+
+最適輸送の歴史は，Monge (1781) の問いに始まる．
+「ある分布の質量を，最小コストで別の分布へ移すには？」
+
+\subsection{写像による輸送}
+
+Monge の定式化では，輸送を\textbf{写像} $T \colon \X \to \Y$ で記述する．
+「ソースの点 $x$ をターゲットの点 $T(x)$ に送る」という決定論的な対応である．
+
+このとき，写像 $T$ がソースの質量配置 $\alpha$ を
+ターゲットの質量配置 $\beta$ に正確に移すことを，
+\textbf{押し出し条件}（push-forward condition）
+\[
+  T\pushforward \alpha = \beta
+\]
+で表す．
+直感的には，「$T$ で移した後の質量配置が $\beta$ に一致する」ことを要求している．
+
+\subsection{Monge 問題の定式化}
+
+\begin{setting*}{}{}
+  ソース空間 $\X$ 上の確率測度 $\alpha$，
+  ターゲット空間 $\Y$ 上の確率測度 $\beta$，
+  およびコスト関数 $c \colon \X \times \Y \to \R_+$ に対して，
+  \textbf{Monge 問題}とは
+  \[
+    \inf_{\substack{T \colon \X \to \Y \\ T\pushforward \alpha = \beta}}
+    \int_{\X} c(x, T(x)) \, \d\alpha(x)
+  \]
+  を求める問題である．
+\end{setting*}
+
+各点 $x$ の質量を $T(x)$ に送るコスト $c(x, T(x))$ を，
+ソース全体で積分（合計）したものが総輸送コストであり，
+これを最小化する写像 $T$ を見つけることが目標である．
+
+\subsection{Monge 問題の本質的困難}
+
+Monge の定式化には2つの深刻な問題がある．
+
+\paragraph{困難1：実行可能集合が凸でない．}
+2つの実行可能な写像 $T_1, T_2$（ともに $T\pushforward \alpha = \beta$ を満たす）に対して，
+その凸結合 $(1-t)T_1 + tT_2$ は一般に押し出し条件を満たさない．
+これは押し出し条件が写像に関して非線形であるためである．
+凸最適化の道具が使えず，大域的最適解の保証が困難になる．
+
+\paragraph{困難2：解が存在しないことがある．}
+写像による輸送では，質量の\textbf{分割}が許されない．
+すなわち，$x$ の質量は $T(x)$ という1点にすべて送らなければならない．
+このため，ソース測度がターゲット測度より「粗い」場合に問題が生じる．
+
+\begin{example*}{Monge 写像が存在しない場合}{sem-monge-nonexistence}
+  $\alpha = \delta_0$（原点に全質量を集中），
+  $\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
+  （$-1$ と $1$ に半分ずつ配置）を考える．
+
+  $T\pushforward \delta_0 = \delta_{T(0)}$ は1点に集中した測度であるから，
+  $\delta_{T(0)} = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
+  を満たす $T(0)$ は存在しない．
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.0]
+    \draw[->] (-1.8, 0) -- (1.8, 0);
+    \draw[thick, blue] (0, 0) -- (0, 1.2);
+    \fill[blue] (0, 1.2) circle (2pt);
+    \node[below] at (0, -0.1) {$0$};
+    \node[above, blue] at (0, 1.35) {$\alpha = \delta_0$};
+
+    \draw[->, thick, dashed, gray] (2.2, 0.6) -- (3.2, 0.6);
+    \node[above, gray] at (2.7, 0.6) {$T\, ?$};
+
+    \begin{scope}[xshift=5cm]
+      \draw[->] (-1.8, 0) -- (1.8, 0);
+      \draw[thick, red] (-1, 0) -- (-1, 0.6);
+      \fill[red] (-1, 0.6) circle (2pt);
+      \draw[thick, red] (1, 0) -- (1, 0.6);
+      \fill[red] (1, 0.6) circle (2pt);
+      \node[below] at (-1, -0.1) {$-1$};
+      \node[below] at (1, -0.1) {$1$};
+      \node[above, red] at (0, 0.8) {$\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+
+  1点の質量を2箇所に分割して送ることができないため，
+  実行可能な写像 $T$ 自体が存在しない．
+\end{example*}
+
+この困難を解消するのが，次節の Kantorovich による緩和である．
+
+%% ============================================================
+%%  2. Kantorovich 緩和
+%% ============================================================
+\section{Kantorovich 緩和}
+\label{sec:sem-kantorovich}
+
+\subsection{鍵となるアイデア}
+
+Kantorovich (1942) の革命的なアイデアは，
+Monge の写像 $T$（各点 $x$ の質量を1つの行き先に集中させる）を，
+\textbf{輸送計画}（質量を複数の行き先に分割して送ることを許す）に置き換えることである．
+Monge の定式化では質量の分割が禁じられていたが，
+Kantorovich はこの制約を外し，$\X \times \Y$ 上の結合測度（カップリング）として
+輸送計画を定式化した．
+
+\subsection{カップリング}
+
+\begin{definition*}{カップリング}{sem-coupling}
+  確率測度 $\alpha \in \Mm_+^1(\X)$ と $\beta \in \Mm_+^1(\Y)$ に対して，
+  $\alpha$ と $\beta$ の\textbf{カップリング}の集合を
+  \[
+    \Couplings(\alpha, \beta) \defeq
+    \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
+    (P_\X)\pushforward \pi = \alpha, \;
+    (P_\Y)\pushforward \pi = \beta \right\}
+  \]
+  で定義する．
+  $\pi$ の周辺分布がそれぞれ $\alpha$, $\beta$ に一致することを要求する．
+\end{definition*}
+
+\paragraph{離散版での解釈．}
+ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$ に対して，
+離散的なカップリングは $n \times m$ の非負行列 $\mathbf{P}$ で表され，
+\[
+  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
+  \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
+  \mathbf{P} \ones_m = \mathbf{a}, \;
+  \mathbf{P}^\top \ones_n = \mathbf{b} \right\}.
+\]
+$P_{i,j}$ は「ソースのビン $i$ からターゲットのビン $j$ へ輸送される質量」を表す．
+
+\paragraph{Monge 写像との対比．}
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  % Monge (left)
+  \node[above] at (1.5, 3.3) {\textbf{Monge 写像}};
+  \fill[blue] (0.5, 2.5) circle (3pt) node[left] {\small $x_1$};
+  \fill[blue] (0.5, 1.5) circle (3pt) node[left] {\small $x_2$};
+  \fill[blue] (0.5, 0.5) circle (3pt) node[left] {\small $x_3$};
+  \fill[red] (2.5, 2.5) circle (3pt) node[right] {\small $y_1$};
+  \fill[red] (2.5, 1.5) circle (3pt) node[right] {\small $y_2$};
+  \draw[->, thick] (0.7, 2.5) -- (2.3, 2.5);
+  \draw[->, thick] (0.7, 1.5) -- (2.3, 2.5);
+  \draw[->, thick] (0.7, 0.5) -- (2.3, 1.5);
+  \node[below, text width=3cm, align=center] at (1.5, -0.2) {\small 各点は1つの\\行き先のみ};
+
+  % Kantorovich (right)
+  \begin{scope}[xshift=5.5cm]
+    \node[above] at (1.5, 3.3) {\textbf{Kantorovich カップリング}};
+    \fill[blue] (0.5, 2.5) circle (3pt) node[left] {\small $x_1$};
+    \fill[blue] (0.5, 1.5) circle (3pt) node[left] {\small $x_2$};
+    \fill[blue] (0.5, 0.5) circle (3pt) node[left] {\small $x_3$};
+    \fill[red] (2.5, 2.5) circle (3pt) node[right] {\small $y_1$};
+    \fill[red] (2.5, 1.5) circle (3pt) node[right] {\small $y_2$};
+    \draw[->, thick] (0.7, 2.5) -- (2.3, 2.5);
+    \draw[->, thick, blue!60] (0.7, 1.5) -- (2.3, 2.5);
+    \draw[->, thick, red!60] (0.7, 1.5) -- (2.3, 1.5);
+    \draw[->, thick] (0.7, 0.5) -- (2.3, 1.5);
+    \node[right, font=\small] at (1.6, 1.8) {分割};
+    \node[below, text width=3cm, align=center] at (1.5, -0.2) {\small 質量の分割を\\許す};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsection{Kantorovich 問題}
+
+\begin{setting*}{}{}
+  確率測度 $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$，
+  コスト関数 $c \colon \X \times \Y \to \R_+$ に対して，
+  \textbf{Kantorovich 問題}とは
+  \[
+    \MK_c(\alpha, \beta) \defeq
+    \inf_{\pi \in \Couplings(\alpha, \beta)}
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
+  \]
+  である．離散版は
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) \defeq
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}.
+  \]
+\end{setting*}
+
+\subsection{なぜ Kantorovich 緩和が優れているか}
+
+Kantorovich の定式化は Monge 問題の困難をすべて解消する：
+
+\begin{enumerate}
+  \item \textbf{凸性}：$\Couplings(\alpha, \beta)$ は凸集合であり，
+    目的関数は $\pi$ に関して線形．よって\textbf{凸最適化問題}である．
+  \item \textbf{線形計画}：離散版は $nm$ 変数の\textbf{線形計画問題}（LP）であり，
+    単体法や内点法で原理的に解ける．
+  \item \textbf{解の存在}：$\Couplings(\alpha, \beta)$ はコンパクト凸集合であるから，
+    最適なカップリング $\pi^*$ が\textbf{常に存在}する．
+    積測度 $\alpha \otimes \beta$（離散版では $\mathbf{a}\mathbf{b}^\top$）が
+    常にカップリングの1つを与えるため，実行可能集合は空でない．
+\end{enumerate}
+
+\subsection{Monge 問題の緩和としての位置づけ}
+
+Monge 写像 $T$ に対して $\pi_T = (\operatorname{Id}, T)\pushforward \alpha$ とおくと
+$\pi_T \in \Couplings(\alpha, \beta)$ となり，
+\[
+  \MK_c(\alpha, \beta) \leq
+  \inf_{\substack{T \colon \X \to \Y \\ T\pushforward \alpha = \beta}}
+  \int_\X c(x, T(x)) \, \d\alpha(x).
+\]
+Kantorovich 問題は Monge 問題の緩和であり，
+Monge 写像による輸送は「$\pi$ が $T$ のグラフ上に集中している」カップリングの特殊な場合である．
+
+%% ============================================================
+%%  3. 双対問題
+%% ============================================================
+\section{双対問題}
+\label{sec:sem-dual}
+
+Kantorovich 問題は線形計画であるから，双対問題を考えることができる．
+双対問題は最適輸送の理論的理解にも計算手法にも重要な役割を果たす．
+
+\subsection{ラグランジュ双対の導出}
+
+離散版 Kantorovich 問題の等式制約に対するラグランジュ乗数を
+$\mathbf{f} \in \R^n$，$\mathbf{g} \in \R^m$ とおくと，
+ラグランジュ関数は
+\[
+  L(\mathbf{P}, \mathbf{f}, \mathbf{g})
+  = \inner{\mathbf{C}}{\mathbf{P}}
+  + \inner{\mathbf{f}}{\mathbf{a} - \mathbf{P}\ones_m}
+  + \inner{\mathbf{g}}{\mathbf{b} - \mathbf{P}^\top \ones_n}.
+\]
+これを整理すると
+\[
+  L = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+  + \inner{\mathbf{C} - \mathbf{f}\ones_m^\top - \ones_n \mathbf{g}^\top}{\mathbf{P}}.
+\]
+$\mathbf{P} \geq 0$ のもとで $L$ を $\mathbf{P}$ について最小化すると，
+第3項が非負（すなわち $f_i + g_j \leq C_{i,j}$, $\forall\, i, j$）のとき
+最小値は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$，
+そうでなければ $-\infty$ となる．
+
+\subsection{Kantorovich 双対定理}
+
+\begin{theorem*}{Kantorovich 双対定理（離散版）}{sem-kantorovich-duality}
+  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$，
+  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対して，
+  \[
+    \underbrace{
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+    }_{\text{主問題（輸送計画の最適化）}}
+    =
+    \underbrace{
+    \max_{\substack{(\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m \\
+    f_i + g_j \leq C_{i,j}\; \forall\, i,j}}
+    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+    }_{\text{双対問題（ポテンシャルの最適化）}}
+  \]
+  が成り立つ．
+  線形計画の強双対性により，主問題と双対問題の最適値は一致する．
+\end{theorem*}
+
+双対実行可能集合を $\PotentialsD(\mathbf{C}) = \{(\mathbf{f}, \mathbf{g}) \mid f_i + g_j \leq C_{i,j},\; \forall\, i, j\}$ と書く．
+
+\subsection{相補性条件}
+
+主問題と双対問題の最適解の間には重要な関係がある．
+
+\begin{proposition*}{相補性条件}{sem-complementary-slackness}
+  $\mathbf{P}^*$ と $(\mathbf{f}^*, \mathbf{g}^*)$ がそれぞれ主問題と双対問題の最適解ならば，
+  \[
+    P^*_{i,j} > 0 \implies f^*_i + g^*_j = C_{i,j}
+  \]
+  が成り立つ．
+  最適輸送計画で正の質量が輸送される経路では，双対ポテンシャルの和がコストに一致する．
+\end{proposition*}
+
+\begin{proof}
+  強双対性から
+  $\inner{\mathbf{C}}{\mathbf{P}^*}
+  = \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}$．
+  主問題の制約を用いると
+  $\inner{\mathbf{C} - \mathbf{f}^* \ones_m^\top - \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*} = 0$．
+  $\mathbf{P}^* \geq 0$ かつ $C_{i,j} - f^*_i - g^*_j \geq 0$ であるから，
+  各成分の積 $P^*_{i,j}(C_{i,j} - f^*_i - g^*_j) = 0$ がすべての $(i, j)$ で成り立つ．
+\end{proof}
+
+\subsection{双対問題の経済学的解釈}
+
+双対問題には次の直感的な解釈がある．
+
+輸送業者が，倉庫 $i$ での集荷料金 $f_i$，工場 $j$ への配送料金 $g_j$ を設定し，
+元の輸送会社に代わって輸送を引き受けるとする．
+輸送会社がこの契約を受け入れるためには，
+どの経路でも業者の料金が自前のコスト以下でなければならない：$f_i + g_j \leq C_{i,j}$．
+この条件のもとで収入 $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$
+を最大化するのが双対問題であり，その最適値が最適輸送コストに一致する．
+
+%% ============================================================
+%%  4. 古典的アルゴリズムとその限界
+%% ============================================================
+\section{古典的アルゴリズムとその限界}
+\label{sec:sem-classical}
+
+Kantorovich 問題は線形計画であるから，原理的には単体法や内点法で解ける．
+さらに，最適輸送の特殊構造を利用した効率的な手法が開発されてきた．
+
+\subsection{線形計画としての構造}
+
+行列 $\mathbf{P}$ をベクトル $\mathbf{p} \in \R^{nm}$ に並べ直すと，
+Kantorovich 問題は標準形の線形計画
+\[
+  \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
+  \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
+  \mathbf{c}^\top \mathbf{p}
+\]
+となる．
+制約行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ の階数は $n + m - 1$ であり，
+輸送多面体の頂点は $n + m - 1$ 個以下の非零成分を持つ．
+
+\subsection{古典的手法の概観}
+
+\paragraph{ネットワーク単体法}
+輸送多面体の頂点間を移動しながら最適解を探索する．
+各反復では，
+(i) 現在の頂点に相補的な双対変数を構成し，
+(ii) 双対実行可能性を確認し，
+(iii) 違反する辺を追加して閉路に沿った流量調整を行う．
+多項式時間で停止することが Orlin (1997) により証明されている．
+
+\paragraph{オークションアルゴリズム}
+Bertsekas (1981) による双対的手法．
+$\varepsilon$-相補性条件を維持しながら双対変数 $\mathbf{g}$ を逐次更新する．
+$\varepsilon$-スケーリングにより $O(n^3 \log \norm{\mathbf{C}}_\infty)$ の計算量．
+
+\paragraph{双対上昇法}
+双対変数 $(\mathbf{f}, \mathbf{g})$ を直接改善する手法．
+ハンガリアン法はこの枠組みの代表例である．
+
+\subsection{計算量の壁}
+
+これらの古典的手法はいずれも厳密解を与えるが，
+実用上の問題は\textbf{計算量}である：
+
+\begin{center}
+\begin{tabular}{ll}
+  \hline
+  手法 & 計算量 \\
+  \hline
+  LP 内点法（一般的な解法） & $O(n^3 m^3)$ 程度 \\
+  ネットワーク単体法 & $O(n^3 \log n \log(n \norm{\mathbf{C}}_\infty))$ \\
+  オークション（$\varepsilon$-スケーリング） & $O(n^3 \log \norm{\mathbf{C}}_\infty)$ \\
+  \hline
+\end{tabular}
+\end{center}
+
+$n = m = 1000$ 程度で $nm = 10^6$ 変数の LP となり，
+画像処理（$n \sim 10^4$--$10^6$）や機械学習の応用では
+$n^3$ のオーダーは実用に耐えない．
+
+\medskip
+\textbf{問い：}厳密解でなく近似解で良いなら，
+もっと速い手法はないか？
+
+この問いへの回答が，次節のエントロピー正則化である．
+
+%% ============================================================
+%%  5. エントロピー正則化
+%% ============================================================
+\section{エントロピー正則化}
+\label{sec:sem-entropic}
+
+\subsection{着想：エントロピー項を加える}
+
+目的関数にエントロピーの\textbf{正則化項}を加えることで，
+問題を厳密に凸化し，かつ効率的に解ける構造を持たせる．
+エントロピーが高い（質量が分散した）輸送計画を優遇する効果がある．
+
+行列 $\mathbf{P} \in \R_+^{n \times m}$ の離散エントロピーを
+\[
+  \Hb(\mathbf{P}) \defeq - \sum_{i,j} P_{i,j} (\log P_{i,j} - 1)
+\]
+とする．
+対応する負エントロピー $-\Hb$ は狭義凸関数であり，
+勾配が $\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$ と簡潔になる．
+
+\begin{setting*}{}{}
+  正則化パラメータ $\varepsilon > 0$ に対して，
+  \textbf{エントロピー正則化された最適輸送問題}を
+  \[
+    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    \defeq
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \underbrace{\inner{\mathbf{C}}{\mathbf{P}}}_{\text{輸送コスト}}
+    \underbrace{- \varepsilon \Hb(\mathbf{P})}_{\text{正則化項}}
+  \]
+  で定義する．
+  目的関数は狭義凸であるから，最適解 $\mathbf{P}_\varepsilon$ は一意に存在する．
+\end{setting*}
+
+\subsection{正則化パラメータ $\varepsilon$ の役割}
+
+$\varepsilon$ は2つの極限を補間する：
+\begin{itemize}
+  \item $\varepsilon \to 0$：$\mathbf{P}_\varepsilon$ は
+    非正則化問題の最適解（のうちエントロピー最大のもの）に収束．
+  \item $\varepsilon \to +\infty$：$\mathbf{P}_\varepsilon$ は
+    積測度 $\mathbf{a}\mathbf{b}^\top$ に収束
+    （ソースとターゲットを独立に結合する最も「ぼやけた」カップリング）．
+\end{itemize}
+
+\subsection{KL ダイバージェンスによる再定式化}
+
+\begin{definition*}{Gibbs カーネル}{sem-gibbs-kernel}
+  コスト行列 $\mathbf{C}$ と $\varepsilon > 0$ に対して，
+  \textbf{Gibbs カーネル}を
+  $K_{i,j} \defeq e^{-C_{i,j}/\varepsilon}$
+  で定義する．
+\end{definition*}
+
+\begin{definition*}{KL ダイバージェンス}{sem-kl-divergence}
+  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  \[
+    \KLD(\mathbf{P} \| \mathbf{K})
+    \defeq \sum_{i,j} \left(
+    P_{i,j} \log \frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}
+    \right)
+  \]
+  とする．
+  $\KLD \geq 0$ であり，等号は $\mathbf{P} = \mathbf{K}$ のときに限る．
+\end{definition*}
+
+Gibbs カーネルを用いると，正則化問題は\textbf{KL 射影}として書き直せる：
+\[
+  \mathbf{P}_\varepsilon
+  = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+  \KLD(\mathbf{P} \| \mathbf{K}).
+\]
+すなわち，$\mathbf{P}_\varepsilon$ は Gibbs カーネル $\mathbf{K}$ の
+カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ への KL 射影
+（集合内で $\mathbf{K}$ に最も近い点）である．
+
+%% ============================================================
+%%  6. Sinkhorn アルゴリズム
+%% ============================================================
+\section{Sinkhorn アルゴリズム}
+\label{sec:sem-sinkhorn}
+
+\subsection{最適解の構造：スケーリング形式}
+
+正則化問題の最適解は，次の特殊な構造を持つ．
+
+\begin{proposition*}{}{sem-scaling-form}
+  最適解 $\mathbf{P}_\varepsilon$ は
+  \[
+    (P_\varepsilon)_{i,j} = u_i \, K_{i,j} \, v_j
+  \]
+  の形で表される．
+  行列形式では
+  $\mathbf{P}_\varepsilon = \diag(\mathbf{u}) \, \mathbf{K} \, \diag(\mathbf{v})$．
+\end{proposition*}
+
+\begin{proof}
+  ラグランジュ関数の $P_{i,j} > 0$ における一次条件
+  $C_{i,j} + \varepsilon \log P_{i,j} - f_i - g_j = 0$ を解くと，
+  \[
+    P_{i,j} = e^{f_i/\varepsilon} \cdot e^{-C_{i,j}/\varepsilon} \cdot e^{g_j/\varepsilon}
+    = u_i \, K_{i,j} \, v_j.
+  \]
+  ここで $u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ とおいた．
+  エントロピー項が $P_{i,j} = 0$ を排除するため，
+  すべての成分で $P_{i,j} > 0$ が成り立つ．
+\end{proof}
+
+\subsection{周辺分布制約からの反復}
+
+$\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ に
+周辺分布制約を代入すると，
+\[
+  \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a}, \qquad
+  \mathbf{v} \odot (\mathbf{K}^\top \mathbf{u}) = \mathbf{b}
+\]
+が得られる（$\odot$ はアダマール積）．
+Sinkhorn アルゴリズムは，この2つの条件を\textbf{交互}に満たすよう
+$\mathbf{u}$ と $\mathbf{v}$ を更新する．
+
+\begin{algorithm}{alg:sem-sinkhorn}
+  \textbf{Input:} $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$,
+  $\mathbf{K} = e^{-\mathbf{C}/\varepsilon}$, 反復回数 $L$ \\
+  \textbf{Output:} スケーリングベクトル $\mathbf{u}, \mathbf{v}$ \\[4pt]
+  1. $\mathbf{v}^{(0)} \leftarrow \ones_m$ \\
+  2. \textbf{for} $\ell = 0, 1, \ldots, L-1$ \textbf{do}: \\
+  3. \quad $\mathbf{u}^{(\ell+1)} \leftarrow \mathbf{a} \oslash (\mathbf{K} \mathbf{v}^{(\ell)})$
+  \hfill （行制約を満たす） \\
+  4. \quad $\mathbf{v}^{(\ell+1)} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top \mathbf{u}^{(\ell+1)})$
+  \hfill （列制約を満たす） \\[4pt]
+  ここで $\oslash$ は成分ごとの除算．
+  各反復は行列ベクトル積2回で $O(nm)$．
+\end{algorithm}
+
+\subsection{Bregman 射影としての解釈}
+
+Sinkhorn の各ステップは，KL ダイバージェンスに関する\textbf{交互射影}と解釈できる：
+\begin{align*}
+  \mathbf{P}^{(\ell+1/2)}
+    &= \argmin_{\mathbf{P}\ones_m = \mathbf{a}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell)})
+    &&\text{（行制約への射影）},
+  \\
+  \mathbf{P}^{(\ell+1)}
+    &= \argmin_{\mathbf{P}^\top \ones_n = \mathbf{b}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell+1/2)})
+    &&\text{（列制約への射影）}.
+\end{align*}
+
+\subsection{GPU 並列化との親和性}
+
+Sinkhorn の核心的演算は行列ベクトル積 $\mathbf{K}\mathbf{v}$ と $\mathbf{K}^\top \mathbf{u}$ であり，
+これは高度に並列化可能である．
+さらに，複数の入力対 $(\mathbf{a}_k, \mathbf{b}_k)$ に対して同一コスト行列 $\mathbf{C}$ のもとでの計算は，
+行列--行列積でバッチ化できる：
+\[
+  \mathbf{U}^{(\ell+1)} = \mathbf{A} \oslash (\mathbf{K}\mathbf{V}^{(\ell)}), \qquad
+  \mathbf{V}^{(\ell+1)} = \mathbf{B} \oslash (\mathbf{K}^\top \mathbf{U}^{(\ell+1)}).
+\]
+古典的アルゴリズム（ネットワーク単体法等）は本質的に逐次的であり，
+この並列性が Sinkhorn の最大の実用的優位点である．
+
+%% ============================================================
+%%  7. 収束性の保証
+%% ============================================================
+\section{収束性の保証}
+\label{sec:sem-convergence}
+
+\subsection{Hilbert 射影距離}
+
+Sinkhorn の収束解析には\textbf{Hilbert 射影距離}が用いられる．
+
+\begin{definition*}{Hilbert 射影距離}{sem-hilbert}
+  正ベクトル $\mathbf{u}, \mathbf{u}' \in \R_{++}^n$ に対して，
+  \[
+    \mathrm{Hilbert}(\mathbf{u}, \mathbf{u}')
+    \defeq \log \max_{i,j} \frac{u_i \, u'_j}{u_j \, u'_i}.
+  \]
+  $\mathrm{Hilbert}(\mathbf{u}, \mathbf{u}') = 0$ は
+  $\mathbf{u}$ と $\mathbf{u}'$ が定数倍の関係にあることと同値であり，
+  射影空間上の距離を与える．
+\end{definition*}
+
+\subsection{Birkhoff の縮小定理}
+
+\begin{theorem*}{}{sem-birkhoff-contraction}
+  正行列 $\mathbf{K} \in \R_{++}^{n \times m}$ に対して，
+  \[
+    \mathrm{Hilbert}(\mathbf{K}\mathbf{v}, \mathbf{K}\mathbf{v}')
+    \leq \lambda(\mathbf{K}) \, \mathrm{Hilbert}(\mathbf{v}, \mathbf{v}')
+  \]
+  が成り立つ．
+  Birkhoff 縮小率は $\lambda(\mathbf{K}) = \frac{\sqrt{\eta} - 1}{\sqrt{\eta} + 1} \in [0, 1)$
+  であり，$\eta = \max_{i,j,k,\ell} \frac{K_{i,k} K_{j,\ell}}{K_{j,k} K_{i,\ell}}$
+  で定まる．
+\end{theorem*}
+
+Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ に対しては
+$\eta = e^{2\norm{\mathbf{C}}_\infty / \varepsilon}$ であり，
+\textbf{$\varepsilon$ が大きいほど $\lambda$ が小さくなり収束が速い}．
+
+\subsection{Sinkhorn の線形収束}
+
+Birkhoff の縮小定理を反復に適用すると，
+\[
+  \mathrm{Hilbert}(\mathbf{u}^{(\ell)}, \mathbf{u}^*)
+  = O(\lambda(\mathbf{K})^{2\ell})
+\]
+が得られ，\textbf{線形収束}（幾何級数的収束）が保証される．
+
+実用的な停止条件としては，周辺分布の制約違反
+$\norm{\mathbf{P}^{(\ell)}\ones_m - \mathbf{a}}_1$ の監視が推奨される．
+
+%% ============================================================
+%%  8. 数値安定性：対数領域 Sinkhorn
+%% ============================================================
+\section{数値安定性：対数領域 Sinkhorn}
+\label{sec:sem-log-domain}
+
+\subsection{アンダーフロー問題}
+
+$\varepsilon$ が小さいとき，$K_{i,j} = e^{-C_{i,j}/\varepsilon}$ は機械精度を下回る．
+例えば $C_{i,j} = 10$，$\varepsilon = 0.01$ では
+$K_{i,j} = e^{-1000} \approx 10^{-434}$
+であり，64ビット浮動小数点で表現不能（アンダーフロー）となる．
+
+\subsection{対数領域への変換}
+
+$u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ として
+対数領域の変数 $(\mathbf{f}, \mathbf{g})$ で反復を記述する：
+\begin{align*}
+  f_i^{(\ell+1)}
+    &= \varepsilon \log a_i
+    - \varepsilon \log \sum_j e^{(g_j^{(\ell)} - C_{i,j})/\varepsilon},
+  \\
+  g_j^{(\ell+1)}
+    &= \varepsilon \log b_j
+    - \varepsilon \log \sum_i e^{(f_i^{(\ell+1)} - C_{i,j})/\varepsilon}.
+\end{align*}
+
+\subsection{ソフト最小値と log-sum-exp 安定化}
+
+上の反復は\textbf{ソフト最小値}
+$\smin_\varepsilon \mathbf{z} \defeq -\varepsilon \log \sum_i e^{-z_i/\varepsilon}$
+を用いて簡潔に書ける．
+$\varepsilon \to 0$ で $\smin_\varepsilon \mathbf{z} \to \min_i z_i$ となり，
+$C$-変換の滑らかな近似であることが見て取れる．
+
+\textbf{log-sum-exp トリック}により数値安定化する：
+\[
+  \smin_\varepsilon \mathbf{z}
+  = \underline{z} - \varepsilon \log \sum_i e^{-(z_i - \underline{z})/\varepsilon},
+  \qquad \underline{z} = \min_i z_i.
+\]
+指数関数の引数が非正となるため，オーバーフローが回避される．
+
+\subsection{トレードオフ}
+
+対数領域 Sinkhorn は任意の $\varepsilon > 0$ で安定に動作するが，
+各反復で $nm$ 回の指数関数計算を要する．
+プリミティブな Sinkhorn（行列ベクトル積のみ）と比較して定数倍遅くなるが，
+$\varepsilon$ が小さい場合には不可欠な安定化手法である．
+
+%% ============================================================
+%%  9. 近似としての評価
+%% ============================================================
+\section{非正則化コストの近似}
+\label{sec:sem-approximation}
+
+$\MKD_{\mathbf{C}}^\varepsilon$ はエントロピー項によりバイアスを含む．
+双対変数を用いて，非正則化コスト $\MKD_{\mathbf{C}}$ の上界・下界が得られる．
+
+\begin{proposition*}{}{sem-dual-lower-bound}
+  正則化問題の最適双対変数 $(\mathbf{f}^*, \mathbf{g}^*)$ は
+  $\PotentialsD(\mathbf{C})$ に属し，
+  \[
+    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+    \leq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+  \]
+  が成り立つ．
+\end{proposition*}
+
+左辺（双対からの下界）と右辺（主問題からの上界）の差は
+$\varepsilon(\Hb(\mathbf{P}_\varepsilon) + 1)$ であり，
+$\varepsilon \to 0$ で消失する．
+すなわち，$\varepsilon$ を小さく取るほど近似が精密になるが，
+収束は遅くなり数値安定性も低下する．
+このトレードオフの制御が実用上の鍵である．
+
+%% ============================================================
+%%  10. まとめ
+%% ============================================================
+\section{まとめ}
+\label{sec:sem-summary}
+
+本セミナーの議論を振り返る．
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=1.8cm,
+  every node/.style={draw, rounded corners, text width=5.5cm, align=center,
+    minimum height=1.2cm, font=\small},
+  arrow/.style={->, thick, >=stealth}
+]
+  \node (monge) {\textbf{Monge 問題}\\写像 $T$ による輸送\\
+    困難：非凸・解の非存在};
+
+  \node (kanto) [below of=monge] {\textbf{Kantorovich 緩和}\\
+    カップリング $\pi$ による輸送\\
+    凸最適化・LP として定式化};
+
+  \node (dual) [below of=kanto] {\textbf{双対問題}\\
+    ポテンシャル $(\mathbf{f}, \mathbf{g})$ の最適化\\
+    相補性条件};
+
+  \node (classic) [below of=dual] {\textbf{古典的アルゴリズム}\\
+    ネットワーク単体法・オークション\\
+    厳密解だが $O(n^3)$ で重い};
+
+  \node (sinkhorn) [below of=classic] {\textbf{エントロピー正則化 + Sinkhorn}\\
+    $O(nm)$/反復・GPU 並列化可能\\
+    線形収束・対数領域で安定};
+
+  \draw[arrow] (monge) -- node[draw=none, right, text width=3cm, minimum height=0pt]
+    {\scriptsize 質量分割を許す} (kanto);
+  \draw[arrow] (kanto) -- node[draw=none, right, text width=3cm, minimum height=0pt]
+    {\scriptsize LP 双対理論} (dual);
+  \draw[arrow] (dual) -- node[draw=none, right, text width=3cm, minimum height=0pt]
+    {\scriptsize 厳密解を求める} (classic);
+  \draw[arrow] (classic) -- node[draw=none, right, text width=3cm, minimum height=0pt]
+    {\scriptsize $-\varepsilon\Hb$ を加える} (sinkhorn);
+\end{tikzpicture}
+\end{center}
