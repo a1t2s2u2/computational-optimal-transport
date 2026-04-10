@@ -10,6 +10,49 @@
 \maketitle
 \tableofcontents
 
+%% ============================================================
+%%  記号表
+%% ============================================================
+\chapter*{記号表}
+\addcontentsline{toc}{chapter}{記号表}
+
+\subsection*{測度}
+\begin{tabular}{ll}
+  $\Mm_+^1(\X)$ & $\X$ 上の確率測度の全体 \\
+  $T\pushforward \alpha$ & 写像 $T$ による $\alpha$ の押し出し（push-forward） \\
+\end{tabular}
+
+\subsection*{離散版}
+\begin{tabular}{ll}
+  $\simplex_n$ & $n$ 次元確率単体
+    $\{\mathbf{a} \in \R_+^n \mid \sum_i a_i = 1\}$ \\
+  $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$
+    & 輸送元・輸送先のヒストグラム \\
+  $\mathbf{C} \in \R_+^{n \times m}$ & コスト行列（$C_{i,j}$: ビン $i$ から $j$ への輸送コスト） \\
+  $\ones_n$ & 成分がすべて $1$ の $n$ 次元ベクトル \\
+  $\inner{\cdot}{\cdot}$ & フロベニウス内積 $\inner{\mathbf{A}}{\mathbf{B}} = \tr(\mathbf{A}^\top \mathbf{B})$ \\
+\end{tabular}
+
+\subsection*{最適輸送}
+\begin{tabular}{ll}
+  $\Couplings(\alpha, \beta)$ & $\alpha$ と $\beta$ のカップリングの集合 \\
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ & 離散版カップリング（輸送多面体） \\
+  $\MK_c(\alpha, \beta)$ & Kantorovich 問題の最適値（連続版） \\
+  $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ & Kantorovich 問題の最適値（離散版） \\
+  $\PotentialsD(\mathbf{C})$ & Kantorovich 双対ポテンシャルの実行可能集合 \\
+\end{tabular}
+
+\subsection*{エントロピー正則化}
+\begin{tabular}{ll}
+  $\Hb(\mathbf{P})$ & 離散エントロピー $-\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)$ \\
+  $\KLD(\mathbf{P} \| \mathbf{K})$ & KL ダイバージェンス \\
+  $\MKD_{\mathbf{C}}^\varepsilon$ & エントロピー正則化された最適輸送の最適値 \\
+  $\smin_\varepsilon$ & ソフト最小値 $-\varepsilon \log \sum_i e^{-z_i/\varepsilon}$ \\
+\end{tabular}
+
+\vspace{1em}
+\hrule
+
 \input{01_from_monge_to_sinkhorn}
 
 \end{document}
