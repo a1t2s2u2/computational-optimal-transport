@@ -11,6 +11,19 @@
 各砂粒をどこに運べばよいか？」---
 1781年に Monge が提唱したこの問題は，次のように定式化される．
 
+\begin{definition*}{Dirac 測度}
+  点 $x \in \X$ に対して，\textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\X)$ を
+  \[
+    \delta_x(A) \defeq
+    \begin{cases}
+      1 & x \in A, \\
+      0 & x \notin A
+    \end{cases}
+    \qquad (\forall\, A \in \Bb(\X))
+  \]
+  で定義する．全質量が点 $x$ に集中した確率測度である．
+\end{definition*}
+
 \begin{definition*}{押し出し（push-forward）}
   写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
@@ -21,7 +34,7 @@
   で定義する．ここで $\Bb(\Y)$ は $\Y$ のボレル $\sigma$-代数である．
 \end{definition*}
 
-\begin{setting*}{}{}
+\begin{setting*}{Monge 問題}
   $\X$, $\Y$ を距離空間，
   $\alpha \in \Mm_+^1(\X)$ を輸送元，
   $\beta \in \Mm_+^1(\Y)$ を輸送先の確率測度とし，
@@ -117,13 +130,109 @@ Monge の定式化の特徴は，輸送を写像 $T$ で記述する点にあり
 
 Monge の定式化には2つの深刻な問題がある．
 
-\paragraph{困難1：実行可能集合が凸でない．}
-2つの実行可能な写像 $T_1, T_2$（ともに $T\pushforward \alpha = \beta$ を満たす）に対して，
-その凸結合 $(1-t)T_1 + tT_2$ は一般に押し出し条件を満たさない．
-これは押し出し条件が写像に関して非線形であるためである．
-凸最適化の道具が使えず，大域的最適解の保証が困難になる．
+\begin{definition*}{凸結合・凸集合}
+  ベクトル空間 $V$ の元 $v_1, v_2 \in V$ と $t \in [0,1]$ に対して，
+  $t v_1 + (1-t) v_2$ を $v_1$ と $v_2$ の\textbf{凸結合}という．
+  部分集合 $S \subseteq V$ が\textbf{凸}であるとは，
+  任意の $v_1, v_2 \in S$ の凸結合が再び $S$ に属すること，すなわち
+  \[
+    v_1, v_2 \in S,\; t \in [0,1]
+    \;\Longrightarrow\;
+    t v_1 + (1-t) v_2 \in S
+  \]
+  が成り立つことをいう．
 
-\paragraph{困難2：解が存在しないことがある．}
+  \smallskip
+  \noindent\textbf{写像への適用．}
+  $\Y$ がベクトル空間のとき，$\X$ 上の写像全体 $\Y^{\X}$ は
+  点ごとの演算によりベクトル空間をなす．
+  写像 $T_1, T_2 \colon \X \to \Y$ の凸結合はこの構造のもとで
+  \[
+    \bigl(t T_1 + (1-t)T_2\bigr)(x) = t\,T_1(x) + (1-t)\,T_2(x)
+    \qquad (\forall\, x \in \X)
+  \]
+  と計算される．
+\end{definition*}
+
+\noindent\textbf{困難1：実行可能集合は凸とは限らない．}
+Monge 問題の実行可能集合は
+\[
+  \mathcal{T}(\alpha, \beta)
+  \defeq \left\{ T \colon \X \to \Y \;\middle|\;
+  T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
+\]
+である．この集合は\textbf{凸とは限らない}．
+
+\begin{example*}{$\mathcal{T}(\alpha,\beta)$ の非凸性}
+  $\alpha = \beta = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_1$ とする．
+  恒等写像 $T_1(x) = x$ と入れ替え $T_2(x) = 1-x$ はいずれも
+  ${T_i}\pushforward \alpha = \beta$ を満たし，
+  $T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ である．
+  凸結合 $\tilde{T} = \frac{1}{2}T_1 + \frac{1}{2}T_2$ を計算すると
+  \[
+    \tilde{T}(x) = \frac{1}{2}x + \frac{1}{2}(1-x) = \frac{1}{2}
+  \]
+  となり，$\tilde{T}$ は入力 $x$ によらず常に $\frac{1}{2}$ を返す定数写像である．
+  したがって，$\alpha$ の質量が $0$ と $1$ の2点に分散していても，
+  $\tilde{T}$ はすべての質量を $\frac{1}{2}$ の1点に押し込んでしまい，
+  \[
+    \tilde{T}\pushforward\alpha = \delta_{1/2}
+    \neq \tfrac{1}{2}\delta_0 + \tfrac{1}{2}\delta_1 = \beta.
+  \]
+
+  \begin{center}
+  \begin{tikzpicture}[scale=0.85]
+    % === 第1段：T₁（恒等写像）===
+    \node[font=\small, anchor=east] at (-0.3, 0) {$T_1$（恒等）：};
+    \draw[->] (0, -0.3) -- (5, -0.3);
+    \node[font=\scriptsize] at (1.0, -0.6) {$0$};
+    \node[font=\scriptsize] at (2.5, -0.6) {$\frac{1}{2}$};
+    \node[font=\scriptsize] at (4.0, -0.6) {$1$};
+    \draw[->, thick, red!70] (1.0, 0.5) -- (1.0, 0.0);
+    \draw[->, thick, red!70] (4.0, 0.5) -- (4.0, 0.0);
+    \fill (1.0, -0.3) circle (2.5pt);
+    \fill (4.0, -0.3) circle (2.5pt);
+    \node[font=\small] at (6.8, 0) {$\Rightarrow\;\beta\;\checkmark$};
+
+    % === 第2段：T₂（入れ替え）===
+    \begin{scope}[yshift=-1.8cm]
+      \node[font=\small, anchor=east] at (-0.3, 0) {$T_2$（入れ替え）：};
+      \draw[->] (0, -0.3) -- (5, -0.3);
+      \node[font=\scriptsize] at (1.0, -0.6) {$0$};
+      \node[font=\scriptsize] at (2.5, -0.6) {$\frac{1}{2}$};
+      \node[font=\scriptsize] at (4.0, -0.6) {$1$};
+      \draw[->, thick, blue!70] (1.0, 0.5) to[bend left=20] (4.0, 0.0);
+      \draw[->, thick, blue!70] (4.0, 0.5) to[bend right=20] (1.0, 0.0);
+      \fill (1.0, -0.3) circle (2.5pt);
+      \fill (4.0, -0.3) circle (2.5pt);
+      \node[font=\small] at (6.8, 0) {$\Rightarrow\;\beta\;\checkmark$};
+    \end{scope}
+
+    % === 第3段：T̄（定数写像 → 1/2 に潰れる）===
+    \begin{scope}[yshift=-3.6cm]
+      \node[font=\small, anchor=east] at (-0.3, 0.3)
+        {$\tilde{T} = \tfrac{1}{2}T_1\!+\!\tfrac{1}{2}T_2$：};
+      \draw[->] (0, -0.3) -- (5, -0.3);
+      \node[font=\scriptsize] at (1.0, -0.6) {$0$};
+      \node[font=\scriptsize] at (2.5, -0.6) {$\frac{1}{2}$};
+      \node[font=\scriptsize] at (4.0, -0.6) {$1$};
+      \draw[->, thick, purple, dashed] (1.0, 0.6) to[bend left=15] (2.5, 0.1);
+      \draw[->, thick, purple, dashed] (4.0, 0.6) to[bend right=15] (2.5, 0.1);
+      \fill[purple] (2.5, -0.3) circle (4pt);
+      \node[font=\small] at (6.8, 0)
+        {$\Rightarrow\;\delta_{1/2}\;\textcolor{red}{\neq \beta}$};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+
+  $T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ であるにもかかわらず
+  凸結合 $\tilde{T} = \frac{1}{2}T_1 + \frac{1}{2}T_2 \notin \mathcal{T}(\alpha,\beta)$
+  であるから，$\mathcal{T}(\alpha,\beta)$ は凸でない．
+\end{example*}
+
+凸とは限らないため，凸最適化の手法が適用できず，大域的最適解の保証が困難になる．
+
+\noindent\textbf{困難2：解が存在しないことがある．}
 写像による輸送では，質量の\textbf{分割}が許されない．
 すなわち，$x$ の質量は $T(x)$ という1点にすべて送らなければならない．
 このため，輸送元の測度が輸送先の測度より「粗い」場合に問題が生じる．
