@@ -129,6 +129,7 @@ Monge の定式化の特徴は，輸送を写像 $T$ で記述する点にあり
 \subsection{Monge 問題の本質的困難}
 
 Monge の定式化には2つの深刻な問題がある．
+1つ目は凸性に関わるため，以下では $\Y$ をベクトル空間（例：$\R^d$）に限定する．
 
 \begin{definition*}{凸結合・凸集合}
   ベクトル空間 $V$ の元 $v_1, v_2 \in V$ と $t \in [0,1]$ に対して，
@@ -141,9 +142,9 @@ Monge の定式化には2つの深刻な問題がある．
     t v_1 + (1-t) v_2 \in S
   \]
   が成り立つことをいう．
+\end{definition*}
 
-  \smallskip
-  \noindent\textbf{写像への適用．}
+\begin{remark*}{写像空間への適用}
   $\Y$ がベクトル空間のとき，$\X$ 上の写像全体 $\Y^{\X}$ は
   点ごとの演算によりベクトル空間をなす．
   写像 $T_1, T_2 \colon \X \to \Y$ の凸結合はこの構造のもとで
@@ -151,20 +152,17 @@ Monge の定式化には2つの深刻な問題がある．
     \bigl(t T_1 + (1-t)T_2\bigr)(x) = t\,T_1(x) + (1-t)\,T_2(x)
     \qquad (\forall\, x \in \X)
   \]
-  と計算される．
-\end{definition*}
+  と計算される．したがって $\Y^{\X}$ の部分集合の凸性を問うことができる．
+\end{remark*}
 
 \noindent\textbf{困難1：実行可能集合は凸とは限らない．}
-以下では $\Y$ がベクトル空間の場合（例：$\Y = \R^d$）を考える．
-このとき写像空間 $\Y^{\X}$ にベクトル空間の構造が入り，
-$\mathcal{T}(\alpha,\beta)$ の凸性が意味を持つ．
-Monge 問題の実行可能集合は
+Monge 問題の実行可能集合
 \[
   \mathcal{T}(\alpha, \beta)
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-である．この集合は\textbf{凸とは限らない}．
+は $\Y^{\X}$ の部分集合であるが，この集合は\textbf{凸とは限らない}．
 
 \begin{memo*}
   ここでは $\Y$ がベクトル空間の場合に限り凸性を議論した．
