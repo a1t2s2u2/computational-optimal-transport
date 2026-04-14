@@ -148,6 +148,8 @@ Monge の定式化には2つの深刻な問題がある．
 \end{definition}
 
 \begin{remark}{写像空間への適用}{sem-map-convex}
+  以下で実行可能集合 $\mathcal{T}(\alpha,\beta)$ の凸性を議論するために，
+  それが属する空間のベクトル空間構造を確認する．
   $\Y$ がベクトル空間のとき，$\X$ 上の写像全体 $\Y^{\X}$ は
   点ごとの演算によりベクトル空間をなす．
   写像 $T_1, T_2 \colon \X \to \Y$ の凸結合はこの構造のもとで
@@ -166,13 +168,9 @@ Monge 問題の実行可能集合
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-は $\Y^{\X}$ の部分集合であるが，この集合は\textbf{凸とは限らない}．
-
-\begin{remark}{測地線凸性}{sem-geodesic-convexity}
-  ここでは $\Y$ がベクトル空間の場合に限り凸性を議論した．
-  $\Y$ が一般の距離空間の場合，凸結合の代わりに2点間の測地線を用いた
-  \textbf{測地線凸性}（geodesic convexity）で同様の議論が展開できる．
-\end{remark}
+は $\Y^{\X}$ の部分集合であるが，一般に\textbf{凸でない}．
+これは，押し出し条件 $T\pushforward \alpha = \beta$ が
+写像 $T$ に関して非線形であることに起因する．
 
 \begin{example}{$\mathcal{T}(\alpha,\beta)$ の非凸性}{sem-nonconvex}
   $\alpha = \beta = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_1$ とする．
@@ -241,7 +239,13 @@ Monge 問題の実行可能集合
   であるから，$\mathcal{T}(\alpha,\beta)$ は凸でない．
 \end{example}
 
-凸とは限らないため，凸最適化の手法が適用できず，大域的最適解の保証が困難になる．
+\begin{remark}{測地線凸性}{sem-geodesic-convexity}
+  ここでは $\Y$ がベクトル空間の場合に限り凸性を議論した．
+  $\Y$ が一般の距離空間の場合，凸結合の代わりに2点間の測地線を用いた
+  \textbf{測地線凸性}（geodesic convexity）で同様の議論が展開できる．
+\end{remark}
+
+一般に凸でないため，凸最適化の手法が適用できず，大域的最適解の保証が困難になる．
 
 \subsubsection{困難2：解の非存在}
 
