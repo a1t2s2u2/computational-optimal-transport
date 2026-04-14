@@ -169,8 +169,20 @@ Monge 問題の実行可能集合
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
 は $\Y^{\X}$ の部分集合であるが，一般に\textbf{凸でない}．
-これは，押し出し条件 $T\pushforward \alpha = \beta$ が
-写像 $T$ に関して非線形であることに起因する．
+その理由は，押し出し $T\pushforward \alpha$ が写像 $T$ に関して
+\textbf{非線形}であることにある．
+すなわち，$T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ のとき
+${T_i}\pushforward \alpha = \beta$ であるから
+$t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
+= t\beta + (1-t)\beta = \beta$
+が成り立つが，凸結合の押し出しはこれと一致するとは限らない：
+\[
+  \bigl(t T_1 + (1-t)T_2\bigr)\pushforward \alpha
+  \neq t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
+  \quad (\text{一般には}).
+\]
+直観的には，押し出しは各点の\textbf{行き先の分布}を見る操作であり，
+行き先を点ごとに補間すると分布自体が変わってしまうためである．
 
 \begin{example}{$\mathcal{T}(\alpha,\beta)$ の非凸性}{sem-nonconvex}
   $\alpha = \beta = \frac{1}{2}\delta_0 + \frac{1}{2}\delta_1$ とする．
