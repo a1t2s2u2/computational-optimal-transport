@@ -49,6 +49,11 @@
 \newtheorem{lem}{補題}[chapter]
 \newtheorem{exmp}{例}[chapter]
 
+% --- 環境エイリアス（一部の章で長い名前が使われるため）---
+\newenvironment{proposition}[1][]{\begin{prop}[#1]}{\end{prop}}
+\newenvironment{example}[1][]{\begin{exmp}[#1]}{\end{exmp}}
+\newenvironment{remark}[1][]{\begin{rem}[#1]}{\end{rem}}
+
 % --- 灰色ボックス付き注意環境 (rem1: 薄灰, rem2: 濃灰) ---
 \newenvironment{rem1}[1]{%
 \begin{rem}[#1]\begin{mdframed}
@@ -238,6 +243,9 @@
     \label{#3}
     \end{figure*}
 }
+\newcommand{\imgBox}[1]{%
+\setlength{\fboxsep}{0pt}
+\fbox{#1}}
 \newcommand{\figitem}[1]{\textsf{\textbf{(#1)}}}
 \newcommand{\figitemraise}[2]{\raisebox{#1}{\figitem{#2}}}
 \newcommand{\itemraise}[2]{\raisebox{#1}{#2}}
