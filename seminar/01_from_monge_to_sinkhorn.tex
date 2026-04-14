@@ -41,15 +41,14 @@
   コスト関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは，
   \[
-    \inf_{T}
+    \inf_{T \colon \X \to \Y}
     \left\{
     \int_{\X} c(x, T(x)) \, \d\alpha(x)
     \;\middle|\;
     T\pushforward \alpha = \beta
     \right\}
   \]
-  を求める問題である．ここで下限は
-  $T\pushforward \alpha = \beta$ を満たすすべての可測写像 $T \colon \X \to \Y$ にわたって取る．
+  を求める問題である．
 \end{definition}
 
 %% --- Monge 問題のイメージ図 ---
