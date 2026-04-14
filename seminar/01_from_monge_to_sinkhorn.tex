@@ -424,7 +424,10 @@ $\distD_{i,j} = |x_i - x_j|$ のように台の点間のユークリッド距離
   $\mathbf{P}^\star = \diag(\mathbf{a})$ が $\CouplingsD(\mathbf{a}, \mathbf{a})$ の
   実行可能解でコスト $0$ を達成し，$\WassD_p(\mathbf{a}, \mathbf{a}) = 0$．
   逆に $\mathbf{a} \neq \mathbf{b}$ のとき，
-  許容カップリングは対角の外に必ず正の成分を持ち，
+  ある添字 $i_0$ で $a_{i_0} \neq b_{i_0}$ であるから，
+  周辺制約 $\mathbf{P}\ones = \mathbf{a}$, $\mathbf{P}^\top\ones = \mathbf{b}$ を満たす
+  任意の $\mathbf{P}$ は対角成分だけでは $\mathbf{a} = \mathbf{b}$ を要求するため，
+  必ず対角の外（$i \neq j$）に正の成分を持つ．
   $\distD^p$ の非対角成分はすべて正であるから $\WassD_p(\mathbf{a}, \mathbf{b}) > 0$．
   $\distD^p$ の対称性より $\WassD_p(\mathbf{a}, \mathbf{b}) = \WassD_p(\mathbf{b}, \mathbf{a})$．
 
@@ -452,7 +455,8 @@ $\distD_{i,j} = |x_i - x_j|$ のように台の点間のユークリッド距離
   \]
   ここで $\ones_{\mathrm{Supp}(\mathbf{b})}$ は
   $b_j > 0$ の添字で $1$，それ以外で $0$ のベクトルであり，
-  $b_j = 0$ ならば $P_{i,j} = 0$ であるから
+  $b_j = 0$ ならば周辺制約 $\sum_i P_{i,j} = b_j = 0$ と
+  $P_{i,j} \geq 0$ から $P_{i,j} = 0$（$\forall\, i$）であるから
   $\mathbf{P} \ones_{\mathrm{Supp}(\mathbf{b})} = \mathbf{P} \ones = \mathbf{a}$
   が成り立つ．
   同様に $\mathbf{S}^\top \ones_n = \mathbf{c}$ も確認できる．
@@ -474,7 +478,11 @@ $\distD_{i,j} = |x_i - x_j|$ のように台の点間のユークリッド距離
   ここで第1の不等式は $\mathbf{S}$ の次善性，
   第2の不等式は $\distD$ の三角不等式 $\distD_{i,k} \leq \distD_{i,j} + \distD_{j,k}$
   による．
-  さらに Minkowski の不等式（$p \geq 1$）を適用すると
+  さらに Minkowski の不等式
+  $\bigl(\sum_i |a_i + b_i|^p\bigr)^{1/p}
+  \leq \bigl(\sum_i |a_i|^p\bigr)^{1/p} + \bigl(\sum_i |b_i|^p\bigr)^{1/p}$
+  （$p \geq 1$）を，
+  重み $P_{i,j} Q_{j,k} / \tilde{b}_j$ に関する加重和に適用すると
   \[
     \leq \Bigl(\sum_{i,j,k}
        \distD_{i,j}^p \frac{P_{i,j} Q_{j,k}}{\tilde{b}_j}\Bigr)^{1/p}
