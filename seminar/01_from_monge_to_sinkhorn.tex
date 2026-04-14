@@ -1,4 +1,4 @@
-\chapter{Monge問題からSinkhornアルゴリズムへ}
+\chapter{Optimal Transport の基礎理論}
 \label{ch:seminar-01}
 
 %% ============================================================
@@ -366,525 +366,172 @@ Kantorovich 問題は Monge 問題の緩和であり，
 Monge 写像による輸送は「$\pi$ が $T$ のグラフ上に集中している」カップリングの特殊な場合である．
 
 %% ============================================================
-%%  3. 双対問題
+%%  3. Wasserstein 距離
 %% ============================================================
-\section{双対問題}
-\label{sec:sem-dual}
+\section{Wasserstein 距離}
+\label{sec:sem-wasserstein}
 
-Kantorovich 問題（定義~\ref{def:sem-kantorovich}）は線形計画であるから，LP 双対理論を適用できる．
-双対問題は最適輸送の理論的理解にも計算手法にも重要な役割を果たす．
+Kantorovich 問題の最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ は
+ヒストグラム間の「輸送コスト」を与えるが，
+コスト行列 $\mathbf{C}$ が距離行列のべき乗であるとき，
+この値から自然に\textbf{距離の公理を満たす量}が定義できる．
+すなわち，OT は点間の ground 距離を，分布間の距離に\textbf{持ち上げる}
+（lift する）正準的な方法を提供する．
 
-\subsection{ラグランジュ双対の導出}
+\subsection{Ground 距離}
 
-離散版 Kantorovich 問題の等式制約に対するラグランジュ乗数を
-$\mathbf{f} \in \R^n$，$\mathbf{g} \in \R^m$ とおくと，
-ラグランジュ関数は
-\[
-  L(\mathbf{P}, \mathbf{f}, \mathbf{g})
-  = \inner{\mathbf{C}}{\mathbf{P}}
-  + \inner{\mathbf{f}}{\mathbf{a} - \mathbf{P}\ones_m}
-  + \inner{\mathbf{g}}{\mathbf{b} - \mathbf{P}^\top \ones_n}.
-\]
-これを整理すると
-\[
-  L = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-  + \inner{\mathbf{C} - \mathbf{f}\ones_m^\top - \ones_n \mathbf{g}^\top}{\mathbf{P}}.
-\]
-$\mathbf{P} \geq 0$ のもとで $L$ を $\mathbf{P}$ について最小化すると，
-第3項が非負（すなわち $f_i + g_j \leq C_{i,j}$, $\forall\, i, j$）のとき
-最小値は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$，
-そうでなければ $-\infty$ となる．
+\begin{definition}{Ground 距離行列}{sem-ground-metric}
+  $\distD \in \R_+^{n \times n}$ が $\range{n}$ 上の\textbf{距離行列}であるとは，
+  以下の3条件を満たすことをいう：
+  \begin{enumerate}
+    \item[(i)] 対称性：$\distD_{i,j} = \distD_{j,i}$，
+    \item[(ii)] 正定値性：$\distD_{i,j} = 0 \iff i = j$，
+    \item[(iii)] 三角不等式：$\distD_{i,k} \leq \distD_{i,j} + \distD_{j,k}$
+      \quad $(\forall\, i, j, k \in \range{n})$．
+  \end{enumerate}
+\end{definition}
 
-\subsection{Kantorovich 双対定理}
+この距離行列 $\distD$ を「ビン間の距離」（ground metric）と呼ぶ．
+例えば $\X = \R$ 上に台を持つヒストグラムでは，
+$\distD_{i,j} = |x_i - x_j|$ のように台の点間のユークリッド距離を取ることが多い．
 
-\begin{theorem}{Kantorovich 双対定理（離散版）}{sem-kantorovich-dual}
-  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$，
-  コスト行列 $\mathbf{C} \in \R_+^{n \times m}$ に対して，
+\subsection{$p$-Wasserstein 距離の定義}
+
+\begin{proposition}{$p$-Wasserstein 距離}{sem-wasserstein-metric}
+  $n = m$ とし，$p \geq 1$ に対して
+  コスト行列を $\mathbf{C} = \distD^p = (\distD_{i,j}^p)_{i,j}$ とする．
+  このとき
   \[
-    \underbrace{
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
-    }_{\text{主問題（輸送計画の最適化）}}
-    =
-    \underbrace{
-    \max_{\substack{(\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m \\
-    f_i + g_j \leq C_{i,j}\; \forall\, i,j}}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-    }_{\text{双対問題（ポテンシャルの最適化）}}
+    \WassD_p(\mathbf{a}, \mathbf{b})
+    \defeq \MKD_{\distD^p}(\mathbf{a}, \mathbf{b})^{1/p}
   \]
-  が成り立つ．
-\end{theorem}
-
-線形計画の強双対性による．
-
-双対実行可能集合を $\PotentialsD(\mathbf{C}) = \{(\mathbf{f}, \mathbf{g}) \mid f_i + g_j \leq C_{i,j},\; \forall\, i, j\}$ と書く．
-
-\subsection{相補性条件}
-
-主問題と双対問題の最適解の間には重要な関係がある．
-
-\begin{proposition}{相補性条件}{sem-complementary}
-  $\mathbf{P}^*$ と $(\mathbf{f}^*, \mathbf{g}^*)$ がそれぞれ主問題と双対問題の最適解ならば，
+  は $\simplex_n$ 上の\textbf{距離}を定義する．
+  すなわち，$\WassD_p$ は対称かつ正定値であり，三角不等式
   \[
-    P^*_{i,j} > 0 \implies f^*_i + g^*_j = C_{i,j}
+    \WassD_p(\mathbf{a}, \mathbf{c})
+    \leq \WassD_p(\mathbf{a}, \mathbf{b})
+    + \WassD_p(\mathbf{b}, \mathbf{c})
+    \qquad (\forall\, \mathbf{a}, \mathbf{b}, \mathbf{c} \in \simplex_n)
   \]
-  が成り立つ．
+  を満たす．
 \end{proposition}
 
-最適輸送計画で正の質量が輸送される経路では，双対ポテンシャルの和がコストに一致する．
+\subsection{距離の公理の証明}
 
 \begin{proof}
-  強双対性から
-  $\inner{\mathbf{C}}{\mathbf{P}^*}
-  = \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}$．
-  主問題の制約を用いると
-  $\inner{\mathbf{C} - \mathbf{f}^* \ones_m^\top - \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*} = 0$．
-  $\mathbf{P}^* \geq 0$ かつ $C_{i,j} - f^*_i - g^*_j \geq 0$ であるから，
-  各成分の積 $P^*_{i,j}(C_{i,j} - f^*_i - g^*_j) = 0$ がすべての $(i, j)$ で成り立つ．
+  \textbf{対称性と正定値性．}
+  $\mathbf{C} = \distD^p$ の対角成分は $\distD_{i,i}^p = 0$ であるから，
+  $\mathbf{P}^\star = \diag(\mathbf{a})$ が $\CouplingsD(\mathbf{a}, \mathbf{a})$ の
+  実行可能解でコスト $0$ を達成し，$\WassD_p(\mathbf{a}, \mathbf{a}) = 0$．
+  逆に $\mathbf{a} \neq \mathbf{b}$ のとき，
+  許容カップリングは対角の外に必ず正の成分を持ち，
+  $\distD^p$ の非対角成分はすべて正であるから $\WassD_p(\mathbf{a}, \mathbf{b}) > 0$．
+  $\distD^p$ の対称性より $\WassD_p(\mathbf{a}, \mathbf{b}) = \WassD_p(\mathbf{b}, \mathbf{a})$．
+
+  \medskip
+  \textbf{三角不等式（glued coupling の構成）．}
+  $\mathbf{a}, \mathbf{b}, \mathbf{c} \in \simplex_n$ とする．
+  $\mathbf{P}$ を $(\mathbf{a}, \mathbf{b})$ 間の最適輸送，
+  $\mathbf{Q}$ を $(\mathbf{b}, \mathbf{c})$ 間の最適輸送とする．
+
+  \textbf{補助カップリングの構成．}
+  $\tilde{\mathbf{b}}$ を $\tilde{b}_j = b_j$ ($b_j > 0$ のとき),
+  $\tilde{b}_j = 1$ ($b_j = 0$ のとき) として，
+  \[
+    \mathbf{S} \defeq \mathbf{P} \, \diag(1 / \tilde{\mathbf{b}}) \, \mathbf{Q}
+    \in \R_+^{n \times n}
+  \]
+  とおく．
+  $\mathbf{S}$ は $(\mathbf{a}, \mathbf{c})$ のカップリングである：
+  \[
+    \mathbf{S} \ones_n
+    = \mathbf{P} \, \diag(1/\tilde{\mathbf{b}}) \, \mathbf{Q} \ones_n
+    = \mathbf{P} (\mathbf{b} / \tilde{\mathbf{b}})
+    = \mathbf{P} \ones_{\mathrm{Supp}(\mathbf{b})}
+    = \mathbf{a},
+  \]
+  ここで $\ones_{\mathrm{Supp}(\mathbf{b})}$ は
+  $b_j > 0$ の添字で $1$，それ以外で $0$ のベクトルであり，
+  $b_j = 0$ ならば $P_{i,j} = 0$ であるから
+  $\mathbf{P} \ones_{\mathrm{Supp}(\mathbf{b})} = \mathbf{P} \ones = \mathbf{a}$
+  が成り立つ．
+  同様に $\mathbf{S}^\top \ones_n = \mathbf{c}$ も確認できる．
+
+  \medskip
+  \textbf{不等式の導出．}
+  $\mathbf{S}$ は $\CouplingsD(\mathbf{a}, \mathbf{c})$ の実行可能解であるから（最適とは限らない），
+  \begin{align*}
+    \WassD_p(\mathbf{a}, \mathbf{c})
+    &= \Bigl(\min_{\mathbf{P}' \in \CouplingsD(\mathbf{a}, \mathbf{c})}
+       \inner{\mathbf{P}'}{\distD^p}\Bigr)^{1/p}
+    \leq \inner{\mathbf{S}}{\distD^p}^{1/p} \\
+    &= \Bigl(\sum_{i,k} \distD_{i,k}^p
+       \sum_j \frac{P_{i,j} Q_{j,k}}{\tilde{b}_j}\Bigr)^{1/p}
+    \leq \Bigl(\sum_{i,j,k}
+       (\distD_{i,j} + \distD_{j,k})^p
+       \frac{P_{i,j} Q_{j,k}}{\tilde{b}_j}\Bigr)^{1/p}
+  \end{align*}
+  ここで第1の不等式は $\mathbf{S}$ の次善性，
+  第2の不等式は $\distD$ の三角不等式 $\distD_{i,k} \leq \distD_{i,j} + \distD_{j,k}$
+  による．
+  さらに Minkowski の不等式（$p \geq 1$）を適用すると
+  \[
+    \leq \Bigl(\sum_{i,j,k}
+       \distD_{i,j}^p \frac{P_{i,j} Q_{j,k}}{\tilde{b}_j}\Bigr)^{1/p}
+    + \Bigl(\sum_{i,j,k}
+       \distD_{j,k}^p \frac{P_{i,j} Q_{j,k}}{\tilde{b}_j}\Bigr)^{1/p}.
+  \]
+  第1項では $k$ について和を取ると
+  $\sum_k Q_{j,k} / \tilde{b}_j = b_j / \tilde{b}_j = 1$（$b_j > 0$ のとき），
+  第2項では $i$ について和を取ると
+  $\sum_i P_{i,j} / \tilde{b}_j = b_j / \tilde{b}_j = 1$ となり，
+  \[
+    \WassD_p(\mathbf{a}, \mathbf{c})
+    \leq \Bigl(\sum_{i,j} \distD_{i,j}^p P_{i,j}\Bigr)^{1/p}
+    + \Bigl(\sum_{j,k} \distD_{j,k}^p Q_{j,k}\Bigr)^{1/p}
+    = \WassD_p(\mathbf{a}, \mathbf{b})
+    + \WassD_p(\mathbf{b}, \mathbf{c}).
+  \]
 \end{proof}
 
-\subsection{双対問題の経済学的解釈}
+証明の核心は，2つの最適輸送 $\mathbf{P}$, $\mathbf{Q}$ を
+$\mathbf{b}$ を経由して「接着」（gluing）し，$(\mathbf{a}, \mathbf{c})$ 間の
+実行可能な（しかし一般に最適ではない）カップリング $\mathbf{S}$ を構成する点にある．
 
-双対問題には次の直感的な解釈がある．
+\subsection{Wasserstein 距離の直観的理解}
 
-輸送業者が，倉庫 $i$ での集荷料金 $f_i$，工場 $j$ への配送料金 $g_j$ を設定し，
-元の輸送会社に代わって輸送を引き受けるとする．
-輸送会社がこの契約を受け入れるためには，
-どの経路でも業者の料金が自前のコスト以下でなければならない：$f_i + g_j \leq C_{i,j}$．
-この条件のもとで収入 $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$
-を最大化するのが双対問題であり，その最適値が最適輸送コストに一致する．
+$p$-Wasserstein 距離の重要な性質を確認する．
 
-%% ============================================================
-%%  4. 古典的アルゴリズムとその限界
-%% ============================================================
-\section{古典的アルゴリズムとその限界}
-\label{sec:sem-classical}
-
-Kantorovich 問題（定義~\ref{def:sem-kantorovich}）は線形計画であるから，原理的には単体法や内点法で解ける．
-さらに，最適輸送の特殊構造を利用した効率的な手法が開発されてきた．
-
-\subsection{線形計画としての構造}
-
-行列 $\mathbf{P}$ をベクトル $\mathbf{p} \in \R^{nm}$ に並べ直すと，
-Kantorovich 問題は標準形の線形計画
+\paragraph{Dirac 測度間の距離．}
+任意の2点 $x, y$ に対して
+$\Couplings(\delta_x, \delta_y) = \{\delta_{(x,y)}\}$（1つしかない）であるから，
 \[
-  \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
-  \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
-  \mathbf{c}^\top \mathbf{p}
+  \Wass_p(\delta_x, \delta_y)^p = \dist(x, y)^p.
 \]
-となる．
-制約行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ の階数は $n + m - 1$ である
-（行制約の総和と列制約の総和がともに $1$ となるため，$n + m$ 本の制約のうち1本が冗長）．
-したがって，輸送多面体の頂点は $n + m - 1$ 個以下の非零成分を持つ．
+すなわち $\Wass_p(\delta_x, \delta_y) = \dist(x,y)$ である．
+点上の Dirac 測度間の Wasserstein 距離は，そのまま ground 距離に一致する．
+これが「距離の持ち上げ」の最も基本的な例である．
 
-\subsection{古典的手法の概観}
+\paragraph{弱距離としての性質．}
+$L^2$ ノルムや KL ダイバージェンスなどの「古典的」な距離・ダイバージェンスは，
+台が重ならない離散分布間では定義できないか，無限大となってしまう．
+一方，Wasserstein 距離は台が重ならない分布の比較を自然に行え，
+2つの分布間の空間的なシフトを定量化できる．
+この性質が，OT を分布間の比較に用いる大きな動機である．
 
-\paragraph{ネットワーク単体法}
-輸送多面体の頂点間を移動しながら最適解を探索する．
-各反復では，
-(i) 現在の頂点に相補的な双対変数を構成し，
-(ii) 双対実行可能性を確認し，
-(iii) 違反する辺を追加して閉路に沿った流量調整を行う．
-多項式時間で停止することが Orlin (1997) により証明されている．
+\subsection{一般測度への拡張}
 
-\paragraph{オークションアルゴリズム}
-Bertsekas (1981) による双対的手法．
-$\varepsilon$-相補性条件を維持しながら双対変数 $\mathbf{g}$ を逐次更新する．
-$\varepsilon$-スケーリングにより $O(n^3 \log \norm{\mathbf{C}}_\infty)$ の計算量．
+ヒストグラム上の結果は一般の測度に自然に拡張できる．
 
-\paragraph{双対上昇法}
-双対変数 $(\mathbf{f}, \mathbf{g})$ を直接改善する手法．
-ハンガリアン法はこの枠組みの代表例である．
-
-\subsection{計算量の壁}
-
-これらの古典的手法はいずれも厳密解を与えるが，
-実用上の問題は\textbf{計算量}である：
-
-\begin{center}
-\begin{tabular}{ll}
-  \hline
-  手法 & 計算量 \\
-  \hline
-  LP 内点法（一般的な解法） & $O(n^3 m^3)$ 程度 \\
-  ネットワーク単体法 & $O(n^3 \log n \log(n \norm{\mathbf{C}}_\infty))$ \\
-  オークション（$\varepsilon$-スケーリング） & $O(n^3 \log \norm{\mathbf{C}}_\infty)$ \\
-  \hline
-\end{tabular}
-\end{center}
-
-$n = m = 1000$ 程度で $nm = 10^6$ 変数の LP となり，
-画像処理（$n \sim 10^4$--$10^6$）や機械学習の応用では
-$n^3$ のオーダーは実用に耐えない．
-
-\medskip
-\textbf{問い：}厳密解でなく近似解で良いなら，
-もっと速い手法はないか？
-
-この問いへの回答が，次節のエントロピー正則化である．
-
-%% ============================================================
-%%  5. エントロピー正則化
-%% ============================================================
-\section{エントロピー正則化}
-\label{sec:sem-entropic}
-
-\subsection{着想：エントロピー項を加える}
-
-目的関数にエントロピーの\textbf{正則化項}を加えることで，
-問題を厳密に凸化し，かつ効率的に解ける構造を持たせる．
-エントロピーが高い（質量が分散した）輸送計画を優遇する効果がある．
-
-行列 $\mathbf{P} \in \R_+^{n \times m}$ の離散エントロピーを
-\[
-  \Hb(\mathbf{P}) \defeq - \sum_{i,j} P_{i,j} (\log P_{i,j} - 1)
-\]
-とする．ただし $0 \log 0 = 0$ と約束する．
-対応する負エントロピー $-\Hb$ は狭義凸関数である
-（各成分 $-x(\log x - 1)$ が $x > 0$ で狭義凸であることによる）．
-勾配は $\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$ と簡潔になる．
-
-\begin{definition}{エントロピー正則化された最適輸送}{sem-entropic-ot}
-  正則化パラメータ $\varepsilon > 0$ に対して，
-  \textbf{エントロピー正則化された最適輸送問題}を
+\begin{proposition}{測度上の $p$-Wasserstein 距離}{sem-wasserstein-measure}
+  $\X = \Y$ とし，$\dist$ を $\X$ 上の距離，$c(x,y) = \dist(x,y)^p$ （$p \geq 1$）とする．
+  このとき
   \[
-    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
-    \defeq
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \underbrace{\inner{\mathbf{C}}{\mathbf{P}}}_{\text{輸送コスト}}
-    \underbrace{- \varepsilon \Hb(\mathbf{P})}_{\text{正則化項}}
+    \Wass_p(\alpha, \beta)
+    \defeq \MK_{\dist^p}(\alpha, \beta)^{1/p}
   \]
-  で定義する．
-\end{definition}
-
-目的関数は狭義凸であるから，最適解 $\mathbf{P}_\varepsilon$ は一意に存在する．
-
-\subsection{正則化パラメータ $\varepsilon$ の役割}
-
-$\varepsilon$ は2つの極限を補間する：
-\begin{itemize}
-  \item $\varepsilon \to 0$：$\mathbf{P}_\varepsilon$ は
-    非正則化問題の最適解（のうちエントロピー最大のもの）に収束．
-  \item $\varepsilon \to +\infty$：$\mathbf{P}_\varepsilon$ は
-    積測度 $\mathbf{a}\mathbf{b}^\top$ に収束
-    （輸送元と輸送先を独立に結合する最も「ぼやけた」カップリング）．
-\end{itemize}
-
-\subsection{KL ダイバージェンスによる再定式化}
-
-\begin{definition}{Gibbs カーネル}{sem-gibbs}
-  コスト行列 $\mathbf{C}$ と $\varepsilon > 0$ に対して，
-  \textbf{Gibbs カーネル}を
-  $K_{i,j} \defeq e^{-C_{i,j}/\varepsilon}$
-  で定義する．
-\end{definition}
-
-\begin{definition}{KL ダイバージェンス}{sem-kl}
-  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
-  \[
-    \KLD(\mathbf{P} \| \mathbf{K})
-    \defeq \sum_{i,j} \left(
-    P_{i,j} \log \frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}
-    \right)
-  \]
-  とする．ただし $0 \log(0/K_{i,j}) = 0$ と約束する．
-\end{definition}
-
-$\KLD \geq 0$ であり，等号は $\mathbf{P} = \mathbf{K}$ のときに限る．
-
-Gibbs カーネルを用いると，正則化問題は\textbf{KL 射影}として書き直せる：
-\[
-  \mathbf{P}_\varepsilon
-  = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-  \KLD(\mathbf{P} \| \mathbf{K}).
-\]
-すなわち，$\mathbf{P}_\varepsilon$ は Gibbs カーネル $\mathbf{K}$ の
-カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ への KL 射影
-（集合内で $\mathbf{K}$ に最も近い点）である．
-
-%% ============================================================
-%%  6. Sinkhorn アルゴリズム
-%% ============================================================
-\section{Sinkhorn アルゴリズム}
-\label{sec:sem-sinkhorn}
-
-\subsection{最適解の構造：スケーリング形式}
-
-正則化問題の最適解は，次の特殊な構造を持つ．
-
-\begin{proposition}{最適解のスケーリング形式}{sem-scaling}
-  最適解 $\mathbf{P}_\varepsilon$ は
-  \[
-    (P_\varepsilon)_{i,j} = u_i \, K_{i,j} \, v_j
-  \]
-  の形で表される．
-  行列形式では
-  $\mathbf{P}_\varepsilon = \diag(\mathbf{u}) \, \mathbf{K} \, \diag(\mathbf{v})$．
+  は $\Mm_+^1(\X)$ 上の距離を定義する．
 \end{proposition}
 
-\begin{proof}
-  ラグランジュ関数の $P_{i,j} > 0$ における一次条件
-  $C_{i,j} + \varepsilon \log P_{i,j} - f_i - g_j = 0$ を解くと，
-  \[
-    P_{i,j} = e^{f_i/\varepsilon} \cdot e^{-C_{i,j}/\varepsilon} \cdot e^{g_j/\varepsilon}
-    = u_i \, K_{i,j} \, v_j.
-  \]
-  ここで $u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ とおいた．
-  エントロピー項により目的関数の勾配は $P_{i,j} \to 0^+$ で $-\infty$ に発散するため，
-  境界 $P_{i,j} = 0$ で最小値を取ることはなく，
-  すべての成分で $P_{i,j} > 0$ が成り立つ．
-\end{proof}
-
-\subsection{周辺分布制約からの反復}
-
-$\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ に
-周辺分布制約を代入すると，
-\[
-  \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a}, \qquad
-  \mathbf{v} \odot (\mathbf{K}^\top \mathbf{u}) = \mathbf{b}
-\]
-が得られる（$\odot$ は成分ごとの積）．
-Sinkhorn アルゴリズムは，この2つの条件を\textbf{交互}に満たすよう
-$\mathbf{u}$ と $\mathbf{v}$ を更新する．
-
-\begin{algorithm}{alg:sem-sinkhorn}
-  \textbf{Input:} $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$,
-  $\mathbf{K} = e^{-\mathbf{C}/\varepsilon}$, 反復回数 $L$ \\
-  \textbf{Output:} スケーリングベクトル $\mathbf{u}, \mathbf{v}$ \\[4pt]
-  1. $\mathbf{v}^{(0)} \leftarrow \ones_m$ \\
-  2. \textbf{for} $\ell = 0, 1, \ldots, L-1$ \textbf{do}: \\
-  3. \quad $\mathbf{u}^{(\ell+1)} \leftarrow \mathbf{a} \oslash (\mathbf{K} \mathbf{v}^{(\ell)})$
-  \hfill （行制約を満たす） \\
-  4. \quad $\mathbf{v}^{(\ell+1)} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top \mathbf{u}^{(\ell+1)})$
-  \hfill （列制約を満たす） \\[4pt]
-  ここで $\oslash$ は成分ごとの除算（$(\mathbf{a} \oslash \mathbf{b})_i = a_i / b_i$）．
-  各反復は行列ベクトル積2回で $O(nm)$．
-\end{algorithm}
-
-\subsection{Bregman 射影としての解釈}
-
-$\mathbf{P}^{(0)} = \mathbf{K}$（Gibbs カーネル）を初期点とすると，
-Sinkhorn の各ステップは KL ダイバージェンスに関する\textbf{交互射影}と解釈できる：
-\begin{align*}
-  \mathbf{P}^{(\ell+1/2)}
-    &= \argmin_{\mathbf{P}\ones_m = \mathbf{a}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell)})
-    &&\text{（行制約への射影）},
-  \\
-  \mathbf{P}^{(\ell+1)}
-    &= \argmin_{\mathbf{P}^\top \ones_n = \mathbf{b}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell+1/2)})
-    &&\text{（列制約への射影）}.
-\end{align*}
-
-\subsection{GPU 並列化との親和性}
-
-Sinkhorn の核心的演算は行列ベクトル積 $\mathbf{K}\mathbf{v}$ と $\mathbf{K}^\top \mathbf{u}$ であり，
-これは高度に並列化可能である．
-さらに，複数の入力対 $(\mathbf{a}_k, \mathbf{b}_k)$ に対して同一コスト行列 $\mathbf{C}$ のもとでの計算は，
-行列--行列積でバッチ化できる：
-\[
-  \mathbf{U}^{(\ell+1)} = \mathbf{A} \oslash (\mathbf{K}\mathbf{V}^{(\ell)}), \qquad
-  \mathbf{V}^{(\ell+1)} = \mathbf{B} \oslash (\mathbf{K}^\top \mathbf{U}^{(\ell+1)}).
-\]
-古典的アルゴリズム（ネットワーク単体法等）は本質的に逐次的であり，
-この並列性が Sinkhorn の最大の実用的優位点である．
-
-%% ============================================================
-%%  7. 収束性の保証
-%% ============================================================
-\section{収束性の保証}
-\label{sec:sem-convergence}
-
-\subsection{Hilbert 射影距離}
-
-Sinkhorn の収束解析には\textbf{Hilbert 射影距離}が用いられる．
-
-\begin{definition}{Hilbert 射影距離}{sem-hilbert}
-  正ベクトル $\mathbf{u}, \mathbf{u}' \in \R_{++}^n$ に対して，
-  \[
-    \mathrm{Hilbert}(\mathbf{u}, \mathbf{u}')
-    \defeq \log \max_{i,j} \frac{u_i \, u'_j}{u_j \, u'_i}.
-  \]
-\end{definition}
-
-$\mathrm{Hilbert}(\mathbf{u}, \mathbf{u}') = 0$ は
-$\mathbf{u}$ と $\mathbf{u}'$ が定数倍の関係にあることと同値であり，
-射影空間 $\R_{++}^n / \R_{++}$ 上の距離を与える．
-
-\subsection{Birkhoff の縮小定理}
-
-\begin{theorem}{Birkhoff の縮小定理}{sem-birkhoff}
-  正行列 $\mathbf{K} \in \R_{++}^{n \times m}$ に対して，
-  \[
-    \mathrm{Hilbert}(\mathbf{K}\mathbf{v}, \mathbf{K}\mathbf{v}')
-    \leq \lambda(\mathbf{K}) \, \mathrm{Hilbert}(\mathbf{v}, \mathbf{v}')
-  \]
-  が成り立つ．
-  Birkhoff 縮小率は $\lambda(\mathbf{K}) = \frac{\sqrt{\eta} - 1}{\sqrt{\eta} + 1} \in [0, 1)$
-  であり，$\eta = \max_{i,j,k,\ell} \frac{K_{i,k} K_{j,\ell}}{K_{j,k} K_{i,\ell}}$
-  で定まる．
-\end{theorem}
-
-Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ に対しては
-$\eta = e^{2\norm{\mathbf{C}}_\infty / \varepsilon}$ であり，
-\textbf{$\varepsilon$ が大きいほど $\lambda$ が小さくなり収束が速い}．
-
-\subsection{Sinkhorn の線形収束}
-
-定理~\ref{thm:sem-birkhoff}を反復に適用すると，
-\[
-  \mathrm{Hilbert}(\mathbf{u}^{(\ell)}, \mathbf{u}^*)
-  = O(\lambda(\mathbf{K})^{2\ell})
-\]
-が得られ，\textbf{線形収束}（幾何級数的収束）が保証される．
-
-実用的な停止条件としては，周辺分布の制約違反
-$\norm{\mathbf{P}^{(\ell)}\ones_m - \mathbf{a}}_1$ の監視が推奨される．
-
-%% ============================================================
-%%  8. 数値安定性：対数領域 Sinkhorn
-%% ============================================================
-\section{数値安定性：対数領域 Sinkhorn}
-\label{sec:sem-log-domain}
-
-\subsection{アンダーフロー問題}
-
-$\varepsilon$ が小さいとき，$K_{i,j} = e^{-C_{i,j}/\varepsilon}$ は機械精度を下回る．
-例えば $C_{i,j} = 10$，$\varepsilon = 0.01$ では
-$K_{i,j} = e^{-1000} \approx 10^{-434}$
-であり，64ビット浮動小数点で表現不能（アンダーフロー）となる．
-
-\subsection{対数領域への変換}
-
-$u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ として
-対数領域の変数 $(\mathbf{f}, \mathbf{g})$ で反復を記述する：
-\begin{align*}
-  f_i^{(\ell+1)}
-    &= \varepsilon \log a_i
-    - \varepsilon \log \sum_j e^{(g_j^{(\ell)} - C_{i,j})/\varepsilon},
-  \\
-  g_j^{(\ell+1)}
-    &= \varepsilon \log b_j
-    - \varepsilon \log \sum_i e^{(f_i^{(\ell+1)} - C_{i,j})/\varepsilon}.
-\end{align*}
-
-\subsection{ソフト最小値と log-sum-exp 安定化}
-
-上の反復は\textbf{ソフト最小値}
-$\smin_\varepsilon \mathbf{z} \defeq -\varepsilon \log \sum_i e^{-z_i/\varepsilon}$
-を用いて簡潔に書ける．
-$\varepsilon \to 0$ で $\smin_\varepsilon \mathbf{z} \to \min_i z_i$ となる．
-
-\textbf{log-sum-exp トリック}により数値安定化する：
-\[
-  \smin_\varepsilon \mathbf{z}
-  = \underline{z} - \varepsilon \log \sum_i e^{-(z_i - \underline{z})/\varepsilon},
-  \qquad \underline{z} = \min_i z_i.
-\]
-指数関数の引数が非正となるため，オーバーフローが回避される．
-
-\subsection{トレードオフ}
-
-対数領域 Sinkhorn は任意の $\varepsilon > 0$ で安定に動作するが，
-各反復で $nm$ 回の指数関数計算を要する．
-プリミティブな Sinkhorn（行列ベクトル積のみ）と比較して定数倍遅くなるが，
-$\varepsilon$ が小さい場合には不可欠な安定化手法である．
-
-%% ============================================================
-%%  9. 近似としての評価
-%% ============================================================
-\section{非正則化コストの近似}
-\label{sec:sem-approximation}
-
-$\MKD_{\mathbf{C}}^\varepsilon$ はエントロピー項によりバイアスを含む．
-双対変数を用いて，非正則化コスト $\MKD_{\mathbf{C}}$ の上界・下界が得られる．
-
-\begin{proposition}{非正則化コストの近似}{sem-approx-bounds}
-  正則化問題の最適双対変数 $(\mathbf{f}^*, \mathbf{g}^*)$ は
-  $\PotentialsD(\mathbf{C})$ に属し，
-  \[
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    \leq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-  \]
-  が成り立つ．
-\end{proposition}
-
-\begin{proof}
-  \textbf{上界：}
-  $\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  非正則化問題の実行可能解であるから，
-  $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}$．
-
-  \textbf{下界：}
-  正則化問題の KKT 条件より
-  $f^*_i + g^*_j = C_{i,j} + \varepsilon \log (P_\varepsilon)_{i,j}$．
-  $\mathbf{P}_\varepsilon$ はカップリングであるから
-  $(P_\varepsilon)_{i,j} \leq a_i \leq 1$ が成り立ち，
-  $\log (P_\varepsilon)_{i,j} \leq 0$．
-  よって $f^*_i + g^*_j \leq C_{i,j}$，
-  すなわち $(\mathbf{f}^*, \mathbf{g}^*) \in \PotentialsD(\mathbf{C})$．
-  非正則化問題の双対定理（定理~\ref{thm:sem-kantorovich-dual}）から下界が従う．
-\end{proof}
-
-左辺と右辺の差（近似誤差）を評価する．
-KKT 条件と周辺分布制約から
-\[
-  \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-  = \sum_{i,j} (f^*_i + g^*_j)(P_\varepsilon)_{i,j}
-  = \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-  + \varepsilon \sum_{i,j} (P_\varepsilon)_{i,j} \log (P_\varepsilon)_{i,j}
-\]
-であり，$\sum_{i,j} (P_\varepsilon)_{i,j} = 1$ と
-$\Hb(\mathbf{P}) = -\sum P_{i,j} \log P_{i,j} + \sum P_{i,j}$ から，
-近似誤差は $\varepsilon(\Hb(\mathbf{P}_\varepsilon) - 1)$ となる．
-$\varepsilon$ を小さく取るほど近似は精密になるが，
-収束は遅くなり数値安定性も低下する．
-このトレードオフの制御が実用上の鍵である．
-
-%% ============================================================
-%%  10. まとめ
-%% ============================================================
-\section{まとめ}
-\label{sec:sem-summary}
-
-本セミナーの議論を振り返る．
-
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[
-  node distance=1.8cm,
-  every node/.style={draw, rounded corners, text width=5.5cm, align=center,
-    minimum height=1.2cm, font=\small},
-  arrow/.style={->, thick, >=stealth}
-]
-  \node (monge) {\textbf{Monge 問題}\\写像 $T$ による輸送\\
-    困難：非凸・解の非存在};
-
-  \node (kanto) [below of=monge] {\textbf{Kantorovich 緩和}\\
-    カップリング $\pi$ による輸送\\
-    凸最適化・LP として定式化};
-
-  \node (dual) [below of=kanto] {\textbf{双対問題}\\
-    ポテンシャル $(\mathbf{f}, \mathbf{g})$ の最適化\\
-    相補性条件};
-
-  \node (classic) [below of=dual] {\textbf{古典的アルゴリズム}\\
-    ネットワーク単体法・オークション\\
-    厳密解だが $O(n^3)$ で重い};
-
-  \node (sinkhorn) [below of=classic] {\textbf{エントロピー正則化 + Sinkhorn}\\
-    $O(nm)$/反復・GPU 並列化可能\\
-    線形収束・対数領域で安定};
-
-  \draw[arrow] (monge) -- node[draw=none, right, text width=3cm, minimum height=0pt]
-    {\scriptsize 質量分割を許す} (kanto);
-  \draw[arrow] (kanto) -- node[draw=none, right, text width=3cm, minimum height=0pt]
-    {\scriptsize LP 双対理論} (dual);
-  \draw[arrow] (dual) -- node[draw=none, right, text width=3cm, minimum height=0pt]
-    {\scriptsize 厳密解を求める} (classic);
-  \draw[arrow] (classic) -- node[draw=none, right, text width=3cm, minimum height=0pt]
-    {\scriptsize $-\varepsilon\Hb$ を加える} (sinkhorn);
-\end{tikzpicture}
-\caption{Monge 問題から Sinkhorn アルゴリズムに至る議論の流れ．}
-\label{fig:sem-overview}
-\end{figure}
+証明はヒストグラムの場合と同様に，gluing lemma による
+カップリングの存在定理に帰着する．
