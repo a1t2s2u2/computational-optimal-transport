@@ -2,7 +2,157 @@
 \label{ch:seminar-01}
 
 %% ============================================================
-%%  1. Monge 問題
+%%  0. 最適割当問題（§2.2 前半）
+%% ============================================================
+\section{最適割当問題}
+\label{sec:sem-assignment}
+
+最適輸送の最も単純な場合として，まず\textbf{最適割当問題}を導入する．
+これは $n$ 個のソースと $n$ 個のターゲットの間に
+1対1対応（全単射）を見つけ，総コストを最小化する問題である．
+
+\begin{definition}{置換}{sem-permutation}
+  有限集合 $S$ 上の\textbf{置換}（permutation）とは，
+  $S$ から $S$ への全単射 $\sigma \colon S \to S$ をいう．
+  特に $S = \range{n} \defeq \{1, \ldots, n\}$ のとき，
+  $\range{n}$ 上のすべての置換の集合を $\Perm(n)$ と記す．
+  $|\Perm(n)| = n!$ である．
+\end{definition}
+
+\begin{definition}{置換行列}{sem-permutation-matrix}
+  置換 $\sigma \in \Perm(n)$ に対して，
+  $n \times n$ 行列 $\mathbf{P}_\sigma$ を
+  \[
+    (\mathbf{P}_\sigma)_{i,j} =
+    \begin{cases}
+      1 & j = \sigma(i), \\
+      0 & j \neq \sigma(i)
+    \end{cases}
+  \]
+  で定義し，これを\textbf{置換行列}（permutation matrix）という．
+  各成分は $0$ か $1$ であり，$\sigma$ が全単射であることから
+  \textbf{各行・各列にちょうど1つの $1$} を持つ．
+\end{definition}
+
+\begin{definition}{最適割当問題}{sem-assignment}
+  コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
+  \textbf{最適割当問題}（optimal assignment problem）とは
+  \[
+    \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
+  \]
+  を求める問題である．
+\end{definition}
+
+\begin{example}{置換行列と割当コスト}{sem-assignment-cost-example}
+  $n = 3$，置換 $\sigma = (2, 3, 1)$
+  （すなわち $\sigma(1) = 2,\; \sigma(2) = 3,\; \sigma(3) = 1$）のとき，
+  置換行列は
+  \[
+    \mathbf{P}_\sigma =
+    \begin{pmatrix}
+      0 & 1 & 0 \\
+      0 & 0 & 1 \\
+      1 & 0 & 0
+    \end{pmatrix}.
+  \]
+  置換行列の役割は，ベクトルの成分を $\sigma$ に従って並び替えることである：
+  \[
+    \mathbf{P}_\sigma
+    \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+    =
+    \begin{pmatrix} \sigma(1) \\ \sigma(2) \\ \sigma(3) \end{pmatrix}
+    =
+    \begin{pmatrix} 2 \\ 3 \\ 1 \end{pmatrix}.
+  \]
+
+  \medskip
+  また，置換行列を使うと割当のコストをフロベニウス内積で表せる．
+  $\mathbf{P}_\sigma$ の成分は $\sigma(i) = j$ の位置だけが $1$ なので，
+  $\inner{\mathbf{C}}{\mathbf{P}_\sigma}
+  = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
+  = \sum_{i} C_{i,\sigma(i)}$
+  が成り立つ．コスト行列が
+  \[
+    \mathbf{C} =
+    \begin{pmatrix}
+      3 & \mathbf{1} & 4 \\
+      1 & 5 & \mathbf{9} \\
+      \mathbf{2} & 6 & 5
+    \end{pmatrix}
+  \]
+  のとき，$\mathbf{P}_\sigma$ の $1$ がある位置（太字）のコストだけが拾われ，
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+    = C_{1,2} + C_{2,3} + C_{3,1}
+    = 1 + 9 + 2 = 12.
+  \]
+  すなわち，最適割当問題は
+  $\min_{\sigma \in \Perm(n)} \frac{1}{n}\inner{\mathbf{C}}{\mathbf{P}_\sigma}$
+  とも書ける．
+\end{example}
+
+ナイーブには $\Perm(n)$ の全列挙（$n!$ 通り）が必要であり，
+$n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
+効率的な解法（オークションアルゴリズムやハンガリアン法など）は
+第3章で扱う．
+
+%% --- 注意 2.3（一意性） ---
+\begin{remark}{最適割当の一意性（Cuturi 注意~2.3）}{sem-uniqueness}
+  最適割当問題の最適解は\textbf{一意とは限らない}．
+
+  \textbf{例}：$n = 2$ とし，4点が辺の長さ $1$ の正方形の頂点に
+  配置されている場合を考える．
+  ソース $x_1, x_2$ を対角頂点に，ターゲット $y_1, y_2$ を
+  残りの対角頂点に配置すると，
+  すべてのソース--ターゲット間距離が等しくなる（$= 1$）．
+  このとき，2つの割当 $\sigma = (1, 2)$（実線）と
+  $\sigma = (2, 1)$（点線）はともに同じ総コストを与え，
+  いずれも最適である．
+
+  \begin{center}
+  \begin{tikzpicture}[scale=1.5]
+    % Square outline (light)
+    \draw[gray!30] (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+    % Source points (diagonal)
+    \fill[blue] (0, 0) circle (3pt) node[below left] {\small $x_1$};
+    \fill[blue] (1, 1) circle (3pt) node[above right] {\small $x_2$};
+    % Target points (other diagonal)
+    \fill[red]  (1, 0) circle (3pt) node[below right] {\small $y_1$};
+    \fill[red]  (0, 1) circle (3pt) node[above left] {\small $y_2$};
+    % Assignment 1: σ = (1,2): x1→y1, x2→y2 — solid
+    \draw[->, thick] (0.1, 0.02) -- (0.88, 0.02);
+    \draw[->, thick] (0.9, 0.98) -- (0.12, 0.98);
+    % Assignment 2: σ = (2,1): x1→y2, x2→y1 — dashed
+    \draw[->, thick, dashed, gray] (0.02, 0.12) -- (0.02, 0.88);
+    \draw[->, thick, dashed, gray] (0.98, 0.88) -- (0.98, 0.12);
+    % Labels
+    \node[below] at (0.5, -0.4) {
+      \small $\sigma\!=\!(1,2)$: コスト $= 1$，\quad
+      \textcolor{gray}{$\sigma\!=\!(2,1)$: コスト $= 1$}};
+    % Side length
+    \node[right, font=\scriptsize] at (1.15, 0.5) {辺の長さ $1$};
+  \end{tikzpicture}
+  \end{center}
+
+  ソースとターゲットが等距離に配置されているため，
+  どの1対1対応を選んでもコストは変わらない．
+\end{remark}
+
+\subsection{割当問題から Monge 問題へ}
+\label{subsec:sem-assignment-to-monge}
+
+最適割当問題は，ソースとターゲットの個数が等しく（$n = m$），
+すべての重みが均一（$a_i = b_j = 1/n$）という特殊な設定であった．
+次に扱う Monge 問題は，以下を許すより一般的な枠組みである：
+\begin{itemize}
+  \item ソースとターゲットの個数が異なる場合（$n \neq m$）
+  \item 重みが不均一な場合（$a_i \neq a_j$ や $b_k \neq b_l$）
+  \item 割当（全単射）ではなく一般の写像
+        （複数のソース点が同じターゲット点に送られることを許す）
+\end{itemize}
+
+%% ============================================================
+%%  1. Monge 問題（§2.2 後半）
 %% ============================================================
 \section{Monge 問題}
 \label{sec:sem-monge}
