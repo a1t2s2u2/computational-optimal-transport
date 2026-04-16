@@ -12,23 +12,23 @@
 $n$ 人の作業者と $n$ 個の仕事があり，
 作業者 $i$ を仕事 $j$ に配属するコストが $C_{i,j}$ で与えられているとする．
 作業者と仕事を1対1に対応させるとき，
-総コストを最小にする割当を求めるのが最適割当問題である．
+総コストを最小にする割当を求めたい．
 
 \begin{definition}{最適割当問題}{sem-assignment}
   コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
   \textbf{最適割当問題}（optimal assignment problem）とは
   \[
-    \min_{\sigma \in \Perm(n)} \sum_{i=1}^{n} C_{i, \sigma(i)}
+    \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
   \]
   を求める問題である．
 \end{definition}
 
 置換行列を用いると，割当のコストはフロベニウス内積（定義~\ref{def:sem-frobenius-inner}）で表せる．
-$(\mathbf{P}_\sigma)_{i,j} = 1$ となるのは $j = \sigma(i)$ のときのみなので，
+$(\mathbf{P}_\sigma)_{i,j} = 1/n$ となるのは $j = \sigma(i)$ のときのみなので，
 \[
   \inner{\mathbf{C}}{\mathbf{P}_\sigma}
   = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
-  = \sum_{i=1}^{n} C_{i,\sigma(i)}
+  = \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
 \]
 が成り立つ．したがって最適割当問題は
 $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
@@ -87,25 +87,25 @@ $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
   \end{tikzpicture}
   \end{center}
 
-  この割当の総コストは
+  この割当の平均コストは
   \[
     \inner{\mathbf{C}}{\mathbf{P}_\sigma}
-    = C_{1,2} + C_{2,3} + C_{3,1}
-    = 2 + 1 + 3 = 6.
+    = \frac{1}{3}(C_{1,2} + C_{2,3} + C_{3,1})
+    = \frac{1}{3}(2 + 1 + 3) = 2.
   \]
   $3! = 6$ 通りの割当すべてのコストを列挙すると，
   \begin{center}
   \begin{tabular}{ccc}
-    $\sigma$ & 割当 & コスト $\sum_i C_{i,\sigma(i)}$ \\\hline
-    $(1,2,3)$ & $1{\to}1,\; 2{\to}2,\; 3{\to}3$ & $5 + 4 + 6 = 15$ \\
-    $(1,3,2)$ & $1{\to}1,\; 2{\to}3,\; 3{\to}2$ & $5 + 1 + 9 = 15$ \\
-    $(2,1,3)$ & $1{\to}2,\; 2{\to}1,\; 3{\to}3$ & $2 + 7 + 6 = 15$ \\
-    $(2,3,1)$ & $1{\to}2,\; 2{\to}3,\; 3{\to}1$ & $2 + 1 + 3 = \mathbf{6}$ \\
-    $(3,1,2)$ & $1{\to}3,\; 2{\to}1,\; 3{\to}2$ & $8 + 7 + 9 = 24$ \\
-    $(3,2,1)$ & $1{\to}3,\; 2{\to}2,\; 3{\to}1$ & $8 + 4 + 3 = 15$ \\
+    $\sigma$ & 割当 & コスト $\frac{1}{n}\sum_i C_{i,\sigma(i)}$ \\\hline
+    $(1,2,3)$ & $1{\to}1,\; 2{\to}2,\; 3{\to}3$ & $\frac{1}{3}(5 + 4 + 6) = 5$ \\
+    $(1,3,2)$ & $1{\to}1,\; 2{\to}3,\; 3{\to}2$ & $\frac{1}{3}(5 + 1 + 9) = 5$ \\
+    $(2,1,3)$ & $1{\to}2,\; 2{\to}1,\; 3{\to}3$ & $\frac{1}{3}(2 + 7 + 6) = 5$ \\
+    $(2,3,1)$ & $1{\to}2,\; 2{\to}3,\; 3{\to}1$ & $\frac{1}{3}(2 + 1 + 3) = \mathbf{2}$ \\
+    $(3,1,2)$ & $1{\to}3,\; 2{\to}1,\; 3{\to}2$ & $\frac{1}{3}(8 + 7 + 9) = 8$ \\
+    $(3,2,1)$ & $1{\to}3,\; 2{\to}2,\; 3{\to}1$ & $\frac{1}{3}(8 + 4 + 3) = 5$ \\
   \end{tabular}
   \end{center}
-  よって $\sigma = (2, 3, 1)$ が最小コスト $6$ を達成し，最適である．
+  よって $\sigma = (2, 3, 1)$ が最小コスト $2$ を達成し，最適である．
 \end{example}
 
 ナイーブには $\Perm(n)$ の全列挙（$n!$ 通り）が必要であり，
@@ -189,9 +189,8 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
     \qquad (\forall\, A \in \Bb(\X))
   \]
   で定義する．
+  直観的には，全質量が点 $x$ に集中した確率測度である．
 \end{definition}
-
-全質量が点 $x$ に集中した確率測度である．
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
   可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
@@ -294,8 +293,13 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
 
 \subsection{Monge 問題の本質的困難}
 
-Monge の定式化には2つの深刻な問題がある．
-1つ目は凸性に関わるため，以下では $\Y$ をベクトル空間（例：$\R^d$）に限定する．
+Monge の定式化には2つの深刻な問題がある：
+\begin{enumerate}
+  \item \textbf{実行可能集合の非凸性}：凸最適化の手法が使えない．
+  \item \textbf{解の非存在}：実行可能な写像 $T$ 自体が存在しない場合がある．
+\end{enumerate}
+順に見ていく．1つ目は凸性に関わるため，
+以下では $\Y$ をベクトル空間（例：$\R^d$）に限定する．
 
 \begin{definition}{凸結合・凸集合}{sem-convex}
   ベクトル空間 $V$ の元 $v_1, v_2 \in V$ と $t \in [0,1]$ に対して，
@@ -353,8 +357,6 @@ $t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
   \textbf{測地線凸性}（geodesic convexity）で同様の議論が展開できる．
 \end{remark}
 
-一般に凸でないため，凸最適化の手法が適用できず，大域的最適解の保証が困難になる．
-
 \subsubsection{困難2：解の非存在}
 
 写像による輸送では，質量の\textbf{分割}が許されない．
@@ -408,12 +410,11 @@ $t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
 
 \subsection{鍵となるアイデア}
 
-Kantorovich (1942) の革命的なアイデアは，
-Monge の写像 $T$（各点 $x$ の質量を1つの行き先に集中させる）を，
-\textbf{輸送計画}（質量を複数の行き先に分割して送ることを許す）に置き換えることである．
-Monge の定式化では質量の分割が禁じられていたが，
-Kantorovich はこの制約を外し，$\X \times \Y$ 上の結合測度（カップリング）として
-輸送計画を定式化した．
+Kantorovich (1942) のアイデアは，
+Monge の写像 $T$（各点の質量を1つの行き先に集中させる）を，
+質量を複数の行き先に分割して送ることを許す\textbf{輸送計画}に
+置き換えることである．
+この輸送計画を $\X \times \Y$ 上の結合測度（カップリング）として定式化する．
 
 \subsection{カップリング}
 

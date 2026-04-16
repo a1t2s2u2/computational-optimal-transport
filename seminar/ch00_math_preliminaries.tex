@@ -21,15 +21,15 @@
   \[
     (\mathbf{P}_\sigma)_{i,j} =
     \begin{cases}
-      1 & j = \sigma(i), \\
+      1/n & j = \sigma(i), \\
       0 & j \neq \sigma(i)
     \end{cases}
   \]
   で定義し，これを\textbf{置換行列}（permutation matrix）という．
-  各成分は $0$ か $1$ であり，$\sigma$ が全単射であることから
-  \textbf{各行・各列にちょうど1つの $1$} を持つ．
-  置換行列はベクトルの成分を $\sigma$ に従って並び替える行列であり，
-  $(\mathbf{P}_\sigma \mathbf{v})_i = v_{\sigma(i)}$ が成り立つ．
+  各行・各列にちょうど1つの非零成分 $1/n$ を持ち，
+  $\mathbf{P}_\sigma \ones_n = \ones_n / n$，
+  $\mathbf{P}_\sigma^\top \ones_n = \ones_n / n$
+  が成り立つ．
 \end{definition}
 
 \begin{example}{置換行列}{sem-permutation-matrix-example}
@@ -38,21 +38,17 @@
   置換行列は
   \[
     \mathbf{P}_\sigma =
+    \frac{1}{3}
     \begin{pmatrix}
       0 & 1 & 0 \\
       0 & 0 & 1 \\
       1 & 0 & 0
     \end{pmatrix}.
   \]
-  実際に成分の並び替えを確認すると，
-  \[
-    \mathbf{P}_\sigma
-    \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
-    =
-    \begin{pmatrix} 2 \\ 3 \\ 1 \end{pmatrix}
-    =
-    \begin{pmatrix} \sigma(1) \\ \sigma(2) \\ \sigma(3) \end{pmatrix}.
-  \]
+  行和・列和を確認すると，
+  $\mathbf{P}_\sigma \ones_3
+  = \frac{1}{3} \begin{psmallmatrix} 1 \\ 1 \\ 1 \end{psmallmatrix}
+  = \ones_3 / 3$．
 \end{example}
 
 %% ============================================================
