@@ -14,24 +14,19 @@ $n$ 人の作業者と $n$ 個の仕事があり，
 
 \begin{definition}{最適割当問題}{sem-assignment}
   コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
-  \textbf{最適割当問題}（optimal assignment problem）とは
+  \textbf{最適割当問題}（optimal assignment problem）とは，
   \[
     \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
   \]
-  を求める問題である．
+  を解く置換 $\sigma \in \Perm(n)$ を求める問題である．
 \end{definition}
 
-置換行列の定義から
-$(\mathbf{P}_\sigma)_{i,j} = 1/n$ となるのは $j = \sigma(i)$ のときのみなので，
-目的関数は
-\[
-  \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
-  = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
-  = \inner{\mathbf{C}}{\mathbf{P}_\sigma}
-\]
-とフロベニウス内積で書ける．したがって最適割当問題は
-$\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
-と表せる．
+素朴には，集合 $\Perm(n)$ 内のすべての置換を用いてコスト関数を評価できる．
+しかし $|\Perm(n)| = n!$ であり，
+小さな $n$ に対しても巨大である．
+例えば $n$ がわずか $70$ のとき，$n! > 10^{100}$ となる．
+したがって，置換の集合上でコスト関数を効率的に最適化する
+アルゴリズムが必要であり，これは第3章で扱う．
 
 \begin{example}{最適割当}{sem-assignment-cost-example}
   3人の作業者を3つの仕事場に配属する状況を考える．
@@ -86,10 +81,9 @@ $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
   \end{tikzpicture}
   \end{center}
 
-  この割当の平均コストは
+  この割当のコストは
   \[
-    \inner{\mathbf{C}}{\mathbf{P}_\sigma}
-    = \frac{1}{3}(C_{1,2} + C_{2,3} + C_{3,1})
+    \frac{1}{3}(C_{1,2} + C_{2,3} + C_{3,1})
     = \frac{1}{3}(2 + 1 + 3) = 2.
   \]
   $3! = 6$ 通りの割当すべてのコストを列挙すると，
@@ -106,11 +100,6 @@ $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
   \end{center}
   よって $\sigma = (2, 3, 1)$ が最小コスト $2$ を達成し，最適である．
 \end{example}
-
-ナイーブには $\Perm(n)$ の全列挙（$n!$ 通り）が必要であり，
-$n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
-効率的な解法（オークションアルゴリズムやハンガリアン法など）は
-第3章で扱う．
 
 \begin{remark}{最適割当の一意性}{sem-uniqueness}
   最適割当問題の最適解は\textbf{一意とは限らない}．
@@ -153,19 +142,6 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
   どの1対1対応を選んでもコストは変わらない．
 \end{remark}
 
-\subsection{割当問題から Monge 問題へ}
-\label{subsec:sem-assignment-to-monge}
-
-最適割当問題は，ソースとターゲットの個数が等しく（$n = m$），
-各点の重みがすべて等しいという特殊な設定であった．
-次に扱う Monge 問題は，以下を許すより一般的な枠組みである：
-\begin{itemize}
-  \item ソースとターゲットの個数が異なる場合（$n \neq m$）
-  \item 各点の重みが不均一な場合
-  \item 割当（全単射）ではなく一般の写像
-        （複数のソース点が同じターゲット点に送られることを許す）
-\end{itemize}
-
 %% ============================================================
 %%  1. Monge 問題（§2.2 後半）
 %% ============================================================
@@ -190,6 +166,17 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
   \]
   を求める問題である．
 \end{definition}
+
+離散測度
+$\alpha = \sum_{i=1}^n a_i \delta_{x_i}$，
+$\beta = \sum_{j=1}^m b_j \delta_{y_j}$
+に対する Monge 問題は，
+$T\pushforward \alpha = \beta$ を満たす写像 $T$ のもとで
+$\sum_i c(x_i, T(x_i))$ を最小化する問題となる．
+特に $n = m$ かつすべての重みが一様（$a_i = b_j = 1/n$）のとき，
+質量保存の制約から $T$ は全単射となり，
+$C_{i,j} \defeq c(x_i, y_j)$ とおけば
+Monge 問題は最適割当問題に帰着する．
 
 %% --- Monge 問題のイメージ図 ---
 \begin{figure}[htbp]
@@ -472,6 +459,28 @@ $P_{i,j}$ は「輸送元のビン $i$ から輸送先のビン $j$ へ送られ
     \inner{\mathbf{C}}{\mathbf{P}}.
   \]
 \end{definition}
+
+\paragraph{カップリングとしての置換行列．}
+置換行列の定義から
+$(\mathbf{P}_\sigma)_{i,j} = 1/n$ となるのは $j = \sigma(i)$ のときのみなので，
+\[
+  \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+  = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
+  = \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
+\]
+が成り立つ．すなわち最適割当問題は，カップリング $\mathbf{P}$ を
+置換行列に制限した Kantorovich 問題に他ならない：
+\[
+  \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
+  = \min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}.
+\]
+置換行列の集合は $\CouplingsD(\ones_n/n, \ones_n/n)$ に含まれるから，
+\[
+  \MKD_{\mathbf{C}}(\ones_n/n, \ones_n/n)
+  \leq \min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+\]
+である．実はこの不等式で等号が成立する
+（Kantorovich 緩和は割当問題に対してタイトである）．
 
 \subsection{なぜ Kantorovich 緩和が優れているか}
 
