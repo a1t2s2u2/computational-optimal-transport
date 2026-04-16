@@ -8,8 +8,11 @@
 \label{sec:sem-assignment}
 
 最適輸送の最も単純な場合として，まず\textbf{最適割当問題}を導入する．
-これは $n$ 個のソースと $n$ 個のターゲットの間に
-1対1対応（全単射）を見つけ，総コストを最小化する問題である．
+
+$n$ 人の作業者と $n$ 個の仕事があり，
+作業者 $i$ を仕事 $j$ に配属するコストが $C_{i,j}$ で与えられているとする．
+作業者と仕事を1対1に対応させるとき，
+総コストを最小にする割当を求めるのが最適割当問題である．
 
 \begin{definition}{置換}{sem-permutation}
   有限集合 $S$ 上の\textbf{置換}（permutation）とは，
@@ -32,6 +35,8 @@
   で定義し，これを\textbf{置換行列}（permutation matrix）という．
   各成分は $0$ か $1$ であり，$\sigma$ が全単射であることから
   \textbf{各行・各列にちょうど1つの $1$} を持つ．
+  置換行列はベクトルの成分を $\sigma$ に従って並び替える行列であり，
+  $(\mathbf{P}_\sigma \mathbf{v})_i = v_{\sigma(i)}$ が成り立つ．
 \end{definition}
 
 \begin{definition}{最適割当問題}{sem-assignment}
@@ -55,40 +60,78 @@
       1 & 0 & 0
     \end{pmatrix}.
   \]
-  置換行列の役割は，ベクトルの成分を $\sigma$ に従って並び替えることである：
+  実際に成分の並び替えを確認すると，
   \[
     \mathbf{P}_\sigma
     \begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
     =
-    \begin{pmatrix} \sigma(1) \\ \sigma(2) \\ \sigma(3) \end{pmatrix}
+    \begin{pmatrix} 2 \\ 3 \\ 1 \end{pmatrix}
     =
-    \begin{pmatrix} 2 \\ 3 \\ 1 \end{pmatrix}.
+    \begin{pmatrix} \sigma(1) \\ \sigma(2) \\ \sigma(3) \end{pmatrix}.
   \]
 
   \medskip
-  また，置換行列を使うと割当のコストをフロベニウス内積で表せる．
-  $\mathbf{P}_\sigma$ の成分は $\sigma(i) = j$ の位置だけが $1$ なので，
-  $\inner{\mathbf{C}}{\mathbf{P}_\sigma}
-  = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
-  = \sum_{i} C_{i,\sigma(i)}$
-  が成り立つ．コスト行列が
+  3人の作業者を3つの仕事場に配属する状況を考える．
+  各作業者の自宅と仕事場の位置が異なるため，
+  通勤コスト $C_{i,j}$（作業者 $i$ が仕事場 $j$ に通う負担）は
+  組合せによって異なる：
   \[
     \mathbf{C} =
     \begin{pmatrix}
-      3 & \mathbf{1} & 4 \\
-      1 & 5 & \mathbf{9} \\
-      \mathbf{2} & 6 & 5
-    \end{pmatrix}
+      5 & \mathbf{2} & 8 \\
+      7 & 4 & \mathbf{1} \\
+      \mathbf{3} & 9 & 6
+    \end{pmatrix}.
   \]
-  のとき，$\mathbf{P}_\sigma$ の $1$ がある位置（太字）のコストだけが拾われ，
+  たとえば $C_{1,2} = 2$ は
+  「作業者1が仕事場2に通うコスト」を意味する．
+
+  割当 $\sigma = (2, 3, 1)$ は，
+  作業者1を仕事場2に，作業者2を仕事場3に，
+  作業者3を仕事場1に配属する：
+
+  \begin{center}
+  \begin{tikzpicture}[
+    worker/.style={circle, draw=blue!50, fill=blue!8,
+                   minimum size=24pt, font=\small},
+    task/.style={circle, draw=red!40, fill=red!6,
+                 minimum size=24pt, font=\small},
+  ]
+    % Workers (left)
+    \node[worker] (w1) at (0, 2)   {$1$};
+    \node[worker] (w2) at (0, 1)   {$2$};
+    \node[worker] (w3) at (0, 0)   {$3$};
+    \node[above, blue!70!black, font=\small] at (0, 2.7) {作業者};
+    % Tasks (right)
+    \node[task] (t1) at (4, 2) {$1$};
+    \node[task] (t2) at (4, 1) {$2$};
+    \node[task] (t3) at (4, 0) {$3$};
+    \node[above, red!60!black, font=\small] at (4, 2.7) {仕事場};
+    % Optimal assignment (curved arrows, no crossing)
+    % w1 → t2
+    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
+      (w1) to[out=0, in=180]
+      node[font=\scriptsize, above, pos=0.5] {$2$} (t2);
+    % w2 → t3
+    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
+      (w2) to[out=-20, in=200]
+      node[font=\scriptsize, below, pos=0.5] {$1$} (t3);
+    % w3 → t1
+    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
+      (w3) to[out=20, in=160]
+      node[font=\scriptsize, above, pos=0.5] {$3$} (t1);
+  \end{tikzpicture}
+  \end{center}
+
+  総コストは
   \[
-    \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+    \sum_{i} C_{i,\sigma(i)}
     = C_{1,2} + C_{2,3} + C_{3,1}
-    = 1 + 9 + 2 = 12.
+    = 2 + 1 + 3 = 6.
   \]
-  すなわち，最適割当問題は
-  $\min_{\sigma \in \Perm(n)} \frac{1}{n}\inner{\mathbf{C}}{\mathbf{P}_\sigma}$
-  とも書ける．
+  他のどの割当（$3! = 6$ 通り）よりもコストが小さいため，
+  この割当は最適である．
+  各作業者がなるべく近い仕事場に配属されている．
 \end{example}
 
 ナイーブには $\Perm(n)$ の全列挙（$n!$ 通り）が必要であり，
