@@ -21,13 +21,6 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   を解く置換 $\sigma \in \Perm(n)$ を求める問題である．
 \end{definition}
 
-素朴には，集合 $\Perm(n)$ 内のすべての置換を用いてコスト関数を評価できる．
-しかし $|\Perm(n)| = n!$ であり，
-小さな $n$ に対しても巨大である．
-例えば $n$ がわずか $70$ のとき，$n! > 10^{100}$ となる．
-したがって，置換の集合上でコスト関数を効率的に最適化する
-アルゴリズムが必要であり，これは第3章で扱う．
-
 \begin{example}{最適割当}{sem-assignment-cost-example}
   3人の作業者を3つの仕事場に配属する状況を考える．
   各作業者の自宅と仕事場の位置が異なるため，
@@ -44,83 +37,117 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   たとえば $C_{1,2} = 2$ は
   「作業者1が仕事場2に通うコスト」を意味する．
 
-  割当 $\sigma = (2, 3, 1)$ は，
-  作業者1を仕事場2に，作業者2を仕事場3に，
-  作業者3を仕事場1に配属する：
+  $3! = 6$ 通りの割当すべてを図示する．
+  各図で青丸（{\color{blue!60}$\bullet$}）が作業者，
+  赤四角（{\color{red!60}$\blacksquare$}）が仕事場を表し，
+  矢印上の数字は個別コスト $C_{i,\sigma(i)}$ である．
 
   \begin{center}
   \begin{tikzpicture}[
-    worker/.style={circle, draw=blue!50, fill=blue!8,
-                   minimum size=24pt, font=\small},
-    task/.style={circle, draw=red!40, fill=red!6,
-                 minimum size=24pt, font=\small},
+    wk/.style={circle, draw=blue!60, fill=blue!10,
+               minimum size=10pt, inner sep=1pt, font=\tiny},
+    tk/.style={rectangle, rounded corners=1.5pt,
+               draw=red!60, fill=red!10,
+               minimum size=10pt, inner sep=1pt, font=\tiny},
+    arr/.style={-{Stealth[length=3pt]}, semithick, black!50},
+    optarr/.style={-{Stealth[length=3pt]}, semithick, green!50!black},
   ]
-    % Workers (left)
-    \node[worker] (w1) at (0, 2)   {$1$};
-    \node[worker] (w2) at (0, 1)   {$2$};
-    \node[worker] (w3) at (0, 0)   {$3$};
-    \node[above, blue!70!black, font=\small] at (0, 2.7) {作業者};
-    % Tasks (right)
-    \node[task] (t1) at (4, 2) {$1$};
-    \node[task] (t2) at (4, 1) {$2$};
-    \node[task] (t3) at (4, 0) {$3$};
-    \node[above, red!60!black, font=\small] at (4, 2.7) {仕事場};
-    % Optimal assignment (curved arrows, no crossing)
-    % w1 → t2
-    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
-      (w1) to[out=0, in=180]
-      node[font=\scriptsize, above, pos=0.5] {$2$} (t2);
-    % w2 → t3
-    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
-      (w2) to[out=-20, in=200]
-      node[font=\scriptsize, below, pos=0.5] {$1$} (t3);
-    % w3 → t1
-    \draw[-{Stealth[length=5pt]}, thick, gray!70!black]
-      (w3) to[out=20, in=160]
-      node[font=\scriptsize, above, pos=0.5] {$3$} (t1);
+    % ---- helper macro: draw 6 nodes at spread positions ----
+    \newcommand{\plotnodes}[1]{
+      \node[wk] (w1#1) at (0.5, 3)   {1};
+      \node[wk] (w2#1) at (3.5, 0.3) {2};
+      \node[wk] (w3#1) at (0, 0.6)   {3};
+      \node[tk] (t1#1) at (1.8, 0.6) {1};
+      \node[tk] (t2#1) at (1.8, 3)   {2};
+      \node[tk] (t3#1) at (2.8, 0)   {3};
+    }
+    %% === Row 1 ===
+    % (1,2,3): 1→1, 2→2, 3→3, cost=5
+    \begin{scope}[xshift=0cm]
+      \plotnodes{A}
+      \draw[arr] (w1A)--(t1A); \draw[arr] (w2A)--(t2A); \draw[arr] (w3A)--(t3A);
+      \node[font=\scriptsize] at (1.8, -0.7) {(a)\; $\sigma=(1,2,3)$};
+      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
+    \end{scope}
+    % (1,3,2): 1→1, 2→3, 3→2, cost=5
+    \begin{scope}[xshift=4.5cm]
+      \plotnodes{B}
+      \draw[arr] (w1B)--(t1B); \draw[arr] (w2B)--(t3B); \draw[arr] (w3B)--(t2B);
+      \node[font=\scriptsize] at (1.8, -0.7) {(b)\; $\sigma=(1,3,2)$};
+      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
+    \end{scope}
+    % (2,1,3): 1→2, 2→1, 3→3, cost=5
+    \begin{scope}[xshift=9cm]
+      \plotnodes{C}
+      \draw[arr] (w1C)--(t2C); \draw[arr] (w2C)--(t1C); \draw[arr] (w3C)--(t3C);
+      \node[font=\scriptsize] at (1.8, -0.7) {(c)\; $\sigma=(2,1,3)$};
+      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
+    \end{scope}
+    %% === Row 2 ===
+    % (2,3,1): 1→2, 2→3, 3→1, cost=2 *** optimal ***
+    \begin{scope}[xshift=0cm, yshift=-5cm]
+      \draw[green!50!black, thick, rounded corners=4pt]
+        (-0.4, -1.5) rectangle (4.0, 3.5);
+      \plotnodes{D}
+      \draw[optarr] (w1D)--(t2D); \draw[optarr] (w2D)--(t3D); \draw[optarr] (w3D)--(t1D);
+      \node[font=\scriptsize, green!40!black] at (1.8, -0.7) {(d)\; $\sigma=(2,3,1)$};
+      \node[font=\scriptsize\bfseries, green!40!black] at (1.8, -1.2) {コスト $= 2$（最適）};
+    \end{scope}
+    % (3,1,2): 1→3, 2→1, 3→2, cost=8
+    \begin{scope}[xshift=4.5cm, yshift=-5cm]
+      \plotnodes{E}
+      \draw[arr] (w1E)--(t3E); \draw[arr] (w2E)--(t1E); \draw[arr] (w3E)--(t2E);
+      \node[font=\scriptsize] at (1.8, -0.7) {(e)\; $\sigma=(3,1,2)$};
+      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 8$};
+    \end{scope}
+    % (3,2,1): 1→3, 2→2, 3→1, cost=5
+    \begin{scope}[xshift=9cm, yshift=-5cm]
+      \plotnodes{F}
+      \draw[arr] (w1F)--(t3F); \draw[arr] (w2F)--(t2F); \draw[arr] (w3F)--(t1F);
+      \node[font=\scriptsize] at (1.8, -0.7) {(f)\; $\sigma=(3,2,1)$};
+      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
+    \end{scope}
   \end{tikzpicture}
   \end{center}
 
-  この割当のコストは
-  \[
-    \frac{1}{3}(C_{1,2} + C_{2,3} + C_{3,1})
-    = \frac{1}{3}(2 + 1 + 3) = 2.
-  \]
-  $3! = 6$ 通りの割当すべてのコストを列挙すると，
+  各割当のコストをまとめると，
   \begin{center}
   \begin{tabular}{ccc}
-    $\sigma$ & 割当 & コスト $\frac{1}{n}\sum_i C_{i,\sigma(i)}$ \\\hline
-    $(1,2,3)$ & $1{\to}1,\; 2{\to}2,\; 3{\to}3$ & $\frac{1}{3}(5 + 4 + 6) = 5$ \\
-    $(1,3,2)$ & $1{\to}1,\; 2{\to}3,\; 3{\to}2$ & $\frac{1}{3}(5 + 1 + 9) = 5$ \\
-    $(2,1,3)$ & $1{\to}2,\; 2{\to}1,\; 3{\to}3$ & $\frac{1}{3}(2 + 7 + 6) = 5$ \\
-    $(2,3,1)$ & $1{\to}2,\; 2{\to}3,\; 3{\to}1$ & $\frac{1}{3}(2 + 1 + 3) = \mathbf{2}$ \\
-    $(3,1,2)$ & $1{\to}3,\; 2{\to}1,\; 3{\to}2$ & $\frac{1}{3}(8 + 7 + 9) = 8$ \\
-    $(3,2,1)$ & $1{\to}3,\; 2{\to}2,\; 3{\to}1$ & $\frac{1}{3}(8 + 4 + 3) = 5$ \\
+     & $\sigma$ & コスト $\frac{1}{n}\sum_i C_{i,\sigma(i)}$ \\\hline
+    (a) & $(1,2,3)$ & $\frac{1}{3}(5 + 4 + 6) = 5$ \\
+    (b) & $(1,3,2)$ & $\frac{1}{3}(5 + 1 + 9) = 5$ \\
+    (c) & $(2,1,3)$ & $\frac{1}{3}(2 + 7 + 6) = 5$ \\
+    (d) & $(2,3,1)$ & $\frac{1}{3}(2 + 1 + 3) = \mathbf{2}$ \\
+    (e) & $(3,1,2)$ & $\frac{1}{3}(8 + 7 + 9) = 8$ \\
+    (f) & $(3,2,1)$ & $\frac{1}{3}(8 + 4 + 3) = 5$ \\
   \end{tabular}
   \end{center}
   よって $\sigma = (2, 3, 1)$ が最小コスト $2$ を達成し，最適である．
 \end{example}
 
-\begin{remark}{最適割当の一意性}{sem-uniqueness}
+この例では $3! = 6$ 通りの全列挙で最適解が求まったが，
+一般には $|\Perm(n)| = n!$ は急激に増大し，
+$n = 70$ でも $n! > 10^{100}$ となるため全列挙は現実的でない．
+ハンガリアン法やオークションアルゴリズムなど，
+$O(n^3)$ で解ける効率的な手法が知られている．
+
+\begin{remark}{最適割当問題の解の一意性}{sem-uniqueness}
   最適割当問題の最適解は\textbf{一意とは限らない}．
 
-  \textbf{例}：$n = 2$ とし，4点が辺の長さ $1$ の正方形の頂点に
-  配置されている場合を考える．
-  ソース $x_1, x_2$ を対角頂点に，ターゲット $y_1, y_2$ を
-  残りの対角頂点に配置すると，
-  すべてのソース--ターゲット間距離が等しくなる（$= 1$）．
-  このとき，2つの割当 $\sigma = (1, 2)$（実線）と
-  $\sigma = (2, 1)$（点線）はともに同じ総コストを与え，
-  いずれも最適である．
+  \textbf{例}：$n = 2$ とし，
+  作業者 $x_1, x_2$ と仕事場 $y_1, y_2$ が
+  辺の長さ $1$ の正方形の頂点に配置されているとする．
+  $x_1, x_2$ を対角頂点に，$y_1, y_2$ を残りの対角頂点に置くと，
+  すべての作業者--仕事場間の距離が等しくなる（$= 1$）．
 
   \begin{center}
   \begin{tikzpicture}[scale=1.5]
     % Square outline (light)
     \draw[gray!30] (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
-    % Source points (diagonal)
+    % Workers (diagonal)
     \fill[blue] (0, 0) circle (3pt) node[below left] {\small $x_1$};
     \fill[blue] (1, 1) circle (3pt) node[above right] {\small $x_2$};
-    % Target points (other diagonal)
+    % Tasks (other diagonal)
     \fill[red]  (1, 0) circle (3pt) node[below right] {\small $y_1$};
     \fill[red]  (0, 1) circle (3pt) node[above left] {\small $y_2$};
     % Assignment 1: σ = (1,2): x1→y1, x2→y2 — solid
@@ -138,8 +165,9 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   \end{tikzpicture}
   \end{center}
 
-  ソースとターゲットが等距離に配置されているため，
-  どの1対1対応を選んでもコストは変わらない．
+  このとき $\sigma = (1,2)$ と $\sigma = (2,1)$ は
+  ともにコスト $1$ を与え，いずれも最適である．
+  すべての距離が等しいため，どの割当を選んでもコストは変わらない．
 \end{remark}
 
 %% ============================================================
@@ -148,11 +176,47 @@ $n$ 人の作業者と $n$ 個の仕事があり，
 \section{Monge 問題}
 \label{sec:sem-monge}
 
+最適割当問題では，同数の点を均等な重みで1対1に対応させていた．
+これを，個数や重みが異なる場合や，1対多の写像にも一般化したい．
+
 「ある場所にある砂山を，最小の労力で別の場所に所定の形状で積み上げるには，
 各砂粒をどこに運べばよいか？」---
-1781年に Monge が提唱したこの問題は，次のように定式化される．
+1781年に Monge が提唱したこの問題は，
+これらを許すより一般的な枠組みを与える．
 
-\begin{definition}{Monge 問題}{sem-monge}
+\begin{definition}{Monge 問題（離散版）}{sem-monge-discrete}
+  点 $x_1, \ldots, x_n \in \X$ に重み $a_i > 0$（$\sum_i a_i = 1$）を，
+  点 $y_1, \ldots, y_m \in \Y$ に重み $b_j > 0$（$\sum_j b_j = 1$）を持たせた
+  離散測度
+  $\alpha = \sum_{i=1}^n a_i \delta_{x_i}$，
+  $\beta = \sum_{j=1}^m b_j \delta_{y_j}$
+  とコスト関数 $c \colon \X \times \Y \to \R_+$ が与えられたとする．
+  写像 $T \colon \{x_1, \ldots, x_n\} \to \{y_1, \ldots, y_m\}$ が
+  質量保存条件
+  \[
+    \forall\, j \in \range{m}, \quad
+    b_j = \sum_{i \,:\, T(x_i) = y_j} a_i
+  \]
+  を満たすとき，$T\pushforward \alpha = \beta$ と書く．
+  \textbf{離散 Monge 問題}とは，
+  \[
+    \min_{T} \left\{
+    \sum_{i=1}^{n} c(x_i, T(x_i))
+    \;\middle|\;
+    T\pushforward \alpha = \beta
+    \right\}
+  \]
+  を求める問題である．
+\end{definition}
+
+特に $n = m$ かつすべての重みが一様（$a_i = b_j = 1/n$）のとき，
+質量保存の制約から $T$ は全単射となり，
+$C_{i,j} \defeq c(x_i, y_j)$ とおけば
+Monge 問題は最適割当問題に帰着する．
+
+離散版を一般の確率測度に拡張すると，次の連続版が得られる．
+
+\begin{definition}{Monge 問題（連続版）}{sem-monge}
   確率測度 $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$ と
   コスト関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは，
@@ -166,17 +230,6 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   \]
   を求める問題である．
 \end{definition}
-
-離散測度
-$\alpha = \sum_{i=1}^n a_i \delta_{x_i}$，
-$\beta = \sum_{j=1}^m b_j \delta_{y_j}$
-に対する Monge 問題は，
-$T\pushforward \alpha = \beta$ を満たす写像 $T$ のもとで
-$\sum_i c(x_i, T(x_i))$ を最小化する問題となる．
-特に $n = m$ かつすべての重みが一様（$a_i = b_j = 1/n$）のとき，
-質量保存の制約から $T$ は全単射となり，
-$C_{i,j} \defeq c(x_i, y_j)$ とおけば
-Monge 問題は最適割当問題に帰着する．
 
 %% --- Monge 問題のイメージ図 ---
 \begin{figure}[htbp]

@@ -92,7 +92,57 @@
 \end{example}
 
 %% ============================================================
-%%  2. Dirac 測度と押し出し
+%%  2. 可測空間と確率測度
+%% ============================================================
+\section{可測空間と確率測度}
+\label{sec:sem-measurable}
+
+\begin{definition}{$\sigma$-代数}{sem-sigma-algebra}
+  集合 $\X$ の部分集合族 $\mathcal{F} \subseteq 2^{\X}$ が
+  \textbf{$\sigma$-代数}（$\sigma$-algebra）であるとは，
+  以下の3条件を満たすことをいう：
+  \begin{enumerate}
+    \item[(i)] $\X \in \mathcal{F}$，
+    \item[(ii)] $A \in \mathcal{F} \Longrightarrow A^c \in \mathcal{F}$（補集合で閉じる），
+    \item[(iii)] $A_1, A_2, \ldots \in \mathcal{F} \Longrightarrow
+      \bigcup_{k=1}^{\infty} A_k \in \mathcal{F}$（可算合併で閉じる）．
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}{可測空間}{sem-measurable-space}
+  集合 $\X$ と $\X$ 上の $\sigma$-代数 $\mathcal{F}$ の組
+  $(\X, \mathcal{F})$ を\textbf{可測空間}（measurable space）という．
+  $\mathcal{F}$ の元を\textbf{可測集合}という．
+\end{definition}
+
+\begin{definition}{ボレル $\sigma$-代数}{sem-borel}
+  距離空間 $(\X, \dist)$ において，
+  すべての開集合を含む最小の $\sigma$-代数を
+  \textbf{ボレル $\sigma$-代数}といい，$\Bb(\X)$ と記す．
+\end{definition}
+
+\begin{definition}{確率測度}{sem-probability-measure}
+  可測空間 $(\X, \mathcal{F})$ 上の\textbf{確率測度}（probability measure）とは，
+  関数 $\mu \colon \mathcal{F} \to [0, 1]$ であって，
+  \begin{enumerate}
+    \item[(i)] $\mu(\X) = 1$，
+    \item[(ii)] 互いに素な可測集合 $A_1, A_2, \ldots \in \mathcal{F}$ に対して
+      $\mu\bigl(\bigcup_{k=1}^{\infty} A_k\bigr) = \sum_{k=1}^{\infty} \mu(A_k)$
+      （可算加法性）
+  \end{enumerate}
+  を満たすものをいう．
+  $\X$ 上の確率測度の全体を $\Mm_+^1(\X)$ と記す．
+\end{definition}
+
+\begin{definition}{可測写像}{sem-measurable-map}
+  可測空間 $(\X, \mathcal{F})$ から $(\Y, \mathcal{G})$ への写像
+  $T \colon \X \to \Y$ が\textbf{可測}であるとは，
+  $T^{-1}(B) \in \mathcal{F}$ が
+  すべての $B \in \mathcal{G}$ に対して成り立つことをいう．
+\end{definition}
+
+%% ============================================================
+%%  3. Dirac 測度と押し出し
 %% ============================================================
 \section{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
