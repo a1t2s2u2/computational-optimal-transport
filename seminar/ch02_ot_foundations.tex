@@ -21,16 +21,17 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   を求める問題である．
 \end{definition}
 
-置換行列を用いると，割当のコストはフロベニウス内積（定義~\ref{def:sem-frobenius-inner}）で表せる．
+置換行列の定義から
 $(\mathbf{P}_\sigma)_{i,j} = 1/n$ となるのは $j = \sigma(i)$ のときのみなので，
+目的関数は
 \[
-  \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+  \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
   = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
-  = \frac{1}{n} \sum_{i=1}^{n} C_{i,\sigma(i)}
+  = \inner{\mathbf{C}}{\mathbf{P}_\sigma}
 \]
-が成り立つ．したがって最適割当問題は
+とフロベニウス内積で書ける．したがって最適割当問題は
 $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
-とも書ける．
+と表せる．
 
 \begin{example}{最適割当}{sem-assignment-cost-example}
   3人の作業者を3つの仕事場に配属する状況を考える．
@@ -175,30 +176,6 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
 「ある場所にある砂山を，最小の労力で別の場所に所定の形状で積み上げるには，
 各砂粒をどこに運べばよいか？」---
 1781年に Monge が提唱したこの問題は，次のように定式化される．
-
-\begin{definition}{Dirac 測度}{sem-dirac}
-  点 $x \in \X$ に対して，\textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\X)$ を
-  \[
-    \delta_x(A) \defeq
-    \begin{cases}
-      1 & x \in A, \\
-      0 & x \notin A
-    \end{cases}
-    \qquad (\forall\, A \in \Bb(\X))
-  \]
-  で定義する．
-  直観的には，全質量が点 $x$ に集中した確率測度である．
-\end{definition}
-
-\begin{definition}{押し出し（push-forward）}{sem-pushforward}
-  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
-  $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
-  \[
-    (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
-    \qquad (\forall\, A \in \Bb(\Y))
-  \]
-  で定義する．
-\end{definition}
 
 \begin{definition}{Monge 問題}{sem-monge}
   確率測度 $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$ と

@@ -90,3 +90,33 @@
     \tr(\mathbf{A}^\top \mathbf{B}) = 26 + 44 = 70.
   \]
 \end{example}
+
+%% ============================================================
+%%  2. Dirac 測度と押し出し
+%% ============================================================
+\section{Dirac 測度と押し出し}
+\label{sec:sem-dirac-pushforward}
+
+\begin{definition}{Dirac 測度}{sem-dirac}
+  点 $x \in \X$ に対して，\textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\X)$ を
+  \[
+    \delta_x(A) \defeq
+    \begin{cases}
+      1 & x \in A, \\
+      0 & x \notin A
+    \end{cases}
+    \qquad (\forall\, A \in \Bb(\X))
+  \]
+  で定義する．
+  直観的には，全質量が点 $x$ に集中した確率測度である．
+\end{definition}
+
+\begin{definition}{押し出し（push-forward）}{sem-pushforward}
+  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
+  $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
+  \[
+    (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
+    \qquad (\forall\, A \in \Bb(\Y))
+  \]
+  で定義する．
+\end{definition}
