@@ -142,7 +142,26 @@
 \end{definition}
 
 %% ============================================================
-%%  3. Dirac 測度と押し出し
+%%  3. 測度に対する積分
+%% ============================================================
+\section{測度に対する積分}
+\label{sec:sem-integration}
+
+\begin{remark}{非負可測関数の積分}{sem-nonneg-integral}
+  可測空間 $(\Omega, \mathcal{F})$ 上の確率測度 $\mu$ と
+  非負可測関数 $f \colon \Omega \to [0, \infty]$ に対して，
+  積分 $\int_\Omega f \, \d\mu$ は常に $[0, +\infty]$ に値を持ち
+  well-defined である．
+  特に，$f$ が有界であるか $\Omega$ がコンパクトであれば積分は有限値をとる．
+
+  一般の可測関数 $f = f^+ - f^-$（$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては，
+  $\int f^+$ と $\int f^-$ の少なくとも一方が有限でなければ
+  積分は定義できない（$\infty - \infty$ が不定となるため）．
+  本稿で扱うコスト関数は $c \geq 0$ であるから，この問題は生じない．
+\end{remark}
+
+%% ============================================================
+%%  4. Dirac 測度と押し出し
 %% ============================================================
 \section{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
@@ -162,6 +181,41 @@
   直観的には，全質量が点 $x$ に集中した確率測度である．
 \end{definition}
 
+\begin{remark}{Dirac 測度に対する積分}{sem-dirac-integral}
+  非負可測関数 $f \colon \X \to [0, \infty]$ に対して，
+  \[
+    \int_\X f \, \d\delta_x = f(x)
+  \]
+  が成り立つ．以下にこれを示す．
+
+  集合 $A \in \mathcal{F}$ に対して，
+  \textbf{指示関数} $\mathbf{1}_A \colon \X \to \{0, 1\}$ を
+  $\mathbf{1}_A(y) = 1$（$y \in A$），$\mathbf{1}_A(y) = 0$（$y \notin A$）
+  で定める．
+  $\mathbf{1}_A$ の積分は $\int \mathbf{1}_A \, \d\delta_x = \delta_x(A) = \mathbf{1}_A(x)$ である．
+
+  有限個の可測集合と非負係数による線形結合
+  $f = \sum_k c_k \mathbf{1}_{A_k}$（\textbf{単関数}）のとき，
+  積分の線形性から
+  \[
+    \int_\X f \, \d\delta_x
+    = \sum_k c_k \, \delta_x(A_k)
+    = \sum_k c_k \, \mathbf{1}_{A_k}(x)
+    = f(x).
+  \]
+  一般の非負可測関数 $f$ に対しては，
+  $f_1 \leq f_2 \leq \cdots \leq f$ かつ各点で $f_n(x) \to f(x)$ を満たす
+  単関数の単調増加列 $(f_n)$ が存在することが知られている．
+  \textbf{単調収束定理}（非負可測関数の単調増加列に対して
+  積分と極限の交換 $\int \lim f_n = \lim \int f_n$ が成り立つ）により，
+  \[
+    \int_\X f \, \d\delta_x
+    = \lim_{n \to \infty} \int_\X f_n \, \d\delta_x
+    = \lim_{n \to \infty} f_n(x)
+    = f(x).
+  \]
+\end{remark}
+
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
   可測空間 $(\X, \mathcal{F})$, $(\Y, \mathcal{G})$ の間の
   可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
@@ -171,4 +225,23 @@
     \qquad (\forall\, A \in \mathcal{G})
   \]
   で定義する．
+\end{definition}
+
+%% ============================================================
+%%  4. 凸結合と凸集合
+%% ============================================================
+\section{凸結合と凸集合}
+\label{sec:sem-convex}
+
+\begin{definition}{凸結合・凸集合}{sem-convex}
+  ベクトル空間 $V$ の元 $v_1, v_2 \in V$ と $t \in [0,1]$ に対して，
+  $t v_1 + (1-t) v_2$ を $v_1$ と $v_2$ の\textbf{凸結合}という．
+  部分集合 $S \subseteq V$ が\textbf{凸}であるとは，
+  任意の $v_1, v_2 \in S$ の凸結合が再び $S$ に属すること，すなわち
+  \[
+    v_1, v_2 \in S,\; t \in [0,1]
+    \;\Longrightarrow\;
+    t v_1 + (1-t) v_2 \in S
+  \]
+  が成り立つことをいう．
 \end{definition}
