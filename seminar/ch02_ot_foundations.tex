@@ -39,16 +39,7 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   $(\mathbf{P}_\sigma \mathbf{v})_i = v_{\sigma(i)}$ が成り立つ．
 \end{definition}
 
-\begin{definition}{最適割当問題}{sem-assignment}
-  コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
-  \textbf{最適割当問題}（optimal assignment problem）とは
-  \[
-    \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
-  \]
-  を求める問題である．
-\end{definition}
-
-\begin{example}{置換行列と割当コスト}{sem-assignment-cost-example}
+\begin{example}{置換行列}{sem-permutation-matrix-example}
   $n = 3$，置換 $\sigma = (2, 3, 1)$
   （すなわち $\sigma(1) = 2,\; \sigma(2) = 3,\; \sigma(3) = 1$）のとき，
   置換行列は
@@ -69,8 +60,39 @@ $n$ 人の作業者と $n$ 個の仕事があり，
     =
     \begin{pmatrix} \sigma(1) \\ \sigma(2) \\ \sigma(3) \end{pmatrix}.
   \]
+\end{example}
 
-  \medskip
+\begin{definition}{最適割当問題}{sem-assignment}
+  コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
+  \textbf{最適割当問題}（optimal assignment problem）とは
+  \[
+    \min_{\sigma \in \Perm(n)} \sum_{i=1}^{n} C_{i, \sigma(i)}
+  \]
+  を求める問題である．
+\end{definition}
+
+置換行列を用いると，割当のコストはフロベニウス内積で表せる．
+
+\begin{proposition}{フロベニウス内積による表現}{sem-frobenius}
+  コスト行列 $\mathbf{C} \in \R^{n \times n}$ と置換 $\sigma \in \Perm(n)$ に対し，
+  \[
+    \sum_{i=1}^{n} C_{i,\sigma(i)} = \inner{\mathbf{C}}{\mathbf{P}_\sigma}.
+  \]
+  したがって最適割当問題は
+  $\min_{\sigma \in \Perm(n)} \inner{\mathbf{C}}{\mathbf{P}_\sigma}$
+  とも書ける．
+\end{proposition}
+
+\begin{proof}
+  $(\mathbf{P}_\sigma)_{i,j} = 1$ となるのは $j = \sigma(i)$ のときのみなので，
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_\sigma}
+    = \sum_{i,j} C_{i,j} (\mathbf{P}_\sigma)_{i,j}
+    = \sum_{i=1}^{n} C_{i,\sigma(i)}.  \qedhere
+  \]
+\end{proof}
+
+\begin{example}{最適割当}{sem-assignment-cost-example}
   3人の作業者を3つの仕事場に配属する状況を考える．
   各作業者の自宅と仕事場の位置が異なるため，
   通勤コスト $C_{i,j}$（作業者 $i$ が仕事場 $j$ に通う負担）は
@@ -78,9 +100,9 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   \[
     \mathbf{C} =
     \begin{pmatrix}
-      5 & \mathbf{2} & 8 \\
-      7 & 4 & \mathbf{1} \\
-      \mathbf{3} & 9 & 6
+      5 & 2 & 8 \\
+      7 & 4 & 1 \\
+      3 & 9 & 6
     \end{pmatrix}.
   \]
   たとえば $C_{1,2} = 2$ は
@@ -123,15 +145,25 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   \end{tikzpicture}
   \end{center}
 
-  総コストは
+  この割当の総コストは
   \[
-    \sum_{i} C_{i,\sigma(i)}
+    \inner{\mathbf{C}}{\mathbf{P}_\sigma}
     = C_{1,2} + C_{2,3} + C_{3,1}
     = 2 + 1 + 3 = 6.
   \]
-  他のどの割当（$3! = 6$ 通り）よりもコストが小さいため，
-  この割当は最適である．
-  各作業者がなるべく近い仕事場に配属されている．
+  $3! = 6$ 通りの割当すべてのコストを列挙すると，
+  \begin{center}
+  \begin{tabular}{ccc}
+    $\sigma$ & 割当 & コスト $\sum_i C_{i,\sigma(i)}$ \\\hline
+    $(1,2,3)$ & $1{\to}1,\; 2{\to}2,\; 3{\to}3$ & $5 + 4 + 6 = 15$ \\
+    $(1,3,2)$ & $1{\to}1,\; 2{\to}3,\; 3{\to}2$ & $5 + 1 + 9 = 15$ \\
+    $(2,1,3)$ & $1{\to}2,\; 2{\to}1,\; 3{\to}3$ & $2 + 7 + 6 = 15$ \\
+    $(2,3,1)$ & $1{\to}2,\; 2{\to}3,\; 3{\to}1$ & $2 + 1 + 3 = \mathbf{6}$ \\
+    $(3,1,2)$ & $1{\to}3,\; 2{\to}1,\; 3{\to}2$ & $8 + 7 + 9 = 24$ \\
+    $(3,2,1)$ & $1{\to}3,\; 2{\to}2,\; 3{\to}1$ & $8 + 4 + 3 = 15$ \\
+  \end{tabular}
+  \end{center}
+  よって $\sigma = (2, 3, 1)$ が最小コスト $6$ を達成し，最適である．
 \end{example}
 
 ナイーブには $\Perm(n)$ の全列挙（$n!$ 通り）が必要であり，
@@ -185,11 +217,11 @@ $n = 70$ でも $n! > 10^{100}$ となるため実用上不可能である．
 \label{subsec:sem-assignment-to-monge}
 
 最適割当問題は，ソースとターゲットの個数が等しく（$n = m$），
-すべての重みが均一（$a_i = b_j = 1/n$）という特殊な設定であった．
+各点の重みがすべて等しいという特殊な設定であった．
 次に扱う Monge 問題は，以下を許すより一般的な枠組みである：
 \begin{itemize}
   \item ソースとターゲットの個数が異なる場合（$n \neq m$）
-  \item 重みが不均一な場合（$a_i \neq a_j$ や $b_k \neq b_l$）
+  \item 各点の重みが不均一な場合
   \item 割当（全単射）ではなく一般の写像
         （複数のソース点が同じターゲット点に送られることを許す）
 \end{itemize}
