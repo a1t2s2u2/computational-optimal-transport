@@ -309,28 +309,41 @@ Monge の定式化には2つの深刻な問題がある：
 
 \subsubsection{困難1：実行可能集合の非凸性}
 
-$\Y$ をベクトル空間（例：$\R^d$）とする．
+$\X = \Y = \R$ とする．
 Monge 問題の実行可能集合
 \[
   \mathcal{T}(\alpha, \beta)
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-は $\Y^{\X}$ の部分集合であるが，一般に\textbf{凸でない}．
-その理由は，押し出し $T\pushforward \alpha$ が写像 $T$ に関して
-\textbf{非線形}であることにある．
-すなわち，$T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ のとき
-${T_i}\pushforward \alpha = \beta$ であるから
-$t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
-= t\beta + (1-t)\beta = \beta$
-が成り立つが，凸結合の押し出しはこれと一致するとは限らない：
-\[
-  \bigl(t T_1 + (1-t)T_2\bigr)\pushforward \alpha
-  \neq t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha
-  \quad (\text{一般には}).
-\]
-直観的には，押し出しは各点の\textbf{行き先の分布}を見る操作であり，
-行き先を点ごとに補間すると分布自体が変わってしまうためである．
+は一般に\textbf{凸でない}．
+$\mathcal{T}(\alpha,\beta)$ が凸であるためには，
+$T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ の
+凸結合 $\bar{T} = t T_1 + (1-t)T_2$ が再び
+$\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
+これは一般に成り立たない．
+
+\begin{example}{実行可能集合の非凸性}{sem-nonconvex}
+  $\alpha = \beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$ とし，
+  $T_1(x) = x$（恒等写像），$T_2(x) = -x$（符号反転）とする．
+  いずれも ${T_i}\pushforward \alpha = \beta$ を満たすから
+  $T_1, T_2 \in \mathcal{T}(\alpha, \beta)$ である．
+
+  しかし凸結合 $\bar{T} = \frac{1}{2}T_1 + \frac{1}{2}T_2$ は
+  $\bar{T}(x) = \frac{1}{2}x + \frac{1}{2}(-x) = 0$（定値写像）であるから，
+  \[
+    \bar{T}\pushforward \alpha = \delta_0
+    \neq \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1 = \beta.
+  \]
+  よって $\bar{T} \notin \mathcal{T}(\alpha, \beta)$ であり，
+  $\mathcal{T}(\alpha, \beta)$ は凸でない．
+\end{example}
+
+この例が示すように，写像の凸結合は各点の行き先を補間するが，
+押し出しは行き先の\textbf{分布}で決まるため，
+$\bigl(t T_1 + (1-t)T_2\bigr)\pushforward \alpha
+\neq t \cdot {T_1}\pushforward \alpha + (1-t) \cdot {T_2}\pushforward \alpha$
+が一般に成り立つ．
 
 \subsubsection{困難2：解の非存在}
 
