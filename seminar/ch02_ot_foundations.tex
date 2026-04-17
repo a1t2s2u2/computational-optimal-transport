@@ -314,7 +314,7 @@ Monge 問題の実行可能集合
 \[
   \mathcal{T}(\alpha, \beta)
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
-  T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
+  T \text{ はボレル可測},\; T\pushforward \alpha = \beta \right\}
 \]
 は一般に\textbf{凸でない}．
 $\mathcal{T}(\alpha,\beta)$ が凸であるためには，
@@ -330,7 +330,7 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
     T_1(x) = x,\qquad T_2(x) = -x,\qquad t = \tfrac{1}{2}
   \]
   をとる．以下では Dirac 測度に関する次の等式を用いる：
-  任意の可測写像 $T$ と任意の点 $x$，可測集合 $A \subset \Y$ に対して
+  任意のボレル可測写像 $T$ と任意の点 $x$，$A \in \Bb(\Y)$ に対して
   \[
     \delta_{T(x)}(A)
     = \begin{cases} 1 & (T(x) \in A)\\ 0 & (\text{otherwise})\end{cases}
@@ -400,7 +400,7 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
 
   これと押し出しの定義
   $({T_i}\pushforward\alpha)(A) = \alpha\bigl(T_i^{-1}(A)\bigr)$
-  を組み合わせると，任意の可測集合 $A \subset \Y$ に対して
+  を組み合わせると，任意の $A \in \Bb(\Y)$ に対して
   \begin{align*}
     ({T_1}\pushforward \alpha)(A)
       &= \tfrac{1}{2}\delta_{-1}\bigl(T_1^{-1}(A)\bigr)
@@ -459,10 +459,10 @@ $\bar{T}\pushforward\alpha = \delta_0$ となり両者は一致しない．
   を考える．$\alpha$ は原点の 1 点に集中した質量 $1$，
   $\beta$ は $-1$ と $1$ の 2 箇所に半分ずつ分散した測度である．
 
-  任意の可測写像 $T \colon \X \to \Y$ に対して，
+  任意のボレル可測写像 $T \colon \X \to \Y$ に対して，
   例~\ref{ex:sem-nonconvex} で用いた等式
   $\delta_x\bigl(T^{-1}(A)\bigr) = \delta_{T(x)}(A)$ と押し出しの定義より，
-  任意の可測集合 $A \subset \Y$ に対して
+  任意の $A \in \Bb(\Y)$ に対して
   \[
     (T\pushforward \delta_0)(A)
     = \delta_0\bigl(T^{-1}(A)\bigr)
@@ -475,7 +475,7 @@ $\bar{T}\pushforward\alpha = \delta_0$ となり両者は一致しない．
 
   したがって $T \in \mathcal{T}(\delta_0, \beta)$ となるには
   1 点集中測度 $\delta_{T(0)}$ が 2 点分散測度 $\beta$ に一致しなければならない．
-  しかし $\delta_{T(0)}$ はどの可測集合 $A$ でも値が $0$ か $1$ なのに対し，
+  しかし $\delta_{T(0)}$ はどの $A \in \Bb(\Y)$ でも値が $0$ か $1$ なのに対し，
   $A = \{-1\}$ で $\beta(\{-1\}) = \tfrac{1}{2}$ となるので，
   どんな $T(0) \in \R$ をとっても両者は食い違う．
   よって条件を満たす $T$ は存在せず

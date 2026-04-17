@@ -92,7 +92,38 @@
 \end{example}
 
 %% ============================================================
-%%  2. 可測空間と確率測度
+%%  2. 距離空間
+%% ============================================================
+\section{距離空間}
+\label{sec:sem-metric-space}
+
+\begin{definition}{距離空間}{sem-metric-space}
+  集合 $\Omega$ と関数 $d \colon \Omega \times \Omega \to [0, \infty)$ の組
+  $(\Omega, d)$ が\textbf{距離空間}（metric space）であるとは，
+  次の3条件がすべての $x, y, z \in \Omega$ に対して成り立つことをいう：
+  \begin{enumerate}
+    \item[(i)] 正定値性：$d(x, y) = 0 \iff x = y$，
+    \item[(ii)] 対称性：$d(x, y) = d(y, x)$，
+    \item[(iii)] 三角不等式：$d(x, z) \leq d(x, y) + d(y, z)$．
+  \end{enumerate}
+  関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
+\end{definition}
+
+\begin{remark}{開球と開集合}{sem-open-ball}
+  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r > 0$ に対して，
+  \textbf{開球} $B_r(x)$ を
+  \[
+    B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
+  \]
+  で定める．
+  $\Omega$ の部分集合 $U \subseteq \Omega$ が\textbf{開集合}であるとは，
+  任意の $x \in U$ に対してある $r > 0$ が存在して
+  $B_r(x) \subseteq U$ となることをいう．
+  開集合の補集合を\textbf{閉集合}という．
+\end{remark}
+
+%% ============================================================
+%%  3. 可測空間と確率測度
 %% ============================================================
 \section{可測空間と確率測度}
 \label{sec:sem-measurable}
@@ -123,8 +154,8 @@
 \end{definition}
 
 \begin{definition}{ボレル $\sigma$-代数}{sem-borel}
-  位相空間 $\Omega$ において，
-  すべての開集合を含む最小の $\sigma$-代数を
+  距離空間 $(\Omega, d)$ において，
+  $d$ から定まる距離位相の開集合すべてを含む最小の $\sigma$-代数を
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
 
@@ -148,7 +179,74 @@
 \end{definition}
 
 %% ============================================================
-%%  3. 測度に対する積分
+%%  4. 本稿で用いる可測空間
+%% ============================================================
+\section{本稿で用いる可測空間 $(\X, \Bb(\X))$}
+\label{sec:sem-borel-measurable-space}
+
+本節では，前節までの一般論を本稿の舞台となる距離空間 $\X, \Y$ に適用し，
+以降で常用する可測空間の取り決め・用語・性質をまとめる．
+
+\begin{remark}{本稿における可測構造の取り決め}{sem-borel-convention}
+  可測空間は集合と $\sigma$-代数の組であるから，距離空間 $\X$ を可測空間として
+  扱うには $\X$ 上に $\sigma$-代数を指定する必要がある．
+  本稿では以降，距離空間 $\X$ に付随する $\sigma$-代数として
+  常にボレル $\sigma$-代数 $\Bb(\X)$ を採用し，$(\X, \Bb(\X))$ を既定の可測空間とする．
+  $\Y$ についても同様である．
+
+  この取り決めのもとで用語を次のように約束する：
+  \begin{itemize}
+    \item 「$\X$ の\textbf{可測集合}」とは $\Bb(\X)$ の元（\textbf{ボレル集合}）を指す．
+    \item 「$\X$ 上の確率測度」とは $(\X, \Bb(\X))$ 上の確率測度
+      $\mu \in \Mm_+^1(\X)$ を指す．
+    \item 距離空間 $\X, \Y$ の間の写像 $T \colon \X \to \Y$ が
+      \textbf{ボレル可測}であるとは，$(\X, \Bb(\X))$ から $(\Y, \Bb(\Y))$ への
+      可測写像であることをいう．
+  \end{itemize}
+\end{remark}
+
+\begin{proposition}{$(\X, \Bb(\X))$ の基本性質}{sem-borel-properties}
+  距離空間 $\X$ とボレル $\sigma$-代数 $\Bb(\X)$ に対し，次が成り立つ：
+  \begin{enumerate}
+    \item[(i)] 補集合で閉じる（$\sigma$-代数の公理，定義~\ref{def:sem-sigma-algebra} (ii)）：
+      \[
+        A \in \Bb(\X) \;\Longrightarrow\; A^c \in \Bb(\X).
+      \]
+    \item[(ii)] 可算合併で閉じる（$\sigma$-代数の公理，定義~\ref{def:sem-sigma-algebra} (iii)）：
+      任意の列 $A_1, A_2, \ldots \in \Bb(\X)$ に対して
+      \[
+        \bigcup_{k=1}^{\infty} A_k \in \Bb(\X).
+      \]
+    \item[(iii)] 可算共通部分で閉じる（(i), (ii) と De Morgan の法則
+      $\bigcap_{k} A_k = \bigl(\bigcup_{k} A_k^c\bigr)^c$ から従う）：
+      \[
+        A_1, A_2, \ldots \in \Bb(\X)
+        \;\Longrightarrow\;
+        \bigcap_{k=1}^{\infty} A_k \in \Bb(\X).
+      \]
+    \item[(iv)] 開集合はすべてボレル集合である
+      （ボレル $\sigma$-代数の定義~\ref{def:sem-borel}）：
+      \[
+        U \subseteq \X \text{ が開集合}
+        \;\Longrightarrow\; U \in \Bb(\X).
+      \]
+    \item[(v)] 閉集合はすべてボレル集合である（(i), (iv) と $F = (F^c)^c$ から従う）：
+      \[
+        F \subseteq \X \text{ が閉集合}
+        \;\Longrightarrow\; F \in \Bb(\X).
+      \]
+    \item[(vi)] ボレル可測写像の引き戻しはボレル集合である
+      （可測写像の定義~\ref{def:sem-measurable-map} を
+      $(\X, \Bb(\X)) \to (\Y, \Bb(\Y))$ に適用）：
+      ボレル可測写像 $T \colon \X \to \Y$ に対し，
+      \[
+        \forall B \in \Bb(\Y),\quad T^{-1}(B) \in \Bb(\X).
+      \]
+  \end{enumerate}
+\end{proposition}
+
+%% ============================================================
+%%  5. 測度に対する積分
 %% ============================================================
 \section{測度に対する積分}
 \label{sec:sem-integration}
@@ -167,13 +265,13 @@
 \end{remark}
 
 %% ============================================================
-%%  4. Dirac 測度と押し出し
+%%  6. Dirac 測度と押し出し
 %% ============================================================
 \section{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
 
 \begin{definition}{Dirac 測度}{sem-dirac}
-  可測空間 $(\X, \mathcal{F})$ 上の点 $x \in \X$ に対して，
+  距離空間 $\X$ 上の点 $x \in \X$ に対して，
   \textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\X)$ を
   \[
     \delta_x(A) \defeq
@@ -181,7 +279,7 @@
       1 & x \in A, \\
       0 & x \notin A
     \end{cases}
-    \qquad (\forall\, A \in \mathcal{F})
+    \qquad (\forall\, A \in \Bb(\X))
   \]
   で定義する．
   直観的には，全質量が点 $x$ に集中した確率測度である．
@@ -194,7 +292,7 @@
   \]
   が成り立つ．以下にこれを示す．
 
-  集合 $A \in \mathcal{F}$ に対して，
+  集合 $A \in \Bb(\X)$ に対して，
   \textbf{指示関数} $\mathbf{1}_A \colon \X \to \{0, 1\}$ を
   $\mathbf{1}_A(y) = 1$（$y \in A$），$\mathbf{1}_A(y) = 0$（$y \notin A$）
   で定める．
@@ -223,18 +321,18 @@
 \end{remark}
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
-  可測空間 $(\X, \mathcal{F})$, $(\Y, \mathcal{G})$ の間の
-  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
+  距離空間 $\X, \Y$ の間のボレル可測写像 $T \colon \X \to \Y$ と
+  測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
   \[
     (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
-    \qquad (\forall\, A \in \mathcal{G})
+    \qquad (\forall\, A \in \Bb(\Y))
   \]
   で定義する．
 \end{definition}
 
 %% ============================================================
-%%  4. 凸結合と凸集合
+%%  7. 凸結合と凸集合
 %% ============================================================
 \section{凸結合と凸集合}
 \label{sec:sem-convex}
