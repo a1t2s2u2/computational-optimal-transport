@@ -128,16 +128,22 @@
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
 
-\begin{definition}{確率測度}{sem-probability-measure}
-  可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{確率測度}（probability measure）とは，
-  関数 $\mu \colon \mathcal{F} \to [0, 1]$ であって，
+\begin{definition}{測度}{sem-measure}
+  可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}（measure）とは，
+  関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
   \begin{enumerate}
-    \item[(i)] $\mu(\Omega) = 1$，
+    \item[(i)] $\mu(\emptyset) = 0$，
     \item[(ii)] 互いに素な可測集合 $A_1, A_2, \ldots \in \mathcal{F}$ に対して
       $\mu\bigl(\bigcup_{k=1}^{\infty} A_k\bigr) = \sum_{k=1}^{\infty} \mu(A_k)$
       （可算加法性）
   \end{enumerate}
   を満たすものをいう．
+\end{definition}
+
+\begin{definition}{確率測度}{sem-probability-measure}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が
+  $\mu(\Omega) = 1$ を満たすとき，$\mu$ を
+  \textbf{確率測度}（probability measure）という．
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
 \end{definition}
 
