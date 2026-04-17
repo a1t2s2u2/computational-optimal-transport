@@ -1,7 +1,7 @@
 """最適割当問題の数学的対象を表す dataclass.
 
-参照: `seminar/ch02_ot_foundations.tex` 行 15–31, 17–22 の定義
-------------------------------------------------------------------
+参照: `seminar/ch02_ot_foundations.tex` 行 15–22
+------------------------------------------------
 
     定義 (最適割当問題).  コスト行列 :math:`C \\in \\mathbb{R}^{n \\times n}` に対し,
 
@@ -9,13 +9,6 @@
        \\min_{\\sigma \\in \\mathrm{Perm}(n)} \\frac{1}{n} \\sum_{i=1}^{n} C_{i,\\sigma(i)}
 
     を達成する置換 :math:`\\sigma` を求める.
-
-    置換行列 :math:`P_\\sigma` は
-
-    .. math::
-       (P_\\sigma)_{ij} = \\begin{cases} 1/n & (j = \\sigma(i)) \\\\ 0 & (j \\neq \\sigma(i)) \\end{cases}
-
-    で定義される (要素が ``1/n`` に正規化されている点に注意).
 """
 
 from __future__ import annotations
@@ -60,32 +53,19 @@ class AssignmentSolution:
         最適な置換 :math:`\\sigma`. **0-indexed**. すなわち ``sigma[i] = j`` は
         「作業者 :math:`i+1` を仕事 :math:`j+1` に割り当てる」を意味する.
     cost : float
-        正規化済の最小コスト :math:`\\frac{1}{n} \\sum_i C_{i,\\sigma(i)} = \\langle C, P_\\sigma \\rangle`.
-    P : shape ``(n, n)``
-        置換行列 :math:`P_\\sigma`. seminar の定義に従い要素は ``1/n`` に正規化済.
+        正規化済の最小コスト :math:`\\frac{1}{n} \\sum_i C_{i,\\sigma(i)}`.
     """
 
     sigma: Permutation
     cost: float
-    P: CostMatrix
-
-    @property
-    def n(self) -> int:
-        return int(self.sigma.shape[0])
 
     @classmethod
     def from_sigma(cls, sigma: np.ndarray, C: np.ndarray) -> AssignmentSolution:
         """置換 ``sigma`` とコスト行列 ``C`` から解オブジェクトを構築."""
         sigma = np.asarray(sigma, dtype=np.int64)
-        C = np.asarray(C, dtype=np.float64)
         n = sigma.shape[0]
-        if C.shape != (n, n):
-            raise ValueError(f"C.shape {C.shape} does not match n={n}")
-        raw_sum = float(C[np.arange(n), sigma].sum())
-        cost = raw_sum / n
-        P = np.zeros((n, n), dtype=np.float64)
-        P[np.arange(n), sigma] = 1.0 / n
-        return cls(sigma=sigma, cost=cost, P=P)
+        cost = float(C[np.arange(n), sigma].sum()) / n
+        return cls(sigma=sigma, cost=cost)
 
     def sigma_one_indexed(self) -> tuple[int, ...]:
         """seminar 原稿と同じ 1-indexed タプルで置換を返す (表示用)."""

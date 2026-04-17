@@ -34,8 +34,8 @@ def pairwise_distance_matrix(
     C : shape ``(n, m)``
         :math:`C_{ij} = \\|x_i - y_j\\|_2^p`.
     """
-    X = np.atleast_2d(np.asarray(X, dtype=np.float64))
-    Y = np.atleast_2d(np.asarray(Y, dtype=np.float64))
+    X = np.asarray(X, dtype=np.float64)
+    Y = np.asarray(Y, dtype=np.float64)
     diff = X[:, None, :] - Y[None, :, :]
     dist = np.linalg.norm(diff, axis=-1)
     return dist**p
