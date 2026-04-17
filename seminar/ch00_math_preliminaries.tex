@@ -2,7 +2,7 @@
 \label{ch:seminar-00}
 
 %% ============================================================
-%%  0. 置換と置換行列
+%% 置換と置換行列
 %% ============================================================
 \section{置換と置換行列}
 \label{sec:sem-permutation}
@@ -20,16 +20,24 @@
   \[
     (\mathbf{P}_\sigma)_{i,j} =
     \begin{cases}
-      1/n & j = \sigma(i), \\
+      1 & j = \sigma(i), \\
       0 & j \neq \sigma(i)
     \end{cases}
   \]
   で定義し，これを\textbf{置換行列}（permutation matrix）という．
-  各行・各列にちょうど1つの非零成分 $1/n$ を持ち，
-  $\mathbf{P}_\sigma \ones_n = \ones_n / n$，
-  $\mathbf{P}_\sigma^\top \ones_n = \ones_n / n$
-  が成り立つ．
+  各行・各列にちょうど 1 つの成分 $1$ を持ち，
+  $\mathbf{P}_\sigma \ones_n = \ones_n$，
+  $\mathbf{P}_\sigma^\top \ones_n = \ones_n$
+  を満たす二重確率行列である．
 \end{definition}
+
+\begin{remark}{縮尺版の用法}{sem-permutation-matrix-scaled}
+  後の \S\ref{sec:sem-kantorovich}（Kantorovich 緩和）では，
+  一様ヒストグラム $\ones_n/n$ 上のカップリング集合
+  $\CouplingsD(\ones_n/n, \ones_n/n)$ に組み込むため，
+  縮尺版 $\mathbf{P}_\sigma / n$ を用いる．
+  このとき $(\mathbf{P}_\sigma / n) \ones_n = \ones_n / n$ が成り立つ．
+\end{remark}
 
 \begin{example}{置換行列}{sem-permutation-matrix-example}
   $n = 3$，置換 $\sigma = (2, 3, 1)$
@@ -37,7 +45,6 @@
   置換行列は
   \[
     \mathbf{P}_\sigma =
-    \frac{1}{3}
     \begin{pmatrix}
       0 & 1 & 0 \\
       0 & 0 & 1 \\
@@ -46,12 +53,12 @@
   \]
   行和・列和を確認すると，
   $\mathbf{P}_\sigma \ones_3
-  = \frac{1}{3} \begin{psmallmatrix} 1 \\ 1 \\ 1 \end{psmallmatrix}
-  = \ones_3 / 3$．
+  = \begin{psmallmatrix} 1 \\ 1 \\ 1 \end{psmallmatrix}
+  = \ones_3$．
 \end{example}
 
 %% ============================================================
-%%  1. フロベニウス内積
+%% フロベニウス内積
 %% ============================================================
 \section{フロベニウス内積}
 \label{sec:sem-frobenius-inner}
@@ -92,7 +99,7 @@
 \end{example}
 
 %% ============================================================
-%%  2. 距離空間
+%% 距離空間
 %% ============================================================
 \section{距離空間}
 \label{sec:sem-metric-space}
@@ -102,11 +109,12 @@
   $(\Omega, d)$ が\textbf{距離空間}（metric space）であるとは，
   次の3条件がすべての $x, y, z \in \Omega$ に対して成り立つことをいう：
   \begin{enumerate}
-    \item[(i)] 正定値性：$d(x, y) = 0 \iff x = y$，
+    \item[(i)] 同一性（identity of indiscernibles）：$d(x, y) = 0 \iff x = y$，
     \item[(ii)] 対称性：$d(x, y) = d(y, x)$，
     \item[(iii)] 三角不等式：$d(x, z) \leq d(x, y) + d(y, z)$．
   \end{enumerate}
   関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
+  なお非負性 $d(x, y) \geq 0$ は codomain $[0, \infty)$ から自動的に従う．
 \end{definition}
 
 \begin{remark}{開球と開集合}{sem-open-ball}
@@ -123,7 +131,7 @@
 \end{remark}
 
 %% ============================================================
-%%  3. 可測空間と確率測度
+%% 可測空間と確率測度
 %% ============================================================
 \section{可測空間と確率測度}
 \label{sec:sem-measurable}
@@ -178,94 +186,70 @@
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
 \end{definition}
 
-%% ============================================================
-%%  4. 本稿で用いる可測空間
-%% ============================================================
-\section{本稿で用いる可測空間 $(\X, \Bb(\X))$}
-\label{sec:sem-borel-measurable-space}
-
-本節では，前節までの一般論を本稿の舞台となる距離空間 $\X, \Y$ に適用し，
-以降で常用する可測空間の取り決め・用語・性質をまとめる．
-
 \begin{remark}{本稿における可測構造の取り決め}{sem-borel-convention}
-  可測空間は集合と $\sigma$-代数の組であるから，距離空間 $\X$ を可測空間として
-  扱うには $\X$ 上に $\sigma$-代数を指定する必要がある．
   本稿では以降，距離空間 $\X$ に付随する $\sigma$-代数として
-  常にボレル $\sigma$-代数 $\Bb(\X)$ を採用し，$(\X, \Bb(\X))$ を既定の可測空間とする．
-  $\Y$ についても同様である．
-
-  この取り決めのもとで用語を次のように約束する：
+  常にボレル $\sigma$-代数 $\Bb(\X)$ を採用し，
+  $(\X, \Bb(\X))$ を既定の可測空間とする（$\Y$ も同様）．
+  これに伴い用語を次のように約束する：
   \begin{itemize}
     \item 「$\X$ の\textbf{可測集合}」とは $\Bb(\X)$ の元（\textbf{ボレル集合}）を指す．
     \item 「$\X$ 上の確率測度」とは $(\X, \Bb(\X))$ 上の確率測度
       $\mu \in \Mm_+^1(\X)$ を指す．
-    \item 距離空間 $\X, \Y$ の間の写像 $T \colon \X \to \Y$ が
+    \item 写像 $T \colon \X \to \Y$ が
       \textbf{ボレル可測}であるとは，$(\X, \Bb(\X))$ から $(\Y, \Bb(\Y))$ への
       可測写像であることをいう．
   \end{itemize}
 \end{remark}
 
-\begin{proposition}{$(\X, \Bb(\X))$ の基本性質}{sem-borel-properties}
-  距離空間 $\X$ とボレル $\sigma$-代数 $\Bb(\X)$ に対し，次が成り立つ：
-  \begin{enumerate}
-    \item[(i)] 補集合で閉じる（$\sigma$-代数の公理，定義~\ref{def:sem-sigma-algebra} (ii)）：
-      \[
-        A \in \Bb(\X) \;\Longrightarrow\; A^c \in \Bb(\X).
-      \]
-    \item[(ii)] 可算合併で閉じる（$\sigma$-代数の公理，定義~\ref{def:sem-sigma-algebra} (iii)）：
-      任意の列 $A_1, A_2, \ldots \in \Bb(\X)$ に対して
-      \[
-        \bigcup_{k=1}^{\infty} A_k \in \Bb(\X).
-      \]
-    \item[(iii)] 可算共通部分で閉じる（(i), (ii) と De Morgan の法則
-      $\bigcap_{k} A_k = \bigl(\bigcup_{k} A_k^c\bigr)^c$ から従う）：
-      \[
-        A_1, A_2, \ldots \in \Bb(\X)
-        \;\Longrightarrow\;
-        \bigcap_{k=1}^{\infty} A_k \in \Bb(\X).
-      \]
-    \item[(iv)] 開集合はすべてボレル集合である
-      （ボレル $\sigma$-代数の定義~\ref{def:sem-borel}）：
-      \[
-        U \subseteq \X \text{ が開集合}
-        \;\Longrightarrow\; U \in \Bb(\X).
-      \]
-    \item[(v)] 閉集合はすべてボレル集合である（(i), (iv) と $F = (F^c)^c$ から従う）：
-      \[
-        F \subseteq \X \text{ が閉集合}
-        \;\Longrightarrow\; F \in \Bb(\X).
-      \]
-    \item[(vi)] ボレル可測写像の引き戻しはボレル集合である
-      （可測写像の定義~\ref{def:sem-measurable-map} を
-      $(\X, \Bb(\X)) \to (\Y, \Bb(\Y))$ に適用）：
-      ボレル可測写像 $T \colon \X \to \Y$ に対し，
-      \[
-        \forall B \in \Bb(\Y),\quad T^{-1}(B) \in \Bb(\X).
-      \]
-  \end{enumerate}
-\end{proposition}
-
 %% ============================================================
-%%  5. 測度に対する積分
+%% 測度に対する積分
 %% ============================================================
 \section{測度に対する積分}
 \label{sec:sem-integration}
 
-\begin{remark}{非負可測関数の積分}{sem-nonneg-integral}
-  可測空間 $(\Omega, \mathcal{F})$ 上の確率測度 $\mu$ と
-  非負可測関数 $f \colon \Omega \to [0, \infty]$ に対して，
-  積分 $\int_\Omega f \, \d\mu$ は常に $[0, +\infty]$ に値を持ち
-  well-defined である．
-  特に，$f$ が有界であるか $\Omega$ がコンパクトであれば積分は有限値をとる．
+\begin{setting}{非負可測関数の積分}{sem-nonneg-integral}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対し，
+  非負可測関数の積分を以下の 2 段階で定める．
+  \begin{itemize}
+    \item[(i)] \textbf{単関数}：互いに素な可測集合
+      $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ による
+      有限線形結合 $s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}$ を単関数といい，
+      その積分を
+      $\int_\Omega s \, \d\mu \defeq \sum_{k=1}^{m} c_k \, \mu(A_k)$
+      で定める．
+    \item[(ii)] 非負可測関数 $f \colon \Omega \to [0, \infty]$ の積分を
+      \[
+        \int_\Omega f \, \d\mu \defeq
+        \sup\!\left\{ \int_\Omega s \, \d\mu
+        \;\middle|\; s \text{ は単関数}, \; 0 \leq s \leq f \right\}
+      \]
+      で定める．この値は常に $[0, +\infty]$ に存在し well-defined である．
+  \end{itemize}
+  $f$ が有界（$\exists M \geq 0$：$0 \leq f \leq M$）かつ $\mu$ が確率測度ならば
+  $\int f \, \d\mu \leq M < \infty$．
 
-  一般の可測関数 $f = f^+ - f^-$（$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては，
+  一般の可測関数 $f = f^+ - f^-$
+  （$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては
   $\int f^+$ と $\int f^-$ の少なくとも一方が有限でなければ
   積分は定義できない（$\infty - \infty$ が不定となるため）．
   本稿で扱うコスト関数は $c \geq 0$ であるから，この問題は生じない．
-\end{remark}
+\end{setting}
+
+\begin{proposition}{単調収束定理と単関数近似}{sem-mct}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対して次が成り立つ．
+  \begin{enumerate}
+    \item[(i)] \textbf{単関数近似}：任意の非負可測関数
+      $f \colon \Omega \to [0, \infty]$ に対して，
+      $f_n \defeq 2^{-n} \lfloor 2^n f \rfloor \wedge n$
+      は単関数の単調増加列であり，各点で $f_n \uparrow f$ を満たす．
+    \item[(ii)] \textbf{単調収束定理}（MCT）：
+      非負可測関数の単調増加列 $f_n \uparrow f$ に対して
+      $\int f_n \, \d\mu \uparrow \int f \, \d\mu$．
+  \end{enumerate}
+\end{proposition}
 
 %% ============================================================
-%%  6. Dirac 測度と押し出し
+%% Dirac 測度と押し出し
 %% ============================================================
 \section{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
@@ -285,22 +269,21 @@
   直観的には，全質量が点 $x$ に集中した確率測度である．
 \end{definition}
 
-\begin{remark}{Dirac 測度に対する積分}{sem-dirac-integral}
-  非負可測関数 $f \colon \X \to [0, \infty]$ に対して，
+\begin{proposition}{Dirac 測度に対する積分}{sem-dirac-integral}
+  任意の非負可測関数 $f \colon \X \to [0, \infty]$ に対して，
   \[
-    \int_\X f \, \d\delta_x = f(x)
+    \int_\X f \, \d\delta_x = f(x).
   \]
-  が成り立つ．以下にこれを示す．
+\end{proposition}
 
-  集合 $A \in \Bb(\X)$ に対して，
-  \textbf{指示関数} $\mathbf{1}_A \colon \X \to \{0, 1\}$ を
+\begin{proof}
+  集合 $A \in \Bb(\X)$ の\textbf{指示関数}
+  $\mathbf{1}_A \colon \X \to \{0, 1\}$ を
   $\mathbf{1}_A(y) = 1$（$y \in A$），$\mathbf{1}_A(y) = 0$（$y \notin A$）
-  で定める．
-  $\mathbf{1}_A$ の積分は $\int \mathbf{1}_A \, \d\delta_x = \delta_x(A) = \mathbf{1}_A(x)$ である．
+  で定める．単関数積分の定義より
+  $\int \mathbf{1}_A \, \d\delta_x = \delta_x(A) = \mathbf{1}_A(x)$．
 
-  有限個の可測集合と非負係数による線形結合
-  $f = \sum_k c_k \mathbf{1}_{A_k}$（\textbf{単関数}）のとき，
-  積分の線形性から
+  単関数 $f = \sum_k c_k \mathbf{1}_{A_k}$ に対しては積分の線形性から
   \[
     \int_\X f \, \d\delta_x
     = \sum_k c_k \, \delta_x(A_k)
@@ -308,17 +291,15 @@
     = f(x).
   \]
   一般の非負可測関数 $f$ に対しては，
-  $f_1 \leq f_2 \leq \cdots \leq f$ かつ各点で $f_n(x) \to f(x)$ を満たす
-  単関数の単調増加列 $(f_n)$ が存在することが知られている．
-  \textbf{単調収束定理}（非負可測関数の単調増加列に対して
-  積分と極限の交換 $\int \lim f_n = \lim \int f_n$ が成り立つ）により，
+  命題~\ref{prop:sem-mct} により単関数の単調増加列 $f_n \uparrow f$ が取れ，
+  単調収束定理から
   \[
     \int_\X f \, \d\delta_x
     = \lim_{n \to \infty} \int_\X f_n \, \d\delta_x
     = \lim_{n \to \infty} f_n(x)
     = f(x).
   \]
-\end{remark}
+\end{proof}
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
   距離空間 $\X, \Y$ の間のボレル可測写像 $T \colon \X \to \Y$ と
@@ -332,7 +313,7 @@
 \end{definition}
 
 %% ============================================================
-%%  7. 凸結合と凸集合
+%% 凸結合と凸集合
 %% ============================================================
 \section{凸結合と凸集合}
 \label{sec:sem-convex}
@@ -348,4 +329,15 @@
     t v_1 + (1-t) v_2 \in S
   \]
   が成り立つことをいう．
+\end{definition}
+
+\begin{definition}{確率単体}{sem-simplex}
+  $\R^n$ の部分集合
+  \[
+    \simplex_n \defeq \left\{
+      \mathbf{a} \in \R_+^n \;\middle|\; \sum_{i=1}^{n} a_i = 1
+    \right\}
+  \]
+  を \textbf{$(n-1)$ 次元確率単体}（probability simplex）という．
+  $\simplex_n$ は $\R^n$ の有界閉凸集合である．
 \end{definition}
