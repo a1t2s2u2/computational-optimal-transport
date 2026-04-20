@@ -189,6 +189,35 @@
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
 
+\begin{remark}{$\Bb(\Omega)$ のイメージ}{sem-borel-intuition}
+  ボレル $\sigma$-代数 $\Bb(\Omega)$ は
+  「\textbf{測度や確率を定義してよい集合の名簿}」と思うとよい．
+  \begin{itemize}
+    \item \textbf{なぜ全部の部分集合ではダメか}：$\Omega$ の任意の部分集合に
+      整合的に「大きさ」を定めようとすると，$\R$ 上の Vitali 集合のような
+      病的な集合（選択公理で構成される）が障害となる．そこで，
+      測度を定義しても矛盾が生じない集合の族をあらかじめ指定しておく必要がある．
+    \item \textbf{構成のイメージ}：$\Bb(\Omega)$ は開集合から出発し，
+      補集合・可算和・可算積を有限・可算回繰り返してできる集合すべての集まりである．
+      レゴブロック（開集合）を組み合わせて作れる構造物の総体，というイメージ．
+    \item \textbf{$\Omega = \R$ の例}：開区間 $(a,b)$，閉区間 $[a,b]$，
+      一点 $\{x\} = \bigcap_n (x-1/n, x+1/n)$，有理数 $\Q$，無理数 $\R\setminus\Q$，
+      Cantor 集合などはすべてボレル集合．
+      日常の解析・確率で書き下せる集合は事実上すべて $\Bb(\R)$ に属する．
+    \item \textbf{役割}：確率測度 $\alpha \in \Mm_+^1(\Omega)$ は
+      名簿 $\Bb(\Omega)$ の各メンバー $A$ に対して値 $\alpha(A) \in [0,1]$ を
+      割り当てる関数である．たとえば $\Omega = \R$ で標準正規分布なら
+      $\alpha((a,b)) = \int_a^b (2\pi)^{-1/2} e^{-x^2/2} \, dx$ が意味を持つのは，
+      $(a,b) \in \Bb(\R)$ だからである．
+    \item \textbf{連続関数との関係}：写像 $f \colon \Omega \to \R$ が連続ならば
+      $f^{-1}(\text{開集合}) \subset \Omega$ は開集合だから，自動的にボレル可測になる．
+      したがって本稿で扱う連続コスト関数は常にボレル可測であり，
+      可測性を意識する必要はほとんどない．
+  \end{itemize}
+  要するに $\Bb(\Omega)$ は「\textbf{位相から自然に作られる扱いやすい集合の名簿}」であり，
+  測度・確率・積分を語る際の共通言語として機能する．
+\end{remark}
+
 \begin{remark}{積ボレル $\sigma$-代数}{sem-product-borel}
   距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，積空間 $\X \times \Y$ には
   積距離（例えば $d((x,y), (x',y')) \defeq d_\X(x,x') + d_\Y(y,y')$）
@@ -236,10 +265,10 @@
       積ボレル $\sigma$-代数 $\Bb(\X \times \Y)$ をとる
       （注意~\ref{rem:sem-product-borel}）．
   \end{itemize}
-  なお本章の定義はいずれも一般の距離空間で成立する．
-  Polish 性（定義~\ref{def:sem-polish}）は
-  §\ref{sec:sem-wasserstein} の一般測度上の Wasserstein 距離の
-  三角不等式（命題~\ref{prop:sem-wasserstein-measure}）でのみ要求される．
+  なお本章の定義はいずれも一般の距離空間で成立するが，
+  本セミナーでは連続理論（disintegration, tightness, Wasserstein 幾何）を
+  扱う都合上，第~\ref{ch:seminar-01}章以降で $\X, \Y$ に
+  Polish 性（定義~\ref{def:sem-polish}）を一様に課す．
 \end{remark}
 
 \subsection{測度に対する積分}

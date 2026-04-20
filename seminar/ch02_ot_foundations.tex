@@ -1,16 +1,6 @@
 \chapter{Optimal Transport の基礎理論}
 \label{ch:seminar-01}
 
-\begin{setting}{本章の舞台}{sem-ch2-setup}
-  本章を通じて議論の舞台となる空間構造を以下に固定する（§\ref{sec:sem-metric-space}--\ref{sec:sem-measurable} の取り決めに従う）．
-  \begin{enumerate}
-    \item[(i)] $\X, \Y$ は Polish 空間（定義~\ref{def:sem-polish}）とし，
-      可測空間 $(\X, \Bb(\X))$, $(\Y, \Bb(\Y))$ として考える．
-    \item[(ii)] 確率測度は $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ とする．
-    \item[(iii)] コスト関数 $c \colon \X \times \Y \to \R_+$ は連続とする（したがってボレル可測）．
-  \end{enumerate}
-\end{setting}
-
 %% ============================================================
 %% 最適割当問題（§2.2 前半）
 %% ============================================================
@@ -185,6 +175,16 @@ $O(n^3)$ で解ける効率的な手法が知られている．
 %% ============================================================
 %% Monge 問題（§2.2 後半）
 %% ============================================================
+\begin{setting}{以降の節の舞台}{sem-ch2-setup}
+  以降の節では議論の舞台となる空間構造を以下に固定する（§\ref{sec:sem-metric-space}--\ref{sec:sem-measurable} の取り決めに従う）．
+  \begin{enumerate}
+    \item[(i)] $\X, \Y$ は Polish 空間（定義~\ref{def:sem-polish}）とし，
+      可測空間 $(\X, \Bb(\X))$, $(\Y, \Bb(\Y))$ として考える．
+    \item[(ii)] 確率測度は $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ とする．
+    \item[(iii)] コスト関数 $c \colon \X \times \Y \to \R_+$ は連続とする（したがってボレル可測）．
+  \end{enumerate}
+\end{setting}
+
 \section{Monge 問題}
 \label{sec:sem-monge}
 
