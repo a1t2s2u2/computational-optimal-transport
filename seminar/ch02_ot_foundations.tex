@@ -24,90 +24,72 @@ $n$ 人の作業者と $n$ 個の仕事があり，
 \end{definition}
 
 \begin{example}{最適割当}{sem-assignment-cost-example}
-  3人の作業者を3つの仕事場に配属する状況を考える．
-  各作業者の自宅と仕事場の位置が異なるため，
-  通勤コスト $C_{i,j}$（作業者 $i$ が仕事場 $j$ に通う負担）は
-  組合せによって異なる：
+  2人の作業者と2つの仕事場が直線上に配置されている状況を考える．
+  作業者の自宅 $x_1, x_2$ と仕事場 $y_1, y_2$ の位置はそれぞれ
+  \[
+    x_1 = 0, \quad x_2 = 3, \quad y_1 = 1, \quad y_2 = 4
+  \]
+  であり，通勤コストは距離 $C_{i,j} = |x_i - y_j|$ で与えられる：
   \[
     \mathbf{C} =
     \begin{pmatrix}
-      5 & 2 & 8 \\
-      7 & 4 & 1 \\
-      3 & 9 & 6
+      |0-1| & |0-4| \\
+      |3-1| & |3-4|
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+      1 & 4 \\
+      2 & 1
     \end{pmatrix}.
   \]
-  たとえば $C_{1,2} = 2$ は
-  「作業者1が仕事場2に通うコスト」を意味する．
 
-  $3! = 6$ 通りの割当すべてを図示する．
-  各図で青丸（{\color{blue!60}$\bullet$}）が作業者，
-  赤四角（{\color{red!60}$\blacksquare$}）が仕事場を表し，
-  矢印上の数字は個別コスト $C_{i,\sigma(i)}$ である．
+  $2! = 2$ 通りの割当を直線上に図示する．
+  青丸（{\color{blue!60}$\bullet$}）が作業者の自宅，
+  赤四角（{\color{red!60}$\blacksquare$}）が仕事場であり，
+  矢印は割当 $i \mapsto \sigma(i)$ を表す．
 
   \begin{center}
   \begin{tikzpicture}[
     wk/.style={circle, draw=blue!60, fill=blue!10,
-               minimum size=10pt, inner sep=1pt, font=\tiny},
+               minimum size=14pt, inner sep=1pt, font=\small},
     tk/.style={rectangle, rounded corners=1.5pt,
                draw=red!60, fill=red!10,
-               minimum size=10pt, inner sep=1pt, font=\tiny},
-    arr/.style={-{Stealth[length=3pt]}, semithick, black!50},
-    optarr/.style={-{Stealth[length=3pt]}, semithick, green!50!black},
+               minimum size=14pt, inner sep=1pt, font=\small},
+    arr/.style={-{Stealth[length=4pt]}, semithick, black!60},
+    optarr/.style={-{Stealth[length=4pt]}, thick, green!50!black},
   ]
-    % ---- helper macro: draw 6 nodes at spread positions ----
-    \newcommand{\plotnodes}[1]{
-      \node[wk] (w1#1) at (0.5, 3)   {1};
-      \node[wk] (w2#1) at (3.5, 0.3) {2};
-      \node[wk] (w3#1) at (0, 0.6)   {3};
-      \node[tk] (t1#1) at (1.8, 0.6) {1};
-      \node[tk] (t2#1) at (1.8, 3)   {2};
-      \node[tk] (t3#1) at (2.8, 0)   {3};
+    \newcommand{\drawscene}[1]{
+      \draw[gray!50, thin] (-0.5, 0) -- (4.8, 0);
+      \foreach \x in {0,1,2,3,4} {
+        \draw[gray!50, thin] (\x, -0.07) -- (\x, 0.07);
+        \node[font=\tiny, gray!70, below=1pt] at (\x, -0.07) {$\x$};
+      }
+      \node[wk] (w1#1) at (0, 0.9) {1};
+      \node[wk] (w2#1) at (3, 0.9) {2};
+      \node[tk] (t1#1) at (1, -0.9) {1};
+      \node[tk] (t2#1) at (4, -0.9) {2};
+      \draw[gray!30, dotted, thin] (0, 0.7) -- (0, 0);
+      \draw[gray!30, dotted, thin] (3, 0.7) -- (3, 0);
+      \draw[gray!30, dotted, thin] (1, -0.7) -- (1, 0);
+      \draw[gray!30, dotted, thin] (4, -0.7) -- (4, 0);
     }
-    %% === Row 1 ===
-    % (1,2,3): 1→1, 2→2, 3→3, cost=5
-    \begin{scope}[xshift=0cm]
-      \plotnodes{A}
-      \draw[arr] (w1A)--(t1A); \draw[arr] (w2A)--(t2A); \draw[arr] (w3A)--(t3A);
-      \node[font=\scriptsize] at (1.8, -0.7) {(a)\; $\sigma=(1,2,3)$};
-      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
-    \end{scope}
-    % (1,3,2): 1→1, 2→3, 3→2, cost=5
-    \begin{scope}[xshift=4.5cm]
-      \plotnodes{B}
-      \draw[arr] (w1B)--(t1B); \draw[arr] (w2B)--(t3B); \draw[arr] (w3B)--(t2B);
-      \node[font=\scriptsize] at (1.8, -0.7) {(b)\; $\sigma=(1,3,2)$};
-      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
-    \end{scope}
-    % (2,1,3): 1→2, 2→1, 3→3, cost=5
-    \begin{scope}[xshift=9cm]
-      \plotnodes{C}
-      \draw[arr] (w1C)--(t2C); \draw[arr] (w2C)--(t1C); \draw[arr] (w3C)--(t3C);
-      \node[font=\scriptsize] at (1.8, -0.7) {(c)\; $\sigma=(2,1,3)$};
-      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
-    \end{scope}
-    %% === Row 2 ===
-    % (2,3,1): 1→2, 2→3, 3→1, cost=2 *** optimal ***
-    \begin{scope}[xshift=0cm, yshift=-5cm]
+    % (a) σ=(1,2): identity — each worker goes to nearest task (no crossing)
+    \begin{scope}
       \draw[green!50!black, thick, rounded corners=4pt]
-        (-0.4, -1.5) rectangle (4.0, 3.5);
-      \plotnodes{D}
-      \draw[optarr] (w1D)--(t2D); \draw[optarr] (w2D)--(t3D); \draw[optarr] (w3D)--(t1D);
-      \node[font=\scriptsize, green!40!black] at (1.8, -0.7) {(d)\; $\sigma=(2,3,1)$};
-      \node[font=\scriptsize\bfseries, green!40!black] at (1.8, -1.2) {コスト $= 2$（最適）};
+        (-0.8, -1.9) rectangle (5.2, 1.5);
+      \drawscene{A}
+      \draw[optarr] (w1A) -- (t1A);
+      \draw[optarr] (w2A) -- (t2A);
+      \node[font=\footnotesize, green!40!black] at (2.2, -1.7)
+        {(a)\ $\sigma=(1,2)$，コスト$=1$（最適）};
     \end{scope}
-    % (3,1,2): 1→3, 2→1, 3→2, cost=8
-    \begin{scope}[xshift=4.5cm, yshift=-5cm]
-      \plotnodes{E}
-      \draw[arr] (w1E)--(t3E); \draw[arr] (w2E)--(t1E); \draw[arr] (w3E)--(t2E);
-      \node[font=\scriptsize] at (1.8, -0.7) {(e)\; $\sigma=(3,1,2)$};
-      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 8$};
-    \end{scope}
-    % (3,2,1): 1→3, 2→2, 3→1, cost=5
-    \begin{scope}[xshift=9cm, yshift=-5cm]
-      \plotnodes{F}
-      \draw[arr] (w1F)--(t3F); \draw[arr] (w2F)--(t2F); \draw[arr] (w3F)--(t1F);
-      \node[font=\scriptsize] at (1.8, -0.7) {(f)\; $\sigma=(3,2,1)$};
-      \node[font=\scriptsize] at (1.8, -1.2) {コスト $= 5$};
+    % (b) σ=(2,1): swap — crossing arrows, longer total distance
+    \begin{scope}[yshift=-4cm]
+      \drawscene{B}
+      \draw[arr] (w1B) -- (t2B);
+      \draw[arr] (w2B) -- (t1B);
+      \node[font=\footnotesize] at (2.2, -1.7)
+        {(b)\ $\sigma=(2,1)$，コスト$=3$};
     \end{scope}
   \end{tikzpicture}
   \end{center}
@@ -116,18 +98,16 @@ $n$ 人の作業者と $n$ 個の仕事があり，
   \begin{center}
   \begin{tabular}{ccc}
      & $\sigma$ & コスト $\frac{1}{n}\sum_i C_{i,\sigma(i)}$ \\\hline
-    (a) & $(1,2,3)$ & $\frac{1}{3}(5 + 4 + 6) = 5$ \\
-    (b) & $(1,3,2)$ & $\frac{1}{3}(5 + 1 + 9) = 5$ \\
-    (c) & $(2,1,3)$ & $\frac{1}{3}(2 + 7 + 6) = 5$ \\
-    (d) & $(2,3,1)$ & $\frac{1}{3}(2 + 1 + 3) = \mathbf{2}$ \\
-    (e) & $(3,1,2)$ & $\frac{1}{3}(8 + 7 + 9) = 8$ \\
-    (f) & $(3,2,1)$ & $\frac{1}{3}(8 + 4 + 3) = 5$ \\
+    (a) & $(1,2)$ & $\frac{1}{2}(1 + 1) = \mathbf{1}$ \\
+    (b) & $(2,1)$ & $\frac{1}{2}(4 + 2) = 3$ \\
   \end{tabular}
   \end{center}
-  よって $\sigma = (2, 3, 1)$ が最小コスト $2$ を達成し，最適である．
+  よって $\sigma = (1, 2)$ が最小コスト $1$ を達成し，最適である．
+  各作業者がそれぞれ最寄りの仕事場へ通う割当が最適であり，
+  幾何的には輸送経路（矢印）が交差しない構造になっている．
 \end{example}
 
-この例では $3! = 6$ 通りの全列挙で最適解が求まったが，
+この例では $2! = 2$ 通りの全列挙で最適解が求まったが，
 一般には $|\Perm(n)| = n!$ は急激に増大し，
 $n = 70$ でも $n! > 10^{100}$ となるため全列挙は現実的でない．
 ハンガリアン法やオークションアルゴリズムなど，
