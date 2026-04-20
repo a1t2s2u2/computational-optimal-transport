@@ -176,8 +176,8 @@
 \end{definition}
 
 \begin{definition}{ボレル $\sigma$-代数}{sem-borel}
-  距離空間 $(\Omega, d)$ において，
-  $d$ から定まる距離位相の開集合すべてを含む最小の $\sigma$-代数を
+  距離空間 $(\Omega, d)$ のすべての開集合（注意~\ref{rem:sem-open-ball}）
+  を含む最小の $\sigma$-代数を
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
 
@@ -329,20 +329,26 @@
   で定義する．
 \end{definition}
 
-\begin{proposition}{Dirac 測度の押し出し}{sem-dirac-pushforward}
-  ボレル可測写像 $T \colon \X \to \Y$ と点 $x \in \X$ に対して，任意の
-  $A \in \Bb(\Y)$ で
+\begin{proposition}{離散測度の押し出し}{sem-dirac-pushforward}
+  ボレル可測写像 $T \colon \X \to \Y$，点 $x_1, \ldots, x_n \in \X$，
+  係数 $a_1, \ldots, a_n \geq 0$ に対して，
   \[
-    \delta_x\bigl(T^{-1}(A)\bigr) = \delta_{T(x)}(A),
-    \qquad\text{すなわち}\qquad
-    T\pushforward \delta_x = \delta_{T(x)}.
+    T\pushforward \Bigl(\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)
+    = \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}.
   \]
+  特に $T\pushforward \delta_x = \delta_{T(x)}$．
 \end{proposition}
 
 \begin{proof}
-  $T(x) \in A \iff x \in T^{-1}(A)$ から，指示関数として
-  $\mathbf{1}_{\{x \in T^{-1}(A)\}} = \mathbf{1}_{\{T(x) \in A\}}$
-  が成り立ち，左辺は $\delta_x(T^{-1}(A))$，右辺は $\delta_{T(x)}(A)$ に等しい．
+  $x \in T^{-1}(A) \iff T(x) \in A$ と Dirac 測度の $\{0, 1\}$ 値性から，
+  任意の $A \in \Bb(\Y)$ で
+  $\delta_{x}(T^{-1}(A)) = \delta_{T(x)}(A)$．
+  押し出しの定義より任意の $A \in \Bb(\Y)$ で
+  \[
+    \Bigl(T\pushforward \sum_i a_i \delta_{x_i}\Bigr)(A)
+    = \sum_i a_i\, \delta_{x_i}(T^{-1}(A))
+    = \sum_i a_i\, \delta_{T(x_i)}(A).
+  \]
 \end{proof}
 
 %% ============================================================
