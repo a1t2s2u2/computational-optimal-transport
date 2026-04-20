@@ -34,14 +34,6 @@
   を満たす二重確率行列である．
 \end{definition}
 
-\begin{remark}{縮尺版の用法}{sem-permutation-matrix-scaled}
-  後の \S\ref{sec:sem-kantorovich}（Kantorovich 緩和）では，
-  一様ヒストグラム $\ones_n/n$ 上のカップリング集合
-  $\CouplingsD(\ones_n/n, \ones_n/n)$ に組み込むため，
-  縮尺版 $\mathbf{P}_\sigma / n$ を用いる．
-  このとき $(\mathbf{P}_\sigma / n) \ones_n = \ones_n / n$ が成り立つ．
-\end{remark}
-
 \begin{example}{置換行列}{sem-permutation-matrix-example}
   $n = 3$，置換 $\sigma = (2, 3, 1)$
   （すなわち $\sigma(1) = 2,\; \sigma(2) = 3,\; \sigma(3) = 1$）のとき，
@@ -190,44 +182,19 @@
 \end{definition}
 
 \begin{remark}{$\Bb(\Omega)$ のイメージ}{sem-borel-intuition}
-  ボレル $\sigma$-代数 $\Bb(\Omega)$ は
-  「\textbf{測度や確率を定義してよい集合の名簿}」と思うとよい．
-  \begin{itemize}
-    \item \textbf{なぜ全部の部分集合ではダメか}：$\Omega$ の任意の部分集合に
-      整合的に「大きさ」を定めようとすると，$\R$ 上の Vitali 集合のような
-      病的な集合（選択公理で構成される）が障害となる．そこで，
-      測度を定義しても矛盾が生じない集合の族をあらかじめ指定しておく必要がある．
-    \item \textbf{構成のイメージ}：$\Bb(\Omega)$ は開集合から出発し，
-      補集合・可算和・可算積を有限・可算回繰り返してできる集合すべての集まりである．
-      レゴブロック（開集合）を組み合わせて作れる構造物の総体，というイメージ．
-    \item \textbf{$\Omega = \R$ の例}：開区間 $(a,b)$，閉区間 $[a,b]$，
-      一点 $\{x\} = \bigcap_n (x-1/n, x+1/n)$，有理数 $\Q$，無理数 $\R\setminus\Q$，
-      Cantor 集合などはすべてボレル集合．
-      日常の解析・確率で書き下せる集合は事実上すべて $\Bb(\R)$ に属する．
-    \item \textbf{役割}：確率測度 $\alpha \in \Mm_+^1(\Omega)$ は
-      名簿 $\Bb(\Omega)$ の各メンバー $A$ に対して値 $\alpha(A) \in [0,1]$ を
-      割り当てる関数である．たとえば $\Omega = \R$ で標準正規分布なら
-      $\alpha((a,b)) = \int_a^b (2\pi)^{-1/2} e^{-x^2/2} \, dx$ が意味を持つのは，
-      $(a,b) \in \Bb(\R)$ だからである．
-    \item \textbf{連続関数との関係}：写像 $f \colon \Omega \to \R$ が連続ならば
-      $f^{-1}(\text{開集合}) \subset \Omega$ は開集合だから，自動的にボレル可測になる．
-      したがって本稿で扱う連続コスト関数は常にボレル可測であり，
-      可測性を意識する必要はほとんどない．
-  \end{itemize}
-  要するに $\Bb(\Omega)$ は「\textbf{位相から自然に作られる扱いやすい集合の名簿}」であり，
-  測度・確率・積分を語る際の共通言語として機能する．
+  $\Bb(\Omega)$ は開集合から出発して補集合・可算和を繰り返して得られる集合族であり，
+  位相から自然に作られる．一方で $2^\Omega$ 全体にわたって整合的に測度を定めることは
+  できない（Vitali 集合などが障害となる）ため，測度の定義域として
+  $\Bb(\Omega)$ を採用する．日常の解析・確率で書き下せる集合は事実上すべて
+  $\Bb(\Omega)$ に属する．連続写像 $f$ は $f^{-1}(\text{開集合})$ が開集合なので
+  自動的にボレル可測である．
 \end{remark}
 
 \begin{remark}{積ボレル $\sigma$-代数}{sem-product-borel}
-  距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，積空間 $\X \times \Y$ には
-  積距離（例えば $d((x,y), (x',y')) \defeq d_\X(x,x') + d_\Y(y,y')$）
-  から定まる距離位相を入れる．このとき $\X \times \Y$ のボレル
-  $\sigma$-代数 $\Bb(\X \times \Y)$ が定まる．
-  $\X, \Y$ が可分であれば
-  $\Bb(\X \times \Y) = \Bb(\X) \otimes \Bb(\Y)$
-  （右辺は $\Bb(\X)$ と $\Bb(\Y)$ が生成する積 $\sigma$-代数）が成り立ち，
-  後章で現れるカップリング $\pi \in \Mm_+^1(\X \times \Y)$ は
-  この可測構造の下で定義される．
+  可分な距離空間 $\X, \Y$ に対しては，積距離から定まる位相のボレル
+  $\sigma$-代数は積 $\sigma$-代数と一致する：
+  $\Bb(\X \times \Y) = \Bb(\X) \otimes \Bb(\Y)$．
+  後章のカップリング $\pi \in \Mm_+^1(\X \times \Y)$ はこの可測構造の下で扱う．
 \end{remark}
 
 \begin{definition}{測度}{sem-measure}
@@ -250,25 +217,11 @@
 \end{definition}
 
 \begin{remark}{本稿における可測構造の取り決め}{sem-borel-convention}
-  本稿では以降，距離空間 $\X$ に付随する $\sigma$-代数として
-  常にボレル $\sigma$-代数 $\Bb(\X)$ を採用し，
-  $(\X, \Bb(\X))$ を既定の可測空間とする（$\Y$ も同様）．
-  これに伴い用語を次のように約束する：
-  \begin{itemize}
-    \item 「$\X$ の\textbf{可測集合}」とは $\Bb(\X)$ の元（\textbf{ボレル集合}）を指す．
-    \item 「$\X$ 上の確率測度」とは $(\X, \Bb(\X))$ 上の確率測度
-      $\mu \in \Mm_+^1(\X)$ を指す．
-    \item 写像 $T \colon \X \to \Y$ が
-      \textbf{ボレル可測}であるとは，$(\X, \Bb(\X))$ から $(\Y, \Bb(\Y))$ への
-      可測写像であることをいう．
-    \item 積空間 $\X \times \Y$ の可測構造には
-      積ボレル $\sigma$-代数 $\Bb(\X \times \Y)$ をとる
-      （注意~\ref{rem:sem-product-borel}）．
-  \end{itemize}
-  なお本章の定義はいずれも一般の距離空間で成立するが，
-  本セミナーでは連続理論（disintegration, tightness, Wasserstein 幾何）を
-  扱う都合上，第~\ref{ch:seminar-01}章以降で $\X, \Y$ に
-  Polish 性（定義~\ref{def:sem-polish}）を一様に課す．
+  以降，距離空間 $\X$ 上の可測構造はボレル $\sigma$-代数
+  $\Bb(\X)$ を既定とし，$(\X, \Bb(\X))$ を既定の可測空間とする（$\Y$ も同様）．
+  本章の定義はいずれも一般の距離空間で成立するが，第~\ref{ch:seminar-01}章以降は
+  連続理論（disintegration, tightness, Wasserstein 幾何）を扱う都合上，
+  $\X, \Y$ に Polish 性（定義~\ref{def:sem-polish}）を一様に課す．
 \end{remark}
 
 \subsection{測度に対する積分}
@@ -375,6 +328,22 @@
   \]
   で定義する．
 \end{definition}
+
+\begin{proposition}{Dirac 測度の押し出し}{sem-dirac-pushforward}
+  ボレル可測写像 $T \colon \X \to \Y$ と点 $x \in \X$ に対して，任意の
+  $A \in \Bb(\Y)$ で
+  \[
+    \delta_x\bigl(T^{-1}(A)\bigr) = \delta_{T(x)}(A),
+    \qquad\text{すなわち}\qquad
+    T\pushforward \delta_x = \delta_{T(x)}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  $T(x) \in A \iff x \in T^{-1}(A)$ から，指示関数として
+  $\mathbf{1}_{\{x \in T^{-1}(A)\}} = \mathbf{1}_{\{T(x) \in A\}}$
+  が成り立ち，左辺は $\delta_x(T^{-1}(A))$，右辺は $\delta_{T(x)}(A)$ に等しい．
+\end{proof}
 
 %% ============================================================
 %% 凸解析
