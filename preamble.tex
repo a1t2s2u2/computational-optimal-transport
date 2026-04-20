@@ -17,34 +17,34 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{theorems,breakable}
 
-% 定義: 青系
-\newtcbtheorem[number within=section]{definition}{定義}{
+% Definition: 青系
+\newtcbtheorem[number within=section]{definition}{Def.}{
   colback=blue!5, colframe=blue!40!black, fonttitle=\bfseries, breakable
 }{def}
-% 命題: オレンジ系
-\newtcbtheorem[use counter from=definition]{proposition}{命題}{
+% Proposition: オレンジ系
+\newtcbtheorem[use counter from=definition]{proposition}{Prop.}{
   colback=orange!5, colframe=orange!50!black, fonttitle=\bfseries, breakable
 }{prop}
-% 定理: 赤系
-\newtcbtheorem[use counter from=definition]{theorem}{定理}{
+% Theorem: 赤系
+\newtcbtheorem[use counter from=definition]{theorem}{Thm.}{
   colback=red!5, colframe=red!40!black, fonttitle=\bfseries, breakable
 }{thm}
-% 注意: 黄系
-\newtcbtheorem[use counter from=definition]{remark}{注意}{
+% Remark: 黄系
+\newtcbtheorem[use counter from=definition]{remark}{Rem.}{
   colback=yellow!5, colframe=yellow!40!black, fonttitle=\bfseries, breakable
 }{rem}
-% 例: 灰色系
-\newtcbtheorem[use counter from=definition]{example}{例}{
+% Example: 灰色系
+\newtcbtheorem[use counter from=definition]{example}{Ex.}{
   colback=gray!5, colframe=gray!50!black, fonttitle=\bfseries, breakable
 }{ex}
-% 設定: 紫系
-\newtcbtheorem[use counter from=definition]{setting}{設定}{
+% Setting: 紫系
+\newtcbtheorem[use counter from=definition]{setting}{Setting}{
   colback=purple!5, colframe=purple!40!black, fonttitle=\bfseries, breakable
 }{set}
-% メモ: 薄い黒系（例より薄く、番号なし、発展的補足）
+% Memo: 薄い黒系（例より薄く、番号なし、発展的補足）
 \newtcolorbox{memo*}{
   colback=black!7, colframe=black!40,
-  fonttitle=\bfseries, title={メモ},
+  fonttitle=\bfseries, title={Memo},
   breakable
 }
 % 証明環境の装飾

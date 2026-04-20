@@ -10,14 +10,14 @@
 \subsection{置換と置換行列}
 \label{sec:sem-permutation}
 
-\begin{definition}{置換}{sem-permutation}
-  $\range{n} \defeq \{1, \ldots, n\}$ 上の\textbf{置換}（permutation）とは，
+\begin{definition}{置換（permutation）}{sem-permutation}
+  $\range{n} \defeq \{1, \ldots, n\}$ 上の\textbf{置換}とは，
   $\range{n}$ から $\range{n}$ への全単射をいう．
   $\range{n}$ 上のすべての置換の集合を $\Perm(n)$ と記す．
   $|\Perm(n)| = n!$ である．
 \end{definition}
 
-\begin{definition}{置換行列}{sem-permutation-matrix}
+\begin{definition}{置換行列（permutation matrix）}{sem-permutation-matrix}
   置換 $\sigma \in \Perm(n)$ に対して，
   $n \times n$ 行列 $\mathbf{P}_\sigma$ を
   \[
@@ -27,7 +27,7 @@
       0 & j \neq \sigma(i)
     \end{cases}
   \]
-  で定義し，これを\textbf{置換行列}（permutation matrix）という．
+  で定義し，これを\textbf{置換行列}という．
   各行・各列にちょうど 1 つの成分 $1$ を持ち，
   $\mathbf{P}_\sigma \ones_n = \ones_n$，
   $\mathbf{P}_\sigma^\top \ones_n = \ones_n$
@@ -55,9 +55,9 @@
 \subsection{フロベニウス内積}
 \label{sec:sem-frobenius-inner}
 
-\begin{definition}{フロベニウス内積}{sem-frobenius-inner}
+\begin{definition}{フロベニウス内積（Frobenius inner product）}{sem-frobenius-inner}
   同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
-  \textbf{フロベニウス内積}（Frobenius inner product）を
+  \textbf{フロベニウス内積}を
   \[
     \inner{\mathbf{A}}{\mathbf{B}}
     \defeq \tr(\mathbf{A}^\top \mathbf{B})
@@ -99,17 +99,17 @@
 \subsection{距離空間}
 \label{sec:sem-metric-space}
 
-\begin{definition}{距離空間}{sem-metric-space}
+\begin{definition}{距離空間（metric space）}{sem-metric-space}
   集合 $\Omega$ と関数 $d \colon \Omega \times \Omega \to [0, \infty)$ の組
-  $(\Omega, d)$ が\textbf{距離空間}（metric space）であるとは，
+  $(\Omega, d)$ が\textbf{距離空間}であるとは，
   次の3条件がすべての $x, y, z \in \Omega$ に対して成り立つことをいう：
   \begin{enumerate}
-    \item[(i)] 同一性（identity of indiscernibles）：$d(x, y) = 0 \iff x = y$，
+    \item[(i)] 同一性：$d(x, y) = 0 \iff x = y$，
     \item[(ii)] 対称性：$d(x, y) = d(y, x)$，
     \item[(iii)] 三角不等式：$d(x, z) \leq d(x, y) + d(y, z)$．
   \end{enumerate}
   関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
-  なお非負性 $d(x, y) \geq 0$ は codomain $[0, \infty)$ から自動的に従う．
+  なお非負性 $d(x, y) \geq 0$ は値域 $[0, \infty)$ から自動的に従う．
 \end{definition}
 
 \begin{remark}{開球と開集合}{sem-open-ball}
@@ -122,27 +122,25 @@
   $\Omega$ の部分集合 $U \subseteq \Omega$ が\textbf{開集合}であるとは，
   任意の $x \in U$ に対してある $r > 0$ が存在して
   $B_r(x) \subseteq U$ となることをいう．
-  開集合の補集合を\textbf{閉集合}という．
 \end{remark}
 
-\begin{definition}{完備距離空間}{sem-complete-metric}
+\begin{definition}{完備距離空間（complete metric space）}{sem-complete-metric}
   距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
-  $(\Omega, d)$ が\textbf{完備}（complete）であるとは，
+  $(\Omega, d)$ が\textbf{完備}であるとは，
   $\Omega$ 上のすべての Cauchy 列が $\Omega$ の点に収束することをいう．
 \end{definition}
 
-\begin{definition}{可分距離空間}{sem-separable}
-  距離空間 $(\Omega, d)$ の部分集合 $D \subseteq \Omega$ が\textbf{稠密}
-  （dense）であるとは，任意の $x \in \Omega$ と任意の $\varepsilon > 0$
+\begin{definition}{可分距離空間（separable metric space）}{sem-separable}
+  距離空間 $(\Omega, d)$ の部分集合 $D \subseteq \Omega$ が\textbf{稠密}であるとは，
+  任意の $x \in \Omega$ と任意の $\varepsilon > 0$
   に対して $d(x, y) < \varepsilon$ を満たす $y \in D$ が存在することをいう．
-  $\Omega$ が可算な稠密部分集合を持つとき，$\Omega$ は\textbf{可分}
-  （separable）であるという．
+  $\Omega$ が可算な稠密部分集合を持つとき，$\Omega$ は\textbf{可分}であるという．
 \end{definition}
 
-\begin{definition}{Polish 空間}{sem-polish}
-  完備かつ可分な距離空間を\textbf{Polish 空間}（Polish space）という．
+\begin{definition}{Polish 空間（Polish space）}{sem-polish}
+  完備かつ可分な距離空間を\textbf{Polish 空間}という．
   例：$\R^d$ はユークリッド距離に関して Polish 空間である
   （$\Q^d$ が可算稠密部分集合を与える）．
 \end{definition}
@@ -150,9 +148,9 @@
 \subsection{可測空間と確率測度}
 \label{sec:sem-measurable}
 
-\begin{definition}{$\sigma$-代数}{sem-sigma-algebra}
+\begin{definition}{$\sigma$-代数（$\sigma$-algebra）}{sem-sigma-algebra}
   集合 $\Omega$ の部分集合族 $\mathcal{F} \subseteq 2^{\Omega}$ が
-  \textbf{$\sigma$-代数}（$\sigma$-algebra）であるとは，
+  \textbf{$\sigma$-代数}であるとは，
   以下の3条件を満たすことをいう：
   \begin{enumerate}
     \item[(i)] $\Omega \in \mathcal{F}$，
@@ -162,9 +160,9 @@
   \end{enumerate}
 \end{definition}
 
-\begin{definition}{可測空間}{sem-measurable-space}
+\begin{definition}{可測空間（measurable space）}{sem-measurable-space}
   集合 $\Omega$ と $\Omega$ 上の $\sigma$-代数 $\mathcal{F}$ の組
-  $(\Omega, \mathcal{F})$ を\textbf{可測空間}（measurable space）という．
+  $(\Omega, \mathcal{F})$ を\textbf{可測空間}という．
   $\mathcal{F}$ の元を\textbf{可測集合}という．
 \end{definition}
 
@@ -197,8 +195,8 @@
   後章のカップリング $\pi \in \Mm_+^1(\X \times \Y)$ はこの可測構造の下で扱う．
 \end{remark}
 
-\begin{definition}{測度}{sem-measure}
-  可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}（measure）とは，
+\begin{definition}{測度（measure）}{sem-measure}
+  可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
   関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
   \begin{enumerate}
     \item[(i)] $\mu(\emptyset) = 0$，
@@ -209,10 +207,10 @@
   を満たすものをいう．
 \end{definition}
 
-\begin{definition}{確率測度}{sem-probability-measure}
+\begin{definition}{確率測度（probability measure）}{sem-probability-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が
   $\mu(\Omega) = 1$ を満たすとき，$\mu$ を
-  \textbf{確率測度}（probability measure）という．
+  \textbf{確率測度}という．
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
 \end{definition}
 
@@ -227,7 +225,20 @@
 \subsection{測度に対する積分}
 \label{sec:sem-integration}
 
-\begin{setting}{非負可測関数の積分}{sem-nonneg-integral}
+\begin{definition}{指示関数（indicator function）}{sem-indicator}
+  集合 $\Omega$ の部分集合 $A \subseteq \Omega$ に対して，
+  \textbf{指示関数} $\mathbf{1}_A \colon \Omega \to \{0, 1\}$ を
+  \[
+    \mathbf{1}_A(y) \defeq
+    \begin{cases}
+      1 & y \in A, \\
+      0 & y \notin A
+    \end{cases}
+  \]
+  で定める．
+\end{definition}
+
+\begin{definition}{非負可測関数の積分}{sem-nonneg-integral}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対し，
   非負可測関数の積分を以下の 2 段階で定める．
   \begin{itemize}
@@ -245,24 +256,23 @@
       \]
       で定める．この値は常に $[0, +\infty]$ に存在し well-defined である．
   \end{itemize}
-  $f$ が有界（$\exists M \geq 0$：$0 \leq f \leq M$）かつ $\mu$ が確率測度ならば
-  $\int f \, \d\mu \leq M < \infty$．
+\end{definition}
 
+\begin{remark}{一般可測関数への拡張}{sem-signed-integral}
   一般の可測関数 $f = f^+ - f^-$
   （$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては
   $\int f^+$ と $\int f^-$ の少なくとも一方が有限でなければ
   積分は定義できない（$\infty - \infty$ が不定となるため）．
   本稿で扱うコスト関数は $c \geq 0$ であるから，この問題は生じない．
-\end{setting}
+\end{remark}
 
-\begin{proposition}{単調収束定理と単関数近似}{sem-mct}
+\begin{proposition}{単調収束定理と単関数近似（monotone convergence theorem, MCT）}{sem-mct}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対して次が成り立つ．
   \begin{enumerate}
     \item[(i)] \textbf{単関数近似}：任意の非負可測関数
       $f \colon \Omega \to [0, \infty]$ に対して，
-      $f_n \defeq 2^{-n} \lfloor 2^n f \rfloor \wedge n$
-      は単関数の単調増加列であり，各点で $f_n \uparrow f$ を満たす．
-    \item[(ii)] \textbf{単調収束定理}（MCT）：
+      各点で $f_n \uparrow f$ を満たす単関数の単調増加列 $(f_n)_{n \geq 1}$ が存在する．
+    \item[(ii)] \textbf{単調収束定理}：
       非負可測関数の単調増加列 $f_n \uparrow f$ に対して
       $\int f_n \, \d\mu \uparrow \int f \, \d\mu$．
   \end{enumerate}
@@ -294,12 +304,8 @@
 \end{proposition}
 
 \begin{proof}
-  集合 $A \in \Bb(\X)$ の\textbf{指示関数}
-  $\mathbf{1}_A \colon \X \to \{0, 1\}$ を
-  $\mathbf{1}_A(y) = 1$（$y \in A$），$\mathbf{1}_A(y) = 0$（$y \notin A$）
-  で定める．単関数積分の定義より
+  $A \in \Bb(\X)$ に対し単関数積分の定義より
   $\int \mathbf{1}_A \, \d\delta_x = \delta_x(A) = \mathbf{1}_A(x)$．
-
   単関数 $f = \sum_k c_k \mathbf{1}_{A_k}$ に対しては積分の線形性から
   \[
     \int_\X f \, \d\delta_x
@@ -373,13 +379,24 @@
   が成り立つことをいう．
 \end{definition}
 
-\begin{definition}{確率単体}{sem-simplex}
-  $\R^n$ の部分集合
+\begin{definition}{確率単体（probability simplex）}{sem-simplex}
+  $\R_+^n \defeq \{\mathbf{a} \in \R^n \mid a_i \geq 0\ (i=1,\ldots,n)\}$ の部分集合
   \[
     \simplex_n \defeq \left\{
       \mathbf{a} \in \R_+^n \;\middle|\; \sum_{i=1}^{n} a_i = 1
     \right\}
   \]
-  を \textbf{$(n-1)$ 次元確率単体}（probability simplex）という．
-  $\simplex_n$ は $\R^n$ の有界閉凸集合である．
+  を \textbf{$(n-1)$ 次元確率単体}という．
+\end{definition}
+
+\begin{definition}{凸多面体（convex polytope）}{sem-polytope}
+  有限個の線形等式および線形不等式制約
+  \[
+    \{\mathbf{x} \in \R^d \mid
+      \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\}
+    \quad
+    (\mathbf{A} \in \R^{k \times d},\; \mathbf{b} \in \R^k)
+  \]
+  で定まる $\R^d$ の部分集合を\textbf{凸多面体}という．
+  凸多面体は凸集合である．
 \end{definition}
