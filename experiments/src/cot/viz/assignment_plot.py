@@ -44,8 +44,8 @@ def plot_cost_matrix(
     im = ax.imshow(C, cmap=cmap, origin="upper")
     ax.set_xticks(range(n), labels=[str(j + 1) for j in range(n)])
     ax.set_yticks(range(n), labels=[str(i + 1) for i in range(n)])
-    ax.set_xlabel("仕事 $j$")
-    ax.set_ylabel("作業者 $i$")
+    ax.set_xlabel("行き先 $j$")
+    ax.set_ylabel("砂山 $i$")
     if annotate:
         vmax = float(np.max(C))
         for i in range(n):
@@ -79,19 +79,19 @@ def plot_assignment_2d(
     draw_points: bool = True,
     show_legend: bool = True,
 ) -> Axes:
-    """2 次元配置図: 作業者 :math:`x_i` (青丸) と仕事場 :math:`y_j` (赤四角)
+    """2 次元配置図: 砂山 :math:`x_i` (青丸) と行き先 :math:`y_j` (赤四角)
     を散布し, 割当 :math:`\\sigma` に沿って矢印を描く.
 
     Parameters
     ----------
     X : shape ``(n, 2)``
-        作業者の 2D 座標.
+        砂山の 2D 座標.
     Y : shape ``(n, 2)``
-        仕事場の 2D 座標.
+        行き先の 2D 座標.
     sigma : shape ``(n,)``
         描画する割当 (0-indexed).
     draw_points : bool
-        作業者・仕事場のマーカーを描画するか. 複数の割当を重ね描きする際は
+        砂山・行き先のマーカーを描画するか. 複数の割当を重ね描きする際は
         2 回目以降で ``False`` を渡すとマーカーの二重描画を避けられる.
     show_legend : bool
         凡例を表示するか.
@@ -108,7 +108,7 @@ def plot_assignment_2d(
             c="tab:blue",
             marker="o",
             edgecolors="black",
-            label="作業者 $x_i$",
+            label="砂山 $x_i$",
             zorder=3,
         )
         ax.scatter(
@@ -118,7 +118,7 @@ def plot_assignment_2d(
             c="tab:red",
             marker="s",
             edgecolors="black",
-            label="仕事場 $y_j$",
+            label="行き先 $y_j$",
             zorder=3,
         )
         for i, xi in enumerate(X):

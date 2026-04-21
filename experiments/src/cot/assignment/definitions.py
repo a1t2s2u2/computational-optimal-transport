@@ -17,6 +17,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from cot.core.scenario import SandpileScenario
 from cot.core.types import CostMatrix, Permutation
 
 
@@ -27,7 +28,7 @@ class AssignmentProblem:
     Parameters
     ----------
     C : shape ``(n, n)``
-        コスト行列 :math:`C_{ij}` = 作業者 :math:`i` を仕事 :math:`j` に配属するコスト.
+        コスト行列 :math:`C_{ij}` = 砂山 :math:`i` を行き先 :math:`j` へ運ぶ輸送コスト.
     """
 
     C: CostMatrix
@@ -42,6 +43,20 @@ class AssignmentProblem:
     def n(self) -> int:
         return int(self.C.shape[0])
 
+    @classmethod
+    def from_scenario(cls, scenario: SandpileScenario, p: float = 1.0) -> AssignmentProblem:
+        """砂山シナリオからコスト行列を生成して問題を構築.
+
+        割当問題は :math:`n = m` かつ一様質量を仮定するので,
+        与えられた ``scenario`` がその条件を満たすことを要求する.
+        """
+        if not scenario.is_balanced_uniform:
+            raise ValueError(
+                "AssignmentProblem は n=m かつ a=b=(1/n)1 を要求する. "
+                "一般の場合は MongeProblem / KantorovichProblem を用いる."
+            )
+        return cls(C=scenario.cost_matrix(p=p))
+
 
 @dataclass(frozen=True)
 class AssignmentSolution:
@@ -51,7 +66,7 @@ class AssignmentSolution:
     ----------
     sigma : shape ``(n,)``, dtype ``int64``
         最適な置換 :math:`\\sigma`. **0-indexed**. すなわち ``sigma[i] = j`` は
-        「作業者 :math:`i+1` を仕事 :math:`j+1` に割り当てる」を意味する.
+        「砂山 :math:`i+1` を行き先 :math:`j+1` へ運ぶ」を意味する.
     cost : float
         正規化済の最小コスト :math:`\\frac{1}{n} \\sum_i C_{i,\\sigma(i)}`.
     """
