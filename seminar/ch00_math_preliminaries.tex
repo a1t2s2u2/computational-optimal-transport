@@ -7,50 +7,41 @@
 \section{線形代数}
 \label{sec:sem-linalg}
 
-\subsection{置換と置換行列}
+\subsection{置換}
 \label{sec:sem-permutation}
 
 \begin{definition}{置換（permutation）}{sem-permutation}
-  $\range{n} \defeq \{1, \ldots, n\}$ 上の\textbf{置換}とは，
-  $\range{n}$ から $\range{n}$ への全単射をいう．
-  $\range{n}$ 上のすべての置換の集合を $\Perm(n)$ と記す．
-  $|\Perm(n)| = n!$ である．
+  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}とは，
+  $\range{n}$ からそれ自身への全単射をいう．
+  置換全体の集合を $\Perm(n)$ と記し，$|\Perm(n)| = n!$ である．
 \end{definition}
 
-\begin{definition}{置換行列（permutation matrix）}{sem-permutation-matrix}
-  置換 $\sigma \in \Perm(n)$ に対して，
-  $n \times n$ 行列 $\mathbf{P}_\sigma$ を
+\begin{proposition}{有限集合の最小元}{sem-finite-min}
+  $\R$ の空でない有限部分集合 $S \subset \R$ は最小元を持つ．
+  すなわち，ある $s^* \in S$ が存在して任意の $s \in S$ に対し $s^* \leq s$ となる．
+\end{proposition}
+
+\begin{proof}
+  $k \defeq |S|$ に関する帰納法で示す．
+
+  \textbf{($k = 1$ のとき）}
+  $S = \{s_1\}$ のとき，$s^* = s_1$ が条件を満たす．
+
+  \textbf{($k \to k + 1$)}
+  $|S| = k + 1$ とし，任意に $s_{k+1} \in S$ を取って
+  $S' \defeq S \setminus \{s_{k+1}\}$ とおく．$|S'| = k$ なので
+  帰納法の仮定より $S'$ は最小元 $s'^* \in S'$ を持つ．
+  $\R$ 上の全順序性により $s'^* \leq s_{k+1}$ か $s_{k+1} < s'^*$ の
+  いずれかが成り立つので，
   \[
-    (\mathbf{P}_\sigma)_{i,j} =
+    s^* \defeq
     \begin{cases}
-      1 & j = \sigma(i), \\
-      0 & j \neq \sigma(i)
+      s'^* & (s'^* \leq s_{k+1}), \\
+      s_{k+1} & (s_{k+1} < s'^*)
     \end{cases}
   \]
-  で定義し，これを\textbf{置換行列}という．
-  各行・各列にちょうど 1 つの成分 $1$ を持ち，
-  $\mathbf{P}_\sigma \ones_n = \ones_n$，
-  $\mathbf{P}_\sigma^\top \ones_n = \ones_n$
-  を満たす二重確率行列である．
-\end{definition}
-
-\begin{example}{置換行列}{sem-permutation-matrix-example}
-  $n = 3$，置換 $\sigma = (2, 3, 1)$
-  （すなわち $\sigma(1) = 2,\; \sigma(2) = 3,\; \sigma(3) = 1$）のとき，
-  置換行列は
-  \[
-    \mathbf{P}_\sigma =
-    \begin{pmatrix}
-      0 & 1 & 0 \\
-      0 & 0 & 1 \\
-      1 & 0 & 0
-    \end{pmatrix}.
-  \]
-  行和・列和を確認すると，
-  $\mathbf{P}_\sigma \ones_3
-  = \begin{psmallmatrix} 1 \\ 1 \\ 1 \end{psmallmatrix}
-  = \ones_3$．
-\end{example}
+  とおけば，任意の $s \in S$ に対して $s^* \leq s$．
+\end{proof}
 
 \subsection{フロベニウス内積}
 \label{sec:sem-frobenius-inner}
@@ -65,30 +56,6 @@
   \]
   で定める．
 \end{definition}
-
-\begin{example}{フロベニウス内積の計算}{sem-frobenius-inner-example}
-  \[
-    \mathbf{A} =
-    \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}, \quad
-    \mathbf{B} =
-    \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}
-  \]
-  に対し，成分ごとの積の総和から
-  \[
-    \inner{\mathbf{A}}{\mathbf{B}}
-    = 1 \cdot 5 + 2 \cdot 6 + 3 \cdot 7 + 4 \cdot 8
-    = 5 + 12 + 21 + 32
-    = 70.
-  \]
-  トレースによる計算でも確かめられる：
-  \[
-    \mathbf{A}^\top \mathbf{B}
-    = \begin{pmatrix} 1 & 3 \\ 2 & 4 \end{pmatrix}
-      \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}
-    = \begin{pmatrix} 26 & 30 \\ 38 & 44 \end{pmatrix}, \quad
-    \tr(\mathbf{A}^\top \mathbf{B}) = 26 + 44 = 70.
-  \]
-\end{example}
 
 %% ============================================================
 %% 距離空間と測度論
@@ -178,15 +145,6 @@
   を含む最小の $\sigma$-代数を
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
-
-\begin{remark}{$\Bb(\Omega)$ のイメージ}{sem-borel-intuition}
-  $\Bb(\Omega)$ は開集合から出発して補集合・可算和を繰り返して得られる集合族であり，
-  位相から自然に作られる．一方で $2^\Omega$ 全体にわたって整合的に測度を定めることは
-  できない（Vitali 集合などが障害となる）ため，測度の定義域として
-  $\Bb(\Omega)$ を採用する．日常の解析・確率で書き下せる集合は事実上すべて
-  $\Bb(\Omega)$ に属する．連続写像 $f$ は $f^{-1}(\text{開集合})$ が開集合なので
-  自動的にボレル可測である．
-\end{remark}
 
 \begin{definition}{積可測空間（product measurable space）}{sem-product-measurable}
   距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，
@@ -285,15 +243,6 @@
   \end{itemize}
 \end{definition}
 
-\begin{remark}{一般可測関数への拡張}{sem-signed-integral}
-  一般の可測関数 $f = f^+ - f^-$
-  （$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては
-  $\int f^+$ と $\int f^-$ の少なくとも一方が有限でなければ
-  積分は定義できない（$\infty - \infty$ が不定となるため）．
-  本稿で扱う関数 $c \colon \X \times \Y \to \R_+$（輸送コスト）は
-  非負値であるから，この問題は生じない．
-\end{remark}
-
 \begin{proposition}{単調収束定理と単関数近似（monotone convergence theorem, MCT）}{sem-mct}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対して次が成り立つ．
   \begin{enumerate}
@@ -338,18 +287,20 @@
 \label{sec:sem-dirac-pushforward}
 
 \begin{definition}{Dirac 測度}{sem-dirac}
-  距離空間 $\X$ 上の点 $x \in \X$ に対して，
-  \textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\X)$ を
+  可測空間 $(\Omega, \mathcal{F})$ 上の点 $x \in \Omega$ に対して，
+  \textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\Omega)$ を
   \[
     \delta_x(A) \defeq
     \begin{cases}
       1 & x \in A, \\
       0 & x \notin A
     \end{cases}
-    \qquad (\forall\, A \in \Bb(\X))
+    \qquad (\forall\, A \in \mathcal{F})
   \]
   で定義する．
   直観的には，全質量が点 $x$ に集中した確率測度である．
+  特に $\X$ はボレル $\sigma$-代数 $\Bb(\X)$ を備えた可測空間なので，
+  $\delta_x \in \Mm_+^1(\X)$（$x \in \X$）も同様に定まる．
 \end{definition}
 
 \begin{proposition}{Dirac 測度に対する積分}{sem-dirac-integral}
@@ -391,26 +342,43 @@
   で定義する．
 \end{definition}
 
-\begin{proposition}{離散測度の押し出し}{sem-dirac-pushforward}
-  可測写像 $T \colon \X \to \Y$，点 $x_1, \ldots, x_n \in \X$，
-  係数 $a_1, \ldots, a_n \geq 0$ に対して，
-  \[
-    T\pushforward \Bigl(\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)
-    = \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}.
-  \]
-  特に $T\pushforward \delta_x = \delta_{T(x)}$．
+\begin{proposition}{Dirac 測度と離散測度の押し出し}{sem-dirac-pushforward}
+  可測写像 $T \colon \X \to \Y$ に対して，次が成り立つ．
+  \begin{enumerate}
+    \item[(i)] 任意の点 $x \in \X$ に対して
+      $T\pushforward \delta_x = \delta_{T(x)}$．
+    \item[(ii)] 任意の点 $x_1, \ldots, x_n \in \X$ と係数
+      $a_1, \ldots, a_n \geq 0$ に対して
+      \[
+        T\pushforward \Bigl(\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)
+        = \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}.
+      \]
+  \end{enumerate}
 \end{proposition}
 
 \begin{proof}
-  $x \in T^{-1}(A) \iff T(x) \in A$ と Dirac 測度の $\{0, 1\}$ 値性から，
-  任意の $A \in \Bb(\Y)$ で
-  $\delta_{x}(T^{-1}(A)) = \delta_{T(x)}(A)$．
-  押し出しの定義より任意の $A \in \Bb(\Y)$ で
+  (i) 任意の $A \in \Bb(\Y)$ に対して，押し出しの定義より
+  $(T\pushforward \delta_x)(A) = \delta_x(T^{-1}(A))$．
+  $x \in T^{-1}(A) \iff T(x) \in A$ なので，
   \[
-    \Bigl(T\pushforward \sum_i a_i \delta_{x_i}\Bigr)(A)
-    = \sum_i a_i\, \delta_{x_i}(T^{-1}(A))
-    = \sum_i a_i\, \delta_{T(x_i)}(A).
+    \delta_x(T^{-1}(A)) =
+    \begin{cases}
+      1 & x \in T^{-1}(A), \text{ すなわち } T(x) \in A \\
+      0 & x \notin T^{-1}(A), \text{ すなわち } T(x) \notin A
+    \end{cases}
+    \;=\; \delta_{T(x)}(A).
   \]
+
+  (ii) 任意の $A \in \Bb(\Y)$ に対して，
+  \begin{align*}
+    \Bigl(T\pushforward \sum_i a_i \delta_{x_i}\Bigr)(A)
+    &= \Bigl(\sum_i a_i \delta_{x_i}\Bigr)(T^{-1}(A))
+      && \text{（押し出しの定義：$(T\pushforward \mu)(A) = \mu(T^{-1}(A))$）} \\
+    &= \sum_i a_i\, \delta_{x_i}(T^{-1}(A))
+      && \text{（測度の和・スカラー倍：$(\sum a_i \mu_i)(B) = \sum a_i \mu_i(B)$）} \\
+    &= \sum_i a_i\, \delta_{T(x_i)}(A)
+      && \text{（(i) より $\delta_{x_i}(T^{-1}(A)) = \delta_{T(x_i)}(A)$）}
+  \end{align*}
 \end{proof}
 
 %% ============================================================
@@ -422,14 +390,10 @@
 \subsection{凸結合と凸集合}
 \label{sec:sem-convex}
 
-\begin{definition}{凸結合・凸集合}{sem-convex}
-  ベクトル空間 $V$ の元 $v_1, v_2 \in V$ と $t \in [0,1]$ に対して，
-  $t v_1 + (1-t) v_2$ を $v_1$ と $v_2$ の\textbf{凸結合}という．
-  部分集合 $S \subseteq V$ が\textbf{凸}であるとは，
-  任意の $v_1, v_2 \in S$ の凸結合が再び $S$ に属すること，すなわち
+\begin{definition}{凸集合（convex set）}{sem-convex}
+  ベクトル空間 $V$ の部分集合 $S \subseteq V$ が\textbf{凸}であるとは，
+  任意の $v_1, v_2 \in S$ と任意の $t \in [0,1]$ に対して
   \[
-    v_1, v_2 \in S,\; t \in [0,1]
-    \;\Longrightarrow\;
     t v_1 + (1-t) v_2 \in S
   \]
   が成り立つことをいう．

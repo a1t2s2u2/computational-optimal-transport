@@ -14,37 +14,31 @@ $n$ 箇所にそれぞれ質量 $1/n$ の砂山があり，
 総コストを最小にする対応づけを求めたい．
 
 \begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
-  置換 $\sigma = (\sigma(1), \sigma(2), \ldots, \sigma(n)) \in \Perm(n)$ と
-  行列 $\mathbf{C} \in \R_+^{n \times n}$
+  $n \in \N$，置換 $\sigma = (\sigma(1), \sigma(2), \ldots, \sigma(n)) \in \Perm(n)$，
+  および行列 $\mathbf{C} \in \R_+^{n \times n}$
   （成分 $C_{i,j}$ を添字 $i$ から $j$ への\textbf{輸送コスト}と解釈する）
-  に対して，\textbf{最適割当問題}とは，
+  に対して，
   \[
     \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
   \]
-  を達成する $\sigma$ を求める問題である．
+  を達成する $\sigma$ を求める問題を\textbf{最適割当問題}という．
 \end{definition}
 
 \begin{example}{最適割当}{sem-assignment-cost-example}
-  $n = 2$ とし，置換 $\sigma = (\sigma(1), \sigma(2)) \in \Perm(2)$ と
-  行列 $\mathbf{C} \in \R_+^{2 \times 2}$ を考える．
-  直線上の砂山の位置 $x_1 = 0, x_2 = 3$ と行き先の位置 $y_1 = 1, y_2 = 4$ から，
-  運搬コストを距離 $C_{i,j} \defeq |x_i - y_j|$ で与えると，
+  $n = 2$ とし，置換 $\sigma \in \Perm(2)$ と行列
   \[
     \mathbf{C} =
     \begin{pmatrix}
-      |0-1| & |0-4| \\
-      |3-1| & |3-4|
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
       1 & 4 \\
       2 & 1
-    \end{pmatrix}.
+    \end{pmatrix} \in \R_+^{2 \times 2}
   \]
+  を考える．
   $\Perm(2) = \{(1,2),\, (2,1)\}$ の $2! = 2$ 通りの割当を直線上に図示する．
   青丸（{\color{blue!60}$\bullet$}）が砂山，
   赤四角（{\color{red!60}$\blacksquare$}）が行き先であり，
-  矢印は割当 $i \mapsto \sigma(i)$ を表す．
+  矢印は割当 $i \mapsto \sigma(i)$ を表す
+  （直線上の数値は各点の位置を表し，$C_{i,j}$ は砂山 $i$ と行き先 $j$ の距離に対応）．
 
   \begin{center}
   \begin{tikzpicture}[
@@ -109,64 +103,32 @@ $n = 70$ でも $n! > 10^{100}$ となるため全列挙は現実的でない．
 ハンガリアン法やオークションアルゴリズムなどの効率的な手法が知られている．
 
 \begin{proposition}{最適解の存在}{sem-assignment-existence}
-  任意の $\mathbf{C} \in \R_+^{n \times n}$ に対して，
-  最適割当問題の最小値は達成される．すなわち
-  \[
-    \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma^*(i)}
-    = \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
-  \]
-  を満たす $\sigma^* \in \Perm(n)$ が存在する．
+  任意の $n \in \N$ と任意の $\mathbf{C} \in \R_+^{n \times n}$ に対して，
+  最適割当問題の最小値は達成される．
 \end{proposition}
 
 \begin{proof}
-  $\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合なので，
-  $\sigma$ を動かして得られる値の集合
+  $\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合なので，集合
   \[
     \left\{ \frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} \;\middle|\; \sigma \in \Perm(n) \right\}
   \]
-  は高々 $n!$ 個の実数からなる有限集合である．
-  実数の空でない有限集合は最小元を持つから，
-  これを達成する $\sigma^* \in \Perm(n)$ が存在する．
+  は高々 $n!$ 個の実数からなる空でない有限集合である．
+  命題~\ref{prop:sem-finite-min} より最小元を持つので，
+  それを達成する $\sigma^* \in \Perm(n)$ が存在する．
 \end{proof}
 
-\begin{remark}{最適割当問題の解の一意性}{sem-uniqueness}
-  最適割当問題の最適解は\textbf{一意とは限らない}．
+\begin{proposition}{最適解が一意でない場合の存在}{sem-uniqueness}
+  任意の $n \geq 2$ に対して，
+  異なる $\sigma_1, \sigma_2 \in \Perm(n)$ がともに最小値を達成するような
+  $\mathbf{C} \in \R_+^{n \times n}$ が存在する．
+\end{proposition}
 
-  \textbf{例}：$n = 2$ とし，
-  砂山 $x_1, x_2$ と行き先 $y_1, y_2$ が
-  辺の長さ $1$ の正方形の頂点に配置されているとする．
-  $x_1, x_2$ を対角頂点に，$y_1, y_2$ を残りの対角頂点に置くと，
-  すべての砂山--行き先間の距離が等しくなる（$= 1$）．
-
-  \begin{center}
-  \begin{tikzpicture}[scale=1.5]
-    % Square outline (light)
-    \draw[gray!30] (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
-    % Workers (diagonal)
-    \fill[blue] (0, 0) circle (3pt) node[below left] {\small $x_1$};
-    \fill[blue] (1, 1) circle (3pt) node[above right] {\small $x_2$};
-    % Tasks (other diagonal)
-    \fill[red]  (1, 0) circle (3pt) node[below right] {\small $y_1$};
-    \fill[red]  (0, 1) circle (3pt) node[above left] {\small $y_2$};
-    % Assignment 1: σ = (1,2): x1→y1, x2→y2 — solid
-    \draw[->, thick] (0.1, 0.02) -- (0.88, 0.02);
-    \draw[->, thick] (0.9, 0.98) -- (0.12, 0.98);
-    % Assignment 2: σ = (2,1): x1→y2, x2→y1 — dashed
-    \draw[->, thick, dashed, gray] (0.02, 0.12) -- (0.02, 0.88);
-    \draw[->, thick, dashed, gray] (0.98, 0.88) -- (0.98, 0.12);
-    % Labels
-    \node[below] at (0.5, -0.4) {
-      \small $\sigma\!=\!(1,2)$: コスト $= 1$，\quad
-      \textcolor{gray}{$\sigma\!=\!(2,1)$: コスト $= 1$}};
-    % Side length
-    \node[right, font=\scriptsize] at (1.15, 0.5) {辺の長さ $1$};
-  \end{tikzpicture}
-  \end{center}
-
-  このとき $\sigma = (1,2)$ と $\sigma = (2,1)$ は
-  ともにコスト $1$ を与え，いずれも最適である．
-  すべての距離が等しいため，どの割当を選んでもコストは変わらない．
-\end{remark}
+\begin{proof}
+  $C_{i,j} \defeq 1$（$i, j = 1, \ldots, n$）と定めると，任意の $\sigma \in \Perm(n)$ に対して
+  $\frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} = 1$．
+  異なる $\sigma_1, \sigma_2 \in \Perm(n)$ を取れば，
+  いずれも最小値 $1$ を達成する．
+\end{proof}
 
 %% ============================================================
 %% Monge 問題（§2.2 後半）
@@ -175,12 +137,12 @@ $n = 70$ でも $n! > 10^{100}$ となるため全列挙は現実的でない．
 \label{sec:sem-monge}
 
 最適割当問題では，同数の砂山を等しい質量で 1 対 1 に運んでいた．
-これを次のように一般化したい：
+Monge 問題では次の設定を扱う：
 \begin{itemize}
-  \item[(i)] 砂山の数 $n$ と行き先の数 $m$ は等しくなくてよい．
-  \item[(ii)] 各砂山の質量と各行き先の必要量は不均一でよい．
-  \item[(iii)] 1 つの行き先に複数の砂山の砂が集まるのは許すが，
-    1 つの砂山は丸ごと 1 つの行き先へ運ぶ（分割しない）．
+  \item[(i)] 砂山の数と行き先の数は等しくなくてよい．
+  \item[(ii)] 各砂山の質量と各行き先で積み上げる量は不均一でよい．
+  \item[(iii)] 複数の砂山が同じ行き先に運ばれてもよい．
+  \item[(iv)] 1 つの砂山は丸ごと 1 つの行き先へ運ぶ（\textbf{分割しない}）．
 \end{itemize}
 
 1781 年に Monge が「砂山を最小の労力で積み替える問題」として提唱したこの問題は，
@@ -211,8 +173,9 @@ $n = 70$ でも $n! > 10^{100}$ となるため全列挙は現実的でない．
   \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
 \]
 とし，ここで $x_1, \ldots, x_n \in \X$ は砂山の位置，$y_1, \ldots, y_m \in \Y$ は行き先の位置，
-確率単体の元 $\mathbf{a} = (a_1, \ldots, a_n) \in \simplex_n$，
-$\mathbf{b} = (b_1, \ldots, b_m) \in \simplex_m$ はそれぞれ各砂山の質量・各行き先の必要量を表す．
+$\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$
+はそれぞれ各砂山の質量・各行き先で積み上げる量を表す
+（$\alpha, \beta$ が確率測度であることから $\sum_i a_i = \sum_j b_j = 1$）．
 行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
 このとき Monge 問題の目的関数は
 \begin{align*}
@@ -335,17 +298,20 @@ Monge の定式化には2つの深刻な問題がある：
 \subsubsection{困難1：実行可能集合の非凸性}
 
 $\X = \Y = \R$ とする．
+このとき可測写像 $T \colon \R \to \R$ の全体は，点ごとの和・スカラー倍
+$(tT_1 + (1-t)T_2)(x) \defeq t\, T_1(x) + (1-t)\, T_2(x)$
+によりベクトル空間をなす．この空間の部分集合としての
 Monge 問題の実行可能集合
 \[
   \mathcal{T}(\alpha, \beta)
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
-  T \text{ はボレル可測},\; T\pushforward \alpha = \beta \right\}
+  T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-は一般に\textbf{凸でない}．
-$\mathcal{T}(\alpha,\beta)$ が凸であるためには，
+は一般に\textbf{凸でない}（凸集合の定義は定義~\ref{def:sem-convex}）．
+実際，$\mathcal{T}(\alpha,\beta)$ が凸であるためには，
 任意の $T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ と
-任意の係数 $t \in [0,1]$ に対して，凸結合
-$\bar{T} = t T_1 + (1-t)T_2$ が再び
+任意の $t \in [0,1]$ に対して
+$\bar{T} \defeq t T_1 + (1-t)T_2$ が再び
 $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
 これは一般に成り立たない．
 
@@ -354,17 +320,31 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
   \[
     T_1(x) = x,\qquad T_2(x) = -x,\qquad t = \tfrac{1}{2}
   \]
-  をとる．命題~\ref{prop:sem-dirac-pushforward} より
-  \[
+  をとる．$\alpha$ の定義を代入し，命題~\ref{prop:sem-dirac-pushforward} を適用すると
+  \begin{align*}
     {T_1}\pushforward \alpha
-    = \tfrac{1}{2}\delta_{T_1(-1)} + \tfrac{1}{2}\delta_{T_1(1)}
-    = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}
-    = \beta,
-  \]
-  同様に $\{T_2(-1), T_2(1)\} = \{1, -1\}$ より ${T_2}\pushforward \alpha = \beta$．
+    &= {T_1}\pushforward \bigl(\tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}\bigr)
+      && \text{（$\alpha$ の定義）} \\
+    &= \tfrac{1}{2}\, {T_1}\pushforward \delta_{-1}
+      + \tfrac{1}{2}\, {T_1}\pushforward \delta_{1}
+      && \text{（命題~\ref{prop:sem-dirac-pushforward} (ii)）} \\
+    &= \tfrac{1}{2}\delta_{T_1(-1)} + \tfrac{1}{2}\delta_{T_1(1)}
+      && \text{（命題~\ref{prop:sem-dirac-pushforward} (i)）} \\
+    &= \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}
+      && \text{（$T_1(x) = x$ より）} \\
+    &= \beta.
+  \end{align*}
+  同様に
+  \begin{align*}
+    {T_2}\pushforward \alpha
+    &= \tfrac{1}{2}\delta_{T_2(-1)} + \tfrac{1}{2}\delta_{T_2(1)}
+    = \tfrac{1}{2}\delta_{1} + \tfrac{1}{2}\delta_{-1}
+    = \beta
+    && \text{（$T_2(x) = -x$ より）}.
+  \end{align*}
   よって $T_1, T_2 \in \mathcal{T}(\alpha, \beta)$ である．
 
-  一方，凸結合は
+  一方，$\bar{T} = \tfrac{1}{2}T_1 + \tfrac{1}{2}T_2$ は
   $\bar{T}(x) = \tfrac{1}{2}x + \tfrac{1}{2}(-x) = 0$
   すなわち $0$ を値にとる定値写像であり，
   $\bar{T}\pushforward\alpha = \delta_0 \neq \beta$．
@@ -399,7 +379,7 @@ $\bar{T}\pushforward\alpha = \delta_0$ となり両者は一致しない．
   を考える．$\alpha$ は原点の 1 点に集中した質量 $1$，
   $\beta$ は $-1$ と $1$ の 2 箇所に半分ずつ分散した測度である．
 
-  任意のボレル可測写像 $T \colon \X \to \Y$ に対して，
+  任意の可測写像 $T \colon \X \to \Y$ に対して，
   命題~\ref{prop:sem-dirac-pushforward} より
   $T\pushforward \delta_0 = \delta_{T(0)}$ である．
   すなわち $\alpha$ を $T$ で運んだ結果は必ず 1 点 $T(0)$ に集中した測度となり，
@@ -449,7 +429,7 @@ $\bar{T}\pushforward\alpha = \delta_0$ となり両者は一致しない．
 前節で見たとおり，Monge の定式化には
 実行可能集合の非凸性と解の非存在という2つの本質的困難がある．
 また，最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
-Monge 問題はこれを一般化するものの，$n!$ 通りの組合せ的構造を持つ．
+Monge 問題はこれを拡張するものの，組合せ的な分割不可制約を残す．
 
 Kantorovich (1942) は，これらの困難を一挙に解消するアイデアを提示した．
 Monge の枠組みでは，各点 $x_i$ の質量をすべて1つの行き先 $T(x_i)$ に送る
