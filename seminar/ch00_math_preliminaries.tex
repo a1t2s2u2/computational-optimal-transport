@@ -188,12 +188,16 @@
   自動的にボレル可測である．
 \end{remark}
 
-\begin{remark}{積ボレル $\sigma$-代数}{sem-product-borel}
-  可分な距離空間 $\X, \Y$ に対しては，積距離から定まる位相のボレル
-  $\sigma$-代数は積 $\sigma$-代数と一致する：
-  $\Bb(\X \times \Y) = \Bb(\X) \otimes \Bb(\Y)$．
-  後章のカップリング $\pi \in \Mm_+^1(\X \times \Y)$ はこの可測構造の下で扱う．
-\end{remark}
+\begin{definition}{積可測空間（product measurable space）}{sem-product-measurable}
+  距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，
+  積空間 $\X \times \Y$ に\textbf{積距離}
+  \[
+    d\bigl((x, y), (x', y')\bigr) \defeq d_\X(x, x') + d_\Y(y, y')
+  \]
+  を入れたときのボレル $\sigma$-代数を $\Bb(\X \times \Y)$ と記し，
+  可測空間 $(\X \times \Y, \Bb(\X \times \Y))$ を
+  $(\X, \Bb(\X))$ と $(\Y, \Bb(\Y))$ の\textbf{積可測空間}という．
+\end{definition}
 
 \begin{definition}{測度（measure）}{sem-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
@@ -215,11 +219,24 @@
 \end{definition}
 
 \begin{remark}{本稿における可測構造の取り決め}{sem-borel-convention}
-  以降，距離空間 $\X$ 上の可測構造はボレル $\sigma$-代数
-  $\Bb(\X)$ を既定とし，$(\X, \Bb(\X))$ を既定の可測空間とする（$\Y$ も同様）．
-  本章の定義はいずれも一般の距離空間で成立するが，第~\ref{ch:seminar-01}章以降は
-  連続理論（disintegration, tightness, Wasserstein 幾何）を扱う都合上，
-  $\X, \Y$ に Polish 性（定義~\ref{def:sem-polish}）を一様に課す．
+  Monge 問題や Kantorovich 問題の\textbf{定式化}に必要な本質的構造は
+  可測空間であり，距離構造はコストの具体形
+  （例：$c(x,y) = d(x,y)^p$）や後続の存在定理で初めて要請される．
+
+  ただし具体例や連続理論との接続のため，本稿では既定として距離空間を採用する：
+  距離空間 $\X$ には距離 $d$ から定まる位相が一意に付随し，
+  その開集合から生成されるボレル $\sigma$-代数 $\Bb(\X)$ が自然に定まる
+  （定義~\ref{def:sem-borel}）．他の $\sigma$-代数（例：ルベーグ完備化）は
+  特定の測度に依存するのに対し，$\Bb(\X)$ は位相のみから一意に決まるため，
+  距離空間を扱う際の既定の可測構造として採用される．
+
+  以降，単に $\X$ と書いたときは可測空間 $(\X, \Bb(\X))$ が入っているものとし
+  （$\Y$ も同様），「$\X$ 上の測度」「$T \colon \X \to \Y$ は可測」等の表現は
+  暗黙に $\Bb(\X), \Bb(\Y)$ を用いているものと解釈する．
+  解の存在・Wasserstein 距離の三角不等式（gluing lemma）・連続版の双対定理など
+  \textbf{後続の定理}を扱う場面では，$\X, \Y$ に
+  Polish 性（定義~\ref{def:sem-polish}）を仮定する
+  （tightness, disintegration, 弱コンパクト性の議論のため）．
 \end{remark}
 
 \subsection{測度に対する積分}
@@ -238,15 +255,25 @@
   で定める．
 \end{definition}
 
+\begin{definition}{単関数（simple function）}{sem-simple-function}
+  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_+$ が
+  \textbf{単関数}であるとは，互いに素な可測集合
+  $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ を用いて
+  \[
+    s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}
+  \]
+  と表せることをいう．
+\end{definition}
+
 \begin{definition}{非負可測関数の積分}{sem-nonneg-integral}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対し，
   非負可測関数の積分を以下の 2 段階で定める．
   \begin{itemize}
-    \item[(i)] \textbf{単関数}：互いに素な可測集合
-      $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ による
-      有限線形結合 $s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}$ を単関数といい，
-      その積分を
-      $\int_\Omega s \, \d\mu \defeq \sum_{k=1}^{m} c_k \, \mu(A_k)$
+    \item[(i)] 単関数 $s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}$
+      （定義~\ref{def:sem-simple-function}）の積分を
+      \[
+        \int_\Omega s \, \d\mu \defeq \sum_{k=1}^{m} c_k \, \mu(A_k)
+      \]
       で定める．
     \item[(ii)] 非負可測関数 $f \colon \Omega \to [0, \infty]$ の積分を
       \[
@@ -263,7 +290,8 @@
   （$f^+ = \max(f, 0)$，$f^- = \max(-f, 0)$）に対しては
   $\int f^+$ と $\int f^-$ の少なくとも一方が有限でなければ
   積分は定義できない（$\infty - \infty$ が不定となるため）．
-  本稿で扱うコスト関数は $c \geq 0$ であるから，この問題は生じない．
+  本稿で扱う関数 $c \colon \X \times \Y \to \R_+$（輸送コスト）は
+  非負値であるから，この問題は生じない．
 \end{remark}
 
 \begin{proposition}{単調収束定理と単関数近似（monotone convergence theorem, MCT）}{sem-mct}
@@ -277,6 +305,34 @@
       $\int f_n \, \d\mu \uparrow \int f \, \d\mu$．
   \end{enumerate}
 \end{proposition}
+
+\begin{proposition}{積分の測度に関する線形性}{sem-measure-linearity}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu_1, \ldots, \mu_n$，
+  非負係数 $a_1, \ldots, a_n \geq 0$，および非負可測関数
+  $f \colon \Omega \to [0, \infty]$ に対して，
+  \[
+    \int_\Omega f \, \d\!\Bigl(\sum_{i=1}^{n} a_i \mu_i\Bigr)
+    = \sum_{i=1}^{n} a_i \int_\Omega f \, \d\mu_i.
+  \]
+  ここで測度の和・スカラー倍は可測集合 $A \in \mathcal{F}$ に対して
+  $(\mu_1 + \mu_2)(A) \defeq \mu_1(A) + \mu_2(A)$，
+  $(a\mu)(A) \defeq a\, \mu(A)$ で定まる測度である．
+\end{proposition}
+
+\begin{proof}
+  単関数 $s = \sum_{k} c_k \mathbf{1}_{A_k}$ について，
+  単関数積分の定義と測度の和・スカラー倍の定義から
+  \[
+    \int s \, \d\!\Bigl(\sum_i a_i \mu_i\Bigr)
+    = \sum_k c_k \Bigl(\sum_i a_i \mu_i\Bigr)(A_k)
+    = \sum_k c_k \sum_i a_i \mu_i(A_k)
+    = \sum_i a_i \sum_k c_k \mu_i(A_k)
+    = \sum_i a_i \int s \, \d\mu_i.
+  \]
+  一般の非負可測関数 $f$ に対しては，
+  命題~\ref{prop:sem-mct} により単関数の単調増加列 $f_n \uparrow f$ が取れ，
+  単調収束定理を両辺に適用すれば結論が得られる．
+\end{proof}
 
 \subsection{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
@@ -325,7 +381,7 @@
 \end{proof}
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
-  距離空間 $\X, \Y$ の間のボレル可測写像 $T \colon \X \to \Y$ と
+  可測写像 $T \colon \X \to \Y$ と
   測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
   \[
@@ -336,7 +392,7 @@
 \end{definition}
 
 \begin{proposition}{離散測度の押し出し}{sem-dirac-pushforward}
-  ボレル可測写像 $T \colon \X \to \Y$，点 $x_1, \ldots, x_n \in \X$，
+  可測写像 $T \colon \X \to \Y$，点 $x_1, \ldots, x_n \in \X$，
   係数 $a_1, \ldots, a_n \geq 0$ に対して，
   \[
     T\pushforward \Bigl(\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)
