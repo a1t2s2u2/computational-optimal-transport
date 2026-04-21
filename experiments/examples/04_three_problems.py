@@ -21,8 +21,7 @@ import pathlib
 import matplotlib.pyplot as plt
 import numpy as np
 
-from cot.assignment import AssignmentProblem
-from cot.assignment import solve_hungarian
+from cot.assignment import AssignmentProblem, solve_hungarian
 from cot.core.scenario import seminar_n2_scenario
 from cot.kantorovich import KantorovichProblem, solve_linprog
 from cot.monge import MongeProblem
@@ -64,12 +63,12 @@ def main() -> None:
         (
             "Assignment",
             f"σ = {a_sol.sigma_one_indexed()}",
-            f"(1/n) Σ C_{{i,σ(i)}}",
+            "(1/n) Σ C_{i,σ(i)}",
             a_sol.cost,
         ),
         (
             "Monge (離散)",
-            f"T = {m_sol.T_one_indexed()}",
+            f"T = {m_sol.t_one_indexed()}",
             "Σ a_i · C_{i,T(i)}",
             m_sol.cost,
         ),
@@ -104,7 +103,7 @@ def main() -> None:
     )
 
     plot_monge_map_1d(scenario, m_sol.T_idx, ax=axes[1], arrow_color="tab:blue")
-    axes[1].set_title(rf"(b) Monge: $T^\star = {m_sol.T_one_indexed()}$,  コスト $= {m_sol.cost}$")
+    axes[1].set_title(rf"(b) Monge: $T^\star = {m_sol.t_one_indexed()}$,  コスト $= {m_sol.cost}$")
 
     plot_coupling_1d(scenario, k_sol.P, ax=axes[2])
     axes[2].set_title(rf"(c) Kantorovich: $\langle C, P^\star\rangle = {k_sol.cost}$")

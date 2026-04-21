@@ -78,7 +78,7 @@ def main() -> None:
         f"実行可能な写像: {len(feasible_sols)} 通り "
         f"(均等質量 n=m の場合は |Perm(n)|={math.factorial(problem.n)} に一致)"
     )
-    print(f"最適 T = {optimal.T_one_indexed()}, cost = {optimal.cost}")
+    print(f"最適 T = {optimal.t_one_indexed()}, cost = {optimal.cost}")
     print("\n→ Monge 問題 (均等質量 n=m) は最適割当問題と同じ解を返す (seminar 行 201–213).")
 
     # --- 図: (左) 実行可能性とコスト表, (右) 1D 配置図 ---
@@ -88,7 +88,7 @@ def main() -> None:
     ax.axis("off")
     row_labels = [str(t) for t, _, _ in all_maps]
     cell_text = []
-    for t, feas, cost in all_maps:
+    for _, feas, cost in all_maps:
         mark = "✓ 可" if feas else "× 不可"
         cost_str = f"{cost:.3f}" if feas else "—"
         cell_text.append([mark, cost_str])
@@ -113,7 +113,7 @@ def main() -> None:
 
     plot_monge_map_1d(scenario, optimal.T_idx, ax=axes[1])
     axes[1].set_title(
-        rf"最適 Monge 写像 $T^\star = {optimal.T_one_indexed()}$,  "
+        rf"最適 Monge 写像 $T^\star = {optimal.t_one_indexed()}$,  "
         rf"コスト $= {optimal.cost}$"
     )
 

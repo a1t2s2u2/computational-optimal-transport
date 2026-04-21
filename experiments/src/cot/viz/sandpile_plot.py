@@ -107,6 +107,7 @@ def plot_sandpile_1d(
 
     ax.set_xlim(x_min, x_max)
     ax.set_ylim(y_dest - 0.6, y_sand + 0.6)
+    ax.set_xticks([])
     ax.set_yticks([])
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

@@ -97,7 +97,13 @@ def main() -> None:
         label=r"端点 (置換行列)",
     )
     ax.scatter(
-        [t_star], [solution.cost], c="tab:green", s=160, marker="*", zorder=4, label=r"最適 $t^\star$"
+        [t_star],
+        [solution.cost],
+        c="tab:green",
+        s=160,
+        marker="*",
+        zorder=4,
+        label=r"最適 $t^\star$",
     )
     ax.axhline(solution.cost, color="tab:green", linestyle="--", alpha=0.5)
     ax.set_xlabel(r"$t \in [0, 1/2]$  (多面体を貫くパラメタ)")

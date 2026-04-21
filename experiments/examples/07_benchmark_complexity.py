@@ -1,6 +1,7 @@
 """全列挙法とハンガリアン法の計算時間を比較する.
 
-seminar §sem-assignment 行 128–132:
+砂山 → 行き先 の最適割当問題 (§sem-assignment) において,
+seminar 行 100–103:
     「n! は急激に増大し, n = 70 でも n! > 10^100」
 「ハンガリアン法やオークションアルゴリズムなど O(n³) で解ける手法が知られている」
 
@@ -72,13 +73,13 @@ def main() -> None:
 
     out = pathlib.Path(__file__).parent / "figures"
     out.mkdir(exist_ok=True)
-    path = out / "04_benchmark_complexity.pdf"
+    path = out / "07_benchmark_complexity.pdf"
     fig.tight_layout()
     fig.savefig(path)
     fig.savefig(path.with_suffix(".png"), dpi=150)
     print(f"\nsaved: {path}")
 
-    # --- seminar 行 128–132 の主張を数値的に示す ---
+    # --- seminar 行 100–103 の主張を数値的に示す ---
     print(f"\nn = 70 での n!: ≈ 10^{math.log10(math.factorial(70)):.0f}")
 
 

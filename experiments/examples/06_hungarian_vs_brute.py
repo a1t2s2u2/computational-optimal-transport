@@ -1,8 +1,10 @@
 """全列挙法とハンガリアン法の結果一致を数値的に確認する.
 
+砂山 → 行き先 の最適割当問題 (§sem-assignment) に対し,
 n = 3…7 のランダムコスト行列をそれぞれ複数生成し, 両手法の最適コストを比較する.
-(seminar §sem-assignment 行 128–132 で言及される O(n³) アルゴリズムが
-全列挙と同一の最適値を返すことを実測する.)
+seminar 行 100–103 で言及される O(n³) アルゴリズムが全列挙と同一の最適値を
+返すことを実測する. 01_assignment.py の n=2 例では両者が同じ σ=(1,2) を返すが,
+より大きな n でも一致することを確認する.
 """
 
 from __future__ import annotations
@@ -52,7 +54,7 @@ def main() -> None:
 
     out = pathlib.Path(__file__).parent / "figures"
     out.mkdir(exist_ok=True)
-    path = out / "03_hungarian_vs_brute.pdf"
+    path = out / "06_hungarian_vs_brute.pdf"
     fig.tight_layout()
     fig.savefig(path)
     fig.savefig(path.with_suffix(".png"), dpi=150)

@@ -88,8 +88,8 @@ class MongeSolution:
         cost = float(np.sum(a * C[np.arange(n), T_idx]))
         return cls(T_idx=T_idx, cost=cost)
 
-    def T_one_indexed(self) -> tuple[int, ...]:
-        """seminar 原稿と同じ 1-indexed タプルで写像を返す (表示用).
+    def t_one_indexed(self) -> tuple[int, ...]:
+        """seminar 原稿と同じ 1-indexed タプルで写像 :math:`T` を返す (表示用).
 
         例: ``T_idx = (0, 1)`` → ``(1, 2)`` (= "x_1 → y_1, x_2 → y_2").
         """

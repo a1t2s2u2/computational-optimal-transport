@@ -91,9 +91,7 @@ class SandpileScenario:
         """:math:`n = m` かつ :math:`a = b = (1/n)\\mathbf{1}` か."""
         if self.n != self.m:
             return False
-        return bool(
-            np.allclose(self.a, 1.0 / self.n) and np.allclose(self.b, 1.0 / self.n)
-        )
+        return bool(np.allclose(self.a, 1.0 / self.n) and np.allclose(self.b, 1.0 / self.n))
 
 
 def seminar_n2_scenario() -> SandpileScenario:

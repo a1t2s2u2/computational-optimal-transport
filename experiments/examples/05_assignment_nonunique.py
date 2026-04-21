@@ -1,10 +1,10 @@
-"""seminar §sem-assignment の remark sem-uniqueness (行 134–171) を再現する.
+"""seminar §sem-assignment の命題 sem-uniqueness (ch02 行 120–131) を 2D で例示する.
 
-正方形の対角頂点に作業者と仕事場を配置するとすべての距離が等しくなり,
+正方形の対角頂点に砂山と行き先を配置するとすべての距離が等しくなり,
 2 通りの割当 σ = (1, 2) と σ = (2, 1) がともに最適となる.
 
-    x_1 = (0, 0), x_2 = (1, 1)   (作業者, 青)
-    y_1 = (1, 0), y_2 = (0, 1)   (仕事場, 赤)
+    x_1 = (0, 0), x_2 = (1, 1)   (砂山, 青丸)
+    y_1 = (1, 0), y_2 = (0, 1)   (行き先, 赤四角)
 """
 
 from __future__ import annotations
@@ -33,9 +33,11 @@ def main() -> None:
     optimals = [s for s in solutions if np.isclose(s.cost, min_cost)]
 
     print("=" * 56)
-    print("seminar remark sem-uniqueness: n=2 非一意性")
+    print("seminar 命題 sem-uniqueness: n=2 非一意性 (2D)")
     print("=" * 56)
-    print(f"C =\n{C}\n")
+    print(f"砂山   x_1 = {X[0].tolist()}, x_2 = {X[1].tolist()}")
+    print(f"行き先 y_1 = {Y[0].tolist()}, y_2 = {Y[1].tolist()}")
+    print(f"\nC =\n{C}\n")
     print("全 2! = 2 通りの割当とコスト:")
     for s in solutions:
         print(f"  σ = {s.sigma_one_indexed()}, cost = {s.cost}")
@@ -63,7 +65,7 @@ def main() -> None:
 
     out = pathlib.Path(__file__).parent / "figures"
     out.mkdir(exist_ok=True)
-    path = out / "02_assignment_nonunique.pdf"
+    path = out / "05_assignment_nonunique.pdf"
     fig.tight_layout()
     fig.savefig(path)
     fig.savefig(path.with_suffix(".png"), dpi=150)

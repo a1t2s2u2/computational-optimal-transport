@@ -50,9 +50,7 @@ class KantorovichProblem:
         if a.ndim != 1 or b.ndim != 1:
             raise ValueError("a, b は 1 次元配列でなければならない")
         if C.shape != (a.shape[0], b.shape[0]):
-            raise ValueError(
-                f"C must have shape (n={a.shape[0]}, m={b.shape[0]}), got {C.shape}"
-            )
+            raise ValueError(f"C must have shape (n={a.shape[0]}, m={b.shape[0]}), got {C.shape}")
         if not np.isclose(a.sum(), b.sum()):
             raise ValueError(f"Σa = {a.sum()} must equal Σb = {b.sum()}")
         object.__setattr__(self, "a", a)
@@ -68,9 +66,7 @@ class KantorovichProblem:
         return int(self.b.shape[0])
 
     @classmethod
-    def from_scenario(
-        cls, scenario: SandpileScenario, p: float = 1.0
-    ) -> KantorovichProblem:
+    def from_scenario(cls, scenario: SandpileScenario, p: float = 1.0) -> KantorovichProblem:
         """砂山シナリオからコスト行列を生成して問題を構築."""
         return cls(a=scenario.a, b=scenario.b, C=scenario.cost_matrix(p=p))
 
