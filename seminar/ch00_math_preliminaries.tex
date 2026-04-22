@@ -11,9 +11,11 @@
 \label{sec:sem-permutation}
 
 \begin{definition}{置換（permutation）}{sem-permutation}
-  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}とは，
-  $\range{n}$ からそれ自身への全単射をいう．
-  置換全体の集合を $\Perm(n)$ と記し，$|\Perm(n)| = n!$ である．
+  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}全体の集合を
+  \[
+    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
+  \]
+  と定める．$|\Perm(n)| = n!$ である．
 \end{definition}
 
 \begin{proposition}{有限集合の最小元}{sem-finite-min}
@@ -22,15 +24,14 @@
 \end{proposition}
 
 \begin{proof}
-  $k \defeq |S|$ に関する帰納法で示す．
+  帰納法で示す．
 
-  \textbf{($k = 1$ のとき）}
+  \textbf{($|S| = 1$ のとき）}
   $S = \{s_1\}$ のとき，$s^* = s_1$ が条件を満たす．
 
-  \textbf{($k \to k + 1$)}
-  $|S| = k + 1$ とし，任意に $s_{k+1} \in S$ を取って
-  $S' \defeq S \setminus \{s_{k+1}\}$ とおく．$|S'| = k$ なので
-  帰納法の仮定より $S'$ は最小元 $s'^* \in S'$ を持つ．
+  \textbf{（$|S| = k$ で成り立つと仮定して $|S| = k + 1$ を示す）}
+  任意に $s_{k+1} \in S$ を取って $S' \defeq S \setminus \{s_{k+1}\}$ とおく．
+  $|S'| = k$ なので帰納法の仮定より $S'$ は最小元 $s'^* \in S'$ を持つ．
   $\R$ 上の全順序性により $s'^* \leq s_{k+1}$ か $s_{k+1} < s'^*$ の
   いずれかが成り立つので，
   \[
@@ -134,10 +135,9 @@
 \end{definition}
 
 \begin{definition}{可測写像}{sem-measurable-map}
-  可測空間 $(\Omega_1, \mathcal{F}_1)$ から $(\Omega_2, \mathcal{F}_2)$ への写像
-  $T \colon \Omega_1 \to \Omega_2$ が\textbf{可測}であるとは，
-  $T^{-1}(A) \in \mathcal{F}_1$ が
-  すべての $A \in \mathcal{F}_2$ に対して成り立つことをいう．
+  可測空間 $(\Omega_1, \mathcal{F}_1)$ から $(\Omega_2, \mathcal{F}_2)$ への
+  写像 $T \colon \Omega_1 \to \Omega_2$ が\textbf{可測}であるとは，
+  $T^{-1}(A) \in \mathcal{F}_1$ がすべての $A \in \mathcal{F}_2$ に対して成り立つことをいう．
 \end{definition}
 
 \begin{definition}{ボレル $\sigma$-代数}{sem-borel}
@@ -160,19 +160,18 @@
 \begin{definition}{測度（measure）}{sem-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
   関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
+  次の 2 条件を満たすものをいう：
   \begin{enumerate}
     \item[(i)] $\mu(\emptyset) = 0$，
     \item[(ii)] 互いに素な可測集合 $A_1, A_2, \ldots \in \mathcal{F}$ に対して
       $\mu\bigl(\bigcup_{k=1}^{\infty} A_k\bigr) = \sum_{k=1}^{\infty} \mu(A_k)$
-      （可算加法性）
+      （可算加法性）．
   \end{enumerate}
-  を満たすものをいう．
 \end{definition}
 
 \begin{definition}{確率測度（probability measure）}{sem-probability-measure}
-  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が
-  $\mu(\Omega) = 1$ を満たすとき，$\mu$ を
-  \textbf{確率測度}という．
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が $\mu(\Omega) = 1$ を満たすとき，
+  $\mu$ を\textbf{確率測度}という．
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
 \end{definition}
 
@@ -225,7 +224,7 @@
 
 \begin{definition}{非負可測関数の積分}{sem-nonneg-integral}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対し，
-  非負可測関数の積分を以下の 2 段階で定める．
+  非負可測関数の積分を以下の 2 段階で定める：
   \begin{itemize}
     \item[(i)] 単関数 $s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}$
       （定義~\ref{def:sem-simple-function}）の積分を
@@ -332,8 +331,7 @@
 \end{proof}
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
-  可測写像 $T \colon \X \to \Y$ と
-  測度 $\mu \in \Mm_+^1(\X)$ に対して，
+  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
   \[
     (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
@@ -381,6 +379,39 @@
   \end{align*}
 \end{proof}
 
+%% --- 押し出しの直感略図 ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % 左：X 側の楕円と点 x, 囲み T^{-1}(A)
+  \draw[thick] (0, 0) ellipse (1.5cm and 1.05cm);
+  \node[above right, font=\scriptsize, gray] at (-1.3, 0.7) {$\X$};
+  \draw[dashed, thick, green!55!black]
+    (-0.1, 0.05) ellipse (0.55cm and 0.45cm);
+  \node[font=\small, green!40!black] at (-0.1, 0.7) {$T^{-1}(A)$};
+  \fill (-0.1, 0.05) circle (1.5pt) node[below, font=\scriptsize] {$x$};
+
+  % 矢印 T
+  \draw[->, thick] (1.7, 0.1) -- (3.8, 0.1)
+    node[midway, above, font=\small] {$T$};
+
+  % 右：Y 側の楕円と点 T(x), 囲み A
+  \begin{scope}[xshift=5.5cm]
+    \draw[thick] (0, 0) ellipse (1.5cm and 1.05cm);
+    \node[above right, font=\scriptsize, gray] at (-1.3, 0.7) {$\Y$};
+    \draw[dashed, thick, orange!70!black]
+      (0.1, 0.05) ellipse (0.55cm and 0.45cm);
+    \node[font=\small, orange!60!black] at (0.1, 0.7) {$A$};
+    \fill (0.1, 0.05) circle (1.5pt) node[below, font=\scriptsize] {$T(x)$};
+  \end{scope}
+
+  % 下：Dirac 測度の値
+  \node[font=\scriptsize] at (-0.1, -1.4) {$\delta_x$};
+  \node[font=\scriptsize] at (5.6, -1.4) {$\delta_{T(x)}$};
+  \node[font=\small] at (2.75, -2.1)
+    {$\delta_x(T^{-1}(A)) = 1 = \delta_{T(x)}(A)$};
+\end{tikzpicture}
+\end{center}
+
 %% ============================================================
 %% 凸解析
 %% ============================================================
@@ -410,13 +441,11 @@
 \end{definition}
 
 \begin{definition}{凸多面体（convex polytope）}{sem-polytope}
-  有限個の線形等式および線形不等式制約
+  行列 $\mathbf{A} \in \R^{k \times d}$ とベクトル $\mathbf{b} \in \R^k$ に対して，
+  線形等式・不等式制約で定まる $\R^d$ の部分集合
   \[
     \{\mathbf{x} \in \R^d \mid
       \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\}
-    \quad
-    (\mathbf{A} \in \R^{k \times d},\; \mathbf{b} \in \R^k)
   \]
-  で定まる $\R^d$ の部分集合を\textbf{凸多面体}という．
-  凸多面体は凸集合である．
+  を\textbf{凸多面体}という．凸多面体は凸集合である．
 \end{definition}
