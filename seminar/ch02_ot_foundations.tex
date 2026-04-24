@@ -7,9 +7,8 @@
 \section{最適割当問題}
 \label{sec:sem-assignment}
 
-質量 $1/n$ の砂山が $n$ 個と，同数の行き先がある．
-各砂山を丸ごと 1 つの行き先へ運ぶ（1 対 1 対応）ものとし，
-コスト行列 $\mathbf{C} \in \R_+^{n \times n}$ のもとで総コストを最小にする割当を求めたい．
+質量 $1/n$ の砂山 $n$ 個を同数の行き先に 1 対 1 で運ぶ．
+コスト行列 $\mathbf{C} \in \R_+^{n \times n}$ のもとで総コストを最小化する割当を求める．
 
 \begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
   $n \in \N$，置換 $\sigma = (\sigma(1), \ldots, \sigma(n)) \in \Perm(n)$，
@@ -124,7 +123,6 @@
 \section{Monge 問題}
 \label{sec:sem-monge}
 
-最適割当問題では，同数の砂山を等しい質量で 1 対 1 に運んでいた．
 Monge 問題では次の設定を扱う：
 \begin{itemize}
   \item[(i)] 砂山の数と行き先の数は等しくなくてよい．
@@ -133,8 +131,7 @@ Monge 問題では次の設定を扱う：
   \item[(iv)] 1 つの砂山は丸ごと 1 つの行き先へ運ぶ（\textbf{分割しない}）．
 \end{itemize}
 
-Monge (1781) はこれを，砂山の分布 $\alpha$，行き先の分布 $\beta$，
-輸送写像 $T$ によって次のように定式化した．
+Monge (1781) はこれを次のように定式化した．
 
 \begin{definition}{Monge 問題（Monge problem）}{sem-monge}
   可測空間 $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
@@ -300,20 +297,13 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
 
 \subsubsection{困難2：解の非存在}
 
-写像による輸送では，質量の\textbf{分割}が許されない．
-すなわち，$x$ の質量は $T(x)$ という1点にすべて送らなければならない．
-このため，輸送元の測度が輸送先の測度より「粗い」場合に問題が生じる．
-
 \begin{example}{Monge 写像が存在しない場合}{sem-monge-noexist}
   $\alpha = \delta_0$，$\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$
-  を考える．$\alpha$ は原点の 1 点に集中した質量 $1$，
-  $\beta$ は $-1$ と $1$ の 2 箇所に半分ずつ分散した測度である．
+  を考える．
 
   任意の可測写像 $T \colon \X \to \Y$ に対して，
   命題~\ref{prop:sem-dirac-pushforward} (i) より
   $T\pushforward \delta_0 = \delta_{T(0)}$ である．
-  すなわち $\alpha$ を $T$ で運んだ結果は必ず 1 点 $T(0)$ に集中した測度となり，
-  写像 $T$ が質量を分割できないことを測度の言葉で表している．
 
   したがって $T \in \mathcal{T}(\delta_0, \beta)$ となるには
   $\delta_{T(0)} = \beta$ が必要だが，
@@ -346,8 +336,6 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
   \end{center}
 \end{example}
 
-この困難を解消するのが，次節の Kantorovich による緩和である．
-
 %% ============================================================
 %% Kantorovich 緩和
 %% ============================================================
@@ -356,18 +344,10 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
 
 \subsection{鍵となるアイデア}
 
-前節で見たとおり，Monge の定式化には
-実行可能集合の非凸性と解の非存在という2つの本質的困難がある．
-また，最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
+最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
 Monge 問題はこれを拡張するものの，組合せ的な分割不可制約を残す．
-
-Kantorovich (1942) は，これらの困難を一挙に解消するアイデアを提示した．
-Monge の枠組みでは，各点 $x_i$ の質量をすべて1つの行き先 $T(x_i)$ に送る
-\textbf{決定論的}な輸送を考えていた．
-Kantorovich はこれを，質量を複数の行き先に分割して送ることを許す
-\textbf{確率的}な輸送に置き換える．
-この「\textbf{質量の分割}」を許す輸送計画を，
-$\X \times \Y$ 上の結合測度（\textbf{カップリング}）として定式化する．
+Kantorovich (1942) はこれを，質量の\textbf{分割}を許す確率的輸送に置き換え，
+$\X \times \Y$ 上の結合測度（\textbf{カップリング}）として定式化した．
 
 \subsection{カップリング}
 
@@ -428,8 +408,6 @@ $\R_+^{n \times m}$ の有界部分集合であるから，
     \inner{\mathbf{C}}{\mathbf{P}}
     = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
   \]
-  Monge の枠組みでは不可能だった「1点の質量を2箇所に分割する」操作が，
-  Kantorovich のカップリングとして自然に実現されている．
 \end{example}
 
 \paragraph{Monge 写像との対比．}
