@@ -187,7 +187,7 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) 
 
 \paragraph{最適割当問題への帰着．}
 特に $n = m$ かつ $a_i = b_j = 1/n$（すべての砂山・行き先の質量が等しい）とする．
-このとき離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward}）より
+このとき離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward} (ii)）より
 \[
   T\pushforward \alpha
   = \frac{1}{n} \sum_{i=1}^{n} \delta_{T(x_i)}.
@@ -245,9 +245,6 @@ $T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に
 
 \subsection{Monge 問題の本質的困難}
 
-Monge 問題は\textbf{実行可能集合の非凸性}（困難 1）と
-\textbf{解の非存在}（困難 2）の 2 つの困難を抱える．順に見ていく．
-
 \subsubsection{困難1：実行可能集合の非凸性}
 
 $\X = \Y = \R$ とする．
@@ -301,15 +298,6 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
   $\mathcal{T}(\alpha, \beta)$ は凸でない．
 \end{example}
 
-\begin{memo*}
-背景：非凸性の根本原因は，写像から測度への対応 $T \longmapsto T\pushforward\alpha$ が
-\textbf{非線形}であること．実際「押し出してから平均」すると
-$\tfrac{1}{2}{T_1}\pushforward\alpha + \tfrac{1}{2}{T_2}\pushforward\alpha = \beta$ だが，
-「平均してから押し出す」と $\bar{T}\pushforward\alpha = \delta_0 \ne \beta$．一般に
-$(tT_1 + (1-t)T_2)\pushforward \alpha \neq
- t \cdot {T_1}\pushforward\alpha + (1-t) \cdot {T_2}\pushforward\alpha$．
-\end{memo*}
-
 \subsubsection{困難2：解の非存在}
 
 写像による輸送では，質量の\textbf{分割}が許されない．
@@ -322,7 +310,7 @@ $(tT_1 + (1-t)T_2)\pushforward \alpha \neq
   $\beta$ は $-1$ と $1$ の 2 箇所に半分ずつ分散した測度である．
 
   任意の可測写像 $T \colon \X \to \Y$ に対して，
-  命題~\ref{prop:sem-dirac-pushforward} より
+  命題~\ref{prop:sem-dirac-pushforward} (i) より
   $T\pushforward \delta_0 = \delta_{T(0)}$ である．
   すなわち $\alpha$ を $T$ で運んだ結果は必ず 1 点 $T(0)$ に集中した測度となり，
   写像 $T$ が質量を分割できないことを測度の言葉で表している．
