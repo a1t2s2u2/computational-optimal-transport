@@ -18,10 +18,10 @@
   と定める．$|\Perm(n)| = n!$ である．
 \end{definition}
 
-\begin{proposition}{有限集合の最小元}{sem-finite-min}
+\begin{claim}{有限集合の最小元}{sem-finite-min}
   $\R$ の空でない有限部分集合 $S \subset \R$ は最小元を持つ．
   すなわち，ある $s^* \in S$ が存在して任意の $s \in S$ に対し $s^* \leq s$ となる．
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   帰納法で示す．
@@ -302,12 +302,12 @@
   $\delta_x \in \Mm_+^1(\X)$（$x \in \X$）も同様に定まる．
 \end{definition}
 
-\begin{proposition}{Dirac 測度に対する積分}{sem-dirac-integral}
+\begin{claim}{Dirac 測度に対する積分}{sem-dirac-integral}
   任意の非負可測関数 $f \colon \X \to [0, \infty]$ に対して，
   \[
     \int_\X f \, \d\delta_x = f(x).
   \]
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   $A \in \Bb(\X)$ に対し単関数積分の定義より

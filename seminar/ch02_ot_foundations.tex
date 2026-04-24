@@ -90,10 +90,10 @@
   よって $\sigma = (1, 2)$ が最小コスト $1$ を達成し，最適である．
 \end{example}
 
-\begin{proposition}{最適解の存在}{sem-assignment-existence}
+\begin{claim}{最適解の存在}{sem-assignment-existence}
   任意の $n \in \N$ と任意の $\mathbf{C} \in \R_+^{n \times n}$ に対して，
   最適割当問題の最小値は達成される．
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   $\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合なので，集合
@@ -101,15 +101,15 @@
     \left\{ \frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} \;\middle|\; \sigma \in \Perm(n) \right\}
   \]
   は高々 $n!$ 個の実数からなる空でない有限集合である．
-  命題~\ref{prop:sem-finite-min} より最小元を持つので，
+  主張~\ref{clm:sem-finite-min} より最小元を持つので，
   それを達成する $\sigma^* \in \Perm(n)$ が存在する．
 \end{proof}
 
-\begin{proposition}{最適解が一意でない場合の存在}{sem-uniqueness}
+\begin{claim}{最適解が一意でない場合の存在}{sem-uniqueness}
   任意の $n \geq 2$ に対して，
   異なる $\sigma_1, \sigma_2 \in \Perm(n)$ がともに最小値を達成するような
   $\mathbf{C} \in \R_+^{n \times n}$ が存在する．
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   $C_{i,j} \defeq 1$（$i, j = 1, \ldots, n$）と定めると，任意の $\sigma \in \Perm(n)$ に対して

@@ -25,10 +25,14 @@
 \newtcbtheorem[use counter from=definition]{proposition}{Prop.}{
   colback=orange!5, colframe=orange!50!black, fonttitle=\bfseries, breakable
 }{prop}
-% Theorem: 赤系
+% Theorem: 赤系（章・節の目玉となる重要結果）
 \newtcbtheorem[use counter from=definition]{theorem}{Thm.}{
   colback=red!5, colframe=red!40!black, fonttitle=\bfseries, breakable
 }{thm}
+% Claim: 緑系（Thm ほど深くはないが，証明を要する主張）
+\newtcbtheorem[use counter from=definition]{claim}{Claim}{
+  colback=green!5, colframe=green!45!black, fonttitle=\bfseries, breakable
+}{clm}
 % Remark: 黄系
 \newtcbtheorem[use counter from=definition]{remark}{Rem.}{
   colback=yellow!5, colframe=yellow!40!black, fonttitle=\bfseries, breakable
