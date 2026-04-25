@@ -1,6 +1,7 @@
 # build output directories
 out/
-chapters/out/
+cuturi/translation/out/
+cuturi/original/out/
 seminar/out/
 
 # LaTeX intermediate files
@@ -13,8 +14,11 @@ seminar/out/
 *.fdb_latexmk
 *.fls
 
-# generated PDFs at repo root (arXiv source images are explicitly tracked)
+# generated PDFs at repo root (cuturi/original の画像は明示的に追跡)
 /main.pdf
-/chapters/main.pdf
+/cuturi/translation/main.pdf
 /seminar/main.pdf
 /translated_for_seminar.pdf
+
+# editor / linter caches
+.ruff_cache/

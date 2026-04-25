@@ -1,5 +1,5 @@
-# uplatex + dvipdfmx 用 latexmk 設定 (chapters/ と seminar/ で共有)
-# seminar/.latexmkrc から `do "../chapters/.latexmkrc";` で読まれる前提
+# uplatex + dvipdfmx 用 latexmk 設定 (cuturi/translation/ と seminar/ で共有)
+# seminar/.latexmkrc から `do "../cuturi/translation/.latexmkrc";` で読まれる前提
 $latex          = 'uplatex -synctex=1 -interaction=nonstopmode -file-line-error %O %S';
 $bibtex         = 'upbibtex %O %B';
 $biber          = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
