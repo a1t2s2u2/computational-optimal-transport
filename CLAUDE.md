@@ -7,8 +7,10 @@
 - `arXiv-1803.00567v4/`: 元論文ソース（参照用，整理対象外）
 
 ## ビルド方法
-- 教科書: `cd chapters && uplatex -output-directory=out main.tex && uplatex -output-directory=out main.tex && dvipdfmx -o out/main.pdf out/main.dvi`
-- セミナー: `cd seminar && uplatex -output-directory=out main.tex && uplatex -output-directory=out main.tex && dvipdfmx -o out/main.pdf out/main.dvi`
+各ディレクトリの `.latexmkrc` で uplatex + dvipdfmx + `$out_dir = 'out'` が設定済み．中間生成物はすべて `out/` 配下に閉じ込められる．
+- 教科書: `cd chapters && latexmk`
+- セミナー: `cd seminar && latexmk`
+- クリーン: `latexmk -c`（中間ファイル削除）/ `latexmk -C`（PDF も含めて完全クリーン）
 
 ## セミナー方針
 - 離散と連続の**両方を行き来する**構成
