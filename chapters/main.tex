@@ -1,0 +1,29 @@
+\documentclass[uplatex, dvipdfmx]{jsreport}
+
+\input{preamble}
+
+\title{計算最適輸送}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本書は，Peyré--Cuturi による ``Computational Optimal Transport'' に基づき，
+最適輸送の理論と計算手法を体系的に解説するものである．
+\end{abstract}
+
+\tableofcontents
+
+% --- 章の読み込み ---
+\input{01_introduction}
+\input{02_theoretical_foundations}
+\input{03_algorithmic_foundations}
+\input{04_entropic_regularization}
+
+% --- 参考文献 ---
+% \bibliographystyle{plainnat}
+% \bibliography{references}
+
+\end{document}

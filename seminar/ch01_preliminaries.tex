@@ -1,0 +1,631 @@
+\chapter{準備}
+\label{ch:seminar-00}
+
+%% ============================================================
+%% 線形代数
+%% ============================================================
+\section{線形代数}
+\label{sec:sem-linalg}
+
+\subsection{置換}
+\label{sec:sem-permutation}
+
+\begin{definition}{置換（permutation）}{sem-permutation}
+  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}全体の集合を
+  \[
+    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
+  \]
+  と定める．$|\Perm(n)| = n!$ である．
+\end{definition}
+
+\begin{claim}{有限集合の最小元}{sem-finite-min}
+  $\R$ の空でない有限部分集合 $S \subset \R$ は最小元を持つ．
+  すなわち，ある $s^* \in S$ が存在して任意の $s \in S$ に対し $s^* \leq s$ となる．
+\end{claim}
+
+\begin{proof}
+  帰納法で示す．
+
+  \textbf{($|S| = 1$ のとき）}
+  $S = \{s_1\}$ のとき，$s^* = s_1$ が条件を満たす．
+
+  \textbf{（$|S| = k$ で成り立つと仮定して $|S| = k + 1$ を示す）}
+  任意に $s_{k+1} \in S$ を取って $S' \defeq S \setminus \{s_{k+1}\}$ とおく．
+  $|S'| = k$ なので帰納法の仮定より $S'$ は最小元 $s'^* \in S'$ を持つ．
+  $\R$ 上の全順序性により $s'^* \leq s_{k+1}$ か $s_{k+1} < s'^*$ の
+  いずれかが成り立つので，
+  \[
+    s^* \defeq
+    \begin{cases}
+      s'^* & (s'^* \leq s_{k+1}), \\
+      s_{k+1} & (s_{k+1} < s'^*)
+    \end{cases}
+  \]
+  とおけば，任意の $s \in S$ に対して $s^* \leq s$．
+\end{proof}
+
+\subsection{フロベニウス内積}
+\label{sec:sem-frobenius-inner}
+
+\begin{definition}{フロベニウス内積（Frobenius inner product）}{sem-frobenius-inner}
+  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
+  \textbf{フロベニウス内積}を
+  \[
+    \inner{\mathbf{A}}{\mathbf{B}}
+    \defeq \tr(\mathbf{A}^\top \mathbf{B})
+    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
+  \]
+  で定める．
+\end{definition}
+
+%% ============================================================
+%% 距離空間と測度論
+%% ============================================================
+\section{距離空間と測度論}
+\label{sec:sem-measure-theory}
+
+\subsection{距離空間}
+\label{sec:sem-metric-space}
+
+\begin{definition}{距離空間（metric space）}{sem-metric-space}
+  集合 $\Omega$ と関数 $d \colon \Omega \times \Omega \to [0, \infty)$ の組
+  $(\Omega, d)$ が\textbf{距離空間}であるとは，
+  次の3条件がすべての $x, y, z \in \Omega$ に対して成り立つことをいう：
+  \begin{enumerate}
+    \item[(i)] 同一性：$d(x, y) = 0 \iff x = y$，
+    \item[(ii)] 対称性：$d(x, y) = d(y, x)$，
+    \item[(iii)] 三角不等式：$d(x, z) \leq d(x, y) + d(y, z)$．
+  \end{enumerate}
+  関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
+\end{definition}
+
+\begin{definition}{開球・開集合・距離位相}{sem-metric-topology}
+  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r > 0$ に対して，
+  \textbf{開球}を
+  \[
+    B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
+  \]
+  で定める．
+  部分集合 $U \subseteq \Omega$ が\textbf{開集合}であるとは，
+  任意の $x \in U$ に対してある $r > 0$ が存在して
+  $B_r(x) \subseteq U$ となることをいう．
+  $\Omega$ の開集合全体を $(\Omega, d)$ の\textbf{距離位相}と呼ぶ．
+\end{definition}
+
+\begin{definition}{完備距離空間（complete metric space）}{sem-complete-metric}
+  距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
+  任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
+  $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
+  $(\Omega, d)$ が\textbf{完備}であるとは，
+  $\Omega$ 上のすべての Cauchy 列が $\Omega$ の点に収束することをいう．
+\end{definition}
+
+\begin{definition}{可分距離空間（separable metric space）}{sem-separable}
+  距離空間 $(\Omega, d)$ の部分集合 $D \subseteq \Omega$ が\textbf{稠密}であるとは，
+  任意の $x \in \Omega$ と任意の $\varepsilon > 0$
+  に対して $d(x, y) < \varepsilon$ を満たす $y \in D$ が存在することをいう．
+  $\Omega$ が可算な稠密部分集合を持つとき，$\Omega$ は\textbf{可分}であるという．
+\end{definition}
+
+\begin{definition}{Polish 空間（Polish space）}{sem-polish}
+  完備かつ可分な距離空間を\textbf{Polish 空間}という．
+  例：$\R^d$ はユークリッド距離に関して Polish 空間である
+  （$\Q^d$ が可算稠密部分集合を与える）．
+\end{definition}
+
+\begin{definition}{連続関数と有界連続関数}{sem-continuous}
+  距離空間 $(\X, d_\X), (\Y, d_\Y)$ に対して，
+  写像 $f \colon \X \to \Y$ が\textbf{連続}であるとは，
+  任意の $x \in \X$ と任意の $\varepsilon > 0$ に対してある $\delta > 0$ が存在して
+  \[
+    d_\X(x, y) < \delta \Longrightarrow d_\Y(f(x), f(y)) < \varepsilon
+  \]
+  となることをいう．
+  $\X$ から $\R$（ユークリッド距離）への連続関数のうち
+  $\sup_{x \in \X} |f(x)| < \infty$ を満たすもの（\textbf{有界連続関数}）の全体を
+  $C_b(\X)$ と記す．
+\end{definition}
+
+\subsection{可測空間と確率測度}
+\label{sec:sem-measurable}
+
+\begin{definition}{$\sigma$-代数（$\sigma$-algebra）}{sem-sigma-algebra}
+  集合 $\Omega$ の部分集合族 $\mathcal{F} \subseteq 2^{\Omega}$ が
+  \textbf{$\sigma$-代数}であるとは，
+  以下の3条件を満たすことをいう：
+  \begin{enumerate}
+    \item[(i)] $\Omega \in \mathcal{F}$，
+    \item[(ii)] $A \in \mathcal{F} \Longrightarrow A^c \in \mathcal{F}$（補集合で閉じる），
+    \item[(iii)] $A_1, A_2, \ldots \in \mathcal{F} \Longrightarrow
+      \bigcup_{k=1}^{\infty} A_k \in \mathcal{F}$（可算合併で閉じる）．
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}{可測空間（measurable space）}{sem-measurable-space}
+  集合 $\Omega$ と $\Omega$ 上の $\sigma$-代数 $\mathcal{F}$ の組
+  $(\Omega, \mathcal{F})$ を\textbf{可測空間}という．
+  $\mathcal{F}$ の元を\textbf{可測集合}という．
+\end{definition}
+
+\begin{definition}{可測写像}{sem-measurable-map}
+  可測空間 $(\Omega_1, \mathcal{F}_1)$ から $(\Omega_2, \mathcal{F}_2)$ への
+  写像 $T \colon \Omega_1 \to \Omega_2$ が\textbf{可測}であるとは，
+  $T^{-1}(A) \in \mathcal{F}_1$ がすべての $A \in \mathcal{F}_2$ に対して成り立つことをいう．
+\end{definition}
+
+\begin{definition}{ボレル $\sigma$-代数}{sem-borel}
+  距離空間 $(\Omega, d)$ のすべての開集合（定義~\ref{def:sem-metric-topology}）
+  を含む最小の $\sigma$-代数を
+  \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
+\end{definition}
+
+\begin{definition}{可測関数（measurable function）}{sem-measurable-function}
+  可測空間 $(\Omega, \mathcal{F})$ から $(\R, \Bb(\R))$ への可測写像
+  $f \colon \Omega \to \R$（定義~\ref{def:sem-measurable-map}）を
+  \textbf{可測関数}という．
+  特に Polish 空間 $\X$ にボレル $\sigma$-代数 $\Bb(\X)$ を入れた
+  可測空間上の可測関数を\textbf{ボレル可測関数}ともいう．
+\end{definition}
+
+\begin{definition}{積可測空間（product measurable space）}{sem-product-measurable}
+  距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，
+  積空間 $\X \times \Y$ に\textbf{積距離}
+  \[
+    d\bigl((x, y), (x', y')\bigr) \defeq d_\X(x, x') + d_\Y(y, y')
+  \]
+  を入れたときのボレル $\sigma$-代数を $\Bb(\X \times \Y)$ と記し，
+  可測空間 $(\X \times \Y, \Bb(\X \times \Y))$ を
+  $(\X, \Bb(\X))$ と $(\Y, \Bb(\Y))$ の\textbf{積可測空間}という．
+\end{definition}
+
+\begin{definition}{測度（measure）}{sem-measure}
+  可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
+  関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
+  次の 2 条件を満たすものをいう：
+  \begin{enumerate}
+    \item[(i)] $\mu(\emptyset) = 0$，
+    \item[(ii)] 互いに素な可測集合 $A_1, A_2, \ldots \in \mathcal{F}$ に対して
+      $\mu\bigl(\bigcup_{k=1}^{\infty} A_k\bigr) = \sum_{k=1}^{\infty} \mu(A_k)$
+      （可算加法性）．
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}{確率測度（probability measure）}{sem-probability-measure}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が $\mu(\Omega) = 1$ を満たすとき，
+  $\mu$ を\textbf{確率測度}という．
+  $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
+\end{definition}
+
+\subsection{測度に対する積分}
+\label{sec:sem-integration}
+
+\begin{definition}{指示関数（indicator function）}{sem-indicator}
+  集合 $\Omega$ の部分集合 $A \subseteq \Omega$ に対して，
+  \textbf{指示関数} $\mathbf{1}_A \colon \Omega \to \{0, 1\}$ を
+  \[
+    \mathbf{1}_A(y) \defeq
+    \begin{cases}
+      1 & y \in A, \\
+      0 & y \notin A
+    \end{cases}
+  \]
+  で定める．
+\end{definition}
+
+\begin{definition}{単関数（simple function）}{sem-simple-function}
+  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_+$ が
+  \textbf{単関数}であるとは，互いに素な可測集合
+  $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ を用いて
+  \[
+    s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}
+  \]
+  と表せることをいう．
+\end{definition}
+
+\begin{definition}{非負可測関数の積分}{sem-nonneg-integral}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対し，
+  非負可測関数の積分を以下の 2 段階で定める：
+  \begin{itemize}
+    \item[(i)] 単関数 $s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}$
+      （定義~\ref{def:sem-simple-function}）の積分を
+      \[
+        \int_\Omega s \, \d\mu \defeq \sum_{k=1}^{m} c_k \, \mu(A_k)
+      \]
+      で定める．
+    \item[(ii)] 非負可測関数 $f \colon \Omega \to [0, \infty]$ の積分を
+      \[
+        \int_\Omega f \, \d\mu \defeq
+        \sup\!\left\{ \int_\Omega s \, \d\mu
+        \;\middle|\; s \text{ は単関数}, \; 0 \leq s \leq f \right\}
+      \]
+      で定める．この値は常に $[0, +\infty]$ に存在し well-defined である．
+  \end{itemize}
+\end{definition}
+
+\begin{proposition}{単調収束定理と単関数近似（monotone convergence theorem, MCT）}{sem-mct}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対して次が成り立つ．
+  \begin{enumerate}
+    \item[(i)] \textbf{単関数近似}：任意の非負可測関数
+      $f \colon \Omega \to [0, \infty]$ に対して，
+      各点で $f_n \uparrow f$ を満たす単関数の単調増加列 $(f_n)_{n \geq 1}$ が存在する．
+    \item[(ii)] \textbf{単調収束定理}：
+      非負可測関数の単調増加列 $f_n \uparrow f$ に対して
+      $\int f_n \, \d\mu \uparrow \int f \, \d\mu$．
+  \end{enumerate}
+\end{proposition}
+
+\begin{proposition}{積分の測度に関する線形性}{sem-measure-linearity}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu_1, \ldots, \mu_n$，
+  非負係数 $a_1, \ldots, a_n \geq 0$，および非負可測関数
+  $f \colon \Omega \to [0, \infty]$ に対して，
+  \[
+    \int_\Omega f \, \d\!\Bigl(\sum_{i=1}^{n} a_i \mu_i\Bigr)
+    = \sum_{i=1}^{n} a_i \int_\Omega f \, \d\mu_i.
+  \]
+  ここで測度の和・スカラー倍は可測集合 $A \in \mathcal{F}$ に対して
+  $(\mu_1 + \mu_2)(A) \defeq \mu_1(A) + \mu_2(A)$，
+  $(a\mu)(A) \defeq a\, \mu(A)$ で定まる測度である．
+\end{proposition}
+
+\begin{proof}
+  単関数 $s = \sum_{k} c_k \mathbf{1}_{A_k}$ について，
+  単関数積分の定義と測度の和・スカラー倍の定義から
+  \[
+    \int s \, \d\!\Bigl(\sum_i a_i \mu_i\Bigr)
+    = \sum_k c_k \Bigl(\sum_i a_i \mu_i\Bigr)(A_k)
+    = \sum_k c_k \sum_i a_i \mu_i(A_k)
+    = \sum_i a_i \sum_k c_k \mu_i(A_k)
+    = \sum_i a_i \int s \, \d\mu_i.
+  \]
+  一般の非負可測関数 $f$ に対しては，
+  命題~\ref{prop:sem-mct} により単関数の単調増加列 $f_n \uparrow f$ が取れ，
+  単調収束定理を両辺に適用すれば結論が得られる．
+\end{proof}
+
+\begin{definition}{可積分関数の積分}{sem-integrable}
+  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ と可測関数
+  $f \colon \Omega \to \R$（定義~\ref{def:sem-measurable-function}）に対して，
+  $f^+ \defeq \max(f, 0)$，$f^- \defeq \max(-f, 0)$ とおく．
+  $\int_\Omega f^+ \d\mu < \infty$ かつ $\int_\Omega f^- \d\mu < \infty$ のとき
+  $f$ は $\mu$ に関して\textbf{可積分}であるといい，その\textbf{積分}を
+  \[
+    \int_\Omega f \, \d\mu \defeq
+    \int_\Omega f^+ \, \d\mu - \int_\Omega f^- \, \d\mu
+  \]
+  で定める．特に $\mu$ が確率測度で $f$ が有界な可測関数であれば
+  $f$ は可積分である．
+\end{definition}
+
+\begin{definition}{測度の弱収束（weak convergence）}{sem-weak-convergence}
+  Polish 空間 $\X$ 上の確率測度の列 $(\mu_n)_{n \geq 1} \subseteq \Mm_+^1(\X)$ と
+  $\mu \in \Mm_+^1(\X)$ に対して，任意の有界連続関数
+  $f \in C_b(\X)$（定義~\ref{def:sem-continuous}）に対して
+  \[
+    \int_\X f \, \d\mu_n \xrightarrow{n \to \infty} \int_\X f \, \d\mu
+  \]
+  が成り立つとき，$\mu_n$ は $\mu$ に\textbf{弱収束}するといい，
+  $\mu_n \rightharpoonup \mu$ と書く．
+\end{definition}
+
+\subsection{Polish 空間の測度論の主要事実}
+\label{sec:sem-polish-theorems}
+
+本節では Kantorovich 問題の解の存在および双対定理の議論で繰り返し用いる，
+Polish 空間上の測度論の 3 つの基本事実を述べる．
+
+\begin{proposition}{有限ボレル測度のタイト性（Ulam）}{sem-ulam}
+  Polish 空間 $\X$ 上の有限ボレル測度 $\mu$
+  （特に確率測度 $\mu \in \Mm_+^1(\X)$）は\textbf{タイト}である：
+  任意の $\varepsilon > 0$ に対してコンパクト集合 $K \subseteq \X$ が存在して
+  $\mu(\X \setminus K) < \varepsilon$ が成り立つ．
+\end{proposition}
+
+\begin{proof}
+  $\X$ は可分なので可算稠密部分集合 $D = \{x_k\}_{k \geq 1}$ が取れる．
+  各 $n \in \N$ に対して開球 $B_{1/n}(x_k)$（$k \geq 1$）の全体は $\X$ を覆うから，
+  測度の単調連続性と $\mu(\X) < \infty$ より，
+  ある $N_n \in \N$ が存在して
+  \[
+    \mu\!\left(\X \setminus \bigcup_{k=1}^{N_n} B_{1/n}(x_k)\right)
+    < \frac{\varepsilon}{2^n}.
+  \]
+  閉球に置き換えた有限和
+  \(
+    A_n \defeq \bigcup_{k=1}^{N_n} \overline{B_{1/n}(x_k)}
+  \)
+  も同じ評価 $\mu(\X \setminus A_n) < \varepsilon / 2^n$ を満たす．
+
+  $K \defeq \bigcap_{n \geq 1} A_n$ とおく．各 $A_n$ は閉だから $K$ は閉集合であり，
+  任意の $n$ に対して $K \subseteq A_n$ は有限個の半径 $1/n$ の閉球で覆えるから，
+  $K$ は\textbf{全有界}である（任意の $\eta > 0$ に対して有限個の
+  半径 $\eta$ の閉球で覆える）．完備距離空間（Polish 性）の閉かつ全有界な集合は
+  コンパクトだから，$K$ はコンパクト．
+  最後に
+  \[
+    \mu(\X \setminus K)
+    = \mu\!\left(\bigcup_{n \geq 1} (\X \setminus A_n)\right)
+    \leq \sum_{n \geq 1} \mu(\X \setminus A_n)
+    < \sum_{n \geq 1} \frac{\varepsilon}{2^n}
+    = \varepsilon.
+  \]
+\end{proof}
+
+\begin{definition}{測度族のタイト性}{sem-tightness-family}
+  Polish 空間 $\X$ 上の確率測度の族
+  $\mathcal{M} \subseteq \Mm_+^1(\X)$ が\textbf{タイト}であるとは，
+  任意の $\varepsilon > 0$ に対してコンパクト集合 $K_\varepsilon \subseteq \X$ が存在して
+  \[
+    \mu(\X \setminus K_\varepsilon) < \varepsilon \qquad (\forall\, \mu \in \mathcal{M})
+  \]
+  が成り立つことをいう．
+\end{definition}
+
+\begin{proposition}{Prokhorov の定理}{sem-prokhorov}
+  Polish 空間 $\X$ 上の確率測度の族 $\mathcal{M} \subseteq \Mm_+^1(\X)$ について，
+  次の 2 条件は同値：
+  \begin{enumerate}
+    \item[(i)] $\mathcal{M}$ はタイト（定義~\ref{def:sem-tightness-family}）．
+    \item[(ii)] $\mathcal{M}$ は\textbf{相対逐次弱コンパクト}：任意の列
+      $(\mu_n)_{n \geq 1} \subseteq \mathcal{M}$ に対して
+      $\mu \in \Mm_+^1(\X)$ と部分列 $(\mu_{n_k})$ が存在して
+      $\mu_{n_k} \rightharpoonup \mu$（定義~\ref{def:sem-weak-convergence}）．
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  \textbf{$(\mathrm{i}) \Rightarrow (\mathrm{ii})$．}
+  $(\mu_n) \subseteq \mathcal{M}$ を任意に固定する．
+  $\X$ は Polish なので，同相な埋め込みで
+  コンパクト距離空間 $\hat{\X}$（例：$[0, 1]^\N$）の部分集合とみなせる．
+  各 $\mu_n$ を $\hat{\X}$ に自明に拡張した測度
+  $\hat{\mu}_n \in \Mm_+^1(\hat{\X})$ を考える．
+
+  $C(\hat{\X})$ は可分 Banach 空間なので，
+  $(\hat{\mu}_n)$ は双対ノルム $\|\hat{\mu}_n\| = 1$ で有界な
+  $C(\hat{\X})^*$ の元．Banach--Alaoglu の定理により弱 $*$ 収束部分列
+  $\hat{\mu}_{n_k} \to \hat{\mu}$ が取れ，
+  $\hat{\mu}$ は $\hat{\X}$ 上の非負測度で $\hat{\mu}(\hat{\X}) \leq 1$．
+
+  タイト性より，各 $m \in \N$ に対してコンパクト $K_m \subseteq \X$ で
+  $\mu_n(\X \setminus K_m) < 1/m$（$\forall n$）．
+  $K_m$ は $\hat{\X}$ 内でも閉（コンパクトは Hausdorff で閉）．
+  弱 $*$ 収束と閉集合に対する上半連続性から
+  $\hat{\mu}(K_m) \geq \limsup_k \hat{\mu}_{n_k}(K_m) \geq 1 - 1/m$．
+  $m \to \infty$ で $\hat{\mu}\!\left(\bigcup_m K_m\right) = 1$ を得る．
+  $\bigcup_m K_m \subseteq \X$ だから $\hat{\mu}$ の支持は $\X$ 内にあり，
+  $\mu \defeq \hat{\mu}|_\X \in \Mm_+^1(\X)$ として取れる．
+
+  最後に $f \in C_b(\X)$ に対して，タイト性のコンパクト $K_m$ の外で
+  $|f|$ を切り捨てた $\hat{\X}$ 上の連続関数に拡張できるので
+  $\int f \d\mu_{n_k} \to \int f \d\mu$．ゆえに $\mu_{n_k} \rightharpoonup \mu$．
+
+  \textbf{$(\mathrm{ii}) \Rightarrow (\mathrm{i})$．} 対偶の骨子のみ述べる．
+  $\mathcal{M}$ がタイトでないとすると，ある $\varepsilon_0 > 0$ で
+  任意のコンパクト $K$ に対しある $\mu_K \in \mathcal{M}$ で
+  $\mu_K(\X \setminus K) \geq \varepsilon_0$ が成り立つ．
+  Polish 空間は可算稠密集合とその閉球族を用いて
+  「任意のコンパクトを飲み込む」増加コンパクト列
+  $K_1 \subseteq K_2 \subseteq \cdots$（$\bigcup_m K_m = \X$）を構成できる．
+  各 $m$ に対し $\mu_m \in \mathcal{M}$ で $\mu_m(\X \setminus K_m) \geq \varepsilon_0$
+  を選び，コンパクト距離空間 $\hat{\X}$ への埋め込みで $\hat{\mu}_m$ と見なすと，
+  任意の部分列の極限 $\hat{\mu}^*$ は $\hat{\X} \setminus \X$ に質量 $\varepsilon_0$
+  を持ち，$\X$ 上への制限は確率測度にならない．これは (ii) の
+  「$\Mm_+^1(\X)$ 内での弱収束部分列が取れる」に反する．
+  詳細な議論は
+  Billingsley, \textit{Convergence of Probability Measures} (2nd ed.),
+  Theorem~5.2 を参照．
+\end{proof}
+
+\begin{proposition}{Disintegration 定理}{sem-disintegration}
+  Polish 空間 $\X, \Y$ 上の確率測度 $\pi \in \Mm_+^1(\X \times \Y)$ と
+  その $\X$-辺縁 $\alpha \defeq (P_\X)\pushforward \pi \in \Mm_+^1(\X)$
+  に対して，可測写像
+  \[
+    \X \ni x \longmapsto \pi_x \in \Mm_+^1(\Y)
+  \]
+  が $\alpha$-a.e.\ に一意に存在して，任意のボレル可測有界関数
+  $\phi \colon \X \times \Y \to \R$ に対して
+  \[
+    \int_{\X \times \Y} \phi(x, y) \, \d\pi(x, y)
+    = \int_\X \!\left( \int_\Y \phi(x, y) \, \d\pi_x(y) \right) \d\alpha(x)
+  \]
+  が成り立つ．この $(\pi_x)_{x \in \X}$ を $\pi$ の $\alpha$ による
+  \textbf{分解}（disintegration）または\textbf{条件付き測度}という．
+\end{proposition}
+
+\begin{proof}[証明の概要]
+  Polish 空間は\textbf{標準ボレル空間}（すなわち $\Bb(\X)$ が
+  可算生成されたボレル構造と同型）であり，この構造のもとで
+  正則条件付き確率（regular conditional probability）が存在することが鍵となる．
+
+  $\Bb(\Y)$ は可算生成されるので，生成系 $\{B_n\}_{n \geq 1}$ を取る．
+  各 $n$ に対して集合関数 $A \mapsto \pi(A \times B_n)$ は $\alpha$ に関して絶対連続
+  （$\alpha(A) = 0 \Rightarrow \pi(A \times B_n) = 0$）．
+  Radon--Nikodym 定理により $\alpha$-可測関数
+  $q_n \colon \X \to [0, 1]$ が $\alpha$-a.e.\ に一意に存在して
+  \[
+    \pi(A \times B_n) = \int_A q_n(x) \, \d\alpha(x) \qquad (\forall A \in \Bb(\X)).
+  \]
+
+  可算個の $\alpha$-零集合の和 $N$ の外では，関数 $B_n \mapsto q_n(x)$ は
+  $\{B_n\}$ 上の有限加法的確率測度の条件を満たす．標準ボレル性により
+  $N$ はボレルで $\alpha$-零であり，Carathéodory の拡張定理によって
+  $x \notin N$ に対し $\pi_x \in \Mm_+^1(\Y)$ が $\Bb(\Y)$ 全体に
+  一意に拡張される（$N$ 上では適当な固定測度を入れる）．
+
+  積分公式は単関数 $\phi = \mathbf{1}_{A \times B_n}$ について構成から直接成り立ち，
+  単調収束定理（命題~\ref{prop:sem-mct}）と $\phi = \phi^+ - \phi^-$ の分解により
+  一般のボレル可測有界関数まで拡張される．
+
+  一意性は Radon--Nikodym 微分の $\alpha$-a.e.\ 一意性と，
+  可算生成系 $\{B_n\}$ 上で一致する二つの測度が
+  $\Bb(\Y)$ 全体で一致することから従う．
+
+  詳細は Villani, \textit{Optimal Transport: Old and New},
+  Theorem~5.3.1 を参照．
+\end{proof}
+
+\subsection{Dirac 測度と押し出し}
+\label{sec:sem-dirac-pushforward}
+
+\begin{definition}{Dirac 測度}{sem-dirac}
+  可測空間 $(\Omega, \mathcal{F})$ 上の点 $x \in \Omega$ に対して，
+  \textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\Omega)$ を
+  \[
+    \delta_x(A) \defeq
+    \begin{cases}
+      1 & x \in A, \\
+      0 & x \notin A
+    \end{cases}
+    \qquad (\forall\, A \in \mathcal{F})
+  \]
+  で定義する．
+\end{definition}
+
+\begin{claim}{Dirac 測度に対する積分}{sem-dirac-integral}
+  任意の非負可測関数 $f \colon \X \to [0, \infty]$ に対して，
+  \[
+    \int_\X f \, \d\delta_x = f(x).
+  \]
+\end{claim}
+
+\begin{proof}
+  $A \in \Bb(\X)$ に対し単関数積分の定義より
+  $\int \mathbf{1}_A \, \d\delta_x = \delta_x(A) = \mathbf{1}_A(x)$．
+  単関数 $f = \sum_k c_k \mathbf{1}_{A_k}$ に対しては積分の線形性から
+  \[
+    \int_\X f \, \d\delta_x
+    = \sum_k c_k \, \delta_x(A_k)
+    = \sum_k c_k \, \mathbf{1}_{A_k}(x)
+    = f(x).
+  \]
+  一般の非負可測関数 $f$ に対しては，
+  命題~\ref{prop:sem-mct} により単関数の単調増加列 $f_n \uparrow f$ が取れ，
+  単調収束定理から
+  \[
+    \int_\X f \, \d\delta_x
+    = \lim_{n \to \infty} \int_\X f_n \, \d\delta_x
+    = \lim_{n \to \infty} f_n(x)
+    = f(x).
+  \]
+\end{proof}
+
+\begin{definition}{押し出し（push-forward）}{sem-pushforward}
+  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
+  $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
+  \[
+    (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
+    \qquad (\forall\, A \in \Bb(\Y))
+  \]
+  で定義する．
+\end{definition}
+
+\begin{proposition}{Dirac 測度と離散測度の押し出し}{sem-dirac-pushforward}
+  可測写像 $T \colon \X \to \Y$ に対して，次が成り立つ．
+  \begin{enumerate}
+    \item[(i)] 任意の点 $x \in \X$ に対して
+      $T\pushforward \delta_x = \delta_{T(x)}$．
+    \item[(ii)] 任意の点 $x_1, \ldots, x_n \in \X$ と係数
+      $a_1, \ldots, a_n \geq 0$ に対して
+      \[
+        T\pushforward \Bigl(\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)
+        = \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}.
+      \]
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  (i) 任意の $A \in \Bb(\Y)$ に対して，押し出しの定義より
+  $(T\pushforward \delta_x)(A) = \delta_x(T^{-1}(A))$．
+  $x \in T^{-1}(A) \iff T(x) \in A$ なので，
+  \[
+    \delta_x(T^{-1}(A)) =
+    \begin{cases}
+      1 & x \in T^{-1}(A), \text{ すなわち } T(x) \in A \\
+      0 & x \notin T^{-1}(A), \text{ すなわち } T(x) \notin A
+    \end{cases}
+    \;=\; \delta_{T(x)}(A).
+  \]
+
+  (ii) 任意の $A \in \Bb(\Y)$ に対して，
+  \begin{align*}
+    \Bigl(T\pushforward \sum_i a_i \delta_{x_i}\Bigr)(A)
+    &= \Bigl(\sum_i a_i \delta_{x_i}\Bigr)(T^{-1}(A))
+      && \text{（押し出しの定義）} \\
+    &= \sum_i a_i\, \delta_{x_i}(T^{-1}(A))
+      && \text{（測度の和・スカラー倍）} \\
+    &= \sum_i a_i\, \delta_{T(x_i)}(A)
+      && \text{（(i) より）}
+  \end{align*}
+\end{proof}
+
+%% --- 押し出しの直感略図 ---
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % 左：X 側の楕円と点 x, 囲み T^{-1}(A)
+  \draw[thick] (0, 0) ellipse (1.5cm and 1.05cm);
+  \node[above right, font=\scriptsize, gray] at (-1.3, 0.7) {$\X$};
+  \draw[dashed, thick, green!55!black]
+    (-0.1, 0.05) ellipse (0.55cm and 0.45cm);
+  \node[font=\small, green!40!black] at (-0.1, 0.7) {$T^{-1}(A)$};
+  \fill (-0.1, 0.05) circle (1.5pt) node[below, font=\scriptsize] {$x$};
+
+  % 矢印 T
+  \draw[->, thick] (1.7, 0.1) -- (3.8, 0.1)
+    node[midway, above, font=\small] {$T$};
+
+  % 右：Y 側の楕円と点 T(x), 囲み A
+  \begin{scope}[xshift=5.5cm]
+    \draw[thick] (0, 0) ellipse (1.5cm and 1.05cm);
+    \node[above right, font=\scriptsize, gray] at (-1.3, 0.7) {$\Y$};
+    \draw[dashed, thick, orange!70!black]
+      (0.1, 0.05) ellipse (0.55cm and 0.45cm);
+    \node[font=\small, orange!60!black] at (0.1, 0.7) {$A$};
+    \fill (0.1, 0.05) circle (1.5pt) node[below, font=\scriptsize] {$T(x)$};
+  \end{scope}
+
+  % 下：Dirac 測度の値
+  \node[font=\scriptsize] at (-0.1, -1.4) {$\delta_x$};
+  \node[font=\scriptsize] at (5.6, -1.4) {$\delta_{T(x)}$};
+  \node[font=\small] at (2.75, -2.1)
+    {$\delta_x(T^{-1}(A)) = 1 = \delta_{T(x)}(A)$};
+\end{tikzpicture}
+\end{center}
+
+%% ============================================================
+%% 凸解析
+%% ============================================================
+\section{凸解析}
+\label{sec:sem-convex-analysis}
+
+\subsection{凸結合と凸集合}
+\label{sec:sem-convex}
+
+\begin{definition}{凸集合（convex set）}{sem-convex}
+  ベクトル空間 $V$ の部分集合 $S \subseteq V$ が\textbf{凸}であるとは，
+  任意の $v_1, v_2 \in S$ と任意の $t \in [0,1]$ に対して
+  \[
+    t v_1 + (1-t) v_2 \in S
+  \]
+  が成り立つことをいう．
+\end{definition}
+
+\begin{definition}{確率単体（probability simplex）}{sem-simplex}
+  $\R_+^n \defeq \{\mathbf{a} \in \R^n \mid a_i \geq 0\ (i=1,\ldots,n)\}$ の部分集合
+  \[
+    \simplex_n \defeq \left\{
+      \mathbf{a} \in \R_+^n \;\middle|\; \sum_{i=1}^{n} a_i = 1
+    \right\}
+  \]
+  を \textbf{$(n-1)$ 次元確率単体}という．
+\end{definition}
+
+\begin{definition}{凸多面体（convex polytope）}{sem-polytope}
+  行列 $\mathbf{A} \in \R^{k \times d}$ とベクトル $\mathbf{b} \in \R^k$ に対して，
+  線形等式・不等式制約で定まる $\R^d$ の部分集合
+  \[
+    \{\mathbf{x} \in \R^d \mid
+      \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\}
+  \]
+  を\textbf{凸多面体}という．凸多面体は凸集合である．
+\end{definition}

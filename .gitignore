@@ -1,4 +1,6 @@
+# build output directories
 out/
+chapters/out/
 seminar/out/
 
 # LaTeX intermediate files
@@ -8,3 +10,11 @@ seminar/out/
 *.out
 *.toc
 *.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# generated PDFs at repo root (arXiv source images are explicitly tracked)
+/main.pdf
+/chapters/main.pdf
+/seminar/main.pdf
+/translated_for_seminar.pdf

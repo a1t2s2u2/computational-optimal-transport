@@ -1,15 +1,59 @@
 \chapter{Optimal Transport の基礎理論}
 \label{ch:seminar-01}
 
+\begin{remark}{本章の設定}{sem-ch2-setup}
+  Cuturi の論文では $\X, \Y$ を単に距離空間としているが，
+  本稿では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間，
+  定義~\ref{def:sem-polish}）とし，
+  ボレル $\sigma$-代数 $\Bb(\X), \Bb(\Y)$（定義~\ref{def:sem-borel}）を備えた
+  可測空間として扱う．
+  距離 $d$ そのものが式に現れる場面は少ないが，
+  距離（および Polish 性）を仮定するのは次の理由による：
+  \begin{enumerate}
+    \item[(i)] 距離から位相（定義~\ref{def:sem-metric-topology}）・
+      ボレル $\sigma$-代数（定義~\ref{def:sem-borel}）・
+      可測関数（定義~\ref{def:sem-measurable-function}）・
+      測度の弱収束（定義~\ref{def:sem-weak-convergence}）が一括で定まる．
+    \item[(ii)] Polish 性により，有限ボレル測度のタイト性
+      （命題~\ref{prop:sem-ulam}）・条件付き測度の取り出し
+      （\textbf{disintegration}，命題~\ref{prop:sem-disintegration}）・
+      弱コンパクト性（\textbf{Prokhorov}，命題~\ref{prop:sem-prokhorov}）が使える．
+      これらは Kantorovich 問題の解の存在および双対定理の基盤となる．
+    \item[(iii)] Wasserstein 距離では輸送コストを $c(x, y) = d(x, y)^p$ に取るため，
+      $\X$ 上の距離（\textbf{ground 距離}）そのものが式に現れる．
+  \end{enumerate}
+  離散版（$\X = \{x_1, \ldots, x_n\}$ が有限集合）では
+  Polish 性は自動で満たされる．実際，$\X$ にどの距離 $d$ を入れたとしても
+  次が成り立つ．
+  \begin{itemize}
+    \item[] \textbf{完備性．} 相異なる 2 点間の距離の最小値を
+      $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
+      これは有限個の正数の最小値なので $\delta > 0$．
+      任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq \X$ に対し，
+      Cauchy 条件（定義~\ref{def:sem-complete-metric}）で
+      $\varepsilon \defeq \delta / 2$ を取ると，ある $N \in \N$ が存在して
+      $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
+      一方 $\X$ の相異なる 2 点の距離は $\delta$ 以上だから，
+      $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
+      ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，
+      その点に収束する．よって完備．
+    \item[] \textbf{可分性．} $\X$ 自身が有限（特に可算）集合であり，
+      任意の $x \in \X$ について $x$ 自身が $\X$ に属するから，
+      $\X$ は $\X$ 自身の中で稠密（定義~\ref{def:sem-separable}）．
+      よって $\X$ は $\X$ という可算稠密部分集合を持ち可分．
+  \end{itemize}
+  以上より $(\X, d)$ は Polish 空間となるから，
+  離散版に対する追加の制約はない．
+\end{remark}
+
 %% ============================================================
 %% 最適割当問題（§2.2 前半）
 %% ============================================================
 \section{最適割当問題}
 \label{sec:sem-assignment}
 
-質量 $1/n$ の砂山が $n$ 個と，同数の行き先がある．
-各砂山を丸ごと 1 つの行き先へ運ぶ（1 対 1 対応）ものとし，
-コスト行列 $\mathbf{C} \in \R_+^{n \times n}$ のもとで総コストを最小にする割当を求めたい．
+質量 $1/n$ の砂山 $n$ 個を同数の行き先に 1 対 1 で運ぶ．
+コスト行列 $\mathbf{C} \in \R_+^{n \times n}$ のもとで総コストを最小化する割当を求める．
 
 \begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
   $n \in \N$，置換 $\sigma = (\sigma(1), \ldots, \sigma(n)) \in \Perm(n)$，
@@ -90,10 +134,10 @@
   よって $\sigma = (1, 2)$ が最小コスト $1$ を達成し，最適である．
 \end{example}
 
-\begin{proposition}{最適解の存在}{sem-assignment-existence}
+\begin{claim}{最適解の存在}{sem-assignment-existence}
   任意の $n \in \N$ と任意の $\mathbf{C} \in \R_+^{n \times n}$ に対して，
   最適割当問題の最小値は達成される．
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   $\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合なので，集合
@@ -101,15 +145,15 @@
     \left\{ \frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} \;\middle|\; \sigma \in \Perm(n) \right\}
   \]
   は高々 $n!$ 個の実数からなる空でない有限集合である．
-  命題~\ref{prop:sem-finite-min} より最小元を持つので，
+  主張~\ref{clm:sem-finite-min} より最小元を持つので，
   それを達成する $\sigma^* \in \Perm(n)$ が存在する．
 \end{proof}
 
-\begin{proposition}{最適解が一意でない場合の存在}{sem-uniqueness}
+\begin{claim}{最適解が一意でない場合の存在}{sem-uniqueness}
   任意の $n \geq 2$ に対して，
   異なる $\sigma_1, \sigma_2 \in \Perm(n)$ がともに最小値を達成するような
   $\mathbf{C} \in \R_+^{n \times n}$ が存在する．
-\end{proposition}
+\end{claim}
 
 \begin{proof}
   $C_{i,j} \defeq 1$（$i, j = 1, \ldots, n$）と定めると，任意の $\sigma \in \Perm(n)$ に対して
@@ -124,7 +168,6 @@
 \section{Monge 問題}
 \label{sec:sem-monge}
 
-最適割当問題では，同数の砂山を等しい質量で 1 対 1 に運んでいた．
 Monge 問題では次の設定を扱う：
 \begin{itemize}
   \item[(i)] 砂山の数と行き先の数は等しくなくてよい．
@@ -133,8 +176,7 @@ Monge 問題では次の設定を扱う：
   \item[(iv)] 1 つの砂山は丸ごと 1 つの行き先へ運ぶ（\textbf{分割しない}）．
 \end{itemize}
 
-Monge (1781) はこれを，砂山の分布 $\alpha$，行き先の分布 $\beta$，
-輸送写像 $T$ によって次のように定式化した．
+Monge (1781) はこれを次のように定式化した．
 
 \begin{definition}{Monge 問題（Monge problem）}{sem-monge}
   可測空間 $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
@@ -187,7 +229,7 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) 
 
 \paragraph{最適割当問題への帰着．}
 特に $n = m$ かつ $a_i = b_j = 1/n$（すべての砂山・行き先の質量が等しい）とする．
-このとき離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward}）より
+このとき離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward} (ii)）より
 \[
   T\pushforward \alpha
   = \frac{1}{n} \sum_{i=1}^{n} \delta_{T(x_i)}.
@@ -245,9 +287,6 @@ $T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に
 
 \subsection{Monge 問題の本質的困難}
 
-Monge 問題は\textbf{実行可能集合の非凸性}（困難 1）と
-\textbf{解の非存在}（困難 2）の 2 つの困難を抱える．順に見ていく．
-
 \subsubsection{困難1：実行可能集合の非凸性}
 
 $\X = \Y = \R$ とする．
@@ -273,19 +312,15 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
   \[
     T_1(x) = x,\qquad T_2(x) = -x,\qquad t = \tfrac{1}{2}
   \]
-  をとる．$\alpha$ の定義を代入し，命題~\ref{prop:sem-dirac-pushforward} を適用すると
+  をとる．$\alpha$ の定義を代入し，命題~\ref{prop:sem-dirac-pushforward} (ii) を適用すると
   \begin{align*}
     {T_1}\pushforward \alpha
     &= {T_1}\pushforward \bigl(\tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}\bigr)
       && \text{（$\alpha$ の定義）} \\
-    &= \tfrac{1}{2}\, {T_1}\pushforward \delta_{-1}
-      + \tfrac{1}{2}\, {T_1}\pushforward \delta_{1}
-      && \text{（命題~\ref{prop:sem-dirac-pushforward} (ii)）} \\
     &= \tfrac{1}{2}\delta_{T_1(-1)} + \tfrac{1}{2}\delta_{T_1(1)}
-      && \text{（命題~\ref{prop:sem-dirac-pushforward} (i)）} \\
-    &= \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}
-      && \text{（$T_1(x) = x$ より）} \\
-    &= \beta.
+      && \text{（命題~\ref{prop:sem-dirac-pushforward} (ii)）} \\
+    &= \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1} = \beta
+      && \text{（$T_1(x) = x$ より）}.
   \end{align*}
   同様に
   \begin{align*}
@@ -305,31 +340,15 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
   $\mathcal{T}(\alpha, \beta)$ は凸でない．
 \end{example}
 
-\begin{memo*}
-背景：非凸性の根本原因は，写像から測度への対応 $T \longmapsto T\pushforward\alpha$ が
-\textbf{非線形}であること．実際「押し出してから平均」すると
-$\tfrac{1}{2}{T_1}\pushforward\alpha + \tfrac{1}{2}{T_2}\pushforward\alpha = \beta$ だが，
-「平均してから押し出す」と $\bar{T}\pushforward\alpha = \delta_0 \ne \beta$．一般に
-$(tT_1 + (1-t)T_2)\pushforward \alpha \neq
- t \cdot {T_1}\pushforward\alpha + (1-t) \cdot {T_2}\pushforward\alpha$．
-\end{memo*}
-
 \subsubsection{困難2：解の非存在}
-
-写像による輸送では，質量の\textbf{分割}が許されない．
-すなわち，$x$ の質量は $T(x)$ という1点にすべて送らなければならない．
-このため，輸送元の測度が輸送先の測度より「粗い」場合に問題が生じる．
 
 \begin{example}{Monge 写像が存在しない場合}{sem-monge-noexist}
   $\alpha = \delta_0$，$\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$
-  を考える．$\alpha$ は原点の 1 点に集中した質量 $1$，
-  $\beta$ は $-1$ と $1$ の 2 箇所に半分ずつ分散した測度である．
+  を考える．
 
   任意の可測写像 $T \colon \X \to \Y$ に対して，
-  命題~\ref{prop:sem-dirac-pushforward} より
+  命題~\ref{prop:sem-dirac-pushforward} (i) より
   $T\pushforward \delta_0 = \delta_{T(0)}$ である．
-  すなわち $\alpha$ を $T$ で運んだ結果は必ず 1 点 $T(0)$ に集中した測度となり，
-  写像 $T$ が質量を分割できないことを測度の言葉で表している．
 
   したがって $T \in \mathcal{T}(\delta_0, \beta)$ となるには
   $\delta_{T(0)} = \beta$ が必要だが，
@@ -362,8 +381,6 @@ $(tT_1 + (1-t)T_2)\pushforward \alpha \neq
   \end{center}
 \end{example}
 
-この困難を解消するのが，次節の Kantorovich による緩和である．
-
 %% ============================================================
 %% Kantorovich 緩和
 %% ============================================================
@@ -372,18 +389,10 @@ $(tT_1 + (1-t)T_2)\pushforward \alpha \neq
 
 \subsection{鍵となるアイデア}
 
-前節で見たとおり，Monge の定式化には
-実行可能集合の非凸性と解の非存在という2つの本質的困難がある．
-また，最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
+最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
 Monge 問題はこれを拡張するものの，組合せ的な分割不可制約を残す．
-
-Kantorovich (1942) は，これらの困難を一挙に解消するアイデアを提示した．
-Monge の枠組みでは，各点 $x_i$ の質量をすべて1つの行き先 $T(x_i)$ に送る
-\textbf{決定論的}な輸送を考えていた．
-Kantorovich はこれを，質量を複数の行き先に分割して送ることを許す
-\textbf{確率的}な輸送に置き換える．
-この「\textbf{質量の分割}」を許す輸送計画を，
-$\X \times \Y$ 上の結合測度（\textbf{カップリング}）として定式化する．
+Kantorovich (1942) はこれを，質量の\textbf{分割}を許す確率的輸送に置き換え，
+$\X \times \Y$ 上の結合測度（\textbf{カップリング}）として定式化した．
 
 \subsection{カップリング}
 
@@ -444,8 +453,6 @@ $\R_+^{n \times m}$ の有界部分集合であるから，
     \inner{\mathbf{C}}{\mathbf{P}}
     = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
   \]
-  Monge の枠組みでは不可能だった「1点の質量を2箇所に分割する」操作が，
-  Kantorovich のカップリングとして自然に実現されている．
 \end{example}
 
 \paragraph{Monge 写像との対比．}
