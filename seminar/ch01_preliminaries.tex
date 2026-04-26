@@ -465,6 +465,15 @@
 \subsection{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
 
+\begin{definition}{測度の台（support）}{sem-support}
+  Polish 空間 $\X$ 上のボレル測度 $\mu$ に対し，
+  \[
+    \supp(\mu) \defeq
+    \{ x \in \X \mid \mu(B_r(x)) > 0\ (\forall r > 0) \}
+  \]
+  を $\mu$ の\textbf{台}という．$\supp(\mu)$ は $\X$ の閉集合．
+\end{definition}
+
 \begin{definition}{Dirac 測度}{sem-dirac}
   可測空間 $(\Omega, \mathcal{F})$ 上の点 $x \in \Omega$ に対して，
   \textbf{Dirac 測度} $\delta_x \in \Mm_+^1(\Omega)$ を
