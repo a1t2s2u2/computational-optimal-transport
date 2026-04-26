@@ -3,10 +3,14 @@
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
   Cuturi の論文では $\X, \Y$ を単に距離空間としているが，
-  本稿では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間，
-  定義~\ref{def:sem-polish}）とし，
-  ボレル $\sigma$-代数 $\Bb(\X), \Bb(\Y)$（定義~\ref{def:sem-borel}）を備えた
-  可測空間として扱う．
+  本章では $\X, \Y$ を\textbf{完備可分な距離空間}
+  （Polish 空間，定義~\ref{def:sem-polish}）とする．
+  距離関数をそれぞれ $d_\X, d_\Y$ と書き，混同の恐れがない場合は
+  単に $d$ と略す．$\X$ にはボレル $\sigma$-代数 $\Bb(\X)$
+  （定義~\ref{def:sem-borel}）を入れて可測空間 $(\X, \Bb(\X))$ とみなし，
+  $\X$ 上の確率測度全体を $\Mm_+^1(\X)$
+  （定義~\ref{def:sem-probability-measure}）と記す．$\Y$ についても同様．
+
   距離 $d$ そのものが式に現れる場面は少ないが，
   距離（および Polish 性）を仮定するのは次の理由による：
   \begin{enumerate}
