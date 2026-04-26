@@ -36,9 +36,8 @@
 \subsection*{離散版}
 \begin{tabular}{ll}
   $\range{n}$ & 整数の集合 $\{1, \ldots, n\}$ \\
-  $\simplex_n$ & 確率単体（$n-1$ 次元）．定義~\ref{def:sem-simplex} 参照 \\
-  $\mathbf{a} \in \simplex_n$, $\mathbf{b} \in \simplex_m$
-    & 輸送元・輸送先のヒストグラム \\
+  $\mathbf{a} \in \R_+^n$, $\mathbf{b} \in \R_+^m$
+    & 輸送元・輸送先のヒストグラム（$\sum_i a_i = \sum_j b_j = 1$） \\
   $\mathbf{C} \in \R_+^{n \times m}$ & 行列（$C_{i,j}$：ビン $i$ から $j$ への輸送コストと解釈） \\
   $\ones_n$ & 成分がすべて $1$ の $n$ 次元ベクトル \\
   $\inner{\cdot}{\cdot}$ & フロベニウス内積 $\inner{\mathbf{A}}{\mathbf{B}} = \tr(\mathbf{A}^\top \mathbf{B})$ \\
