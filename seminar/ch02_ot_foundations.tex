@@ -2,24 +2,19 @@
 \label{ch:seminar-01}
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
-  本章では $\X, \Y$ を\textbf{完備可分な距離空間}
-  （Polish 空間，定義~\ref{def:sem-polish}）とする．
-  距離関数を $d$ と書く．$\X$ にはボレル $\sigma$-代数 $\Bb(\X)$
-  （定義~\ref{def:sem-borel}）を入れて可測空間 $(\X, \Bb(\X))$ とみなし，
-  $\X$ 上の確率測度全体を $\Mm_+^1(\X)$
-  （定義~\ref{def:sem-probability-measure}）と記す．$\Y$ についても同様．
+  本章では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間）とする．
+  距離関数を $d$ と書く．$\X$ にはボレル $\sigma$-代数 $\Bb(\X)$ を入れて
+  可測空間 $(\X, \Bb(\X))$ とみなし，
+  $\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．$\Y$ についても同様．
 
   距離と Polish 性は本章で次のように使う：
   \begin{enumerate}
-    \item[(i)] 距離から $\X, \Y$ の位相（定義~\ref{def:sem-metric-topology}）・
-      ボレル $\sigma$-代数（定義~\ref{def:sem-borel}）・可測関数
-      （定義~\ref{def:sem-measurable-function}）・測度の弱収束
-      （定義~\ref{def:sem-weak-convergence}）を定める．
-    \item[(ii)] Polish 性は有限ボレル測度のタイト性
-      （命題~\ref{prop:sem-ulam}）・条件付き測度の取り出し
-      （\textbf{disintegration}，命題~\ref{prop:sem-disintegration}）・
-      弱コンパクト性（\textbf{Prokhorov}，命題~\ref{prop:sem-prokhorov}）を
-      保証し，Kantorovich 問題の解の存在と双対定理の基盤となる．
+    \item[(i)] 距離から $\X, \Y$ の位相・ボレル $\sigma$-代数・可測関数・
+      測度の弱収束を定める．
+    \item[(ii)] Polish 性は有限ボレル測度のタイト性（\textbf{Ulam}）・
+      条件付き測度の取り出し（\textbf{disintegration}）・
+      弱コンパクト性（\textbf{Prokhorov}）を保証し，
+      Kantorovich 問題の解の存在と双対定理の基盤となる．
     \item[(iii)] Wasserstein 距離の輸送コスト
       $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
@@ -31,8 +26,8 @@
       $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
       これは有限個の正数の最小値なので $\delta > 0$．
       任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq \X$ に対し，
-      Cauchy 条件（定義~\ref{def:sem-complete-metric}）で
-      $\varepsilon \defeq \delta / 2$ を取ると，ある $N \in \N$ が存在して
+      Cauchy 条件で $\varepsilon \defeq \delta / 2$ を取ると，
+      ある $N \in \N$ が存在して
       $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
       一方 $\X$ の相異なる 2 点の距離は $\delta$ 以上だから，
       $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
@@ -40,7 +35,7 @@
       その点に収束する．よって完備．
     \item[] \textbf{可分性．} $\X$ 自身が有限（特に可算）集合であり，
       任意の $x \in \X$ について $x$ 自身が $\X$ に属するから，
-      $\X$ は $\X$ 自身の中で稠密（定義~\ref{def:sem-separable}）．
+      $\X$ は $\X$ 自身の中で稠密．
       よって $\X$ は $\X$ という可算稠密部分集合を持ち可分．
   \end{itemize}
   以上より $(\X, d)$ は Polish 空間となるから，
