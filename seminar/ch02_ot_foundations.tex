@@ -18,28 +18,28 @@
     \item[(iii)] Wasserstein 距離の輸送コスト
       $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
-  離散版（$\X = \{x_1, \ldots, x_n\}$ が有限集合）では
-  Polish 性は自動で満たされる．実際，$\X$ にどの距離 $d$ を入れたとしても
-  次が成り立つ．
+  離散版では確率測度の台 $S \defeq \{x_1, \ldots, x_n\} \subseteq \X$ が
+  有限集合となる．$S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
+  自動で Polish 空間になる：
   \begin{itemize}
     \item[] \textbf{完備性．} 相異なる 2 点間の距離の最小値を
       $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
       これは有限個の正数の最小値なので $\delta > 0$．
-      任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq \X$ に対し，
+      任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq S$ に対し，
       Cauchy 条件で $\varepsilon \defeq \delta / 2$ を取ると，
       ある $N \in \N$ が存在して
       $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
-      一方 $\X$ の相異なる 2 点の距離は $\delta$ 以上だから，
+      一方 $S$ の相異なる 2 点の距離は $\delta$ 以上だから，
       $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
       ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，
       その点に収束する．よって完備．
-    \item[] \textbf{可分性．} $\X$ 自身が有限（特に可算）集合であり，
-      任意の $x \in \X$ について $x$ 自身が $\X$ に属するから，
-      $\X$ は $\X$ 自身の中で稠密．
-      よって $\X$ は $\X$ という可算稠密部分集合を持ち可分．
+    \item[] \textbf{可分性．} $S$ 自身が有限（特に可算）集合であり，
+      自身の中で稠密だから可分．
   \end{itemize}
-  以上より $(\X, d)$ は Polish 空間となるから，
-  離散版に対する追加の制約はない．
+  これは Cuturi のように $\X, \Y$ を単なる距離空間とする設定でも，
+  離散版では本章の Polish 設定が自動成立することの確認である．
+  本章の Polish 強化は連続側で必要となる一方，
+  離散版には追加制約を課さない．
 \end{remark}
 
 %% ============================================================
