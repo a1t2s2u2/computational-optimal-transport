@@ -2,48 +2,40 @@
 \label{ch:seminar-01}
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
-  Cuturi の論文では $\X, \Y$ を単に距離空間としているが，
-  本稿では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間，
-  定義~\ref{def:sem-polish}）とし，
-  ボレル $\sigma$-代数 $\Bb(\X), \Bb(\Y)$（定義~\ref{def:sem-borel}）を備えた
-  可測空間として扱う．
-  距離 $d$ そのものが式に現れる場面は少ないが，
-  距離（および Polish 性）を仮定するのは次の理由による：
+  本章では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間）とする．
+  距離関数を $d$ と書く．$\X$ にはボレル $\sigma$-代数 $\Bb(\X)$ を入れて
+  可測空間 $(\X, \Bb(\X))$ とみなし，
+  $\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．$\Y$ についても同様．
+
+  距離は本章で次のように使う：
   \begin{enumerate}
-    \item[(i)] 距離から位相（定義~\ref{def:sem-metric-topology}）・
-      ボレル $\sigma$-代数（定義~\ref{def:sem-borel}）・
-      可測関数（定義~\ref{def:sem-measurable-function}）・
-      測度の弱収束（定義~\ref{def:sem-weak-convergence}）が一括で定まる．
-    \item[(ii)] Polish 性により，有限ボレル測度のタイト性
-      （命題~\ref{prop:sem-ulam}）・条件付き測度の取り出し
-      （\textbf{disintegration}，命題~\ref{prop:sem-disintegration}）・
-      弱コンパクト性（\textbf{Prokhorov}，命題~\ref{prop:sem-prokhorov}）が使える．
-      これらは Kantorovich 問題の解の存在および双対定理の基盤となる．
-    \item[(iii)] Wasserstein 距離では輸送コストを $c(x, y) = d(x, y)^p$ に取るため，
-      $\X$ 上の距離（\textbf{ground 距離}）そのものが式に現れる．
+    \item[(i)] 距離から $\X, \Y$ の位相・ボレル $\sigma$-代数・可測関数を定める．
+    \item[(ii)] Wasserstein 距離の輸送コスト
+      $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
-  離散版（$\X = \{x_1, \ldots, x_n\}$ が有限集合）では
-  Polish 性は自動で満たされる．実際，$\X$ にどの距離 $d$ を入れたとしても
-  次が成り立つ．
+  離散版では確率測度の台 $S \defeq \{x_1, \ldots, x_n\} \subseteq \X$ が
+  有限集合となる．$S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
+  自動で Polish 空間になる：
   \begin{itemize}
-    \item[] \textbf{完備性．} 相異なる 2 点間の距離の最小値を
+    \item[] \textbf{完備性．} $n = 1$ なら任意の列は定値列ゆえ自明に収束する．
+      以下 $n \geq 2$ とする．相異なる 2 点間の距離の最小値を
       $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
       これは有限個の正数の最小値なので $\delta > 0$．
-      任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq \X$ に対し，
-      Cauchy 条件（定義~\ref{def:sem-complete-metric}）で
-      $\varepsilon \defeq \delta / 2$ を取ると，ある $N \in \N$ が存在して
+      任意の Cauchy 列 $(y_k)_{k \geq 1} \subseteq S$ に対し，
+      Cauchy 条件で $\varepsilon \defeq \delta / 2$ を取ると，
+      ある $N \in \N$ が存在して
       $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
-      一方 $\X$ の相異なる 2 点の距離は $\delta$ 以上だから，
+      一方 $S$ の相異なる 2 点の距離は $\delta$ 以上だから，
       $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
       ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，
       その点に収束する．よって完備．
-    \item[] \textbf{可分性．} $\X$ 自身が有限（特に可算）集合であり，
-      任意の $x \in \X$ について $x$ 自身が $\X$ に属するから，
-      $\X$ は $\X$ 自身の中で稠密（定義~\ref{def:sem-separable}）．
-      よって $\X$ は $\X$ という可算稠密部分集合を持ち可分．
+    \item[] \textbf{可分性．} $S$ 自身が有限（特に可算）集合であり，
+      自身の中で稠密だから可分．
   \end{itemize}
-  以上より $(\X, d)$ は Polish 空間となるから，
-  離散版に対する追加の制約はない．
+  これは Cuturi のように $\X, \Y$ を単なる距離空間とする設定でも，
+  離散版では本章の Polish 設定が自動成立することの確認である．
+  本章の Polish 強化は連続側で必要となる一方，
+  離散版には追加制約を課さない．
 \end{remark}
 
 %% ============================================================
@@ -51,9 +43,6 @@
 %% ============================================================
 \section{最適割当問題}
 \label{sec:sem-assignment}
-
-質量 $1/n$ の砂山 $n$ 個を同数の行き先に 1 対 1 で運ぶ．
-コスト行列 $\mathbf{C} \in \R_+^{n \times n}$ のもとで総コストを最小化する割当を求める．
 
 \begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
   $n \in \N$，置換 $\sigma = (\sigma(1), \ldots, \sigma(n)) \in \Perm(n)$，
@@ -168,18 +157,8 @@
 \section{Monge 問題}
 \label{sec:sem-monge}
 
-Monge 問題では次の設定を扱う：
-\begin{itemize}
-  \item[(i)] 砂山の数と行き先の数は等しくなくてよい．
-  \item[(ii)] 各砂山の質量と各行き先で積み上げる量は不均一でよい．
-  \item[(iii)] 複数の砂山が同じ行き先に運ばれてもよい．
-  \item[(iv)] 1 つの砂山は丸ごと 1 つの行き先へ運ぶ（\textbf{分割しない}）．
-\end{itemize}
-
-Monge (1781) はこれを次のように定式化した．
-
 \begin{definition}{Monge 問題（Monge problem）}{sem-monge}
-  可測空間 $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$
   （$c(x, y)$ は $x$ から $y$ への\textbf{輸送コスト}）に対して，
   \textbf{Monge 問題}とは
@@ -300,12 +279,6 @@ Monge 問題の実行可能集合
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
 は一般に\textbf{凸でない}（凸集合の定義は定義~\ref{def:sem-convex}）．
-実際，$\mathcal{T}(\alpha,\beta)$ が凸であるためには，
-任意の $T_1, T_2 \in \mathcal{T}(\alpha,\beta)$ と
-任意の $t \in [0,1]$ に対して
-$\bar{T} \defeq t T_1 + (1-t)T_2$ が再び
-$\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
-これは一般に成り立たない．
 
 \begin{example}{実行可能集合の非凸性}{sem-nonconvex}
   $\alpha = \beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$ とし，
@@ -387,17 +360,10 @@ $\bar{T}\pushforward \alpha = \beta$ を満たす必要があるが，
 \section{Kantorovich 緩和}
 \label{sec:sem-kantorovich}
 
-\subsection{鍵となるアイデア}
-
-最適割当問題は $n = m$ かつ一様な重みの場合しか扱えず，
-Monge 問題はこれを拡張するものの，組合せ的な分割不可制約を残す．
-Kantorovich (1942) はこれを，質量の\textbf{分割}を許す確率的輸送に置き換え，
-$\X \times \Y$ 上の結合測度（\textbf{カップリング}）として定式化した．
-
 \subsection{カップリング}
 
 \begin{definition}{カップリング（coupling）}{sem-coupling}
-  可測空間 $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
+  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
   に対して，$\X \times \Y$ 上の確率測度のうち周辺測度がそれぞれ
   $\alpha, \beta$ に一致するものの集合
   \[
@@ -494,7 +460,7 @@ $\R_+^{n \times m}$ の有界部分集合であるから，
 \subsection{Kantorovich 問題}
 
 \begin{definition}{Kantorovich 問題（Kantorovich problem）}{sem-kantorovich}
-  可測空間 $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Kantorovich 問題}とは
   \[
