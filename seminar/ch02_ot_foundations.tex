@@ -2,7 +2,6 @@
 \label{ch:seminar-01}
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
-  Cuturi の論文では $\X, \Y$ を単に距離空間としているが，
   本章では $\X, \Y$ を\textbf{完備可分な距離空間}
   （Polish 空間，定義~\ref{def:sem-polish}）とする．
   距離関数をそれぞれ $d_\X, d_\Y$ と書き，混同の恐れがない場合は
@@ -11,20 +10,19 @@
   $\X$ 上の確率測度全体を $\Mm_+^1(\X)$
   （定義~\ref{def:sem-probability-measure}）と記す．$\Y$ についても同様．
 
-  距離 $d$ そのものが式に現れる場面は少ないが，
-  距離（および Polish 性）を仮定するのは次の理由による：
+  距離と Polish 性は本章で次のように使う：
   \begin{enumerate}
-    \item[(i)] 距離から位相（定義~\ref{def:sem-metric-topology}）・
-      ボレル $\sigma$-代数（定義~\ref{def:sem-borel}）・
-      可測関数（定義~\ref{def:sem-measurable-function}）・
-      測度の弱収束（定義~\ref{def:sem-weak-convergence}）が一括で定まる．
-    \item[(ii)] Polish 性により，有限ボレル測度のタイト性
+    \item[(i)] 距離から $\X, \Y$ の位相（定義~\ref{def:sem-metric-topology}）・
+      ボレル $\sigma$-代数（定義~\ref{def:sem-borel}）・可測関数
+      （定義~\ref{def:sem-measurable-function}）・測度の弱収束
+      （定義~\ref{def:sem-weak-convergence}）を定める．
+    \item[(ii)] Polish 性は有限ボレル測度のタイト性
       （命題~\ref{prop:sem-ulam}）・条件付き測度の取り出し
       （\textbf{disintegration}，命題~\ref{prop:sem-disintegration}）・
-      弱コンパクト性（\textbf{Prokhorov}，命題~\ref{prop:sem-prokhorov}）が使える．
-      これらは Kantorovich 問題の解の存在および双対定理の基盤となる．
-    \item[(iii)] Wasserstein 距離では輸送コストを $c(x, y) = d(x, y)^p$ に取るため，
-      $\X$ 上の距離（\textbf{ground 距離}）そのものが式に現れる．
+      弱コンパクト性（\textbf{Prokhorov}，命題~\ref{prop:sem-prokhorov}）を
+      保証し，Kantorovich 問題の解の存在と双対定理の基盤となる．
+    \item[(iii)] Wasserstein 距離の輸送コスト
+      $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
   離散版（$\X = \{x_1, \ldots, x_n\}$ が有限集合）では
   Polish 性は自動で満たされる．実際，$\X$ にどの距離 $d$ を入れたとしても
