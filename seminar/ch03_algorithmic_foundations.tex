@@ -46,12 +46,14 @@ $\mathbf{p} \in \R^{nm}$ を考える
   \qquad
   \mathbf{A} \defeq
   \begin{bmatrix}
-    \ones_n^\top \otimes \Identity_m \\
-    \Identity_n \otimes \ones_m^\top
+    \ones_m^\top \otimes \Identity_n \\
+    \Identity_m \otimes \ones_n^\top
   \end{bmatrix}
   \in \R^{(n+m) \times nm}
 \]
-と書ける．コスト行列 $\mathbf{C}$ も同様にベクトル化して
+と書ける．上段の $n$ 行は行和制約 $\mathbf{P}\ones_m = \mathbf{a}$ に，
+下段の $m$ 行は列和制約 $\mathbf{P}^\top \ones_n = \mathbf{b}$ に対応する．
+コスト行列 $\mathbf{C}$ も同様にベクトル化して
 $\mathbf{c} \in \R^{nm}$ とすると，
 離散 Kantorovich 問題は標準形の線形計画
 \[
@@ -250,29 +252,33 @@ LP 一般論により，標準形 $\{\mathbf{p} \geq 0 \mid \mathbf{A}\mathbf{p}
 
 \textbf{ネットワーク単体法}（network simplex）は最適輸送問題に特化した単体法で，
 輸送多面体の頂点間を移動しながら最適解を探索する．
+アルゴリズムが管理するのは台グラフ $G(\mathbf{P})$ そのものではなく，
+それを含む\textbf{基底木} $T$ である．基底木は二部グラフ上の木（または森）であり，
+退化のときは $P_{i,j} = 0$ の辺も含みうる．
 各反復で以下の3つの操作を行う：
-\textbf{(1)} 現在の主実行可能頂点 $\mathbf{P}$ に相補的な双対 $(\mathbf{f}, \mathbf{g})$ を構成．
-\textbf{(2)} 双対実行可能性を判定し，違反辺があれば台グラフへ追加．
-\textbf{(3)} 閉路に沿った流量更新で次の頂点へ移る．
+\textbf{(1)} 現在の主実行可能頂点 $\mathbf{P}$ と基底木 $T$ に相補的な
+双対 $(\mathbf{f}, \mathbf{g})$ を構成．
+\textbf{(2)} 双対実行可能性を判定し，違反辺があれば $T$ に追加して基本閉路を作る．
+\textbf{(3)} 閉路に沿って流量を更新し，1 本の辺を $T$ から外して次の頂点へ移る．
 
 \subsection{相補的双対変数の構成}
 \label{subsec:sem-dual-from-primal}
 
 主実行可能頂点 $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ が与えられたとき，
-$P_{i,j} > 0$ なるすべての $(i, j)$ に対して
+まず台グラフ $G(\mathbf{P})$ を含む基底木 $T$ を1つ固定する．
+命題~\ref{prop:sem-extremal-tree} から $G(\mathbf{P})$ は森であり辺数 $\leq n + m - 1$ ゆえ，
+必要ならば $P_{i,j} = 0$ の辺を補って $T$ を $n + m - 1$ 本の辺をもつ木にできる．
+$T$ の各辺 $(i, j')$ に対して
 \[
   f_i + g_j = C_{i,j}
 \]
-を満たす $(\mathbf{f}, \mathbf{g})$ を構成する．
-命題~\ref{prop:sem-extremal-tree} から $G(\mathbf{P})$ は森であり辺数 $\leq n + m - 1$．
-各連結成分（木）について：
+を満たす $(\mathbf{f}, \mathbf{g})$ を木のたどりで構成する：
 \begin{itemize}
-  \item ルート節点をひとつ選び，対応する双対変数を $0$ に設定する．
-  \item 木を幅優先または深さ優先で辿りながら，各辺 $(i, j')$ で
+  \item $T$ のルート節点をひとつ選び，対応する双対変数を $0$ に設定する．
+  \item $T$ を幅優先または深さ優先で辿りながら，各辺 $(i, j')$ で
     $f_i + g_j = C_{i,j}$ を逐次的に解いて未確定の双対変数を定める．
 \end{itemize}
-台グラフの辺数が $n + m - 1$ 未満（連結成分が複数）の場合，
-各連結成分でルートを別々に選べばよい．
+$T$ が連結でない場合（複数の木からなる森）は，各連結成分でルートを別々に選べばよい．
 
 \subsection{最適性判定と更新}
 \label{subsec:sem-simplex-update}
@@ -283,20 +289,17 @@ $P_{i,j} > 0$ なるすべての $(i, j)$ に対して
     主双対最適性（主張~\ref{clm:sem-primal-dual-optimality}）から $\mathbf{P}$ は最適．
     アルゴリズム終了．
   \item ある $(i, j)$ で $f_i + g_j > C_{i,j}$（双対違反辺）なら，
-    辺 $(i, j')$ を $G(\mathbf{P})$ に追加する：
+    その辺 $(i, j')$ を基底木 $T$ に追加する：
 \end{itemize}
 
-\begin{enumerate}
-  \item[(a)] 追加して\textbf{閉路が生じない}場合：
-    $G$ は依然として森で，連結成分が1つ減るだけ．
-    $(\mathbf{f}, \mathbf{g})$ を再計算して反復を続ける（退化ステップ）．
-  \item[(b)] 追加して\textbf{閉路が生じる}場合：
-    閉路に沿って流量を調整する．
-    閉路上の「正方向」の辺では $P_{i,j}$ を $\theta$ だけ増加させ，
-    「負方向」の辺では $\theta$ だけ減少させる．
-    $\theta$ は負方向の辺の最小流量に等しく取る．
-    流量が $0$ になった辺を $G$ から除去すると，新しい頂点 $\tilde{\mathbf{P}}$ が得られる．
-\end{enumerate}
+追加後の $T \cup \{(i, j')\}$ には基本閉路が一意に生じる．
+閉路に沿って流量を調整する：
+閉路上の「正方向」の辺では $P_{i,j}$ を $\theta$ だけ増加させ，
+「負方向」の辺では $\theta$ だけ減少させる．
+$\theta$ は負方向の辺の最小流量に等しく取る．
+流量が $0$ になった辺を $T$ から $1$ 本除去すると，新しい頂点 $\tilde{\mathbf{P}}$ と
+新しい基底木 $\tilde T$ が得られる．
+$\theta = 0$ となる退化ステップでは $\mathbf{P}$ は変化しないが，$T$ のみ更新される．
 
 \subsection{コスト改善の証明}
 \label{subsec:sem-simplex-improvement}
@@ -315,7 +318,7 @@ $(i, j_1'), (i_2, j_1'), (i_2, j_2'), \ldots, (i_l, j_l'), (i, j_l')$ と書く
     + C_{i_l, j_l} - C_{i, j_l}
   \right).
 \]
-新規辺以外（$k = 2, \ldots, l$ の項と最後の項）は既存の台グラフの辺ゆえ，
+新規辺以外（$k = 2, \ldots, l$ の項と最後の項）は基底木 $T$ の辺ゆえ，
 相補性から $C_{i_k, j_k} = f_{i_k} + g_{j_k}$，$C_{i_{k+1}, j_k} = f_{i_{k+1}} + g_{j_k}$
 （添字は閉路に沿うものとし $i_{l+1} = i$）．代入すると望遠的にキャンセルし，
 新規辺の項のみが残る：
