@@ -400,26 +400,28 @@
 
 \begin{definition}{離散測度（discrete measure）}{sem-discrete-measure}
   Polish 空間 $\X$ 上のボレル確率測度 $\mu \in \Mm_+^1(\X)$ が
-  \textbf{離散測度}であるとは，台 $\supp(\mu)$ が有限集合であることをいう．
+  \textbf{離散測度}であるとは，
+  ある $n \in \N$，相異なる $x_1, \ldots, x_n \in \X$，
+  および $a_1, \ldots, a_n > 0$（$\sum_{i=1}^n a_i = 1$）が存在して
+  \[
+    \mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}
+  \]
+  と表せることをいう．
 \end{definition}
 
-\begin{claim}{離散測度の標準形}{sem-discrete-measure-form}
-  Polish 空間 $\X$ 上のボレル確率測度 $\mu \in \Mm_+^1(\X)$ について以下は同値．
+\begin{claim}{離散測度の標準形と一意性}{sem-discrete-measure-form}
+  $\mu \in \Mm_+^1(\X)$ について以下は同値：
   \begin{enumerate}
     \item[(i)] $\mu$ は離散測度（定義~\ref{def:sem-discrete-measure}）．
-    \item[(ii)] ある $n \in \N$，相異なる $x_1, \ldots, x_n \in \X$，
-      $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$
-      （各 $a_i > 0$，$\sum_{i=1}^n a_i = 1$）が存在して
-      \[
-        \mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}.
-      \]
+    \item[(ii)] $\supp(\mu)$ は有限集合．
   \end{enumerate}
-  さらに (ii) の表示において $\supp(\mu) = \{x_1, \ldots, x_n\}$，
-  $a_i = \mu(\{x_i\})$ が成り立つ．
+  さらに離散測度 $\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}$ の表示において
+  $\supp(\mu) = \{x_1, \ldots, x_n\}$，$a_i = \mu(\{x_i\})$ が成り立ち，
+  $n$ および対 $\{(x_i, a_i)\}_{i=1}^n$ は添字の入れ替えを除いて一意に定まる．
 \end{claim}
 
 \begin{proof}
-  \textbf{(ii) $\Rightarrow$ (i)．}
+  \textbf{(i) $\Rightarrow$ (ii)，および $\supp(\mu) = \{x_1, \ldots, x_n\}$．}
   有限集合 $\{x_1, \ldots, x_n\}$ は閉集合
   （主張~\ref{clm:sem-metric-hausdorff}）．
   $y \notin \{x_1, \ldots, x_n\}$ なら十分小さい $r > 0$ で
@@ -428,7 +430,7 @@
   一方，任意の $r > 0$ で $\mu(B_r(x_i)) \geq a_i > 0$ ゆえ $x_i \in \supp(\mu)$．
   したがって $\supp(\mu) = \{x_1, \ldots, x_n\}$ は有限集合．
 
-  \textbf{(i) $\Rightarrow$ (ii)．}
+  \textbf{(ii) $\Rightarrow$ (i)．}
   $\supp(\mu) = \{x_1, \ldots, x_n\}$（相異なる $n$ 点）とおき，
   $a_i \defeq \mu(\{x_i\})$ とする．
   $\X \setminus \supp(\mu)$ の各点 $y$ はある開球 $B_{r_y}(y)$ で $\mu(B_{r_y}(y)) = 0$ をみたし，
@@ -452,6 +454,11 @@
   十分小さい $r > 0$ で $B_r(x_i) \cap \supp(\mu) = \{x_i\}$，
   すなわち $B_r(x_i) \setminus \{x_i\} \subset \X \setminus \supp(\mu)$ は $\mu$-零．
   ゆえに $\mu(B_r(x_i)) = a_i$．$x_i \in \supp(\mu)$ より $a_i > 0$．
+
+  \textbf{表示の一意性．}
+  上で示した $\supp(\mu) = \{x_1, \ldots, x_n\}$ により点集合は $\mu$ から一意に定まり，
+  $a_i = \mu(\{x_i\})$ により重みも一意に定まる．したがって
+  添字の入れ替えを除いて表示は一意．
 \end{proof}
 
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
