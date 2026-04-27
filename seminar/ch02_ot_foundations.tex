@@ -446,6 +446,50 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は $n + m$ 本の等式制約で定まる
 $\R_+^{n \times m}$ の有界部分集合であるから，
 凸多面体（定義~\ref{def:sem-polytope}）をなす．
 
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0,
+    cell/.style={draw, minimum size=1cm, font=\small, anchor=center},
+    bara/.style={draw, fill=blue!25, minimum height=1cm, anchor=east, font=\small},
+    barb/.style={draw, fill=red!25, minimum width=1cm, anchor=south, font=\small}]
+  % --- 行列 P （3x3） ---
+  \def\Pa{0.20} \def\Pb{0.05} \def\Pc{0.05}
+  \def\Pd{0.15} \def\Pe{0.15} \def\Pf{0.10}
+  \def\Pg{0.05} \def\Ph{0.10} \def\Pi{0.15}
+  \node[cell, fill=purple!50] (P11) at (0, 0) {0.20};
+  \node[cell, fill=purple!15] (P12) at (1, 0) {0.05};
+  \node[cell, fill=purple!15] (P13) at (2, 0) {0.05};
+  \node[cell, fill=purple!40] (P21) at (0, -1) {0.15};
+  \node[cell, fill=purple!40] (P22) at (1, -1) {0.15};
+  \node[cell, fill=purple!25] (P23) at (2, -1) {0.10};
+  \node[cell, fill=purple!15] (P31) at (0, -2) {0.05};
+  \node[cell, fill=purple!25] (P32) at (1, -2) {0.10};
+  \node[cell, fill=purple!40] (P33) at (2, -2) {0.15};
+
+  % --- 行和（右）= a_i ---
+  \node[bara, minimum width=0.9cm] (a1) at (3.5, 0) {$a_1=0.3$};
+  \node[bara, minimum width=1.2cm] (a2) at (3.5, -1) {$a_2=0.4$};
+  \node[bara, minimum width=0.9cm] (a3) at (3.5, -2) {$a_3=0.3$};
+  \node[font=\small] at (3.5, 0.9) {$\mathbf{a}$};
+
+  % --- 列和（上）= b_j ---
+  \node[barb, minimum height=1.2cm] (b1) at (0, 1.1) {$b_1=0.4$};
+  \node[barb, minimum height=0.9cm] (b2) at (1, 1.1) {$b_2=0.3$};
+  \node[barb, minimum height=0.9cm] (b3) at (2, 1.1) {$b_3=0.3$};
+  \node[font=\small] at (-1.1, 1.5) {$\mathbf{b}$};
+
+  % --- 矢印で行和・列和を示す ---
+  \draw[->, gray] (P11.east)  -- ++(0.2, 0);
+  \draw[->, gray] (P12.north) -- ++(0, 0.1);
+  \node[font=\small\itshape] at (-1.2, -1) {行列 $\mathbf{P}$};
+\end{tikzpicture}
+\caption{離散カップリング $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の構造．
+中央が $\mathbf{P}$，色の濃さが値の大きさを表す．
+$\mathbf{P}$ の行和は周辺ヒストグラム $\mathbf{a}$ に，
+列和は $\mathbf{b}$ に一致する．}
+\label{fig:sem-coupling-matrix}
+\end{figure}
+
 \paragraph{Monge 写像との対比．}
 \begin{figure}[htbp]
 \centering
