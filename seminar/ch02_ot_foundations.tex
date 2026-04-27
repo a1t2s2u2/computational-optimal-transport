@@ -411,9 +411,12 @@ Monge 問題の実行可能集合
 \begin{definition}{カップリング}{sem-coupling}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
   に対し，写像
-  $P_\X \colon \X \times \Y \to \X$, $P_\Y \colon \X \times \Y \to \Y$ を
-  $P_\X(x, y) \defeq x$, $P_\Y(x, y) \defeq y$ で定める．
-  $\alpha$ と $\beta$ の\textbf{カップリング}の集合を
+  \[
+    P_\X \colon \X \times \Y \to \X,\; (x, y) \mapsto x,
+    \qquad
+    P_\Y \colon \X \times \Y \to \Y,\; (x, y) \mapsto y
+  \]
+  を用いて，$\alpha$ と $\beta$ の\textbf{カップリング}の集合を
   \[
     \Couplings(\alpha, \beta) \defeq
     \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
