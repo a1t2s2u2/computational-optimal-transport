@@ -9,7 +9,7 @@
 
   距離は本章で次のように使う：
   \begin{enumerate}
-    \item[(i)] 距離から $\X, \Y$ の位相・ボレル $\sigma$-代数・可測関数を定める．
+    \item[(i)] 距離から $\X, \Y$ の開集合・ボレル $\sigma$-代数・可測関数を定める．
     \item[(ii)] Wasserstein 距離の輸送コスト
       $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
@@ -44,7 +44,7 @@
 \section{最適割当問題}
 \label{sec:sem-assignment}
 
-\begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
+\begin{definition}{最適割当問題}{sem-assignment}
   $n \in \N$，置換 $\sigma \in \Perm(n)$，
   および行列 $\mathbf{C} \in \R_+^{n \times n}$ に対して，
   \[
@@ -138,7 +138,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \section{Monge 問題}
 \label{sec:sem-monge}
 
-\begin{definition}{Monge 問題（Monge problem）}{sem-monge}
+\begin{definition}{Monge 問題}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
@@ -170,7 +170,7 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_
 \]
 と書ける．行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
 
-\begin{claim}{離散 Monge 問題（discrete Monge problem）}{sem-discrete-monge}
+\begin{claim}{離散 Monge 問題}{sem-discrete-monge}
   $\alpha, \beta$ を上記の表示の離散測度とする．
   台上の写像 $T \colon \{x_1, \ldots, x_n\} \to \Y$ に対する押し出しを
   $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$ と定め，
@@ -405,7 +405,7 @@ Monge 問題の実行可能集合
 
 \subsection{カップリング}
 
-\begin{definition}{カップリング（coupling）}{sem-coupling}
+\begin{definition}{カップリング}{sem-coupling}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
   に対して，$\X \times \Y$ 上の確率測度のうち周辺測度がそれぞれ
   $\alpha, \beta$ に一致するものの集合
@@ -502,7 +502,7 @@ $\R_+^{n \times m}$ の有界部分集合であるから，
 
 \subsection{Kantorovich 問題}
 
-\begin{definition}{Kantorovich 問題（Kantorovich problem）}{sem-kantorovich}
+\begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Kantorovich 問題}とは
