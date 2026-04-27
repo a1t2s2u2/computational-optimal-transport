@@ -445,28 +445,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は $n + m$ 本の等式制約で定まる
 $\R_+^{n \times m}$ の有界部分集合であるから，
 凸多面体（定義~\ref{def:sem-polytope}）をなす．
 
-\begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
-  例~\ref{ex:sem-monge-noexist} では
-  $\alpha = \delta_0$，$\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
-  に対して Monge 写像が存在しないことを見た．
-  Kantorovich の枠組みでこの問題を考えよう．
-
-  離散表現は $\mathbf{a} = (1)$，$\mathbf{b} = (1/2,\; 1/2)$ であり，
-  カップリング $\mathbf{P} \in \R_+^{1 \times 2}$ は
-  $\mathbf{P}\ones_2 = 1$，$\mathbf{P}^\top \ones_1 = \mathbf{b}$
-  を満たす必要がある．行が1つしかないため $P_{1,j} = b_j$ が強制され，
-  \[
-    \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
-  \]
-  が唯一のカップリングである．
-  コスト $c(x,y) = |x - y|$ から
-  $\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)$ であり，
-  \[
-    \inner{\mathbf{C}}{\mathbf{P}}
-    = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
-  \]
-\end{example}
-
 \paragraph{Monge 写像との対比．}
 \begin{figure}[htbp]
 \centering
@@ -527,6 +505,32 @@ $\int c \, \d\pi = \sum_{i,j} C_{i,j} P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$
 \]
 と書ける．
 これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の最適化問題である．
+
+\begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
+  例~\ref{ex:sem-monge-noexist} では
+  $\alpha = \delta_0$，$\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
+  に対して Monge 写像が存在しないことを見た．
+  Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の枠組みで考え直す．
+
+  離散表現は $\mathbf{a} = (1)$，$\mathbf{b} = (1/2,\; 1/2)$ であり，
+  カップリング $\mathbf{P} \in \R_+^{1 \times 2}$ は
+  $\mathbf{P}\ones_2 = 1$，$\mathbf{P}^\top \ones_1 = \mathbf{b}$
+  を満たす必要がある．行が1つしかないため $P_{1,j} = b_j$ が強制され，
+  \[
+    \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
+  \]
+  が唯一の実行可能カップリングである．
+  コスト $c(x,y) = |x - y|$ から
+  $\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)$ であり，
+  最適値は
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \inner{\mathbf{C}}{\mathbf{P}}
+    = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
+  \]
+  Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
+  実行可能解が存在し，最適値が定まる．
+\end{example}
 
 \subsection{離散版の解の存在}
 
