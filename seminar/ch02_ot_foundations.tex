@@ -424,62 +424,63 @@ Monge 問題の実行可能集合
   を $\alpha$ と $\beta$ の\textbf{カップリング}の集合という．
 \end{definition}
 
-$\alpha, \beta$ がともに離散測度の場合，
-カップリングは $\X \times \Y$ の有限グリッド $\{x_i\} \times \{y_j\}$ 上に集中する
-非負行列で特徴付けられる：
-
 \begin{claim}{離散カップリングの行列表示}{sem-discrete-coupling-form}
   $\alpha = \sum_{i=1}^n a_i \delta_{x_i}$，$\beta = \sum_{j=1}^m b_j \delta_{y_j}$ を
-  §\ref{sec:sem-monge}~冒頭で定めた標準形の離散測度とする．
-  カップリング $\pi \in \Couplings(\alpha, \beta)$ は，ある
-  $\mathbf{P} \in \R_+^{n \times m}$ により
-  \[
-    \pi = \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
-  \]
-  と一意に表される．対応 $\pi \leftrightarrow \mathbf{P}$ は
-  $\Couplings(\alpha, \beta)$ と
+  §\ref{sec:sem-monge}~冒頭で定めた標準形の離散測度とし，
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
     \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
     \mathbf{P} \ones_m = \mathbf{a},\;
     \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
   \]
-  との間の全単射を与える．
+  とおく．写像
+  \[
+    \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
+    \qquad
+    \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
+  \]
+  は全単射であり，逆写像は
+  $\Phi^{-1}(\pi) = (\pi(\{(x_i, y_j)\}))_{i,j}$ で与えられる．
 \end{claim}
 
 \begin{proof}
-  \textbf{(a) $\pi$ がグリッド上に集中する．}
-  $\alpha = \sum_i a_i \delta_{x_i}$ より
-  $\alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0$．
-  周辺条件 $(P_\X)\pushforward \pi = \alpha$ から
+  以下の3点を示す．
+
+  \textbf{(i) $\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)$.}
+  $\Phi(\mathbf{P})(\X \times \Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1$ より
+  $\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)$．
+  単点 $\{x_k\}$ について
   \[
-    \pi\bigl( (\X \setminus \{x_1, \ldots, x_n\}) \times \Y \bigr)
-    = \alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0.
+    \bigl((P_\X)\pushforward \Phi(\mathbf{P})\bigr)(\{x_k\})
+    = \Phi(\mathbf{P})(\{x_k\} \times \Y)
+    = \sum_{j=1}^m P_{k,j}
+    = a_k
+    = \alpha(\{x_k\}).
   \]
-  同様に $\pi\bigl( \X \times (\Y \setminus \{y_1, \ldots, y_m\}) \bigr) = 0$．
-  したがって $\pi$ は有限集合
-  $\{(x_i, y_j) \mid 1 \leq i \leq n,\; 1 \leq j \leq m\}$ 上に集中し，
+  $\alpha$ は $\X \setminus \{x_1, \ldots, x_n\}$ で零ゆえ，
+  両辺はすべての可測集合 $A \in \Bb(\X)$ で一致し
+  $(P_\X)\pushforward \Phi(\mathbf{P}) = \alpha$．同様に $\beta$ について．
+
+  \textbf{(ii) 単射性．}
+  $\Phi(\mathbf{P})(\{(x_k, y_l)\}) = P_{k,l}$ より
+  $\mathbf{P}$ は $\Phi(\mathbf{P})$ から一意に定まる．
+
+  \textbf{(iii) 全射性．}
+  $\pi \in \Couplings(\alpha, \beta)$ を任意にとる．
+  $\alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0$ と周辺条件
+  $(P_\X)\pushforward \pi = \alpha$ から
+  \[
+    \pi\bigl((\X \setminus \{x_1, \ldots, x_n\}) \times \Y\bigr)
+    = \alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0,
+  \]
+  同様に $\pi(\X \times (\Y \setminus \{y_1, \ldots, y_m\})) = 0$．
+  したがって $\pi$ は $\{(x_i, y_j)\}_{i, j}$ の補集合で零となり，
   $P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0$ とおけば
   $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
-
-  \textbf{(b) 周辺条件の翻訳．}
-  単点 $\{x_k\}$ について
-  \begin{align*}
-    a_k = \alpha(\{x_k\})
-    = \bigl((P_\X)\pushforward \pi\bigr)(\{x_k\})
-    &= \pi(\{x_k\} \times \Y) \\
-    &= \sum_{j=1}^m \pi(\{(x_k, y_j)\}) = \sum_{j=1}^m P_{k,j},
-  \end{align*}
-  すなわち $\mathbf{P}\ones_m = \mathbf{a}$．同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
-
-  \textbf{(c) 逆方向の対応．}
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ から
-  $\pi \defeq \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ と定めれば
-  $\pi(\X \times \Y) = \sum_{i,j} P_{i,j}
-  = \sum_i \sum_j P_{i,j} = \sum_i a_i = 1$ ゆえ
-  $\pi \in \Mm_+^1(\X \times \Y)$．
-  (b) の計算を逆にたどれば周辺は $\alpha, \beta$ となり，
-  対応は全単射．
+  単点 $\{x_k\}$ における周辺条件
+  $a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times \Y) = \sum_j P_{k,j}$
+  から $\mathbf{P}\ones_m = \mathbf{a}$．同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
+  ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$．
 \end{proof}
 
 \begin{claim}{離散カップリング集合は凸多面体}{sem-coupling-polytope}
