@@ -129,11 +129,16 @@
 \end{proof}
 
 \begin{definition}{完備性}{sem-complete-metric}
-  距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
+  距離空間 $(\Omega, d)$ における列 $(x_n)_{n \geq 1} \subset \Omega$ が
+  点 $x \in \Omega$ に\textbf{収束}するとは，
+  任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
+  $n \geq N \Longrightarrow d(x_n, x) < \varepsilon$ となることをいう．
+  $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
   $(\Omega, d)$ が\textbf{完備}であるとは，
-  $\Omega$ 上のすべての Cauchy 列が $\Omega$ の点に収束することをいう．
+  $\Omega$ における任意の Cauchy 列がある点 $x \in \Omega$ に
+  収束することをいう．
 \end{definition}
 
 \begin{definition}{Polish 空間}{sem-polish}
