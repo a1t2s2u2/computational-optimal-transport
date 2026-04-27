@@ -160,8 +160,8 @@ $c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
 
 $\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）の場合を考える．
 定義により，
-ある $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
-$\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$
+ある相異なる $x_1, \ldots, x_n \in \X$，相異なる $y_1, \ldots, y_m \in \Y$，
+$\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_{++}^m$
 （$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$）を用いて
 \[
   \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
@@ -176,7 +176,7 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) 
   $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$ と定め，
   \textbf{離散 Monge 問題}を
   \[
-    \min_{T}
+    \inf_{T}
     \left\{
     \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
     \;\middle|\;
@@ -184,10 +184,11 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) 
     T\pushforward \alpha = \beta
     \right\}
   \]
-  により定める．このとき離散 Monge 問題の最小値は連続版 Monge 問題
-  （定義~\ref{def:sem-monge}）の下限と一致する：
-  連続版の可測写像 $T \colon \X \to \Y$ から制限 $T|_{\{x_1, \ldots, x_n\}}$ により
-  離散版の写像が得られ，この対応の下で目的関数値・押し出し制約が保存される．
+  により定める（実行可能集合が空のときは下限を $+\infty$ と約束する）．
+  このとき離散 Monge 問題と連続版 Monge 問題（定義~\ref{def:sem-monge}）の
+  下限は一致する：連続版の可測写像 $T \colon \X \to \Y$ から制限
+  $T|_{\{x_1, \ldots, x_n\}}$ により離散版の写像が得られ，
+  この対応の下で目的関数値・押し出し制約が保存される．
   逆に離散版の任意の写像はある可測写像の制限として得られる．
 \end{claim}
 
