@@ -334,6 +334,57 @@
   \]
 \end{proof}
 
+\begin{definition}{離散測度（discrete measure）}{sem-discrete-measure}
+  Polish 空間 $\X$ 上のボレル確率測度 $\mu \in \Mm_+^1(\X)$ が
+  \textbf{離散測度}であるとは，台 $\supp(\mu)$ が有限集合であることをいう．
+\end{definition}
+
+\begin{claim}{離散測度の標準形}{sem-discrete-measure-form}
+  $\X$ 上のボレル確率測度 $\mu \in \Mm_+^1(\X)$ について以下は同値．
+  \begin{enumerate}
+    \item[(i)] $\mu$ は離散測度（定義~\ref{def:sem-discrete-measure}）．
+    \item[(ii)] ある $n \in \N$，相異なる $x_1, \ldots, x_n \in \X$，
+      $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$
+      （各 $a_i > 0$，$\sum_{i=1}^n a_i = 1$）が存在して
+      \[
+        \mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}.
+      \]
+  \end{enumerate}
+  さらに (ii) の表示において $\supp(\mu) = \{x_1, \ldots, x_n\}$，
+  $a_i = \mu(\{x_i\})$ が成り立つ．
+\end{claim}
+
+\begin{proof}
+  \textbf{(ii) $\Rightarrow$ (i)．}
+  Polish 空間は Hausdorff なので有限集合 $\{x_1, \ldots, x_n\}$ は閉．
+  $y \notin \{x_1, \ldots, x_n\}$ なら十分小さい $r > 0$ で
+  $B_r(y) \cap \{x_1, \ldots, x_n\} = \emptyset$，
+  すなわち $\mu(B_r(y)) = 0$．よって $y \notin \supp(\mu)$．
+  一方，任意の $r > 0$ で $\mu(B_r(x_i)) \geq a_i > 0$ ゆえ $x_i \in \supp(\mu)$．
+  したがって $\supp(\mu) = \{x_1, \ldots, x_n\}$ は有限集合．
+
+  \textbf{(i) $\Rightarrow$ (ii)．}
+  $\supp(\mu) = \{x_1, \ldots, x_n\}$（相異なる $n$ 点）とおき，
+  $a_i \defeq \mu(\{x_i\})$ とする．
+  $\X \setminus \supp(\mu)$ の各点 $y$ はある開球 $B_{r_y}(y)$ で $\mu(B_{r_y}(y)) = 0$ をみたす．
+  Polish 空間は第二可算ゆえ $\X \setminus \supp(\mu)$ はそのような開球の可算和で覆え，
+  測度の劣加法性から $\mu(\X \setminus \supp(\mu)) = 0$．したがって
+  \[
+    1 = \mu(\X) = \mu(\supp(\mu)) = \sum_{i=1}^n a_i.
+  \]
+  任意の $A \in \Bb(\X)$ に対し
+  \[
+    \mu(A) = \mu(A \cap \supp(\mu))
+    = \sum_{i:\, x_i \in A} a_i
+    = \sum_{i=1}^n a_i\, \delta_{x_i}(A)
+  \]
+  ゆえ $\mu = \sum_{i=1}^n a_i\, \delta_{x_i}$．
+  $a_i > 0$ については，$x_i$ 以外の台点は $x_i$ から正の距離にあるから
+  十分小さい $r > 0$ で $B_r(x_i) \cap \supp(\mu) = \{x_i\}$，
+  すなわち $B_r(x_i) \setminus \{x_i\} \subset \X \setminus \supp(\mu)$ は $\mu$-零．
+  ゆえに $\mu(B_r(x_i)) = a_i$．$x_i \in \supp(\mu)$ より $a_i > 0$．
+\end{proof}
+
 \begin{definition}{押し出し（push-forward）}{sem-pushforward}
   可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を

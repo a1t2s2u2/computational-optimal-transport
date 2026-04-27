@@ -158,17 +158,17 @@ $c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
 写像 $T \colon \X \to \Y$ は $x$ にある質量を $T(x)$ へ送ることを意味し，
 目的関数 $\int_\X c(x, T(x)) \, \d\alpha(x)$ はその輸送の総コストを表す．
 
-離散測度の場合，すなわち，
-$x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
-$\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$ を用いて
+$\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）の場合を考える．
+標準形（主張~\ref{clm:sem-discrete-measure-form}）により，
+ある $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
+$\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$
+（各成分は正，$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$）を用いて
 \[
   \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
   \qquad
   \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
 \]
-と書ける場合を考える．$\alpha, \beta$ が確率測度であることから
-$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$ をみたす．
-行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
+と書ける．行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
 このとき Monge 問題の目的関数は
 \begin{align*}
   \int_\X c(x, T(x)) \, \d\alpha(x)
