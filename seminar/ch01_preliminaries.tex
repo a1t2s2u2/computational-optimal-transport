@@ -102,23 +102,6 @@
   $(\Omega, \mathcal{O})$ は\textbf{可分}であるという．
 \end{definition}
 
-\begin{definition}{第二可算}{sem-second-countable}
-  位相空間 $(\Omega, \mathcal{O})$ が\textbf{第二可算}であるとは，
-  可算な開集合族 $\mathcal{N} = \{U_k\}_{k \geq 1} \subset \mathcal{O}$ が存在して，
-  任意の開集合 $U \in \mathcal{O}$ がある部分族
-  $\mathcal{N}' \subset \mathcal{N}$ の和集合
-  $U = \bigcup_{V \in \mathcal{N}'} V$ として書けることをいう．
-  この $\mathcal{N}$ を\textbf{可算開基}という．
-\end{definition}
-
-\begin{definition}{Lindelöf 性}{sem-lindelof}
-  位相空間 $(\Omega, \mathcal{O})$ が\textbf{Lindelöf 空間}であるとは，
-  $\Omega$ の任意の開部分集合 $U$ の任意の開被覆
-  $\{V_\lambda\}_{\lambda \in \Lambda}$
-  （$U \subset \bigcup_\lambda V_\lambda$，各 $V_\lambda \in \mathcal{O}$）が
-  可算な部分被覆を持つことをいう．
-\end{definition}
-
 %% ============================================================
 %% 距離空間
 %% ============================================================
@@ -211,35 +194,6 @@
   $(\Omega, d)$ が\textbf{完備}であるとは，
   $\Omega$ 上のすべての Cauchy 列が $\Omega$ の点に収束することをいう．
 \end{definition}
-
-\begin{claim}{可分距離空間は第二可算かつ Lindelöf}{sem-separable-second-countable-lindelof}
-  距離空間 $(\Omega, d)$ が距離位相について可分（定義~\ref{def:sem-separable}）であれば，
-  第二可算（定義~\ref{def:sem-second-countable}）であり，かつ
-  Lindelöf（定義~\ref{def:sem-lindelof}）である．
-\end{claim}
-
-\begin{proof}
-  \textbf{第二可算性．}
-  $D = \{q_k\}_{k \geq 1} \subset \Omega$ を可算稠密部分集合とし，
-  $\mathcal{N} \defeq \{B_{1/n}(q_k) \mid k \geq 1,\, n \geq 1\}$ とおく．
-  $\mathcal{N}$ は可算族．任意の開集合 $U$ と $x \in U$ に対し
-  $B_r(x) \subset U$ をみたす $r > 0$ がとれる．
-  $2/n < r$ なる $n \in \N$ と，稠密性から $d(q_k, x) < 1/n$ なる $q_k \in D$ をとると，
-  $x \in B_{1/n}(q_k)$ かつ，$z \in B_{1/n}(q_k)$ について
-  $d(z, x) \leq d(z, q_k) + d(q_k, x) < 2/n < r$ ゆえ
-  $B_{1/n}(q_k) \subset B_r(x) \subset U$．
-  したがって $U$ は $\mathcal{N}$ の部分族の和集合として書ける．
-
-  \textbf{Lindelöf 性．}
-  $\mathcal{N} = \{U_k\}_{k \geq 1}$ を可算開基，$U$ を開集合，
-  $\{V_\lambda\}_{\lambda \in \Lambda}$ を $U$ の開被覆とする．
-  各 $x \in U$ に対し $x \in V_{\lambda(x)}$ なる $\lambda(x)$ をひとつ選ぶと，
-  $V_{\lambda(x)}$ は開ゆえある $k(x) \geq 1$ で $x \in U_{k(x)} \subset V_{\lambda(x)}$．
-  $K \defeq \{k(x) \mid x \in U\} \subset \N$ は可算．
-  各 $k \in K$ に対し $U_k \subset V_{\lambda_k}$ なる $\lambda_k \in \Lambda$ をひとつ選ぶと，
-  $\bigcup_{k \in K} V_{\lambda_k} \supset \bigcup_{k \in K} U_k \supset U$
-  ゆえ $\{V_{\lambda_k}\}_{k \in K}$ は可算部分被覆．
-\end{proof}
 
 \begin{definition}{Polish 空間}{sem-polish}
   完備かつ可分な距離空間を\textbf{Polish 空間}という．
@@ -575,10 +529,7 @@
 %% ============================================================
 %% 凸解析
 %% ============================================================
-\section{凸解析}
-\label{sec:sem-convex-analysis}
-
-\subsection{凸結合と凸集合}
+\section{凸集合と凸多面体}
 \label{sec:sem-convex}
 
 \begin{definition}{凸集合}{sem-convex}
