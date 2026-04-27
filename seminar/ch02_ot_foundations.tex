@@ -140,8 +140,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 
 \begin{definition}{Monge 問題（Monge problem）}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
-  可測関数 $c \colon \X \times \Y \to \R_+$
-  （$c(x, y)$ は $x$ から $y$ への\textbf{輸送コスト}）に対して，
+  可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
   \[
     \inf_{T}
@@ -155,37 +154,100 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
   を求める問題である．
 \end{definition}
 
-離散測度の場合を考える．すなわち
+$c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
+写像 $T \colon \X \to \Y$ は $x$ にある質量を $T(x)$ へ送ることを意味し，
+目的関数 $\int_\X c(x, T(x)) \, \d\alpha(x)$ はその輸送の総コストを表す．
+
+$\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）の場合を考える．
+定義により，
+ある相異なる $x_1, \ldots, x_n \in \X$，相異なる $y_1, \ldots, y_m \in \Y$，
+$\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_{++}^m$
+（$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$）を用いて
 \[
   \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
   \qquad
   \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
 \]
-とし，ここで $x_1, \ldots, x_n \in \X$ は砂山の位置，$y_1, \ldots, y_m \in \Y$ は行き先の位置，
-$\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$
-はそれぞれ各砂山の質量・各行き先で積み上げる量を表す
-（$\alpha, \beta$ が確率測度であることから $\sum_i a_i = \sum_j b_j = 1$）．
-行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
-このとき Monge 問題の目的関数は
-\begin{align*}
-  \int_\X c(x, T(x)) \, \d\alpha(x)
-  &= \int_\X c(x, T(x)) \, \d\!\Bigl(\textstyle\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)(x)
-    && \text{（$\alpha$ を代入）} \\
-  &= \sum_{i=1}^{n} a_i \int_\X c(x, T(x)) \, \d\delta_{x_i}(x)
-    && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
-  &= \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
-    && \text{（Dirac 積分 $\int f\, \d\delta_{x_i} = f(x_i)$）}
-\end{align*}
-と書き換えられる．したがって\textbf{離散 Monge 問題}は
-\[
-  \min_{T}
-  \left\{
-  \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
-  \;\middle|\;
-  T\pushforward \alpha = \beta
-  \right\}
-\]
-と書ける．
+と書ける．行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
+
+\begin{claim}{離散 Monge 問題（discrete Monge problem）}{sem-discrete-monge}
+  $\alpha, \beta$ を上記の表示の離散測度とする．
+  台上の写像 $T \colon \{x_1, \ldots, x_n\} \to \Y$ に対する押し出しを
+  $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$ と定め，
+  \textbf{離散 Monge 問題}を
+  \[
+    \inf_{T}
+    \left\{
+    \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
+    \;\middle|\;
+    T \colon \{x_1, \ldots, x_n\} \to \Y, \;
+    T\pushforward \alpha = \beta
+    \right\}
+  \]
+  により定める（実行可能集合が空のときは下限を $+\infty$ と約束する）．
+  このとき離散 Monge 問題と連続版 Monge 問題（定義~\ref{def:sem-monge}）の
+  下限は一致する：連続版の可測写像 $T \colon \X \to \Y$ から制限
+  $T|_{\{x_1, \ldots, x_n\}}$ により離散版の写像が得られ，
+  この対応の下で目的関数値・押し出し制約が保存される．
+  逆に離散版の任意の写像はある可測写像の制限として得られる．
+\end{claim}
+
+\begin{proof}
+  目的関数 (a) と押し出し制約 (b) が $T$ の台上の値 $T(x_1), \ldots, T(x_n)$
+  のみに依存することを示し，さらに台上の任意の値の組
+  $(y_1, \ldots, y_n) \in \Y^n$ がある可測写像 $\widetilde T \colon \X \to \Y$ の
+  台上の値として実現されること (c) を示す．
+
+  \textbf{(a) 目的関数の書き換え．}
+  $\alpha = \sum_i a_i\, \delta_{x_i}$ を代入し，
+  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）を順に適用すると
+  \begin{align*}
+    \int_\X c(x, T(x)) \, \d\alpha(x)
+    &= \int_\X c(x, T(x)) \, \d\!\Bigl(\textstyle\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)(x)
+      && \text{（$\alpha$ の表示）} \\
+    &= \sum_{i=1}^{n} a_i \int_\X c(x, T(x)) \, \d\delta_{x_i}(x)
+      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
+    &= \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
+      && \text{（主張~\ref{clm:sem-dirac-integral}）}.
+  \end{align*}
+
+  \textbf{(b) 押し出し制約の書き換え．}
+  離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward} (ii)）より
+  \[
+    T\pushforward \alpha
+    = T\pushforward \Bigl(\sum_{i=1}^n a_i\, \delta_{x_i}\Bigr)
+    = \sum_{i=1}^n a_i\, \delta_{T(x_i)}
+  \]
+  であり，等式 $T\pushforward \alpha = \beta$ もまた台上の値のみに依存する．
+
+  以上 (a)(b) より制限写像 $T \mapsto T|_{\{x_1, \ldots, x_n\}}$ は，
+  連続版の実行可能写像を離散版の実行可能写像に目的関数値を保存して写す．
+  残るはこの制限写像が全射であること，
+  すなわち台上の任意の値の組が可測写像から実現されることである．
+
+  \textbf{(c) 可測延長の存在．}
+  任意の値の組 $(y_1, \ldots, y_n) \in \Y^n$ に対し，
+  $y_\ast \in \Y$ を一つ任意に固定して
+  \[
+    \widetilde T(x) \defeq
+    \begin{cases}
+      y_i & (x = x_i,\; i = 1, \ldots, n), \\
+      y_\ast & (x \notin \{x_1, \ldots, x_n\})
+    \end{cases}
+  \]
+  と定める．$\X$ は Polish ゆえ Hausdorff
+  （注釈~\ref{rem:sem-ch2-setup}, 主張~\ref{clm:sem-metric-hausdorff}）であり，
+  単点集合 $\{x_i\}$ は閉集合，したがって $\Bb(\X)$ に属する．
+  $\widetilde T$ の値域は有限集合 $V \defeq \{y_\ast, y_1, \ldots, y_n\}$ であり，
+  各 $y \in V$ に対し $\widetilde T^{-1}(\{y\})$ は
+  $\{x_i \mid y_i = y\} \in \Bb(\X)$ あるいはそれと
+  $\X \setminus \{x_1, \ldots, x_n\} \in \Bb(\X)$ との和集合に一致するから，
+  ともにボレル集合．任意の $B \in \Bb(\Y)$ に対し
+  $\widetilde T^{-1}(B) = \bigcup_{y \in B \cap V} \widetilde T^{-1}(\{y\})$
+  はボレル集合の有限和ゆえボレル．
+  したがって $\widetilde T$ は可測で $\widetilde T(x_i) = y_i$ をみたす．
+\end{proof}
 
 \paragraph{最適割当問題への帰着．}
 特に $n = m$ かつ $a_i = b_j = 1/n$（すべての砂山・行き先の質量が等しい）とする．
@@ -259,7 +321,7 @@ Monge 問題の実行可能集合
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-は一般に\textbf{凸でない}（凸集合の定義は定義~\ref{def:sem-convex}）．
+は一般に\textbf{凸でない}．
 
 \begin{example}{実行可能集合の非凸性}{sem-nonconvex}
   $\alpha = \beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$ とし，
