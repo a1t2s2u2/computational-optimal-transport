@@ -13,7 +13,8 @@
     \item[(ii)] Wasserstein 距離の輸送コスト
       $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
   \end{enumerate}
-  離散版では確率測度の台 $S \defeq \{x_1, \ldots, x_n\} \subset \X$ が
+  離散版では離散測度の表示に現れる点集合
+  $S \defeq \{x_1, \ldots, x_n\} \subset \X$ が
   有限集合となる．$S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
   自動で Polish 空間になる：
   \begin{itemize}
@@ -172,7 +173,7 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_
 
 \begin{claim}{離散 Monge 問題}{sem-discrete-monge}
   $\alpha, \beta$ を上記の表示の離散測度とする．
-  台上の写像 $T \colon \{x_1, \ldots, x_n\} \to \Y$ に対する押し出しを
+  $\{x_1, \ldots, x_n\}$ 上の写像 $T \colon \{x_1, \ldots, x_n\} \to \Y$ に対する押し出しを
   $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$ と定め，
   \textbf{離散 Monge 問題}を
   \[
@@ -193,10 +194,10 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_
 \end{claim}
 
 \begin{proof}
-  目的関数 (a) と押し出し制約 (b) が $T$ の台上の値 $T(x_1), \ldots, T(x_n)$
-  のみに依存することを示し，さらに台上の任意の値の組
+  目的関数 (a) と押し出し制約 (b) が $T$ の値 $T(x_1), \ldots, T(x_n)$
+  のみに依存することを示し，さらに任意の値の組
   $(y_1, \ldots, y_n) \in \Y^n$ がある可測写像 $\widetilde T \colon \X \to \Y$ の
-  台上の値として実現されること (c) を示す．
+  $x_1, \ldots, x_n$ における値として実現されること (c) を示す．
 
   \textbf{(a) 目的関数の書き換え．}
   $\alpha = \sum_i a_i\, \delta_{x_i}$ を代入し，
@@ -219,12 +220,14 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_
     = T\pushforward \Bigl(\sum_{i=1}^n a_i\, \delta_{x_i}\Bigr)
     = \sum_{i=1}^n a_i\, \delta_{T(x_i)}
   \]
-  であり，等式 $T\pushforward \alpha = \beta$ もまた台上の値のみに依存する．
+  であり，等式 $T\pushforward \alpha = \beta$ もまた
+  $T(x_1), \ldots, T(x_n)$ のみに依存する．
 
   以上 (a)(b) より制限写像 $T \mapsto T|_{\{x_1, \ldots, x_n\}}$ は，
   連続版の実行可能写像を離散版の実行可能写像に目的関数値を保存して写す．
   残るはこの制限写像が全射であること，
-  すなわち台上の任意の値の組が可測写像から実現されることである．
+  すなわち $x_1, \ldots, x_n$ における任意の値の組が
+  可測写像から実現されることである．
 
   \textbf{(c) 可測延長の存在．}
   任意の値の組 $(y_1, \ldots, y_n) \in \Y^n$ に対し，
@@ -267,7 +270,7 @@ $T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[scale=1.0]
-  % --- X（土台）と α ---
+  % --- $\X$ と $\alpha$ ---
   \begin{scope}
     \draw[thick] (-0.3, 0) -- (3.3, 0);
     \node[below] at (1.5, -0.4) {$\X$};
@@ -285,7 +288,7 @@ $T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に
   \draw[->, very thick, gray!80] (3.5, 1.0) -- (6.3, 1.0)
     node[midway, above, font=\small] {$T$};
 
-  % --- Y（土台）と β ---
+  % --- $\Y$ と $\beta$ ---
   \begin{scope}[xshift=6.5cm]
     \draw[thick] (-0.3, 0) -- (3.3, 0);
     \node[below] at (1.5, -0.4) {$\Y$};
