@@ -527,3 +527,61 @@ $\int c \, \d\pi = \sum_{i,j} C_{i,j} P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$
 \]
 と書ける．
 これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の最適化問題である．
+
+\subsection{離散版の解の存在}
+
+離散 Kantorovich 問題の実行可能集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
+凸多面体（定義~\ref{def:sem-polytope}）をなす．
+有界閉集合上の連続関数は最小値を達成するから，最適解が存在する．
+
+\begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
+  任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
+  （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
+  離散 Kantorovich 問題は最適解
+  $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ をもつ：
+  \[
+    \mathbf{P}^* \in \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}},
+    \qquad
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) = \inner{\mathbf{C}}{\mathbf{P}^*}.
+  \]
+\end{claim}
+
+\begin{proof}
+  以下の3点を示せばよい：
+  (i) $\CouplingsD(\mathbf{a}, \mathbf{b}) \neq \emptyset$，
+  (ii) $\CouplingsD(\mathbf{a}, \mathbf{b}) \subset \R^{n \times m}$ はコンパクト，
+  (iii) 目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は連続．
+
+  \textbf{(i) 非空性．}
+  積測度に相当する $\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top$，すなわち
+  $(P_0)_{i,j} = a_i b_j$ をとると，
+  $(\mathbf{P}_0 \ones_m)_i = a_i \sum_j b_j = a_i$，
+  $(\mathbf{P}_0^\top \ones_n)_j = b_j \sum_i a_i = b_j$
+  ゆえ $\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+
+  \textbf{(ii) コンパクト性．}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式
+  $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top \ones_n = \mathbf{b}$
+  と非負性 $\mathbf{P} \geq 0$ で定まる $\R^{n \times m}$ の閉集合．
+  さらに各成分は $0 \leq P_{i,j} \leq \min(a_i, b_j) \leq 1$ をみたすから有界．
+  $\R^{n \times m}$ における有界閉集合はコンパクト．
+
+  \textbf{(iii) 連続性．}
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}$
+  は線形写像であり，有限次元線形空間上で連続．
+
+  $\R^{n \times m}$ 上の連続関数は空でないコンパクト集合上で最小値を達成する
+  （Weierstrass の最大値の定理）．したがって最適解 $\mathbf{P}^*$ が存在する．
+\end{proof}
+
+\begin{remark}{最適解の一意性は一般に成り立たない}{sem-discrete-nonunique}
+  Claim~\ref{clm:sem-uniqueness} で見たとおり，
+  $\mathbf{C}$ がすべて等しい等の縮退状況では，
+  最適値を達成する $\mathbf{P}^*$ は一意ではない．
+  実際，目的関数は線形であり実行可能集合は凸多面体であるから，
+  最適解の集合は $\CouplingsD(\mathbf{a}, \mathbf{b})$ の面の1つをなす．
+\end{remark}
+
+連続版（Polish 空間設定）の解の存在は Prokhorov の定理と
+コスト関数の下半連続性を用いて示される．これは別途章を改めて扱う．
