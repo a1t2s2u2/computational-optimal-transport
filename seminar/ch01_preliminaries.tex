@@ -112,6 +112,70 @@
   $\Omega$ が可算な稠密部分集合を持つとき，$\Omega$ は\textbf{可分}であるという．
 \end{definition}
 
+\begin{definition}{Hausdorff 性（Hausdorff property）}{sem-hausdorff}
+  距離空間 $(\Omega, d)$ が\textbf{Hausdorff 空間}であるとは，
+  相異なる任意の 2 点 $x, y \in \Omega$ に対し，
+  $B_r(x) \cap B_r(y) = \emptyset$ をみたす $r > 0$ が存在することをいう．
+\end{definition}
+
+\begin{claim}{距離空間は Hausdorff}{sem-metric-hausdorff}
+  任意の距離空間は Hausdorff である．
+  特に単点集合 $\{x\}$ および有限集合 $\{x_1, \ldots, x_n\}$ は閉集合．
+\end{claim}
+
+\begin{proof}
+  相異なる $x, y \in \Omega$ に対し $r \defeq d(x, y)/2 > 0$ とおく．
+  $z \in B_r(x) \cap B_r(y)$ ならば三角不等式より
+  $d(x, y) \leq d(x, z) + d(z, y) < 2r = d(x, y)$ となり矛盾．
+  ゆえに $B_r(x) \cap B_r(y) = \emptyset$．
+
+  単点 $\{x\}$ の閉性：任意の $y \neq x$ に対し
+  $r' \defeq d(x, y)/2 > 0$ で $B_{r'}(y) \cap \{x\} = \emptyset$
+  ゆえ $\Omega \setminus \{x\}$ は開集合，すなわち $\{x\}$ は閉集合．
+  有限集合は閉集合の有限和ゆえ閉．
+\end{proof}
+
+\begin{definition}{第二可算（second-countable）}{sem-second-countable}
+  距離空間 $(\Omega, d)$ が\textbf{第二可算}であるとは，
+  可算な開集合族 $\mathcal{N} = \{U_k\}_{k \geq 1}$ が存在して，
+  $\Omega$ の任意の開集合 $U$ がある部分族 $\mathcal{N}' \subset \mathcal{N}$ の和集合
+  $U = \bigcup_{V \in \mathcal{N}'} V$ として書けることをいう．
+  この $\mathcal{N}$ を\textbf{可算開基（countable base）}という．
+\end{definition}
+
+\begin{definition}{Lindelöf 性（Lindel\"of property）}{sem-lindelof}
+  距離空間 $(\Omega, d)$ が\textbf{Lindelöf 空間}であるとは，
+  $\Omega$ の任意の開部分集合 $U$ の任意の開被覆 $\{V_\lambda\}_{\lambda \in \Lambda}$
+  （$U \subset \bigcup_\lambda V_\lambda$）が可算な部分被覆を持つことをいう．
+\end{definition}
+
+\begin{claim}{可分距離空間は第二可算かつ Lindelöf}{sem-separable-second-countable-lindelof}
+  可分距離空間 $(\Omega, d)$ は第二可算であり，かつ Lindelöf である．
+\end{claim}
+
+\begin{proof}
+  \textbf{第二可算性．}
+  $D = \{q_k\}_{k \geq 1} \subset \Omega$ を可算稠密部分集合とし，
+  $\mathcal{N} \defeq \{B_{1/n}(q_k) \mid k \geq 1,\, n \geq 1\}$ とおく．
+  $\mathcal{N}$ は可算族．任意の開集合 $U$ と $x \in U$ に対し
+  $B_r(x) \subset U$ をみたす $r > 0$ がとれる．
+  $2/n < r$ なる $n \in \N$ と，稠密性から $d(q_k, x) < 1/n$ なる $q_k \in D$ をとると，
+  $x \in B_{1/n}(q_k)$ かつ，$z \in B_{1/n}(q_k)$ について
+  $d(z, x) \leq d(z, q_k) + d(q_k, x) < 2/n < r$ ゆえ
+  $B_{1/n}(q_k) \subset B_r(x) \subset U$．
+  したがって $U$ は $\mathcal{N}$ の部分族の和集合として書ける．
+
+  \textbf{Lindelöf 性．}
+  $\mathcal{N} = \{U_k\}_{k \geq 1}$ を可算開基，$U$ を開集合，
+  $\{V_\lambda\}_{\lambda \in \Lambda}$ を $U$ の開被覆とする．
+  各 $x \in U$ に対し $x \in V_{\lambda(x)}$ なる $\lambda(x)$ をひとつ選ぶと，
+  $V_{\lambda(x)}$ は開ゆえある $k(x) \geq 1$ で $x \in U_{k(x)} \subset V_{\lambda(x)}$．
+  $K \defeq \{k(x) \mid x \in U\} \subset \N$ は可算．
+  各 $k \in K$ に対し $U_k \subset V_{\lambda_k}$ なる $\lambda_k \in \Lambda$ をひとつ選ぶと，
+  $\bigcup_{k \in K} V_{\lambda_k} \supset \bigcup_{k \in K} U_k \supset U$
+  ゆえ $\{V_{\lambda_k}\}_{k \in K}$ は可算部分被覆．
+\end{proof}
+
 \begin{definition}{Polish 空間（Polish space）}{sem-polish}
   完備かつ可分な距離空間を\textbf{Polish 空間}という．
   例：$\R^d$ はユークリッド距離に関して Polish 空間である
@@ -356,7 +420,8 @@
 
 \begin{proof}
   \textbf{(ii) $\Rightarrow$ (i)．}
-  Polish 空間は Hausdorff なので有限集合 $\{x_1, \ldots, x_n\}$ は閉．
+  有限集合 $\{x_1, \ldots, x_n\}$ は閉集合
+  （主張~\ref{clm:sem-metric-hausdorff}）．
   $y \notin \{x_1, \ldots, x_n\}$ なら十分小さい $r > 0$ で
   $B_r(y) \cap \{x_1, \ldots, x_n\} = \emptyset$，
   すなわち $\mu(B_r(y)) = 0$．よって $y \notin \supp(\mu)$．
@@ -366,9 +431,13 @@
   \textbf{(i) $\Rightarrow$ (ii)．}
   $\supp(\mu) = \{x_1, \ldots, x_n\}$（相異なる $n$ 点）とおき，
   $a_i \defeq \mu(\{x_i\})$ とする．
-  $\X \setminus \supp(\mu)$ の各点 $y$ はある開球 $B_{r_y}(y)$ で $\mu(B_{r_y}(y)) = 0$ をみたす．
-  Polish 空間は第二可算ゆえ $\X \setminus \supp(\mu)$ はそのような開球の可算和で覆え，
-  測度の劣加法性から $\mu(\X \setminus \supp(\mu)) = 0$．したがって
+  $\X \setminus \supp(\mu)$ の各点 $y$ はある開球 $B_{r_y}(y)$ で $\mu(B_{r_y}(y)) = 0$ をみたし，
+  これらは $\X \setminus \supp(\mu)$ の開被覆をなす．
+  Polish 空間は可分なので Lindelöf
+  （主張~\ref{clm:sem-separable-second-countable-lindelof}）であり，
+  可算部分被覆 $\{B_{r_{y_k}}(y_k)\}_{k \geq 1}$ が取れる．
+  測度の劣加法性から
+  $\mu(\X \setminus \supp(\mu)) \leq \sum_k \mu(B_{r_{y_k}}(y_k)) = 0$．したがって
   \[
     1 = \mu(\X) = \mu(\supp(\mu)) = \sum_{i=1}^n a_i.
   \]
