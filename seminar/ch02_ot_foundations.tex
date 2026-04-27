@@ -159,7 +159,7 @@ $c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
 目的関数 $\int_\X c(x, T(x)) \, \d\alpha(x)$ はその輸送の総コストを表す．
 
 $\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）の場合を考える．
-標準形（主張~\ref{clm:sem-discrete-measure-form}）により，
+定義により，
 ある $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
 $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_+^m$
 （$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$）を用いて
@@ -179,50 +179,26 @@ $\mathbf{a} = (a_1, \ldots, a_n) \in \R_+^n$，$\mathbf{b} = (b_1, \ldots, b_m) 
   &= \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
     && \text{（Dirac 積分 $\int f\, \d\delta_{x_i} = f(x_i)$）}
 \end{align*}
-と書き換えられる．したがって\textbf{離散 Monge 問題}は
+と書き換えられる．これと押し出し制約
+$T\pushforward \alpha = \sum_{i=1}^n a_i\, \delta_{T(x_i)} = \beta$
+（命題~\ref{prop:sem-dirac-pushforward} (ii)）はいずれも
+$T$ の台 $\{x_1, \ldots, x_n\}$ 上の値 $T(x_1), \ldots, T(x_n) \in \Y$ にしか依存しない．
+逆に任意の値の組 $(y_1, \ldots, y_n) \in \Y^n$ は，$y_\ast \in \Y$ を一つ固定して
+台上で $y_i$，補集合上で $y_\ast$ をとる単純関数を作れば
+（Polish $\Rightarrow$ Hausdorff より各 $\{x_i\} \in \Bb(\X)$ ゆえボレル可測）
+ボレル可測写像 $\X \to \Y$ に持ち上がる．
+したがって一般 Monge 問題における可測写像 $T \colon \X \to \Y$ の選択は
+$T \colon \{x_1, \ldots, x_n\} \to \Y$ の選択と等価で，\textbf{離散 Monge 問題}は
 \[
   \min_{T}
   \left\{
   \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
   \;\middle|\;
-  T \colon \X \to \Y \text{ は可測}, \;
+  T \colon \{x_1, \ldots, x_n\} \to \Y, \;
   T\pushforward \alpha = \beta
   \right\}
 \]
-と書ける．目的関数および押し出し制約は $T$ の台 $\{x_1, \ldots, x_n\}$ 上の値
-$T(x_1), \ldots, T(x_n) \in \Y$ にしか依存しないが，
-定義~\ref{def:sem-monge} から継承される可測性条件は，
-注釈~\ref{rem:sem-ch2-setup} の Polish 性と同様，離散の場合は自動成立する．
-
-\begin{claim}{離散始域上の値割当の可測延長}{sem-discrete-measurable-extension}
-  Polish 空間 $\X, \Y$ と相異なる $x_1, \ldots, x_n \in \X$ を固定する．
-  任意の値の組 $(y_1, \ldots, y_n) \in \Y^n$ に対し，
-  $T(x_i) = y_i$ ($i = 1, \ldots, n$) をみたす可測写像 $T \colon \X \to \Y$ が存在する．
-\end{claim}
-
-\begin{proof}
-  $y_\ast \in \Y$ を一つ任意に固定し，
-  \[
-    T(x) \defeq
-    \begin{cases}
-      y_i & (x = x_i,\; i = 1, \ldots, n), \\
-      y_\ast & (x \notin \{x_1, \ldots, x_n\})
-    \end{cases}
-  \]
-  と定める．Polish 空間は Hausdorff ゆえ各 $\{x_i\}$ は閉集合，
-  したがって $\Bb(\X)$ に属する．
-  $T$ の値域は有限集合 $V \defeq \{y_\ast, y_1, \ldots, y_n\}$ であり，
-  各 $y \in V$ に対し $T^{-1}(\{y\})$ は
-  $\{x_1, \ldots, x_n\}$ の部分集合（有限点集合）または
-  それと $\X \setminus \{x_1, \ldots, x_n\}$ との和集合に一致するから，
-  いずれもボレル集合．任意の $B \in \Bb(\Y)$ に対し
-  $T^{-1}(B) = \bigcup_{y \in B \cap V} T^{-1}(\{y\})$
-  はボレル集合の有限和ゆえボレル．したがって $T$ は可測．
-\end{proof}
-
-特に離散 Monge 問題において $T$ に課された可測性条件は，
-$T(x_1), \ldots, T(x_n) \in \Y$ をどう選んでも常に満たすことができ，
-実行可能領域は実質的に押し出し制約 $T\pushforward \alpha = \beta$ のみで定まる．
+と書ける（ここで $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$）．
 
 \paragraph{最適割当問題への帰着．}
 特に $n = m$ かつ $a_i = b_j = 1/n$（すべての砂山・行き先の質量が等しい）とする．
