@@ -140,8 +140,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 
 \begin{definition}{Monge 問題（Monge problem）}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
-  可測関数 $c \colon \X \times \Y \to \R_+$
-  （$c(x, y)$ は $x$ から $y$ への\textbf{輸送コスト}）に対して，
+  可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
   \[
     \inf_{T}
@@ -154,6 +153,10 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
   \]
   を求める問題である．
 \end{definition}
+
+$c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
+写像 $T \colon \X \to \Y$ は $x$ にある質量を $T(x)$ へ送ることを意味し，
+目的関数 $\int_\X c(x, T(x)) \, \d\alpha(x)$ はその輸送の総コストを表す．
 
 離散測度の場合を考える．すなわち
 \[
