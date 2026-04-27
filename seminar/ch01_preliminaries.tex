@@ -1,65 +1,6 @@
 \chapter{準備}
 \label{ch:seminar-00}
 
-\begin{definition}{有限集合と濃度}{sem-finite}
-  集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
-  全単射 $f \colon \range{n} \to S$ が存在することをいう．
-  この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
-\end{definition}
-
-\begin{claim}{有限集合の最小元}{sem-finite-min}
-  $\R$ の空でない有限部分集合 $S$（定義~\ref{def:sem-finite}）には
-  最小元が存在する：
-  \[
-    \exists\, s^* \in S \;\;\text{s.t.}\;\; \forall\, s \in S,\; s^* \leq s.
-  \]
-\end{claim}
-
-\begin{proof}
-  $|S|$ に関する帰納法で示す．
-
-  \textbf{$|S| = 1$ の時．} $S$ の唯一の元がそのまま最小元．
-
-  \textbf{$|S| \geq 2$ の時．}
-  $\R$ の任意の空でない有限部分集合 $T$ について $|T| < |S|$ ならば最小元を持つと仮定する．
-  $a \in S$ を任意に取り $S' \defeq S \setminus \{a\}$ とおくと $|S'| = |S| - 1$ なので，
-  仮定が $S'$ に対して適用でき最小元 $b \in S'$ を持つ．
-  $a, b \in \R$ より $b \leq a$ か $a < b$ のいずれかが成り立つので，
-  \[
-    s^* \defeq
-    \begin{cases}
-      b & (b \leq a), \\
-      a & (a < b)
-    \end{cases}
-  \]
-  とおけば $s^* \in S$ かつ任意の $s \in S$ について $s^* \leq s$．
-\end{proof}
-
-%% ============================================================
-%% 線形代数
-%% ============================================================
-\section{線形代数}
-\label{sec:sem-linalg}
-
-\begin{definition}{置換}{sem-permutation}
-  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}全体の集合を
-  \[
-    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
-  \]
-  と定める．$|\Perm(n)| = n!$ である．
-\end{definition}
-
-\begin{definition}{フロベニウス内積}{sem-frobenius-inner}
-  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
-  \textbf{フロベニウス内積}を
-  \[
-    \inner{\mathbf{A}}{\mathbf{B}}
-    \defeq \tr(\mathbf{A}^\top \mathbf{B})
-    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
-  \]
-  で定める．
-\end{definition}
-
 %% ============================================================
 %% 位相空間
 %% ============================================================
@@ -529,8 +470,61 @@
 %% ============================================================
 %% 凸解析
 %% ============================================================
-\section{凸集合と凸多面体}
-\label{sec:sem-convex}
+\section{線形代数}
+\label{sec:sem-linalg}
+
+\begin{definition}{有限集合と濃度}{sem-finite}
+  集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
+  全単射 $f \colon \range{n} \to S$ が存在することをいう．
+  この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
+\end{definition}
+
+\begin{claim}{有限集合の最小元}{sem-finite-min}
+  $\R$ の空でない有限部分集合 $S$（定義~\ref{def:sem-finite}）には
+  最小元が存在する：
+  \[
+    \exists\, s^* \in S \;\;\text{s.t.}\;\; \forall\, s \in S,\; s^* \leq s.
+  \]
+\end{claim}
+
+\begin{proof}
+  $|S|$ に関する帰納法で示す．
+
+  \textbf{$|S| = 1$ の時．} $S$ の唯一の元がそのまま最小元．
+
+  \textbf{$|S| \geq 2$ の時．}
+  $\R$ の任意の空でない有限部分集合 $T$ について $|T| < |S|$ ならば最小元を持つと仮定する．
+  $a \in S$ を任意に取り $S' \defeq S \setminus \{a\}$ とおくと $|S'| = |S| - 1$ なので，
+  仮定が $S'$ に対して適用でき最小元 $b \in S'$ を持つ．
+  $a, b \in \R$ より $b \leq a$ か $a < b$ のいずれかが成り立つので，
+  \[
+    s^* \defeq
+    \begin{cases}
+      b & (b \leq a), \\
+      a & (a < b)
+    \end{cases}
+  \]
+  とおけば $s^* \in S$ かつ任意の $s \in S$ について $s^* \leq s$．
+\end{proof}
+
+\begin{definition}{置換}{sem-permutation}
+  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}全体の集合を
+  \[
+    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
+  \]
+  と定める．$|\Perm(n)| = n!$ である．
+\end{definition}
+
+\begin{definition}{フロベニウス内積}{sem-frobenius-inner}
+  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
+  \textbf{フロベニウス内積}を
+  \[
+    \inner{\mathbf{A}}{\mathbf{B}}
+    \defeq \tr(\mathbf{A}^\top \mathbf{B})
+    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
+  \]
+  で定める．
+\end{definition}
 
 \begin{definition}{凸集合}{sem-convex}
   ベクトル空間 $V$ の部分集合 $S \subset V$ が\textbf{凸}であるとは，
