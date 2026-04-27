@@ -349,14 +349,14 @@ $\theta > 0$ ならコストは厳密に減少する．
   \item \textbf{微分不可能性}：最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ は
     $\mathbf{a}, \mathbf{b}$ について区分線形にしかならず，
     自動微分による勾配最適化に組み込めない．
-  \item \textbf{標本バイアス}：経験測度 $\hat{\alpha}_n, \hat{\beta}_n$ から計算した
-    $\MKD_{\mathbf{C}}(\hat{\mathbf{a}}, \hat{\mathbf{b}})$ は，
+  \item \textbf{標本バイアス}：母集団からの有限サンプルに基づいて
+    $\MKD_{\mathbf{C}}$ を推定すると，
     高次元では母集団値への収束が指数的に遅い（次元の呪い）．
 \end{itemize}
 
 これらの困難はすべて，目的関数に \textbf{エントロピー} を加えて
 \textbf{正則化}することで同時に解消される：
-\textbf{Sinkhorn アルゴリズム}（次章）は計算が GPU 並列で軽く，
-正則化された最適値は marginals に関して滑らか（微分可能）であり，
-さらに統計的安定化（次々章）の理論的基礎も提供する．
+正則化された最適輸送（\textbf{Sinkhorn アルゴリズム}）は
+計算が GPU 並列で軽く，最適値は marginals に関して滑らか（微分可能）であり，
+さらに統計的安定化の理論的基礎も提供する．
 これが本セミナーの主軸である．
