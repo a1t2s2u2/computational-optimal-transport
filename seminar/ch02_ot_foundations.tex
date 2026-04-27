@@ -464,13 +464,16 @@ Monge 問題の実行可能集合
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
-  \textbf{Kantorovich 問題}とは
+  $\alpha, \beta$ のカップリング
+  $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）に
+  わたって積分 $\int_{\X \times \Y} c(x, y) \, \d\pi(x, y)$ を
+  最小化する問題
   \[
     \MK_c(\alpha, \beta) \defeq
     \inf_{\pi \in \Couplings(\alpha, \beta)}
     \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
   \]
-  を求める問題である．
+  を\textbf{Kantorovich 問題}という．
 \end{definition}
 
 \subsection{離散版}
