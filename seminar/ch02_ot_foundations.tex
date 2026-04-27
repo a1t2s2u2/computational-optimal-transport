@@ -424,69 +424,118 @@ Monge 問題の実行可能集合
   を $\alpha$ と $\beta$ の\textbf{カップリング}の集合という．
 \end{definition}
 
-離散測度
-$\alpha = \sum_i a_i \delta_{x_i}$，
-$\beta = \sum_j b_j \delta_{y_j}$
-の場合，カップリングは
-$\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$
-の形をとる．
-周辺条件 $(P_\X)\pushforward \pi = \alpha$ は
-$\sum_j P_{i,j} = a_i$，すなわち $\mathbf{P}\ones_m = \mathbf{a}$ に帰着し，
-$(P_\Y)\pushforward \pi = \beta$ は $\mathbf{P}^\top \ones_n = \mathbf{b}$ に帰着する．
-したがって\textbf{離散カップリング}の集合は
-\[
-  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
-  \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
-  \mathbf{P} \ones_m = \mathbf{a}, \;
-  \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
-\]
-で与えられる．
-$P_{i,j}$ は「輸送元のビン $i$ から輸送先のビン $j$ へ送られる質量」を表す．
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ は $n + m$ 本の等式制約で定まる
-$\R_+^{n \times m}$ の有界部分集合であるから，
-凸多面体（定義~\ref{def:sem-polytope}）をなす．
+$\alpha, \beta$ がともに離散測度の場合，
+カップリングは $\X \times \Y$ の有限グリッド $\{x_i\} \times \{y_j\}$ 上に集中する
+非負行列で特徴付けられる：
 
-\begin{figure}[htbp]
+\begin{claim}{離散カップリングの行列表示}{sem-discrete-coupling-form}
+  $\alpha = \sum_{i=1}^n a_i \delta_{x_i}$，$\beta = \sum_{j=1}^m b_j \delta_{y_j}$ を
+  §\ref{sec:sem-monge}~冒頭で定めた標準形の離散測度とする．
+  カップリング $\pi \in \Couplings(\alpha, \beta)$ は，ある
+  $\mathbf{P} \in \R_+^{n \times m}$ により
+  \[
+    \pi = \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
+  \]
+  と一意に表される．対応 $\pi \leftrightarrow \mathbf{P}$ は
+  $\Couplings(\alpha, \beta)$ と
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
+    \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
+    \mathbf{P} \ones_m = \mathbf{a},\;
+    \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
+  \]
+  との間の全単射を与える．
+\end{claim}
+
+\begin{proof}
+  \textbf{(a) $\pi$ がグリッド上に集中する．}
+  $\alpha = \sum_i a_i \delta_{x_i}$ より
+  $\alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0$．
+  周辺条件 $(P_\X)\pushforward \pi = \alpha$ から
+  \[
+    \pi\bigl( (\X \setminus \{x_1, \ldots, x_n\}) \times \Y \bigr)
+    = \alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0.
+  \]
+  同様に $\pi\bigl( \X \times (\Y \setminus \{y_1, \ldots, y_m\}) \bigr) = 0$．
+  したがって $\pi$ は有限集合
+  $\{(x_i, y_j) \mid 1 \leq i \leq n,\; 1 \leq j \leq m\}$ 上に集中し，
+  $P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0$ とおけば
+  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
+
+  \textbf{(b) 周辺条件の翻訳．}
+  単点 $\{x_k\}$ について
+  \begin{align*}
+    a_k = \alpha(\{x_k\})
+    = \bigl((P_\X)\pushforward \pi\bigr)(\{x_k\})
+    &= \pi(\{x_k\} \times \Y) \\
+    &= \sum_{j=1}^m \pi(\{(x_k, y_j)\}) = \sum_{j=1}^m P_{k,j},
+  \end{align*}
+  すなわち $\mathbf{P}\ones_m = \mathbf{a}$．同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
+
+  \textbf{(c) 逆方向の対応．}
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ から
+  $\pi \defeq \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ と定めれば
+  $\pi(\X \times \Y) = \sum_{i,j} P_{i,j}
+  = \sum_i \sum_j P_{i,j} = \sum_i a_i = 1$ ゆえ
+  $\pi \in \Mm_+^1(\X \times \Y)$．
+  (b) の計算を逆にたどれば周辺は $\alpha, \beta$ となり，
+  対応は全単射．
+\end{proof}
+
+\begin{claim}{離散カップリング集合は凸多面体}{sem-coupling-polytope}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体（定義~\ref{def:sem-polytope}）をなす．
+\end{claim}
+
+\begin{proof}
+  $\mathbf{P} \in \R^{n \times m}$ を列方向に並べたベクトル
+  $\mathbf{p} \in \R^{nm}$ を考えると，
+  周辺条件 $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$
+  はある行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ と
+  $\mathbf{r} \defeq [\mathbf{a}^\top, \mathbf{b}^\top]^\top \in \R^{n+m}$ を用いて
+  $\mathbf{A}\mathbf{p} = \mathbf{r}$ と書ける（具体的構成は
+  §\ref{sec:sem-lp-standard}）．したがって
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b})
+    \;\cong\;
+    \{\mathbf{p} \in \R^{nm} \mid
+      \mathbf{A}\mathbf{p} = \mathbf{r},\; \mathbf{p} \geq \mathbf{0}\}
+  \]
+  であり，これは凸多面体の定義~\ref{def:sem-polytope}の形である．
+\end{proof}
+
+\begin{figure}[H]
 \centering
-\begin{tikzpicture}[scale=1.0,
-    cell/.style={draw, minimum size=1cm, font=\small, anchor=center},
-    bara/.style={draw, fill=blue!25, minimum height=1cm, anchor=east, font=\small},
-    barb/.style={draw, fill=red!25, minimum width=1cm, anchor=south, font=\small}]
-  % --- 行列 P （3x3） ---
-  \def\Pa{0.20} \def\Pb{0.05} \def\Pc{0.05}
-  \def\Pd{0.15} \def\Pe{0.15} \def\Pf{0.10}
-  \def\Pg{0.05} \def\Ph{0.10} \def\Pi{0.15}
-  \node[cell, fill=purple!50] (P11) at (0, 0) {0.20};
-  \node[cell, fill=purple!15] (P12) at (1, 0) {0.05};
-  \node[cell, fill=purple!15] (P13) at (2, 0) {0.05};
-  \node[cell, fill=purple!40] (P21) at (0, -1) {0.15};
-  \node[cell, fill=purple!40] (P22) at (1, -1) {0.15};
-  \node[cell, fill=purple!25] (P23) at (2, -1) {0.10};
-  \node[cell, fill=purple!15] (P31) at (0, -2) {0.05};
-  \node[cell, fill=purple!25] (P32) at (1, -2) {0.10};
-  \node[cell, fill=purple!40] (P33) at (2, -2) {0.15};
+\begin{tikzpicture}[scale=1.0]
+  % ---- 上ヘッダー: b_j = sum_i P_{i,j} = value（3 行に折りたたみ） ----
+  \node[font=\footnotesize, anchor=south, align=center] at (1.5, 0.15)
+    {$b_1$ \\[1pt] $= \textstyle\sum_i P_{i,1}$ \\[1pt] $= 0.4$};
+  \node[font=\footnotesize, anchor=south, align=center] at (3.0, 0.15)
+    {$b_2$ \\[1pt] $= \textstyle\sum_i P_{i,2}$ \\[1pt] $= 0.3$};
+  \node[font=\footnotesize, anchor=south, align=center] at (4.5, 0.15)
+    {$b_3$ \\[1pt] $= \textstyle\sum_i P_{i,3}$ \\[1pt] $= 0.3$};
 
-  % --- 行和（右）= a_i ---
-  \node[bara, minimum width=0.9cm] (a1) at (3.5, 0) {$a_1=0.3$};
-  \node[bara, minimum width=1.2cm] (a2) at (3.5, -1) {$a_2=0.4$};
-  \node[bara, minimum width=0.9cm] (a3) at (3.5, -2) {$a_3=0.3$};
-  \node[font=\small] at (3.5, 0.9) {$\mathbf{a}$};
+  % ---- 左ヘッダー: a_i = sum_j P_{i,j} = value（1 行） ----
+  \node[font=\small, anchor=east] at (0.6, -1.5) {$a_1 = \sum_j P_{1,j} = 0.3$};
+  \node[font=\small, anchor=east] at (0.6, -3.0) {$a_2 = \sum_j P_{2,j} = 0.4$};
+  \node[font=\small, anchor=east] at (0.6, -4.5) {$a_3 = \sum_j P_{3,j} = 0.3$};
 
-  % --- 列和（上）= b_j ---
-  \node[barb, minimum height=1.2cm] (b1) at (0, 1.1) {$b_1=0.4$};
-  \node[barb, minimum height=0.9cm] (b2) at (1, 1.1) {$b_2=0.3$};
-  \node[barb, minimum height=0.9cm] (b3) at (2, 1.1) {$b_3=0.3$};
-  \node[font=\small] at (-1.1, 1.5) {$\mathbf{b}$};
+  % ---- 行列 P （3x3） ----
+  \foreach \i/\j/\v/\op in {%
+    1/1/0.20/60, 1/2/0.05/15, 1/3/0.05/15,%
+    2/1/0.15/45, 2/2/0.15/45, 2/3/0.10/30,%
+    3/1/0.05/15, 3/2/0.10/30, 3/3/0.15/45}{%
+    \fill[purple!\op] (1.5*\j - 0.75, -1.5*\i + 0.75)
+                      rectangle (1.5*\j + 0.75, -1.5*\i - 0.75);
+    \draw (1.5*\j - 0.75, -1.5*\i + 0.75)
+          rectangle (1.5*\j + 0.75, -1.5*\i - 0.75);
+    \node[font=\small] at (1.5*\j, -1.5*\i) {$\v$};
+  }
 
-  % --- 矢印で行和・列和を示す ---
-  \draw[->, gray] (P11.east)  -- ++(0.2, 0);
-  \draw[->, gray] (P12.north) -- ++(0, 0.1);
-  \node[font=\small\itshape] at (-1.2, -1) {行列 $\mathbf{P}$};
+  % ---- P ラベル ----
+  \node[font=\small\bfseries] at (5.7, -3.0) {$\mathbf{P}$};
 \end{tikzpicture}
 \caption{離散カップリング $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の構造．
-中央が $\mathbf{P}$，色の濃さが値の大きさを表す．
-$\mathbf{P}$ の行和は周辺ヒストグラム $\mathbf{a}$ に，
-列和は $\mathbf{b}$ に一致する．}
+中央の $3 \times 3$ 行列が $\mathbf{P}$（色の濃さが値 $P_{i,j}$ の大きさを表す）．}
 \label{fig:sem-coupling-matrix}
 \end{figure}
 
@@ -540,16 +589,49 @@ $\mathbf{P}$ の行和は周辺ヒストグラム $\mathbf{a}$ に，
   を求める問題である．
 \end{definition}
 
-離散カップリング $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ の場合，
-$\int c \, \d\pi = \sum_{i,j} C_{i,j} P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$
-となるから，\textbf{離散 Kantorovich 問題}は
-\[
-  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) \defeq
-  \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-  \inner{\mathbf{C}}{\mathbf{P}}
-\]
-と書ける．
-これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の最適化問題である．
+離散測度の場合，Kantorovich 問題は離散カップリング行列上の
+有限次元線形計画に帰着する：
+
+\begin{claim}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
+  $\alpha, \beta$ を§\ref{sec:sem-monge}~冒頭の標準形の離散測度，
+  $C_{i,j} \defeq c(x_i, y_j)$ とおく．
+  Claim~\ref{clm:sem-discrete-coupling-form} の対応で
+  $\pi \in \Couplings(\alpha, \beta)$ と
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ を結ぶと
+  \[
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y) = \inner{\mathbf{C}}{\mathbf{P}}
+  \]
+  が成り立ち，連続版 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の
+  下限は\textbf{離散 Kantorovich 問題}
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    \defeq
+    \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+  \]
+  に等しい：$\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$．
+\end{claim}
+
+\begin{proof}
+  Claim~\ref{clm:sem-discrete-coupling-form} より
+  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
+  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
+  \begin{align*}
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
+    &= \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
+      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
+    &= \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+      && \text{（主張~\ref{clm:sem-dirac-integral}）} \\
+    &= \sum_{i,j} C_{i,j} P_{i,j}
+      = \inner{\mathbf{C}}{\mathbf{P}}.
+  \end{align*}
+  Claim~\ref{clm:sem-discrete-coupling-form} の全単射対応により
+  $\pi \in \Couplings(\alpha, \beta)$ にわたる下限と
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ にわたる下限は等しい．
+\end{proof}
+
+これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画である．
 
 \begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
   例~\ref{ex:sem-monge-noexist} では
@@ -580,20 +662,19 @@ $\int c \, \d\pi = \sum_{i,j} C_{i,j} P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$
 \subsection{離散版の解の存在}
 
 離散 Kantorovich 問題の実行可能集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
-凸多面体（定義~\ref{def:sem-polytope}）をなす．
-有界閉集合上の連続関数は最小値を達成するから，最適解が存在する．
+凸多面体（主張~\ref{clm:sem-coupling-polytope}）をなす．
+有界閉集合上の連続関数は最小値を達成するから，下限は最小値となり最適解が存在する．
 
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
   任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
   （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
-  離散 Kantorovich 問題は最適解
-  $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ をもつ：
+  離散 Kantorovich 問題の下限は最小値として達成される：
   \[
-    \mathbf{P}^* \in \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}},
-    \qquad
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) = \inner{\mathbf{C}}{\mathbf{P}^*}.
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+    = \inner{\mathbf{C}}{\mathbf{P}^*}
   \]
+  をみたす $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ が存在する．
 \end{claim}
 
 \begin{proof}
