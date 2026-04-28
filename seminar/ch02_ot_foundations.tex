@@ -43,10 +43,11 @@
       任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
       $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ が成り立つことをいう．
       $(\X, d)$ が完備とは，任意の Cauchy 列 $(x_n) \subset \X$ に対し
-      ある $x \in \X$ が存在して
-      $\lim_{n \to \infty} d(x_n, x) = 0$ が成立すること
+      ある $x \in \X$ が存在して，
+      任意の $\varepsilon > 0$ に対しある $N \in \N$ が存在して
+      $n \geq N \Longrightarrow d(x_n, x) < \varepsilon$ となること
+      （すなわち $x_n \to x$）をいう
       （定義~\ref{def:sem-complete-metric}）．
-      すなわち $\X$ 内の任意の Cauchy 列の極限が $\X$ 内に存在する．
     \item \textbf{可分性}．可算な稠密部分集合
       $D = \{q_k\}_{k \geq 1} \subset \X$ が存在する
       （定義~\ref{def:sem-separable}, \ref{def:sem-dense}）．
