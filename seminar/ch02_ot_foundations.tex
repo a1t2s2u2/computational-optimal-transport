@@ -332,39 +332,16 @@ Monge 問題の実行可能集合
 \subsubsection{困難2：解の非存在}
 
 \begin{example}{Monge 写像が存在しない場合}{sem-monge-noexist}
-  $\X = \Y = \R$ とし，
-  \[
-    \alpha = \delta_0,
-    \qquad
-    \beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1
-  \]
-  を考える（$\alpha$ は点 $0$ に質量 $1$ を集中させた Dirac 測度，
-  $\beta$ は点 $-1$ と $1$ に質量 $\tfrac{1}{2}$ ずつ分散させた離散測度）．
-  この $\alpha, \beta$ に対して $\mathcal{T}(\alpha, \beta) = \emptyset$，
-  すなわち押し出し制約をみたす可測写像が存在しないことを示す．
-
-  任意の可測写像 $T \colon \R \to \R$ に対し
+  $\alpha = \delta_0$（質量 $1$ が 1 点 $0$ に集中）と
+  $\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$（2 点に質量 $\tfrac{1}{2}$ ずつ分散）
+  を考える．任意の可測写像 $T \colon \R \to \R$ について
   命題~\ref{prop:sem-dirac-pushforward} (i) より
   \[
-    T\pushforward \alpha = T\pushforward \delta_0 = \delta_{T(0)}
+    T\pushforward \alpha = \delta_{T(0)}
   \]
-  となる．これは点 $T(0) \in \R$ に質量 $1$ を集中させた Dirac 測度．
-
-  押し出し制約 $T\pushforward \alpha = \beta$ が成立するためには
-  $\delta_{T(0)} = \beta$ が必要．これを単点集合 $\{-1\}$ の上で
-  測度として評価すると，
-  \[
-    \delta_{T(0)}(\{-1\}) =
-    \begin{cases}
-      1 & (T(0) = -1) \\
-      0 & (T(0) \neq -1)
-    \end{cases},
-    \qquad
-    \beta(\{-1\}) = \tfrac{1}{2}.
-  \]
-  どんな $T(0) \in \R$ を選んでも左辺は $\{0, 1\}$ のいずれかにしかならず，
-  右辺の $\tfrac{1}{2}$ と一致しない．
-  したがって押し出し制約を満たす $T$ は存在せず，
+  であり，これは 1 点に質量 $1$ が集中した Dirac 測度．
+  分散している $\beta$ と一致しえないので，
+  $T\pushforward \alpha = \beta$ をみたす $T$ は存在せず
   $\mathcal{T}(\alpha, \beta) = \emptyset$（下図）．
 
   \begin{center}
