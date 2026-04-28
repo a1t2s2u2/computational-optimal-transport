@@ -9,3 +9,7 @@
 ## tex コーディング規約
 - Cuturi の論文構成と記法に従うこと
 - コミット時 / PR時 には co-authored-by や ClaudeCode は記載しない
+
+## ブランチ戦略
+発表日 `feat/MMDD` ブランチを作成し、`main` にマージする運用とする。
+適宜 `feat/MMDD` からブランチを切って、作業すること。
