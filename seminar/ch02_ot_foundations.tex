@@ -6,25 +6,30 @@
   定義~\ref{def:sem-polish}）とする．距離関数を $d$ と書き，
   ボレル $\sigma$-代数 $\Bb(\X)$ により $\X$ を可測空間 $(\X, \Bb(\X))$ として扱う
   （$\Y$ についても同様）．$\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．
+  写像 $T \colon \X \to \Y$ が\textbf{可測}とは
+  任意の $B \in \Bb(\Y)$ に対し $T^{-1}(B) \in \Bb(\X)$ が成立することをいう
+  （定義~\ref{def:sem-measurable-map}）．
 
   Polish 空間の3要素を確認する：
   \begin{itemize}
     \item \textbf{距離空間}．距離関数
       $d \colon \X \times \X \to [0, \infty)$ が
       同一性・対称性・三角不等式（定義~\ref{def:sem-metric-space}）を満たす．
-      開球を
-      \[
-        B_r(x) \defeq \{y \in \X \mid d(x, y) < r\}
-      \]
-      で定める（定義~\ref{def:sem-open-ball}）．
-      $U \subset \X$ が\textbf{開集合}とは，
-      任意の $x \in U$ に対し $B_r(x) \subset U$ をみたす $r > 0$ が
-      とれることをいう．$\X$ のすべての開集合を含む最小の $\sigma$-代数を
-      \textbf{ボレル $\sigma$-代数} $\Bb(\X)$ という
-      （定義~\ref{def:sem-borel}）．
-      写像 $T \colon \X \to \Y$ が\textbf{可測}とは，
-      任意の $B \in \Bb(\Y)$ に対し $T^{-1}(B) \in \Bb(\X)$ が
-      成立することをいう（定義~\ref{def:sem-measurable-map}）．
+      $d$ から以下が順次定まる：
+      \begin{align*}
+        B_r(x)
+          &\defeq \{y \in \X \mid d(x, y) < r\}
+          && \text{（開球，定義~\ref{def:sem-open-ball}）} \\
+        \mathcal{O}_d
+          &\defeq \{U \subset \X \mid \forall x \in U,\,
+            \exists r > 0,\, B_r(x) \subset U\}
+          && \text{（開集合の全体）} \\
+        \Bb(\X)
+          &\defeq \sigma(\mathcal{O}_d)
+          && \text{（ボレル } \sigma\text{-代数，定義~\ref{def:sem-borel}）}
+      \end{align*}
+      ここで $\sigma(\mathcal{O}_d)$ は $\mathcal{O}_d$ を含む最小の
+      $\sigma$-代数を表す．
     \item \textbf{完備性}．任意の Cauchy 列
       $(x_n)_{n \geq 1} \subset \X$ に対し，
       ある $x \in \X$ が存在して
