@@ -44,6 +44,64 @@
   $(\Omega, \mathcal{O})$ は\textbf{可分}であるという．
 \end{definition}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% --- 上段：1次元の例 (Q ⊂ R) ---
+  \draw[thick, ->] (-0.2, 1.8) -- (8.2, 1.8);
+  \node[right, font=\small] at (8.2, 1.8) {$\Omega = \R$};
+
+  %% 可算稠密点 D = Q（散在する青点）
+  \foreach \x in {0.25, 0.7, 1.15, 1.55, 1.95, 2.35, 2.65, 3.05,
+                  3.5, 3.85, 4.2, 4.6, 4.95, 5.3, 5.65, 6.0,
+                  6.35, 6.75, 7.15, 7.6} {
+    \fill[blue] (\x, 1.8) circle (1.3pt);
+  }
+  \node[blue, font=\small, below right] at (-0.2, 1.5) {$D$（可算稠密集合）};
+
+  %% 任意の点 x と開近傍 U
+  \fill[red] (4.4, 1.8) circle (2pt);
+  \node[red, font=\small, above] at (4.4, 1.95) {$x$};
+  \draw[red, thick] (3.85, 1.65) -- (3.85, 2.15)
+                    (4.95, 1.65) -- (4.95, 2.15);
+  \draw[red, thick, decorate, decoration={brace, amplitude=4pt}]
+    (4.95, 2.25) -- (3.85, 2.25)
+    node[midway, above, font=\small] {$U \ni x$ ：任意の開近傍};
+
+  %% U に入る D の点を強調
+  \draw[->, thick, blue!50!green]
+    (4.6, 1.0) node[below, font=\small] {$D \cap U \neq \emptyset$}
+    -- (4.6, 1.65);
+
+  %% --- 下段：2次元の例 ---
+  \begin{scope}[yshift=-2.0cm]
+    \draw[thick] (0, 0) rectangle (3.5, 1.5);
+    \node[right, font=\small] at (3.5, 1.5) {$\Omega = \R^2$};
+
+    %% 格子状の可算稠密点 (Q^2 のサンプル)
+    \foreach \i in {0,...,6} {
+      \foreach \j in {0,...,3} {
+        \pgfmathsetmacro{\xx}{0.25 + \i*0.5 + 0.05*rand}
+        \pgfmathsetmacro{\yy}{0.2 + \j*0.4 + 0.05*rand}
+        \fill[blue] (\xx, \yy) circle (1pt);
+      }
+    }
+
+    %% 任意の点 x と開近傍 U（円）
+    \fill[red] (1.8, 0.8) circle (1.5pt);
+    \node[red, font=\small, above right] at (1.85, 0.8) {$x$};
+    \draw[red, thick] (1.8, 0.8) circle (0.35);
+    \node[red, font=\small, anchor=west] at (2.3, 0.5) {$U$};
+  \end{scope}
+\end{tikzpicture}
+\caption{稠密集合・可分性のイメージ．
+青点 $D \subset \Omega$ が稠密とは「任意の空でない開集合 $U$ に対し
+$D \cap U \neq \emptyset$」をみたすこと．
+$D$ が可算ならば $\Omega$ は\textbf{可分}．
+代表例：$\Q \subset \R$（上段），$\Q^2 \subset \R^2$（下段）．}
+\label{fig:sem-dense-separable}
+\end{figure}
+
 %% ============================================================
 %% 距離空間
 %% ============================================================
