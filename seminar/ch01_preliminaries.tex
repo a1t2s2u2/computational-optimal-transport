@@ -78,64 +78,6 @@
   で定める．
 \end{definition}
 
-\begin{claim}{距離空間は位相空間（距離位相）}{sem-metric-induces-topology}
-  距離空間 $(\Omega, d)$ に対し，
-  \[
-    \mathcal{O}_d \defeq
-    \{U \subset \Omega \mid
-      \forall x \in U,\, \exists r > 0,\, B_r(x) \subset U\}
-  \]
-  は $\Omega$ 上の位相（定義~\ref{def:sem-topological-space}）である．
-  $(\Omega, \mathcal{O}_d)$ を $(\Omega, d)$ から定まる
-  \textbf{距離位相空間}という．
-  さらに $D \subset \Omega$ について，
-  $D$ が $(\Omega, \mathcal{O}_d)$ で稠密であること
-  （定義~\ref{def:sem-dense}）と，
-  「任意の $x \in \Omega$ と $\varepsilon > 0$ に対し
-  $d(x, y) < \varepsilon$ をみたす $y \in D$ が存在する」ことは同値．
-\end{claim}
-
-\begin{proof}
-  \textbf{位相の3条件．}
-  (i) $\emptyset \in \mathcal{O}_d$ は条件が空に成立．
-  $\Omega \in \mathcal{O}_d$ も任意の $r > 0$ で $B_r(x) \subset \Omega$ が
-  成り立つことから従う．
-  (ii) $U_1, \ldots, U_n \in \mathcal{O}_d$ と $x \in \bigcap_k U_k$ に対し，
-  各 $k$ で $B_{r_k}(x) \subset U_k$ なる $r_k > 0$ がとれ，
-  $r \defeq \min_k r_k > 0$ とおけば $B_r(x) \subset \bigcap_k U_k$．
-  (iii) $\{U_\lambda\} \subset \mathcal{O}_d$ と
-  $x \in \bigcup_\lambda U_\lambda$ に対し，
-  ある $\lambda_0$ で $x \in U_{\lambda_0}$，
-  $B_r(x) \subset U_{\lambda_0} \subset \bigcup_\lambda U_\lambda$
-  なる $r > 0$ がとれる．
-
-  \textbf{稠密性の同値．}
-  ($\Rightarrow$) 任意の $x \in \Omega$ と $\varepsilon > 0$ に対し
-  $B_\varepsilon(x) \in \mathcal{O}_d$ かつ非空ゆえ
-  $D \cap B_\varepsilon(x) \neq \emptyset$．
-  ($\Leftarrow$) 任意の空でない $U \in \mathcal{O}_d$ と $x \in U$ に対し，
-  ある $r > 0$ で $B_r(x) \subset U$ がとれ，仮定より
-  $D \cap B_r(x) \neq \emptyset$，ゆえに $D \cap U \neq \emptyset$．
-\end{proof}
-
-\begin{claim}{距離空間は Hausdorff}{sem-metric-hausdorff}
-  距離空間 $(\Omega, d)$ から定まる距離位相空間 $(\Omega, \mathcal{O}_d)$ は
-  Hausdorff（定義~\ref{def:sem-hausdorff}）である．
-  特に単点集合 $\{x\}$ および有限集合 $\{x_1, \ldots, x_n\}$ は閉集合．
-\end{claim}
-
-\begin{proof}
-  相異なる $x, y \in \Omega$ に対し $r \defeq d(x, y)/2 > 0$ とおく．
-  $z \in B_r(x) \cap B_r(y)$ ならば三角不等式より
-  $d(x, y) \leq d(x, z) + d(z, y) < 2r = d(x, y)$ となり矛盾．
-  ゆえに $B_r(x) \cap B_r(y) = \emptyset$．
-  $B_r(x), B_r(y) \in \mathcal{O}_d$ ゆえ Hausdorff．
-
-  単点 $\{x\}$ の閉性：任意の $y \neq x$ に対し
-  $r' \defeq d(x, y)/2 > 0$ で $B_{r'}(y) \cap \{x\} = \emptyset$
-  ゆえ $\Omega \setminus \{x\}$ は開集合，すなわち $\{x\}$ は閉集合．
-  有限集合は閉集合の有限和ゆえ閉．
-\end{proof}
 
 \begin{definition}{収束列}{sem-convergence}
   距離空間 $(\Omega, d)$ における列 $(x_n)_{n \geq 1} \subset \Omega$ が
