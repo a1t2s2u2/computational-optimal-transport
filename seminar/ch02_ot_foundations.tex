@@ -312,10 +312,12 @@ Monge 問題の実行可能集合
   同様に
   \begin{align*}
     {T_2}\pushforward \alpha
+    &= {T_2}\pushforward \bigl(\tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}\bigr)
+      && \text{（$\alpha$ の定義）} \\
     &= \tfrac{1}{2}\delta_{T_2(-1)} + \tfrac{1}{2}\delta_{T_2(1)}
-    = \tfrac{1}{2}\delta_{1} + \tfrac{1}{2}\delta_{-1}
-    = \beta
-    && \text{（$T_2(x) = -x$ より）}.
+      && \text{（命題~\ref{prop:sem-dirac-pushforward} (ii)）} \\
+    &= \tfrac{1}{2}\delta_{1} + \tfrac{1}{2}\delta_{-1} = \beta
+      && \text{（$T_2(x) = -x$ より $T_2(-1) = 1,\, T_2(1) = -1$）}.
   \end{align*}
   よって $T_1, T_2 \in \mathcal{T}(\alpha, \beta)$ である．
 
