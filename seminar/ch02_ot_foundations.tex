@@ -53,18 +53,14 @@
         n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
       \]
     \item \textbf{可分性}．
-      $D \subset \X$ が\textbf{稠密}であるとは，任意の $x \in \X$ と
-      任意の $\varepsilon > 0$ に対しある $q \in D$ が存在して
-      $d(x, q) < \varepsilon$ となることをいう
-      （定義~\ref{def:sem-dense}；距離空間における同値表現）．
-      $(\X, d)$ が可分とは，可算な稠密部分集合 $D \subset \X$ が
+      $D \subset \X$ が\textbf{稠密}であるとは閉包が全空間となること
+      $\overline{D} = \X$ をいう（定義~\ref{def:sem-closure}, \ref{def:sem-dense}）．
+      距離空間ではこれは「任意の $x \in \X$ と任意の $\varepsilon > 0$ に対し
+      $\exists q \in D,\; d(x, q) < \varepsilon$」と同値．
+      $(\X, d)$ が可分とは可算な稠密部分集合 $D \subset \X$ が
       存在することをいう（定義~\ref{def:sem-separable}）．すなわち
       \[
-        \exists D \subset \X \text{ 可算},\;
-        \forall x \in \X,\;
-        \forall \varepsilon > 0,\;
-        \exists q \in D,\;
-        d(x, q) < \varepsilon.
+        \exists D \subset \X \text{ 可算},\; \overline{D} = \X.
       \]
   \end{itemize}
 
