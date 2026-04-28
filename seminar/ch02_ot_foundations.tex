@@ -57,15 +57,14 @@
       任意の $\varepsilon > 0$ に対しある $q \in D$ が存在して
       $d(x, q) < \varepsilon$ となることをいう
       （定義~\ref{def:sem-dense}；距離空間における同値表現）．
-      $(\X, d)$ が可分とは，可算な稠密部分集合
-      $D = \{q_k\}_{k \geq 1} \subset \X$ が存在することをいう
-      （定義~\ref{def:sem-separable}）．すなわち
+      $(\X, d)$ が可分とは，可算な稠密部分集合 $D \subset \X$ が
+      存在することをいう（定義~\ref{def:sem-separable}）．すなわち
       \[
-        \exists D = \{q_k\}_{k \geq 1} \subset \X,\;
+        \exists D \subset \X \text{ 可算},\;
         \forall x \in \X,\;
         \forall \varepsilon > 0,\;
-        \exists k \in \N,\;
-        d(x, q_k) < \varepsilon.
+        \exists q \in D,\;
+        d(x, q) < \varepsilon.
       \]
   \end{itemize}
 
