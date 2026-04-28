@@ -47,58 +47,46 @@
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=1.0]
-  %% --- 上段：1次元の例 (Q ⊂ R) ---
-  \draw[thick, ->] (-0.2, 1.8) -- (8.2, 1.8);
-  \node[right, font=\small] at (8.2, 1.8) {$\Omega = \R$};
+  %% 数直線 Ω = R
+  \draw[thick, ->] (-0.5, 0) -- (8.0, 0);
+  \node[right, font=\small] at (8.0, 0) {$\Omega = \R$};
 
-  %% 可算稠密点 D = Q（散在する青点）
-  \foreach \x in {0.25, 0.7, 1.15, 1.55, 1.95, 2.35, 2.65, 3.05,
-                  3.5, 3.85, 4.2, 4.6, 4.95, 5.3, 5.65, 6.0,
-                  6.35, 6.75, 7.15, 7.6} {
-    \fill[blue] (\x, 1.8) circle (1.3pt);
+  %% 可算稠密集合 D = {q_1, q_2, ...}：番号付けで可算性を強調
+  %% 一部に番号を付ける
+  \foreach \k/\xpos in {1/0.5, 2/2.0, 3/4.5, 4/6.5, 5/1.2, 6/3.3, 7/5.7, 8/7.4} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, below] at (\xpos, -0.1) {$q_{\k}$};
   }
-  \node[blue, font=\small, below right] at (-0.2, 1.5) {$D$（可算稠密集合）};
+  %% 番号なしの追加点（無限に並ぶことを示唆）
+  \foreach \xpos in {0.85, 1.7, 2.5, 2.85, 3.7, 4.1, 4.85, 5.3, 6.1, 6.85, 7.7} {
+    \fill[blue!60] (\xpos, 0) circle (1pt);
+  }
 
-  %% 任意の点 x と開近傍 U
-  \fill[red] (4.4, 1.8) circle (2pt);
-  \node[red, font=\small, above] at (4.4, 1.95) {$x$};
-  \draw[red, thick] (3.85, 1.65) -- (3.85, 2.15)
-                    (4.95, 1.65) -- (4.95, 2.15);
-  \draw[red, thick, decorate, decoration={brace, amplitude=4pt}]
-    (4.95, 2.25) -- (3.85, 2.25)
-    node[midway, above, font=\small] {$U \ni x$ ：任意の開近傍};
+  %% 任意の点 x（無理数）と任意精度の近傍
+  \fill[red] (4.7, 0) circle (2pt);
+  \node[red, font=\small, above] at (4.7, 0.1) {$x$};
+  %% ε-近傍を示す赤線
+  \draw[red, thick]
+    (4.45, 0.6) -- (4.45, 0.8) -- (4.95, 0.8) -- (4.95, 0.6)
+    node[above, font=\footnotesize, midway] at (4.7, 0.85) {$\varepsilon$ 近傍};
 
-  %% U に入る D の点を強調
+  %% 近傍内の D の点（近似列の存在）
   \draw[->, thick, blue!50!green]
-    (4.6, 1.0) node[below, font=\small] {$D \cap U \neq \emptyset$}
-    -- (4.6, 1.65);
+    (4.6, 0.1) -- (4.6, 0.6);
+  \node[blue!50!green, font=\footnotesize, anchor=west] at (5.05, 0.7)
+    {$\exists q_k \in D,\; d(x, q_k) < \varepsilon$};
 
-  %% --- 下段：2次元の例 ---
-  \begin{scope}[yshift=-2.0cm]
-    \draw[thick] (0, 0) rectangle (3.5, 1.5);
-    \node[right, font=\small] at (3.5, 1.5) {$\Omega = \R^2$};
-
-    %% 格子状の可算稠密点 (Q^2 のサンプル)
-    \foreach \i in {0,...,6} {
-      \foreach \j in {0,...,3} {
-        \pgfmathsetmacro{\xx}{0.25 + \i*0.5 + 0.05*rand}
-        \pgfmathsetmacro{\yy}{0.2 + \j*0.4 + 0.05*rand}
-        \fill[blue] (\xx, \yy) circle (1pt);
-      }
-    }
-
-    %% 任意の点 x と開近傍 U（円）
-    \fill[red] (1.8, 0.8) circle (1.5pt);
-    \node[red, font=\small, above right] at (1.85, 0.8) {$x$};
-    \draw[red, thick] (1.8, 0.8) circle (0.35);
-    \node[red, font=\small, anchor=west] at (2.3, 0.5) {$U$};
-  \end{scope}
+  %% 凡例
+  \node[blue, font=\footnotesize, anchor=west] at (-0.3, -0.7)
+    {$D = \{q_1, q_2, \ldots\}$ は可算（番号付けできる）};
+  \node[font=\footnotesize, anchor=west] at (-0.3, -1.05)
+    {かつ稠密（任意の $x$ を任意精度で近似）};
 \end{tikzpicture}
-\caption{稠密集合・可分性のイメージ．
-青点 $D \subset \Omega$ が稠密とは「任意の空でない開集合 $U$ に対し
-$D \cap U \neq \emptyset$」をみたすこと．
-$D$ が可算ならば $\Omega$ は\textbf{可分}．
-代表例：$\Q \subset \R$（上段），$\Q^2 \subset \R^2$（下段）．}
+\caption{可分性のイメージ（$\Q \subset \R$ を例に）．
+青点 $D = \{q_1, q_2, \ldots\}$ は可算（番号付け可能）．
+さらに任意の点 $x \in \R$ と任意の精度 $\varepsilon > 0$ に対し
+$d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
+可算性と稠密性の両立が可分性の本質．}
 \label{fig:sem-dense-separable}
 \end{figure}
 
@@ -221,6 +209,64 @@ $\Omega$ 上の開集合全体が位相 $\mathcal{O}_d$ をなす．}
     n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
   \]
 \end{definition}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% --- 左：完備な空間 Ω = [0, 4] ---
+  \begin{scope}
+    \node[above, font=\small\bfseries] at (2.2, 1.7) {完備：$\Omega = [0, 4]$};
+    \draw[thick] (0, 1.0) -- (4.2, 1.0);
+    \fill[black] (0, 1.0) circle (1.5pt);
+    \fill[black] (4.2, 1.0) circle (1.5pt);
+
+    %% Cauchy sequence x_k = 1/k * 3 (decreasing toward 0)
+    \foreach \k/\xpos in {1/3.0, 2/1.5, 3/1.0, 4/0.75, 5/0.6, 6/0.5} {
+      \fill[blue] (\xpos, 1.0) circle (1.5pt);
+    }
+    \node[blue, font=\scriptsize, above] at (3.0, 1.1) {$x_1$};
+    \node[blue, font=\scriptsize, above] at (1.5, 1.1) {$x_2$};
+    \node[blue, font=\scriptsize, above] at (1.0, 1.1) {$x_3$};
+    \node[blue, font=\footnotesize, above] at (0.5, 1.3) {$\cdots$};
+
+    %% limit point at 0 ∈ Ω
+    \fill[red] (0, 1.0) circle (2.5pt);
+    \node[red, font=\small, below] at (0, 0.85) {$x^*$};
+    \node[red, font=\footnotesize, below] at (0, 0.5) {$\in \Omega$};
+
+    %% convergence arrow
+    \draw[->, gray, thick]
+      (1.0, 0.45) .. controls (0.5, 0.5) .. (0.05, 0.95);
+    \node[font=\footnotesize, gray, anchor=west] at (1.1, 0.4) {収束先};
+  \end{scope}
+
+  %% --- 右：完備でない $\Omega' = (0, 4]$ ---
+  \begin{scope}[xshift=5.5cm]
+    \node[above, font=\small\bfseries] at (2.2, 1.7) {完備でない：$\Omega' = (0, 4]$};
+    \draw[thick] (0.05, 1.0) -- (4.2, 1.0);
+    %% 0 を除く: open endpoint
+    \draw[thick, fill=white] (0, 1.0) circle (2.0pt);
+    \fill[black] (4.2, 1.0) circle (1.5pt);
+
+    %% same Cauchy 列
+    \foreach \xpos in {3.0, 1.5, 1.0, 0.75, 0.6, 0.5} {
+      \fill[blue] (\xpos, 1.0) circle (1.5pt);
+    }
+
+    %% 極限が Ω' の外
+    \draw[red, very thick] (-0.18, 0.83) -- (0.18, 1.17);
+    \draw[red, very thick] (-0.18, 1.17) -- (0.18, 0.83);
+    \node[red, font=\small, below] at (0, 0.7) {$x^*$};
+    \node[red, font=\footnotesize, below] at (0, 0.4) {$\notin \Omega'$};
+  \end{scope}
+\end{tikzpicture}
+\caption{完備性の概念．Cauchy 列 $(x_k)$ は項間距離が無限小に縮まる
+（$\forall \varepsilon > 0,\; \exists N,\; k, l \geq N \Rightarrow d(x_k, x_l) < \varepsilon$）．
+左：完備な $\Omega$ では極限 $x^*$ が $\Omega$ 内に存在し $x_k \to x^*$．
+右：$\Omega' = (0, 4]$（端点 $0$ を除外）では同じ Cauchy 列の極限 $0$ が
+$\Omega'$ の外に逃げ，完備でない．}
+\label{fig:sem-completeness}
+\end{figure}
 
 \begin{definition}{Polish 空間}{sem-polish}
   完備かつ可分な距離空間を\textbf{Polish 空間}という．
