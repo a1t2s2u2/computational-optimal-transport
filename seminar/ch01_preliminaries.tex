@@ -151,12 +151,15 @@
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
   $(\Omega, d)$ が\textbf{完備}であるとは，
-  $\Omega$ における任意の Cauchy 列 $(x_n)_{n \geq 1}$ に対し，
+  $\Omega$ における任意の Cauchy 列が $\Omega$ の点に収束する
+  （定義~\ref{def:sem-convergence}）ことをいう．すなわち
   \[
-    \exists\, x \in \Omega,\quad x_n \to x
-    \quad (n \to \infty)
+    \forall (x_n)_{n \geq 1} \subset \Omega \text{ Cauchy 列},\;
+    \exists x \in \Omega,\;
+    \forall \varepsilon > 0,\;
+    \exists N \in \N,\;
+    n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
   \]
-  が成り立つことをいう（収束は定義~\ref{def:sem-convergence}）．
 \end{definition}
 
 \begin{definition}{Polish 空間}{sem-polish}
