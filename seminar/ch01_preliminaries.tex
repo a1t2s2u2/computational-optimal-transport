@@ -32,21 +32,10 @@
   $F \subset \Omega$ を\textbf{閉集合}という．
 \end{definition}
 
-\begin{definition}{閉包}{sem-closure}
-  位相空間 $(\Omega, \mathcal{O})$ の部分集合 $A \subset \Omega$ に対し，
-  $A$ を含む最小の閉集合を $A$ の\textbf{閉包}といい $\overline{A}$ と記す：
-  \[
-    \overline{A} \defeq
-    \bigcap \{F \subset \Omega \mid F \text{ は閉集合},\; A \subset F\}.
-  \]
-\end{definition}
-
 \begin{definition}{稠密集合}{sem-dense}
   位相空間 $(\Omega, \mathcal{O})$ の部分集合 $D \subset \Omega$ が\textbf{稠密}とは，
-  $\overline{D} = \Omega$ となること
-  （定義~\ref{def:sem-closure}）をいう．
-  同値に，任意の空でない開集合 $U \in \mathcal{O}$ に対して
-  $D \cap U \neq \emptyset$ となることである．
+  任意の空でない開集合 $U \in \mathcal{O}$ に対して $D \cap U \neq \emptyset$
+  となることをいう．
 \end{definition}
 
 \begin{definition}{可分性}{sem-separable}
