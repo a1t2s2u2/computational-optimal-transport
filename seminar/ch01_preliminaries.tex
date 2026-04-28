@@ -274,6 +274,57 @@ $\Omega'$ の外に逃げ，完備でない．}
   （$\Q^d$ が可算稠密部分集合を与える）．
 \end{definition}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% Ω = R
+  \draw[thick, ->] (-0.5, 0) -- (8.0, 0);
+  \node[right, font=\small] at (8.0, 0) {$\R$};
+
+  %% Q = countable dense subset, labeled
+  %% spread Q points; some near limit x* = π
+  \foreach \k/\xpos in {1/0.5, 2/1.5, 3/4.0, 4/6.5, 5/7.3} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, below] at (\xpos, -0.15) {$q_{\k}$};
+  }
+  %% Cauchy subsequence (q_{k_n}) → x* (irrational point)
+  \def\xstar{3.14}
+  \foreach \i/\xpos/\lab in {6/2.5/$q_{k_1}$, 7/3.0/$q_{k_2}$, 8/3.13/$q_{k_3}$} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, above] at (\xpos, 0.1) {\lab};
+  }
+  %% extra Q points (background density)
+  \foreach \xpos in {1.0, 1.9, 4.5, 5.0, 5.5, 6.0, 6.9, 7.6} {
+    \fill[blue!50] (\xpos, 0) circle (1pt);
+  }
+
+  %% x* (limit, irrational) in R
+  \fill[red] (\xstar, 0) circle (2.5pt);
+  \node[red, font=\small, above] at (\xstar, 0.3) {$x^*$};
+  \node[red, font=\scriptsize] at (\xstar, 0.6) {（無理数）};
+
+  %% arrow from Cauchy seq to x*
+  \draw[->, blue!50!green, thick]
+    (2.7, 1.3) .. controls (3.0, 1.0) .. (\xstar, 0.4);
+  \node[blue!50!green, font=\footnotesize, anchor=south west] at (1.3, 1.25)
+    {Cauchy 列 $(q_{k_n}) \to x^*$};
+
+  %% labels
+  \node[font=\footnotesize, anchor=west, blue] at (-0.3, -1.0)
+    {\textbf{可分性}：可算稠密な $\Q = \{q_1, q_2, \ldots\} \subset \R$};
+  \node[font=\footnotesize, anchor=west, red!70!black] at (-0.3, -1.4)
+    {\textbf{完備性}：Cauchy 列の極限 $x^*$ が $\R$ 内に存在
+      （無理数も $\R$ には含まれる）};
+\end{tikzpicture}
+\caption{Polish 空間（完備可分距離空間）のイメージ．代表例 $\R$ 上で：
+$\Q$ は可算かつ稠密（可分性）．
+$\Q$ 内の Cauchy 列 $(q_{k_n})$ の極限は無理数になりうるが，
+それも $\R$ 内に存在する（完備性）．
+$\Q$ 自身は完備でない（極限を $\Q$ に拾えない）が，
+$\R$ はその「完備化」として機能する．}
+\label{fig:sem-polish}
+\end{figure}
+
 %% ============================================================
 %% 測度論
 %% ============================================================
