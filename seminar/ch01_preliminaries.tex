@@ -129,6 +129,67 @@ $D$ が可算ならば $\Omega$ は\textbf{可分}．
   で定める．
 \end{definition}
 
+距離空間 $(\Omega, d)$ における開集合（定義~\ref{def:sem-topological-space}）は，
+開球 $B_r(x)$ を用いて次のように特徴付けられる：
+$U \subset \Omega$ が開集合であるとは，任意の $x \in U$ に対し
+$B_r(x) \subset U$ をみたす $r \in \R_{++}$ が存在することをいう．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% --- 左：開集合 U（境界は U に含まれない） ---
+  \begin{scope}
+    \node[above, font=\small\bfseries] at (1.7, 3.0) {開集合の例};
+    %% U の領域（境界を点線で示し，「境界は含まない」）
+    \draw[blue, dashed, thick, fill=blue!8]
+      plot[smooth cycle, tension=0.7]
+      coordinates {(0.2, 1.0) (0.7, 2.4) (2.1, 2.7) (3.2, 2.0)
+                   (3.0, 0.8) (1.8, 0.2) (0.6, 0.4)};
+    \node[blue, font=\small] at (1.9, 1.5) {$U$};
+
+    %% 内点 x_1 とその開球
+    \fill[red] (1.2, 1.7) circle (1.5pt);
+    \node[red, font=\small, above right] at (1.2, 1.7) {$x_1$};
+    \draw[red, thick] (1.2, 1.7) circle (0.35);
+    \node[red, font=\footnotesize] at (1.2, 1.05) {$B_{r_1}(x_1) \subset U$};
+
+    %% 内点 x_2 とその開球（境界に近い）
+    \fill[red] (2.6, 2.0) circle (1.5pt);
+    \node[red, font=\small, above] at (2.6, 2.05) {$x_2$};
+    \draw[red, thick] (2.6, 2.0) circle (0.18);
+
+    \node[font=\footnotesize, anchor=north] at (1.7, -0.1)
+      {任意の点 $x \in U$ で $B_r(x) \subset U$ なる $r$ がとれる};
+  \end{scope}
+
+  %% --- 右：開集合でない例（境界点を含む） ---
+  \begin{scope}[xshift=6.0cm]
+    \node[above, font=\small\bfseries] at (1.7, 3.0) {開集合でない例};
+    %% F の領域（境界を実線で示し，「境界も含む」）
+    \draw[red!70!black, thick, fill=red!8]
+      plot[smooth cycle, tension=0.7]
+      coordinates {(0.2, 1.0) (0.7, 2.4) (2.1, 2.7) (3.2, 2.0)
+                   (3.0, 0.8) (1.8, 0.2) (0.6, 0.4)};
+    \node[red!70!black, font=\small] at (1.9, 1.5) {$F$};
+
+    %% 境界上の点 x_0
+    \fill[red] (3.18, 1.7) circle (1.5pt);
+    \node[red, font=\small, right] at (3.22, 1.7) {$x_0$};
+    %% B_r(x_0) が F からはみ出す様子
+    \draw[red, thick, dashed] (3.18, 1.7) circle (0.4);
+    \node[red, font=\footnotesize] at (3.6, 1.05) {$B_r(x_0) \not\subset F$};
+
+    \node[font=\footnotesize, anchor=north] at (1.7, -0.1)
+      {境界点 $x_0$ で $B_r(x_0)$ が外にはみ出す};
+  \end{scope}
+\end{tikzpicture}
+\caption{開集合の概念図．左：$U$ は開集合で，任意の点 $x \in U$ について
+十分小さい開球 $B_r(x)$ が $U$ に含まれる（境界は $U$ に含まれない；点線で表示）．
+右：$F$ は境界を含むため開集合でなく，境界点 $x_0$ ではどんなに $r$ を
+小さくしても $B_r(x_0) \not\subset F$．
+$\Omega$ 上の開集合全体が位相 $\mathcal{O}_d$ をなす．}
+\label{fig:sem-open-set}
+\end{figure}
 
 \begin{definition}{収束列}{sem-convergence}
   距離空間 $(\Omega, d)$ における列 $(x_n)_{n \geq 1} \subset \Omega$ が
