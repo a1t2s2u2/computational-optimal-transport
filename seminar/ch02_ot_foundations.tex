@@ -197,6 +197,20 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \section{Monge 問題}
 \label{sec:sem-monge}
 
+最適割当問題（定義~\ref{def:sem-assignment}）は有限の添字集合 $\range{n}$ と
+均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
+$\X, \Y$ と任意の確率測度に拡張する：
+\begin{center}
+  \begin{tabular}{l|ll}
+    & 最適割当問題 & Monge 問題 \\ \hline
+    source/target & $\range{n}$（重み $1/n$） & $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$ \\
+    輸送写像 & 置換 $\sigma \in \Perm(n)$ & 可測写像 $T \colon \X \to \Y$ \\
+    全射制約 & $\sigma$ が全単射 & 押し出し $T\pushforward \alpha = \beta$ \\
+    総コスト & $\frac{1}{n}\sum_i C_{i, \sigma(i)}$ & $\int_\X c(x, T(x))\, \d\alpha(x)$
+  \end{tabular}
+\end{center}
+これに基づく連続版の輸送問題が \textbf{Monge 問題}である．
+
 \begin{definition}{Monge 問題}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
