@@ -128,17 +128,22 @@
   有限集合は閉集合の有限和ゆえ閉．
 \end{proof}
 
-\begin{definition}{完備性}{sem-complete-metric}
+\begin{definition}{収束列}{sem-convergence}
   距離空間 $(\Omega, d)$ における列 $(x_n)_{n \geq 1} \subset \Omega$ が
   点 $x \in \Omega$ に\textbf{収束}するとは，
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n \geq N \Longrightarrow d(x_n, x) < \varepsilon$ となることをいう．
-  $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
+  このとき $\lim_{n \to \infty} x_n = x$ または $x_n \to x$ と書く．
+\end{definition}
+
+\begin{definition}{完備性}{sem-complete-metric}
+  距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1} \subset \Omega$ が
+  \textbf{Cauchy 列}であるとは，
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
   $(\Omega, d)$ が\textbf{完備}であるとは，
   $\Omega$ における任意の Cauchy 列がある点 $x \in \Omega$ に
-  収束することをいう．
+  収束する（定義~\ref{def:sem-convergence}）ことをいう．
 \end{definition}
 
 \begin{definition}{Polish 空間}{sem-polish}
