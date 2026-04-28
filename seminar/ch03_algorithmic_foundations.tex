@@ -1,0 +1,365 @@
+\chapter{アルゴリズムの基礎}
+\label{ch:seminar-02}
+
+第~\ref{ch:seminar-01}~章で離散 Kantorovich 問題
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+  \inner{\mathbf{C}}{\mathbf{P}}
+\]
+を定式化し，最適解の存在
+（主張~\ref{clm:sem-discrete-kantorovich-existence}）を確認した．
+本章ではその求解を扱う：線形計画標準形への帰着，輸送多面体の頂点構造，
+そして\textbf{ネットワーク単体法}による反復解法を順に展開する．
+
+%% ============================================================
+%% 線形計画標準形
+%% ============================================================
+\section{線形計画標準形への帰着}
+\label{sec:sem-lp-standard}
+
+離散 Kantorovich 問題を線形計画の標準形に書き直す．
+これによりネットワーク単体法をはじめとする一般の LP アルゴリズムが適用できる．
+
+\begin{definition}{Kronecker 積}{sem-kronecker}
+  行列 $\mathbf{A} \in \R^{p \times q}$ と $\mathbf{B} \in \R^{r \times s}$ の
+  \textbf{Kronecker 積} $\mathbf{A} \otimes \mathbf{B} \in \R^{pr \times qs}$ を，
+  $(i,j)$ ブロックが $A_{i,j} \mathbf{B}$ であるブロック行列
+  \[
+    \mathbf{A} \otimes \mathbf{B} \defeq
+    \begin{pmatrix}
+      A_{1,1}\mathbf{B} & \cdots & A_{1,q}\mathbf{B} \\
+      \vdots & \ddots & \vdots \\
+      A_{p,1}\mathbf{B} & \cdots & A_{p,q}\mathbf{B}
+    \end{pmatrix}
+  \]
+  で定める．
+\end{definition}
+
+行列 $\mathbf{P} \in \R^{n \times m}$ を列方向に並べたベクトル
+$\mathbf{p} \in \R^{nm}$ を考える
+（$\mathbf{p}$ の第 $i + n(j-1)$ 成分が $P_{i,j}$）．
+このとき周辺分布の制約は
+\[
+  \mathbf{A}\mathbf{p}
+  = \begin{bmatrix} \mathbf{a} \\ \mathbf{b} \end{bmatrix},
+  \qquad
+  \mathbf{A} \defeq
+  \begin{bmatrix}
+    \ones_m^\top \otimes \Identity_n \\
+    \Identity_m \otimes \ones_n^\top
+  \end{bmatrix}
+  \in \R^{(n+m) \times nm}
+\]
+と書ける．上段の $n$ 行は行和制約 $\mathbf{P}\ones_m = \mathbf{a}$ に，
+下段の $m$ 行は列和制約 $\mathbf{P}^\top \ones_n = \mathbf{b}$ に対応する．
+コスト行列 $\mathbf{C}$ も同様にベクトル化して
+$\mathbf{c} \in \R^{nm}$ とすると，
+離散 Kantorovich 問題は標準形の線形計画
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
+    \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
+  \mathbf{c}^\top \mathbf{p}
+\]
+と表される．
+
+\begin{claim}{制約行列 $\mathbf{A}$ の階数}{sem-A-rank}
+  $\rank \mathbf{A} = n + m - 1$．
+\end{claim}
+
+\begin{proof}
+  $\mathbf{A}$ の最初の $n$ 行の和は $\ones_{nm}^\top$，
+  残りの $m$ 行の和もまた $\ones_{nm}^\top$ に等しい．
+  したがって $n + m$ 本の行は線形独立でなく，$\rank \mathbf{A} \leq n + m - 1$．
+
+  逆に，最初の $n$ 行と残りの $m$ 行のうち $1$ 本を除いた行は線形独立であることが
+  確認できる．したがって $\rank \mathbf{A} \geq n + m - 1$．
+\end{proof}
+
+ランク条件は次節の頂点構造解析の鍵となる：
+LP 一般論により，標準形 $\{\mathbf{p} \geq 0 \mid \mathbf{A}\mathbf{p} = \mathbf{r}\}$
+の頂点では非零成分の数が $\rank \mathbf{A}$ 以下に抑えられる．
+
+%% ============================================================
+%% 輸送多面体の頂点
+%% ============================================================
+\section{輸送多面体の頂点}
+\label{sec:sem-transport-vertices}
+
+線形計画の最適解は実行可能領域の\textbf{頂点}（端点）で達成される．
+ネットワーク単体法はこの頂点間を移動して探索するため，
+頂点の構造を理解することがアルゴリズムの設計に不可欠である．
+
+\begin{definition}{頂点（端点）}{sem-vertex}
+  凸集合 $K \subset \R^d$ の点 $\mathbf{v} \in K$ が \textbf{頂点}（vertex; 端点）
+  であるとは，$\mathbf{v} = \tfrac{1}{2}(\mathbf{u} + \mathbf{w})$,
+  $\mathbf{u}, \mathbf{w} \in K$ が成り立つならば $\mathbf{u} = \mathbf{w} = \mathbf{v}$
+  であることをいう．
+\end{definition}
+
+\begin{definition}{二部グラフと台グラフ}{sem-bipartite-support}
+  ソース節点集合 $V \defeq \{1, \ldots, n\}$ と
+  ターゲット節点集合 $V' \defeq \{1', \ldots, m'\}$ に対し，
+  $V$ と $V'$ の間のすべての辺
+  $\{(i, j') \mid i \in \range{n},\, j \in \range{m}\}$ から成るグラフを
+  \textbf{完全二部グラフ}という．
+  輸送計画 $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の
+  \textbf{台グラフ}を，$P_{i,j} > 0$ なる辺 $(i, j')$ の集合
+  $S(\mathbf{P}) \defeq \{(i, j') \mid P_{i,j} > 0\}$ と頂点 $V \cup V'$ から成るグラフ
+  \[
+    G(\mathbf{P}) \defeq (V \cup V', S(\mathbf{P}))
+  \]
+  で定める．
+\end{definition}
+
+\begin{definition}{閉路・森・木}{sem-cycle-forest}
+  グラフにおいて相異なる節点 $v_1, v_2, \ldots, v_k$ と辺
+  $(v_1, v_2), (v_2, v_3), \ldots, (v_{k-1}, v_k), (v_k, v_1)$ から成る経路を
+  \textbf{閉路}（cycle）という．閉路を持たないグラフを\textbf{森}（forest），
+  連結な森を\textbf{木}（tree）という．
+\end{definition}
+
+\begin{proposition}{頂点の木構造}{sem-extremal-tree}
+  $\mathbf{P}$ が $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点ならば，
+  台グラフ $G(\mathbf{P})$ は閉路を持たない（すなわち森である）．
+  特に $\mathbf{P}$ の非零成分の数は $n + m - 1$ 以下である．
+\end{proposition}
+
+\begin{proof}
+  背理法による．$\mathbf{P}$ が頂点であり，かつ $G(\mathbf{P})$ が
+  閉路 $(i_1, j_1'), (i_2, j_1'), (i_2, j_2'), \ldots, (i_k, j_k'), (i_1, j_k')$ を
+  もつとする．
+
+  この閉路に沿って交互に符号 $+1, -1, +1, \ldots$ を付与し，
+  対応する成分に小さな摂動 $\pm \theta$ を加える行列 $\mathbf{E} \in \R^{n \times m}$ を
+  構成する（閉路上にない成分は $0$）．
+  $\theta > 0$ を閉路上の $\mathbf{P}$ の最小値より小さく取れば，
+  \[
+    \mathbf{Q} \defeq \mathbf{P} + \mathbf{E},
+    \qquad
+    \mathbf{R} \defeq \mathbf{P} - \mathbf{E}
+  \]
+  はいずれも非負．閉路の構造から $\mathbf{E}$ の各行和・各列和は $0$ ゆえ，
+  $\mathbf{Q}, \mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+  $\mathbf{P} = \tfrac{1}{2}(\mathbf{Q} + \mathbf{R})$
+  かつ $\mathbf{Q} \neq \mathbf{P}$ ゆえ，$\mathbf{P}$ が頂点であることに矛盾．
+
+  $k$ 個の節点をもつ閉路のないグラフの辺数は $k - 1$ 以下．
+  $G(\mathbf{P})$ は $n + m$ 個の節点をもつから，辺数（$= \mathbf{P}$ の非零成分数）は
+  $n + m - 1$ 以下である．
+\end{proof}
+
+%% ============================================================
+%% 北西隅法
+%% ============================================================
+\section{北西隅法による初期頂点}
+\label{sec:sem-northwest}
+
+ネットワーク単体法は頂点 $\mathbf{P}^{(0)} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ から
+反復を開始する．\textbf{北西隅法}（north-west corner rule）は
+高々 $n + m$ ステップで頂点を1つ構成する単純な手続きである．
+
+\begin{definition}{北西隅法}{sem-northwest}
+  入力を $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
+  （$\sum_i a_i = \sum_j b_j = 1$）とし，以下を反復する：
+  \begin{enumerate}
+    \item[1.] $i \leftarrow 1$，$j \leftarrow 1$，$r \leftarrow a_1$，$c \leftarrow b_1$．
+    \item[2.] $i \leq n$ かつ $j \leq m$ のあいだ：
+    \begin{itemize}
+      \item $t \leftarrow \min(r, c)$，$P_{i,j} \leftarrow t$．
+      \item $r \leftarrow r - t$，$c \leftarrow c - t$．
+      \item $r = 0$ なら $i \leftarrow i + 1$ とし，$i \leq n$ なら $r \leftarrow a_i$．
+      \item $c = 0$ なら $j \leftarrow j + 1$ とし，$j \leq m$ なら $c \leftarrow b_j$．
+    \end{itemize}
+  \end{enumerate}
+  ループ終了時の $\mathbf{P} \in \R_+^{n \times m}$ を出力する．
+\end{definition}
+
+\begin{example}{北西隅法の実行例}{sem-northwest-example}
+  $\mathbf{a} = (0.2,\, 0.5,\, 0.3)$，$\mathbf{b} = (0.5,\, 0.1,\, 0.4)$ のとき
+  \[
+    \mathbf{P} =
+    \begin{pmatrix}
+      0.2 & 0   & 0   \\
+      0.3 & 0.1 & 0.1 \\
+      0   & 0   & 0.3
+    \end{pmatrix}.
+  \]
+  非零成分は $5 = n + m - 1$ 個であり，台グラフは閉路を持たない．
+  したがって $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点である．
+\end{example}
+
+%% ============================================================
+%% 主双対最適性条件
+%% ============================================================
+\section{主双対最適性条件}
+\label{sec:sem-primal-dual}
+
+ネットワーク単体法の各反復は，主実行可能解 $\mathbf{P}$ と
+\textbf{相補的}な双対変数 $(\mathbf{f}, \mathbf{g})$ の対を保つ．
+この対が双対実行可能なら $\mathbf{P}$ は最適となる．以下を Claim として確認する．
+
+\begin{claim}{主双対最適性}{sem-primal-dual-optimality}
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
+  $(\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m$ が以下を満たすとする：
+  \begin{enumerate}
+    \item[(i)] \textbf{相補性}：$P_{i,j} > 0 \Longrightarrow f_i + g_j = C_{i,j}$，
+    \item[(ii)] \textbf{双対実行可能性}：$f_i + g_j \leq C_{i,j}$（$\forall i, j$）．
+  \end{enumerate}
+  このとき $\mathbf{P}$ は離散 Kantorovich 問題の最適解であり，
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \inner{\mathbf{C}}{\mathbf{P}}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+\end{claim}
+
+\begin{proof}
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ に対し，
+  双対実行可能性 (ii) と $Q_{i,j} \geq 0$ から
+  \[
+    \inner{\mathbf{C}}{\mathbf{Q}}
+    = \sum_{i,j} C_{i,j} Q_{i,j}
+    \geq \sum_{i,j} (f_i + g_j) Q_{i,j}.
+  \]
+  右辺を周辺条件 $\sum_j Q_{i,j} = a_i$, $\sum_i Q_{i,j} = b_j$ で整理すると
+  \[
+    \sum_{i,j} (f_i + g_j) Q_{i,j}
+    = \sum_i f_i \sum_j Q_{i,j} + \sum_j g_j \sum_i Q_{i,j}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+  したがって任意の $\mathbf{Q}$ について
+  $\inner{\mathbf{C}}{\mathbf{Q}} \geq \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$．
+
+  $\mathbf{P}$ については相補性 (i) から $P_{i,j} > 0$ の項で等号が成り立ち，
+  $P_{i,j} = 0$ の項はそもそも和に寄与しない．ゆえに
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}}
+    = \sum_{i,j} (f_i + g_j) P_{i,j}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+  以上から
+  $\inner{\mathbf{C}}{\mathbf{P}} \leq \inner{\mathbf{C}}{\mathbf{Q}}$
+  が任意の $\mathbf{Q}$ で成立し，$\mathbf{P}$ は最適．
+\end{proof}
+
+%% ============================================================
+%% ネットワーク単体法
+%% ============================================================
+\section{ネットワーク単体法}
+\label{sec:sem-network-simplex}
+
+\textbf{ネットワーク単体法}（network simplex）は最適輸送問題に特化した単体法で，
+輸送多面体の頂点間を移動しながら最適解を探索する．
+アルゴリズムが管理するのは台グラフ $G(\mathbf{P})$ そのものではなく，
+それを含む\textbf{基底木} $T$ である．基底木は二部グラフ上の木（または森）であり，
+退化のときは $P_{i,j} = 0$ の辺も含みうる．
+各反復で以下の3つの操作を行う：
+\textbf{(1)} 現在の主実行可能頂点 $\mathbf{P}$ と基底木 $T$ に相補的な
+双対 $(\mathbf{f}, \mathbf{g})$ を構成．
+\textbf{(2)} 双対実行可能性を判定し，違反辺があれば $T$ に追加して基本閉路を作る．
+\textbf{(3)} 閉路に沿って流量を更新し，1 本の辺を $T$ から外して次の頂点へ移る．
+
+\subsection{相補的双対変数の構成}
+\label{subsec:sem-dual-from-primal}
+
+主実行可能頂点 $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ が与えられたとき，
+まず台グラフ $G(\mathbf{P})$ を含む基底木 $T$ を1つ固定する．
+命題~\ref{prop:sem-extremal-tree} から $G(\mathbf{P})$ は森であり辺数 $\leq n + m - 1$ ゆえ，
+必要ならば $P_{i,j} = 0$ の辺を補って $T$ を $n + m - 1$ 本の辺をもつ木にできる．
+$T$ の各辺 $(i, j')$ に対して
+\[
+  f_i + g_j = C_{i,j}
+\]
+を満たす $(\mathbf{f}, \mathbf{g})$ を木のたどりで構成する：
+\begin{itemize}
+  \item $T$ のルート節点をひとつ選び，対応する双対変数を $0$ に設定する．
+  \item $T$ を幅優先または深さ優先で辿りながら，各辺 $(i, j')$ で
+    $f_i + g_j = C_{i,j}$ を逐次的に解いて未確定の双対変数を定める．
+\end{itemize}
+$T$ が連結でない場合（複数の木からなる森）は，各連結成分でルートを別々に選べばよい．
+
+\subsection{最適性判定と更新}
+\label{subsec:sem-simplex-update}
+
+得られた $(\mathbf{f}, \mathbf{g})$ について：
+\begin{itemize}
+  \item 全ての $(i, j)$ で $f_i + g_j \leq C_{i,j}$ なら，
+    主双対最適性（主張~\ref{clm:sem-primal-dual-optimality}）から $\mathbf{P}$ は最適．
+    アルゴリズム終了．
+  \item ある $(i, j)$ で $f_i + g_j > C_{i,j}$（双対違反辺）なら，
+    その辺 $(i, j')$ を基底木 $T$ に追加する：
+\end{itemize}
+
+追加後の $T \cup \{(i, j')\}$ には基本閉路が一意に生じる．
+閉路に沿って流量を調整する：
+閉路上の「正方向」の辺では $P_{i,j}$ を $\theta$ だけ増加させ，
+「負方向」の辺では $\theta$ だけ減少させる．
+$\theta$ は負方向の辺の最小流量に等しく取る．
+流量が $0$ になった辺を $T$ から $1$ 本除去すると，新しい頂点 $\tilde{\mathbf{P}}$ と
+新しい基底木 $\tilde T$ が得られる．
+$\theta = 0$ となる退化ステップでは $\mathbf{P}$ は変化しないが，$T$ のみ更新される．
+
+\subsection{コスト改善の証明}
+\label{subsec:sem-simplex-improvement}
+
+(b) の閉路更新でコストが厳密に減少することを示す．
+追加された辺を $(i, j)$ とし，閉路を
+$(i, j_1'), (i_2, j_1'), (i_2, j_2'), \ldots, (i_l, j_l'), (i, j_l')$ と書く
+（$j_1 = j$ は新規辺の終点）．
+正方向の辺で $\theta$ 増加，負方向の辺で $\theta$ 減少するから
+\[
+  \inner{\mathbf{C}}{\tilde{\mathbf{P}}} - \inner{\mathbf{C}}{\mathbf{P}}
+  = \theta \left(
+    C_{i, j_1} - C_{i_2, j_1}
+    + C_{i_2, j_2} - C_{i_3, j_2}
+    + \cdots
+    + C_{i_l, j_l} - C_{i, j_l}
+  \right).
+\]
+新規辺以外（$k = 2, \ldots, l$ の項と最後の項）は基底木 $T$ の辺ゆえ，
+相補性から $C_{i_k, j_k} = f_{i_k} + g_{j_k}$，$C_{i_{k+1}, j_k} = f_{i_{k+1}} + g_{j_k}$
+（添字は閉路に沿うものとし $i_{l+1} = i$）．代入すると望遠的にキャンセルし，
+新規辺の項のみが残る：
+\[
+  \inner{\mathbf{C}}{\tilde{\mathbf{P}}} - \inner{\mathbf{C}}{\mathbf{P}}
+  = \theta\bigl( C_{i, j} - (f_i + g_j) \bigr).
+\]
+新規辺は $f_i + g_j > C_{i, j}$ をみたす違反辺として選ばれたから括弧内は負．
+$\theta > 0$ ならコストは厳密に減少する．
+
+\begin{remark}{計算量}{sem-network-simplex-complexity}
+  ネットワーク単体法は多項式時間で停止することが Orlin (1997) により示された．
+  Tarjan (1997) は効率的なデータ構造を用いて
+  $O\bigl((n+m)\,nm\,\log(n+m)\,\log((n+m)\norm{\mathbf{C}}_\infty)\bigr)$
+  の計算量を達成している．
+\end{remark}
+
+%% ============================================================
+%% 動機付け
+%% ============================================================
+\section{エントロピー正則化への動機付け}
+\label{sec:sem-motivation-entropic}
+
+ネットワーク単体法は離散 Kantorovich 問題の \textbf{exact} な解法を与えるが，
+学習・大規模応用の観点ではいくつかの根本的な制約をもつ：
+
+\begin{itemize}
+  \item \textbf{計算量}：$O(nm)$ 個の変数に対する反復・データ構造管理は，
+    $n, m$ が $10^5$ オーダーになると現実的でない．
+    GPU 並列化にも本質的に向かない（離散探索的）．
+  \item \textbf{微分不可能性}：最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ は
+    $\mathbf{a}, \mathbf{b}$ について区分線形にしかならず，
+    自動微分による勾配最適化に組み込めない．
+  \item \textbf{標本バイアス}：母集団からの有限サンプルに基づいて
+    $\MKD_{\mathbf{C}}$ を推定すると，
+    高次元では母集団値への収束が指数的に遅い（次元の呪い）．
+\end{itemize}
+
+これらの困難はすべて，目的関数に \textbf{エントロピー} を加えて
+\textbf{正則化}することで同時に解消される：
+正則化された最適輸送（\textbf{Sinkhorn アルゴリズム}）は
+計算が GPU 並列で軽く，最適値は marginals に関して滑らか（微分可能）であり，
+さらに統計的安定化の理論的基礎も提供する．
+これが本セミナーの主軸である．

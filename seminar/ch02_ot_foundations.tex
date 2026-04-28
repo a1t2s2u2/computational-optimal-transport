@@ -2,22 +2,84 @@
 \label{ch:seminar-01}
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
-  本章では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間）とする．
-  距離関数を $d$ と書く．$\X$ にはボレル $\sigma$-代数 $\Bb(\X)$ を入れて
-  可測空間 $(\X, \Bb(\X))$ とみなし，
-  $\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．$\Y$ についても同様．
+  本章では $\X, \Y$ を\textbf{完備可分な距離空間}（Polish 空間，
+  定義~\ref{def:sem-polish}）とする．距離関数を $d$ と書き，
+  ボレル $\sigma$-代数 $\Bb(\X)$ により $\X$ を可測空間 $(\X, \Bb(\X))$ として扱う
+  （$\Y$ についても同様）．$\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．
 
-  距離は本章で次のように使う：
-  \begin{enumerate}
-    \item[(i)] 距離から $\X, \Y$ の位相・ボレル $\sigma$-代数・可測関数を定める．
-    \item[(ii)] Wasserstein 距離の輸送コスト
-      $c(x, y) = d(x, y)^p$ に\textbf{ground 距離} $d$ を用いる．
-  \end{enumerate}
-  離散版では確率測度の台 $S \defeq \{x_1, \ldots, x_n\} \subset \X$ が
-  有限集合となる．$S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
-  自動で Polish 空間になる：
+  Polish 空間の3要素を確認する：
   \begin{itemize}
-    \item[] \textbf{完備性．} $n = 1$ なら任意の列は定値列ゆえ自明に収束する．
+    \item \textbf{距離空間}．距離関数
+      $d \colon \X \times \X \to [0, \infty)$ が距離の公理
+      （定義~\ref{def:sem-metric-space}）を満たし，$d$ から以下が順次定まる：
+      \begin{align*}
+        B_r(x)
+          &\defeq \{y \in \X \mid d(x, y) < r\}
+          && \text{（開球，定義~\ref{def:sem-open-ball}）} \\
+        \mathcal{O}_d
+          &\defeq \{U \subset \X \mid \forall x \in U,\,
+            \exists r > 0,\, B_r(x) \subset U\}
+          && \text{（開集合の全体）} \\
+        \Bb(\X)
+          &\defeq \sigma(\mathcal{O}_d)
+          && \text{（ボレル } \sigma\text{-代数，定義~\ref{def:sem-borel}）}
+      \end{align*}
+      ここで $\sigma(\mathcal{O}_d)$ は，$\mathcal{O}_d$ を含む
+      $\X$ 上のすべての $\sigma$-代数の共通部分
+      \[
+        \sigma(\mathcal{O}_d)
+        \defeq \bigcap
+        \bigl\{
+          \mathcal{F} \subset 2^{\X}
+          \;\big|\;
+          \mathcal{F} \text{ は } \sigma\text{-代数, }
+          \mathcal{O}_d \subset \mathcal{F}
+        \bigr\}
+      \]
+      として定まる．これにより可測空間 $(\X, \Bb(\X))$
+      （定義~\ref{def:sem-measurable-space}）が得られる．
+    \item \textbf{完備性}．
+      列 $(x_n)_{n \geq 1} \subset \X$ が\textbf{Cauchy 列}であるとは，
+      任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
+      $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ が成り立つことをいう．
+      $(\X, d)$ が完備とは，任意の Cauchy 列 $(x_n) \subset \X$ が
+      $\X$ の点に収束する（定義~\ref{def:sem-convergence}）ことをいう．
+      すなわち
+      \[
+        \forall (x_n) \subset \X \text{ Cauchy 列},\;
+        \exists x \in \X,\; x_n \to x.
+      \]
+      収束の定義に展開すれば
+      \[
+        \forall (x_n) \subset \X \text{ Cauchy 列},\;
+        \exists x \in \X,\;
+        \forall \varepsilon > 0,\;
+        \exists N \in \N,\;
+        n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
+      \]
+    \item \textbf{可分性}．
+      $D \subset \X$ が\textbf{稠密}であるとは，任意の空でない開集合
+      $U \subset \X$ に対し $D \cap U \neq \emptyset$ となることをいう
+      （定義~\ref{def:sem-dense}）．
+      距離空間ではこれは「任意の $x \in \X$ と任意の $\varepsilon > 0$ に対し
+      $\exists q \in D,\; d(x, q) < \varepsilon$」と同値．
+      $(\X, d)$ が可分とは可算な稠密部分集合 $D \subset \X$ が
+      存在することをいう（定義~\ref{def:sem-separable}）．すなわち
+      \[
+        \exists D \subset \X \text{ 可算},\;
+        \forall U \subset \X \text{ 空でない開集合},\;
+        D \cap U \neq \emptyset.
+      \]
+  \end{itemize}
+
+  離散版では確率測度の表示に現れる点集合
+  $S \defeq \{x_1, \ldots, x_n\} \subset \X$ は有限集合となる．
+  $S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
+  自動で Polish 空間となる（$\X$ の可測構造は $S$ に制限することで継承される）：
+  \begin{itemize}
+    \item[] \textbf{完備性．} $n = 1$ なら $S = \{x_1\}$ ゆえ
+      任意の列は $y_k = x_1$ ($\forall k$) なる定値列であり，
+      $d(y_k, x_1) = 0$ より $x_1$ に収束する．
       以下 $n \geq 2$ とする．相異なる 2 点間の距離の最小値を
       $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
       これは有限個の正数の最小値なので $\delta > 0$．
@@ -27,14 +89,11 @@
       $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
       一方 $S$ の相異なる 2 点の距離は $\delta$ 以上だから，
       $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
-      ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，
-      その点に収束する．よって完備．
+      ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，その点に収束する．
     \item[] \textbf{可分性．} $S$ 自身が有限（特に可算）集合であり，
       自身の中で稠密だから可分．
   \end{itemize}
-  これは Cuturi のように $\X, \Y$ を単なる距離空間とする設定でも，
-  離散版では本章の Polish 設定が自動成立することの確認である．
-  本章の Polish 強化は連続側で必要となる一方，
+  したがって本章の Polish 強化は連続側で必要となる一方，
   離散版には追加制約を課さない．
 \end{remark}
 
@@ -44,7 +103,7 @@
 \section{最適割当問題}
 \label{sec:sem-assignment}
 
-\begin{definition}{最適割当問題（optimal assignment problem）}{sem-assignment}
+\begin{definition}{最適割当問題}{sem-assignment}
   $n \in \N$，置換 $\sigma \in \Perm(n)$，
   および行列 $\mathbf{C} \in \R_+^{n \times n}$ に対して，
   \[
@@ -138,7 +197,21 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \section{Monge 問題}
 \label{sec:sem-monge}
 
-\begin{definition}{Monge 問題（Monge problem）}{sem-monge}
+最適割当問題（定義~\ref{def:sem-assignment}）は有限の添字集合 $\range{n}$ と
+均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
+$\X, \Y$ と任意の確率測度に拡張する：
+\begin{center}
+  \begin{tabular}{l|ll}
+    & 最適割当問題 & Monge 問題 \\ \hline
+    source/target & $\range{n}$（重み $1/n$） & $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$ \\
+    輸送写像 & 置換 $\sigma \in \Perm(n)$ & 可測写像 $T \colon \X \to \Y$ \\
+    全射制約 & $\sigma$ が全単射 & 押し出し $T\pushforward \alpha = \beta$ \\
+    総コスト & $\frac{1}{n}\sum_i C_{i, \sigma(i)}$ & $\int_\X c(x, T(x))\, \d\alpha(x)$
+  \end{tabular}
+\end{center}
+これに基づく連続版の輸送問題が \textbf{Monge 問題}である．
+
+\begin{definition}{Monge 問題}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
@@ -157,117 +230,15 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 $c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
 写像 $T \colon \X \to \Y$ は $x$ にある質量を $T(x)$ へ送ることを意味し，
 目的関数 $\int_\X c(x, T(x)) \, \d\alpha(x)$ はその輸送の総コストを表す．
-
-$\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）の場合を考える．
-定義により，
-ある相異なる $x_1, \ldots, x_n \in \X$，相異なる $y_1, \ldots, y_m \in \Y$，
-$\mathbf{a} = (a_1, \ldots, a_n) \in \R_{++}^n$，$\mathbf{b} = (b_1, \ldots, b_m) \in \R_{++}^m$
-（$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j = 1$）を用いて
-\[
-  \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
-  \qquad
-  \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
-\]
-と書ける．行列 $\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ とおく．
-
-\begin{claim}{離散 Monge 問題（discrete Monge problem）}{sem-discrete-monge}
-  $\alpha, \beta$ を上記の表示の離散測度とする．
-  台上の写像 $T \colon \{x_1, \ldots, x_n\} \to \Y$ に対する押し出しを
-  $T\pushforward \alpha \defeq \sum_{i=1}^{n} a_i\, \delta_{T(x_i)}$ と定め，
-  \textbf{離散 Monge 問題}を
-  \[
-    \inf_{T}
-    \left\{
-    \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
-    \;\middle|\;
-    T \colon \{x_1, \ldots, x_n\} \to \Y, \;
-    T\pushforward \alpha = \beta
-    \right\}
-  \]
-  により定める（実行可能集合が空のときは下限を $+\infty$ と約束する）．
-  このとき離散 Monge 問題と連続版 Monge 問題（定義~\ref{def:sem-monge}）の
-  下限は一致する：連続版の可測写像 $T \colon \X \to \Y$ から制限
-  $T|_{\{x_1, \ldots, x_n\}}$ により離散版の写像が得られ，
-  この対応の下で目的関数値・押し出し制約が保存される．
-  逆に離散版の任意の写像はある可測写像の制限として得られる．
-\end{claim}
-
-\begin{proof}
-  目的関数 (a) と押し出し制約 (b) が $T$ の台上の値 $T(x_1), \ldots, T(x_n)$
-  のみに依存することを示し，さらに台上の任意の値の組
-  $(y_1, \ldots, y_n) \in \Y^n$ がある可測写像 $\widetilde T \colon \X \to \Y$ の
-  台上の値として実現されること (c) を示す．
-
-  \textbf{(a) 目的関数の書き換え．}
-  $\alpha = \sum_i a_i\, \delta_{x_i}$ を代入し，
-  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
-  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）を順に適用すると
-  \begin{align*}
-    \int_\X c(x, T(x)) \, \d\alpha(x)
-    &= \int_\X c(x, T(x)) \, \d\!\Bigl(\textstyle\sum_{i=1}^{n} a_i\, \delta_{x_i}\Bigr)(x)
-      && \text{（$\alpha$ の表示）} \\
-    &= \sum_{i=1}^{n} a_i \int_\X c(x, T(x)) \, \d\delta_{x_i}(x)
-      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
-    &= \sum_{i=1}^{n} a_i \, c(x_i, T(x_i))
-      && \text{（主張~\ref{clm:sem-dirac-integral}）}.
-  \end{align*}
-
-  \textbf{(b) 押し出し制約の書き換え．}
-  離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward} (ii)）より
-  \[
-    T\pushforward \alpha
-    = T\pushforward \Bigl(\sum_{i=1}^n a_i\, \delta_{x_i}\Bigr)
-    = \sum_{i=1}^n a_i\, \delta_{T(x_i)}
-  \]
-  であり，等式 $T\pushforward \alpha = \beta$ もまた台上の値のみに依存する．
-
-  以上 (a)(b) より制限写像 $T \mapsto T|_{\{x_1, \ldots, x_n\}}$ は，
-  連続版の実行可能写像を離散版の実行可能写像に目的関数値を保存して写す．
-  残るはこの制限写像が全射であること，
-  すなわち台上の任意の値の組が可測写像から実現されることである．
-
-  \textbf{(c) 可測延長の存在．}
-  任意の値の組 $(y_1, \ldots, y_n) \in \Y^n$ に対し，
-  $y_\ast \in \Y$ を一つ任意に固定して
-  \[
-    \widetilde T(x) \defeq
-    \begin{cases}
-      y_i & (x = x_i,\; i = 1, \ldots, n), \\
-      y_\ast & (x \notin \{x_1, \ldots, x_n\})
-    \end{cases}
-  \]
-  と定める．$\X$ は Polish ゆえ Hausdorff
-  （注釈~\ref{rem:sem-ch2-setup}, 主張~\ref{clm:sem-metric-hausdorff}）であり，
-  単点集合 $\{x_i\}$ は閉集合，したがって $\Bb(\X)$ に属する．
-  $\widetilde T$ の値域は有限集合 $V \defeq \{y_\ast, y_1, \ldots, y_n\}$ であり，
-  各 $y \in V$ に対し $\widetilde T^{-1}(\{y\})$ は
-  $\{x_i \mid y_i = y\} \in \Bb(\X)$ あるいはそれと
-  $\X \setminus \{x_1, \ldots, x_n\} \in \Bb(\X)$ との和集合に一致するから，
-  ともにボレル集合．任意の $B \in \Bb(\Y)$ に対し
-  $\widetilde T^{-1}(B) = \bigcup_{y \in B \cap V} \widetilde T^{-1}(\{y\})$
-  はボレル集合の有限和ゆえボレル．
-  したがって $\widetilde T$ は可測で $\widetilde T(x_i) = y_i$ をみたす．
-\end{proof}
-
-\paragraph{最適割当問題への帰着．}
-特に $n = m$ かつ $a_i = b_j = 1/n$（すべての砂山・行き先の質量が等しい）とする．
-このとき離散測度の押し出し（命題~\ref{prop:sem-dirac-pushforward} (ii)）より
-\[
-  T\pushforward \alpha
-  = \frac{1}{n} \sum_{i=1}^{n} \delta_{T(x_i)}.
-\]
-これが $\beta = \frac{1}{n}\sum_{j=1}^{n} \delta_{y_j}$ に一致するには，
-多重集合として
-$\{T(x_1), \ldots, T(x_n)\} = \{y_1, \ldots, y_n\}$
-でなければならない．したがって $T$ は $\{x_i\}$ から $\{y_j\}$ への全単射，
-すなわちある置換 $\sigma \in \Perm(n)$ により
-$T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に帰着する．
+この問題には次節で示す通り，実行可能集合の \textbf{非凸性} と
+\textbf{解の非存在}という本質的な困難があり，
+これを解消するため次々節で \textbf{Kantorovich 緩和}を導入する．
 
 %% --- Monge 問題のイメージ図 ---
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[scale=1.0]
-  % --- X（土台）と α ---
+  % --- $\X$ と $\alpha$ ---
   \begin{scope}
     \draw[thick] (-0.3, 0) -- (3.3, 0);
     \node[below] at (1.5, -0.4) {$\X$};
@@ -285,7 +256,7 @@ $T(x_i) = y_{\sigma(i)}$ と書け，離散 Monge 問題は最適割当問題に
   \draw[->, very thick, gray!80] (3.5, 1.0) -- (6.3, 1.0)
     node[midway, above, font=\small] {$T$};
 
-  % --- Y（土台）と β ---
+  % --- $\Y$ と $\beta$ ---
   \begin{scope}[xshift=6.5cm]
     \draw[thick] (-0.3, 0) -- (3.3, 0);
     \node[below] at (1.5, -0.4) {$\Y$};
@@ -341,10 +312,12 @@ Monge 問題の実行可能集合
   同様に
   \begin{align*}
     {T_2}\pushforward \alpha
+    &= {T_2}\pushforward \bigl(\tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_{1}\bigr)
+      && \text{（$\alpha$ の定義）} \\
     &= \tfrac{1}{2}\delta_{T_2(-1)} + \tfrac{1}{2}\delta_{T_2(1)}
-    = \tfrac{1}{2}\delta_{1} + \tfrac{1}{2}\delta_{-1}
-    = \beta
-    && \text{（$T_2(x) = -x$ より）}.
+      && \text{（命題~\ref{prop:sem-dirac-pushforward} (ii)）} \\
+    &= \tfrac{1}{2}\delta_{1} + \tfrac{1}{2}\delta_{-1} = \beta
+      && \text{（$T_2(x) = -x$ より $T_2(-1) = 1,\, T_2(1) = -1$）}.
   \end{align*}
   よって $T_1, T_2 \in \mathcal{T}(\alpha, \beta)$ である．
 
@@ -359,18 +332,20 @@ Monge 問題の実行可能集合
 \subsubsection{困難2：解の非存在}
 
 \begin{example}{Monge 写像が存在しない場合}{sem-monge-noexist}
-  $\alpha = \delta_0$，$\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$
-  を考える．
-
-  任意の可測写像 $T \colon \X \to \Y$ に対して，
+  $\alpha = \delta_0$（質量 $1$ が 1 点 $0$ に集中）と
+  $\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$（2 点に質量 $\tfrac{1}{2}$ ずつ分散）
+  を考える．任意の可測写像 $T \colon \R \to \R$ について
   命題~\ref{prop:sem-dirac-pushforward} (i) より
-  $T\pushforward \delta_0 = \delta_{T(0)}$ である．
-
-  したがって $T \in \mathcal{T}(\delta_0, \beta)$ となるには
-  $\delta_{T(0)} = \beta$ が必要だが，
-  $A = \{-1\}$ で $\delta_{T(0)}(\{-1\}) \in \{0, 1\}$ に対し
-  $\beta(\{-1\}) = \tfrac{1}{2}$ なので，どんな $T(0)$ でも一致しない．
-  よって条件を満たす $T$ は存在せず $\mathcal{T}(\delta_0, \beta) = \emptyset$ である（下図）．
+  \[
+    T\pushforward \alpha = T\pushforward \delta_0 = \delta_{T(0)}
+  \]
+  となる．これは点 $T(0)$ に質量 $1$ を集中させた測度ゆえ
+  $\delta_{T(0)}(\{T(0)\}) = 1$．一方 $\beta$ は任意の単点 $\{y\}$ に対し
+  $\beta(\{y\}) \in \{0,\, \tfrac{1}{2}\}$（$y = \pm 1$ のとき $\tfrac{1}{2}$，
+  それ以外で $0$）しか与えないので，どの $T(0) \in \R$ をとっても
+  $\delta_{T(0)} \neq \beta$ である．
+  したがって $T\pushforward \alpha = \beta$ をみたす $T$ は存在せず，
+  $\mathcal{T}(\alpha, \beta) = \emptyset$（下図）．
 
   \begin{center}
   \begin{tikzpicture}[scale=1.0]
@@ -405,66 +380,64 @@ Monge 問題の実行可能集合
 
 \subsection{カップリング}
 
-\begin{definition}{カップリング（coupling）}{sem-coupling}
+\begin{definition}{カップリング}{sem-coupling}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
-  に対して，$\X \times \Y$ 上の確率測度のうち周辺測度がそれぞれ
-  $\alpha, \beta$ に一致するものの集合
+  に対し，写像
+  \[
+    P_\X \colon \X \times \Y \to \X,\; (x, y) \mapsto x,
+    \qquad
+    P_\Y \colon \X \times \Y \to \Y,\; (x, y) \mapsto y
+  \]
+  を用いて，$\alpha$ と $\beta$ の\textbf{カップリング}の集合を
   \[
     \Couplings(\alpha, \beta) \defeq
     \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
     (P_\X)\pushforward \pi = \alpha, \;
     (P_\Y)\pushforward \pi = \beta \right\}
   \]
-  を $\alpha$ と $\beta$ の\textbf{カップリング}の集合という．
-  ここで $P_\X \colon \X \times \Y \to \X$, $P_\Y \colon \X \times \Y \to \Y$
-  はそれぞれ第 1・第 2 成分への射影である．
+  で定める．
 \end{definition}
 
-離散測度
-$\alpha = \sum_i a_i \delta_{x_i}$，
-$\beta = \sum_j b_j \delta_{y_j}$
-の場合，カップリングは
-$\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$
-の形をとる．
-周辺条件 $(P_\X)\pushforward \pi = \alpha$ は
-$\sum_j P_{i,j} = a_i$，すなわち $\mathbf{P}\ones_m = \mathbf{a}$ に帰着し，
-$(P_\Y)\pushforward \pi = \beta$ は $\mathbf{P}^\top \ones_n = \mathbf{b}$ に帰着する．
-したがって\textbf{離散カップリング}の集合は
-\[
-  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
-  \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
-  \mathbf{P} \ones_m = \mathbf{a}, \;
-  \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
-\]
-で与えられる．
-$P_{i,j}$ は「輸送元のビン $i$ から輸送先のビン $j$ へ送られる質量」を表す．
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ は $n + m$ 本の等式制約で定まる
-$\R_+^{n \times m}$ の有界部分集合であるから，
-凸多面体（定義~\ref{def:sem-polytope}）をなす．
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  % --- 正方形 X × Y ---
+  \draw[thick] (0, 0) rectangle (4, 4);
+  \node[font=\small, below right] at (4, 0) {$\X$};
+  \node[font=\small, above left] at (0, 4) {$\Y$};
 
-\begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
-  例~\ref{ex:sem-monge-noexist} では
-  $\alpha = \delta_0$，$\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
-  に対して Monge 写像が存在しないことを見た．
-  Kantorovich の枠組みでこの問題を考えよう．
+  % --- π を表す 2 つの集中領域（紫の濃淡，サイズで重みを表現）---
+  % 小さい山: (1, 1) ; 大きい山: (3, 3)
+  \fill[purple!20, opacity=0.7] (1.0, 1.0) ellipse (0.5 and 0.35);
+  \fill[purple!45, opacity=0.7] (1.0, 1.0) ellipse (0.32 and 0.22);
+  \fill[purple!75, opacity=0.8] (1.0, 1.0) ellipse (0.16 and 0.11);
+  \fill[purple!20, opacity=0.7] (3.0, 3.0) ellipse (0.85 and 0.6);
+  \fill[purple!45, opacity=0.7] (3.0, 3.0) ellipse (0.55 and 0.38);
+  \fill[purple!75, opacity=0.8] (3.0, 3.0) ellipse (0.27 and 0.19);
+  \node[font=\small] at (2.0, 2.0) {$\pi$};
 
-  離散表現は $\mathbf{a} = (1)$，$\mathbf{b} = (1/2,\; 1/2)$ であり，
-  カップリング $\mathbf{P} \in \R_+^{1 \times 2}$ は
-  $\mathbf{P}\ones_2 = 1$，$\mathbf{P}^\top \ones_1 = \mathbf{b}$
-  を満たす必要がある．行が1つしかないため $P_{1,j} = b_j$ が強制され，
-  \[
-    \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
-  \]
-  が唯一のカップリングである．
-  コスト $c(x,y) = |x - y|$ から
-  $\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)$ であり，
-  \[
-    \inner{\mathbf{C}}{\mathbf{P}}
-    = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
-  \]
-\end{example}
+  % --- α: X への射影（下方，2 山の密度曲線；高さ非対称） ---
+  \draw[blue, thick, smooth, samples=80, domain=0:4]
+    plot (\x, {-1 + 0.35*exp(-(\x-1.0)*(\x-1.0)*4)
+                + 0.75*exp(-(\x-3.0)*(\x-3.0)*4)});
+  \node[blue, font=\small, anchor=north west] at (3.6, -0.3) {$\alpha$};
+  \node[font=\footnotesize, gray, anchor=west] at (-0.2, -1.3)
+    {$(P_\X)\pushforward \pi = \alpha$};
 
-\paragraph{Monge 写像との対比．}
+  % --- β: Y への射影（左方，2 山の密度曲線；高さ非対称） ---
+  \draw[red, thick, smooth, samples=80, domain=0:4, variable=\y]
+    plot ({-1 + 0.35*exp(-(\y-1.0)*(\y-1.0)*4)
+            + 0.75*exp(-(\y-3.0)*(\y-3.0)*4)}, \y);
+  \node[red, font=\small, anchor=south east] at (-0.3, 3.6) {$\beta$};
+  \node[font=\footnotesize, gray, anchor=base east, rotate=90] at (-1.3, 0.0)
+    {$(P_\Y)\pushforward \pi = \beta$};
+\end{tikzpicture}
+\caption{カップリング $\pi \in \Couplings(\alpha, \beta)$ の概念図．
+$\X \times \Y$ 上に分布する $\pi$（中央の紫領域）について，
+$\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
+\label{fig:sem-coupling-continuous}
+\end{figure}
+
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[scale=0.95]
@@ -502,25 +475,268 @@ $\R_+^{n \times m}$ の有界部分集合であるから，
 
 \subsection{Kantorovich 問題}
 
-\begin{definition}{Kantorovich 問題（Kantorovich problem）}{sem-kantorovich}
+\begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
-  \textbf{Kantorovich 問題}とは
+  $\alpha, \beta$ のカップリング
+  $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）に
+  わたって積分 $\int_{\X \times \Y} c(x, y) \, \d\pi(x, y)$ を
+  最小化する問題
   \[
     \MK_c(\alpha, \beta) \defeq
     \inf_{\pi \in \Couplings(\alpha, \beta)}
     \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
   \]
-  を求める問題である．
+  を\textbf{Kantorovich 問題}という．
 \end{definition}
 
-離散カップリング $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ の場合，
-$\int c \, \d\pi = \sum_{i,j} C_{i,j} P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$
-となるから，\textbf{離散 Kantorovich 問題}は
+\subsection{離散版}
+\label{subsec:sem-discrete-kantorovich}
+
+$\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}）
 \[
-  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) \defeq
-  \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-  \inner{\mathbf{C}}{\mathbf{P}}
+  \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
+  \qquad
+  \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
 \]
-と書ける．
-これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の最適化問題である．
+（相異なる $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
+$\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$，
+$\sum_i a_i = \sum_j b_j = 1$）の場合を考え，行列
+$\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ で定める．
+このときカップリング集合 $\Couplings(\alpha, \beta)$ は有限次元の行列集合
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
+有限次元線形計画として書き直せる．以下，対応・最適化問題・解の存在を順に確かめる．
+
+\begin{claim}{離散カップリングの行列表示}{sem-discrete-coupling-form}
+  集合
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
+    \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
+    \mathbf{P} \ones_m = \mathbf{a},\;
+    \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
+  \]
+  に対し，写像
+  \[
+    \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
+    \qquad
+    \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
+  \]
+  は全単射であり，逆写像は
+  $\Phi^{-1}(\pi) = (\pi(\{(x_i, y_j)\}))_{i,j}$ で与えられる．
+\end{claim}
+
+\begin{proof}
+  以下の3点を示す．
+
+  \textbf{(i) $\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)$.}
+  $\Phi(\mathbf{P})(\X \times \Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1$ より
+  $\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)$．
+  単点 $\{x_k\}$ について
+  \[
+    \bigl((P_\X)\pushforward \Phi(\mathbf{P})\bigr)(\{x_k\})
+    = \Phi(\mathbf{P})(\{x_k\} \times \Y)
+    = \sum_{j=1}^m P_{k,j}
+    = a_k
+    = \alpha(\{x_k\}).
+  \]
+  $\alpha$ は $\X \setminus \{x_1, \ldots, x_n\}$ で零ゆえ，
+  両辺はすべての可測集合 $A \in \Bb(\X)$ で一致し
+  $(P_\X)\pushforward \Phi(\mathbf{P}) = \alpha$．同様に $\beta$ について．
+
+  \textbf{(ii) 単射性．}
+  $\Phi(\mathbf{P})(\{(x_k, y_l)\}) = P_{k,l}$ より
+  $\mathbf{P}$ は $\Phi(\mathbf{P})$ から一意に定まる．
+
+  \textbf{(iii) 全射性．}
+  $\pi \in \Couplings(\alpha, \beta)$ を任意にとる．
+  $\alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0$ と周辺条件
+  $(P_\X)\pushforward \pi = \alpha$ から
+  \[
+    \pi\bigl((\X \setminus \{x_1, \ldots, x_n\}) \times \Y\bigr)
+    = \alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0,
+  \]
+  同様に $\pi(\X \times (\Y \setminus \{y_1, \ldots, y_m\})) = 0$．
+  したがって $\pi$ は $\{(x_i, y_j)\}_{i, j}$ の補集合で零となり，
+  $P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0$ とおけば
+  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
+  単点 $\{x_k\}$ における周辺条件
+  $a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times \Y) = \sum_j P_{k,j}$
+  から $\mathbf{P}\ones_m = \mathbf{a}$．同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
+  ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$．
+\end{proof}
+
+\begin{claim}{離散カップリング集合は凸多面体}{sem-coupling-polytope}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体（定義~\ref{def:sem-polytope}）をなす．
+\end{claim}
+
+\begin{proof}
+  $\mathbf{P} \in \R^{n \times m}$ を列方向に並べたベクトル
+  $\mathbf{p} \in \R^{nm}$ を考えると，
+  周辺条件 $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$
+  はある行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ と
+  $\mathbf{r} \defeq [\mathbf{a}^\top, \mathbf{b}^\top]^\top \in \R^{n+m}$ を用いて
+  $\mathbf{A}\mathbf{p} = \mathbf{r}$ と書ける（具体的構成は
+  §\ref{sec:sem-lp-standard}）．したがって
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b})
+    \;\cong\;
+    \{\mathbf{p} \in \R^{nm} \mid
+      \mathbf{A}\mathbf{p} = \mathbf{r},\; \mathbf{p} \geq \mathbf{0}\}
+  \]
+  であり，これは凸多面体の定義~\ref{def:sem-polytope}の形である．
+\end{proof}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  % ---- 上ヘッダー: b_j = sum_i P_{i,j} = value（3 行に折りたたみ） ----
+  \node[font=\footnotesize, anchor=south, align=center] at (1.5, 0.15)
+    {$b_1$ \\[1pt] $= \textstyle\sum_i P_{i,1}$ \\[1pt] $= 0.4$};
+  \node[font=\footnotesize, anchor=south, align=center] at (3.0, 0.15)
+    {$b_2$ \\[1pt] $= \textstyle\sum_i P_{i,2}$ \\[1pt] $= 0.3$};
+  \node[font=\footnotesize, anchor=south, align=center] at (4.5, 0.15)
+    {$b_3$ \\[1pt] $= \textstyle\sum_i P_{i,3}$ \\[1pt] $= 0.3$};
+
+  % ---- 左ヘッダー: a_i = sum_j P_{i,j} = value（1 行） ----
+  \node[font=\small, anchor=east] at (0.6, -1.5) {$a_1 = \sum_j P_{1,j} = 0.3$};
+  \node[font=\small, anchor=east] at (0.6, -3.0) {$a_2 = \sum_j P_{2,j} = 0.4$};
+  \node[font=\small, anchor=east] at (0.6, -4.5) {$a_3 = \sum_j P_{3,j} = 0.3$};
+
+  % ---- 行列 P （3x3） ----
+  \foreach \i/\j/\v/\op in {%
+    1/1/0.20/60, 1/2/0.05/15, 1/3/0.05/15,%
+    2/1/0.15/45, 2/2/0.15/45, 2/3/0.10/30,%
+    3/1/0.05/15, 3/2/0.10/30, 3/3/0.15/45}{%
+    \fill[purple!\op] (1.5*\j - 0.75, -1.5*\i + 0.75)
+                      rectangle (1.5*\j + 0.75, -1.5*\i - 0.75);
+    \draw (1.5*\j - 0.75, -1.5*\i + 0.75)
+          rectangle (1.5*\j + 0.75, -1.5*\i - 0.75);
+    \node[font=\small] at (1.5*\j, -1.5*\i) {$\v$};
+  }
+
+  % ---- P ラベル ----
+  \node[font=\small\bfseries] at (5.7, -3.0) {$\mathbf{P}$};
+\end{tikzpicture}
+\caption{離散カップリング $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の構造．
+中央の $3 \times 3$ 行列が $\mathbf{P}$（色の濃さが値 $P_{i,j}$ の大きさを表す）．}
+\label{fig:sem-coupling-matrix}
+\end{figure}
+
+\begin{claim}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
+  Claim~\ref{clm:sem-discrete-coupling-form} の対応 $\Phi$ で
+  $\pi = \Phi(\mathbf{P})$ と書くと
+  \[
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y) = \inner{\mathbf{C}}{\mathbf{P}}
+  \]
+  が成り立つ．したがって連続版 Kantorovich 問題
+  （定義~\ref{def:sem-kantorovich}）の下限は\textbf{離散 Kantorovich 問題}
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    \defeq
+    \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+  \]
+  に等しい：$\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$．
+\end{claim}
+
+\begin{proof}
+  Claim~\ref{clm:sem-discrete-coupling-form} より
+  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
+  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
+  \begin{align*}
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
+    &= \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
+      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
+    &= \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+      && \text{（主張~\ref{clm:sem-dirac-integral}）} \\
+    &= \sum_{i,j} C_{i,j} P_{i,j}
+      = \inner{\mathbf{C}}{\mathbf{P}}.
+  \end{align*}
+  $\Phi$ の全単射性から $\pi \in \Couplings(\alpha, \beta)$ にわたる下限と
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ にわたる下限は等しい．
+\end{proof}
+
+これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画である．
+
+\begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
+  例~\ref{ex:sem-monge-noexist} では
+  $\alpha = \delta_0$，$\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
+  に対して Monge 写像が存在しないことを見た．
+  Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の枠組みで考え直す．
+
+  離散表現は $\mathbf{a} = (1)$，$\mathbf{b} = (1/2,\; 1/2)$ であり，
+  カップリング $\mathbf{P} \in \R_+^{1 \times 2}$ は
+  $\mathbf{P}\ones_2 = 1$，$\mathbf{P}^\top \ones_1 = \mathbf{b}$
+  を満たす必要がある．行が1つしかないため $P_{1,j} = b_j$ が強制され，
+  \[
+    \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
+  \]
+  が唯一の実行可能カップリングである．
+  コスト $c(x,y) = |x - y|$ から
+  $\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)$ であり，
+  最適値は
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \inner{\mathbf{C}}{\mathbf{P}}
+    = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
+  \]
+  Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
+  実行可能解が存在し，最適値が定まる．
+\end{example}
+
+\paragraph{解の存在．}
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体
+（主張~\ref{clm:sem-coupling-polytope}）をなす．
+有界閉集合上の連続関数は最小値を達成するから，下限は最小値となり最適解が存在する．
+
+\begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
+  任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
+  （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
+  離散 Kantorovich 問題の下限は最小値として達成される：
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+    = \inner{\mathbf{C}}{\mathbf{P}^*}
+  \]
+  をみたす $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ が存在する．
+\end{claim}
+
+\begin{proof}
+  以下の3点を示せばよい：
+  (i) $\CouplingsD(\mathbf{a}, \mathbf{b}) \neq \emptyset$，
+  (ii) $\CouplingsD(\mathbf{a}, \mathbf{b}) \subset \R^{n \times m}$ はコンパクト，
+  (iii) 目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は連続．
+
+  \textbf{(i) 非空性．}
+  積測度に相当する $\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top$，すなわち
+  $(P_0)_{i,j} = a_i b_j$ をとると，
+  $(\mathbf{P}_0 \ones_m)_i = a_i \sum_j b_j = a_i$，
+  $(\mathbf{P}_0^\top \ones_n)_j = b_j \sum_i a_i = b_j$
+  ゆえ $\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+
+  \textbf{(ii) コンパクト性．}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式
+  $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top \ones_n = \mathbf{b}$
+  と非負性 $\mathbf{P} \geq 0$ で定まる $\R^{n \times m}$ の閉集合．
+  さらに各成分は $0 \leq P_{i,j} \leq \min(a_i, b_j) \leq 1$ をみたすから有界．
+  $\R^{n \times m}$ における有界閉集合はコンパクト．
+
+  \textbf{(iii) 連続性．}
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}$
+  は線形写像であり，有限次元線形空間上で連続．
+
+  $\R^{n \times m}$ 上の連続関数は空でないコンパクト集合上で最小値を達成する
+  （Weierstrass の最大値の定理）．したがって最適解 $\mathbf{P}^*$ が存在する．
+\end{proof}
+
+\begin{remark}{最適解の一意性は一般に成り立たない}{sem-discrete-nonunique}
+  Claim~\ref{clm:sem-uniqueness} で見たとおり，
+  $\mathbf{C}$ がすべて等しい等の縮退状況では，
+  最適値を達成する $\mathbf{P}^*$ は一意ではない．
+  実際，目的関数は線形であり実行可能集合は凸多面体であるから，
+  最適解の集合は $\CouplingsD(\mathbf{a}, \mathbf{b})$ の面の1つをなす．
+\end{remark}
+
+連続版（Polish 空間設定）の解の存在は Prokhorov の定理と
+コスト関数の下半連続性を用いて示されるが，本稿では離散版に焦点を当てる．

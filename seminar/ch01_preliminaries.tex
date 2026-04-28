@@ -1,70 +1,94 @@
 \chapter{準備}
 \label{ch:seminar-00}
 
-\begin{definition}{有限集合と濃度（finite set, cardinality）}{sem-finite}
-  集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
-  全単射 $f \colon \range{n} \to S$ が存在することをいう．
-  この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
+\begin{definition}{冪集合}{sem-power-set}
+  集合 $\Omega$ に対し，$\Omega$ の部分集合全体を
+  \[
+    2^{\Omega} \defeq \{A \mid A \subset \Omega\}
+  \]
+  と書き，$\Omega$ の\textbf{冪集合}という．
 \end{definition}
-
-\begin{claim}{有限集合の最小元}{sem-finite-min}
-  $\R$ の空でない有限部分集合 $S$（定義~\ref{def:sem-finite}）には
-  最小元が存在する：
-  \[
-    \exists\, s^* \in S \;\;\text{s.t.}\;\; \forall\, s \in S,\; s^* \leq s.
-  \]
-\end{claim}
-
-\begin{proof}
-  $|S|$ に関する帰納法で示す．
-
-  \textbf{$|S| = 1$ の時．} $S$ の唯一の元がそのまま最小元．
-
-  \textbf{$|S| \geq 2$ の時．}
-  $\R$ の任意の空でない有限部分集合 $T$ について $|T| < |S|$ ならば最小元を持つと仮定する．
-  $a \in S$ を任意に取り $S' \defeq S \setminus \{a\}$ とおくと $|S'| = |S| - 1$ なので，
-  仮定が $S'$ に対して適用でき最小元 $b \in S'$ を持つ．
-  $a, b \in \R$ より $b \leq a$ か $a < b$ のいずれかが成り立つので，
-  \[
-    s^* \defeq
-    \begin{cases}
-      b & (b \leq a), \\
-      a & (a < b)
-    \end{cases}
-  \]
-  とおけば $s^* \in S$ かつ任意の $s \in S$ について $s^* \leq s$．
-\end{proof}
 
 %% ============================================================
-%% 線形代数
+%% 位相空間
 %% ============================================================
-\section{線形代数}
-\label{sec:sem-linalg}
+\section{位相空間}
+\label{sec:sem-topology}
 
-\subsection{置換}
-\label{sec:sem-permutation}
-
-\begin{definition}{置換（permutation）}{sem-permutation}
-  $n \in \N$ とする．$\range{n}$ 上の\textbf{置換}全体の集合を
-  \[
-    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
-  \]
-  と定める．$|\Perm(n)| = n!$ である．
+\begin{definition}{位相空間}{sem-topological-space}
+  集合 $\Omega$ と部分集合族 $\mathcal{O} \subset 2^{\Omega}$ の組
+  $(\Omega, \mathcal{O})$ が\textbf{位相空間}であるとは，
+  次の3条件を満たすことをいう：
+  \begin{enumerate}
+    \item[(i)] $\emptyset, \Omega \in \mathcal{O}$，
+    \item[(ii)] $U_1, \ldots, U_n \in \mathcal{O} \Longrightarrow
+      \bigcap_{k=1}^{n} U_k \in \mathcal{O}$（有限交叉で閉じる），
+    \item[(iii)] $\{U_\lambda\}_{\lambda \in \Lambda} \subset \mathcal{O}
+      \Longrightarrow \bigcup_{\lambda \in \Lambda} U_\lambda \in \mathcal{O}$
+      （任意濃度の和集合で閉じる）．
+  \end{enumerate}
+  $\mathcal{O}$ の元を\textbf{開集合}，$\mathcal{O}$ を $\Omega$ 上の\textbf{位相}という．
+  ある開集合 $U \in \mathcal{O}$ を用いて $F = \Omega \setminus U$ と書ける
+  $F \subset \Omega$ を\textbf{閉集合}という．
 \end{definition}
 
-\subsection{フロベニウス内積}
-\label{sec:sem-frobenius-inner}
-
-\begin{definition}{フロベニウス内積（Frobenius inner product）}{sem-frobenius-inner}
-  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
-  \textbf{フロベニウス内積}を
-  \[
-    \inner{\mathbf{A}}{\mathbf{B}}
-    \defeq \tr(\mathbf{A}^\top \mathbf{B})
-    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
-  \]
-  で定める．
+\begin{definition}{稠密集合}{sem-dense}
+  位相空間 $(\Omega, \mathcal{O})$ の部分集合 $D \subset \Omega$ が\textbf{稠密}とは，
+  任意の空でない開集合 $U \in \mathcal{O}$ に対して $D \cap U \neq \emptyset$
+  となることをいう．
 \end{definition}
+
+\begin{definition}{可分性}{sem-separable}
+  位相空間 $(\Omega, \mathcal{O})$ が可算な稠密部分集合
+  （定義~\ref{def:sem-dense}）をもつとき，
+  $(\Omega, \mathcal{O})$ は\textbf{可分}であるという．
+\end{definition}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% 数直線 Ω = R
+  \draw[thick, ->] (-0.5, 0) -- (8.0, 0);
+  \node[right, font=\small] at (8.0, 0) {$\Omega = \R$};
+
+  %% 可算稠密集合 D = {q_1, q_2, ...}：番号付けで可算性を強調
+  %% 一部に番号を付ける
+  \foreach \k/\xpos in {1/0.5, 2/2.0, 3/4.5, 4/6.5, 5/1.2, 6/3.3, 7/5.7, 8/7.4} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, below] at (\xpos, -0.1) {$q_{\k}$};
+  }
+  %% 番号なしの追加点（無限に並ぶことを示唆）
+  \foreach \xpos in {0.85, 1.7, 2.5, 2.85, 3.7, 4.1, 4.85, 5.3, 6.1, 6.85, 7.7} {
+    \fill[blue!60] (\xpos, 0) circle (1pt);
+  }
+
+  %% 任意の点 x（無理数）と任意精度の近傍
+  \fill[red] (4.7, 0) circle (2pt);
+  \node[red, font=\small, above] at (4.7, 0.1) {$x$};
+  %% ε-近傍を示す赤線
+  \draw[red, thick]
+    (4.45, 0.6) -- (4.45, 0.8) -- (4.95, 0.8) -- (4.95, 0.6)
+    node[above, font=\footnotesize, midway] at (4.7, 0.85) {$\varepsilon$ 近傍};
+
+  %% 近傍内の D の点（近似列の存在）
+  \draw[->, thick, blue!50!green]
+    (4.6, 0.1) -- (4.6, 0.6);
+  \node[blue!50!green, font=\footnotesize, anchor=west] at (5.05, 0.7)
+    {$\exists q_k \in D,\; d(x, q_k) < \varepsilon$};
+
+  %% 凡例
+  \node[blue, font=\footnotesize, anchor=west] at (-0.3, -0.7)
+    {$D = \{q_1, q_2, \ldots\}$ は可算（番号付けできる）};
+  \node[font=\footnotesize, anchor=west] at (-0.3, -1.05)
+    {かつ稠密（任意の $x$ を任意精度で近似）};
+\end{tikzpicture}
+\caption{可分性のイメージ（$\Q \subset \R$ を例に）．
+青点 $D = \{q_1, q_2, \ldots\}$ は可算（番号付け可能）．
+さらに任意の点 $x \in \R$ と任意の精度 $\varepsilon > 0$ に対し
+$d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
+可算性と稠密性の両立が可分性の本質．}
+\label{fig:sem-dense-separable}
+\end{figure}
 
 %% ============================================================
 %% 距離空間
@@ -72,7 +96,7 @@
 \section{距離空間}
 \label{sec:sem-metric-space}
 
-\begin{definition}{距離空間（metric space）}{sem-metric-space}
+\begin{definition}{距離空間}{sem-metric-space}
   集合 $\Omega$ と関数 $d \colon \Omega \times \Omega \to [0, \infty)$ の組
   $(\Omega, d)$ が\textbf{距離空間}であるとは，
   次の3条件がすべての $x, y, z \in \Omega$ に対して成り立つことをいう：
@@ -84,103 +108,222 @@
   関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
 \end{definition}
 
-\begin{definition}{開球・開集合・距離位相}{sem-metric-topology}
-  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r > 0$ に対して，
-  \textbf{開球}を
+\begin{definition}{開球}{sem-open-ball}
+  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{++}$ に対して，
+  中心 $x$，半径 $r$ の\textbf{開球}を
   \[
     B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
   \]
   で定める．
-  部分集合 $U \subset \Omega$ が\textbf{開集合}であるとは，
-  任意の $x \in U$ に対してある $r > 0$ が存在して
-  $B_r(x) \subset U$ となることをいう．
-  $\Omega$ の開集合全体を $(\Omega, d)$ の\textbf{距離位相}と呼ぶ．
 \end{definition}
 
-\begin{definition}{完備距離空間（complete metric space）}{sem-complete-metric}
-  距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1}$ が\textbf{Cauchy 列}であるとは，
+距離空間 $(\Omega, d)$ における開集合（定義~\ref{def:sem-topological-space}）は，
+開球 $B_r(x)$ を用いて次のように特徴付けられる：
+$U \subset \Omega$ が開集合であるとは，任意の $x \in U$ に対し
+$B_r(x) \subset U$ をみたす $r \in \R_{++}$ が存在することをいう．
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% --- 左：開集合 U（境界は U に含まれない） ---
+  \begin{scope}
+    \node[above, font=\small\bfseries] at (1.7, 3.0) {開集合の例};
+    %% U の領域（境界を点線で示し，「境界は含まない」）
+    \draw[blue, dashed, thick, fill=blue!8]
+      plot[smooth cycle, tension=0.7]
+      coordinates {(0.2, 1.0) (0.7, 2.4) (2.1, 2.7) (3.2, 2.0)
+                   (3.0, 0.8) (1.8, 0.2) (0.6, 0.4)};
+    \node[blue, font=\small] at (1.9, 1.5) {$U$};
+
+    %% 内点 x_1 とその開球
+    \fill[red] (1.2, 1.7) circle (1.5pt);
+    \node[red, font=\small, above right] at (1.2, 1.7) {$x_1$};
+    \draw[red, thick] (1.2, 1.7) circle (0.35);
+    \node[red, font=\footnotesize] at (1.2, 1.05) {$B_{r_1}(x_1) \subset U$};
+
+    %% 内点 x_2 とその開球（境界に近い）
+    \fill[red] (2.6, 2.0) circle (1.5pt);
+    \node[red, font=\small, above] at (2.6, 2.05) {$x_2$};
+    \draw[red, thick] (2.6, 2.0) circle (0.18);
+
+    \node[font=\footnotesize, anchor=north] at (1.7, -0.1)
+      {任意の点 $x \in U$ で $B_r(x) \subset U$ なる $r$ がとれる};
+  \end{scope}
+
+  %% --- 右：開集合でない例（境界点を含む） ---
+  \begin{scope}[xshift=6.0cm]
+    \node[above, font=\small\bfseries] at (1.7, 3.0) {開集合でない例};
+    %% F の領域（境界を実線で示し，「境界も含む」）
+    \draw[red!70!black, thick, fill=red!8]
+      plot[smooth cycle, tension=0.7]
+      coordinates {(0.2, 1.0) (0.7, 2.4) (2.1, 2.7) (3.2, 2.0)
+                   (3.0, 0.8) (1.8, 0.2) (0.6, 0.4)};
+    \node[red!70!black, font=\small] at (1.9, 1.5) {$F$};
+
+    %% 境界上の点 x_0
+    \fill[red] (3.18, 1.7) circle (1.5pt);
+    \node[red, font=\small, right] at (3.22, 1.7) {$x_0$};
+    %% B_r(x_0) が F からはみ出す様子
+    \draw[red, thick, dashed] (3.18, 1.7) circle (0.4);
+    \node[red, font=\footnotesize] at (3.6, 1.05) {$B_r(x_0) \not\subset F$};
+
+    \node[font=\footnotesize, anchor=north] at (1.7, -0.1)
+      {境界点 $x_0$ で $B_r(x_0)$ が外にはみ出す};
+  \end{scope}
+\end{tikzpicture}
+\caption{開集合の概念図．左：$U$ は開集合で，任意の点 $x \in U$ について
+十分小さい開球 $B_r(x)$ が $U$ に含まれる（境界は $U$ に含まれない；点線で表示）．
+右：$F$ は境界を含むため開集合でなく，境界点 $x_0$ ではどんなに $r$ を
+小さくしても $B_r(x_0) \not\subset F$．
+$\Omega$ 上の開集合全体が位相 $\mathcal{O}_d$ をなす．}
+\label{fig:sem-open-set}
+\end{figure}
+
+\begin{definition}{収束列}{sem-convergence}
+  距離空間 $(\Omega, d)$ における列 $(x_n)_{n \geq 1} \subset \Omega$ が
+  点 $x \in \Omega$ に\textbf{収束}するとは，
+  任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
+  $n \geq N \Longrightarrow d(x_n, x) < \varepsilon$ となることをいう．
+  このとき $\lim_{n \to \infty} x_n = x$ または $x_n \to x$ と書く．
+\end{definition}
+
+\begin{definition}{完備性}{sem-complete-metric}
+  距離空間 $(\Omega, d)$ の列 $(x_n)_{n \geq 1} \subset \Omega$ が
+  \textbf{Cauchy 列}であるとは，
   任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
   $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ となることをいう．
   $(\Omega, d)$ が\textbf{完備}であるとは，
-  $\Omega$ 上のすべての Cauchy 列が $\Omega$ の点に収束することをいう．
+  $\Omega$ における任意の Cauchy 列が $\Omega$ の点に収束する
+  （定義~\ref{def:sem-convergence}）ことをいう．すなわち
+  \[
+    \forall (x_n)_{n \geq 1} \subset \Omega \text{ Cauchy 列},\;
+    \exists x \in \Omega,\;
+    x_n \to x.
+  \]
+  収束の定義に展開すれば
+  \[
+    \forall (x_n)_{n \geq 1} \subset \Omega \text{ Cauchy 列},\;
+    \exists x \in \Omega,\;
+    \forall \varepsilon > 0,\;
+    \exists N \in \N,\;
+    n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
+  \]
 \end{definition}
 
-\begin{definition}{可分距離空間（separable metric space）}{sem-separable}
-  距離空間 $(\Omega, d)$ の部分集合 $D \subset \Omega$ が\textbf{稠密}であるとは，
-  任意の $x \in \Omega$ と任意の $\varepsilon > 0$
-  に対して $d(x, y) < \varepsilon$ を満たす $y \in D$ が存在することをいう．
-  $\Omega$ が可算な稠密部分集合を持つとき，$\Omega$ は\textbf{可分}であるという．
-\end{definition}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% --- 左：完備な空間 Ω = [0, 4] ---
+  \begin{scope}
+    \node[above, font=\small\bfseries] at (2.2, 1.7) {完備：$\Omega = [0, 4]$};
+    \draw[thick] (0, 1.0) -- (4.2, 1.0);
+    \fill[black] (0, 1.0) circle (1.5pt);
+    \fill[black] (4.2, 1.0) circle (1.5pt);
 
-\begin{definition}{Hausdorff 性（Hausdorff property）}{sem-hausdorff}
-  距離空間 $(\Omega, d)$ が\textbf{Hausdorff 空間}であるとは，
-  相異なる任意の 2 点 $x, y \in \Omega$ に対し，
-  $B_r(x) \cap B_r(y) = \emptyset$ をみたす $r > 0$ が存在することをいう．
-\end{definition}
+    %% Cauchy sequence x_k = 1/k * 3 (decreasing toward 0)
+    \foreach \k/\xpos in {1/3.0, 2/1.5, 3/1.0, 4/0.75, 5/0.6, 6/0.5} {
+      \fill[blue] (\xpos, 1.0) circle (1.5pt);
+    }
+    \node[blue, font=\scriptsize, above] at (3.0, 1.1) {$x_1$};
+    \node[blue, font=\scriptsize, above] at (1.5, 1.1) {$x_2$};
+    \node[blue, font=\scriptsize, above] at (1.0, 1.1) {$x_3$};
+    \node[blue, font=\footnotesize, above] at (0.5, 1.3) {$\cdots$};
 
-\begin{claim}{距離空間は Hausdorff}{sem-metric-hausdorff}
-  任意の距離空間は Hausdorff である．
-  特に単点集合 $\{x\}$ および有限集合 $\{x_1, \ldots, x_n\}$ は閉集合．
-\end{claim}
+    %% limit point at 0 ∈ Ω
+    \fill[red] (0, 1.0) circle (2.5pt);
+    \node[red, font=\small, below] at (0, 0.85) {$x^*$};
+    \node[red, font=\footnotesize, below] at (0, 0.5) {$\in \Omega$};
 
-\begin{proof}
-  相異なる $x, y \in \Omega$ に対し $r \defeq d(x, y)/2 > 0$ とおく．
-  $z \in B_r(x) \cap B_r(y)$ ならば三角不等式より
-  $d(x, y) \leq d(x, z) + d(z, y) < 2r = d(x, y)$ となり矛盾．
-  ゆえに $B_r(x) \cap B_r(y) = \emptyset$．
+    %% convergence arrow
+    \draw[->, gray, thick]
+      (1.0, 0.45) .. controls (0.5, 0.5) .. (0.05, 0.95);
+    \node[font=\footnotesize, gray, anchor=west] at (1.1, 0.4) {収束先};
+  \end{scope}
 
-  単点 $\{x\}$ の閉性：任意の $y \neq x$ に対し
-  $r' \defeq d(x, y)/2 > 0$ で $B_{r'}(y) \cap \{x\} = \emptyset$
-  ゆえ $\Omega \setminus \{x\}$ は開集合，すなわち $\{x\}$ は閉集合．
-  有限集合は閉集合の有限和ゆえ閉．
-\end{proof}
+  %% --- 右：完備でない $\Omega' = (0, 4]$ ---
+  \begin{scope}[xshift=5.5cm]
+    \node[above, font=\small\bfseries] at (2.2, 1.7) {完備でない：$\Omega' = (0, 4]$};
+    \draw[thick] (0.05, 1.0) -- (4.2, 1.0);
+    %% 0 を除く: open endpoint
+    \draw[thick, fill=white] (0, 1.0) circle (2.0pt);
+    \fill[black] (4.2, 1.0) circle (1.5pt);
 
-\begin{definition}{第二可算（second-countable）}{sem-second-countable}
-  距離空間 $(\Omega, d)$ が\textbf{第二可算}であるとは，
-  可算な開集合族 $\mathcal{N} = \{U_k\}_{k \geq 1}$ が存在して，
-  $\Omega$ の任意の開集合 $U$ がある部分族 $\mathcal{N}' \subset \mathcal{N}$ の和集合
-  $U = \bigcup_{V \in \mathcal{N}'} V$ として書けることをいう．
-  この $\mathcal{N}$ を\textbf{可算開基（countable base）}という．
-\end{definition}
+    %% same Cauchy 列
+    \foreach \xpos in {3.0, 1.5, 1.0, 0.75, 0.6, 0.5} {
+      \fill[blue] (\xpos, 1.0) circle (1.5pt);
+    }
 
-\begin{definition}{Lindelöf 性（Lindel\"of property）}{sem-lindelof}
-  距離空間 $(\Omega, d)$ が\textbf{Lindelöf 空間}であるとは，
-  $\Omega$ の任意の開部分集合 $U$ の任意の開被覆 $\{V_\lambda\}_{\lambda \in \Lambda}$
-  （$U \subset \bigcup_\lambda V_\lambda$）が可算な部分被覆を持つことをいう．
-\end{definition}
+    %% 極限が Ω' の外
+    \draw[red, very thick] (-0.18, 0.83) -- (0.18, 1.17);
+    \draw[red, very thick] (-0.18, 1.17) -- (0.18, 0.83);
+    \node[red, font=\small, below] at (0, 0.7) {$x^*$};
+    \node[red, font=\footnotesize, below] at (0, 0.4) {$\notin \Omega'$};
+  \end{scope}
+\end{tikzpicture}
+\caption{完備性の概念．Cauchy 列 $(x_k)$ は項間距離が無限小に縮まる
+（$\forall \varepsilon > 0,\; \exists N,\; k, l \geq N \Rightarrow d(x_k, x_l) < \varepsilon$）．
+左：完備な $\Omega$ では極限 $x^*$ が $\Omega$ 内に存在し $x_k \to x^*$．
+右：$\Omega' = (0, 4]$（端点 $0$ を除外）では同じ Cauchy 列の極限 $0$ が
+$\Omega'$ の外に逃げ，完備でない．}
+\label{fig:sem-completeness}
+\end{figure}
 
-\begin{claim}{可分距離空間は第二可算かつ Lindelöf}{sem-separable-second-countable-lindelof}
-  可分距離空間 $(\Omega, d)$ は第二可算であり，かつ Lindelöf である．
-\end{claim}
-
-\begin{proof}
-  \textbf{第二可算性．}
-  $D = \{q_k\}_{k \geq 1} \subset \Omega$ を可算稠密部分集合とし，
-  $\mathcal{N} \defeq \{B_{1/n}(q_k) \mid k \geq 1,\, n \geq 1\}$ とおく．
-  $\mathcal{N}$ は可算族．任意の開集合 $U$ と $x \in U$ に対し
-  $B_r(x) \subset U$ をみたす $r > 0$ がとれる．
-  $2/n < r$ なる $n \in \N$ と，稠密性から $d(q_k, x) < 1/n$ なる $q_k \in D$ をとると，
-  $x \in B_{1/n}(q_k)$ かつ，$z \in B_{1/n}(q_k)$ について
-  $d(z, x) \leq d(z, q_k) + d(q_k, x) < 2/n < r$ ゆえ
-  $B_{1/n}(q_k) \subset B_r(x) \subset U$．
-  したがって $U$ は $\mathcal{N}$ の部分族の和集合として書ける．
-
-  \textbf{Lindelöf 性．}
-  $\mathcal{N} = \{U_k\}_{k \geq 1}$ を可算開基，$U$ を開集合，
-  $\{V_\lambda\}_{\lambda \in \Lambda}$ を $U$ の開被覆とする．
-  各 $x \in U$ に対し $x \in V_{\lambda(x)}$ なる $\lambda(x)$ をひとつ選ぶと，
-  $V_{\lambda(x)}$ は開ゆえある $k(x) \geq 1$ で $x \in U_{k(x)} \subset V_{\lambda(x)}$．
-  $K \defeq \{k(x) \mid x \in U\} \subset \N$ は可算．
-  各 $k \in K$ に対し $U_k \subset V_{\lambda_k}$ なる $\lambda_k \in \Lambda$ をひとつ選ぶと，
-  $\bigcup_{k \in K} V_{\lambda_k} \supset \bigcup_{k \in K} U_k \supset U$
-  ゆえ $\{V_{\lambda_k}\}_{k \in K}$ は可算部分被覆．
-\end{proof}
-
-\begin{definition}{Polish 空間（Polish space）}{sem-polish}
+\begin{definition}{Polish 空間}{sem-polish}
   完備かつ可分な距離空間を\textbf{Polish 空間}という．
   例：$\R^d$ はユークリッド距離に関して Polish 空間である
   （$\Q^d$ が可算稠密部分集合を与える）．
 \end{definition}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  %% Ω = R
+  \draw[thick, ->] (-0.5, 0) -- (8.0, 0);
+  \node[right, font=\small] at (8.0, 0) {$\R$};
+
+  %% Q = countable dense subset, labeled
+  %% spread Q points; some near limit x* = π
+  \foreach \k/\xpos in {1/0.5, 2/1.5, 3/4.0, 4/6.5, 5/7.3} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, below] at (\xpos, -0.15) {$q_{\k}$};
+  }
+  %% Cauchy subsequence (q_{k_n}) → x* (irrational point)
+  \def\xstar{3.14}
+  \foreach \i/\xpos/\lab in {6/2.5/$q_{k_1}$, 7/3.0/$q_{k_2}$, 8/3.13/$q_{k_3}$} {
+    \fill[blue] (\xpos, 0) circle (1.5pt);
+    \node[blue, font=\scriptsize, above] at (\xpos, 0.1) {\lab};
+  }
+  %% extra Q points (background density)
+  \foreach \xpos in {1.0, 1.9, 4.5, 5.0, 5.5, 6.0, 6.9, 7.6} {
+    \fill[blue!50] (\xpos, 0) circle (1pt);
+  }
+
+  %% x* (limit, irrational) in R
+  \fill[red] (\xstar, 0) circle (2.5pt);
+  \node[red, font=\small, above] at (\xstar, 0.3) {$x^*$};
+  \node[red, font=\scriptsize] at (\xstar, 0.6) {（無理数）};
+
+  %% arrow from Cauchy seq to x*
+  \draw[->, blue!50!green, thick]
+    (2.7, 1.3) .. controls (3.0, 1.0) .. (\xstar, 0.4);
+  \node[blue!50!green, font=\footnotesize, anchor=south west] at (1.3, 1.25)
+    {Cauchy 列 $(q_{k_n}) \to x^*$};
+
+  %% labels
+  \node[font=\footnotesize, anchor=west, blue] at (-0.3, -1.0)
+    {\textbf{可分性}：可算稠密な $\Q = \{q_1, q_2, \ldots\} \subset \R$};
+  \node[font=\footnotesize, anchor=west, red!70!black] at (-0.3, -1.4)
+    {\textbf{完備性}：Cauchy 列の極限 $x^*$ が $\R$ 内に存在
+      （無理数も $\R$ には含まれる）};
+\end{tikzpicture}
+\caption{Polish 空間（完備可分距離空間）のイメージ．代表例 $\R$ 上で：
+$\Q$ は可算かつ稠密（可分性）．
+$\Q$ 内の Cauchy 列 $(q_{k_n})$ の極限は無理数になりうるが，
+それも $\R$ 内に存在する（完備性）．
+$\Q$ 自身は完備でない（極限を $\Q$ に拾えない）が，
+$\R$ はその「完備化」として機能する．}
+\label{fig:sem-polish}
+\end{figure}
 
 %% ============================================================
 %% 測度論
@@ -191,7 +334,7 @@
 \subsection{可測空間と確率測度}
 \label{sec:sem-measurable}
 
-\begin{definition}{$\sigma$-代数（$\sigma$-algebra）}{sem-sigma-algebra}
+\begin{definition}{$\sigma$-代数}{sem-sigma-algebra}
   集合 $\Omega$ の部分集合族 $\mathcal{F} \subset 2^{\Omega}$ が
   \textbf{$\sigma$-代数}であるとは，
   以下の3条件を満たすことをいう：
@@ -203,7 +346,7 @@
   \end{enumerate}
 \end{definition}
 
-\begin{definition}{可測空間（measurable space）}{sem-measurable-space}
+\begin{definition}{可測空間}{sem-measurable-space}
   集合 $\Omega$ と $\Omega$ 上の $\sigma$-代数 $\mathcal{F}$ の組
   $(\Omega, \mathcal{F})$ を\textbf{可測空間}という．
   $\mathcal{F}$ の元を\textbf{可測集合}という．
@@ -216,12 +359,13 @@
 \end{definition}
 
 \begin{definition}{ボレル $\sigma$-代数}{sem-borel}
-  距離空間 $(\Omega, d)$ のすべての開集合（定義~\ref{def:sem-metric-topology}）
+  位相空間 $(\Omega, \mathcal{O})$ のすべての開集合
+  （定義~\ref{def:sem-topological-space}）
   を含む最小の $\sigma$-代数を
   \textbf{ボレル $\sigma$-代数}といい，$\Bb(\Omega)$ と記す．
 \end{definition}
 
-\begin{definition}{可測関数（measurable function）}{sem-measurable-function}
+\begin{definition}{可測関数}{sem-measurable-function}
   可測空間 $(\Omega, \mathcal{F})$ から $(\R, \Bb(\R))$ への可測写像
   $f \colon \Omega \to \R$（定義~\ref{def:sem-measurable-map}）を
   \textbf{可測関数}という．
@@ -229,7 +373,7 @@
   可測空間上の可測関数を\textbf{ボレル可測関数}ともいう．
 \end{definition}
 
-\begin{definition}{積可測空間（product measurable space）}{sem-product-measurable}
+\begin{definition}{積可測空間}{sem-product-measurable}
   距離空間 $(\X, d_\X)$, $(\Y, d_\Y)$ に対して，
   積空間 $\X \times \Y$ に\textbf{積距離}
   \[
@@ -240,7 +384,7 @@
   $(\X, \Bb(\X))$ と $(\Y, \Bb(\Y))$ の\textbf{積可測空間}という．
 \end{definition}
 
-\begin{definition}{測度（measure）}{sem-measure}
+\begin{definition}{測度}{sem-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
   関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
   次の 2 条件を満たすものをいう：
@@ -252,7 +396,7 @@
   \end{enumerate}
 \end{definition}
 
-\begin{definition}{確率測度（probability measure）}{sem-probability-measure}
+\begin{definition}{確率測度}{sem-probability-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が $\mu(\Omega) = 1$ を満たすとき，
   $\mu$ を\textbf{確率測度}という．
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
@@ -261,7 +405,7 @@
 \subsection{測度に対する積分}
 \label{sec:sem-integration}
 
-\begin{definition}{指示関数（indicator function）}{sem-indicator}
+\begin{definition}{指示関数}{sem-indicator}
   集合 $\Omega$ の部分集合 $A \subset \Omega$ に対して，
   \textbf{指示関数} $\mathbf{1}_A \colon \Omega \to \{0, 1\}$ を
   \[
@@ -274,7 +418,7 @@
   で定める．
 \end{definition}
 
-\begin{definition}{単関数（simple function）}{sem-simple-function}
+\begin{definition}{単関数}{sem-simple-function}
   可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_+$ が
   \textbf{単関数}であるとは，互いに素な可測集合
   $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ を用いて
@@ -304,7 +448,7 @@
   \end{itemize}
 \end{definition}
 
-\begin{proposition}{単調収束定理と単関数近似（monotone convergence theorem, MCT）}{sem-mct}
+\begin{proposition}{単調収束定理と単関数近似}{sem-mct}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ に対して次が成り立つ．
   \begin{enumerate}
     \item[(i)] \textbf{単関数近似}：任意の非負可測関数
@@ -346,15 +490,6 @@
 
 \subsection{Dirac 測度と押し出し}
 \label{sec:sem-dirac-pushforward}
-
-\begin{definition}{測度の台（support）}{sem-support}
-  Polish 空間 $\X$ 上のボレル測度 $\mu$ に対し，
-  \[
-    \supp(\mu) \defeq
-    \{ x \in \X \mid \mu(B_r(x)) > 0\ (\forall r > 0) \}
-  \]
-  を $\mu$ の\textbf{台}という．$\supp(\mu)$ は $\X$ の閉集合．
-\end{definition}
 
 \begin{definition}{Dirac 測度}{sem-dirac}
   可測空間 $(\Omega, \mathcal{F})$ 上の点 $x \in \Omega$ に対して，
@@ -398,7 +533,7 @@
   \]
 \end{proof}
 
-\begin{definition}{離散測度（discrete measure）}{sem-discrete-measure}
+\begin{definition}{離散測度}{sem-discrete-measure}
   Polish 空間 $\X$ 上のボレル確率測度 $\mu \in \Mm_+^1(\X)$ が
   \textbf{離散測度}であるとは，
   ある $n \in \N$，相異なる $x_1, \ldots, x_n \in \X$，
@@ -409,59 +544,31 @@
   と表せることをいう．
 \end{definition}
 
-\begin{claim}{離散測度の標準形と一意性}{sem-discrete-measure-form}
-  $\mu \in \Mm_+^1(\X)$ について以下は同値：
-  \begin{enumerate}
-    \item[(i)] $\mu$ は離散測度（定義~\ref{def:sem-discrete-measure}）．
-    \item[(ii)] $\supp(\mu)$ は有限集合．
-  \end{enumerate}
-  さらに離散測度 $\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}$ の表示において
-  $\supp(\mu) = \{x_1, \ldots, x_n\}$，$a_i = \mu(\{x_i\})$ が成り立ち，
-  $n$ および対 $\{(x_i, a_i)\}_{i=1}^n$ は添字の入れ替えを除いて一意に定まる．
+\begin{claim}{離散測度の表示の一意性}{sem-discrete-measure-uniqueness}
+  離散測度 $\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}$ の表示について
+  $a_i = \mu(\{x_i\})$ が成り立ち，
+  $n$ および対 $\{(x_i, a_i)\}_{i=1}^{n}$ は $\mu$ から
+  添字の入れ替えを除いて一意に定まる．
 \end{claim}
 
 \begin{proof}
-  \textbf{(i) $\Rightarrow$ (ii)，および $\supp(\mu) = \{x_1, \ldots, x_n\}$．}
-  有限集合 $\{x_1, \ldots, x_n\}$ は閉集合
-  （主張~\ref{clm:sem-metric-hausdorff}）．
-  $y \notin \{x_1, \ldots, x_n\}$ なら十分小さい $r > 0$ で
-  $B_r(y) \cap \{x_1, \ldots, x_n\} = \emptyset$，
-  すなわち $\mu(B_r(y)) = 0$．よって $y \notin \supp(\mu)$．
-  一方，任意の $r > 0$ で $\mu(B_r(x_i)) \geq a_i > 0$ ゆえ $x_i \in \supp(\mu)$．
-  したがって $\supp(\mu) = \{x_1, \ldots, x_n\}$ は有限集合．
-
-  \textbf{(ii) $\Rightarrow$ (i)．}
-  $\supp(\mu) = \{x_1, \ldots, x_n\}$（相異なる $n$ 点）とおき，
-  $a_i \defeq \mu(\{x_i\})$ とする．
-  $\X \setminus \supp(\mu)$ の各点 $y$ はある開球 $B_{r_y}(y)$ で $\mu(B_{r_y}(y)) = 0$ をみたし，
-  これらは $\X \setminus \supp(\mu)$ の開被覆をなす．
-  Polish 空間は可分なので Lindelöf
-  （主張~\ref{clm:sem-separable-second-countable-lindelof}）であり，
-  可算部分被覆 $\{B_{r_{y_k}}(y_k)\}_{k \geq 1}$ が取れる．
-  測度の劣加法性から
-  $\mu(\X \setminus \supp(\mu)) \leq \sum_k \mu(B_{r_{y_k}}(y_k)) = 0$．したがって
+  $x_1, \ldots, x_n$ は相異なるから
+  $\delta_{x_i}(\{x_k\}) = \mathbf{1}[i = k]$．
+  ゆえに
   \[
-    1 = \mu(\X) = \mu(\supp(\mu)) = \sum_{i=1}^n a_i.
+    \mu(\{x_k\}) = \sum_{i=1}^{n} a_i\, \delta_{x_i}(\{x_k\}) = a_k.
   \]
-  任意の $A \in \Bb(\X)$ に対し
-  \[
-    \mu(A) = \mu(A \cap \supp(\mu))
-    = \sum_{i:\, x_i \in A} a_i
-    = \sum_{i=1}^n a_i\, \delta_{x_i}(A)
-  \]
-  ゆえ $\mu = \sum_{i=1}^n a_i\, \delta_{x_i}$．
-  $a_i > 0$ については，$x_i$ 以外の台点は $x_i$ から正の距離にあるから
-  十分小さい $r > 0$ で $B_r(x_i) \cap \supp(\mu) = \{x_i\}$，
-  すなわち $B_r(x_i) \setminus \{x_i\} \subset \X \setminus \supp(\mu)$ は $\mu$-零．
-  ゆえに $\mu(B_r(x_i)) = a_i$．$x_i \in \supp(\mu)$ より $a_i > 0$．
-
-  \textbf{表示の一意性．}
-  上で示した $\supp(\mu) = \{x_1, \ldots, x_n\}$ により点集合は $\mu$ から一意に定まり，
-  $a_i = \mu(\{x_i\})$ により重みも一意に定まる．したがって
-  添字の入れ替えを除いて表示は一意．
+  もう一通りの表示
+  $\mu = \sum_{j=1}^{m} b_j\, \delta_{y_j}$
+  （相異なる $y_j \in \X$，$b_j > 0$，$\sum_j b_j = 1$）が存在したとすると，
+  各 $y_j$ について $\mu(\{y_j\}) = b_j > 0$ より
+  $y_j \in \{x_1, \ldots, x_n\}$．対称性から $\{y_j\} \subset \{x_i\}$ かつ
+  $\{x_i\} \subset \{y_j\}$ ゆえ集合として一致．
+  したがって $m = n$ かつある置換 $\sigma \in \Perm(n)$ で $y_{\sigma(i)} = x_i$，
+  $b_{\sigma(i)} = a_i$．
 \end{proof}
 
-\begin{definition}{押し出し（push-forward）}{sem-pushforward}
+\begin{definition}{押し出し}{sem-pushforward}
   可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
   \[
@@ -546,13 +653,66 @@
 %% ============================================================
 %% 凸解析
 %% ============================================================
-\section{凸解析}
-\label{sec:sem-convex-analysis}
+\section{線形代数}
+\label{sec:sem-linalg}
 
-\subsection{凸結合と凸集合}
-\label{sec:sem-convex}
+\begin{definition}{有限集合と濃度}{sem-finite}
+  集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
+  全単射 $f \colon \range{n} \to S$ が存在することをいう．
+  この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
+\end{definition}
 
-\begin{definition}{凸集合（convex set）}{sem-convex}
+\begin{claim}{有限集合の最小元}{sem-finite-min}
+  $\R$ の空でない有限部分集合 $S$（定義~\ref{def:sem-finite}）には
+  最小元が存在する：
+  \[
+    \exists\, s^* \in S \;\;\text{s.t.}\;\; \forall\, s \in S,\; s^* \leq s.
+  \]
+\end{claim}
+
+\begin{proof}
+  $|S|$ に関する帰納法で示す．
+
+  \textbf{$|S| = 1$ の時．} $S$ の唯一の元がそのまま最小元．
+
+  \textbf{$|S| \geq 2$ の時．}
+  $\R$ の任意の空でない有限部分集合 $T$ について $|T| < |S|$ ならば最小元を持つと仮定する．
+  $a \in S$ を任意に取り $S' \defeq S \setminus \{a\}$ とおくと $|S'| = |S| - 1$ なので，
+  仮定が $S'$ に対して適用でき最小元 $b \in S'$ を持つ．
+  $a, b \in \R$ より $b \leq a$ か $a < b$ のいずれかが成り立つので，
+  \[
+    s^* \defeq
+    \begin{cases}
+      b & (b \leq a), \\
+      a & (a < b)
+    \end{cases}
+  \]
+  とおけば $s^* \in S$ かつ任意の $s \in S$ について $s^* \leq s$．
+\end{proof}
+
+\begin{definition}{置換}{sem-permutation}
+  $n \in \N$ について，全単射
+  $\sigma \colon \range{n} \to \range{n}$ を $\range{n}$ 上の\textbf{置換}という．
+  置換全体の集合を
+  \[
+    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
+  \]
+  で表す．$\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合
+  （定義~\ref{def:sem-finite}）である．
+\end{definition}
+
+\begin{definition}{フロベニウス内積}{sem-frobenius-inner}
+  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
+  \textbf{フロベニウス内積}を
+  \[
+    \inner{\mathbf{A}}{\mathbf{B}}
+    \defeq \tr(\mathbf{A}^\top \mathbf{B})
+    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
+  \]
+  で定める．
+\end{definition}
+
+\begin{definition}{凸集合}{sem-convex}
   ベクトル空間 $V$ の部分集合 $S \subset V$ が\textbf{凸}であるとは，
   任意の $v_1, v_2 \in S$ と任意の $t \in [0,1]$ に対して
   \[
@@ -561,7 +721,7 @@
   が成り立つことをいう．
 \end{definition}
 
-\begin{definition}{凸多面体（convex polytope）}{sem-polytope}
+\begin{definition}{凸多面体}{sem-polytope}
   行列 $\mathbf{A} \in \R^{k \times d}$ とベクトル $\mathbf{b} \in \R^k$ に対して，
   線形等式・不等式制約で定まる $\R^d$ の部分集合
   \[
