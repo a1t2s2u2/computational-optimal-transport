@@ -189,9 +189,15 @@ p {
 }
 
 .mermaid {
-  min-width: 860px;
+  min-width: 720px;
   margin: 0;
   padding: 20px;
+}
+
+.map-wrap svg {
+  display: block;
+  max-width: none !important;
+  min-width: 720px;
 }
 
 .math-block,

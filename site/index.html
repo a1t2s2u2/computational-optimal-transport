@@ -61,75 +61,71 @@
 <p class="eyebrow">Seminar Map</p>
 <h1>計算最適輸送セミナー</h1>
 <p class="lead">測度論的な Kantorovich 問題を有限支持測度の行列問題として扱い、線形計画、双対、エントロピー正則化、Sinkhorn 反復へ接続する。</p>
-<p>矢印ラベルは概念間の関係を表す。中央の「Cuturi/Peyre の主経路」は計算最適輸送の流れであり、Wasserstein 幾何はその後に接続される別系統の理論である。</p>
-<div class="map-wrap"><pre class="mermaid">flowchart LR
-  subgraph Prep[&quot;準備&quot;]
-    Metric[&quot;距離空間&quot;]
-    Polish[&quot;Polish 空間&quot;]
-    Borel[&quot;Borel sigma 代数&quot;]
-    Prob[&quot;確率測度&quot;]
-    Push[&quot;押し出し&quot;]
-    Coupling[&quot;カップリング&quot;]
-  end
-
-  subgraph OT[&quot;最適輸送問題&quot;]
-    Monge[&quot;Monge 問題&quot;]
-    Kantorovich[&quot;Kantorovich 問題&quot;]
-    DiscreteOT[&quot;離散 Kantorovich 問題&quot;]
-    LP[&quot;線形計画&quot;]
-    Dual[&quot;Kantorovich 双対&quot;]
-    CTransform[&quot;C/c 変換&quot;]
-  end
-
-  subgraph Entropic[&quot;Cuturi/Peyre の主経路&quot;]
-    EntropicOT[&quot;エントロピー正則化 OT&quot;]
-    KLProj[&quot;KL 射影&quot;]
-    Gibbs[&quot;Gibbs カーネル&quot;]
-    Scaling[&quot;スケーリング形式&quot;]
-    Sinkhorn[&quot;Sinkhorn 反復&quot;]
-    LogDomain[&quot;対数領域 Sinkhorn&quot;]
-  end
-
-  subgraph Limits[&quot;極限と用途&quot;]
-    Eps0[&quot;epsilon -&gt; 0&quot;]
-    EpsInf[&quot;epsilon -&gt; infinity&quot;]
-    Smooth[&quot;微分可能な損失&quot;]
-  end
-
-  subgraph Geometry[&quot;Wasserstein 幾何&quot;]
-    Wp[&quot;W_p 距離&quot;]
-    Geodesic[&quot;測地線&quot;]
-    Curvature[&quot;変位凸性・曲率&quot;]
-  end
-
+<p>矢印ラベルは概念間の関係を表す。一枚の巨大な図ではなく、基礎、離散化、Cuturi/Peyre の正則化、極限と幾何に分ける。</p>
+<h2>地図 1: 基礎から Kantorovich 問題</h2>
+<div class="map-wrap"><pre class="mermaid">flowchart TB
   Metric --&gt;|&quot;完備性と可分性を仮定&quot;| Polish
   Polish --&gt;|&quot;開集合から生成&quot;| Borel
   Borel --&gt;|&quot;可測集合上に定義&quot;| Prob
   Prob --&gt;|&quot;写像で測度を運ぶ&quot;| Push
   Prob --&gt;|&quot;積空間上で周辺を固定&quot;| Coupling
-
   Push --&gt;|&quot;制約 T#alpha = beta&quot;| Monge
   Monge --&gt;|&quot;写像からカップリングへ緩和&quot;| Kantorovich
-  Coupling --&gt;|&quot;実行可能集合を与える&quot;| Kantorovich
-  Kantorovich --&gt;|&quot;有限支持なら行列問題に一致&quot;| DiscreteOT
-  DiscreteOT --&gt;|&quot;制約付き線形最小化&quot;| LP
+  Coupling --&gt;|&quot;実行可能集合を与える&quot;| Kantorovich</pre></div>
+<h2>地図 2: 有限支持化と双対</h2>
+<div class="map-wrap"><pre class="mermaid">flowchart TB
+  Kantorovich[&quot;Kantorovich 問題&quot;]
+  DiscreteOT[&quot;離散 Kantorovich 問題&quot;]
+  MatrixPlan[&quot;行列カップリング P&quot;]
+  LP[&quot;線形計画&quot;]
+  Dual[&quot;Kantorovich 双対&quot;]
+  CTransform[&quot;C/c 変換&quot;]
+  NetworkSimplex[&quot;ネットワーク単体法&quot;]
+
+  Kantorovich --&gt;|&quot;有限支持なら厳密に一致&quot;| DiscreteOT
+  DiscreteOT --&gt;|&quot;カップリングを行列で表す&quot;| MatrixPlan
+  MatrixPlan --&gt;|&quot;行和・列和制約&quot;| LP
   LP --&gt;|&quot;有限次元 LP 双対&quot;| Dual
   Dual --&gt;|&quot;制約を飽和させる操作&quot;| CTransform
+  LP --&gt;|&quot;頂点をたどって解く&quot;| NetworkSimplex</pre></div>
+<h2>地図 3: Cuturi/Peyre のエントロピー正則化</h2>
+<div class="map-wrap"><pre class="mermaid">flowchart TB
+  DiscreteOT[&quot;離散 Kantorovich 問題&quot;]
+  EntropicOT[&quot;エントロピー正則化 OT&quot;]
+  Gibbs[&quot;Gibbs カーネル K&quot;]
+  KLProj[&quot;KL 射影&quot;]
+  Scaling[&quot;P = diag(u) K diag(v)&quot;]
+  Sinkhorn[&quot;Sinkhorn 反復&quot;]
+  DualAscent[&quot;双対の交互最大化&quot;]
+  LogDomain[&quot;対数領域 Sinkhorn&quot;]
 
   DiscreteOT --&gt;|&quot;負エントロピーを加える&quot;| EntropicOT
   EntropicOT --&gt;|&quot;K = exp(-C/epsilon) を使う&quot;| Gibbs
   EntropicOT --&gt;|&quot;KL 最小化に書き換える&quot;| KLProj
-  Gibbs --&gt;|&quot;正行列を行列スケーリングする&quot;| Scaling
-  KLProj --&gt;|&quot;行制約と列制約へ交互射影&quot;| Sinkhorn
+  Gibbs --&gt;|&quot;正行列をスケーリングする&quot;| Scaling
+  KLProj --&gt;|&quot;行制約・列制約へ交互射影&quot;| Sinkhorn
   Scaling --&gt;|&quot;固定点反復として解く&quot;| Sinkhorn
-  Sinkhorn --&gt;|&quot;小さい epsilon で安定化&quot;| LogDomain
+  DualAscent --&gt;|&quot;同じ更新式を与える&quot;| Sinkhorn
+  Sinkhorn --&gt;|&quot;小さい epsilon で安定化&quot;| LogDomain</pre></div>
+<h2>地図 4: 正則化の極限と幾何への接続</h2>
+<div class="map-wrap"><pre class="mermaid">flowchart TB
+  EntropicOT[&quot;エントロピー正則化 OT&quot;]
+  Eps0[&quot;epsilon -&gt; 0&quot;]
+  EpsInf[&quot;epsilon -&gt; infinity&quot;]
+  MaxEntropy[&quot;最大エントロピー OT 解&quot;]
+  Independent[&quot;独立カップリング ab^T&quot;]
+  Smooth[&quot;微分可能な損失&quot;]
+  Kantorovich[&quot;Kantorovich 問題&quot;]
+  Wp[&quot;W_p 距離&quot;]
+  Geodesic[&quot;Wasserstein 測地線&quot;]
+  Curvature[&quot;変位凸性・曲率&quot;]
 
   EntropicOT --&gt;|&quot;正則化を消す&quot;| Eps0
-  Eps0 --&gt;|&quot;非正則化 OT の最大エントロピー解&quot;| Kantorovich
+  Eps0 --&gt;|&quot;選ばれる極限&quot;| MaxEntropy
+  MaxEntropy --&gt;|&quot;非正則化問題の最適解&quot;| Kantorovich
   EntropicOT --&gt;|&quot;エントロピーが支配&quot;| EpsInf
-  EpsInf --&gt;|&quot;独立カップリング ab^T&quot;| Coupling
+  EpsInf --&gt;|&quot;収束先&quot;| Independent
   EntropicOT --&gt;|&quot;双対ポテンシャルが勾配&quot;| Smooth
-
   Kantorovich --&gt;|&quot;コストを d^p に特殊化&quot;| Wp
   Wp --&gt;|&quot;距離空間として扱う&quot;| Geodesic
   Geodesic --&gt;|&quot;凸性・曲率へ発展&quot;| Curvature</pre></div>
