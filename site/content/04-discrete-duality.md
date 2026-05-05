@@ -5,13 +5,7 @@ eyebrow: 3. Discrete OT
 title: 離散化、線形計画、双対
 ---
 
-有限支持測度 \(\alpha=\sum_i a_i\delta_{x_i}\), \(\beta=\sum_j b_j\delta_{y_j}\) では、カップリングは行列 \(\mathbf{P}\in\R_+^{n\times m}\) で表される。
-
-:::definition
-### 定義: ヒストグラム
-
-ベクトル \(\mathbf{a}\in\R_+^n\) が \(\sum_{i=1}^n a_i=1\) を満たすとき、\(\mathbf{a}\) をヒストグラムという。各成分 \(a_i\) は点 \(x_i\) に置かれた質量を表す。
-:::
+有限支持測度 \(\alpha=\sum_i a_i\delta_{x_i}\), \(\beta=\sum_j b_j\delta_{y_j}\)（相異なる \(x_1,\ldots,x_n\in\X\), \(y_1,\ldots,y_m\in\Y\), \(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\), \(\sum_i a_i=\sum_j b_j=1\)）では、カップリングは行列 \(\mathbf{P}\in\R_+^{n\times m}\) で表される。
 
 :::definition
 ### 定義: 輸送多面体

@@ -6,19 +6,9 @@ title: エントロピー正則化
 term: entropy
 ---
 
-Cuturi/Peyre におけるエントロピー正則化は、離散 Kantorovich 問題に負エントロピーを加え、線形計画を強凸な最適化問題へ変える操作である。正則化された問題は一意な解を持ち、その解は Gibbs カーネルの KL 射影として表される。
+Cuturi/Peyre におけるエントロピー正則化は、離散 Kantorovich 問題に負エントロピーを加え、最適化問題の解を一意にする操作である。正則化された問題の解は Gibbs カーネルの KL 射影として表される。
 
-:::definition
-### 定義: 正ヒストグラム
-
-ベクトル \(\mathbf{a}\in\R^n\) が
-
-\[
-  a_i>0\quad(\forall i),\qquad \sum_{i=1}^n a_i=1
-\]
-
-を満たすとき、\(\mathbf{a}\) を正ヒストグラムという。以下では \(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\) を正ヒストグラムとする。
-:::
+以下、\(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\), \(\sum_i a_i=\sum_j b_j=1\) および \(\mathbf{C}\in\R_+^{n\times m}\) を固定する。
 
 :::definition
 ### 定義: 離散エントロピー
