@@ -1,0 +1,552 @@
+\chapter{エントロピー正則化と Sinkhorn アルゴリズム}
+\label{ch:seminar-03-entropic}
+
+離散 Kantorovich 問題は線形計画として解ける．
+目的関数にエントロピー項を加えると，最適解は一意になり，
+行列スケーリングによって計算できる．この行列スケーリング反復を
+\textbf{Sinkhorn アルゴリズム}という．
+
+以下，
+\[
+  \mathbf{a} \in \R_{++}^{n},\qquad
+  \mathbf{b} \in \R_{++}^{m},\qquad
+  \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
+\]
+および $\mathbf{C} \in \R_+^{n \times m}$ を固定する．
+輸送多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
+主張~\ref{clm:sem-discrete-coupling-form} の通り
+\[
+  \CouplingsD(\mathbf{a}, \mathbf{b})
+  =
+  \left\{
+    \mathbf{P} \in \R_+^{n \times m}
+    \;\middle|\;
+    \mathbf{P}\ones_m = \mathbf{a},\;
+    \mathbf{P}^\top \ones_n = \mathbf{b}
+  \right\}
+\]
+である．
+
+%% ============================================================
+%% エントロピー正則化
+%% ============================================================
+\section{エントロピー正則化}
+\label{sec:sem-entropic-regularization}
+
+\begin{definition}{離散エントロピー}{sem-discrete-entropy}
+  非負行列 $\mathbf{P} \in \R_+^{n \times m}$ に対して，
+  \textbf{離散エントロピー}を
+  \[
+    \Hb(\mathbf{P})
+    \defeq
+    - \sum_{i=1}^{n} \sum_{j=1}^{m}
+      P_{i,j}\bigl(\log P_{i,j} - 1\bigr)
+  \]
+  で定める．ただし $0\log 0 = 0$ と約束する．
+\end{definition}
+
+\begin{remark}{通常の Shannon エントロピーとの違い}{sem-entropy-convention}
+  確率行列では $\sum_{i,j}P_{i,j}=1$ なので，
+  \[
+    \Hb(\mathbf{P})
+    =
+    -\sum_{i,j} P_{i,j}\log P_{i,j} + 1
+  \]
+  であり，通常の Shannon エントロピーとは定数 $1$ だけ異なる．
+  この定数は最適化の解には影響しない．この形を使う理由は，
+  $-\Hb$ の微分が
+  \[
+    \frac{\partial(-\Hb)}{\partial P_{i,j}} = \log P_{i,j}
+  \]
+  と簡単になるからである．
+\end{remark}
+
+\begin{definition}{エントロピー正則化された離散最適輸送}{sem-entropic-ot}
+  正則化パラメータ $\varepsilon > 0$ に対して，
+  \textbf{エントロピー正則化された離散 Kantorovich 問題}を
+  \[
+    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    \defeq
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \left\{
+      \inner{\mathbf{C}}{\mathbf{P}}
+      - \varepsilon \Hb(\mathbf{P})
+    \right\}
+  \]
+  と定める．この問題の最適解を $\mathbf{P}_\varepsilon$ と書く．
+\end{definition}
+
+\begin{proposition}{正則化問題の解の存在と一意性}{sem-entropic-existence-unique}
+  任意の $\varepsilon > 0$ に対して，
+  正則化問題~\ref{def:sem-entropic-ot} は一意な最適解
+  $\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})$ を持つ．
+\end{proposition}
+
+\begin{proof}
+  輸送多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
+  （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）．
+  関数 $x \mapsto x\log x - x$ は $[0,\infty)$ 上で連続かつ狭義凸である．
+  したがって
+  \[
+    \mathbf{P}
+    \mapsto
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+    =
+    \inner{\mathbf{C}}{\mathbf{P}}
+    + \varepsilon \sum_{i,j} P_{i,j}(\log P_{i,j}-1)
+  \]
+  は連続かつ凸である．コンパクト集合上の連続関数なので最小値を達成する．
+  $x\log x-x$ の狭義凸性により，異なる2つの最適解があれば
+  その中点で目的関数がより小さくなるため矛盾する．
+  よって最適解は一意である．
+\end{proof}
+
+\begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
+  正則化問題の一意解 $\mathbf{P}_\varepsilon$ は
+  \[
+    (P_\varepsilon)_{i,j} > 0
+    \qquad(\forall\, i \in \range{n},\, j \in \range{m})
+  \]
+  を満たす．
+\end{proposition}
+
+\begin{proof}
+  背理法で示す．ある $(i,j)$ で
+  $(P_\varepsilon)_{i,j}=0$ とする．
+  $a_i>0$ なので同じ行に $(P_\varepsilon)_{i,j_1}>0$ となる
+  $j_1$ が存在する．また $b_j>0$ なので同じ列に
+  $(P_\varepsilon)_{i_1,j}>0$ となる $i_1$ が存在する．
+  小さい $\theta>0$ に対し，4成分だけを
+  \[
+    P_{i,j} \leftarrow P_{i,j}+\theta,\quad
+    P_{i,j_1} \leftarrow P_{i,j_1}-\theta,\quad
+    P_{i_1,j} \leftarrow P_{i_1,j}-\theta,\quad
+    P_{i_1,j_1} \leftarrow P_{i_1,j_1}+\theta
+  \]
+  と変化させる．$\theta$ を
+  $(P_\varepsilon)_{i,j_1}$ と $(P_\varepsilon)_{i_1,j}$ より小さく取れば，
+  非負性と周辺条件は保たれる．
+
+  この変化による線形コストの変化は $\theta$ に比例する．
+  一方，エントロピー項のうち $0$ だった成分に対応する負エントロピー
+  $x\log x-x$ の変化は
+  \[
+    \theta\log\theta - \theta
+  \]
+  であり，これを $\theta$ で割ると $\log\theta-1 \to -\infty$
+  となる．したがって十分小さい $\theta>0$ では，
+  全体の目的関数
+  $\inner{\mathbf{C}}{\mathbf{P}}-\varepsilon\Hb(\mathbf{P})$
+  は小さくなる．これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
+  よって全成分が正である．
+\end{proof}
+
+\begin{remark}{$\varepsilon$ の役割}{sem-epsilon-role}
+  $\varepsilon$ は，元の線形計画と独立カップリングの間を補間する量である：
+  \begin{itemize}
+    \item $\varepsilon$ が小さいほど，線形項
+      $\inner{\mathbf{C}}{\mathbf{P}}$ が支配的になり，非正則化 OT に近づく．
+    \item $\varepsilon$ が大きいほど，エントロピー項が支配的になり，
+      質量を広く分散させるカップリングに近づく．
+  \end{itemize}
+  この意味で，エントロピー正則化は「疎な最適輸送計画」を
+  「拡散した輸送計画」に滑らかに変形する操作である．
+\end{remark}
+
+%% ============================================================
+%% KL 射影
+%% ============================================================
+\section{KL 射影としての定式化}
+\label{sec:sem-kl-projection}
+
+\begin{definition}{離散 KL ダイバージェンス}{sem-kl-divergence}
+  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  \textbf{KL ダイバージェンス}を
+  \[
+    \KLD(\mathbf{P} \| \mathbf{K})
+    \defeq
+    \sum_{i,j}
+    \left(
+      P_{i,j}\log\frac{P_{i,j}}{K_{i,j}}
+      - P_{i,j} + K_{i,j}
+    \right)
+  \]
+  で定める．ただし $0\log 0 = 0$ と約束し，
+  $P_{i,j} > 0$ かつ $K_{i,j}=0$ となる成分がある場合は
+  $\KLD(\mathbf{P}\|\mathbf{K}) = +\infty$ とする．
+\end{definition}
+
+\begin{definition}{Gibbs カーネル}{sem-gibbs-kernel}
+  コスト行列 $\mathbf{C}$ と $\varepsilon > 0$ に対して，
+  \textbf{Gibbs カーネル} $\mathbf{K} \in \R_{++}^{n \times m}$ を
+  \[
+    K_{i,j} \defeq \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
+  \]
+  で定める．
+\end{definition}
+
+\begin{proposition}{正則化 OT は KL 射影である}{sem-entropic-kl-projection}
+  $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ とすると，
+  正則化問題~\ref{def:sem-entropic-ot} の最適解は
+  \[
+    \mathbf{P}_\varepsilon
+    =
+    \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \KLD(\mathbf{P}\|\mathbf{K})
+  \]
+  と書ける．
+\end{proposition}
+
+\begin{proof}
+  $\log K_{i,j} = -C_{i,j}/\varepsilon$ より
+  \begin{align*}
+    \varepsilon \KLD(\mathbf{P}\|\mathbf{K})
+    &=
+    \varepsilon\sum_{i,j}
+    \left(
+      P_{i,j}\log P_{i,j}
+      - P_{i,j}\log K_{i,j}
+      - P_{i,j}
+      + K_{i,j}
+    \right) \\
+    &=
+    \sum_{i,j} C_{i,j}P_{i,j}
+    + \varepsilon\sum_{i,j} P_{i,j}(\log P_{i,j}-1)
+    + \varepsilon\sum_{i,j} K_{i,j} \\
+    &=
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+    + \varepsilon\sum_{i,j} K_{i,j}.
+  \end{align*}
+  最後の項は $\mathbf{P}$ に依存しない定数なので，
+  両者の最小化問題は同じ最適解を持つ．
+\end{proof}
+
+\begin{memo*}
+  KL 射影という見方では，
+  \[
+    \text{Gibbs カーネル } \mathbf{K}
+    \quad\longrightarrow\quad
+    \text{周辺制約を満たす最近点 } \mathbf{P}_\varepsilon
+  \]
+  を KL ダイバージェンスで測っている．Sinkhorn アルゴリズムは，
+  行和制約と列和制約への KL 射影を交互に行う反復として理解できる．
+\end{memo*}
+
+%% ============================================================
+%% Sinkhorn
+%% ============================================================
+\section{Sinkhorn アルゴリズム}
+\label{sec:sem-sinkhorn}
+
+\subsection{最適解のスケーリング形式}
+
+\begin{theorem}{スケーリング形式}{sem-sinkhorn-scaling-form}
+  正則化問題~\ref{def:sem-entropic-ot} の最適解
+  $\mathbf{P}_\varepsilon$ は，ある正ベクトル
+  $\mathbf{u} \in \R_{++}^{n}$，$\mathbf{v} \in \R_{++}^{m}$ により
+  \[
+    \mathbf{P}_\varepsilon
+    =
+    \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+  \]
+  と表される．すなわち
+  \[
+    (P_\varepsilon)_{i,j} = u_i K_{i,j} v_j.
+  \]
+\end{theorem}
+
+\begin{proof}
+  ラグランジュ関数を
+  \[
+    \mathcal{L}(\mathbf{P},\mathbf{f},\mathbf{g})
+    =
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+    - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
+    - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
+  \]
+  とおく．命題~\ref{prop:sem-entropic-positive-solution} より
+  最適解では $P_{i,j}>0$ であり，その点での一階条件は
+  \[
+    \frac{\partial \mathcal{L}}{\partial P_{i,j}}
+    =
+    C_{i,j} + \varepsilon\log P_{i,j} - f_i - g_j
+    = 0
+  \]
+  である．したがって
+  \[
+    P_{i,j}
+    =
+    \exp\!\left(\frac{f_i}{\varepsilon}\right)
+    \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
+    \exp\!\left(\frac{g_j}{\varepsilon}\right).
+  \]
+  $u_i \defeq \exp(f_i/\varepsilon)$，
+  $v_j \defeq \exp(g_j/\varepsilon)$ とおけば，
+  $P_{i,j}=u_iK_{i,j}v_j$ を得る．
+\end{proof}
+
+\begin{remark}{スケーリングの非一意性}{sem-scaling-nonunique}
+  $\lambda>0$ に対して
+  $(\mathbf{u},\mathbf{v})$ を
+  $(\lambda\mathbf{u},\lambda^{-1}\mathbf{v})$ に置き換えても
+  $\diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ は変わらない．
+  したがってスケーリングベクトル自体は一意でないが，
+  輸送計画 $\mathbf{P}_\varepsilon$ は一意である．
+\end{remark}
+
+\subsection{行列スケーリング反復}
+
+スケーリング形式を周辺条件に代入すると，
+\[
+  \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})\ones_m = \mathbf{a},
+  \qquad
+  \diag(\mathbf{v})\mathbf{K}^\top\diag(\mathbf{u})\ones_n = \mathbf{b}
+\]
+である．成分ごとに書けば
+\[
+  \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
+  \qquad
+  \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}.
+\]
+したがって，一方を固定すれば他方は成分ごとの割り算で更新できる：
+\[
+  \mathbf{u} \leftarrow \mathbf{a} \oslash (\mathbf{K}\mathbf{v}),
+  \qquad
+  \mathbf{v} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}).
+\]
+
+\begin{algorithm}{alg:sem-sinkhorn}
+  \textbf{Input:}
+  $\mathbf{a} \in \R_{++}^{n}$，$\mathbf{b} \in \R_{++}^{m}$，
+  $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$，反復回数 $L$ \\
+  \textbf{Output:}
+  $\mathbf{P}^{(L)} = \diag(\mathbf{u}^{(L)})\mathbf{K}\diag(\mathbf{v}^{(L)})$ \\[4pt]
+  1. $\mathbf{v}^{(0)} \leftarrow \ones_m$ \\
+  2. \textbf{for} $\ell = 0,1,\ldots,L-1$ \textbf{do} \\
+  3. \quad $\mathbf{u}^{(\ell+1)}
+      \leftarrow \mathbf{a} \oslash (\mathbf{K}\mathbf{v}^{(\ell)})$ \\
+  4. \quad $\mathbf{v}^{(\ell+1)}
+      \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}^{(\ell+1)})$ \\
+  5. \textbf{return}
+      $\diag(\mathbf{u}^{(L)})\mathbf{K}\diag(\mathbf{v}^{(L)})$
+\end{algorithm}
+
+\begin{theorem}{Sinkhorn 反復の収束}{sem-sinkhorn-convergence}
+  $\mathbf{K} \in \R_{++}^{n \times m}$ かつ
+  $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$ のとき，
+  Algorithm~\ref{alg:sem-sinkhorn} が生成する輸送計画
+  \[
+    \mathbf{P}^{(\ell)}
+    \defeq
+    \diag(\mathbf{u}^{(\ell)})\mathbf{K}\diag(\mathbf{v}^{(\ell)})
+  \]
+  は，正則化問題の一意解 $\mathbf{P}_\varepsilon$ に収束する．
+\end{theorem}
+
+\begin{proof}
+  完全な証明には Hilbert 射影距離に関する Birkhoff の縮小定理を用いる．
+  この定理は正行列が正錐の射影距離に関して縮小写像を誘導することを述べる．
+  直感的には，各反復で行和制約と列和制約を交互に満たすように
+  正の行列 $\mathbf{K}$ をスケールし，正の行列の錐の中でこの操作が縮小写像として働くため，
+  極限のスケーリング行列が一意に定まる．
+\end{proof}
+
+\begin{remark}{計算量と並列性}{sem-sinkhorn-complexity}
+  Sinkhorn の1反復は
+  $\mathbf{K}\mathbf{v}$ と $\mathbf{K}^\top\mathbf{u}$ の2つの行列ベクトル積であり，
+  計算量は $O(nm)$ である．ネットワーク単体法と異なり，反復の中心は密な線形代数演算なので，
+  GPU やバッチ計算と相性がよい．
+\end{remark}
+
+%% ============================================================
+%% 対数領域
+%% ============================================================
+\section{対数領域 Sinkhorn}
+\label{sec:sem-log-domain-sinkhorn}
+
+小さい $\varepsilon$ では
+$K_{i,j}=\exp(-C_{i,j}/\varepsilon)$ が数値的に $0$ に近くなり，
+通常の Sinkhorn 反復は不安定になりやすい．そのため実装では，
+スケーリングベクトルそのものではなく，双対ポテンシャル
+\[
+  f_i \defeq \varepsilon \log u_i,
+  \qquad
+  g_j \defeq \varepsilon \log v_j
+\]
+を更新する．
+
+\begin{definition}{ソフト最小値}{sem-soft-min}
+  $z_1,\ldots,z_m \in \R$ と $\varepsilon>0$ に対し，
+  \textbf{ソフト最小値}を
+  \[
+    \smin_\varepsilon(z_1,\ldots,z_m)
+    \defeq
+    -\varepsilon\log\left(\sum_{j=1}^{m} e^{-z_j/\varepsilon}\right)
+  \]
+  で定める．
+\end{definition}
+
+\begin{proposition}{対数領域の更新式}{sem-log-domain-updates}
+  Sinkhorn の更新は，双対ポテンシャル $(\mathbf{f},\mathbf{g})$ に対して
+  \[
+    f_i
+    \leftarrow
+    \varepsilon\log a_i
+    +
+    \smin_\varepsilon
+    \bigl(C_{i,1}-g_1,\ldots,C_{i,m}-g_m\bigr),
+  \]
+  \[
+    g_j
+    \leftarrow
+    \varepsilon\log b_j
+    +
+    \smin_\varepsilon
+    \bigl(C_{1,j}-f_1,\ldots,C_{n,j}-f_n\bigr)
+  \]
+  と書ける．
+\end{proposition}
+
+\begin{proof}
+  $\mathbf{u} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v})$ の第 $i$ 成分は
+  \[
+    u_i
+    =
+    \frac{a_i}{\sum_j \exp(-C_{i,j}/\varepsilon)\exp(g_j/\varepsilon)}.
+  \]
+  両辺の対数を取り $\varepsilon$ を掛けると
+  \[
+    f_i
+    =
+    \varepsilon\log a_i
+    -
+    \varepsilon\log
+    \sum_j \exp\!\left(-\frac{C_{i,j}-g_j}{\varepsilon}\right)
+    =
+    \varepsilon\log a_i
+    +
+    \smin_\varepsilon(C_{i,1}-g_1,\ldots,C_{i,m}-g_m).
+  \]
+  $\mathbf{v}$ の更新も同様である．
+\end{proof}
+
+%% ============================================================
+%% 正当性と極限
+%% ============================================================
+\section{正則化の正当性}
+\label{sec:sem-entropic-justification}
+
+エントロピー正則化の数学的な正当化は次の3点に集約される：
+\[
+  \text{一意な解}
+  \quad+\quad
+  \text{Sinkhorn による計算}
+  \quad+\quad
+  \varepsilon \to 0 \text{ で元問題に戻ること}.
+\]
+
+\begin{theorem}{$\varepsilon \to 0$ による非正則化 OT への収束}{sem-entropic-convergence-eps-zero}
+  $\varepsilon_k > 0$，$\varepsilon_k \to 0$ とし，
+  $\mathbf{P}_{\varepsilon_k}$ を正則化問題の一意解とする．
+  もし部分列 $\mathbf{P}_{\varepsilon_{k_\ell}}$ が
+  $\mathbf{P}^0$ に収束するならば，
+  $\mathbf{P}^0$ は非正則化問題
+  \[
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+  \]
+  の最適解である．また最適値は
+  \[
+    \lim_{\varepsilon \to 0}
+    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
+    =
+    \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
+  \]
+  を満たす．さらに，非正則化問題の最適解が複数ある場合，
+  $\mathbf{P}_\varepsilon$ はその中でエントロピー $\Hb$ が最大のものに収束する．
+\end{theorem}
+
+\begin{proof}
+  非正則化問題の任意の最適解を $\mathbf{P}^*$ とする．
+  $\mathbf{P}_\varepsilon$ の最適性より
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+    - \varepsilon\Hb(\mathbf{P}_\varepsilon)
+    \leq
+    \inner{\mathbf{C}}{\mathbf{P}^*}
+    - \varepsilon\Hb(\mathbf{P}^*).
+  \]
+  一方，$\mathbf{P}^*$ は非正則化問題の最適解なので
+  \[
+    0
+    \leq
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+    - \inner{\mathbf{C}}{\mathbf{P}^*}
+    \leq
+    \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr).
+  \]
+  輸送多面体はコンパクトであり，$\Hb$ はその上で有界なので，
+  右辺は $\varepsilon \to 0$ で $0$ に収束する．
+  したがって
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+  \to \inner{\mathbf{C}}{\mathbf{P}^*}$ である．また
+  $\varepsilon\Hb(\mathbf{P}_\varepsilon) \to 0$ なので，
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
+  \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ である．
+  任意の極限点 $\mathbf{P}^0$ は非正則化問題の最適値を達成する．
+  さらに上の不等式から
+  \[
+    \Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)
+  \]
+  が任意の非正則化最適解 $\mathbf{P}^*$ について成り立つ．
+  $\Hb$ は連続なので，任意の極限点 $\mathbf{P}^0$ は
+  非正則化最適解の中で $\Hb$ を最大化する．
+  非正則化最適解集合は凸であり，$-\Hb$ は狭義凸であるから，
+  $\Hb$ を最大化する非正則化最適解は一意である．したがって
+  $\mathbf{P}_\varepsilon$ 全体がその最大エントロピー最適解に収束する．
+\end{proof}
+
+\begin{theorem}{$\varepsilon \to +\infty$ による独立カップリングへの収束}{sem-entropic-convergence-eps-infty}
+  $\varepsilon \to +\infty$ のとき，
+  正則化問題の解は
+  \[
+    \mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top
+  \]
+  に収束する．ここで
+  $(\mathbf{a}\mathbf{b}^\top)_{i,j}=a_i b_j$ は，
+  ソースとターゲットを独立に結合するカップリングである．
+\end{theorem}
+
+\begin{proof}
+  $\varepsilon$ で目的関数を割ると
+  \[
+    \frac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}
+    - \Hb(\mathbf{P})
+  \]
+  を最小化していることになる．$\varepsilon \to +\infty$ では
+  第一項が消え，極限問題は
+  \[
+    \max_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
+    \Hb(\mathbf{P})
+  \]
+  である．周辺分布を固定したとき，エントロピーを最大にする結合は
+  独立カップリング $\mathbf{a}\mathbf{b}^\top$ である．したがって
+  $\mathbf{P}_\varepsilon$ は $\mathbf{a}\mathbf{b}^\top$ に収束する．
+\end{proof}
+
+\begin{memo*}
+  以上により，エントロピー正則化は
+  \[
+    \varepsilon \to 0
+    \quad\Longrightarrow\quad
+    \text{非正則化 OT},
+    \qquad
+    \varepsilon \to +\infty
+    \quad\Longrightarrow\quad
+    \text{独立カップリング}
+  \]
+  という2つの極限を持つ．実用上は，小さすぎる $\varepsilon$ は数値不安定を招き，
+  大きすぎる $\varepsilon$ は輸送構造をぼかしすぎる．
+  したがって $\varepsilon$ は「計算安定性」と「非正則化 OT への近さ」の
+  トレードオフを制御するパラメータである．
+\end{memo*}
