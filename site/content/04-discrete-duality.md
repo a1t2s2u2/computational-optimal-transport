@@ -8,6 +8,12 @@ title: 離散化、線形計画、双対
 有限支持測度 \(\alpha=\sum_i a_i\delta_{x_i}\), \(\beta=\sum_j b_j\delta_{y_j}\) では、カップリングは行列 \(\mathbf{P}\in\R_+^{n\times m}\) で表される。
 
 :::definition
+### 定義: ヒストグラム
+
+ベクトル \(\mathbf{a}\in\R_+^n\) が \(\sum_{i=1}^n a_i=1\) を満たすとき、\(\mathbf{a}\) をヒストグラムという。各成分 \(a_i\) は点 \(x_i\) に置かれた質量を表す。
+:::
+
+:::definition
 ### 定義: 輸送多面体
 
 \[
@@ -17,6 +23,12 @@ title: 離散化、線形計画、双対
   \mathbf{P}\ones_m=\mathbf{a},
   \mathbf{P}^{\top}\ones_n=\mathbf{b}\}.
 \]
+:::
+
+:::definition
+### 定義: 線形計画
+
+変数 \(x\in\R^d\) に対して、線形関数 \(c^\top x\) を線形等式・線形不等式で定まる集合上で最小化または最大化する問題を線形計画という。
 :::
 
 :::theorem
@@ -32,6 +44,12 @@ title: 離散化、線形計画、双対
 これは有限次元線形計画である。
 :::
 
+:::definition
+### 定義: 双対問題
+
+制約付き最小化問題に対して、制約をラグランジュ乗数で目的関数に組み込んで得られる最大化問題を双対問題という。元の最小化問題を主問題という。
+:::
+
 :::theorem
 ### 定理: 離散 Kantorovich 双対
 
@@ -45,6 +63,24 @@ title: 離散化、線形計画、双対
     \mid f_i+g_j\le C_{ij}
   \right\}.
 \]
+:::
+
+:::definition
+### 定義: \(C\)-変換と \(c\)-変換
+
+離散コスト行列 \(\mathbf{C}\) とベクトル \(\mathbf{f}\in\R^n\) に対して、
+
+\[
+  f^C_j\defeq \min_i(C_{ij}-f_i)
+\]
+
+を \(C\)-変換という。連続コスト \(c:\X\times\Y\to\R\) と関数 \(\varphi:\X\to\R\) に対して、
+
+\[
+  \varphi^c(y)\defeq \inf_{x\in\X}(c(x,y)-\varphi(x))
+\]
+
+を \(c\)-変換という。
 :::
 
 :::compare

@@ -61,44 +61,102 @@
 <p class="eyebrow">Seminar Map</p>
 <h1>計算最適輸送セミナー</h1>
 <p class="lead">測度論的な Kantorovich 問題を有限支持測度の行列問題として扱い、線形計画、双対、エントロピー正則化、Sinkhorn 反復へ接続する。</p>
-<div class="map-wrap"><pre class="mermaid">flowchart TD
-  Set[&quot;集合・写像&quot;] --&gt; Top[&quot;位相空間&quot;]
-  Top --&gt; Metric[&quot;距離空間&quot;]
-  Metric --&gt; Polish[&quot;Polish 空間&quot;]
-  Top --&gt; Borel[&quot;Borel sigma 代数&quot;]
-  Borel --&gt; Measure[&quot;測度・確率測度&quot;]
-  Measure --&gt; Integral[&quot;積分&quot;]
-  Measure --&gt; Dirac[&quot;Dirac 測度&quot;]
-  Measure --&gt; Push[&quot;押し出し&quot;]
-  Dirac --&gt; DiscreteMeasure[&quot;有限支持測度&quot;]
-  Push --&gt; Monge[&quot;Monge 問題&quot;]
-  Measure --&gt; Coupling[&quot;カップリング&quot;]
-  Monge --&gt; Kantorovich[&quot;Kantorovich 緩和&quot;]
-  Coupling --&gt; Kantorovich
-  DiscreteMeasure --&gt; MatrixCoupling[&quot;行列カップリング P&quot;]
-  MatrixCoupling --&gt; DiscreteOT[&quot;離散 Kantorovich 問題&quot;]
-  Kantorovich --&gt; DiscreteOT
-  DiscreteOT --&gt; LP[&quot;線形計画標準形&quot;]
-  LP --&gt; Dual[&quot;Kantorovich 双対&quot;]
-  Dual --&gt; CTransform[&quot;C/c 変換&quot;]
-  LP --&gt; Polytope[&quot;輸送多面体&quot;]
-  Polytope --&gt; NetworkSimplex[&quot;ネットワーク単体法&quot;]
-  DiscreteOT --&gt; Entropic[&quot;エントロピー正則化&quot;]
-  Entropic --&gt; KL[&quot;KL 射影&quot;]
-  Entropic --&gt; Gibbs[&quot;Gibbs カーネル&quot;]
-  KL --&gt; Scaling[&quot;P = diag(u) K diag(v)&quot;]
-  Gibbs --&gt; Scaling
-  Scaling --&gt; Sinkhorn[&quot;Sinkhorn 反復&quot;]
-  Sinkhorn --&gt; LogDomain[&quot;対数領域 Sinkhorn&quot;]
-  Entropic --&gt; Eps0[&quot;epsilon -&gt; 0: 非正則化 OT&quot;]
-  Entropic --&gt; EpsInf[&quot;epsilon -&gt; infinity: 独立カップリング&quot;]
-  Kantorovich --&gt; Wp[&quot;W_p 距離&quot;]
-  Wp --&gt; Geodesic[&quot;Wasserstein 測地線&quot;]
-  Geodesic --&gt; Curvature[&quot;変位凸性・曲率&quot;]</pre></div>
+<p>矢印ラベルは概念間の関係を表す。中央の「Cuturi/Peyre の主経路」は計算最適輸送の流れであり、Wasserstein 幾何はその後に接続される別系統の理論である。</p>
+<div class="map-wrap"><pre class="mermaid">flowchart LR
+  subgraph Prep[&quot;準備&quot;]
+    Metric[&quot;距離空間&quot;]
+    Polish[&quot;Polish 空間&quot;]
+    Borel[&quot;Borel sigma 代数&quot;]
+    Prob[&quot;確率測度&quot;]
+    Push[&quot;押し出し&quot;]
+    Coupling[&quot;カップリング&quot;]
+  end
+
+  subgraph OT[&quot;最適輸送問題&quot;]
+    Monge[&quot;Monge 問題&quot;]
+    Kantorovich[&quot;Kantorovich 問題&quot;]
+    DiscreteOT[&quot;離散 Kantorovich 問題&quot;]
+    LP[&quot;線形計画&quot;]
+    Dual[&quot;Kantorovich 双対&quot;]
+    CTransform[&quot;C/c 変換&quot;]
+  end
+
+  subgraph Entropic[&quot;Cuturi/Peyre の主経路&quot;]
+    EntropicOT[&quot;エントロピー正則化 OT&quot;]
+    KLProj[&quot;KL 射影&quot;]
+    Gibbs[&quot;Gibbs カーネル&quot;]
+    Scaling[&quot;スケーリング形式&quot;]
+    Sinkhorn[&quot;Sinkhorn 反復&quot;]
+    LogDomain[&quot;対数領域 Sinkhorn&quot;]
+  end
+
+  subgraph Limits[&quot;極限と用途&quot;]
+    Eps0[&quot;epsilon -&gt; 0&quot;]
+    EpsInf[&quot;epsilon -&gt; infinity&quot;]
+    Smooth[&quot;微分可能な損失&quot;]
+  end
+
+  subgraph Geometry[&quot;Wasserstein 幾何&quot;]
+    Wp[&quot;W_p 距離&quot;]
+    Geodesic[&quot;測地線&quot;]
+    Curvature[&quot;変位凸性・曲率&quot;]
+  end
+
+  Metric --&gt;|&quot;完備性と可分性を仮定&quot;| Polish
+  Polish --&gt;|&quot;開集合から生成&quot;| Borel
+  Borel --&gt;|&quot;可測集合上に定義&quot;| Prob
+  Prob --&gt;|&quot;写像で測度を運ぶ&quot;| Push
+  Prob --&gt;|&quot;積空間上で周辺を固定&quot;| Coupling
+
+  Push --&gt;|&quot;制約 T#alpha = beta&quot;| Monge
+  Monge --&gt;|&quot;写像からカップリングへ緩和&quot;| Kantorovich
+  Coupling --&gt;|&quot;実行可能集合を与える&quot;| Kantorovich
+  Kantorovich --&gt;|&quot;有限支持なら行列問題に一致&quot;| DiscreteOT
+  DiscreteOT --&gt;|&quot;制約付き線形最小化&quot;| LP
+  LP --&gt;|&quot;有限次元 LP 双対&quot;| Dual
+  Dual --&gt;|&quot;制約を飽和させる操作&quot;| CTransform
+
+  DiscreteOT --&gt;|&quot;負エントロピーを加える&quot;| EntropicOT
+  EntropicOT --&gt;|&quot;K = exp(-C/epsilon) を使う&quot;| Gibbs
+  EntropicOT --&gt;|&quot;KL 最小化に書き換える&quot;| KLProj
+  Gibbs --&gt;|&quot;正行列を行列スケーリングする&quot;| Scaling
+  KLProj --&gt;|&quot;行制約と列制約へ交互射影&quot;| Sinkhorn
+  Scaling --&gt;|&quot;固定点反復として解く&quot;| Sinkhorn
+  Sinkhorn --&gt;|&quot;小さい epsilon で安定化&quot;| LogDomain
+
+  EntropicOT --&gt;|&quot;正則化を消す&quot;| Eps0
+  Eps0 --&gt;|&quot;非正則化 OT の最大エントロピー解&quot;| Kantorovich
+  EntropicOT --&gt;|&quot;エントロピーが支配&quot;| EpsInf
+  EpsInf --&gt;|&quot;独立カップリング ab^T&quot;| Coupling
+  EntropicOT --&gt;|&quot;双対ポテンシャルが勾配&quot;| Smooth
+
+  Kantorovich --&gt;|&quot;コストを d^p に特殊化&quot;| Wp
+  Wp --&gt;|&quot;距離空間として扱う&quot;| Geodesic
+  Geodesic --&gt;|&quot;凸性・曲率へ発展&quot;| Curvature</pre></div>
+<p>有限と無限の行き来は、厳密な同一視と近似を分ける。</p>
+<div class="map-wrap"><pre class="mermaid">flowchart TB
+  Continuous[&quot;連続測度 alpha, beta&quot;]
+  FiniteSupport[&quot;有限支持測度 sum a_i delta_x_i&quot;]
+  Empirical[&quot;経験測度・格子近似&quot;]
+  MatrixPlan[&quot;行列カップリング P&quot;]
+  ContinuousPlan[&quot;測度カップリング pi&quot;]
+  DiscreteProblem[&quot;有限次元 LP&quot;]
+  ContinuousProblem[&quot;測度上の Kantorovich 問題&quot;]
+  Convergence[&quot;近似誤差の収束解析&quot;]
+
+  Continuous --&gt;|&quot;最初から有限支持なら厳密同一視&quot;| FiniteSupport
+  Continuous --&gt;|&quot;サンプル化・格子化なら近似&quot;| Empirical
+  FiniteSupport --&gt;|&quot;pi = sum P_ij delta_(x_i,y_j)&quot;| MatrixPlan
+  MatrixPlan --&gt;|&quot;行和・列和が周辺分布&quot;| DiscreteProblem
+  Continuous --&gt;|&quot;積空間上の測度&quot;| ContinuousPlan
+  ContinuousPlan --&gt;|&quot;周辺が alpha, beta&quot;| ContinuousProblem
+  Empirical --&gt;|&quot;有限問題として解く&quot;| DiscreteProblem
+  DiscreteProblem --&gt;|&quot;元の連続問題へ戻すには必要&quot;| Convergence
+  Convergence --&gt;|&quot;経験測度や格子幅の極限&quot;| ContinuousProblem</pre></div>
 <div class="grid two">
 <article class="fact">
 <h2>Cuturi/Peyre と同じ主軸</h2>
-<p>Monge/Kantorovich、離散 OT、LP、双対、エントロピー正則化、Sinkhorn という流れは Computational Optimal Transport の標準的な構成である。</p>
+<p>Monge/Kantorovich、離散 OT、LP、双対、エントロピー正則化、Gibbs カーネル、KL 射影、Sinkhorn という流れは Computational Optimal Transport の標準的な構成である。</p>
 </article>
 <article class="fact accent">
 <h2>幾何は別の主文脈</h2>
@@ -111,8 +169,38 @@
 <h2>準備</h2>
 <p>最適輸送では点を動かす写像だけでなく、点集合上の確率測度を扱う。基礎語は位相、可測性、測度、押し出し、凸性に分かれる。</p>
 <div class="block definition">
+<h3>定義: 基本記号</h3>
+<p>\(\R\) は実数全体、\(\R_+\) は非負実数全体 \([0,\infty)\)、\(\R_{++}\) は正実数全体 \((0,\infty)\) を表す。\(\R^n\) は \(n\) 個の実数を並べたベクトル全体、\(\R^{n\times m}\) は \(n\) 行 \(m\) 列の実行列全体を表す。</p>
+</div>
+<div class="block definition">
+<h3>定義: 距離空間</h3>
+<p>集合 \(\X\) と関数 \(d:\X\times\X\to\R_+\) が、すべての \(x,y,z\in\X\) について</p>
+<div class="math-block">\[
+  d(x,y)=0 \Longleftrightarrow x=y,\qquad
+  d(x,y)=d(y,x),\qquad
+  d(x,z)\le d(x,y)+d(y,z)
+\]</div>
+<p>を満たすとき、\(d\) を距離、組 \((\X,d)\) を距離空間という。</p>
+<div class="math-block">\[
+  B_r(x)\defeq\{y\in\X\mid d(x,y)&lt;r\}
+\]</div>
+<p>を中心 \(x\)、半径 \(r\) の開球という。</p>
+</div>
+<div class="block definition">
 <h3>定義: Polish 空間</h3>
+<p>距離空間 \((\X,d)\) において、任意の Cauchy 列が \(\X\) の点へ収束するとき、\(\X\) は完備であるという。ここで Cauchy 列とは、任意の \(\varepsilon&gt;0\) に対してある \(N\) が存在し、\(k,\ell\ge N\) ならば \(d(x_k,x_\ell)&lt;\varepsilon\) となる列である。</p>
+<p>距離空間 \(\X\) が可算な稠密部分集合を持つとき、\(\X\) は可分であるという。可算とは、自然数で番号を付けられることをいう。部分集合 \(D\subset\X\) が稠密であるとは、任意の \(x\in\X\) と任意の \(r&gt;0\) に対して \(B_r(x)\cap D\ne\emptyset\) となることをいう。</p>
 <p>距離空間 \((\X,d)\) が完備かつ可分であるとき、\(\X\) を <button class="term" data-term="polish">Polish 空間</button> という。</p>
+</div>
+<div class="block definition">
+<h3>定義: \(\sigma\)-代数</h3>
+<p>集合 \(\X\) の部分集合族 \(\mathcal{F}\subset 2^{\X}\) が</p>
+<ol>
+<li>\(\X\in\mathcal{F}\)</li>
+<li>\(A\in\mathcal{F}\) ならば \(\X\setminus A\in\mathcal{F}\)</li>
+<li>\(A_1,A_2,\ldots\in\mathcal{F}\) ならば \(\bigcup_{k=1}^{\infty}A_k\in\mathcal{F}\)</li>
+</ol>
+<p>を満たすとき、\(\mathcal{F}\) を \(\sigma\)-代数という。</p>
 </div>
 <div class="block definition">
 <h3>定義: Borel \(\sigma\)-代数</h3>
@@ -121,6 +209,20 @@
   \Bb(\X) \defeq \sigma(\mathcal{O}_d)
 \]</div>
 <p>を \(\X\) 上の Borel \(\sigma\)-代数という。</p>
+</div>
+<div class="block definition">
+<h3>定義: 可測写像</h3>
+<p>集合 \(\X\) とその上の \(\sigma\)-代数 \(\mathcal{F}\) の組 \((\X,\mathcal{F})\) を可測空間という。\((\X,\mathcal{F})\), \((\Y,\mathcal{G})\) を可測空間とする。写像 \(T:\X\to\Y\) が、任意の \(B\in\mathcal{G}\) について \(T^{-1}(B)\in\mathcal{F}\) を満たすとき、\(T\) を可測写像という。</p>
+</div>
+<div class="block definition">
+<h3>定義: 確率測度</h3>
+<p>\((\X,\mathcal{F})\) 上の関数 \(\alpha:\mathcal{F}\to[0,1]\) が、\(\alpha(\X)=1\) と可算加法性</p>
+<div class="math-block">\[
+  \alpha\left(\bigcup_{k=1}^{\infty}A_k\right)
+  =
+  \sum_{k=1}^{\infty}\alpha(A_k)
+\]</div>
+<p>を互いに交わらない \(A_1,A_2,\ldots\in\mathcal{F}\) について満たすとき、\(\alpha\) を確率測度という。</p>
 </div>
 <div class="block definition">
 <h3>定義: 押し出し</h3>
@@ -138,6 +240,18 @@
 \]</div>
 <p>と書ける確率測度を有限支持測度という。離散 OT はこの場合の Kantorovich 問題そのものであり、単なる近似ではない。</p>
 </details>
+<div class="block definition">
+<h3>定義: 凸集合と凸関数</h3>
+<p>集合 \(S\subset\R^d\) が、任意の \(x,y\in S\), \(t\in[0,1]\) について \(tx+(1-t)y\in S\) を満たすとき、\(S\) を凸集合という。凸集合 \(S\) 上の関数 \(F:S\to\R\) が</p>
+<div class="math-block">\[
+  F(tx+(1-t)y)\le tF(x)+(1-t)F(y)
+\]</div>
+<p>をすべての \(x,y\in S\), \(t\in[0,1]\) について満たすとき、\(F\) を凸関数という。不等号が \(x\ne y\), \(t\in(0,1)\) で常に狭義になるとき、\(F\) を狭義凸関数という。</p>
+</div>
+<div class="block definition">
+<h3>定義: コンパクト集合</h3>
+<p>\(\R^d\) の部分集合 \(S\) がコンパクトであるとは、\(S\) の任意の点列が \(S\) 内の点へ収束する部分列を持つことをいう。</p>
+</div>
 </section>
 <section id="monge-kantorovich" class="chapter">
 <p class="eyebrow">2. OT Foundations</p>
@@ -174,6 +288,10 @@
 <h2>離散化、線形計画、双対</h2>
 <p>有限支持測度 \(\alpha=\sum_i a_i\delta_{x_i}\), \(\beta=\sum_j b_j\delta_{y_j}\) では、カップリングは行列 \(\mathbf{P}\in\R_+^{n\times m}\) で表される。</p>
 <div class="block definition">
+<h3>定義: ヒストグラム</h3>
+<p>ベクトル \(\mathbf{a}\in\R_+^n\) が \(\sum_{i=1}^n a_i=1\) を満たすとき、\(\mathbf{a}\) をヒストグラムという。各成分 \(a_i\) は点 \(x_i\) に置かれた質量を表す。</p>
+</div>
+<div class="block definition">
 <h3>定義: 輸送多面体</h3>
 <div class="math-block">\[
   \Pi(\mathbf{a},\mathbf{b}) =
@@ -182,6 +300,10 @@
   \mathbf{P}\ones_m=\mathbf{a},
   \mathbf{P}^{\top}\ones_n=\mathbf{b}\}.
 \]</div>
+</div>
+<div class="block definition">
+<h3>定義: 線形計画</h3>
+<p>変数 \(x\in\R^d\) に対して、線形関数 \(c^\top x\) を線形等式・線形不等式で定まる集合上で最小化または最大化する問題を線形計画という。</p>
 </div>
 <div class="block theorem">
 <h3>離散 Kantorovich 問題</h3>
@@ -192,6 +314,10 @@
   \inner{\mathbf{C}}{\mathbf{P}}.
 \]</div>
 <p>これは有限次元線形計画である。</p>
+</div>
+<div class="block definition">
+<h3>定義: 双対問題</h3>
+<p>制約付き最小化問題に対して、制約をラグランジュ乗数で目的関数に組み込んで得られる最大化問題を双対問題という。元の最小化問題を主問題という。</p>
 </div>
 <div class="block theorem">
 <h3>定理: 離散 Kantorovich 双対</h3>
@@ -205,6 +331,18 @@
     \mid f_i+g_j\le C_{ij}
   \right\}.
 \]</div>
+</div>
+<div class="block definition">
+<h3>定義: \(C\)-変換と \(c\)-変換</h3>
+<p>離散コスト行列 \(\mathbf{C}\) とベクトル \(\mathbf{f}\in\R^n\) に対して、</p>
+<div class="math-block">\[
+  f^C_j\defeq \min_i(C_{ij}-f_i)
+\]</div>
+<p>を \(C\)-変換という。連続コスト \(c:\X\times\Y\to\R\) と関数 \(\varphi:\X\to\R\) に対して、</p>
+<div class="math-block">\[
+  \varphi^c(y)\defeq \inf_{x\in\X}(c(x,y)-\varphi(x))
+\]</div>
+<p>を \(c\)-変換という。</p>
 </div>
 <div class="compare">
 <div>
@@ -227,18 +365,28 @@
 <section id="entropic" class="chapter">
 <p class="eyebrow">4. Entropic Regularization</p>
 <h2><button class="term heading-term" data-term="entropy">エントロピー正則化</button></h2>
-<p>離散 Kantorovich 問題の目的関数にエントロピー項を加えると、最適解は一意になり、行列スケーリングで計算できる。</p>
+<p>Cuturi/Peyre におけるエントロピー正則化は、離散 Kantorovich 問題に負エントロピーを加え、線形計画を強凸な最適化問題へ変える操作である。正則化された問題は一意な解を持ち、その解は Gibbs カーネルの KL 射影として表される。</p>
+<div class="block definition">
+<h3>定義: 正ヒストグラム</h3>
+<p>ベクトル \(\mathbf{a}\in\R^n\) が</p>
+<div class="math-block">\[
+  a_i&gt;0\quad(\forall i),\qquad \sum_{i=1}^n a_i=1
+\]</div>
+<p>を満たすとき、\(\mathbf{a}\) を正ヒストグラムという。以下では \(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\) を正ヒストグラムとする。</p>
+</div>
 <div class="block definition">
 <h3>定義: 離散エントロピー</h3>
+<p>非負行列 \(\mathbf{P}\in\R_+^{n\times m}\) に対して、<button class="term" data-term="entropy">離散エントロピー</button>を</p>
 <div class="math-block">\[
   \Hb(\mathbf{P})
   \defeq
-  -\sum_{i,j}P_{ij}(\log P_{ij}-1),
-  \qquad 0\log 0=0.
+  -\sum_{i,j}P_{ij}(\log P_{ij}-1)
 \]</div>
+<p>で定める。ただし \(0\log 0=0\) と約束する。通常の Shannon エントロピー \(-\sum_{i,j}P_{ij}\log P_{ij}\) とは、確率行列上では定数 \(1\) だけ異なる。</p>
 </div>
 <div class="block definition">
-<h3>定義: エントロピー正則化 OT</h3>
+<h3>定義: エントロピー正則化された離散 OT</h3>
+<p>正則化パラメータ \(\varepsilon&gt;0\) に対して、エントロピー正則化された離散 Kantorovich 問題を</p>
 <div class="math-block">\[
   \mathrm{MK}_{\mathbf{C}}^{\varepsilon}(\mathbf{a},\mathbf{b})
   \defeq
@@ -246,48 +394,195 @@
   \left\{
     \inner{\mathbf{C}}{\mathbf{P}}
     -\varepsilon \Hb(\mathbf{P})
-  \right\}.
+  \right\}
 \]</div>
+<p>で定める。ここで \(\varepsilon\) は線形コストとエントロピー項の相対的な重みである。</p>
+</div>
+<div class="block definition">
+<h3>定義: 強凸性</h3>
+<p>凸集合 \(S\subset\R^d\) 上の関数 \(F:S\to\R\) が、ある \(\lambda&gt;0\) に対して</p>
+<div class="math-block">\[
+  F(tx+(1-t)y)
+  \le
+  tF(x)+(1-t)F(y)-\frac{\lambda}{2}t(1-t)\|x-y\|^2
+\]</div>
+<p>をすべての \(x,y\in S\), \(t\in[0,1]\) で満たすとき、\(F\) を \(\lambda\)-強凸という。強凸関数の最小解は高々一つである。</p>
 </div>
 <div class="block theorem">
 <h3>命題: 存在と一意性</h3>
-<p>任意の \(\varepsilon&gt;0\) に対し、正則化問題は一意な最適解 \(\mathbf{P}_{\varepsilon}\) を持つ。</p>
-<details class="fold embedded"><summary>証明の骨格</summary>
-<p>輸送多面体は空でないコンパクト集合である。関数 \(x\mapsto x\log x-x\) は連続かつ狭義凸である。したがって目的関数は連続かつ狭義凸であり、最小値を一意に達成する。</p>
+<p>任意の \(\varepsilon&gt;0\) に対し、エントロピー正則化問題は一意な最適解 \(\mathbf{P}_{\varepsilon}\) を持つ。</p>
+<details class="fold embedded"><summary>証明</summary>
+<p>輸送多面体 \(\Pi(\mathbf{a},\mathbf{b})\) は空でないコンパクト集合である。関数 \(x\mapsto x\log x-x\) は \([0,\infty)\) 上で連続であり、\((0,\infty)\) 上で狭義凸である。したがって目的関数</p>
+<div class="math-block">\[
+  \mathbf{P}\mapsto
+  \inner{\mathbf{C}}{\mathbf{P}}
+  +\varepsilon\sum_{i,j}P_{ij}(\log P_{ij}-1)
+\]</div>
+<p>はコンパクト集合上で最小値を達成する。さらに負エントロピー項が凸性を強めるため、最小解は一意である。</p>
 </details>
 </div>
+<div class="block definition">
+<h3>定義: KL ダイバージェンス</h3>
+<p>非負行列 \(\mathbf{P},\mathbf{K}\in\R_+^{n\times m}\) に対して、<button class="term" data-term="kl">KL ダイバージェンス</button>を</p>
+<div class="math-block">\[
+  \KLD(\mathbf{P}\Vert\mathbf{K})
+  \defeq
+  \sum_{i,j}
+  \left(
+    P_{ij}\log\frac{P_{ij}}{K_{ij}}
+    -P_{ij}
+    +K_{ij}
+  \right)
+\]</div>
+<p>で定める。ただし \(0\log0=0\) とし、\(P_{ij}&gt;0\) かつ \(K_{ij}=0\) となる成分がある場合は \(+\infty\) とする。</p>
+</div>
+<div class="block definition">
+<h3>定義: Gibbs カーネル</h3>
+<p>コスト行列 \(\mathbf{C}\) と \(\varepsilon&gt;0\) に対して、<button class="term" data-term="gibbs">Gibbs カーネル</button>を</p>
+<div class="math-block">\[
+  K_{ij}\defeq \exp\left(-\frac{C_{ij}}{\varepsilon}\right)
+\]</div>
+<p>で定める。コストが大きい成分ほど \(K_{ij}\) は小さい。</p>
+</div>
+<div class="block definition">
+<h3>定義: KL 射影</h3>
+<p>集合 \(S\subset\R_+^{n\times m}\) と正行列 \(\mathbf{K}\) に対して、</p>
+<div class="math-block">\[
+  \operatorname{Proj}^{\KLD}_{S}(\mathbf{K})
+  \defeq
+  \arg\min_{\mathbf{P}\in S}\KLD(\mathbf{P}\Vert\mathbf{K})
+\]</div>
+<p>を \(\mathbf{K}\) の \(S\) への KL 射影という。</p>
+</div>
 <div class="block theorem">
-<h3>KL 射影としての定式化</h3>
-<p>\(K_{ij}=\exp(-C_{ij}/\varepsilon)\) とおくと、</p>
+<h3>命題: 正則化 OT は KL 射影である</h3>
+<p>\(\mathbf{K}=\exp(-\mathbf{C}/\varepsilon)\) とすると、</p>
 <div class="math-block">\[
   \mathbf{P}_{\varepsilon}
   =
+  \operatorname{Proj}^{\KLD}_{\Pi(\mathbf{a},\mathbf{b})}(\mathbf{K})
+  =
   \arg\min_{\mathbf{P}\in\Pi(\mathbf{a},\mathbf{b})}
-  \KLD(\mathbf{P}\Vert\mathbf{K}).
+  \KLD(\mathbf{P}\Vert\mathbf{K})
 \]</div>
+<p>である。</p>
+<details class="fold embedded"><summary>証明</summary>
+<p>\(\log K_{ij}=-C_{ij}/\varepsilon\) より、</p>
+<div class="math-block">\[
+  \varepsilon\KLD(\mathbf{P}\Vert\mathbf{K})
+  =
+  \inner{\mathbf{C}}{\mathbf{P}}
+  -\varepsilon\Hb(\mathbf{P})
+  +\varepsilon\sum_{i,j}K_{ij}.
+\]</div>
+<p>最後の項は \(\mathbf{P}\) に依存しない。したがって二つの最小化問題は同じ最適解を持つ。</p>
+</details>
 </div>
 </section>
 <section id="sinkhorn" class="chapter">
 <p class="eyebrow">5. Sinkhorn</p>
 <h2><button class="term heading-term" data-term="sinkhorn">Sinkhorn アルゴリズム</button></h2>
+<p>Cuturi/Peyre の Sinkhorn アルゴリズムは、Gibbs カーネルを行方向と列方向に交互にスケーリングし、指定された周辺ヒストグラムを持つ行列へ収束させる反復である。</p>
+<div class="block definition">
+<h3>定義: 対角行列とスケーリングベクトル</h3>
+<p>ベクトル \(\mathbf{u}\in\R^n\) に対して、\(\diag(\mathbf{u})\) は対角成分が \(u_1,\ldots,u_n\)、非対角成分が \(0\) の行列である。正ベクトル \(\mathbf{u}\in\R_{++}^n\), \(\mathbf{v}\in\R_{++}^m\) を用いて</p>
+<div class="math-block">\[
+  \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})
+\]</div>
+<p>と書く操作を、\(\mathbf{K}\) の行方向と列方向のスケーリングという。</p>
+</div>
 <div class="block theorem">
-<h3>定理: スケーリング形式</h3>
-<p>正則化問題の最適解は、正ベクトル \(\mathbf{u},\mathbf{v}\) により</p>
+<h3>命題: スケーリング形式</h3>
+<p>正則化問題の最適解は、正ベクトル \(\mathbf{u}\in\R_{++}^n\), \(\mathbf{v}\in\R_{++}^m\) により</p>
 <div class="math-block">\[
   \mathbf{P}_{\varepsilon}
   =
   \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})
 \]</div>
 <p>と表される。</p>
+<details class="fold embedded"><summary>証明</summary>
+<p>周辺制約を目的関数に組み込む補助変数として、ラグランジュ乗数 \(\mathbf{f}\in\R^n\), \(\mathbf{g}\in\R^m\) を導入する。最適解で偏微分が \(0\) になる条件を一階条件という。この場合の一階条件は</p>
+<div class="math-block">\[
+  C_{ij}+\varepsilon\log P_{ij}-f_i-g_j=0
+\]</div>
+<p>である。したがって</p>
+<div class="math-block">\[
+  P_{ij}
+  =
+  \exp(f_i/\varepsilon)
+  \exp(-C_{ij}/\varepsilon)
+  \exp(g_j/\varepsilon).
+\]</div>
+<p>\(u_i=\exp(f_i/\varepsilon)\), \(v_j=\exp(g_j/\varepsilon)\) とおけば、主張を得る。</p>
+</details>
+</div>
+<div class="block definition">
+<h3>定義: 成分ごとの積と除算</h3>
+<p>同じ長さのベクトル \(\mathbf{x},\mathbf{y}\) に対して、</p>
+<div class="math-block">\[
+  (\mathbf{x}\odot\mathbf{y})_i\defeq x_i y_i,
+  \qquad
+  (\mathbf{x}\oslash\mathbf{y})_i\defeq \frac{x_i}{y_i}
+\]</div>
+<p>で定まる演算を、それぞれ成分ごとの積、成分ごとの除算という。</p>
 </div>
 <div class="algorithm">
 <h3>Sinkhorn 反復</h3>
+<div class="math-block">\[
+  \mathbf{P}=\diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})
+\]</div>
+<p>が周辺条件 \(\mathbf{P}\ones_m=\mathbf{a}\), \(\mathbf{P}^{\top}\ones_n=\mathbf{b}\) を満たすことは</p>
+<div class="math-block">\[
+  \mathbf{u}\odot(\mathbf{K}\mathbf{v})=\mathbf{a},
+  \qquad
+  \mathbf{v}\odot(\mathbf{K}^{\top}\mathbf{u})=\mathbf{b}
+\]</div>
+<p>と同値である。したがって以下の反復を行う。</p>
 <ol>
 <li>\(\mathbf{v}^{(0)}=\ones_m\)</li>
-<li>\(\mathbf{u}\leftarrow\mathbf{a}\oslash(\mathbf{K}\mathbf{v})\)</li>
-<li>\(\mathbf{v}\leftarrow\mathbf{b}\oslash(\mathbf{K}^{\top}\mathbf{u})\)</li>
-<li>\(\mathbf{P}=\diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})\)</li>
+<li>\(\mathbf{u}^{(\ell+1)}\leftarrow\mathbf{a}\oslash(\mathbf{K}\mathbf{v}^{(\ell)})\)</li>
+<li>\(\mathbf{v}^{(\ell+1)}\leftarrow\mathbf{b}\oslash(\mathbf{K}^{\top}\mathbf{u}^{(\ell+1)})\)</li>
+<li>\(\mathbf{P}^{(\ell)}=\diag(\mathbf{u}^{(\ell)})\mathbf{K}\diag(\mathbf{v}^{(\ell)})\)</li>
 </ol>
+</div>
+<div class="block definition">
+<h3>定義: KL 交互射影</h3>
+<p>二つの集合 \(S_1,S_2\) があるとき、ある点を \(S_1\) へ KL 射影し、次に \(S_2\) へ KL 射影し、この操作を繰り返す方法を KL 交互射影という。Sinkhorn 反復は、行和制約</p>
+<div class="math-block">\[
+  S_{\mathrm{row}}\defeq\{\mathbf{P}\mid \mathbf{P}\ones_m=\mathbf{a}\}
+\]</div>
+<p>と列和制約</p>
+<div class="math-block">\[
+  S_{\mathrm{col}}\defeq\{\mathbf{P}\mid \mathbf{P}^{\top}\ones_n=\mathbf{b}\}
+\]</div>
+<p>への KL 交互射影である。</p>
+</div>
+<div class="block definition">
+<h3>定義: 正則化双対問題</h3>
+<p>関数</p>
+<div class="math-block">\[
+  Q(\mathbf{f},\mathbf{g})
+  \defeq
+  \inner{\mathbf{f}}{\mathbf{a}}
+  +\inner{\mathbf{g}}{\mathbf{b}}
+  -\varepsilon
+  \sum_{i,j}
+  \exp\left(\frac{f_i+g_j-C_{ij}}{\varepsilon}\right)
+\]</div>
+<p>を正則化双対目的関数という。正則化双対問題とは \(Q\) を \(\mathbf{f}\in\R^n\), \(\mathbf{g}\in\R^m\) について最大化する問題である。このとき \(\mathbf{f},\mathbf{g}\) を双対ポテンシャルという。</p>
+</div>
+<div class="block theorem">
+<h3>命題: Sinkhorn は双対の交互最大化である</h3>
+<p>正則化双対目的関数 \(Q(\mathbf{f},\mathbf{g})\) において、\(\mathbf{g}\) を固定して \(\mathbf{f}\) を最大化し、次に \(\mathbf{f}\) を固定して \(\mathbf{g}\) を最大化する操作は、Sinkhorn 反復と同値である。</p>
+<details class="fold embedded"><summary>対応</summary>
+<p>\(u_i=\exp(f_i/\varepsilon)\), \(v_j=\exp(g_j/\varepsilon)\) とおくと、双対の一階条件は</p>
+<div class="math-block">\[
+  \mathbf{u}\odot(\mathbf{K}\mathbf{v})=\mathbf{a},
+  \qquad
+  \mathbf{v}\odot(\mathbf{K}^{\top}\mathbf{u})=\mathbf{b}.
+\]</div>
+<p>これは Sinkhorn の固定点条件である。</p>
+</details>
 </div>
 
 <div class="demo" aria-label="Sinkhorn デモ">
@@ -310,31 +605,183 @@
     </div>
   </div>
 </div>
-<details class="fold"><summary>対数領域 Sinkhorn</summary>
-<p>小さい \(\varepsilon\) では \(K_{ij}=\exp(-C_{ij}/\varepsilon)\) が数値的に不安定になる。\(f_i=\varepsilon\log u_i\), \(g_j=\varepsilon\log v_j\) を更新することで、log-sum-exp 型の安定な計算になる。</p>
+<div class="block definition">
+<h3>定義: soft-min</h3>
+<p>ベクトル \(\mathbf{z}=(z_1,\ldots,z_m)\) と \(\varepsilon&gt;0\) に対して、</p>
+<div class="math-block">\[
+  \operatorname{smin}_{\varepsilon}(\mathbf{z})
+  \defeq
+  -\varepsilon\log\sum_{j=1}^m e^{-z_j/\varepsilon}
+\]</div>
+<p>を soft-min という。\(\varepsilon\to0\) で \(\operatorname{smin}_{\varepsilon}(\mathbf{z})\to\min_j z_j\) である。</p>
+</div>
+<div class="block definition">
+<h3>定義: 対数領域 Sinkhorn</h3>
+<p>双対ポテンシャル</p>
+<div class="math-block">\[
+  f_i\defeq \varepsilon\log u_i,
+  \qquad
+  g_j\defeq \varepsilon\log v_j
+\]</div>
+<p>を直接更新する Sinkhorn 反復を対数領域 Sinkhorn という。更新式は</p>
+<div class="math-block">\[
+  f_i
+  \leftarrow
+  \varepsilon\log a_i
+  +
+  \operatorname{smin}_{\varepsilon}(C_{i1}-g_1,\ldots,C_{im}-g_m),
+\]</div>
+<div class="math-block">\[
+  g_j
+  \leftarrow
+  \varepsilon\log b_j
+  +
+  \operatorname{smin}_{\varepsilon}(C_{1j}-f_1,\ldots,C_{nj}-f_n).
+\]</div>
+</div>
+<details class="fold"><summary>数値安定性</summary>
+<p>小さい \(\varepsilon\) では \(K_{ij}=\exp(-C_{ij}/\varepsilon)\) が計算機上で \(0\) として扱われることがある。この現象を underflow という。対数領域 Sinkhorn は、指数関数の値そのものではなく対数を用いることで underflow を避ける。</p>
 </details>
 </section>
 <section id="justification" class="chapter">
 <p class="eyebrow">6. Justification</p>
 <h2>正則化の正当性</h2>
-<p>エントロピー正則化の正当化は、一意性、計算可能性、非正則化問題への極限という三点に集約される。</p>
+<p>Cuturi/Peyre におけるエントロピー正則化の正当性は、非正則化 OT への極限、Sinkhorn による計算可能性、滑らかな損失関数としての微分可能性に分かれる。</p>
+<div class="block definition">
+<h3>定義: 最大エントロピー最適解</h3>
+<p>非正則化問題</p>
+<div class="math-block">\[
+  \min_{\mathbf{P}\in\Pi(\mathbf{a},\mathbf{b})}
+  \inner{\mathbf{C}}{\mathbf{P}}
+\]</div>
+<p>の最適解全体を</p>
+<div class="math-block">\[
+  \mathcal{S}_0
+  \defeq
+  \left\{
+    \mathbf{P}\in\Pi(\mathbf{a},\mathbf{b})
+    \mid
+    \inner{\mathbf{C}}{\mathbf{P}}
+    =
+    \mathrm{MK}_{\mathbf{C}}(\mathbf{a},\mathbf{b})
+  \right\}
+\]</div>
+<p>とする。\(\mathcal{S}_0\) の中で \(\Hb(\mathbf{P})\) を最大にする元を最大エントロピー最適解という。</p>
+</div>
 <div class="block theorem">
 <h3>定理: \(\varepsilon\to0\) 極限</h3>
-<p>\(\varepsilon_k\to0\) とし、\(\mathbf{P}_{\varepsilon_k}\) を正則化問題の解とする。任意の収束部分列の極限は非正則化 OT の最適解である。さらに</p>
+<p>\(\varepsilon\to0\) のとき、正則化解 \(\mathbf{P}_{\varepsilon}\) は最大エントロピー最適解へ収束する。特に</p>
 <div class="math-block">\[
   \lim_{\varepsilon\to0}
   \mathrm{MK}_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
   =
   \mathrm{MK}_{\mathbf{C}}(\mathbf{a},\mathbf{b})
 \]</div>
-<p>が成り立つ。</p>
+<p>である。</p>
+<details class="fold embedded"><summary>証明</summary>
+<p>非正則化問題の任意の最適解を \(\mathbf{P}\) とする。正則化解の最適性より</p>
+<div class="math-block">\[
+  \inner{\mathbf{C}}{\mathbf{P}_{\varepsilon}}
+  -\varepsilon\Hb(\mathbf{P}_{\varepsilon})
+  \le
+  \inner{\mathbf{C}}{\mathbf{P}}
+  -\varepsilon\Hb(\mathbf{P})
+\]</div>
+<p>である。一方、\(\mathbf{P}\) は非正則化問題の最適解なので</p>
+<div class="math-block">\[
+  0
+  \le
+  \inner{\mathbf{C}}{\mathbf{P}_{\varepsilon}}
+  -
+  \inner{\mathbf{C}}{\mathbf{P}}
+  \le
+  \varepsilon
+  \left(
+    \Hb(\mathbf{P}_{\varepsilon})-\Hb(\mathbf{P})
+  \right).
+\]</div>
+<p>輸送多面体はコンパクトで、\(\Hb\) はその上で有界である。したがってコスト差は \(0\) に収束する。さらに上の不等式を \(\varepsilon\) で割って極限を取ると、極限点は非正則化最適解の中でエントロピーを最大化する。</p>
+</details>
 </div>
 <div class="block theorem">
 <h3>定理: \(\varepsilon\to+\infty\) 極限</h3>
 <div class="math-block">\[
   \mathbf{P}_{\varepsilon}\to\mathbf{a}\mathbf{b}^{\top}.
 \]</div>
-<p>大きな正則化では、輸送計画は独立カップリングに近づく。</p>
+<p>ここで \((\mathbf{a}\mathbf{b}^{\top})_{ij}=a_i b_j\) である。この行列は、ソースとターゲットを独立に結合するカップリングである。</p>
+</div>
+<div class="block definition">
+<h3>定義: Hilbert 射影距離</h3>
+<p>正ベクトル \(\mathbf{x},\mathbf{y}\in\R_{++}^n\) に対して、</p>
+<div class="math-block">\[
+  d_H(\mathbf{x},\mathbf{y})
+  \defeq
+  \log
+  \max_{i,j}
+  \frac{x_i y_j}{x_j y_i}
+\]</div>
+<p>を Hilbert 射影距離という。\(d_H(\mathbf{x},\mathbf{y})=0\) は、\(\mathbf{x}\) と \(\mathbf{y}\) が正の定数倍で一致することを意味する。</p>
+</div>
+<div class="block definition">
+<h3>定義: 縮小写像</h3>
+<p>距離空間 \((S,d)\) 上の写像 \(T:S\to S\) が、ある \(\lambda\in[0,1)\) に対して</p>
+<div class="math-block">\[
+  d(Tx,Ty)\le \lambda d(x,y)
+\]</div>
+<p>をすべての \(x,y\in S\) で満たすとき、\(T\) を縮小写像という。</p>
+</div>
+<div class="block theorem">
+<h3>定理: Birkhoff の縮小定理</h3>
+<p>全成分が正である行列を正行列という。正行列 \(\mathbf{K}\) によって定まる写像 \(\mathbf{x}\mapsto\mathbf{K}\mathbf{x}\) は、Hilbert 射影距離に関して縮小写像である。すなわち、ある \(\lambda\in[0,1)\) が存在して</p>
+<div class="math-block">\[
+  d_H(\mathbf{K}\mathbf{x},\mathbf{K}\mathbf{y})
+  \le
+  \lambda d_H(\mathbf{x},\mathbf{y})
+\]</div>
+<p>が成り立つ。</p>
+</div>
+<div class="block theorem">
+<h3>定理: Sinkhorn 反復の収束</h3>
+<p>\(\mathbf{K}\in\R_{++}^{n\times m}\), \(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\) のとき、Sinkhorn 反復が生成する行列</p>
+<div class="math-block">\[
+  \mathbf{P}^{(\ell)}
+  =
+  \diag(\mathbf{u}^{(\ell)})\mathbf{K}\diag(\mathbf{v}^{(\ell)})
+\]</div>
+<p>は正則化問題の一意解 \(\mathbf{P}_{\varepsilon}\) に収束する。</p>
+<details class="fold embedded"><summary>Cuturi/Peyre における収束の見方</summary>
+<p>収束解析では Hilbert 射影距離を使う。Sinkhorn 反復は正ベクトル全体 \(\R_{++}^n\), \(\R_{++}^m\) の上で Birkhoff の縮小定理を利用するため、スケーリングベクトルは定数倍の自由度を除いて一意な極限へ収束する。</p>
+</details>
+</div>
+<div class="block definition">
+<h3>定義: 微分可能性と勾配</h3>
+<p>関数 \(F:\R^d\to\R\) が点 \(x\) で微分可能であるとは、あるベクトル \(\nabla F(x)\in\R^d\) が存在して</p>
+<div class="math-block">\[
+  F(x+h)
+  =
+  F(x)
+  +
+  \inner{\nabla F(x)}{h}
+  +
+  o(\|h\|)
+\]</div>
+<p>を満たすことをいう。このベクトル \(\nabla F(x)\) を \(F\) の勾配という。</p>
+</div>
+<div class="block theorem">
+<h3>命題: 正則化 OT は滑らかな損失になる</h3>
+<p>\(\varepsilon&gt;0\) のとき、\(\mathrm{MK}_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})\) は入力ヒストグラムに関して微分可能である。最適な双対ポテンシャルを \((\mathbf{f}^{\star},\mathbf{g}^{\star})\) とすると、定数倍の不定性を除いて</p>
+<div class="math-block">\[
+  \nabla_{\mathbf{a}}
+  \mathrm{MK}_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
+  =
+  \mathbf{f}^{\star},
+  \qquad
+  \nabla_{\mathbf{b}}
+  \mathrm{MK}_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
+  =
+  \mathbf{g}^{\star}
+\]</div>
+<p>である。損失関数とは、最小化の対象として使う関数である。この性質により、正則化 OT は最適化や機械学習の損失関数として扱いやすい。</p>
 </div>
 </section>
 <section id="geometry" class="chapter">

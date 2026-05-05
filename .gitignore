@@ -22,3 +22,4 @@ seminar/out/
 
 # editor / linter caches
 .ruff_cache/
+.DS_Store

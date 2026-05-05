@@ -8,12 +8,20 @@ const glossary = {
     body: "二つの周辺分布を固定した積空間上の確率測度。Kantorovich 緩和の未知量。"
   },
   entropy: {
-    title: "エントロピー正則化",
-    body: "線形コストに負エントロピーを加える正則化。一意性と Sinkhorn 計算を生む。"
+    title: "離散エントロピー / エントロピー正則化",
+    body: "離散エントロピーは \\(H(P)=-\\sum_{ij}P_{ij}(\\log P_{ij}-1)\\)。正則化では線形コストに \\(-\\varepsilon H(P)\\) を加える。"
+  },
+  kl: {
+    title: "KL ダイバージェンス",
+    body: "非負行列 \\(P,K\\) の差を測る量。\\(\\sum_{ij}P_{ij}\\log(P_{ij}/K_{ij})-P_{ij}+K_{ij}\\) で定義する。"
+  },
+  gibbs: {
+    title: "Gibbs カーネル",
+    body: "コスト行列から作る正行列。\\(K_{ij}=\\exp(-C_{ij}/\\varepsilon)\\)。Sinkhorn はこの行列を周辺制約に合わせてスケーリングする。"
   },
   sinkhorn: {
     title: "Sinkhorn 反復",
-    body: "Gibbs カーネルを行方向と列方向に交互にスケールし、指定された周辺分布に合わせる反復。"
+    body: "Gibbs カーネルを行方向と列方向に交互にスケールし、指定された周辺分布に合わせる反復。KL 交互射影、双対の交互最大化としても解釈できる。"
   }
 };
 
