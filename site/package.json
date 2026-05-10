@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "tex": "node scripts/md2tex.mjs"
+    "build": "node scripts/build.mjs"
   }
 }

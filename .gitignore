@@ -20,6 +20,9 @@ seminar/out/
 /seminar/main.pdf
 /translated_for_seminar.pdf
 
+# generated site artifacts
+site/tex-out/
+
 # editor / linter caches
 .ruff_cache/
 .DS_Store
