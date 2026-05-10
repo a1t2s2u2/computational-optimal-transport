@@ -1,6 +1,6 @@
 \documentclass[uplatex, dvipdfmx]{jsreport}
 
-\input{../cuturi/translation/preamble}
+\input{preamble}
 
 \title{セミナー発表原稿\\{\Large 計算最適輸送}}
 \author{}
@@ -63,6 +63,8 @@
 \subsection*{エントロピー正則化}
 \begin{tabular}{ll}
   $\Hb(\mathbf{P})$ & 離散エントロピー $-\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)$ \\
+  $\mathbf{K}$ & Gibbs カーネル $K_{i,j} = \exp(-C_{i,j}/\varepsilon)$ \\
+  $\mathbf{u},\mathbf{v}$ & Sinkhorn スケーリングベクトル \\
   $\KLD(\mathbf{P} \| \mathbf{K})$ & KL ダイバージェンス \\
   $\MKD_{\mathbf{C}}^\varepsilon$ & エントロピー正則化された最適輸送の最適値 \\
   $\smin_\varepsilon$ & ソフト最小値 $-\varepsilon \log \sum_i e^{-z_i/\varepsilon}$ \\
@@ -74,5 +76,6 @@
 \input{ch01_preliminaries}
 \input{ch02_ot_foundations}
 \input{ch03_algorithmic_foundations}
+\input{ch04_entropic_regularization}
 
 \end{document}

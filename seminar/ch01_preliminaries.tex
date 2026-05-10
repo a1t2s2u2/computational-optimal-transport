@@ -721,6 +721,25 @@ $\R$ はその「完備化」として機能する．}
   が成り立つことをいう．
 \end{definition}
 
+\begin{definition}{凸関数と狭義凸関数}{sem-convex-function}
+  凸集合 $S \subset V$ 上の関数 $f \colon S \to \R$ が
+  \textbf{凸関数}であるとは，任意の $v_1, v_2 \in S$ と
+  任意の $t \in [0,1]$ に対して
+  \[
+    f\bigl(t v_1 + (1-t)v_2\bigr)
+    \leq
+    t f(v_1) + (1-t) f(v_2)
+  \]
+  が成り立つことをいう．さらに，任意の相異なる
+  $v_1 \neq v_2$ と任意の $t \in (0,1)$ に対して
+  \[
+    f\bigl(t v_1 + (1-t)v_2\bigr)
+    <
+    t f(v_1) + (1-t) f(v_2)
+  \]
+  が成り立つとき，$f$ は\textbf{狭義凸関数}であるという．
+\end{definition}
+
 \begin{definition}{凸多面体}{sem-polytope}
   行列 $\mathbf{A} \in \R^{k \times d}$ とベクトル $\mathbf{b} \in \R^k$ に対して，
   線形等式・不等式制約で定まる $\R^d$ の部分集合
