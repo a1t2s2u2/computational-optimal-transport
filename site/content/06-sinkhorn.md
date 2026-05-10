@@ -6,7 +6,7 @@ title: Sinkhorn アルゴリズム
 term: sinkhorn
 ---
 
-Cuturi/Peyre の Sinkhorn アルゴリズムは、Gibbs カーネルを行方向と列方向に交互にスケーリングし、指定された周辺ヒストグラムを持つ行列へ収束させる反復である。
+Cuturi/Peyre の Sinkhorn アルゴリズムは、[ref:Gibbs カーネル]を行方向と列方向に交互にスケーリングし、指定された周辺ヒストグラムを持つ行列へ収束させる反復である。
 
 :::definition
 ### 定義: 対角行列とスケーリングベクトル
@@ -94,7 +94,7 @@ Cuturi/Peyre の Sinkhorn アルゴリズムは、Gibbs カーネルを行方向
 :::definition
 ### 定義: KL 交互射影
 
-二つの集合 \(S_1,S_2\) があるとき、ある点を \(S_1\) へ KL 射影し、次に \(S_2\) へ KL 射影し、この操作を繰り返す方法を KL 交互射影という。Sinkhorn 反復は、行和制約
+二つの集合 \(S_1,S_2\) があるとき、ある点を \(S_1\) へ [ref:KL 射影]し、次に \(S_2\) へ KL 射影し、この操作を繰り返す方法を KL 交互射影という。Sinkhorn 反復は、行和制約
 
 \[
   S_{\mathrm{row}}\defeq\{\mathbf{P}\mid \mathbf{P}\ones_m=\mathbf{a}\}

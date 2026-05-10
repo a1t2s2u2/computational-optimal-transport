@@ -6,7 +6,7 @@ title: エントロピー正則化
 term: entropy
 ---
 
-Cuturi/Peyre におけるエントロピー正則化は、離散 Kantorovich 問題に負エントロピーを加え、最適化問題の解を一意にする操作である。正則化された問題の解は Gibbs カーネルの KL 射影として表される。
+Cuturi/Peyre におけるエントロピー正則化は、[ref:離散 Kantorovich 問題]に負エントロピーを加え、最適化問題の解を一意にする操作である。正則化された問題の解は [ref:Gibbs カーネル]の[ref:KL 射影]として表される。
 
 以下、\(\mathbf{a}\in\R_{++}^n\), \(\mathbf{b}\in\R_{++}^m\), \(\sum_i a_i=\sum_j b_j=1\) および \(\mathbf{C}\in\R_+^{n\times m}\) を固定する。
 
@@ -62,7 +62,7 @@ Cuturi/Peyre におけるエントロピー正則化は、離散 Kantorovich 問
 任意の \(\varepsilon>0\) に対し、エントロピー正則化問題は一意な最適解 \(\mathbf{P}_{\varepsilon}\) を持つ。
 
 :::details-embedded 証明
-輸送多面体 \(\Pi(\mathbf{a},\mathbf{b})\) は空でないコンパクト集合である。関数 \(x\mapsto x\log x-x\) は \([0,\infty)\) 上で連続であり、\((0,\infty)\) 上で狭義凸である。したがって目的関数
+[ref:輸送多面体] \(\Pi(\mathbf{a},\mathbf{b})\) は空でないコンパクト集合である。関数 \(x\mapsto x\log x-x\) は \([0,\infty)\) 上で連続であり、\((0,\infty)\) 上で狭義凸である。したがって目的関数
 
 \[
   \mathbf{P}\mapsto

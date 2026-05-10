@@ -289,6 +289,54 @@ p {
   font-weight: inherit;
 }
 
+.ref {
+  cursor: pointer;
+  border: 0;
+  border-bottom: 1px dashed var(--indigo);
+  border-radius: 0;
+  padding: 0 1px;
+  background: transparent;
+  color: var(--indigo);
+  font: inherit;
+}
+
+.ref:hover,
+.ref:focus-visible {
+  background: var(--indigo-soft);
+  outline: 2px solid transparent;
+}
+
+.block-preview h3 {
+  font-size: 15px;
+}
+
+.block-preview p {
+  font-size: 14px;
+  color: #3d4852;
+}
+
+.block-preview .math-block {
+  font-size: 13px;
+}
+
+.block-preview .fold {
+  font-size: 13px;
+}
+
+.ref-jump {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.ref-jump a {
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.ref-jump a:hover {
+  text-decoration: underline;
+}
+
 .fold {
   margin-top: 16px;
   padding: 0;

@@ -29,14 +29,39 @@ function setGlossary(term) {
   const box = document.querySelector("#glossary-box");
   const item = glossary[term];
   if (!box || !item) return;
+  const header = box.closest(".glossary-panel")?.querySelector("h2");
+  if (header) header.textContent = "用語";
   box.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p>`;
   if (window.MathJax?.typesetPromise) {
     window.MathJax.typesetPromise([box]);
   }
 }
 
-document.querySelectorAll(".term").forEach((button) => {
-  button.addEventListener("click", () => setGlossary(button.dataset.term));
+function showBlock(name) {
+  const blocks = window.__blocks || [];
+  const block = blocks.find((b) => b.name === name);
+  if (!block) return;
+  const box = document.querySelector("#glossary-box");
+  if (!box) return;
+  const header = box.closest(".glossary-panel")?.querySelector("h2");
+  const color = block.type === "definition" ? "var(--teal)" : "var(--indigo)";
+  const label = block.type === "definition" ? "定義" : "定理";
+  if (header) header.textContent = label;
+  box.innerHTML = `<div class="block-preview" style="border-left: 4px solid ${color}; padding-left: 12px;">${block.html}</div>`;
+  const target = document.getElementById(block.id);
+  if (target) {
+    box.innerHTML += `<p class="ref-jump"><a href="#${block.id}">本文で見る →</a></p>`;
+  }
+  if (window.MathJax?.typesetPromise) {
+    MathJax.typesetPromise([box]);
+  }
+}
+
+document.addEventListener("click", (e) => {
+  const term = e.target.closest(".term");
+  if (term) return setGlossary(term.dataset.term);
+  const ref = e.target.closest(".ref");
+  if (ref) return showBlock(ref.dataset.ref);
 });
 
 const navLinks = Array.from(document.querySelectorAll(".chapter-nav a"));

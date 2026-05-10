@@ -14,6 +14,31 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
+const allBlocks = [];
+const usedBlockIds = new Set();
+
+function makeBlockId(type, rawName) {
+  const prefix = type === "definition" ? "def" : "thm";
+  const slug = rawName
+    .replace(/\\\(([^)]*)\\\)/g, (_, tex) =>
+      tex.replace(/\\[a-zA-Z]+/g, "").replace(/[{}^_]/g, "").trim()
+    )
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9぀-ゟ゠-ヿ一-鿿-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  let id = `${prefix}-${slug || "unnamed"}`;
+  if (usedBlockIds.has(id)) {
+    let n = 2;
+    while (usedBlockIds.has(`${id}-${n}`)) n += 1;
+    id = `${id}-${n}`;
+  }
+  usedBlockIds.add(id);
+  return id;
+}
+
 function parseFrontmatter(source, filePath) {
   if (!source.startsWith("---\n")) {
     throw new Error(`${filePath}: frontmatter is required`);
@@ -41,10 +66,19 @@ function parseFrontmatter(source, filePath) {
 }
 
 function renderInline(source) {
-  return escapeHtml(source).replace(
-    /\[term:([^|\]]+)\|([a-z0-9-]+)\]/g,
-    (_match, label, term) => `<button class="term" data-term="${term}">${label}</button>`
-  );
+  return escapeHtml(source)
+    .replace(
+      /\[term:([^|\]]+)\|([a-z0-9-]+)\]/g,
+      (_match, label, term) => `<button class="term" data-term="${term}">${label}</button>`
+    )
+    .replace(
+      /\[ref:([^|\]]+?)(?:\|([^\]]+))?\]/g,
+      (_match, first, second) => {
+        const display = first;
+        const refName = second || first;
+        return `<button class="ref" data-ref="${refName}">${display}</button>`;
+      }
+    );
 }
 
 function sinkhornDemo() {
@@ -77,6 +111,7 @@ function renderMarkdown(markdown) {
   const stack = [];
   let paragraph = [];
   let listType = null;
+  let currentBlock = null;
 
   const closeList = () => {
     if (!listType) return;
@@ -104,6 +139,19 @@ function renderMarkdown(markdown) {
     if (!closing) {
       throw new Error("container close marker without an open container");
     }
+    if (currentBlock && stack.length === currentBlock.depth) {
+      if (currentBlock.name) {
+        const contentHtml = html.slice(currentBlock.divIndex + 1).join("\n");
+        allBlocks.push({
+          id: currentBlock.id,
+          name: currentBlock.name,
+          type: currentBlock.type,
+          title: currentBlock.fullTitle,
+          html: contentHtml
+        });
+      }
+      currentBlock = null;
+    }
     html.push(closing);
   };
 
@@ -127,11 +175,13 @@ function renderMarkdown(markdown) {
       return;
     }
     if (spec === "definition") {
+      currentBlock = { type: "definition", divIndex: html.length, depth: stack.length };
       html.push('<div class="block definition">');
       stack.push("</div>");
       return;
     }
     if (spec === "theorem") {
+      currentBlock = { type: "theorem", divIndex: html.length, depth: stack.length };
       html.push('<div class="block theorem">');
       stack.push("</div>");
       return;
@@ -228,6 +278,16 @@ function renderMarkdown(markdown) {
       flushParagraph();
       closeList();
       const level = heading[1].length;
+      if (currentBlock && level === 3 && !currentBlock.name) {
+        const rawTitle = heading[2];
+        const nameMatch = /^(?:定義|命題|定理|補題):\s*(.+)$/.exec(rawTitle);
+        const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
+        const id = makeBlockId(currentBlock.type, name);
+        currentBlock.name = name;
+        currentBlock.id = id;
+        currentBlock.fullTitle = rawTitle;
+        html[currentBlock.divIndex] = `<div class="block ${currentBlock.type}" id="${escapeHtml(id)}">`;
+      }
       html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
       continue;
     }
@@ -325,6 +385,7 @@ function pageTemplate(sections) {
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>window.__blocks = ${JSON.stringify(allBlocks).replace(/<\//g, "<\\/")};</script>
     <script defer src="./app.js"></script>
   </head>
   <body>
