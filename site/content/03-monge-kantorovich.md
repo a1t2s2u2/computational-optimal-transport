@@ -24,7 +24,7 @@ title: Monge 問題と Kantorovich 緩和
 \(\X\times\Y\) 上の確率測度 \(\pi\) が第一周辺 \(\alpha\)、第二周辺 \(\beta\) を持つとき、\(\pi\) を \(\alpha\) と \(\beta\) の [term:カップリング|coupling] という。全体を \(\Couplings(\alpha,\beta)\) と書く。
 :::
 
-:::theorem
+:::definition
 ### 定義: Kantorovich 問題
 
 \[

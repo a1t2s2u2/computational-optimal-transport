@@ -40,17 +40,18 @@ function makeBlockId(type, rawName) {
 }
 
 function parseFrontmatter(source, filePath) {
-  if (!source.startsWith("---\n")) {
+  const src = source.replaceAll("\r\n", "\n");
+  if (!src.startsWith("---\n")) {
     throw new Error(`${filePath}: frontmatter is required`);
   }
 
-  const end = source.indexOf("\n---\n", 4);
+  const end = src.indexOf("\n---\n", 4);
   if (end === -1) {
     throw new Error(`${filePath}: frontmatter is not closed`);
   }
 
-  const raw = source.slice(4, end);
-  const body = source.slice(end + 5);
+  const raw = src.slice(4, end);
+  const body = src.slice(end + 5);
   const data = {};
   for (const line of raw.split("\n")) {
     if (!line.trim()) continue;
@@ -69,14 +70,14 @@ function renderInline(source) {
   return escapeHtml(source)
     .replace(
       /\[term:([^|\]]+)\|([a-z0-9-]+)\]/g,
-      (_match, label, term) => `<button class="term" data-term="${term}">${label}</button>`
+      (_match, label, term) => `<button type="button" class="term" data-term="${term}">${label}</button>`
     )
     .replace(
       /\[ref:([^|\]]+?)(?:\|([^\]]+))?\]/g,
       (_match, first, second) => {
         const display = first;
         const refName = second || first;
-        return `<button class="ref" data-ref="${refName}">${display}</button>`;
+        return `<button type="button" class="ref" data-ref="${refName}">${display}</button>`;
       }
     );
 }
@@ -241,6 +242,9 @@ function renderMarkdown(markdown) {
         code.push(lines[i]);
         i += 1;
       }
+      if (i >= lines.length) {
+        throw new Error("unclosed code fence (```) at EOF");
+      }
       if (language === "mermaid") {
         html.push(`<div class="map-wrap"><pre class="mermaid">${escapeHtml(code.join("\n"))}</pre></div>`);
       } else {
@@ -313,8 +317,8 @@ function renderMarkdown(markdown) {
 
   flushParagraph();
   closeList();
-  while (stack.length > 0) {
-    html.push(stack.pop());
+  if (stack.length > 0) {
+    throw new Error(`${stack.length} unclosed container(s) (:::) at EOF`);
   }
 
   return html.join("\n");
@@ -324,7 +328,7 @@ function renderHeading(section, isFirst) {
   const title = escapeHtml(section.data.title);
   const level = isFirst ? "h1" : "h2";
   if (section.data.term) {
-    return `<${level}><button class="term heading-term" data-term="${escapeHtml(section.data.term)}">${title}</button></${level}>`;
+    return `<${level}><button type="button" class="term heading-term" data-term="${escapeHtml(section.data.term)}">${title}</button></${level}>`;
   }
   return `<${level}>${title}</${level}>`;
 }

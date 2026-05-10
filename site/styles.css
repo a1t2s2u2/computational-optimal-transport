@@ -280,7 +280,7 @@ p {
 .term:hover,
 .term:focus-visible {
   background: var(--teal-soft);
-  outline: 2px solid transparent;
+  outline: 2px solid var(--teal);
 }
 
 .heading-term {
@@ -303,7 +303,7 @@ p {
 .ref:hover,
 .ref:focus-visible {
   background: var(--indigo-soft);
-  outline: 2px solid transparent;
+  outline: 2px solid var(--indigo);
 }
 
 .block-preview h3 {
