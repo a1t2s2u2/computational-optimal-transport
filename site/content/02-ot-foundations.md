@@ -10,13 +10,13 @@ title: Optimal Transport の基礎理論
 ### 本章の設定
 
 \(\X, \Y\) は**完備可分な距離空間**（Polish 空間，
-定義）とする．距離関数を \(d\) と書き，
+[ref:定義: Polish 空間|Polish 空間]）とする．距離関数を \(d\) と書き，
 ボレル \(\sigma\)-代数 \(\Bb(\X)\) により \(\X\) を可測空間 \((\X, \Bb(\X))\) として扱う
 （\(\Y\) についても同様）．\(\X\) 上の確率測度全体を \(\Mm_+^1(\X)\) と記す．
 
 Polish 空間の3要素を確認する：
 
-- **距離空間**．距離関数 \(d \colon \X \times \X \to [0, \infty)\) が距離の公理 （定義）を満たし，\(d\) から以下が順次定まる：
+- **距離空間**．距離関数 \(d \colon \X \times \X \to [0, \infty)\) が距離の公理 （[ref:定義: 距離空間|距離空間]）を満たし，\(d\) から以下が順次定まる：
 
 \[\begin{aligned}
  B_r(x)
@@ -44,8 +44,8 @@ Polish 空間の3要素を確認する：
  \bigr\}
 \]
 
-として定まる．これにより可測空間 \((\X, \Bb(\X))\) （定義）が得られる．
-- **完備性**． 列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは， 任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して \(n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon\) が成り立つことをいう． \((\X, d)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が \(\X\) の点に収束する（定義）ことをいう． すなわち
+として定まる．これにより可測空間 \((\X, \Bb(\X))\) （[ref:定義: 可測空間|可測空間]）が得られる．
+- **完備性**． 列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは， 任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して \(n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon\) が成り立つことをいう． \((\X, d)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が \(\X\) の点に収束する（[ref:定義: 収束列|収束列]）ことをいう． すなわち
 
 \[
  \forall (x_n) \subset \X \text{ Cauchy 列},\;
@@ -62,7 +62,7 @@ Polish 空間の3要素を確認する：
  n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
 \]
 
-- **可分性**． \(D \subset \X\) が**稠密**であるとは，任意の空でない開集合 \(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう （定義）． 距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し \(\exists q \in D,\; d(x, q) < \varepsilon\)」と同値． \((\X, d)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が 存在することをいう（定義）．すなわち
+- **可分性**． \(D \subset \X\) が**稠密**であるとは，任意の空でない開集合 \(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう （[ref:定義: 稠密集合|稠密集合]）． 距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し \(\exists q \in D,\; d(x, q) < \varepsilon\)」と同値． \((\X, d)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が 存在することをいう（[ref:定義: 可分性|可分性]）．すなわち
 
 \[
  \exists D \subset \X \text{ 可算},\;
@@ -140,7 +140,7 @@ Polish 空間の3要素を確認する：
 \]
 
 は高々 \(n!\) 個の実数からなる空でない有限集合である．
-\(\R\) の空でない有限部分集合は最小元を持つ（主張）
+\(\R\) の空でない有限部分集合は最小元を持つ（[ref:主張: 有限集合の最小元|有限集合の最小元]）
 ので，それを達成する \(\sigma^* \in \Perm(n)\) が存在する．
 :::
 :::
@@ -165,7 +165,7 @@ Polish 空間の3要素を確認する：
 ## Monge 問題
 
 
-最適割当問題（定義）は有限の添字集合 \(\range{n}\) と
+最適割当問題（[ref:定義: 最適割当問題|最適割当問題]）は有限の添字集合 \(\range{n}\) と
 均一重み \(1/n\) を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
 \(\X, \Y\) と任意の確率測度に拡張する：
 これに基づく連続版の輸送問題が **Monge 問題**である．
@@ -228,7 +228,7 @@ Monge 問題の実行可能集合
  T_1(x) = x,\qquad T_2(x) = -x,\qquad t = \tfrac{1}{2}
 \]
 
-をとる．\(\alpha\) の定義を代入し，命題 (ii) を適用すると
+をとる．\(\alpha\) の定義を代入し，[ref:命題: Dirac 測度と離散測度の押し出し|Dirac 測度と離散測度の押し出し] (ii) を適用すると
 
 \[\begin{aligned}
  {T_1}\pushforward \alpha
@@ -272,7 +272,7 @@ Monge 問題の実行可能集合
 \(\alpha = \delta_0\)（質量 \(1\) が 1 点 \(0\) に集中）と
 \(\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1\)（2 点に質量 \(\tfrac{1}{2}\) ずつ分散）
 を考える．任意の可測写像 \(T \colon \R \to \R\) について
-命題 (i) より
+[ref:命題: Dirac 測度と離散測度の押し出し|Dirac 測度と離散測度の押し出し] (i) より
 
 \[
  T\pushforward \alpha = T\pushforward \delta_0 = \delta_{T(0)}
@@ -328,7 +328,7 @@ Monge 問題の実行可能集合
 \(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
 可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
 \(\alpha, \beta\) のカップリング
-\(\pi \in \Couplings(\alpha, \beta)\)（定義）に
+\(\pi \in \Couplings(\alpha, \beta)\)（[ref:定義: カップリング|カップリング]）に
 わたって積分 \(\int_{\X \times \Y} c(x, y) \, \d\pi(x, y)\) を
 最小化する問題
 
@@ -345,7 +345,7 @@ Monge 問題の実行可能集合
 ### 離散版
 
 
-\(\alpha, \beta\) がともに離散測度（定義）
+\(\alpha, \beta\) がともに離散測度（[ref:定義: 離散測度|離散測度]）
 
 \[
  \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
@@ -433,7 +433,7 @@ Monge 問題の実行可能集合
 :::theorem
 ### 主張: 離散カップリング集合は凸多面体
 
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸多面体（定義）をなす．
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸多面体（[ref:定義: 凸多面体|凸多面体]）をなす．
 
 :::details-embedded 証明
 \(\mathbf{P} \in \R^{n \times m}\) を列方向に並べたベクトル
@@ -451,7 +451,7 @@ Monge 問題の実行可能集合
  \mathbf{A}\mathbf{p} = \mathbf{r},\; \mathbf{p} \geq \mathbf{0}\}
 \]
 
-であり，これは凸多面体の定義の形である．
+であり，これは凸多面体の[ref:定義: 凸多面体|凸多面体]の形である．
 :::
 :::
 
@@ -459,7 +459,7 @@ Monge 問題の実行可能集合
 :::theorem
 ### 主張: 離散 Kantorovich 問題
 
-Claim の対応 \(\Phi\) で
+[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] の対応 \(\Phi\) で
 \(\pi = \Phi(\mathbf{P})\) と書くと
 
 \[
@@ -467,7 +467,7 @@ Claim の対応 \(\Phi\) で
 \]
 
 が成り立つ．したがって連続版 Kantorovich 問題
-（定義）の下限は**離散 Kantorovich 問題**
+（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の下限は**離散 Kantorovich 問題**
 
 \[
  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
@@ -479,10 +479,10 @@ Claim の対応 \(\Phi\) で
 に等しい：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
 
 :::details-embedded 証明
-Claim より
+[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] より
 \(\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\)．
-測度に関する積分の線形性（命題）と
-Dirac 測度に対する積分（主張）から
+測度に関する積分の線形性（[ref:命題: 積分の測度に関する線形性|積分の測度に関する線形性]）と
+Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
 \[\begin{aligned}
  \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
@@ -505,10 +505,10 @@ Dirac 測度に対する積分（主張）から
 :::fact accent
 ### 例: Monge 写像が存在しない場合の解消
 
-例 では
+[ref:例: Monge 写像が存在しない場合|Monge 写像が存在しない場合] では
 \(\alpha = \delta_0\)，\(\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1\)
 に対して Monge 写像が存在しないことを見た．
-Kantorovich 問題（定義）の枠組みで考え直す．
+Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の枠組みで考え直す．
 
 離散表現は \(\mathbf{a} = (1)\)，\(\mathbf{b} = (1/2,\; 1/2)\) であり，
 カップリング \(\mathbf{P} \in \R_+^{1 \times 2}\) は
@@ -538,7 +538,7 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 **解の存在．**
 
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸多面体
-（主張）をなす．
+（[ref:主張: 離散カップリング集合は凸多面体|離散カップリング集合は凸多面体]）をなす．
 有界閉集合上の連続関数は最小値を達成するから，下限は最小値となり最適解が存在する．
 
 :::theorem
@@ -615,7 +615,7 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 **凸性．**
 \(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
 \(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) は
-主張 の凸性から
+[ref:主張: 離散カップリング集合は凸多面体|離散カップリング集合は凸多面体] の凸性から
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) に属し，
 
 \[
@@ -653,7 +653,7 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 頂点を少なくとも1つ含む．
 
 :::details-embedded 証明
-主張 より
+[ref:主張: 最適解集合は輸送多面体の面をなす|最適解集合は輸送多面体の面をなす] より
 \(S^*\) は凸多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\)
 の空でない面であり，それ自身も凸多面体をなすから頂点を持つ．
 \(\mathbf{P}^*\) を \(S^*\) の頂点とし，
@@ -675,9 +675,9 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) の頂点は
 非零成分を高々 \(n + m - 1\) 個しか持たない
 （
-命題）．
+[ref:命題: 頂点の木構造|頂点の木構造]）．
 全成分数 \(nm\) と比べ，
-主張 が保証する
+[ref:主張: 頂点での最適解の達成|頂点での最適解の達成] が保証する
 頂点最適解は大幅にスパースである．
 :::
 
@@ -741,9 +741,9 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 \]
 
 では，\(\varepsilon > 0\) のとき目的関数が
-狭義凸（定義）となるため，
+狭義凸（[ref:定義: 凸関数と狭義凸関数|凸関数と狭義凸関数]）となるため，
 最適解は常に一意に定まる
-（命題）．
+（[ref:命題: 正則化問題の解の存在と一意性|正則化問題の解の存在と一意性]）．
 これは計算上の利点
 （Sinkhorn アルゴリズムの収束先が一意）
 だけでなく，理論上も解の選択の曖昧さを解消する意義を持つ．
@@ -759,7 +759,7 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 \(\X, \Y\) が Polish 空間で
 コスト関数 \(c \colon \X \times \Y \to [0, +\infty]\) が
 下半連続であるとき，
-Kantorovich 問題（定義）の下限は
+Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の下限は
 最小値として達成される：
 
 \[
@@ -993,7 +993,7 @@ Kantorovich 問題は線形計画であり，双対問題を持つ．
 \(\inner{\mathbf{g}}{\mathbf{b}}\) を最大にするものは
 \(\mathbf{g} = \mathbf{f}^{\,C}\) である
 （\(\mathbf{b} \geq 0\) を用いる）．
-定理 の双対問題で
+[ref:定理: Kantorovich 双対定理（離散版）|Kantorovich 双対定理（離散版）] の双対問題で
 \(\mathbf{g}\) を消去すれば結論を得る．
 :::
 :::

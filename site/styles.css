@@ -158,7 +158,8 @@ h1 {
 }
 
 h2 {
-  font-size: 30px;
+  margin-top: 48px;
+  font-size: 26px;
 }
 
 h3 {
@@ -170,7 +171,21 @@ h4 {
 }
 
 p {
-  margin: 12px 0 0;
+  margin: 14px 0 0;
+}
+
+.chapter strong {
+  font-weight: 600;
+}
+
+.content ul,
+.content ol {
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.content li + li {
+  margin-top: 4px;
 }
 
 .lead {
@@ -235,6 +250,7 @@ p {
 }
 
 .fact {
+  margin-top: 18px;
   padding: 18px;
 }
 

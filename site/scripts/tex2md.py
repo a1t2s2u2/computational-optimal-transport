@@ -51,6 +51,26 @@ BLOCK_ENVS = {
     "example":    ("fact accent","例"),
 }
 
+LABEL_PREFIX_MAP = {
+    "def": "定義",
+    "clm": "主張",
+    "thm": "定理",
+    "prop": "命題",
+    "rem": "注意",
+    "ex": "例",
+}
+
+ENV_TO_PREFIX = {
+    "definition": "def",
+    "claim": "clm",
+    "theorem": "thm",
+    "proposition": "prop",
+    "remark": "rem",
+    "example": "ex",
+}
+
+LABEL_MAP = {}
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -123,6 +143,64 @@ def strip_ref(text: str) -> str:
     return text
 
 
+def build_label_map():
+    """Scan all TeX chapter files and build a map: 'prefix:label' -> title."""
+    label_map = {}
+    for tex_file, _, _ in CHAPTERS:
+        tex_path = os.path.join(SEMINAR_DIR, tex_file)
+        if not os.path.exists(tex_path):
+            continue
+        with open(tex_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        for m in re.finditer(r"\\begin\{(\w+)\}\{(.+?)\}\{(.+?)\}", content):
+            env_name = m.group(1)
+            title = m.group(2)
+            label = m.group(3)
+            if env_name in ENV_TO_PREFIX:
+                prefix = ENV_TO_PREFIX[env_name]
+                label_map[f"{prefix}:{label}"] = title
+    return label_map
+
+
+def convert_refs(text: str) -> str:
+    r"""Convert \ref{...} to clickable [ref:display|name] links."""
+    text = re.sub(r"第~?\\ref\{ch:[^}]*\}~?章", "", text)
+    text = re.sub(r"§~?\\ref\{sec:[^}]*\}", "", text)
+    text = re.sub(r"Algorithm~?\\ref\{alg:[^}]*\}", "", text)
+
+    def _replace_typed(m):
+        label = m.group(2)
+        title = LABEL_MAP.get(label)
+        if not title:
+            return ""
+        prefix = label.split(":")[0] if ":" in label else ""
+        jp_type = LABEL_PREFIX_MAP.get(prefix, m.group(1))
+        return f"[ref:{jp_type}: {title}|{title}]"
+
+    text = re.sub(
+        r"(定義|主張|命題|定理|例|注意|Claim|正則化問題)~?\\ref\{([^}]+)\}",
+        lambda m: _replace_typed(m),
+        text,
+    )
+
+    def _replace_bare(m):
+        label = m.group(1)
+        title = LABEL_MAP.get(label)
+        if not title:
+            return ""
+        prefix = label.split(":")[0] if ":" in label else ""
+        type_name = LABEL_PREFIX_MAP.get(prefix, "")
+        display = f"{type_name}: {title}" if type_name else title
+        return f"[ref:{display}|{title}]"
+
+    text = re.sub(r"~?\\ref\{([^}]+)\}", _replace_bare, text)
+
+    text = re.sub(r"  +", " ", text)
+    text = re.sub(r"（\s*）", "", text)
+    text = re.sub(r"\(\s*\)", "", text)
+    return text
+
+
 def convert_tilde(text: str) -> str:
     """Convert non-breaking space ~ to regular space."""
     return text.replace("~", " ")
@@ -133,10 +211,13 @@ def convert_paragraph(text: str) -> str:
     return re.sub(r"\\paragraph\{([^}]*)\}", r"\n**\1**\n", text)
 
 
-def apply_inline_conversions(text: str) -> str:
+def apply_inline_conversions(text: str, convert_references: bool = True) -> str:
     """Apply all inline-level conversions to a line of text."""
     text = strip_label(text)
-    text = strip_ref(text)
+    if convert_references and LABEL_MAP:
+        text = convert_refs(text)
+    else:
+        text = strip_ref(text)
     text = convert_tilde(text)
     text = convert_text_commands(text)
     text = convert_paragraph(text)
@@ -589,7 +670,7 @@ def render_nodes(nodes, indent=0):
             output.append("")
             output.append("\\[")
             for ml in math_lines:
-                output.append(apply_inline_conversions(strip_label(ml)))
+                output.append(apply_inline_conversions(ml, convert_references=False))
             output.append("\\]")
             output.append("")
             continue
@@ -599,7 +680,7 @@ def render_nodes(nodes, indent=0):
             output.append("")
             output.append("\\[\\begin{aligned}")
             for ml in math_lines:
-                output.append(apply_inline_conversions(strip_label(ml)))
+                output.append(apply_inline_conversions(ml, convert_references=False))
             output.append("\\end{aligned}\\]")
             output.append("")
             continue
@@ -747,6 +828,10 @@ def process_chapter(tex_filename, md_filename, frontmatter):
 
 
 def main():
+    global LABEL_MAP
+    LABEL_MAP = build_label_map()
+    print(f"Built label map with {len(LABEL_MAP)} entries")
+
     # Clean existing markdown files
     existing = glob.glob(os.path.join(CONTENT_DIR, "*.md"))
     for f in existing:

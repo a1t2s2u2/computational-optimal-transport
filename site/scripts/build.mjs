@@ -18,7 +18,8 @@ const allBlocks = [];
 const usedBlockIds = new Set();
 
 function makeBlockId(type, rawName) {
-  const prefix = type === "definition" ? "def" : "thm";
+  const prefixMap = { definition: "def", theorem: "thm", remark: "rem", example: "ex" };
+  const prefix = prefixMap[type] || type;
   const slug = rawName
     .replace(/\\\(([^)]*)\\\)/g, (_, tex) =>
       tex.replace(/\\[a-zA-Z]+/g, "").replace(/[{}^_]/g, "").trim()
@@ -195,11 +196,13 @@ function renderMarkdown(markdown) {
       return;
     }
     if (spec === "fact") {
+      currentBlock = { type: "remark", divIndex: html.length, depth: stack.length };
       html.push('<article class="fact">');
       stack.push("</article>");
       return;
     }
     if (spec === "fact accent") {
+      currentBlock = { type: "example", divIndex: html.length, depth: stack.length };
       html.push('<article class="fact accent">');
       stack.push("</article>");
       return;
@@ -286,13 +289,14 @@ function renderMarkdown(markdown) {
       const level = heading[1].length;
       if (currentBlock && level === 3 && !currentBlock.name) {
         const rawTitle = heading[2];
-        const nameMatch = /^(?:定義|命題|定理|補題|主張):\s*(.+)$/.exec(rawTitle);
+        const nameMatch = /^(?:定義|命題|定理|補題|主張|例):\s*(.+)$/.exec(rawTitle);
         const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
         const id = makeBlockId(currentBlock.type, name);
         currentBlock.name = name;
         currentBlock.id = id;
         currentBlock.fullTitle = rawTitle;
-        html[currentBlock.divIndex] = `<div class="block ${currentBlock.type}" id="${escapeHtml(id)}">`;
+        const original = html[currentBlock.divIndex];
+        html[currentBlock.divIndex] = original.replace(/>/, ` id="${escapeHtml(id)}">`);
       }
       html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
       continue;

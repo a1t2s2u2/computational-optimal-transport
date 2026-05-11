@@ -21,7 +21,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 
 および \(\mathbf{C} \in \R_+^{n \times m}\) を固定する．
 輸送多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
-主張 の通り
+[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] の通り
 
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b})
@@ -103,12 +103,12 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 ### 命題: 正則化問題の解の存在と一意性
 
 任意の \(\varepsilon > 0\) に対して，
-正則化問題 は一意な最適解
+[ref:定義: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] は一意な最適解
 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
 :::details-embedded 証明
 輸送多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
-（主張 の証明）．
+（[ref:主張: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．
 関数 \(x \mapsto x\log x - x\) は \([0,\infty)\) 上で連続かつ狭義凸である．
 したがって
 
@@ -234,7 +234,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 ### 命題: 正則化 OT は KL 射影である
 
 \(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) とすると，
-正則化問題 の最適解は
+[ref:定義: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] の最適解は
 
 \[
  \mathbf{P}_\varepsilon
@@ -296,7 +296,7 @@ KL 射影という見方では，
 :::theorem
 ### 定理: スケーリング形式
 
-正則化問題 の最適解
+[ref:定義: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] の最適解
 \(\mathbf{P}_\varepsilon\) は，ある正ベクトル
 \(\mathbf{u} \in \R_{++}^{n}\)，\(\mathbf{v} \in \R_{++}^{m}\) により
 
@@ -323,7 +323,7 @@ KL 射影という見方では，
  - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
 \]
 
-とおく．命題 より
+とおく．[ref:命題: 正則化解の正値性|正則化解の正値性] より
 最適解では \(P_{i,j}>0\) であり，その点での一階条件は
 
 \[
@@ -395,7 +395,7 @@ KL 射影という見方では，
 
 \(\mathbf{K} \in \R_{++}^{n \times m}\) かつ
 \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\) のとき，
-Algorithm が生成する輸送計画
+ が生成する輸送計画
 
 \[
  \mathbf{P}^{(\ell)}

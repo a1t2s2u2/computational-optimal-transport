@@ -44,8 +44,10 @@ function showBlock(name) {
   const box = document.querySelector("#glossary-box");
   if (!box) return;
   const header = box.closest(".glossary-panel")?.querySelector("h2");
-  const color = block.type === "definition" ? "var(--teal)" : "var(--indigo)";
-  const label = block.type === "definition" ? "定義" : "定理";
+  const colors = { definition: "var(--teal)", theorem: "var(--indigo)", remark: "var(--muted)", example: "var(--wine)" };
+  const labels = { definition: "定義", theorem: "定理", remark: "注意", example: "例" };
+  const color = colors[block.type] || "var(--teal)";
+  const label = labels[block.type] || "参照";
   if (header) header.textContent = label;
   box.innerHTML = `<div class="block-preview" style="border-left: 4px solid ${color}; padding-left: 12px;">${block.html}</div>`;
   const target = document.getElementById(block.id);
