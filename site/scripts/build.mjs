@@ -68,6 +68,8 @@ function parseFrontmatter(source, filePath) {
 
 function renderInline(source) {
   return escapeHtml(source)
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(
       /\[term:([^|\]]+)\|([a-z0-9-]+)\]/g,
       (_match, label, term) => `<button type="button" class="term" data-term="${term}">${label}</button>`
@@ -284,7 +286,7 @@ function renderMarkdown(markdown) {
       const level = heading[1].length;
       if (currentBlock && level === 3 && !currentBlock.name) {
         const rawTitle = heading[2];
-        const nameMatch = /^(?:定義|命題|定理|補題):\s*(.+)$/.exec(rawTitle);
+        const nameMatch = /^(?:定義|命題|定理|補題|主張):\s*(.+)$/.exec(rawTitle);
         const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
         const id = makeBlockId(currentBlock.type, name);
         currentBlock.name = name;
@@ -369,19 +371,49 @@ function pageTemplate(sections) {
           inlineMath: [["\\\\(", "\\\\)"]],
           displayMath: [["\\\\[", "\\\\]"]],
           macros: {
+            R: "\\\\mathbb{R}",
+            N: "\\\\mathbb{N}",
+            E: "\\\\mathbb{E}",
+            Z: "\\\\mathbb{Z}",
+            Q: "\\\\mathbb{Q}",
             X: "\\\\mathcal{X}",
             Y: "\\\\mathcal{Y}",
-            R: "\\\\mathbb{R}",
-            Bb: "\\\\mathcal{B}",
             Mm: "\\\\mathcal{M}",
-            Couplings: "\\\\Pi",
-            Hb: "\\\\mathcal{H}",
+            Bb: "\\\\mathcal{B}",
+            Cc: "\\\\mathcal{C}",
+            Pp: "\\\\mathcal{P}",
+            Couplings: "\\\\mathcal{U}",
+            CouplingsD: "\\\\mathbf{U}",
+            MK: "\\\\mathcal{L}",
+            MKD: "\\\\mathrm{L}",
+            Potentials: "\\\\mathcal{R}",
+            PotentialsD: "\\\\mathbf{R}",
+            Hb: "\\\\mathrm{H}",
             KLD: "\\\\mathrm{KL}",
-            diag: "\\\\operatorname{diag}",
             ones: "\\\\mathbf{1}",
+            Identity: "\\\\mathbf{I}",
+            simplex: "\\\\Sigma",
+            diag: "\\\\operatorname{diag}",
+            tr: "\\\\operatorname{tr}",
+            Perm: "\\\\operatorname{Perm}",
+            rank: "\\\\operatorname{rank}",
+            supp: "\\\\operatorname{supp}",
+            smin: "\\\\operatorname{smin}",
+            Id: "\\\\operatorname{Id}",
+            argmin: "\\\\operatorname*{arg\\\\,min}",
+            argmax: "\\\\operatorname*{arg\\\\,max}",
+            pushforward: "{_\\\\sharp}",
+            d: "\\\\mathrm{d}",
+            abs: ["\\\\lvert #1\\\\rvert", 1],
+            norm: ["\\\\lVert #1\\\\rVert", 1],
+            inner: ["\\\\langle #1,\\\\,#2\\\\rangle", 2],
+            defeq: "\\\\overset{\\\\mathrm{def}}{=}",
             oslash: "\\\\oslash",
-            inner: ["\\\\langle #1,#2\\\\rangle", 2],
-            defeq: "\\\\mathrel{:=}"
+            range: ["\\\\llbracket #1\\\\rrbracket", 1],
+            dist: "d",
+            distD: "\\\\mathbf{D}",
+            Wass: "\\\\mathcal{W}",
+            WassD: "\\\\mathrm{W}"
           }
         },
         svg: { fontCache: "global" }
