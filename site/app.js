@@ -1,3 +1,9 @@
+/* ==========================================================================
+   Living Mathematical Manuscript — Interactions
+   ========================================================================== */
+
+/* ---------- Glossary ---------- */
+
 const glossary = {
   polish: {
     title: "Polish 空間",
@@ -25,66 +31,254 @@ const glossary = {
   }
 };
 
-function setGlossary(term) {
-  const box = document.querySelector("#glossary-box");
-  const item = glossary[term];
-  if (!box || !item) return;
-  const header = box.closest(".glossary-panel")?.querySelector("h2");
-  if (header) header.textContent = "用語";
-  box.innerHTML = `<h3>${item.title}</h3><p>${item.body}</p>`;
-  if (window.MathJax?.typesetPromise) {
-    window.MathJax.typesetPromise([box]);
+/* ---------- Reading Progress ---------- */
+
+const progressFill = document.querySelector(".reading-progress__fill");
+
+function updateProgress() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  if (docHeight > 0 && progressFill) {
+    progressFill.style.width = (scrollTop / docHeight) * 100 + "%";
   }
 }
 
-function showBlock(name) {
-  const blocks = window.__blocks || [];
-  const block = blocks.find((b) => b.name === name);
-  if (!block) return;
-  const box = document.querySelector("#glossary-box");
-  if (!box) return;
-  const header = box.closest(".glossary-panel")?.querySelector("h2");
-  const colors = { definition: "var(--teal)", theorem: "var(--indigo)", remark: "var(--muted)", example: "var(--wine)" };
-  const labels = { definition: "定義", theorem: "定理", remark: "注意", example: "例" };
-  const color = colors[block.type] || "var(--teal)";
-  const label = labels[block.type] || "参照";
-  if (header) header.textContent = label;
-  box.innerHTML = `<div class="block-preview" style="border-left: 4px solid ${color}; padding-left: 12px;">${block.html}</div>`;
-  const target = document.getElementById(block.id);
-  if (target) {
-    box.innerHTML += `<p class="ref-jump"><a href="#${block.id}">本文で見る →</a></p>`;
+window.addEventListener("scroll", updateProgress, { passive: true });
+
+/* ---------- Navigation Rail ---------- */
+
+const rail = document.querySelector(".nav-rail");
+const railMark = document.querySelector(".nav-rail__mark");
+const navNodes = document.querySelectorAll(".nav-rail__node");
+const chapters = Array.from(navNodes)
+  .map((n) => document.querySelector(n.getAttribute("href")))
+  .filter(Boolean);
+
+if (railMark) {
+  railMark.addEventListener("click", () => {
+    rail.classList.toggle("is-expanded");
+  });
+  document.addEventListener("click", (e) => {
+    if (rail && !rail.contains(e.target)) {
+      rail.classList.remove("is-expanded");
+    }
+  });
+}
+
+const chapterObserver = new IntersectionObserver(
+  (entries) => {
+    const visible = entries
+      .filter((e) => e.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visible) return;
+    navNodes.forEach((node) => {
+      node.classList.toggle(
+        "is-active",
+        node.getAttribute("href") === `#${visible.target.id}`
+      );
+    });
+  },
+  { rootMargin: "-10% 0px -70% 0px", threshold: [0, 0.1, 0.25, 0.5] }
+);
+
+chapters.forEach((ch) => chapterObserver.observe(ch));
+
+/* ---------- Block Reference: Floating Cards ---------- */
+
+const marginCol = document.querySelector(".margin-col");
+const refSheet = document.getElementById("ref-sheet");
+const MAX_CARDS = 3;
+let activeCards = [];
+
+const typeLabels = { definition: "定義", theorem: "定理", remark: "注意", example: "例", algorithm: "アルゴリズム" };
+const typeColors = {
+  definition: "var(--teal)",
+  theorem: "var(--indigo)",
+  remark: "var(--muted)",
+  example: "var(--wine)",
+  algorithm: "var(--amber)"
+};
+
+function createMarginCard(block, sourceEl) {
+  if (activeCards.length >= MAX_CARDS) {
+    const oldest = activeCards.shift();
+    oldest.remove();
   }
+
+  const card = document.createElement("div");
+  card.className = "context-card";
+  card.dataset.blockId = block.id;
+
+  card.innerHTML =
+    `<div class="context-card__header">` +
+    `<span class="context-card__type" style="color:${typeColors[block.type] || "var(--teal)"}">${typeLabels[block.type] || "参照"}</span>` +
+    `<button class="context-card__close" type="button" aria-label="閉じる">&times;</button>` +
+    `</div>` +
+    `<div class="context-card__body">${block.html}</div>` +
+    `<a class="context-card__jump" href="#${block.id}">本文で見る &rarr;</a>`;
+
+  const proseEl = document.querySelector(".prose");
+  if (proseEl && marginCol) {
+    const sourceY = sourceEl.getBoundingClientRect().top + window.scrollY;
+    const proseY = proseEl.getBoundingClientRect().top + window.scrollY;
+    let targetTop = sourceY - proseY;
+
+    for (const existing of activeCards) {
+      const eBottom = existing.offsetTop + existing.offsetHeight;
+      if (targetTop < eBottom + 12) {
+        targetTop = eBottom + 12;
+      }
+    }
+
+    card.style.top = targetTop + "px";
+  }
+
+  card.querySelector(".context-card__close").addEventListener("click", () => {
+    card.remove();
+    activeCards = activeCards.filter((c) => c !== card);
+  });
+
+  if (marginCol) {
+    marginCol.appendChild(card);
+  }
+  activeCards.push(card);
+
   if (window.MathJax?.typesetPromise) {
-    MathJax.typesetPromise([box]);
+    MathJax.typesetPromise([card]);
   }
 }
+
+function showRefMobile(block) {
+  if (!refSheet) return;
+  const content = refSheet.querySelector(".ref-sheet__content");
+  if (!content) return;
+  const label = typeLabels[block.type] || "参照";
+  content.innerHTML =
+    `<h3 style="color:${typeColors[block.type] || "var(--teal)"}">${label}: ${block.name}</h3>` +
+    `<div>${block.html}</div>` +
+    `<p style="margin-top:12px"><a href="#${block.id}" style="color:var(--teal);text-decoration:none">本文で見る &rarr;</a></p>`;
+  refSheet.showModal();
+  if (window.MathJax?.typesetPromise) {
+    MathJax.typesetPromise([content]);
+  }
+}
+
+/* ---------- Hover Tooltip ---------- */
+
+let hoverTimeout = null;
+let tooltip = null;
+
+function showTooltip(refEl, block) {
+  tooltip = document.createElement("div");
+  tooltip.className = "ref-tooltip";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = block.html;
+  const text = tmp.textContent.slice(0, 100);
+  tooltip.textContent = text + (tmp.textContent.length > 100 ? "..." : "");
+  const rect = refEl.getBoundingClientRect();
+  tooltip.style.top = rect.bottom + 6 + "px";
+  tooltip.style.left = Math.min(rect.left, window.innerWidth - 340) + "px";
+  document.body.appendChild(tooltip);
+}
+
+function hideTooltip() {
+  clearTimeout(hoverTimeout);
+  if (tooltip) {
+    tooltip.remove();
+    tooltip = null;
+  }
+}
+
+document.addEventListener("mouseover", (e) => {
+  const ref = e.target.closest(".ref");
+  if (!ref) return;
+  const blocks = window.__blocks || [];
+  const block = blocks.find((b) => b.name === ref.dataset.ref);
+  if (!block) return;
+  hoverTimeout = setTimeout(() => showTooltip(ref, block), 400);
+});
+
+document.addEventListener("mouseout", (e) => {
+  if (e.target.closest(".ref")) hideTooltip();
+});
+
+/* ---------- Click Handlers ---------- */
 
 document.addEventListener("click", (e) => {
   const term = e.target.closest(".term");
-  if (term) return setGlossary(term.dataset.term);
+  if (term) {
+    const item = glossary[term.dataset.term];
+    if (!item) return;
+    const isWide = window.matchMedia("(min-width: 1200px)").matches;
+    const fakeBlock = {
+      id: "glossary-" + term.dataset.term,
+      name: item.title,
+      type: "definition",
+      html: `<h3>${item.title}</h3><p>${item.body}</p>`
+    };
+    if (isWide && marginCol) {
+      createMarginCard(fakeBlock, term);
+    } else {
+      showRefMobile(fakeBlock);
+    }
+    return;
+  }
+
   const ref = e.target.closest(".ref");
-  if (ref) return showBlock(ref.dataset.ref);
+  if (ref) {
+    hideTooltip();
+    const blocks = window.__blocks || [];
+    const block = blocks.find((b) => b.name === ref.dataset.ref);
+    if (!block) return;
+    const isWide = window.matchMedia("(min-width: 1200px)").matches;
+    if (isWide && marginCol) {
+      createMarginCard(block, ref);
+    } else {
+      showRefMobile(block);
+    }
+    return;
+  }
 });
 
-const navLinks = Array.from(document.querySelectorAll(".chapter-nav a"));
-const sections = navLinks
-  .map((link) => document.querySelector(link.getAttribute("href")))
-  .filter(Boolean);
+/* Close dialog */
+if (refSheet) {
+  const closeBtn = refSheet.querySelector(".ref-sheet__close");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => refSheet.close());
+  }
+  refSheet.addEventListener("click", (e) => {
+    if (e.target === refSheet) refSheet.close();
+  });
+}
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    const visible = entries
-      .filter((entry) => entry.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    navLinks.forEach((link) => {
-      link.classList.toggle("active", link.getAttribute("href") === `#${visible.target.id}`);
-    });
-  },
-  { rootMargin: "-12% 0px -70% 0px", threshold: [0.1, 0.25, 0.5] }
+/* ---------- Keyboard Navigation ---------- */
+
+const allBlocks = document.querySelectorAll(
+  ".block, .example-band, .margin-note"
 );
+let currentBlockIdx = -1;
 
-sections.forEach((section) => observer.observe(section));
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+  if (e.key === "j") {
+    currentBlockIdx = Math.min(currentBlockIdx + 1, allBlocks.length - 1);
+    allBlocks[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    e.preventDefault();
+  }
+  if (e.key === "k") {
+    currentBlockIdx = Math.max(currentBlockIdx - 1, 0);
+    allBlocks[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    e.preventDefault();
+  }
+  if (e.key === "Escape") {
+    activeCards.forEach((c) => c.remove());
+    activeCards = [];
+    refSheet?.close();
+  }
+});
+
+/* ---------- Sinkhorn Demo ---------- */
 
 const cost = [
   [0.08, 0.46, 0.92, 1.28],
@@ -99,22 +293,14 @@ const b = [0.20, 0.30, 0.27, 0.23];
 function sinkhorn(epsilon) {
   const n = cost.length;
   const m = cost[0].length;
-  const kernel = cost.map((row) => row.map((value) => Math.exp(-value / epsilon)));
+  const kernel = cost.map((row) => row.map((v) => Math.exp(-v / epsilon)));
   let u = Array(n).fill(1);
   let v = Array(m).fill(1);
-
-  for (let step = 0; step < 70; step += 1) {
-    u = u.map((_, i) => {
-      const denom = kernel[i].reduce((sum, kij, j) => sum + kij * v[j], 0);
-      return a[i] / denom;
-    });
-    v = v.map((_, j) => {
-      const denom = kernel.reduce((sum, row, i) => sum + row[j] * u[i], 0);
-      return b[j] / denom;
-    });
+  for (let step = 0; step < 70; step++) {
+    u = u.map((_, i) => a[i] / kernel[i].reduce((s, k, j) => s + k * v[j], 0));
+    v = v.map((_, j) => b[j] / kernel.reduce((s, row, i) => s + row[j] * u[i], 0));
   }
-
-  return kernel.map((row, i) => row.map((kij, j) => u[i] * kij * v[j]));
+  return kernel.map((row, i) => row.map((k, j) => u[i] * k * v[j]));
 }
 
 function renderMatrix(target, values, mode) {
@@ -124,8 +310,7 @@ function renderMatrix(target, values, mode) {
   const min = Math.min(...flat);
   const max = Math.max(...flat);
   el.innerHTML = "";
-
-  values.flat().forEach((value) => {
+  flat.forEach((value) => {
     const t = max === min ? 0 : (value - min) / (max - min);
     const hue = mode === "cost" ? 32 - t * 18 : 176 - t * 142;
     const lightness = mode === "cost" ? 94 - t * 30 : 94 - t * 42;
@@ -153,6 +338,8 @@ if (slider) {
   slider.addEventListener("input", updateDemo);
   updateDemo();
 }
+
+/* ---------- Mermaid ---------- */
 
 window.addEventListener("load", async () => {
   if (window.mermaid) {

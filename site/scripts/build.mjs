@@ -16,6 +16,7 @@ function escapeHtml(value) {
 
 const allBlocks = [];
 const usedBlockIds = new Set();
+let currentChapterId = null;
 
 function makeBlockId(type, rawName) {
   const prefixMap = { definition: "def", theorem: "thm", remark: "rem", example: "ex" };
@@ -151,6 +152,7 @@ function renderMarkdown(markdown) {
           name: currentBlock.name,
           type: currentBlock.type,
           title: currentBlock.fullTitle,
+          chapter: currentChapterId,
           html: contentHtml
         });
       }
@@ -180,36 +182,37 @@ function renderMarkdown(markdown) {
     }
     if (spec === "definition") {
       currentBlock = { type: "definition", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block definition">');
+      html.push('<div class="block block--def">');
       stack.push("</div>");
       return;
     }
     if (spec === "theorem") {
       currentBlock = { type: "theorem", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block theorem">');
+      html.push('<div class="block block--thm">');
       stack.push("</div>");
       return;
     }
     if (spec === "algorithm") {
-      html.push('<div class="algorithm">');
+      currentBlock = { type: "algorithm", divIndex: html.length, depth: stack.length };
+      html.push('<div class="block block--algo">');
       stack.push("</div>");
       return;
     }
     if (spec === "fact") {
       currentBlock = { type: "remark", divIndex: html.length, depth: stack.length };
-      html.push('<article class="fact">');
-      stack.push("</article>");
+      html.push('<aside class="margin-note">');
+      stack.push("</aside>");
       return;
     }
     if (spec === "fact accent") {
       currentBlock = { type: "example", divIndex: html.length, depth: stack.length };
-      html.push('<article class="fact accent">');
-      stack.push("</article>");
+      html.push('<div class="example-band"><article class="example-band__inner">');
+      stack.push("</article></div>");
       return;
     }
     if (spec.startsWith("details-embedded ")) {
       const title = spec.slice("details-embedded ".length);
-      html.push(`<details class="fold embedded"><summary>${renderInline(title)}</summary>`);
+      html.push(`<details class="proof"><summary>${renderInline(title)}</summary>`);
       stack.push("</details>");
       return;
     }
@@ -220,7 +223,9 @@ function renderMarkdown(markdown) {
       return;
     }
     if (spec === "demo sinkhorn") {
+      html.push('<div class="demo-breakout">');
       html.push(sinkhornDemo());
+      html.push('</div>');
       return;
     }
 
@@ -298,7 +303,17 @@ function renderMarkdown(markdown) {
         const original = html[currentBlock.divIndex];
         html[currentBlock.divIndex] = original.replace(/>/, ` id="${escapeHtml(id)}">`);
       }
-      html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
+      if (level === 2) {
+        const slug = heading[2].trim().toLowerCase()
+          .replace(/\\\([^)]*\\\)/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9ぁ-ゟ゠-ヿ一-鿿-]/g, "")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "");
+        html.push(`<h2 id="sec-${slug}">${renderInline(heading[2])}</h2>`);
+      } else {
+        html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
+      }
       continue;
     }
 
@@ -330,35 +345,28 @@ function renderMarkdown(markdown) {
   return html.join("\n");
 }
 
-function renderHeading(section, isFirst) {
-  const title = escapeHtml(section.data.title);
-  const level = isFirst ? "h1" : "h2";
-  if (section.data.term) {
-    return `<${level}><button type="button" class="term heading-term" data-term="${escapeHtml(section.data.term)}">${title}</button></${level}>`;
-  }
-  return `<${level}>${title}</${level}>`;
-}
-
 function renderSection(section, index) {
   const eyebrow = section.data.eyebrow
-    ? `<p class="eyebrow">${escapeHtml(section.data.eyebrow)}</p>`
+    ? `<p class="chapter__eyebrow">${escapeHtml(section.data.eyebrow)}</p>`
     : "";
-  const lead = section.data.lead ? `<p class="lead">${renderInline(section.data.lead)}</p>` : "";
-  const parts = [
+  const level = index === 0 ? "h1" : "h2";
+  const heading = `<${level} class="chapter__title">${escapeHtml(section.data.title)}</${level}>`;
+  return [
     `<section id="${escapeHtml(section.data.id)}" class="chapter">`,
     eyebrow,
-    renderHeading(section, index === 0),
-    lead,
+    heading,
     section.html,
     "</section>"
-  ].filter(Boolean);
-  return parts.join("\n");
+  ].filter(Boolean).join("\n");
 }
 
 function pageTemplate(sections) {
-  const nav = sections
-    .map((section) => `<a href="#${escapeHtml(section.data.id)}">${escapeHtml(section.data.nav ?? section.data.title)}</a>`)
-    .join("\n          ");
+  const navNodes = sections
+    .map((s) => `          <a href="#${escapeHtml(s.data.id)}" class="nav-rail__node" data-chapter="${escapeHtml(s.data.id)}">
+            <span class="nav-rail__dot"></span>
+            <span class="nav-rail__label">${escapeHtml(s.data.nav ?? s.data.title)}</span>
+          </a>`)
+    .join("\n");
   const renderedSections = sections.map(renderSection).join("\n");
 
   return `<!doctype html>
@@ -368,6 +376,9 @@ function pageTemplate(sections) {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>計算最適輸送セミナー</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" />
     <script>
       window.MathJax = {
@@ -424,63 +435,35 @@ function pageTemplate(sections) {
       };
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>window.__blocks = ${JSON.stringify(allBlocks).replace(/<\//g, "<\\/")};</script>
     <script defer src="./app.js"></script>
   </head>
   <body>
-    <div class="site-shell">
-      <aside class="sidebar" aria-label="章ナビゲーション">
-        <div class="brand">
-          <span class="brand-mark">OT</span>
-          <div>
-            <strong>計算最適輸送</strong>
-            <span>Cuturi / Peyre ルート</span>
-          </div>
-        </div>
-        <nav class="chapter-nav">
-          ${nav}
-        </nav>
-      </aside>
+    <div class="reading-progress" aria-hidden="true">
+      <div class="reading-progress__fill"></div>
+    </div>
 
-      <main class="content">
+    <div class="manuscript">
+      <nav class="nav-rail" aria-label="章ナビゲーション">
+        <div class="nav-rail__brand">
+          <span class="nav-rail__mark">OT</span>
+        </div>
+        <div class="nav-rail__timeline">
+${navNodes}
+        </div>
+      </nav>
+
+      <main class="prose">
         ${renderedSections}
       </main>
 
-      <aside class="inspector" aria-label="用語と対応表">
-        <section class="panel glossary-panel">
-          <h2>用語</h2>
-          <div id="glossary-box">
-            <h3>Polish 空間</h3>
-            <p>完備かつ可分な距離空間。測度論的 OT の標準的な基礎空間。</p>
-          </div>
-        </section>
-
-        <section class="panel">
-          <h2>有限と無限</h2>
-          <table class="mini-table">
-            <tbody>
-              <tr>
-                <th>測度</th>
-                <td>\\(\\alpha=\\sum_i a_i\\delta_{x_i}\\)</td>
-              </tr>
-              <tr>
-                <th>結合</th>
-                <td>\\(\\pi=\\sum_{i,j}P_{ij}\\delta_{(x_i,y_j)}\\)</td>
-              </tr>
-              <tr>
-                <th>コスト</th>
-                <td>\\(C_{ij}=c(x_i,y_j)\\)</td>
-              </tr>
-              <tr>
-                <th>極限</th>
-                <td>\\(\\varepsilon\\to0\\) で非正則化 OT</td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </aside>
+      <aside class="margin-col" aria-label="コンテキスト"></aside>
     </div>
+
+    <dialog class="ref-sheet" id="ref-sheet">
+      <div class="ref-sheet__content"></div>
+      <button class="ref-sheet__close" type="button" aria-label="閉じる">&times;</button>
+    </dialog>
   </body>
 </html>
 `;
@@ -493,6 +476,7 @@ const sections = readdirSync(contentDir)
     const fullPath = path.join(contentDir, file);
     const source = readFileSync(fullPath, "utf8");
     const parsed = parseFrontmatter(source, fullPath);
+    currentChapterId = parsed.data.id || null;
     return {
       file,
       data: parsed.data,
