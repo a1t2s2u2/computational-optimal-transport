@@ -730,16 +730,183 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体
   （Weierstrass の最大値の定理）．したがって最適解 $\mathbf{P}^*$ が存在する．
 \end{proof}
 
-\begin{remark}{最適解の一意性は一般に成り立たない}{sem-discrete-nonunique}
-  Claim~\ref{clm:sem-uniqueness} で見たとおり，
-  $\mathbf{C}$ がすべて等しい等の縮退状況では，
-  最適値を達成する $\mathbf{P}^*$ は一意ではない．
-  実際，目的関数は線形であり実行可能集合は凸多面体であるから，
-  最適解の集合は $\CouplingsD(\mathbf{a}, \mathbf{b})$ の面の1つをなす．
+\paragraph{最適解の構造．}
+
+最適解が一意とは限らないことを確認し，最適解集合の構造を調べる．
+
+\begin{claim}{最適解集合は輸送多面体の面をなす}{sem-optimal-face}
+  最適解の集合
+  \[
+    S^*
+    \defeq
+    \bigl\{ \mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})
+    \bigm|
+    \inner{\mathbf{C}}{\mathbf{P}^*} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    \bigr\}
+  \]
+  は凸かつコンパクトであり，$\CouplingsD(\mathbf{a}, \mathbf{b})$ の面をなす：
+  $\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
+  $t \in (0,1)$ に対して
+  $t\mathbf{P} + (1-t)\mathbf{Q} \in S^*$ ならば
+  $\mathbf{P}, \mathbf{Q} \in S^*$．
+\end{claim}
+
+\begin{proof}
+  \textbf{凸性．}
+  $\mathbf{P}^*, \mathbf{Q}^* \in S^*$ と $t \in [0,1]$ に対し，
+  $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ は
+  主張~\ref{clm:sem-coupling-polytope} の凸性から
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属し，
+  \[
+    \inner{\mathbf{C}}{\mathbf{R}}
+    = t\inner{\mathbf{C}}{\mathbf{P}^*} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}^*}
+    = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
+  \]
+
+  \textbf{面の性質．}
+  $t\mathbf{P} + (1-t)\mathbf{Q} \in S^*$
+  （$\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$，
+  $t \in (0,1)$）とする．
+  $\inner{\mathbf{C}}{\mathbf{P}},\, \inner{\mathbf{C}}{\mathbf{Q}}
+  \geq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$
+  かつ
+  $t\inner{\mathbf{C}}{\mathbf{P}} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}}
+  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$
+  が成り立つには等号
+  $\inner{\mathbf{C}}{\mathbf{P}} = \inner{\mathbf{C}}{\mathbf{Q}}
+  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$
+  が必要である．
+
+  \textbf{コンパクト性．}
+  $S^*
+  = \CouplingsD(\mathbf{a}, \mathbf{b})
+  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}}
+  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  はコンパクト集合と閉集合の共通部分．
+\end{proof}
+
+目的関数が線形であるため，有界凸多面体上の最小値は
+頂点（端点）で達成される：
+
+\begin{claim}{頂点での最適解の達成}{sem-vertex-optimal}
+  $S^*$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ の
+  頂点を少なくとも1つ含む．
+\end{claim}
+
+\begin{proof}
+  主張~\ref{clm:sem-optimal-face} より
+  $S^*$ は凸多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$
+  の空でない面であり，それ自身も凸多面体をなすから頂点を持つ．
+  $\mathbf{P}^*$ を $S^*$ の頂点とし，
+  $\mathbf{P}^* = t\mathbf{P} + (1-t)\mathbf{Q}$
+  （$\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$，
+  $t \in (0,1)$）と書けたとする．
+  面の性質から $\mathbf{P}, \mathbf{Q} \in S^*$．
+  $\mathbf{P}^*$ は $S^*$ の頂点であるから
+  $\mathbf{P} = \mathbf{Q} = \mathbf{P}^*$．
+  よって $\mathbf{P}^*$ は
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点でもある．
+\end{proof}
+
+\begin{remark}{最適輸送計画のスパース性}{sem-sparse-optimal}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点は
+  非零成分を高々 $n + m - 1$ 個しか持たない
+  （第~\ref{ch:seminar-02}~章
+  命題~\ref{prop:sem-extremal-tree}）．
+  全成分数 $nm$ と比べ，
+  主張~\ref{clm:sem-vertex-optimal} が保証する
+  頂点最適解は大幅にスパースである．
 \end{remark}
 
-連続版（Polish 空間設定）の解の存在は Prokhorov の定理と
-コスト関数の下半連続性を用いて示される．
+次の例は，非自明な状況で最適解が一意にならないことを示す．
+
+\begin{example}{最適解の非一意性}{sem-nonunique-example}
+  $n = m = 2$，$\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)$ とし，
+  コスト行列を
+  \[
+    \mathbf{C} = \begin{pmatrix} 1 & 3 \\ 3 & 5 \end{pmatrix}
+  \]
+  とする（$C_{11} + C_{22} = 6 = C_{12} + C_{21}$）．
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は2つの頂点
+  \[
+    \mathbf{P}_1
+    = \begin{pmatrix} 1/2 & 0 \\ 0 & 1/2 \end{pmatrix},
+    \qquad
+    \mathbf{P}_2
+    = \begin{pmatrix} 0 & 1/2 \\ 1/2 & 0 \end{pmatrix}
+  \]
+  を結ぶ線分であり，両者のコストはともに
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_1}
+    = \tfrac{1}{2} + \tfrac{5}{2} = 3,
+    \qquad
+    \inner{\mathbf{C}}{\mathbf{P}_2}
+    = \tfrac{3}{2} + \tfrac{3}{2} = 3
+  \]
+  で等しい．
+  したがって任意の $t \in [0, 1]$ に対して
+  $t\mathbf{P}_1 + (1-t)\mathbf{P}_2$ が最適であり，
+  最適面 $S^*$ は輸送多面体全体に等しい．
+
+  この非一意性は
+  $C_{11} + C_{22} = C_{12} + C_{21}$ から生じる．
+  逆に $C_{11} + C_{22} \neq C_{12} + C_{21}$ ならば
+  2頂点のコストが異なるため最適解は一意となる．
+\end{example}
+
+\begin{remark}{エントロピー正則化による一意性の回復}{sem-entropic-uniqueness-motivation}
+  離散 Kantorovich 問題の非一意性は
+  目的関数 $\inner{\mathbf{C}}{\mathbf{P}}$ の線形性に由来する．
+  第~\ref{ch:seminar-03-entropic}~章で導入する
+  エントロピー正則化
+  \[
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+  \]
+  では，$\varepsilon > 0$ のとき目的関数が
+  狭義凸（定義~\ref{def:sem-convex-function}）となるため，
+  最適解は常に一意に定まる
+  （命題~\ref{prop:sem-entropic-existence-unique}）．
+  これは計算上の利点
+  （Sinkhorn アルゴリズムの収束先が一意）
+  だけでなく，理論上も解の選択の曖昧さを解消する意義を持つ．
+\end{remark}
+
+\paragraph{連続版の存在．}
+
+\begin{remark}{Polish 空間上の Kantorovich 問題の解の存在}{sem-continuous-existence}
+  $\X, \Y$ が Polish 空間で
+  コスト関数 $c \colon \X \times \Y \to [0, +\infty]$ が
+  下半連続であるとき，
+  Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の下限は
+  最小値として達成される：
+  \[
+    \MK_c(\alpha, \beta)
+    = \min_{\pi \in \Couplings(\alpha, \beta)}
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y).
+  \]
+  証明は以下の4段階による：
+  \begin{enumerate}
+    \item $\Couplings(\alpha, \beta)$ は確率測度の
+          弱収束の位相で\textbf{緊密}（tight）である．
+          周辺 $\alpha, \beta$ がそれぞれ Polish 空間上で緊密であることから，
+          任意の $\varepsilon > 0$ に対して
+          コンパクト集合 $K_\X \times K_\Y \subset \X \times \Y$ で
+          $\sup_{\pi \in \Couplings(\alpha, \beta)}
+          \pi((\X \times \Y) \setminus (K_\X \times K_\Y)) < \varepsilon$
+          とできる．
+    \item \textbf{Prokhorov の定理}により，
+          Polish 空間上の緊密な確率測度族は弱位相で相対コンパクトである．
+    \item $\Couplings(\alpha, \beta)$ は弱位相で閉集合であるから
+          （弱収束の極限は周辺条件を保存するため），
+          相対コンパクトかつ閉 = コンパクト．
+    \item 下半連続コスト汎関数
+          $\pi \mapsto \int c \, \d\pi$ は弱収束に関して下半連続であり，
+          空でないコンパクト集合上で最小値を達成する．
+  \end{enumerate}
+  詳細は C.~Villani,
+  \textit{Optimal Transport: Old and New}, Springer, 2009, Chapter~4 を参照．
+\end{remark}
 
 %% ============================================================
 %% Kantorovich 双対

@@ -52,7 +52,6 @@
           <a href="#entropic">エントロピー正則化</a>
           <a href="#sinkhorn">Sinkhorn</a>
           <a href="#justification">正則化の正当性</a>
-          <a href="#geometry">Wasserstein 幾何</a>
         </nav>
       </aside>
 
@@ -664,32 +663,6 @@
   \mathbf{g}^{\star}
 \]</div>
 <p>である。損失関数とは、最小化の対象として使う関数である。この性質により、正則化 OT は最適化や機械学習の損失関数として扱いやすい。</p>
-</div>
-</section>
-<section id="geometry" class="chapter">
-<p class="eyebrow">Geometry</p>
-<h2>Wasserstein 幾何への接続</h2>
-<p>コストを距離の \(p\) 乗に固定すると、Kantorovich 最適値は \(p\)-Wasserstein 距離を定める。</p>
-<div class="block definition" id="def-wp">
-<h3>定義: \(W_p\)</h3>
-<div class="math-block">\[
-  W_p(\alpha,\beta)
-  =
-  \left(
-    \inf_{\pi\in\Couplings(\alpha,\beta)}
-    \int_{\X\times\X} d(x,y)^p\,d\pi(x,y)
-  \right)^{1/p}.
-\]</div>
-</div>
-<div class="compare">
-<div>
-<h3>Cuturi/Peyre 側</h3>
-<p>計算可能な OT、Sinkhorn、近似、統計、応用が中心である。</p>
-</div>
-<div>
-<h3>Villani/AGS 側</h3>
-<p>測地線、変位補間、変位凸性、勾配流、曲率が中心である。</p>
-</div>
 </div>
 </section>
       </main>
