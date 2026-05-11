@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Living Mathematical Manuscript — Interactions
+   Computational Optimal Transport — Interactions
    ========================================================================== */
 
 /* ---------- Glossary ---------- */
@@ -45,50 +45,62 @@ function updateProgress() {
 
 window.addEventListener("scroll", updateProgress, { passive: true });
 
-/* ---------- Navigation Rail ---------- */
+/* ---------- Chapter TOC (Left Sidebar) ---------- */
 
-const rail = document.querySelector(".nav-rail");
-const railMark = document.querySelector(".nav-rail__mark");
-const navNodes = document.querySelectorAll(".nav-rail__node");
-const chapters = Array.from(navNodes)
-  .map((n) => document.querySelector(n.getAttribute("href")))
-  .filter(Boolean);
+function buildToc() {
+  const toc = document.querySelector(".chapter-toc");
+  if (!toc) return;
 
-if (railMark) {
-  railMark.addEventListener("click", () => {
-    rail.classList.toggle("is-expanded");
+  const headings = document.querySelectorAll(".prose h2[id]");
+  if (headings.length === 0) return;
+
+  const title = document.createElement("span");
+  title.className = "chapter-toc__title";
+  title.textContent = "目次";
+  toc.appendChild(title);
+
+  const list = document.createElement("ul");
+  list.className = "chapter-toc__list";
+
+  headings.forEach((h) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${h.id}`;
+    a.className = "chapter-toc__link";
+    a.textContent = h.textContent;
+    li.appendChild(a);
+    list.appendChild(li);
   });
-  document.addEventListener("click", (e) => {
-    if (rail && !rail.contains(e.target)) {
-      rail.classList.remove("is-expanded");
-    }
-  });
+
+  toc.appendChild(list);
+
+  const tocObserver = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.target.getBoundingClientRect().top - b.target.getBoundingClientRect().top)[0];
+      if (!visible) return;
+      list.querySelectorAll(".chapter-toc__link").forEach((link) => {
+        link.classList.toggle(
+          "is-active",
+          link.getAttribute("href") === `#${visible.target.id}`
+        );
+      });
+    },
+    { rootMargin: "-60px 0px -75% 0px", threshold: 0 }
+  );
+
+  headings.forEach((h) => tocObserver.observe(h));
 }
 
-const chapterObserver = new IntersectionObserver(
-  (entries) => {
-    const visible = entries
-      .filter((e) => e.isIntersecting)
-      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!visible) return;
-    navNodes.forEach((node) => {
-      node.classList.toggle(
-        "is-active",
-        node.getAttribute("href") === `#${visible.target.id}`
-      );
-    });
-  },
-  { rootMargin: "-10% 0px -70% 0px", threshold: [0, 0.1, 0.25, 0.5] }
-);
+buildToc();
 
-chapters.forEach((ch) => chapterObserver.observe(ch));
+/* ---------- Reference Sidebar (Right, Fixed) ---------- */
 
-/* ---------- Block Reference: Floating Cards ---------- */
-
-const marginCol = document.querySelector(".margin-col");
+const refSidebar = document.querySelector(".ref-sidebar");
+const refBody = refSidebar?.querySelector(".ref-sidebar__body");
 const refSheet = document.getElementById("ref-sheet");
-const MAX_CARDS = 3;
-let activeCards = [];
+const MAX_SIDEBAR_CARDS = 3;
 
 const typeLabels = { definition: "定義", theorem: "定理", remark: "注意", example: "例", algorithm: "アルゴリズム" };
 const typeColors = {
@@ -99,49 +111,49 @@ const typeColors = {
   algorithm: "var(--amber)"
 };
 
-function createMarginCard(block, sourceEl) {
-  if (activeCards.length >= MAX_CARDS) {
-    const oldest = activeCards.shift();
-    oldest.remove();
+function blockJumpHref(block) {
+  const current = window.__currentChapter;
+  const files = window.__chapterFiles || {};
+  if (block.chapter && block.chapter !== current && files[block.chapter]) {
+    return `${files[block.chapter]}#${block.id}`;
+  }
+  return `#${block.id}`;
+}
+
+function showInSidebar(block) {
+  if (!refBody) return;
+
+  const existing = refBody.querySelector(`[data-block-id="${block.id}"]`);
+  if (existing) return;
+
+  const empty = refBody.querySelector(".ref-sidebar__empty");
+  if (empty) empty.remove();
+
+  const cards = refBody.querySelectorAll(".ref-sidebar__card");
+  if (cards.length >= MAX_SIDEBAR_CARDS) {
+    cards[cards.length - 1].remove();
   }
 
+  const jumpHref = blockJumpHref(block);
   const card = document.createElement("div");
-  card.className = "context-card";
+  card.className = "ref-sidebar__card";
   card.dataset.blockId = block.id;
-
   card.innerHTML =
-    `<div class="context-card__header">` +
-    `<span class="context-card__type" style="color:${typeColors[block.type] || "var(--teal)"}">${typeLabels[block.type] || "参照"}</span>` +
-    `<button class="context-card__close" type="button" aria-label="閉じる">&times;</button>` +
+    `<div class="ref-sidebar__card-header">` +
+    `<span class="ref-sidebar__type" style="color:${typeColors[block.type] || "var(--teal)"}">${typeLabels[block.type] || "参照"}</span>` +
+    `<button class="ref-sidebar__close" type="button" aria-label="閉じる">&times;</button>` +
     `</div>` +
-    `<div class="context-card__body">${block.html}</div>` +
-    `<a class="context-card__jump" href="#${block.id}">本文で見る &rarr;</a>`;
+    `<div class="ref-sidebar__content">${block.html}</div>` +
+    `<a class="ref-sidebar__jump" href="${jumpHref}">本文で見る &rarr;</a>`;
 
-  const proseEl = document.querySelector(".prose");
-  if (proseEl && marginCol) {
-    const sourceY = sourceEl.getBoundingClientRect().top + window.scrollY;
-    const proseY = proseEl.getBoundingClientRect().top + window.scrollY;
-    let targetTop = sourceY - proseY;
-
-    for (const existing of activeCards) {
-      const eBottom = existing.offsetTop + existing.offsetHeight;
-      if (targetTop < eBottom + 12) {
-        targetTop = eBottom + 12;
-      }
-    }
-
-    card.style.top = targetTop + "px";
-  }
-
-  card.querySelector(".context-card__close").addEventListener("click", () => {
+  card.querySelector(".ref-sidebar__close").addEventListener("click", () => {
     card.remove();
-    activeCards = activeCards.filter((c) => c !== card);
+    if (refBody.querySelectorAll(".ref-sidebar__card").length === 0) {
+      refBody.innerHTML = '<p class="ref-sidebar__empty">参照リンクをクリックすると<br>ここに定義や定理が表示されます</p>';
+    }
   });
 
-  if (marginCol) {
-    marginCol.appendChild(card);
-  }
-  activeCards.push(card);
+  refBody.prepend(card);
 
   if (window.MathJax?.typesetPromise) {
     MathJax.typesetPromise([card]);
@@ -153,13 +165,23 @@ function showRefMobile(block) {
   const content = refSheet.querySelector(".ref-sheet__content");
   if (!content) return;
   const label = typeLabels[block.type] || "参照";
+  const jumpHref = blockJumpHref(block);
   content.innerHTML =
     `<h3 style="color:${typeColors[block.type] || "var(--teal)"}">${label}: ${block.name}</h3>` +
     `<div>${block.html}</div>` +
-    `<p style="margin-top:12px"><a href="#${block.id}" style="color:var(--teal);text-decoration:none">本文で見る &rarr;</a></p>`;
+    `<p style="margin-top:12px"><a href="${jumpHref}" style="color:var(--teal);text-decoration:none">本文で見る &rarr;</a></p>`;
   refSheet.showModal();
   if (window.MathJax?.typesetPromise) {
     MathJax.typesetPromise([content]);
+  }
+}
+
+function showBlock(block, sourceEl) {
+  const hasWide = window.matchMedia("(min-width: 1400px)").matches;
+  if (hasWide && refSidebar) {
+    showInSidebar(block);
+  } else {
+    showRefMobile(block);
   }
 }
 
@@ -209,18 +231,14 @@ document.addEventListener("click", (e) => {
   if (term) {
     const item = glossary[term.dataset.term];
     if (!item) return;
-    const isWide = window.matchMedia("(min-width: 1200px)").matches;
     const fakeBlock = {
       id: "glossary-" + term.dataset.term,
       name: item.title,
       type: "definition",
+      chapter: window.__currentChapter,
       html: `<h3>${item.title}</h3><p>${item.body}</p>`
     };
-    if (isWide && marginCol) {
-      createMarginCard(fakeBlock, term);
-    } else {
-      showRefMobile(fakeBlock);
-    }
+    showBlock(fakeBlock, term);
     return;
   }
 
@@ -230,12 +248,7 @@ document.addEventListener("click", (e) => {
     const blocks = window.__blocks || [];
     const block = blocks.find((b) => b.name === ref.dataset.ref);
     if (!block) return;
-    const isWide = window.matchMedia("(min-width: 1200px)").matches;
-    if (isWide && marginCol) {
-      createMarginCard(block, ref);
-    } else {
-      showRefMobile(block);
-    }
+    showBlock(block, ref);
     return;
   }
 });
@@ -253,7 +266,7 @@ if (refSheet) {
 
 /* ---------- Keyboard Navigation ---------- */
 
-const allBlocks = document.querySelectorAll(
+const allBlockEls = document.querySelectorAll(
   ".block, .example-band, .margin-note"
 );
 let currentBlockIdx = -1;
@@ -262,18 +275,19 @@ document.addEventListener("keydown", (e) => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
 
   if (e.key === "j") {
-    currentBlockIdx = Math.min(currentBlockIdx + 1, allBlocks.length - 1);
-    allBlocks[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    currentBlockIdx = Math.min(currentBlockIdx + 1, allBlockEls.length - 1);
+    allBlockEls[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
     e.preventDefault();
   }
   if (e.key === "k") {
     currentBlockIdx = Math.max(currentBlockIdx - 1, 0);
-    allBlocks[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    allBlockEls[currentBlockIdx]?.scrollIntoView({ behavior: "smooth", block: "center" });
     e.preventDefault();
   }
   if (e.key === "Escape") {
-    activeCards.forEach((c) => c.remove());
-    activeCards = [];
+    if (refBody) {
+      refBody.innerHTML = '<p class="ref-sidebar__empty">参照リンクをクリックすると<br>ここに定義や定理が表示されます</p>';
+    }
     refSheet?.close();
   }
 });
