@@ -823,24 +823,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
   2頂点のコストが異なるため最適解は一意となる．
 \end{example}
 
-\begin{remark}{エントロピー正則化による一意性の回復}{sem-entropic-uniqueness-motivation}
-  離散 Kantorovich 問題の非一意性は
-  目的関数 $\inner{\mathbf{C}}{\mathbf{P}}$ の線形性に由来する．
-  第~\ref{ch:seminar-03-entropic}~章で導入する
-  エントロピー正則化
-  \[
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
-  \]
-  では，$\varepsilon > 0$ のとき目的関数が
-  狭義凸（定義~\ref{def:sem-convex-function}）となるため，
-  最適解は常に一意に定まる
-  （命題~\ref{prop:sem-entropic-existence-unique}）．
-  これは計算上の利点
-  （Sinkhorn アルゴリズムの収束先が一意）
-  だけでなく，理論上も解の選択の曖昧さを解消する意義を持つ．
-\end{remark}
-
 %% ============================================================
 %% Kantorovich 双対
 %% ============================================================
