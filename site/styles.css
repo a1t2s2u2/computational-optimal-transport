@@ -576,11 +576,10 @@ strong {
 
 .example-band {
   position: relative;
-  margin: 32px -24px;
-  padding: 24px 24px;
+  margin: 32px 0;
+  padding: 24px;
   background: var(--wine-bg);
   border-left: 4px solid var(--wine);
-  border-radius: 0 10px 10px 0;
 }
 
 .example-band__inner {
@@ -1194,10 +1193,9 @@ strong {
   }
 
   .example-band {
-    margin-left: -16px;
-    margin-right: -16px;
+    margin-left: 0;
+    margin-right: 0;
     padding: 20px 16px;
-    border-radius: 0;
   }
 
   .chapter-pager {
