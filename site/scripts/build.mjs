@@ -69,7 +69,13 @@ function parseFrontmatter(source, filePath) {
 }
 
 function renderInline(source) {
-  return escapeHtml(source)
+  const mathSpans = [];
+  const shielded = source.replace(/\\\([^]*?\\\)/g, (m) => {
+    mathSpans.push(m);
+    return `\x00MATH${mathSpans.length - 1}\x00`;
+  });
+
+  let result = escapeHtml(shielded)
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
     .replace(/\*([^*]+)\*/g, "<em>$1</em>")
     .replace(
@@ -84,6 +90,10 @@ function renderInline(source) {
         return `<button type="button" class="ref" data-ref="${refName}">${display}</button>`;
       }
     );
+
+  return result.replace(/\x00MATH(\d+)\x00/g, (_, i) =>
+    escapeHtml(mathSpans[parseInt(i)])
+  );
 }
 
 function sinkhornDemo() {
