@@ -1,19 +1,88 @@
 \chapter{アルゴリズムの基礎}
 \label{ch:seminar-02}
 
+%% ============================================================
+%% 線形計画としての定式化
+%% ============================================================
+\section{線形計画としての定式化}
+\label{sec:sem-lp-standard}
+
 離散 Kantorovich 問題
 \[
   \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
   \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
   \inner{\mathbf{C}}{\mathbf{P}}
 \]
-は $nm$ 個の変数と $n + m$ 本の等式制約を持つ線形計画であり，
+は線形計画である．
+$\mathbf{P}$ と $\mathbf{C}$ をそれぞれベクトル化した
+$\mathbf{p}, \mathbf{c} \in \R^{nm}$，
+周辺条件をまとめた制約行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ を用いると，
+標準形
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
+    \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
+  \mathbf{c}^\top \mathbf{p}
+\]
+と表される．$nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画であり，
 \textbf{ネットワーク単体法}（network simplex）をはじめとする
 LP アルゴリズムで厳密に解ける．
-ネットワーク単体法は輸送多面体の頂点間を移動しながら
-コストを単調に減少させ，多項式時間で最適解に到達する（Orlin, 1997）．
 
-しかし，学習・大規模応用の観点ではいくつかの根本的な制約をもつ：
+%% ============================================================
+%% 主双対最適性条件
+%% ============================================================
+\section{主双対最適性条件}
+\label{sec:sem-primal-dual}
+
+線形計画の双対理論から，最適解を特徴付ける主双対条件が得られる．
+
+\begin{claim}{主双対最適性}{sem-primal-dual-optimality}
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
+  $(\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m$ が以下を満たすとする：
+  \begin{enumerate}
+    \item[(i)] \textbf{相補性}：$P_{i,j} > 0 \Longrightarrow f_i + g_j = C_{i,j}$，
+    \item[(ii)] \textbf{双対実行可能性}：$f_i + g_j \leq C_{i,j}$（$\forall i, j$）．
+  \end{enumerate}
+  このとき $\mathbf{P}$ は離散 Kantorovich 問題の最適解であり，
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    = \inner{\mathbf{C}}{\mathbf{P}}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+\end{claim}
+
+\begin{proof}
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ に対し，
+  双対実行可能性 (ii) と $Q_{i,j} \geq 0$ から
+  \[
+    \inner{\mathbf{C}}{\mathbf{Q}}
+    = \sum_{i,j} C_{i,j} Q_{i,j}
+    \geq \sum_{i,j} (f_i + g_j) Q_{i,j}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+  $\mathbf{P}$ については相補性 (i) から $P_{i,j} > 0$ の項で等号が成り立ち，
+  $P_{i,j} = 0$ の項は和に寄与しないから
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}}
+    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+  \]
+  以上から
+  $\inner{\mathbf{C}}{\mathbf{P}} \leq \inner{\mathbf{C}}{\mathbf{Q}}$
+  が任意の $\mathbf{Q}$ で成立し，$\mathbf{P}$ は最適．
+\end{proof}
+
+ネットワーク単体法はこの条件に基づき，
+実行可能解を改善しながらコストを単調に減少させ，
+多項式時間で最適解に到達する（Orlin, 1997）．
+
+%% ============================================================
+%% エントロピー正則化への動機付け
+%% ============================================================
+\section{エントロピー正則化への動機付け}
+\label{sec:sem-motivation-entropic}
+
+ネットワーク単体法は厳密解を与えるが，
+大規模応用の観点では根本的な制約をもつ：
 
 \begin{itemize}
   \item \textbf{計算量}：$O(nm)$ 個の変数に対する反復・データ構造管理は，
@@ -21,14 +90,10 @@ LP アルゴリズムで厳密に解ける．
     GPU 並列化にも本質的に向かない（離散探索的）．
   \item \textbf{微分不可能性}：最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ は
     $\mathbf{a}, \mathbf{b}$ について区分線形にしかならず，
-    滑らかな損失関数として自動微分による勾配最適化に組み込みにくい．
-  \item \textbf{標本バイアス}：母集団からの有限サンプルに基づいて
-    $\MKD_{\mathbf{C}}$ を推定すると，
-    高次元では母集団値への収束が指数的に遅い（次元の呪い）．
+    自動微分による勾配最適化に組み込みにくい．
 \end{itemize}
 
-これらの困難は，目的関数に \textbf{エントロピー} を加えて
-\textbf{正則化}することで大きく緩和される：
-正則化された最適輸送（\textbf{Sinkhorn アルゴリズム}）は
-計算が GPU 並列で軽く，最適値は marginals に関して滑らか（微分可能）であり，
-さらに統計的安定化の理論的基礎も提供する．
+これらの困難は，目的関数にエントロピー項を加えて
+正則化することで大きく緩和される．
+正則化された問題は \textbf{Sinkhorn アルゴリズム}で効率的に解け，
+計算は GPU 並列に適し，最適値は周辺分布に関して微分可能となる．

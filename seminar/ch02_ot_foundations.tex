@@ -565,25 +565,7 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
   ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$．
 \end{proof}
 
-\begin{claim}{離散カップリング集合は凸多面体}{sem-coupling-polytope}
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体（定義~\ref{def:sem-polytope}）をなす．
-\end{claim}
-
-\begin{proof}
-  $\mathbf{P} \in \R^{n \times m}$ を列方向に並べたベクトル
-  $\mathbf{p} \in \R^{nm}$ を考えると，
-  周辺条件 $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$
-  はある行列 $\mathbf{A} \in \R^{(n+m) \times nm}$ と
-  $\mathbf{r} \defeq [\mathbf{a}^\top, \mathbf{b}^\top]^\top \in \R^{n+m}$ を用いて
-  $\mathbf{A}\mathbf{p} = \mathbf{r}$ と書ける．したがって
-  \[
-    \CouplingsD(\mathbf{a}, \mathbf{b})
-    \;\cong\;
-    \{\mathbf{p} \in \R^{nm} \mid
-      \mathbf{A}\mathbf{p} = \mathbf{r},\; \mathbf{p} \geq \mathbf{0}\}
-  \]
-  であり，これは凸多面体の定義~\ref{def:sem-polytope}の形である．
-\end{proof}
+$\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約と非負制約で定まるから凸集合である．
 
 \begin{figure}[H]
 \centering
@@ -723,7 +705,7 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
   \textbf{凸性．}
   $\mathbf{P}^*, \mathbf{Q}^* \in S^*$ と $t \in [0,1]$ に対し，
   $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ は
-  主張~\ref{clm:sem-coupling-polytope} の凸性から
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性から
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属し，
   \[
     \inner{\mathbf{C}}{\mathbf{R}}
@@ -752,37 +734,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
   = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
   はコンパクト集合と閉集合の共通部分．
 \end{proof}
-
-目的関数が線形であるため，有界凸多面体上の最小値は
-頂点（端点）で達成される：
-
-\begin{claim}{頂点での最適解の達成}{sem-vertex-optimal}
-  $S^*$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ の
-  頂点を少なくとも1つ含む．
-\end{claim}
-
-\begin{proof}
-  主張~\ref{clm:sem-optimal-face} より
-  $S^*$ は凸多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$
-  の空でない面であり，それ自身も凸多面体をなすから頂点を持つ．
-  $\mathbf{P}^*$ を $S^*$ の頂点とし，
-  $\mathbf{P}^* = t\mathbf{P} + (1-t)\mathbf{Q}$
-  （$\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$，
-  $t \in (0,1)$）と書けたとする．
-  面の性質から $\mathbf{P}, \mathbf{Q} \in S^*$．
-  $\mathbf{P}^*$ は $S^*$ の頂点であるから
-  $\mathbf{P} = \mathbf{Q} = \mathbf{P}^*$．
-  よって $\mathbf{P}^*$ は
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点でもある．
-\end{proof}
-
-\begin{remark}{最適輸送計画のスパース性}{sem-sparse-optimal}
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の頂点は
-  非零成分を高々 $n + m - 1$ 個しか持たない．
-  全成分数 $nm$ と比べ，
-  主張~\ref{clm:sem-vertex-optimal} が保証する
-  頂点最適解は大幅にスパースである．
-\end{remark}
 
 次の例は，非自明な状況で最適解が一意にならないことを示す．
 
