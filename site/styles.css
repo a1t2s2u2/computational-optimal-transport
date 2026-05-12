@@ -504,7 +504,7 @@ strong {
   position: relative;
   margin: 32px 0;
   padding: 22px 24px;
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   border-left: 4px solid transparent;
 }
 

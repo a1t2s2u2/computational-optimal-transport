@@ -283,15 +283,17 @@ function renderMarkdown(markdown) {
       continue;
     }
 
-    if (trimmed === "\\[") {
+    if (trimmed.startsWith("\\[")) {
       flushParagraph();
       closeList();
       const math = [trimmed];
-      i += 1;
-      while (i < lines.length) {
-        math.push(lines[i]);
-        if (lines[i].trim() === "\\]") break;
+      if (!trimmed.endsWith("\\]")) {
         i += 1;
+        while (i < lines.length) {
+          math.push(lines[i]);
+          if (lines[i].trim().endsWith("\\]")) break;
+          i += 1;
+        }
       }
       html.push(`<div class="math-block">${escapeHtml(math.join("\n"))}</div>`);
       continue;
