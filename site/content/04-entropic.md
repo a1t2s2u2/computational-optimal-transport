@@ -6,10 +6,9 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 ---
 
 
-離散 Kantorovich 問題は線形計画として解ける．
-目的関数にエントロピー項を加えると，最適解は一意になり，
-行列スケーリングによって計算できる．この行列スケーリング反復を
-**Sinkhorn アルゴリズム**という．
+エントロピー正則化は，
+最適輸送問題にエントロピー項を加えることで問題を狭義凸化し，
+行列スケーリングの反復（Sinkhorn アルゴリズム）で効率的に解を得る手法である．
 
 以下，
 
@@ -183,15 +182,12 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 
 \(\varepsilon\) は，元の線形計画と独立カップリングの間を補間する量である：
 
-- \(\varepsilon\) が小さいほど，線形項 \(\inner{\mathbf{C}}{\mathbf{P}}\) が支配的になり，非正則化 OT に近づく．
-- \(\varepsilon\) が大きいほど，エントロピー項が支配的になり， 質量を広く分散させるカップリングに近づく．
-
-この意味で，エントロピー正則化は「疎な最適輸送計画」を
-「拡散した輸送計画」に滑らかに変形する操作である．
+- \(\varepsilon \to 0\) のとき，\(\mathbf{P}_\varepsilon\) は 非正則化問題 \(\MKD_{\mathbf{C}}\) の最適解のうち エントロピーが最大のものに収束する （[ref:定理: \(\varepsilon \to 0\) による非正則化 OT への収束|\(\varepsilon \to 0\) による非正則化 OT への収束]）．
+- \(\varepsilon \to +\infty\) のとき，\(\mathbf{P}_\varepsilon\) は 積測度 \(\mathbf{a} \mathbf{b}^\top\) に収束する （[ref:注意: \(\varepsilon \to +\infty\) による独立カップリングへの収束|\(\varepsilon \to +\infty\) による独立カップリングへの収束]）．
 :::
 
 
-## KL 射影としての定式化
+### KL ダイバージェンスによる定式化
 
 
 :::definition
@@ -273,257 +269,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 :::
 
 
-:::fact
-KL 射影という見方では，
-
-\[
- \text{Gibbs カーネル } \mathbf{K}
- \quad\longrightarrow\quad
- \text{周辺制約を満たす最近点 } \mathbf{P}_\varepsilon
-\]
-
-を KL ダイバージェンスで測っている．Sinkhorn アルゴリズムは，
-行和制約と列和制約への KL 射影を交互に行う反復として理解できる．
-:::
-
-
-## Sinkhorn アルゴリズム
-
-
-### 最適解のスケーリング形式
-
-
-:::theorem
-### 定理: スケーリング形式
-
-[ref:定義: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] の最適解
-\(\mathbf{P}_\varepsilon\) は，ある正ベクトル
-\(\mathbf{u} \in \R_{++}^{n}\)，\(\mathbf{v} \in \R_{++}^{m}\) により
-
-\[
- \mathbf{P}_\varepsilon
- =
- \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
-\]
-
-と表される．すなわち
-
-\[
- (P_\varepsilon)_{i,j} = u_i K_{i,j} v_j.
-\]
-
-:::details-embedded 証明
-ラグランジュ関数を
-
-\[
- \mathcal{L}(\mathbf{P},\mathbf{f},\mathbf{g})
- =
- \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
- - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
- - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
-\]
-
-とおく．[ref:命題: 正則化解の正値性|正則化解の正値性] より
-最適解では \(P_{i,j}>0\) であり，その点での一階条件は
-
-\[
- \frac{\partial \mathcal{L}}{\partial P_{i,j}}
- =
- C_{i,j} + \varepsilon\log P_{i,j} - f_i - g_j
- = 0
-\]
-
-である．したがって
-
-\[
- P_{i,j}
- =
- \exp\!\left(\frac{f_i}{\varepsilon}\right)
- \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
- \exp\!\left(\frac{g_j}{\varepsilon}\right).
-\]
-
-\(u_i \defeq \exp(f_i/\varepsilon)\)，
-\(v_j \defeq \exp(g_j/\varepsilon)\) とおけば，
-\(P_{i,j}=u_iK_{i,j}v_j\) を得る．
-:::
-:::
-
-
-:::fact
-### スケーリングの非一意性
-
-\(\lambda>0\) に対して
-\((\mathbf{u},\mathbf{v})\) を
-\((\lambda\mathbf{u},\lambda^{-1}\mathbf{v})\) に置き換えても
-\(\diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})\) は変わらない．
-したがってスケーリングベクトル自体は一意でないが，
-輸送計画 \(\mathbf{P}_\varepsilon\) は一意である．
-:::
-
-
-### 行列スケーリング反復
-
-
-スケーリング形式を周辺条件に代入すると，
-
-\[
- \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})\ones_m = \mathbf{a},
- \qquad
- \diag(\mathbf{v})\mathbf{K}^\top\diag(\mathbf{u})\ones_n = \mathbf{b}
-\]
-
-である．成分ごとに書けば
-
-\[
- \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
- \qquad
- \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}.
-\]
-
-したがって，一方を固定すれば他方は成分ごとの割り算で更新できる：
-
-\[
- \mathbf{u} \leftarrow \mathbf{a} \oslash (\mathbf{K}\mathbf{v}),
- \qquad
- \mathbf{v} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}).
-\]
-
-
-:::theorem
-### 定理: Sinkhorn 反復の収束
-
-\(\mathbf{K} \in \R_{++}^{n \times m}\) かつ
-\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\) のとき，
- が生成する輸送計画
-
-\[
- \mathbf{P}^{(\ell)}
- \defeq
- \diag(\mathbf{u}^{(\ell)})\mathbf{K}\diag(\mathbf{v}^{(\ell)})
-\]
-
-は，正則化問題の一意解 \(\mathbf{P}_\varepsilon\) に収束する．
-
-:::details-embedded 証明
-完全な証明には Hilbert 射影距離に関する Birkhoff の縮小定理を用いる．
-この定理は正行列が正錐の射影距離に関して縮小写像を誘導することを述べる．
-直感的には，各反復で行和制約と列和制約を交互に満たすように
-正の行列 \(\mathbf{K}\) をスケールし，正の行列の錐の中でこの操作が縮小写像として働くため，
-極限のスケーリング行列が一意に定まる．
-:::
-:::
-
-
-:::fact
-### 計算量と並列性
-
-Sinkhorn の1反復は
-\(\mathbf{K}\mathbf{v}\) と \(\mathbf{K}^\top\mathbf{u}\) の2つの行列ベクトル積であり，
-計算量は \(O(nm)\) である．ネットワーク単体法と異なり，反復の中心は密な線形代数演算なので，
-GPU やバッチ計算と相性がよい．
-:::
-
-
-## 対数領域 Sinkhorn
-
-
-小さい \(\varepsilon\) では
-\(K_{i,j}=\exp(-C_{i,j}/\varepsilon)\) が数値的に \(0\) に近くなり，
-通常の Sinkhorn 反復は不安定になりやすい．そのため実装では，
-スケーリングベクトルそのものではなく，双対ポテンシャル
-
-\[
- f_i \defeq \varepsilon \log u_i,
- \qquad
- g_j \defeq \varepsilon \log v_j
-\]
-
-を更新する．
-
-:::definition
-### 定義: ソフト最小値
-
-\(z_1,\ldots,z_m \in \R\) と \(\varepsilon>0\) に対し，
-**ソフト最小値**を
-
-\[
- \smin_\varepsilon(z_1,\ldots,z_m)
- \defeq
- -\varepsilon\log\left(\sum_{j=1}^{m} e^{-z_j/\varepsilon}\right)
-\]
-
-で定める．
-:::
-
-
-:::theorem
-### 命題: 対数領域の更新式
-
-Sinkhorn の更新は，双対ポテンシャル \((\mathbf{f},\mathbf{g})\) に対して
-
-\[
- f_i
- \leftarrow
- \varepsilon\log a_i
- +
- \smin_\varepsilon
- \bigl(C_{i,1}-g_1,\ldots,C_{i,m}-g_m\bigr),
-\]
-
-
-\[
- g_j
- \leftarrow
- \varepsilon\log b_j
- +
- \smin_\varepsilon
- \bigl(C_{1,j}-f_1,\ldots,C_{n,j}-f_n\bigr)
-\]
-
-と書ける．
-
-:::details-embedded 証明
-\(\mathbf{u} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v})\) の第 \(i\) 成分は
-
-\[
- u_i
- =
- \frac{a_i}{\sum_j \exp(-C_{i,j}/\varepsilon)\exp(g_j/\varepsilon)}.
-\]
-
-両辺の対数を取り \(\varepsilon\) を掛けると
-
-\[
- f_i
- =
- \varepsilon\log a_i
- -
- \varepsilon\log
- \sum_j \exp\!\left(-\frac{C_{i,j}-g_j}{\varepsilon}\right)
- =
- \varepsilon\log a_i
- +
- \smin_\varepsilon(C_{i,1}-g_1,\ldots,C_{i,m}-g_m).
-\]
-
-\(\mathbf{v}\) の更新も同様である．
-:::
-:::
-
-
-## 正則化の正当性
-
-
-エントロピー正則化の数学的な正当化は次の3点に集約される：
-
-\[
- \text{一意な解}
- \quad+\quad
- \text{Sinkhorn による計算}
- \quad+\quad
- \varepsilon \to 0 \text{ で元問題に戻ること}.
-\]
+### 正則化パラメータの極限
 
 
 :::theorem
@@ -598,58 +344,400 @@ Sinkhorn の更新は，双対ポテンシャル \((\mathbf{f},\mathbf{g})\) に
 :::
 
 
-:::theorem
-### 定理: \(\varepsilon \to +\infty\) による独立カップリングへの収束
+:::fact
+### \(\varepsilon \to +\infty\) による独立カップリングへの収束
 
-\(\varepsilon \to +\infty\) のとき，
-正則化問題の解は
+\(\varepsilon \to +\infty\) のとき
+\(\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top\) が成り立つ．
+\(\varepsilon\) で目的関数を割ると
+\(\varepsilon^{-1}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P})\)
+の最小化であり，\(\varepsilon \to +\infty\) では
+エントロピー最大化
+\(\max_{\mathbf{P} \in \CouplingsD} \Hb(\mathbf{P})\)
+に帰着する．周辺分布を固定したエントロピー最大化の解は
+独立カップリング \(\mathbf{a}\mathbf{b}^\top\) である．
+:::
+
+
+## Sinkhorn アルゴリズム
+
+
+### 最適解の構造
+
+
+:::theorem
+### 定理: スケーリング形式
+
+[ref:定義: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] の最適解
+\(\mathbf{P}_\varepsilon\) は，ある正ベクトル
+\(\mathbf{u} \in \R_{++}^{n}\)，\(\mathbf{v} \in \R_{++}^{m}\) により
 
 \[
- \mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top
+ \mathbf{P}_\varepsilon
+ =
+ \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
 \]
 
-に収束する．ここで
-\((\mathbf{a}\mathbf{b}^\top)_{i,j}=a_i b_j\) は，
-ソースとターゲットを独立に結合するカップリングである．
+と表される．すなわち
+
+\[
+ (P_\varepsilon)_{i,j} = u_i K_{i,j} v_j.
+\]
 
 :::details-embedded 証明
-\(\varepsilon\) で目的関数を割ると
+ラグランジュ関数を
 
 \[
- \frac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}
- - \Hb(\mathbf{P})
+ \mathcal{L}(\mathbf{P},\mathbf{f},\mathbf{g})
+ =
+ \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+ - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
+ - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
 \]
 
-を最小化していることになる．\(\varepsilon \to +\infty\) では
-第一項が消え，極限問題は
+とおく．[ref:命題: 正則化解の正値性|正則化解の正値性] より
+最適解では \(P_{i,j}>0\) であり，その点での一階条件は
 
 \[
- \max_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
- \Hb(\mathbf{P})
+ \frac{\partial \mathcal{L}}{\partial P_{i,j}}
+ =
+ C_{i,j} + \varepsilon\log P_{i,j} - f_i - g_j
+ = 0
 \]
 
-である．周辺分布を固定したとき，エントロピーを最大にする結合は
-独立カップリング \(\mathbf{a}\mathbf{b}^\top\) である．したがって
-\(\mathbf{P}_\varepsilon\) は \(\mathbf{a}\mathbf{b}^\top\) に収束する．
+である．したがって
+
+\[
+ P_{i,j}
+ =
+ \exp\!\left(\frac{f_i}{\varepsilon}\right)
+ \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
+ \exp\!\left(\frac{g_j}{\varepsilon}\right).
+\]
+
+\(u_i \defeq \exp(f_i/\varepsilon)\)，
+\(v_j \defeq \exp(g_j/\varepsilon)\) とおけば，
+\(P_{i,j}=u_iK_{i,j}v_j\) を得る．
 :::
+:::
+
+
+### Sinkhorn の反復
+
+
+スケーリング形式を周辺条件に代入すると，
+
+\[
+ \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
+ \qquad
+ \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}
+\]
+
+が得られる（\(\odot\) はアダマール積）．
+Sinkhorn アルゴリズムは，この2つの条件を交互に満たすよう
+\(\mathbf{u}\) と \(\mathbf{v}\) を更新する．
+
+
+各反復は行列ベクトル積 \(\mathbf{K}\mathbf{v}\) および \(\mathbf{K}^\top \mathbf{u}\) を
+計算するだけであり，計算量は \(O(nm)\) である．
+
+:::fact
+### Bregman 射影としての解釈
+
+Sinkhorn の各ステップは，KL ダイバージェンスに関する交互射影と解釈できる：
+
+\[\begin{aligned}
+ \mathbf{P}^{(\ell+1/2)}
+ &= \argmin_{\mathbf{P}\ones_m = \mathbf{a}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell)}),
+ \\
+ \mathbf{P}^{(\ell+1)}
+ &= \argmin_{\mathbf{P}^\top \ones_n = \mathbf{b}}
+ \KLD(\mathbf{P} \| \mathbf{P}^{(\ell+1/2)}).
+\end{aligned}\]
+
+行制約と列制約への KL 射影を交互に行うことに対応する．
 :::
 
 
 :::fact
-以上により，エントロピー正則化は
+### GPU 並列化
+
+複数の入力対 \((\mathbf{a}_1, \mathbf{b}_1), \ldots, (\mathbf{a}_N, \mathbf{b}_N)\) に対して
+同一コスト行列 \(\mathbf{C}\) のもとでの計算は，
+行列 \(\mathbf{A} = [\mathbf{a}_1, \ldots, \mathbf{a}_N]\)，
+\(\mathbf{B} = [\mathbf{b}_1, \ldots, \mathbf{b}_N]\) を用いて
 
 \[
- \varepsilon \to 0
- \quad\Longrightarrow\quad
- \text{非正則化 OT},
- \qquad
- \varepsilon \to +\infty
- \quad\Longrightarrow\quad
- \text{独立カップリング}
+ \mathbf{U}^{(\ell+1)} = \mathbf{A} \oslash (\mathbf{K} \mathbf{V}^{(\ell)}), \qquad
+ \mathbf{V}^{(\ell+1)} = \mathbf{B} \oslash (\mathbf{K}^\top \mathbf{U}^{(\ell+1)})
 \]
 
-という2つの極限を持つ．実用上は，小さすぎる \(\varepsilon\) は数値不安定を招き，
-大きすぎる \(\varepsilon\) は輸送構造をぼかしすぎる．
-したがって \(\varepsilon\) は「計算安定性」と「非正則化 OT への近さ」の
-トレードオフを制御するパラメータである．
+と行列--行列積でバッチ化でき，GPU 上で効率的に実行できる．
+:::
+
+
+## 収束性
+
+
+Sinkhorn アルゴリズムの収束は Hilbert 射影距離を用いて解析される．
+
+:::definition
+### 定義: Hilbert 射影距離
+
+正ベクトル \(\mathbf{u}, \mathbf{u}' \in \R_{++}^n\) に対して，
+**Hilbert 射影距離**を
+
+\[
+ d_{\mathrm{H}}(\mathbf{u}, \mathbf{u}')
+ \defeq \log \max_{i,j} \frac{u_i \, u'_j}{u_j \, u'_i}
+\]
+
+で定義する．\(d_{\mathrm{H}}(\mathbf{u}, \mathbf{u}') = 0\) は
+\(\mathbf{u}\) と \(\mathbf{u}'\) が定数倍の関係にあることと同値であり，
+射影空間 \(\R_{++}^n / {\sim}\) 上の距離となる．
+:::
+
+
+:::theorem
+### 定理: Birkhoff の縮小定理
+
+正行列 \(\mathbf{K} \in \R_{++}^{n \times m}\) に対して，
+任意の \(\mathbf{v}, \mathbf{v}' \in \R_{++}^m\) について
+
+\[
+ d_{\mathrm{H}}(\mathbf{K}\mathbf{v},\, \mathbf{K}\mathbf{v}')
+ \leq \lambda(\mathbf{K}) \, d_{\mathrm{H}}(\mathbf{v},\, \mathbf{v}')
+\]
+
+が成り立つ．ここで **Birkhoff 縮小率**
+\(\lambda(\mathbf{K}) \in [0, 1)\) は
+
+\[
+ \lambda(\mathbf{K})
+ = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1},
+ \qquad
+ \eta(\mathbf{K})
+ = \max_{i,j,k,\ell}
+ \frac{K_{i,k} \, K_{j,\ell}}{K_{j,k} \, K_{i,\ell}}
+\]
+
+で定義される．Gibbs カーネル \(K_{i,j} = e^{-C_{i,j}/\varepsilon}\) に対しては
+\(\eta(\mathbf{K}) = e^{2\norm{\mathbf{C}}_\infty / \varepsilon}\) であり，
+\(\varepsilon\) が大きいほど \(\lambda(\mathbf{K})\) は小さくなる（収束が速い）．
+:::
+
+
+:::theorem
+### 命題: Sinkhorn の線形収束
+
+のスケーリングベクトルは，
+Hilbert 距離の意味で最適スケーリング \((\mathbf{u}^*, \mathbf{v}^*)\) に線形収束する：
+
+\[
+ d_{\mathrm{H}}(\mathbf{u}^{(\ell)}, \mathbf{u}^*)
+ = O(\lambda(\mathbf{K})^{2\ell}).
+\]
+
+停止条件としては，周辺分布の制約違反
+\(\norm{\mathbf{P}^{(\ell)} \ones_m - \mathbf{a}}_1\) の監視が実用的である．
+:::
+
+
+## 数値安定性と対数領域計算
+
+
+\(\varepsilon\) が小さいとき，Gibbs カーネルの成分 \(K_{i,j} = e^{-C_{i,j}/\varepsilon}\) は
+機械精度のアンダーフローを起こしうる．
+この問題は，**対数領域**（log-domain）で計算を行うことで回避できる．
+
+### 正則化問題の双対
+
+
+:::theorem
+### 命題: エントロピー正則化の双対問題
+
+エントロピー正則化された最適輸送の双対問題は
+
+\[
+ \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+ = \max_{\mathbf{f} \in \R^n,\, \mathbf{g} \in \R^m}
+ \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+ - \varepsilon \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}
+\]
+
+で与えられる．ここで \((\mathbf{f}, \mathbf{g})\) とスケーリング変数の関係は
+\(u_i = e^{f_i/\varepsilon}\)，\(v_j = e^{g_j/\varepsilon}\) である．
+
+:::details-embedded 証明
+[ref:定理: スケーリング形式|スケーリング形式] の証明における
+ラグランジュ関数に最適解 \(P_{i,j} = u_i K_{i,j} v_j\) を代入する．
+\(P_{i,j} = e^{(f_i + g_j - C_{i,j})/\varepsilon}\) なので
+
+\[\begin{aligned}
+ \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+ - \varepsilon\Hb(\mathbf{P}_\varepsilon)
+ &= \sum_{i,j} P_{i,j}(C_{i,j} + \varepsilon\log P_{i,j} - \varepsilon) \\
+ &= \sum_{i,j} P_{i,j}(f_i + g_j - \varepsilon) \\
+ &= \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
+ - \varepsilon \sum_{i,j} P_{i,j}.
+\end{aligned}\]
+
+\(\sum_{i,j} P_{i,j} = \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}\)
+を代入すれば結論を得る．
+:::
+:::
+
+
+### 対数領域 Sinkhorn
+
+
+双対変数 \(f_i = \varepsilon \log u_i\)，\(g_j = \varepsilon \log v_j\) を
+直接更新すれば，Gibbs カーネルの成分を陽に計算する必要がない．
+
+:::theorem
+### 命題: 対数領域の更新式
+
+Sinkhorn の更新は，双対ポテンシャル \((\mathbf{f},\mathbf{g})\) に対して
+
+\[
+ f_i
+ \leftarrow
+ \varepsilon\log a_i
+ +
+ \smin_\varepsilon
+ \bigl(C_{i,1}-g_1,\ldots,C_{i,m}-g_m\bigr),
+\]
+
+
+\[
+ g_j
+ \leftarrow
+ \varepsilon\log b_j
+ +
+ \smin_\varepsilon
+ \bigl(C_{1,j}-f_1,\ldots,C_{n,j}-f_n\bigr)
+\]
+
+と書ける．ここで \(\smin_\varepsilon\) は
+[ref:定義: ソフト最小値|ソフト最小値] のソフト最小値である．
+
+:::details-embedded 証明
+\(\mathbf{u} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v})\) の第 \(i\) 成分は
+
+\[
+ u_i
+ =
+ \frac{a_i}{\sum_j \exp(-C_{i,j}/\varepsilon)\exp(g_j/\varepsilon)}.
+\]
+
+両辺の対数を取り \(\varepsilon\) を掛けると
+
+\[
+ f_i
+ =
+ \varepsilon\log a_i
+ -
+ \varepsilon\log
+ \sum_j \exp\!\left(-\frac{C_{i,j}-g_j}{\varepsilon}\right)
+ =
+ \varepsilon\log a_i
+ +
+ \smin_\varepsilon(C_{i,1}-g_1,\ldots,C_{i,m}-g_m).
+\]
+
+\(\mathbf{v}\) の更新も同様である．
+:::
+:::
+
+
+### ソフト最小値と log-sum-exp
+
+
+:::definition
+### 定義: ソフト最小値
+
+\(z_1,\ldots,z_m \in \R\) と \(\varepsilon>0\) に対し，
+**ソフト最小値**を
+
+\[
+ \smin_\varepsilon(z_1,\ldots,z_m)
+ \defeq
+ -\varepsilon\log\left(\sum_{j=1}^{m} e^{-z_j/\varepsilon}\right)
+\]
+
+で定める．\(\varepsilon \to 0\) のとき
+\(\smin_\varepsilon \mathbf{z} \to \min_j z_j\) となる．
+:::
+
+
+:::fact
+### log-sum-exp の安定化
+
+\(\smin_\varepsilon\) の計算では，指数関数のオーバーフローを避けるために
+**log-sum-exp トリック**を用いる：
+
+\[
+ \smin_\varepsilon \mathbf{z}
+ = \underline{z} - \varepsilon \log \sum_j e^{-(z_j - \underline{z})/\varepsilon},
+ \qquad \underline{z} = \min_j z_j.
+\]
+
+指数関数の引数が非正となるため，オーバーフローが回避される．
+:::
+
+
+## 正則化された輸送コストの近似
+
+
+\(\MKD_{\mathbf{C}}^\varepsilon\) は正則化によりバイアスを含む．
+双対変数から非正則化コスト \(\MKD_{\mathbf{C}}\) の近似が得られる．
+
+:::theorem
+### 命題: 双対変数からの下界
+
+エントロピー正則化問題の最適双対変数 \((\mathbf{f}^*, \mathbf{g}^*)\) は
+非正則化問題の双対実行可能集合 \(\PotentialsD(\mathbf{C})\) に属し，
+
+\[
+ \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+ \leq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+\]
+
+が成り立つ．
+
+:::details-embedded 証明
+一階条件 \(f_i^* + g_j^* - C_{i,j} = \varepsilon \log P_{i,j}^*\) において
+\(P_{i,j}^* > 0\)（[ref:命題: 正則化解の正値性|正則化解の正値性]）であるから
+\(\log P_{i,j}^*\) は有限であり，特に \(f_i^* + g_j^* \leq C_{i,j}\) が
+任意の \((i,j)\) で成り立つ．
+したがって \((\mathbf{f}^*, \mathbf{g}^*) \in \PotentialsD(\mathbf{C})\) であり，
+非正則化問題の弱双対性から下界が従う．
+:::
+:::
+
+
+これを利用して，2種類の **Sinkhorn ダイバージェンス**を定義する：
+
+\[\begin{aligned}
+ \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{dual}}(\mathbf{a}, \mathbf{b})
+ &\defeq \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
+ &&(\text{下界}),
+ \\
+ \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{primal}}(\mathbf{a}, \mathbf{b})
+ &\defeq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+ &&(\text{上界}).
+\end{aligned}\]
+
+両者の差は
+\(\mathrm{S}^{\varepsilon,\,\mathrm{primal}} - \mathrm{S}^{\varepsilon,\,\mathrm{dual}} = \varepsilon(\Hb(\mathbf{P}_\varepsilon) + 1)\)
+であり，\(\varepsilon \to 0\) で消失する．
+
+:::fact
+### \((\mathbf{a}, \mathbf{b})\) に関する凸性
+
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) は \((\mathbf{a}, \mathbf{b})\) に関して
+凸であり，\(\varepsilon > 0\) のとき微分可能で
+\(\nabla_{\mathbf{a}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{f}^*\)，
+\(\nabla_{\mathbf{b}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{g}^*\)
+が成り立つ．この性質は Wasserstein 重心の計算などで重要である．
 :::

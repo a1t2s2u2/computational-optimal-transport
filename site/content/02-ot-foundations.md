@@ -430,30 +430,7 @@ Monge 問題の実行可能集合
 :::
 
 
-:::theorem
-### 主張: 離散カップリング集合は凸多面体
-
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸多面体（[ref:定義: 凸多面体|凸多面体]）をなす．
-
-:::details-embedded 証明
-\(\mathbf{P} \in \R^{n \times m}\) を列方向に並べたベクトル
-\(\mathbf{p} \in \R^{nm}\) を考えると，
-周辺条件 \(\mathbf{P}\ones_m = \mathbf{a}\)，\(\mathbf{P}^\top \ones_n = \mathbf{b}\)
-はある行列 \(\mathbf{A} \in \R^{(n+m) \times nm}\) と
-\(\mathbf{r} \defeq [\mathbf{a}^\top, \mathbf{b}^\top]^\top \in \R^{n+m}\) を用いて
-\(\mathbf{A}\mathbf{p} = \mathbf{r}\) と書ける（具体的構成は
-）．したがって
-
-\[
- \CouplingsD(\mathbf{a}, \mathbf{b})
- \;\cong\;
- \{\mathbf{p} \in \R^{nm} \mid
- \mathbf{A}\mathbf{p} = \mathbf{r},\; \mathbf{p} \geq \mathbf{0}\}
-\]
-
-であり，これは凸多面体の[ref:定義: 凸多面体|凸多面体]の形である．
-:::
-:::
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は線形等式制約と非負制約で定まるから凸集合である．
 
 
 :::theorem
@@ -501,45 +478,6 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 
 
 これは \(nm\) 個の変数と \(n + m\) 本の等式制約を持つ有限次元の線形計画である．
-
-:::fact accent
-### 例: Monge 写像が存在しない場合の解消
-
-[ref:例: Monge 写像が存在しない場合|Monge 写像が存在しない場合] では
-\(\alpha = \delta_0\)，\(\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1\)
-に対して Monge 写像が存在しないことを見た．
-Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の枠組みで考え直す．
-
-離散表現は \(\mathbf{a} = (1)\)，\(\mathbf{b} = (1/2,\; 1/2)\) であり，
-カップリング \(\mathbf{P} \in \R_+^{1 \times 2}\) は
-\(\mathbf{P}\ones_2 = 1\)，\(\mathbf{P}^\top \ones_1 = \mathbf{b}\)
-を満たす必要がある．行が1つしかないため \(P_{1,j} = b_j\) が強制され，
-
-\[
- \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
-\]
-
-が唯一の実行可能カップリングである．
-コスト \(c(x,y) = |x - y|\) から
-\(\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)\) であり，
-最適値は
-
-\[
- \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
- = \inner{\mathbf{C}}{\mathbf{P}}
- = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
-\]
-
-Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
-実行可能解が存在し，最適値が定まる．
-:::
-
-
-**解の存在．**
-
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸多面体
-（[ref:主張: 離散カップリング集合は凸多面体|離散カップリング集合は凸多面体]）をなす．
-有界閉集合上の連続関数は最小値を達成するから，下限は最小値となり最適解が存在する．
 
 :::theorem
 ### 主張: 離散 Kantorovich 問題の解の存在
@@ -615,7 +553,7 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 **凸性．**
 \(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
 \(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) は
-[ref:主張: 離散カップリング集合は凸多面体|離散カップリング集合は凸多面体] の凸性から
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性から
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) に属し，
 
 \[
@@ -640,45 +578,6 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 \(S^* = \CouplingsD(\mathbf{a}, \mathbf{b}) \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
 はコンパクト集合と閉集合の共通部分．
 :::
-:::
-
-
-目的関数が線形であるため，有界凸多面体上の最小値は
-頂点（端点）で達成される：
-
-:::theorem
-### 主張: 頂点での最適解の達成
-
-\(S^*\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) の
-頂点を少なくとも1つ含む．
-
-:::details-embedded 証明
-[ref:主張: 最適解集合は輸送多面体の面をなす|最適解集合は輸送多面体の面をなす] より
-\(S^*\) は凸多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\)
-の空でない面であり，それ自身も凸多面体をなすから頂点を持つ．
-\(\mathbf{P}^*\) を \(S^*\) の頂点とし，
-\(\mathbf{P}^* = t\mathbf{P} + (1-t)\mathbf{Q}\)
-（\(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)，
-\(t \in (0,1)\)）と書けたとする．
-面の性質から \(\mathbf{P}, \mathbf{Q} \in S^*\)．
-\(\mathbf{P}^*\) は \(S^*\) の頂点であるから
-\(\mathbf{P} = \mathbf{Q} = \mathbf{P}^*\)．
-よって \(\mathbf{P}^*\) は
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の頂点でもある．
-:::
-:::
-
-
-:::fact
-### 最適輸送計画のスパース性
-
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の頂点は
-非零成分を高々 \(n + m - 1\) 個しか持たない
-（
-[ref:命題: 頂点の木構造|頂点の木構造]）．
-全成分数 \(nm\) と比べ，
-[ref:主張: 頂点での最適解の達成|頂点での最適解の達成] が保証する
-頂点最適解は大幅にスパースである．
 :::
 
 
@@ -727,65 +626,11 @@ Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
 :::
 
 
-:::fact
-### エントロピー正則化による一意性の回復
-
-離散 Kantorovich 問題の非一意性は
-目的関数 \(\inner{\mathbf{C}}{\mathbf{P}}\) の線形性に由来する．
-で導入する
-エントロピー正則化
-
-\[
- \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
- \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
-\]
-
-では，\(\varepsilon > 0\) のとき目的関数が
-狭義凸（[ref:定義: 凸関数と狭義凸関数|凸関数と狭義凸関数]）となるため，
-最適解は常に一意に定まる
-（[ref:命題: 正則化問題の解の存在と一意性|正則化問題の解の存在と一意性]）．
-これは計算上の利点
-（Sinkhorn アルゴリズムの収束先が一意）
-だけでなく，理論上も解の選択の曖昧さを解消する意義を持つ．
-:::
-
-
-**連続版の存在．**
-
-
-:::fact
-### Polish 空間上の Kantorovich 問題の解の存在
-
-\(\X, \Y\) が Polish 空間で
-コスト関数 \(c \colon \X \times \Y \to [0, +\infty]\) が
-下半連続であるとき，
-Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の下限は
-最小値として達成される：
-
-\[
- \MK_c(\alpha, \beta)
- = \min_{\pi \in \Couplings(\alpha, \beta)}
- \int_{\X \times \Y} c(x, y) \, \d\pi(x, y).
-\]
-
-証明は以下の4段階による：
-
-1. \(\Couplings(\alpha, \beta)\) は確率測度の 弱収束の位相で**緊密**（tight）である． 周辺 \(\alpha, \beta\) がそれぞれ Polish 空間上で緊密であることから， 任意の \(\varepsilon > 0\) に対して コンパクト集合 \(K_\X \times K_\Y \subset \X \times \Y\) で \(\sup_{\pi \in \Couplings(\alpha, \beta)} \pi((\X \times \Y) \setminus (K_\X \times K_\Y)) < \varepsilon\) とできる．
-2. **Prokhorov の定理**により， Polish 空間上の緊密な確率測度族は弱位相で相対コンパクトである．
-3. \(\Couplings(\alpha, \beta)\) は弱位相で閉集合であるから （弱収束の極限は周辺条件を保存するため）， 相対コンパクトかつ閉 = コンパクト．
-4. 下半連続コスト汎関数 \(\pi \mapsto \int c \, \d\pi\) は弱収束に関して下半連続であり， 空でないコンパクト集合上で最小値を達成する．
-
-詳細は C. Villani,
-*Optimal Transport: Old and New*, Springer, 2009, Chapter 4 を参照．
-:::
-
-
 ## Kantorovich 双対
 
 
 Kantorovich 問題は線形計画であり，双対問題を持つ．
 離散版では有限次元線形計画の双対性により双対問題を完全に導出できる．
-連続版では，双対制約を整理する操作として \(c\)-変換が現れる．
 
 ### 離散版の双対問題
 
@@ -996,65 +841,4 @@ Kantorovich 問題は線形計画であり，双対問題を持つ．
 [ref:定理: Kantorovich 双対定理（離散版）|Kantorovich 双対定理（離散版）] の双対問題で
 \(\mathbf{g}\) を消去すれば結論を得る．
 :::
-:::
-
-
-### 連続版の \(c\)-変換
-
-
-離散 \(C\)-変換では，有限個の候補に対して
-\(\min_i(C_{i,j} - f_i)\) を取った．連続版では，添字 \(i\) が点
-\(x \in \X\) に置き換わり，最小値ではなく下限を取る．
-
-:::definition
-### 定義: \(c\)-変換
-
-\(\X, \Y\) を集合，\(c \colon \X \times \Y \to \R \cup \{+\infty\}\)
-をコスト関数とする．関数 \(f \colon \X \to \R \cup \{-\infty\}\) に対して，
-\(f\) の**\(c\)-変換** \(f^c \colon \Y \to \R \cup \{-\infty\}\) を
-
-\[
- f^c(y)
- \defeq
- \inf_{x \in \X} \bigl(c(x,y) - f(x)\bigr)
- \qquad (y \in \Y)
-\]
-
-で定める．同様に，\(g \colon \Y \to \R \cup \{-\infty\}\) に対して
-
-\[
- g^{\bar c}(x)
- \defeq
- \inf_{y \in \Y} \bigl(c(x,y) - g(y)\bigr)
- \qquad (x \in \X)
-\]
-
-を**\(\bar c\)-変換**という．
-:::
-
-
-:::fact
-### 連続版双対の形
-
-連続版でも，双対制約は
-
-\[
- f(x) + g(y) \leq c(x,y)
- \qquad (\forall\, x \in \X,\; y \in \Y)
-\]
-
-である．固定した \(f\) に対して制約を満たす最大の \(g\) は
-\(g = f^c\) で与えられるので，形式的には
-
-\[
- \MK_c(\alpha,\beta)
- =
- \sup_f
- \left\{
- \int_\X f \,\d\alpha + \int_\Y f^c \,\d\beta
- \right\}
-\]
-
-という半双対が現れる．この等式を厳密な定理として述べるには，
-\(f, g\) の可積分性や \(c\) の正則性に関する仮定が必要である．
 :::

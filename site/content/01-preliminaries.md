@@ -621,18 +621,3 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 が成り立つとき，\(f\) は**狭義凸関数**であるという．
 :::
-
-
-:::definition
-### 定義: 凸多面体
-
-行列 \(\mathbf{A} \in \R^{k \times d}\) とベクトル \(\mathbf{b} \in \R^k\) に対して，
-線形等式・不等式制約で定まる \(\R^d\) の部分集合
-
-\[
- \{\mathbf{x} \in \R^d \mid
- \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\}
-\]
-
-を**凸多面体**という．凸多面体は凸集合である．
-:::
