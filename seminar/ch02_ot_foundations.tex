@@ -659,37 +659,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
 
 これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画である．
 
-\begin{example}{Monge 写像が存在しない場合の解消}{sem-kantorovich-resolve}
-  例~\ref{ex:sem-monge-noexist} では
-  $\alpha = \delta_0$，$\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
-  に対して Monge 写像が存在しないことを見た．
-  Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の枠組みで考え直す．
-
-  離散表現は $\mathbf{a} = (1)$，$\mathbf{b} = (1/2,\; 1/2)$ であり，
-  カップリング $\mathbf{P} \in \R_+^{1 \times 2}$ は
-  $\mathbf{P}\ones_2 = 1$，$\mathbf{P}^\top \ones_1 = \mathbf{b}$
-  を満たす必要がある．行が1つしかないため $P_{1,j} = b_j$ が強制され，
-  \[
-    \mathbf{P} = \begin{pmatrix} 1/2 & 1/2 \end{pmatrix}
-  \]
-  が唯一の実行可能カップリングである．
-  コスト $c(x,y) = |x - y|$ から
-  $\mathbf{C} = (|0-(-1)|,\; |0-1|) = (1,\; 1)$ であり，
-  最適値は
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    = \inner{\mathbf{C}}{\mathbf{P}}
-    = 1 \cdot \tfrac{1}{2} + 1 \cdot \tfrac{1}{2} = 1.
-  \]
-  Monge 問題と異なり，質量分割を許す Kantorovich の枠組みでは
-  実行可能解が存在し，最適値が定まる．
-\end{example}
-
-\paragraph{解の存在．}
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体
-（主張~\ref{clm:sem-coupling-polytope}）をなす．
-有界閉集合上の連続関数は最小値を達成するから，下限は最小値となり最適解が存在する．
-
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
   任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
   （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
@@ -872,42 +841,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体
   だけでなく，理論上も解の選択の曖昧さを解消する意義を持つ．
 \end{remark}
 
-\paragraph{連続版の存在．}
-
-\begin{remark}{Polish 空間上の Kantorovich 問題の解の存在}{sem-continuous-existence}
-  $\X, \Y$ が Polish 空間で
-  コスト関数 $c \colon \X \times \Y \to [0, +\infty]$ が
-  下半連続であるとき，
-  Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の下限は
-  最小値として達成される：
-  \[
-    \MK_c(\alpha, \beta)
-    = \min_{\pi \in \Couplings(\alpha, \beta)}
-    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y).
-  \]
-  証明は以下の4段階による：
-  \begin{enumerate}
-    \item $\Couplings(\alpha, \beta)$ は確率測度の
-          弱収束の位相で\textbf{緊密}（tight）である．
-          周辺 $\alpha, \beta$ がそれぞれ Polish 空間上で緊密であることから，
-          任意の $\varepsilon > 0$ に対して
-          コンパクト集合 $K_\X \times K_\Y \subset \X \times \Y$ で
-          $\sup_{\pi \in \Couplings(\alpha, \beta)}
-          \pi((\X \times \Y) \setminus (K_\X \times K_\Y)) < \varepsilon$
-          とできる．
-    \item \textbf{Prokhorov の定理}により，
-          Polish 空間上の緊密な確率測度族は弱位相で相対コンパクトである．
-    \item $\Couplings(\alpha, \beta)$ は弱位相で閉集合であるから
-          （弱収束の極限は周辺条件を保存するため），
-          相対コンパクトかつ閉 = コンパクト．
-    \item 下半連続コスト汎関数
-          $\pi \mapsto \int c \, \d\pi$ は弱収束に関して下半連続であり，
-          空でないコンパクト集合上で最小値を達成する．
-  \end{enumerate}
-  詳細は C.~Villani,
-  \textit{Optimal Transport: Old and New}, Springer, 2009, Chapter~4 を参照．
-\end{remark}
-
 %% ============================================================
 %% Kantorovich 双対
 %% ============================================================
@@ -916,7 +849,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸多面体
 
 Kantorovich 問題は線形計画であり，双対問題を持つ．
 離散版では有限次元線形計画の双対性により双対問題を完全に導出できる．
-連続版では，双対制約を整理する操作として $c$-変換が現れる．
 
 \subsection{離散版の双対問題}
 
@@ -1086,49 +1018,3 @@ Kantorovich 問題は線形計画であり，双対問題を持つ．
   $\mathbf{g}$ を消去すれば結論を得る．
 \end{proof}
 
-\subsection{連続版の $c$-変換}
-\label{subsec:sem-continuous-c-transform}
-
-離散 $C$-変換では，有限個の候補に対して
-$\min_i(C_{i,j} - f_i)$ を取った．連続版では，添字 $i$ が点
-$x \in \X$ に置き換わり，最小値ではなく下限を取る．
-
-\begin{definition}{$c$-変換}{sem-c-transform}
-  $\X, \Y$ を集合，$c \colon \X \times \Y \to \R \cup \{+\infty\}$
-  をコスト関数とする．関数 $f \colon \X \to \R \cup \{-\infty\}$ に対して，
-  $f$ の\textbf{$c$-変換} $f^c \colon \Y \to \R \cup \{-\infty\}$ を
-  \[
-    f^c(y)
-    \defeq
-    \inf_{x \in \X} \bigl(c(x,y) - f(x)\bigr)
-    \qquad (y \in \Y)
-  \]
-  で定める．同様に，$g \colon \Y \to \R \cup \{-\infty\}$ に対して
-  \[
-    g^{\bar c}(x)
-    \defeq
-    \inf_{y \in \Y} \bigl(c(x,y) - g(y)\bigr)
-    \qquad (x \in \X)
-  \]
-  を\textbf{$\bar c$-変換}という．
-\end{definition}
-
-\begin{remark}{連続版双対の形}{sem-continuous-dual-shape}
-  連続版でも，双対制約は
-  \[
-    f(x) + g(y) \leq c(x,y)
-    \qquad (\forall\, x \in \X,\; y \in \Y)
-  \]
-  である．固定した $f$ に対して制約を満たす最大の $g$ は
-  $g = f^c$ で与えられるので，形式的には
-  \[
-    \MK_c(\alpha,\beta)
-    =
-    \sup_f
-    \left\{
-      \int_\X f \,\d\alpha + \int_\Y f^c \,\d\beta
-    \right\}
-  \]
-  という半双対が現れる．この等式を厳密な定理として述べるには，
-  $f, g$ の可積分性や $c$ の正則性に関する仮定が必要である．
-\end{remark}
