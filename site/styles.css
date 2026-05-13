@@ -930,6 +930,38 @@ strong {
 }
 
 /* ==========================================================================
+   Figures
+   ========================================================================== */
+
+.fig {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.fig svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.fig figcaption {
+  margin-top: 0.5em;
+  font-size: 0.88em;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fig svg text {
+    fill: var(--ink);
+  }
+  .fig svg .stroke-ink {
+    stroke: var(--ink);
+  }
+}
+
+/* ==========================================================================
    Mobile Bottom Sheet (Dialog)
    ========================================================================== */
 

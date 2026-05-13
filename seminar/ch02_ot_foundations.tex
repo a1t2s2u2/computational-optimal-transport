@@ -400,6 +400,32 @@ Monge 問題の実行可能集合
   $\alpha$ と $\beta$ の\textbf{カップリング}という．
 \end{definition}
 
+\begin{remark}{周辺条件の意味}{sem-marginal-condition}
+  カップリングの条件 $(P_\X)\pushforward \pi = \alpha$ を具体的に展開する．
+  任意のボレル集合 $A \in \Bb(\X)$ をとる．
+  押し出しの定義（定義~\ref{def:sem-pushforward}）により
+  \[
+    \bigl((P_\X)\pushforward \pi\bigr)(A)
+    = \pi\bigl(P_\X^{-1}(A)\bigr).
+  \]
+  ここで $P_\X^{-1}(A)$ は射影 $P_\X$ の逆像であり，
+  \[
+    P_\X^{-1}(A)
+    = \{(x, y) \in \X \times \Y \mid P_\X(x, y) \in A\}
+    = \{(x, y) \in \X \times \Y \mid x \in A\}
+    = A \times \Y
+  \]
+  となる．したがって $(P_\X)\pushforward \pi = \alpha$ とは，
+  \[
+    \pi(A \times \Y) = \alpha(A)
+    \qquad (\forall\, A \in \Bb(\X))
+  \]
+  を意味する．すなわち，$\pi$ を $\Y$ 方向に「積分して潰す」と
+  $\X$ 上の測度 $\alpha$ が復元される．
+  同様に $(P_\Y)\pushforward \pi = \beta$ は
+  $\pi(\X \times B) = \beta(B)$（$\forall\, B \in \Bb(\Y)$）を意味する．
+\end{remark}
+
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=1.0]
