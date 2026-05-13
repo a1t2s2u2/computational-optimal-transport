@@ -199,7 +199,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 
 最適割当問題（定義~\ref{def:sem-assignment}）は有限の添字集合 $\range{n}$ と
 均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
-$(\X, d_\X)$, $(\Y, d_\Y)$ と任意の確率測度に拡張する：
+$\X, \Y$ と任意の確率測度に拡張する：
 \begin{center}
   \begin{tabular}{l|ll}
     & 最適割当問題 & Monge 問題 \\ \hline
@@ -212,8 +212,7 @@ $(\X, d_\X)$, $(\Y, d_\Y)$ と任意の確率測度に拡張する：
 これに基づく連続版の輸送問題が \textbf{Monge 問題}である．
 
 \begin{definition}{Monge 問題}{sem-monge}
-  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
-  $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
   \[
@@ -382,8 +381,15 @@ Monge 問題の実行可能集合
 \subsection{カップリング}
 
 \begin{definition}{カップリング}{sem-coupling}
-  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
+  $\X, \Y$ 上の確率測度
   $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ に対し，
+  射影
+  \[
+    P_\X \colon \X \times \Y \to \X,
+    \qquad
+    P_\Y \colon \X \times \Y \to \Y
+  \]
+  を用いて
   \[
     \Couplings(\alpha, \beta) \defeq
     \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
@@ -472,8 +478,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \subsection{Kantorovich 問題}
 
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
-  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
-  $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   $\alpha, \beta$ のカップリング
   $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）に
