@@ -10,19 +10,19 @@
   <style>
     :root {
       color-scheme: light dark;
-      --bg: #faf9f7; --paper: #fff; --ink: #1c1917; --ink-2: #44403c;
-      --muted: #78716c; --line: #e7e5e4;
-      --teal: #0d9488; --blue: #2563eb; --gray-path: #999;
-      --scene-bg: #faf9f7;
+      --bg: #000; --paper: #000; --ink: #e4e6ea; --ink-2: #9ca3af;
+      --muted: #6b7280; --line: #2a2f3a;
+      --teal: #2dd4bf; --blue: #60a5fa; --gray-path: #aaa;
+      --scene-bg: #000;
       --font-serif: "Noto Serif JP","Hiragino Mincho ProN",serif;
       --font-sans: system-ui,-apple-system,sans-serif;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0c0e14; --paper: #161a24; --ink: #e4e6ea; --ink-2: #9ca3af;
+        --bg: #000; --paper: #000; --ink: #e4e6ea; --ink-2: #9ca3af;
         --muted: #6b7280; --line: #2a2f3a;
         --teal: #2dd4bf; --blue: #60a5fa; --gray-path: #aaa;
-        --scene-bg: #0c0e14;
+        --scene-bg: #000;
       }
     }
     *, *::before, *::after { box-sizing: border-box; }
@@ -201,7 +201,7 @@ function initScene() {
   const w = wrap.clientWidth, h = wrap.clientHeight;
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(isDark ? 0x0c0e14 : 0xfaf9f7);
+  scene.background = new THREE.Color(0x000000);
 
   camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
   renderer = new THREE.WebGLRenderer({ antialias: true });

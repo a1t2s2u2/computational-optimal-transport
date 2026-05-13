@@ -2,38 +2,38 @@
 \label{ch:seminar-01}
 
 \begin{remark}{本章の設定}{sem-ch2-setup}
-  $\X, \Y$ は\textbf{完備可分な距離空間}（Polish 空間，
-  定義~\ref{def:sem-polish}）とする．距離関数を $d$ と書き，
+  $(\X, d_\X)$, $(\Y, d_\Y)$ は\textbf{完備可分な距離空間}（Polish 空間，
+  定義~\ref{def:sem-polish}）とする．
   ボレル $\sigma$-代数 $\Bb(\X)$ により $\X$ を可測空間 $(\X, \Bb(\X))$ として扱う
   （$\Y$ についても同様）．$\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．
 
   Polish 空間の3要素を確認する：
   \begin{itemize}
     \item \textbf{距離空間}．距離関数
-      $d \colon \X \times \X \to [0, \infty)$ が距離の公理
-      （定義~\ref{def:sem-metric-space}）を満たし，$d$ から以下が順次定まる：
+      $d_\X \colon \X \times \X \to [0, \infty)$ が距離の公理
+      （定義~\ref{def:sem-metric-space}）を満たし，$d_\X$ から以下が順次定まる：
       \begin{align*}
         B_r(x)
-          &\defeq \{y \in \X \mid d(x, y) < r\}
+          &\defeq \{y \in \X \mid d_\X(x, y) < r\}
           && \text{（開球，定義~\ref{def:sem-open-ball}）} \\
-        \mathcal{O}_d
+        \mathcal{O}_{d_\X}
           &\defeq \{U \subset \X \mid \forall x \in U,\,
             \exists r > 0,\, B_r(x) \subset U\}
           && \text{（開集合の全体）} \\
         \Bb(\X)
-          &\defeq \sigma(\mathcal{O}_d)
+          &\defeq \sigma(\mathcal{O}_{d_\X})
           && \text{（ボレル } \sigma\text{-代数，定義~\ref{def:sem-borel}）}
       \end{align*}
-      ここで $\sigma(\mathcal{O}_d)$ は，$\mathcal{O}_d$ を含む
+      ここで $\sigma(\mathcal{O}_{d_\X})$ は，$\mathcal{O}_{d_\X}$ を含む
       $\X$ 上のすべての $\sigma$-代数の共通部分
       \[
-        \sigma(\mathcal{O}_d)
+        \sigma(\mathcal{O}_{d_\X})
         \defeq \bigcap
         \bigl\{
           \mathcal{F} \subset 2^{\X}
           \;\big|\;
           \mathcal{F} \text{ は } \sigma\text{-代数, }
-          \mathcal{O}_d \subset \mathcal{F}
+          \mathcal{O}_{d_\X} \subset \mathcal{F}
         \bigr\}
       \]
       として定まる．これにより可測空間 $(\X, \Bb(\X))$
@@ -41,8 +41,8 @@
     \item \textbf{完備性}．
       列 $(x_n)_{n \geq 1} \subset \X$ が\textbf{Cauchy 列}であるとは，
       任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
-      $n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon$ が成り立つことをいう．
-      $(\X, d)$ が完備とは，任意の Cauchy 列 $(x_n) \subset \X$ が
+      $n, m \geq N \Longrightarrow d_\X(x_n, x_m) < \varepsilon$ が成り立つことをいう．
+      $(\X, d_\X)$ が完備とは，任意の Cauchy 列 $(x_n) \subset \X$ が
       $\X$ の点に収束する（定義~\ref{def:sem-convergence}）ことをいう．
       すなわち
       \[
@@ -55,15 +55,15 @@
         \exists x \in \X,\;
         \forall \varepsilon > 0,\;
         \exists N \in \N,\;
-        n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
+        n \geq N \Longrightarrow d_\X(x_n, x) < \varepsilon.
       \]
     \item \textbf{可分性}．
       $D \subset \X$ が\textbf{稠密}であるとは，任意の空でない開集合
       $U \subset \X$ に対し $D \cap U \neq \emptyset$ となることをいう
       （定義~\ref{def:sem-dense}）．
       距離空間ではこれは「任意の $x \in \X$ と任意の $\varepsilon > 0$ に対し
-      $\exists q \in D,\; d(x, q) < \varepsilon$」と同値．
-      $(\X, d)$ が可分とは可算な稠密部分集合 $D \subset \X$ が
+      $\exists q \in D,\; d_\X(x, q) < \varepsilon$」と同値．
+      $(\X, d_\X)$ が可分とは可算な稠密部分集合 $D \subset \X$ が
       存在することをいう（定義~\ref{def:sem-separable}）．すなわち
       \[
         \exists D \subset \X \text{ 可算},\;
@@ -199,7 +199,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 
 最適割当問題（定義~\ref{def:sem-assignment}）は有限の添字集合 $\range{n}$ と
 均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
-$\X, \Y$ と任意の確率測度に拡張する：
+$(\X, d_\X)$, $(\Y, d_\Y)$ と任意の確率測度に拡張する：
 \begin{center}
   \begin{tabular}{l|ll}
     & 最適割当問題 & Monge 問題 \\ \hline
@@ -212,7 +212,8 @@ $\X, \Y$ と任意の確率測度に拡張する：
 これに基づく連続版の輸送問題が \textbf{Monge 問題}である．
 
 \begin{definition}{Monge 問題}{sem-monge}
-  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
+  $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   \textbf{Monge 問題}とは
   \[
@@ -381,21 +382,16 @@ Monge 問題の実行可能集合
 \subsection{カップリング}
 
 \begin{definition}{カップリング}{sem-coupling}
-  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$
-  に対し，写像
-  \[
-    P_\X \colon \X \times \Y \to \X,\; (x, y) \mapsto x,
-    \qquad
-    P_\Y \colon \X \times \Y \to \Y,\; (x, y) \mapsto y
-  \]
-  を用いて，$\alpha$ と $\beta$ の\textbf{カップリング}の集合を
+  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
+  $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ に対し，
   \[
     \Couplings(\alpha, \beta) \defeq
     \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
     (P_\X)\pushforward \pi = \alpha, \;
     (P_\Y)\pushforward \pi = \beta \right\}
   \]
-  で定める．
+  と定め，$\Couplings(\alpha, \beta)$ の元を
+  $\alpha$ と $\beta$ の\textbf{カップリング}という．
 \end{definition}
 
 \begin{figure}[H]
@@ -476,7 +472,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \subsection{Kantorovich 問題}
 
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
-  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  Polish 空間 $(\X, d_\X)$, $(\Y, d_\Y)$ 上の確率測度
+  $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   $\alpha, \beta$ のカップリング
   $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）に
