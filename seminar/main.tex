@@ -63,6 +63,14 @@
   $\smin_\varepsilon$ & ソフト最小値 $-\varepsilon \log \sum_i e^{-z_i/\varepsilon}$ \\
 \end{tabular}
 
+\subsection*{VAE・リーマン幾何}
+\begin{tabular}{ll}
+  $\Zz$ & VAE の潜在空間 ($\cong \R^d$) \\
+  $G(z)$ & 点 $z$ におけるリーマン計量テンソル \\
+  $J_\mu(z)$ & デコーダ平均 $\mu_\theta$ のヤコビ行列 \\
+  $G_W(z)$ & Wasserstein 引き戻し計量テンソル \\
+\end{tabular}
+
 \vspace{1em}
 \hrule
 
@@ -70,5 +78,6 @@
 \input{ch02_ot_foundations}
 \input{ch03_algorithmic_foundations}
 \input{ch04_entropic_regularization}
+\input{ch05_vae_geodesic}
 
 \end{document}

@@ -1,0 +1,327 @@
+% ============================================================
+%  第5章  VAE 潜在空間のリーマン幾何と測地線
+% ============================================================
+\chapter{VAE 潜在空間のリーマン幾何と測地線}
+\label{ch:seminar-04-vae}
+
+変分オートエンコーダ (VAE) は，データ空間の複雑な分布を低次元の潜在空間で捉える
+生成モデルである．
+潜在空間上での「補間」はしばしば直線で行われるが，
+デコーダが誘導する幾何を無視した直線補間は，
+データ多様体から逸脱した不自然な中間表現を生む．
+本章では，
+デコーダの写像から\emph{引き戻し計量} (pullback metric) を構成して
+潜在空間にリーマン構造を与え，
+\emph{測地線}を計算することで幾何学的に意味のある補間を実現する枠組みを解説する．
+3 次元の潜在空間を用いて MNIST 上で実験的に検証し，
+測地線が直線補間に比べてデータ多様体に沿った自然な変形を与えることを示す．
+
+%% ==========================================================
+%%  5.1  リーマン多様体の基礎
+%% ==========================================================
+\section{リーマン多様体の基礎}
+\label{sec:sem-riemannian-basics}
+
+\begin{definition}{リーマン計量}{sem-riemannian-metric}
+  $d$ 次元滑らかな多様体 $\mathcal{Z}$ 上の各点 $z \in \mathcal{Z}$ に対し，
+  接空間 $T_z\mathcal{Z}$ 上の正定値対称双線型形式
+  $g_z \colon T_z\mathcal{Z} \times T_z\mathcal{Z} \to \R$
+  が $z$ に関して滑らかに変化するとき，
+  $g = \{g_z\}_{z \in \mathcal{Z}}$ を\textbf{リーマン計量}という．
+  座標表示では $d \times d$ の正定値対称行列 $G(z)$ により
+  \[
+    g_z(v, w) = v^\top G(z)\, w, \qquad v, w \in T_z\mathcal{Z}
+  \]
+  と書ける．
+\end{definition}
+
+\begin{definition}{曲線の長さとエネルギー}{sem-curve-length-energy}
+  滑らかな曲線 $\gamma \colon [0,1] \to \mathcal{Z}$ に対して，
+  \textbf{長さ}と\textbf{エネルギー}を
+  \begin{align}
+    L[\gamma] &\defeq \int_0^1 \sqrt{\dot{\gamma}(t)^\top G(\gamma(t))\, \dot{\gamma}(t)} \;\d t, \label{eq:curve-length} \\
+    E[\gamma] &\defeq \int_0^1 \dot{\gamma}(t)^\top G(\gamma(t))\, \dot{\gamma}(t) \;\d t \label{eq:curve-energy}
+  \end{align}
+  と定義する．
+  Cauchy--Schwarz 不等式より $L[\gamma]^2 \le E[\gamma]$ であり，
+  等号は $\gamma$ が\emph{等速パラメータ}（$\norm{\dot{\gamma}(t)}_g$ が定数）のとき
+  かつそのときに限り成立する．
+\end{definition}
+
+\begin{definition}{測地線}{sem-geodesic-def}
+  端点 $\gamma(0) = z_0$, $\gamma(1) = z_1$ を固定したとき，
+  エネルギー汎関数 $E[\gamma]$ を最小化する曲線を\textbf{測地線}という．
+  Euler--Lagrange 方程式から，測地線は
+  \begin{equation}
+    \ddot{\gamma}^i + \sum_{j,k} \Gamma^i_{jk}\, \dot{\gamma}^j \dot{\gamma}^k = 0,
+    \qquad i = 1, \ldots, d
+    \label{eq:geodesic-ode}
+  \end{equation}
+  を満たす．ここで $\Gamma^i_{jk}$ はクリストッフェル記号
+  \[
+    \Gamma^i_{jk}
+    = \frac{1}{2} \sum_l G^{il}
+      \Bigl(\frac{\partial G_{lj}}{\partial z^k}
+           + \frac{\partial G_{lk}}{\partial z^j}
+           - \frac{\partial G_{jk}}{\partial z^l}\Bigr)
+  \]
+  であり，$G^{il}$ は $G(z)$ の逆行列の $(i,l)$ 成分を表す．
+\end{definition}
+
+\begin{remark}{ユークリッド空間の測地線}{sem-euclidean-geodesic}
+  $G(z) = \Identity_d$（ユークリッド計量）のとき
+  $\Gamma^i_{jk} = 0$ となり，
+  測地線の ODE は $\ddot{\gamma} = 0$，すなわち
+  $\gamma(t) = (1-t)\, z_0 + t\, z_1$（直線）である．
+  一般のリーマン計量の下では測地線は曲がり，
+  計量の非一様性を反映した最短経路を描く．
+\end{remark}
+
+%% ==========================================================
+%%  5.2  引き戻し計量
+%% ==========================================================
+\section{引き戻し計量}
+\label{sec:sem-pullback-metric}
+
+\begin{definition}{引き戻し計量}{sem-pullback-def}
+  滑らかな写像 $f \colon \R^d \to \R^D$ ($D \ge d$) のヤコビ行列を
+  \[
+    J_f(z) \defeq \frac{\partial f}{\partial z}(z) \in \R^{D \times d}
+  \]
+  とする．$\R^D$ のユークリッド計量を $f$ で\textbf{引き戻す}ことで得られる
+  $\R^d$ 上のリーマン計量テンソルは
+  \begin{equation}
+    G(z) = J_f(z)^\top J_f(z)
+    \label{eq:pullback-metric}
+  \end{equation}
+  で与えられる．この計量の下での内積は
+  $\inner{v}{w}_z = v^\top J_f^\top J_f\, w = \inner{J_f v}{J_f w}_{\R^D}$
+  であり，潜在空間での微小変位の「出力空間での大きさ」を測る．
+\end{definition}
+
+\begin{proposition}{引き戻し計量の正定値性}{sem-pullback-pd}
+  $J_f(z)$ が列フルランク（$\rank J_f(z) = d$）ならば，
+  $G(z) = J_f(z)^\top J_f(z)$ は正定値である．
+\end{proposition}
+\begin{proof}
+  任意の $v \ne 0$ に対し $v^\top G(z)\, v = \norm{J_f(z)\, v}^2 > 0$
+  （$J_f$ が列フルランクなので $J_f v \ne 0$）．
+\end{proof}
+
+\begin{remark}{活性化関数の滑らかさ}{sem-smooth-activation}
+  ReLU $\sigma(x) = \max(0, x)$ は $x = 0$ で微分不可能であり，
+  ReLU を用いたネットワークのヤコビアンは不連続になりうる．
+  GELU や Softplus は $C^\infty$ 級の活性化関数であり，
+  ネットワークの合成関数としての滑らかさを保証する．
+  引き戻し計量の計算にはヤコビアンの連続性が不可欠であるため，
+  本章では GELU を採用する．
+\end{remark}
+
+%% ==========================================================
+%%  5.3  VAE の定式化
+%% ==========================================================
+\section{変分オートエンコーダ (VAE)}
+\label{sec:sem-vae-review}
+
+\begin{definition}{VAE の定式化}{sem-vae-formulation}
+  潜在変数 $z \in \R^d$ に対して，
+  以下の生成モデルと推論モデルを考える：
+  \begin{itemize}
+    \item \textbf{事前分布:} $p(z) = \mathcal{N}(0, \Identity_d)$
+    \item \textbf{デコーダ（生成モデル）:}
+      $p_\theta(x \mid z) = \mathcal{N}\bigl(\mu_\theta(z),\; \sigma_\theta(z)^2 \Identity_D\bigr)$
+    \item \textbf{エンコーダ（推論モデル）:}
+      $q_\phi(z \mid x) = \mathcal{N}\bigl(\mu_\phi(x),\; \diag(\sigma_\phi(x)^2)\bigr)$
+  \end{itemize}
+  ここで $\mu_\theta, \sigma_\theta, \mu_\phi, \sigma_\phi$ はニューラルネットワークで
+  パラメータ化される．VAE は，エビデンス下界 (ELBO)
+  \begin{equation}
+    \log p_\theta(x)
+    \ge \E_{q_\phi(z|x)}\bigl[\log p_\theta(x \mid z)\bigr]
+       - \KL\bigl(q_\phi(z \mid x) \;\|\; p(z)\bigr)
+    \label{eq:elbo}
+  \end{equation}
+  を最大化するように $\theta, \phi$ を同時に学習する．
+\end{definition}
+
+\begin{remark}{再パラメータ化トリック}{sem-reparameterization}
+  ELBO \eqref{eq:elbo} の勾配を計算するために，
+  $z = \mu_\phi(x) + \sigma_\phi(x) \odot \varepsilon$,
+  $\varepsilon \sim \mathcal{N}(0, \Identity_d)$
+  とサンプリングを再パラメータ化する．
+  これにより $\nabla_\phi \E_{q_\phi}[\cdot]$ がモンテカルロ推定可能になる．
+\end{remark}
+
+本章の実験では，入力 $x \in [0,1]^{784}$ (MNIST) に対して
+$d = 3$ 次元の潜在空間を用い，
+エンコーダ・デコーダとも 2 層の全結合ネットワーク（活性化は GELU）を採用する．
+デコーダは決定論的な平均写像 $f_\theta \colon \R^3 \to [0,1]^{784}$（Sigmoid 出力）とし，
+損失は二値交差エントロピー再構成誤差 + KL ダイバージェンスを用いる．
+
+%% ==========================================================
+%%  5.4  Wasserstein 拡張への展望
+%% ==========================================================
+
+\begin{remark}{Wasserstein 引き戻し計量}{sem-wasserstein-remark}
+  デコーダが確率分布
+  $p_\theta(x \mid z) = \mathcal{N}(\mu_\theta(z),\; \sigma_\theta(z)^2 \Identity_D)$
+  を出力するモデルでは，Roy--Hauberg (2022) に基づき
+  2-Wasserstein 距離から誘導される計量
+  $G_W(z) = J_\mu^\top J_\mu + D\, \nabla_z\sigma_\theta \cdot (\nabla_z\sigma_\theta)^\top$
+  が構成できる．
+  $\sigma_\theta$ が定数ならば $G_W = G$（標準引き戻し計量）に帰着する．
+  本章では決定論的デコーダを用いるため
+  標準引き戻し計量 $G(z) = J_f^\top J_f$ のみを扱う．
+\end{remark}
+
+%% ==========================================================
+%%  5.5  測地線の数値計算
+%% ==========================================================
+\section{測地線の数値計算}
+\label{sec:sem-geodesic-computation}
+
+測地線の ODE \eqref{eq:geodesic-ode} を直接解く方法（シューティング法）もあるが，
+クリストッフェル記号の計算には計量テンソルの逆行列と偏微分が必要であり，
+ニューラルネットワークのデコーダに対しては数値的に不安定になりうる．
+ここでは，曲線のエネルギー \eqref{eq:curve-energy} を直接最小化する
+\emph{離散エネルギー最小化法}を採用する．
+
+\begin{algorithm}{alg:sem-geodesic-energy}
+\textbf{入力:} 端点 $z_0, z_1 \in \R^d$，計量関数 $G$，
+中間点数 $K$，反復数 $N$，学習率 $\eta$
+
+\begin{enumerate}
+  \item $\{w_k\}_{k=1}^K$ を線形補間で初期化:
+    $w_k \gets z_0 + \frac{k}{K+1}(z_1 - z_0)$
+  \item パス構成: $\gamma_0 = z_0,\; \gamma_k = w_k\; (k=1,\ldots,K),\; \gamma_{K+1} = z_1$
+  \item $n = 1, \ldots, N$ に対して:
+    \begin{enumerate}
+      \item 離散エネルギー
+        $E = (K+1)\displaystyle\sum_{k=0}^{K}
+              (\gamma_{k+1} - \gamma_k)^\top
+              G\!\left(\frac{\gamma_k + \gamma_{k+1}}{2}\right)
+              (\gamma_{k+1} - \gamma_k)$
+        を計算
+      \item $\{w_k\}$ を $\nabla_{\{w_k\}} E$ の方向に学習率 $\eta$ で更新
+    \end{enumerate}
+\end{enumerate}
+
+\textbf{出力:} 測地線の離散近似 $(\gamma_0, \gamma_1, \ldots, \gamma_{K+1})$
+\end{algorithm}
+
+\begin{remark}{初期化と収束}{sem-geodesic-init}
+  中間点を線形補間で初期化することが収束にとって重要である．
+  ランダム初期化ではエネルギー関数の局所解に陥りやすく，
+  特にデータ多様体から大きく離れた領域で計量テンソルが
+  悪条件になりうる．
+  線形補間からの出発は「直線を計量に沿って徐々に変形する」
+  直感的なアプローチであり，実用上良好な収束を示す．
+\end{remark}
+
+%% ==========================================================
+%%  5.6  MNIST での実験
+%% ==========================================================
+\section{MNIST での実験}
+\label{sec:sem-mnist-experiment}
+
+\subsection{実験設定}
+\begin{itemize}
+  \item \textbf{データ:} MNIST 手書き数字（$28 \times 28 = 784$ 次元，60,000 訓練 / 10,000 テスト）
+  \item \textbf{潜在次元:} $d = 3$（3 次元空間での測地線の曲がりを視覚的に確認するため）
+  \item \textbf{エンコーダ:}
+    Linear(784, 512) $\to$ GELU $\to$ Linear(512, 256) $\to$ GELU
+    $\to$ 2 ヘッド: $\mu_\phi$ (256 $\to$ 3), $\log\sigma_\phi^2$ (256 $\to$ 3)
+  \item \textbf{デコーダ:}
+    Linear(3, 256) $\to$ GELU $\to$ Linear(256, 512) $\to$ GELU
+    $\to$ Linear(512, 784) $\to$ Sigmoid
+  \item \textbf{損失:} 二値交差エントロピー再構成 + KL ダイバージェンス
+  \item \textbf{学習:} Adam ($\eta = 10^{-3}$), バッチサイズ 128, 50 エポック
+  \item \textbf{計量:} 引き戻し計量 $G(z) = J_f(z)^\top J_f(z)$,
+    格子上（$20^3 = 8{,}000$ 点）で事前計算し三線形補間
+  \item \textbf{測地線:} $K = 30$ 中間点, L-BFGS-B による離散エネルギー最小化
+\end{itemize}
+
+\subsection{潜在空間の構造}
+
+図 \ref{fig:latent-scatter} にテストデータのエンコーダ平均 $\mu_\phi(x)$ を
+数字ラベルで色分けした 3 次元散布図を示す（2 つの視点角度から描画）．
+3 次元潜在空間では数字クラスごとの分離がより明確になるが，
+一部のクラス（例: 4 と 9，3 と 8）は依然として隣接している．
+クラス境界を横切る領域では計量テンソルが大きく変化し，
+測地線と直線補間の差異が顕著になる．
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{ch05_latent_scatter.pdf}
+  \caption{MNIST テストセットの 3 次元潜在空間表現（2 視点）．
+           各点はエンコーダ平均 $\mu_\phi(x)$ を示し，
+           数字ラベル ($0$--$9$) で色分けされている．}
+  \label{fig:latent-scatter}
+\end{figure}
+
+\subsection{測地線と直線補間の比較}
+
+3 組の数字ペア（$0 \to 1$，$3 \to 8$，$4 \to 9$）に対して，
+直線補間と引き戻し計量による測地線を計算した．
+図 \ref{fig:geodesic-paths} にこれらの経路を 3 次元潜在空間上に描画する．
+測地線のエネルギーは直線のエネルギーに対してそれぞれ
+$0 \to 1$ で 11.7\%，$3 \to 8$ で 4.8\% 低く，
+計量の非一様性を反映して曲がった経路が有利であることを確認できる．
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{ch05_geodesic_paths.pdf}
+  \caption{3 次元潜在空間における測地線と直線補間の比較（2 視点）．
+           灰色破線: 直線補間，青実線: 引き戻し計量 $G = J_f^\top J_f$ の測地線．
+           黒丸は端点（各数字クラスの重心最近傍点）を示す．}
+  \label{fig:geodesic-paths}
+\end{figure}
+
+図 \ref{fig:decoded-geodesic} に，
+数字ペア $0 \to 1$ に対する 2 種類の経路に沿ったデコード画像を示す．
+直線補間では途中でぼやけた画像や不自然な形状が現れうるのに対し，
+測地線に沿った補間はデータ多様体に沿って推移するため，
+より滑らかで自然な変形が得られる．
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{ch05_decoded_geodesic.pdf}
+  \caption{経路に沿ったデコード画像（$0 \to 1$）．
+           上段: 直線補間，下段: 引き戻し計量による測地線．
+           各行は $t = 0$ から $t = 1$ まで等間隔にサンプリングした点でのデコード結果．}
+  \label{fig:decoded-geodesic}
+\end{figure}
+
+\subsection{体積歪みの可視化}
+
+図 \ref{fig:metric-ellipses} に，
+テストデータの潜在空間位置における計量テンソルの体積要素
+$\sqrt{\det G(z)}$ を色で可視化した結果を示す．
+$\sqrt{\det G}$ が大きい領域はデコーダの感度が高く
+（微小変位が出力空間で大きな変化をもたらす），
+小さい領域は感度が低い．
+数字クラスの境界付近では計量が大きくなる傾向があり，
+測地線がこれらの高コスト領域を迂回するように曲がることの
+幾何学的な説明を与える．
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{ch05_metric_ellipses.pdf}
+  \caption{計量テンソルの体積歪み $\log\sqrt{\det G(z)}$（2 視点）．
+           色が明るい領域ほどデコーダの感度が高い．}
+  \label{fig:metric-ellipses}
+\end{figure}
+
+\subsection{考察}
+
+引き戻し計量 $G(z) = J_f(z)^\top J_f(z)$ の下での測地線は，
+デコーダ $f$ が感度の高い方向への移動コストを大きく見積もることで，
+直線補間に比べてデータ多様体に沿った自然な経路を与える．
+3 次元潜在空間を用いることで，測地線が直線から
+\emph{3 次元的に}逸れる様子が視覚的に確認でき，
+潜在空間のリーマン幾何構造をより直感的に理解できる．
+
+最適輸送の観点からは，
+潜在空間上の曲線をデコーダを通じた「画像の変形経路」と見なすことで，
+引き戻し計量のエネルギーがその変形の
+\emph{知覚的コスト}を近似しているという解釈が成り立つ．
