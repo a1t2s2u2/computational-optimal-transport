@@ -378,8 +378,6 @@ Monge 問題の実行可能集合
 \section{Kantorovich 緩和}
 \label{sec:sem-kantorovich}
 
-\subsection{カップリング}
-
 \begin{definition}{カップリング}{sem-coupling}
   $\X, \Y$ 上の確率測度
   $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ に対し，
@@ -499,15 +497,12 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \label{fig:sem-monge-vs-kantorovich}
 \end{figure}
 
-\subsection{Kantorovich 問題}
-
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
   $\alpha, \beta$ のカップリング
-  $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）に
-  わたって積分 $\int_{\X \times \Y} c(x, y) \, \d\pi(x, y)$ を
-  最小化する問題
+  $\pi \in \Couplings(\alpha, \beta)$（定義~\ref{def:sem-coupling}）にわたって
+  輸送コストを最小化する問題
   \[
     \MK_c(\alpha, \beta) \defeq
     \inf_{\pi \in \Couplings(\alpha, \beta)}
@@ -527,21 +522,44 @@ $\alpha, \beta$ がともに離散測度（定義~\ref{def:sem-discrete-measure}
 \]
 （相異なる $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
 $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$，
-$\sum_i a_i = \sum_j b_j = 1$）の場合を考え，行列
-$\mathbf{C} \in \R_+^{n \times m}$ の成分を $C_{i,j} \defeq c(x_i, y_j)$ で定める．
-このときカップリング集合 $\Couplings(\alpha, \beta)$ は有限次元の行列集合
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
-有限次元線形計画として書き直せる．以下，対応・最適化問題・解の存在を順に確かめる．
+$\sum_i a_i = \sum_j b_j = 1$）の場合を考える．
+コスト関数を離散化した行列
+$\mathbf{C} \in \R_+^{n \times m}$，$C_{i,j} \defeq c(x_i, y_j)$ を定めると，
+Kantorovich 問題の各要素は次のように有限次元へ帰着される：
+\begin{center}
+  \begin{tabular}{l|ll}
+    & 連続版 & 離散版 \\ \hline
+    カップリング集合
+      & $\Couplings(\alpha, \beta) \subset \Mm_+^1(\X \times \Y)$
+      & $\CouplingsD(\mathbf{a}, \mathbf{b}) \subset \R_+^{n \times m}$ \\
+    輸送コスト
+      & $\displaystyle\int_{\X \times \Y} c\, \d\pi$
+      & $\inner{\mathbf{C}}{\mathbf{P}}$ \\
+    最適化
+      & $\MK_c(\alpha, \beta)$
+      & $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$
+  \end{tabular}
+\end{center}
+以下，この対応を順に定式化する．
 
-\begin{claim}{離散カップリングの行列表示}{sem-discrete-coupling-form}
-  集合
+\subsubsection*{離散カップリング集合}
+
+\begin{definition}{離散カップリング集合（輸送多面体）}{sem-discrete-coupling}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
     \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
     \mathbf{P} \ones_m = \mathbf{a},\;
     \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
   \]
-  に対し，写像
+  を $\mathbf{a}$ と $\mathbf{b}$ の\textbf{離散カップリング集合}（\textbf{輸送多面体}）という．
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約と非負制約で定まるから凸集合である．
+\end{definition}
+
+成分 $P_{i,j}$ は「$x_i$ から $y_j$ へ運ぶ質量」を表し，
+行和・列和の制約がそれぞれ供給 $\mathbf{a}$ と需要 $\mathbf{b}$ に一致する．
+
+\begin{claim}{離散カップリングの行列表示}{sem-discrete-coupling-form}
+  写像
   \[
     \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
     \qquad
@@ -591,8 +609,6 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ と同一視でき，Kantorovich 問題は
   ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$．
 \end{proof}
 
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約と非負制約で定まるから凸集合である．
-
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=1.0]
@@ -629,26 +645,19 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約と非負制約で定
 \label{fig:sem-coupling-matrix}
 \end{figure}
 
-\begin{claim}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
-  Claim~\ref{clm:sem-discrete-coupling-form} の対応 $\Phi$ で
-  $\pi = \Phi(\mathbf{P})$ と書くと
+\subsubsection*{輸送コストの離散化}
+
+Claim~\ref{clm:sem-discrete-coupling-form} の全単射 $\Phi$ で
+$\pi = \Phi(\mathbf{P})$ と書くと，輸送コストはフロベニウス内積に帰着される：
+
+\begin{claim}{輸送コストの行列表示}{sem-cost-matrix-form}
   \[
-    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y) = \inner{\mathbf{C}}{\mathbf{P}}
+    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y) = \inner{\mathbf{C}}{\mathbf{P}}.
   \]
-  が成り立つ．したがって連続版 Kantorovich 問題
-  （定義~\ref{def:sem-kantorovich}）の下限は\textbf{離散 Kantorovich 問題}
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    \defeq
-    \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
-  \]
-  に等しい：$\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$．
 \end{claim}
 
 \begin{proof}
-  Claim~\ref{clm:sem-discrete-coupling-form} より
-  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$．
+  $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ に対し，
   測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
   Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
   \begin{align*}
@@ -660,11 +669,24 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約と非負制約で定
     &= \sum_{i,j} C_{i,j} P_{i,j}
       = \inner{\mathbf{C}}{\mathbf{P}}.
   \end{align*}
-  $\Phi$ の全単射性から $\pi \in \Couplings(\alpha, \beta)$ にわたる下限と
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ にわたる下限は等しい．
 \end{proof}
 
-これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画である．
+\subsubsection*{離散 Kantorovich 問題}
+
+$\Phi$ の全単射性から，$\pi \in \Couplings(\alpha, \beta)$ にわたる下限は
+$\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ にわたる下限に等しい．
+
+\begin{definition}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
+  \[
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+    \defeq
+    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+    = \MK_c(\alpha, \beta)
+  \]
+  を\textbf{離散 Kantorovich 問題}という．
+  これは $nm$ 個の変数と $n + m$ 本の等式制約を持つ有限次元の線形計画である．
+\end{definition}
 
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
   任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
