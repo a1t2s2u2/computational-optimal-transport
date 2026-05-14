@@ -395,11 +395,11 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 
 に帰着される：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
 この有限次元問題を**離散 Kantorovich 問題**という．
-成分 \(P_{i,j}\) は「\(x_i\) から \(y_j\) へ運ぶ質量」を表し，
-行和・列和の制約がそれぞれ供給 \(\mathbf{a}\) と需要 \(\mathbf{b}\) に一致する．
 
 :::details-embedded 証明
-写像
+離散カップリング集合の各行列
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対し，
+\(\X \times \Y\) 上の測度を対応させる写像 \(\Phi\) を
 
 \[
  \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
@@ -407,9 +407,10 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
  \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
 \]
 
-が全単射であり，コストを保つことを示す．
+で定義する．\(\Phi\) が全単射かつコストを保つことを示せば，
+両問題の最適値の一致が従う．
 
-**(i) \(\Phi(\mathbf{P**) \in \Couplings(\alpha, \beta)\).}
+**(i)** \(\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)\).
 \(\Phi(\mathbf{P})(\X \times \Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1\) より
 \(\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)\)．
 単点 \(\{x_k\}\) について

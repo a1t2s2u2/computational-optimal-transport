@@ -380,7 +380,7 @@ function mathJaxScript() {
             Cc: "\\\\mathcal{C}",
             Pp: "\\\\mathcal{P}",
             Couplings: "\\\\mathcal{U}",
-            CouplingsD: "\\\\mathbf{U}",
+            CouplingsD: "\\\\Pi",
             MK: "\\\\mathcal{L}",
             MKD: "\\\\mathrm{L}",
             Potentials: "\\\\mathcal{R}",
