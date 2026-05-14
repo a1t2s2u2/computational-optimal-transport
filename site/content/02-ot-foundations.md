@@ -9,43 +9,43 @@ title: Optimal Transport の基礎理論
 :::fact
 ### 本章の設定
 
-\(\X, \Y\) は**完備可分な距離空間**（Polish 空間，
-[ref:定義: Polish 空間|Polish 空間]）とする．距離関数を \(d\) と書き，
+\((\X, d_\X)\), \((\Y, d_\Y)\) は**完備可分な距離空間**（Polish 空間，
+[ref:定義: Polish 空間|Polish 空間]）とする．
 ボレル \(\sigma\)-代数 \(\Bb(\X)\) により \(\X\) を可測空間 \((\X, \Bb(\X))\) として扱う
 （\(\Y\) についても同様）．\(\X\) 上の確率測度全体を \(\Mm_+^1(\X)\) と記す．
 
 Polish 空間の3要素を確認する：
 
-- **距離空間**．距離関数 \(d \colon \X \times \X \to [0, \infty)\) が距離の公理 （[ref:定義: 距離空間|距離空間]）を満たし，\(d\) から以下が順次定まる：
+- **距離空間**．距離関数 \(d_\X \colon \X \times \X \to [0, \infty)\) が距離の公理 （[ref:定義: 距離空間|距離空間]）を満たし，\(d_\X\) から以下が順次定まる：
 
 \[\begin{aligned}
  B_r(x)
- &\defeq \{y \in \X \mid d(x, y) < r\}
+ &\defeq \{y \in \X \mid d_\X(x, y) < r\}
  && \text{（開球，定義）} \\
- \mathcal{O}_d
+ \mathcal{O}_{d_\X}
  &\defeq \{U \subset \X \mid \forall x \in U,\,
  \exists r > 0,\, B_r(x) \subset U\}
  && \text{（開集合の全体）} \\
  \Bb(\X)
- &\defeq \sigma(\mathcal{O}_d)
+ &\defeq \sigma(\mathcal{O}_{d_\X})
  && \text{（ボレル } \sigma\text{-代数，定義）}
 \end{aligned}\]
 
-ここで \(\sigma(\mathcal{O}_d)\) は，\(\mathcal{O}_d\) を含む \(\X\) 上のすべての \(\sigma\)-代数の共通部分
+ここで \(\sigma(\mathcal{O}_{d_\X})\) は，\(\mathcal{O}_{d_\X}\) を含む \(\X\) 上のすべての \(\sigma\)-代数の共通部分
 
 \[
- \sigma(\mathcal{O}_d)
+ \sigma(\mathcal{O}_{d_\X})
  \defeq \bigcap
  \bigl\{
  \mathcal{F} \subset 2^{\X}
  \;\big|\;
  \mathcal{F} \text{ は } \sigma\text{-代数, }
- \mathcal{O}_d \subset \mathcal{F}
+ \mathcal{O}_{d_\X} \subset \mathcal{F}
  \bigr\}
 \]
 
 として定まる．これにより可測空間 \((\X, \Bb(\X))\) （[ref:定義: 可測空間|可測空間]）が得られる．
-- **完備性**． 列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは， 任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して \(n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon\) が成り立つことをいう． \((\X, d)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が \(\X\) の点に収束する（[ref:定義: 収束列|収束列]）ことをいう． すなわち
+- **完備性**． 列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは， 任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して \(n, m \geq N \Longrightarrow d_\X(x_n, x_m) < \varepsilon\) が成り立つことをいう． \((\X, d_\X)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が \(\X\) の点に収束する（[ref:定義: 収束列|収束列]）ことをいう． すなわち
 
 \[
  \forall (x_n) \subset \X \text{ Cauchy 列},\;
@@ -59,10 +59,10 @@ Polish 空間の3要素を確認する：
  \exists x \in \X,\;
  \forall \varepsilon > 0,\;
  \exists N \in \N,\;
- n \geq N \Longrightarrow d(x_n, x) < \varepsilon.
+ n \geq N \Longrightarrow d_\X(x_n, x) < \varepsilon.
 \]
 
-- **可分性**． \(D \subset \X\) が**稠密**であるとは，任意の空でない開集合 \(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう （[ref:定義: 稠密集合|稠密集合]）． 距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し \(\exists q \in D,\; d(x, q) < \varepsilon\)」と同値． \((\X, d)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が 存在することをいう（[ref:定義: 可分性|可分性]）．すなわち
+- **可分性**． \(D \subset \X\) が**稠密**であるとは，任意の空でない開集合 \(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう （[ref:定義: 稠密集合|稠密集合]）． 距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し \(\exists q \in D,\; d_\X(x, q) < \varepsilon\)」と同値． \((\X, d_\X)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が 存在することをいう（[ref:定義: 可分性|可分性]）．すなわち
 
 \[
  \exists D \subset \X \text{ 可算},\;
@@ -291,22 +291,14 @@ Monge 問題の実行可能集合
 ## Kantorovich 緩和
 
 
-### カップリング
-
-
 :::definition
-### 定義: カップリング
+### 定義: Kantorovich 問題
 
-\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\)
-に対し，写像
-
-\[
- P_\X \colon \X \times \Y \to \X,\; (x, y) \mapsto x,
- \qquad
- P_\Y \colon \X \times \Y \to \Y,\; (x, y) \mapsto y
-\]
-
-を用いて，\(\alpha\) と \(\beta\) の**カップリング**の集合を
+\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
+可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
+射影 \(P_\X \colon \X \times \Y \to \X\)，
+\(P_\Y \colon \X \times \Y \to \Y\) を用いた
+**カップリング集合**
 
 \[
  \Couplings(\alpha, \beta) \defeq
@@ -315,22 +307,7 @@ Monge 問題の実行可能集合
  (P_\Y)\pushforward \pi = \beta \right\}
 \]
 
-で定める．
-:::
-
-
-### Kantorovich 問題
-
-
-:::definition
-### 定義: Kantorovich 問題
-
-\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
-可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
-\(\alpha, \beta\) のカップリング
-\(\pi \in \Couplings(\alpha, \beta)\)（[ref:定義: カップリング|カップリング]）に
-わたって積分 \(\int_{\X \times \Y} c(x, y) \, \d\pi(x, y)\) を
-最小化する問題
+上で輸送コストを最小化する問題
 
 \[
  \MK_c(\alpha, \beta) \defeq
@@ -339,6 +316,41 @@ Monge 問題の実行可能集合
 \]
 
 を**Kantorovich 問題**という．
+\(\Couplings(\alpha, \beta)\) の元を
+\(\alpha\) と \(\beta\) の**カップリング**という．
+:::
+
+
+:::fact
+### 周辺条件の意味
+
+カップリングの条件 \((P_\X)\pushforward \pi = \alpha\) を具体的に展開する．
+任意のボレル集合 \(A \in \Bb(\X)\) をとる．
+押し出しの定義（[ref:定義: 押し出し|押し出し]）により
+
+\[
+ \bigl((P_\X)\pushforward \pi\bigr)(A)
+ = \pi\bigl(P_\X^{-1}(A)\bigr).
+\]
+
+ここで \(P_\X^{-1}(A)\) は射影 \(P_\X\) の逆像であり，
+
+\[
+ P_\X^{-1}(A)
+ = \{(x, y) \in \X \times \Y \mid P_\X(x, y) \in A\}
+ = \{(x, y) \in \X \times \Y \mid x \in A\}
+ = A \times \Y
+\]
+
+となる．したがって \((P_\X)\pushforward \pi = \alpha\) とは，
+
+\[
+ \pi(A \times \Y) = \alpha(A)
+ \qquad (\forall\, A \in \Bb(\X))
+\]
+
+を意味する．同様に \((P_\Y)\pushforward \pi = \beta\) は
+\(\pi(\X \times B) = \beta(B)\)（\(\forall\, B \in \Bb(\Y)\)）を意味する．
 :::
 
 
@@ -355,16 +367,15 @@ Monge 問題の実行可能集合
 
 （相異なる \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
 \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)，
-\(\sum_i a_i = \sum_j b_j = 1\)）の場合を考え，行列
-\(\mathbf{C} \in \R_+^{n \times m}\) の成分を \(C_{i,j} \defeq c(x_i, y_j)\) で定める．
-このときカップリング集合 \(\Couplings(\alpha, \beta)\) は有限次元の行列集合
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) と同一視でき，Kantorovich 問題は
-有限次元線形計画として書き直せる．以下，対応・最適化問題・解の存在を順に確かめる．
+\(\sum_i a_i = \sum_j b_j = 1\)）の場合を考える．
+コスト関数を離散化した行列
+\(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) を定める．
 
 :::theorem
-### 主張: 離散カップリングの行列表示
+### 命題: 離散 Kantorovich 問題
 
-集合
+Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
+**離散カップリング集合**
 
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
@@ -373,7 +384,22 @@ Monge 問題の実行可能集合
  \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
 \]
 
-に対し，写像
+上の有限次元線形計画
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ \defeq
+ \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \inner{\mathbf{C}}{\mathbf{P}}
+\]
+
+に帰着される：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
+この有限次元問題を**離散 Kantorovich 問題**という．
+成分 \(P_{i,j}\) は「\(x_i\) から \(y_j\) へ運ぶ質量」を表し，
+行和・列和の制約がそれぞれ供給 \(\mathbf{a}\) と需要 \(\mathbf{b}\) に一致する．
+
+:::details-embedded 証明
+写像
 
 \[
  \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
@@ -381,11 +407,7 @@ Monge 問題の実行可能集合
  \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
 \]
 
-は全単射であり，逆写像は
-\(\Phi^{-1}(\pi) = (\pi(\{(x_i, y_j)\}))_{i,j}\) で与えられる．
-
-:::details-embedded 証明
-以下の3点を示す．
+が全単射であり，コストを保つことを示す．
 
 **(i) \(\Phi(\mathbf{P**) \in \Couplings(\alpha, \beta)\).}
 \(\Phi(\mathbf{P})(\X \times \Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1\) より
@@ -426,38 +448,9 @@ Monge 問題の実行可能集合
 \(a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times \Y) = \sum_j P_{k,j}\)
 から \(\mathbf{P}\ones_m = \mathbf{a}\)．同様に \(\mathbf{P}^\top \ones_n = \mathbf{b}\)．
 ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(\Phi(\mathbf{P}) = \pi\)．
-:::
-:::
 
-
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は線形等式制約と非負制約で定まるから凸集合である．
-
-
-:::theorem
-### 主張: 離散 Kantorovich 問題
-
-[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] の対応 \(\Phi\) で
-\(\pi = \Phi(\mathbf{P})\) と書くと
-
-\[
- \int_{\X \times \Y} c(x, y) \, \d\pi(x, y) = \inner{\mathbf{C}}{\mathbf{P}}
-\]
-
-が成り立つ．したがって連続版 Kantorovich 問題
-（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の下限は**離散 Kantorovich 問題**
-
-\[
- \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
- \defeq
- \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
- \inner{\mathbf{C}}{\mathbf{P}}
-\]
-
-に等しい：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
-
-:::details-embedded 証明
-[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] より
-\(\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\)．
+**(iv) コスト等式．**
+\(\pi = \Phi(\mathbf{P}) = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\) に対し，
 測度に関する積分の線形性（[ref:命題: 積分の測度に関する線形性|積分の測度に関する線形性]）と
 Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
@@ -471,13 +464,11 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \end{aligned}\]
 
-\(\Phi\) の全単射性から \(\pi \in \Couplings(\alpha, \beta)\) にわたる下限と
-\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) にわたる下限は等しい．
+\(\Phi\) の全単射性と (iv) から，\(\pi \in \Couplings(\alpha, \beta)\) にわたる下限は
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) にわたる下限に等しい．
 :::
 :::
 
-
-これは \(nm\) 個の変数と \(n + m\) 本の等式制約を持つ有限次元の線形計画である．
 
 :::theorem
 ### 主張: 離散 Kantorovich 問題の解の存在
@@ -524,13 +515,8 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 :::
 
 
-**最適解の構造．**
-
-
-最適解が一意とは限らないことを確認し，最適解集合の構造を調べる．
-
 :::theorem
-### 主張: 最適解集合は輸送多面体の面をなす
+### 主張: 最適解集合は凸かつコンパクト
 
 最適解の集合
 
@@ -543,11 +529,7 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
  \bigr\}
 \]
 
-は凸かつコンパクトであり，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の面をなす：
-\(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と
-\(t \in (0,1)\) に対して
-\(t\mathbf{P} + (1-t)\mathbf{Q} \in S^*\) ならば
-\(\mathbf{P}, \mathbf{Q} \in S^*\)．
+は凸かつコンパクトである．
 
 :::details-embedded 証明
 **凸性．**
@@ -563,25 +545,12 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 \]
 
 
-**面の性質．**
-\(t\mathbf{P} + (1-t)\mathbf{Q} \in S^*\)
-（\(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)，
-\(t \in (0,1)\)）とする．
-\(\inner{\mathbf{C}}{\mathbf{P}},\, \inner{\mathbf{C}}{\mathbf{Q}} \geq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)
-かつ
-\(t\inner{\mathbf{C}}{\mathbf{P}} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)
-が成り立つには等号
-\(\inner{\mathbf{C}}{\mathbf{P}} = \inner{\mathbf{C}}{\mathbf{Q}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)
-が必要である．
-
 **コンパクト性．**
 \(S^* = \CouplingsD(\mathbf{a}, \mathbf{b}) \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
 はコンパクト集合と閉集合の共通部分．
 :::
 :::
 
-
-次の例は，非自明な状況で最適解が一意にならないことを示す．
 
 :::fact accent
 ### 例: 最適解の非一意性
@@ -617,12 +586,31 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 で等しい．
 したがって任意の \(t \in [0, 1]\) に対して
 \(t\mathbf{P}_1 + (1-t)\mathbf{P}_2\) が最適であり，
-最適面 \(S^*\) は輸送多面体全体に等しい．
+\(S^* = \CouplingsD(\mathbf{a}, \mathbf{b})\) となる．
 
 この非一意性は
 \(C_{11} + C_{22} = C_{12} + C_{21}\) から生じる．
 逆に \(C_{11} + C_{22} \neq C_{12} + C_{21}\) ならば
 2頂点のコストが異なるため最適解は一意となる．
+:::
+
+
+:::fact
+### エントロピー正則化による一意性の回復
+
+離散 Kantorovich 問題の最適解は一般に一意でないが，
+正則化パラメータ \(\varepsilon > 0\) を用いたエントロピー正則化
+
+\[
+ \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \left\{
+ \inner{\mathbf{C}}{\mathbf{P}}
+ - \varepsilon \Hb(\mathbf{P})
+ \right\}
+\]
+
+は狭義凸最適化であり，最適解は一意に定まる
+（[ref:命題: 正則化問題の解の存在と一意性|正則化問題の解の存在と一意性]）．
 :::
 
 
@@ -718,7 +706,7 @@ Kantorovich 問題は線形計画であり，双対問題を持つ．
  \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
 \]
 
-である．主問題は空でない有界な輸送多面体上の線形計画なので，
+である．主問題は空でない有界な \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上の線形計画なので，
 有限次元線形計画の強双対性により主問題と双対問題の最適値は一致する．
 :::
 :::

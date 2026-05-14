@@ -19,8 +19,8 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 \]
 
 および \(\mathbf{C} \in \R_+^{n \times m}\) を固定する．
-輸送多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
-[ref:主張: 離散カップリングの行列表示|離散カップリングの行列表示] の通り
+離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
+[ref:命題: 離散 Kantorovich 問題|離散 Kantorovich 問題] の通り
 
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b})
@@ -106,7 +106,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
 :::details-embedded 証明
-輸送多面体 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
 （[ref:主張: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．
 関数 \(x \mapsto x\log x - x\) は \([0,\infty)\) 上で連続かつ狭義凸である．
 したがって
@@ -321,7 +321,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
  \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr).
 \]
 
-輸送多面体はコンパクトであり，\(\Hb\) はその上で有界なので，
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) はコンパクトであり，\(\Hb\) はその上で有界なので，
 右辺は \(\varepsilon \to 0\) で \(0\) に収束する．
 したがって
 \(\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \inner{\mathbf{C}}{\mathbf{P}^*}\) である．また

@@ -930,6 +930,28 @@ strong {
 }
 
 /* ==========================================================================
+   Compare Table (連続版 vs 離散版)
+   ========================================================================== */
+
+.compare-table {
+  margin: 1em auto;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 0.4em 1em;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.compare-table thead th {
+  background: var(--line-soft);
+  font-weight: 700;
+}
+
+/* ==========================================================================
    Figures
    ========================================================================== */
 

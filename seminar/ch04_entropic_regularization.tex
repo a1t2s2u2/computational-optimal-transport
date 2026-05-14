@@ -12,8 +12,8 @@
   \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
 \]
 および $\mathbf{C} \in \R_+^{n \times m}$ を固定する．
-輸送多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
-主張~\ref{clm:sem-discrete-coupling-form} の通り
+離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
+命題~\ref{prop:sem-discrete-kantorovich} の通り
 \[
   \CouplingsD(\mathbf{a}, \mathbf{b})
   =
@@ -82,7 +82,7 @@
 \end{proposition}
 
 \begin{proof}
-  輸送多面体 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
   （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）．
   関数 $x \mapsto x\log x - x$ は $[0,\infty)$ 上で連続かつ狭義凸である．
   したがって
@@ -261,7 +261,7 @@
     \leq
     \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr).
   \]
-  輸送多面体はコンパクトであり，$\Hb$ はその上で有界なので，
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ はコンパクトであり，$\Hb$ はその上で有界なので，
   右辺は $\varepsilon \to 0$ で $0$ に収束する．
   したがって
   $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
