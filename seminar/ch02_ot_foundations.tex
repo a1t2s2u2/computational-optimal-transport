@@ -565,15 +565,14 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   $\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)$．
   単点 $\{x_k\}$ について
   \[
-    \bigl((P_\X)\pushforward \Phi(\mathbf{P})\bigr)(\{x_k\})
-    = \Phi(\mathbf{P})(\{x_k\} \times Y)
+    \Phi(\mathbf{P})(\{x_k\} \times \Y)
     = \sum_{j=1}^m P_{k,j}
     = a_k
     = \alpha(\{x_k\}).
   \]
-  $\alpha$ は $\X \setminus X$ で零ゆえ，
-  両辺はすべての可測集合 $A \in \Bb(\X)$ で一致し
-  $(P_\X)\pushforward \Phi(\mathbf{P}) = \alpha$．同様に $\beta$ について．
+  $\alpha$ は $\X \setminus X$ で零ゆえ，$\sigma$-加法性より
+  任意の $A \in \Bb(\X)$ で $\Phi(\mathbf{P})(A \times \Y) = \alpha(A)$．
+  同様に $\Phi(\mathbf{P})(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）．
 
   \textbf{(ii) 単射性．}
   $\Phi(\mathbf{P})(\{(x_k, y_l)\}) = P_{k,l}$ より
@@ -582,7 +581,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \textbf{(iii) 全射性．}
   $\pi \in \Couplings(\alpha, \beta)$ を任意にとる．
   $\alpha(\X \setminus X) = 0$ と周辺条件
-  $(P_\X)\pushforward \pi = \alpha$ から
+  $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）から
   \[
     \pi\bigl((\X \setminus X) \times \Y\bigr)
     = \alpha(\X \setminus X) = 0,
