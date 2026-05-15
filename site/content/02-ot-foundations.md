@@ -356,12 +356,14 @@ Monge 問題の実行可能集合
  Y \defeq \{y_1, \ldots, y_m\} \subset \Y
 \]
 
-を台，\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)（\(\sum_i a_i = \sum_j b_j = 1\)）
-を重みとする離散測度（[ref:定義: 離散測度|離散測度]）
+を台とする離散測度（[ref:定義: 離散測度|離散測度]）
 
-\[
- \alpha = \sum_{i=1}^n a_i\, \delta_{x_i}, \qquad \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
-\]
+\[\begin{aligned}
+ \alpha &= \sum_{i=1}^n a_i\, \delta_{x_i}
+   \quad (\mathbf{a} \in \R_{++}^n,\; \textstyle\sum_i a_i = 1), \\
+ \beta  &= \sum_{j=1}^m b_j\, \delta_{y_j}
+   \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
+\end{aligned}\]
 
 と，コスト行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) に対して，
 Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
