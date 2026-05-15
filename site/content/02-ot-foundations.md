@@ -569,14 +569,17 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 \(\mathbf{P}\ones_m = \mathbf{a}\), \(\mathbf{P}^\top \ones_n = \mathbf{b}\)
 と非負性 \(\mathbf{P} \geq 0\) で定まる \(\R^{n \times m}\) の閉集合．
 さらに各成分は \(0 \leq P_{i,j} \leq \min(a_i, b_j) \leq 1\) をみたすから有界．
-\(\R^{n \times m}\) における有界閉集合はコンパクト．
+\(\R^{n \times m}\) における有界閉集合はコンパクト
+（[ref:定理: Heine-Borel の定理|Heine-Borel の定理]）．
 
 **(iii) 連続性．**
 \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}\)
-は線形写像であり，有限次元線形空間上で連続．
+は線形写像であり，有限次元線形空間上で連続
+（[ref:定義: 連続写像|連続写像]）．
 
-\(\R^{n \times m}\) 上の連続関数は空でないコンパクト集合上で最小値を達成する
-（Weierstrass の最大値の定理）．したがって最適解 \(\mathbf{P}^*\) が存在する．
+以上 (i)--(iii) と [ref:定理: Weierstrass の最大値の定理|Weierstrass の最大値の定理] より，
+空でないコンパクト集合上の連続関数は最小値を達成する．
+したがって最適解 \(\mathbf{P}^*\) が存在する．
 :::
 :::
 
