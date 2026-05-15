@@ -460,11 +460,12 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 \end{aligned}\]
 
 以上より最適値の一致を示す．
-\(\Phi\) は全単射であるから
-\(\{\Phi(\mathbf{P}) \mid \mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\} = \Couplings(\alpha, \beta)\)
-が成り立ち，\(\pi \in \Couplings(\alpha, \beta)\) にわたる下限は
-\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) にわたる下限に置き換えられる．
-そこに (iv) のコスト等式を適用すると，
+(i)--(iii) より \(\Phi\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) から
+\(\Couplings(\alpha, \beta)\) への全単射であり，(iv) よりコストを保存する．
+すなわち，連続版のカップリング \(\pi \in \Couplings(\alpha, \beta)\) と
+離散版の行列 \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) は
+\(\pi = \Phi(\mathbf{P})\) を通じてコストを変えずに一対一対応する．
+したがって，
 
 \[\begin{aligned}
  \MK_c(\alpha, \beta)
