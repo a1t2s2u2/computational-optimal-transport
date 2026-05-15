@@ -346,26 +346,20 @@ Monge 問題の実行可能集合
 :::
 
 
-### 離散版
-
-
-\(\alpha, \beta\) がともに離散測度（[ref:定義: 離散測度|離散測度]）
-
-\[
- \alpha = \sum_{i=1}^n a_i\, \delta_{x_i},
- \qquad
- \beta = \sum_{j=1}^m b_j\, \delta_{y_j}
-\]
-
-（相異なる \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
-\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)，
-\(\sum_i a_i = \sum_j b_j = 1\)）の場合を考える．
-コスト関数を離散化した行列
-\(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) を定める．
-
 :::theorem
 ### 命題: 離散 Kantorovich 問題
 
+\(\alpha = \sum_{i=1}^n a_i\, \delta_{x_i}\)，\(\beta = \sum_{j=1}^m b_j\, \delta_{y_j}\)
+を離散測度（[ref:定義: 離散測度|離散測度]）とし，
+
+\[
+ X \defeq \{x_1, \ldots, x_n\} \subset \X, \qquad
+ Y \defeq \{y_1, \ldots, y_m\} \subset \Y
+\]
+
+をその台（\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)，
+\(\sum_i a_i = \sum_j b_j = 1\)），
+\(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) をコスト行列とする．
 Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 **離散カップリング集合**
 
@@ -393,7 +387,7 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 :::details-embedded 証明
 離散カップリング集合の各行列
 \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対し，
-\(\X \times \Y\) 上の測度を対応させる写像 \(\Phi\) を
+\(X \times Y\) 上の測度を対応させる写像 \(\Phi\) を
 
 \[
  \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
@@ -405,19 +399,19 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 両問題の最適値の一致が従う．
 
 **(i)** \(\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)\).
-\(\Phi(\mathbf{P})(\X \times \Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1\) より
+\(\Phi(\mathbf{P})(X \times Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1\) より
 \(\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)\)．
 単点 \(\{x_k\}\) について
 
 \[
  \bigl((P_\X)\pushforward \Phi(\mathbf{P})\bigr)(\{x_k\})
- = \Phi(\mathbf{P})(\{x_k\} \times \Y)
+ = \Phi(\mathbf{P})(\{x_k\} \times Y)
  = \sum_{j=1}^m P_{k,j}
  = a_k
  = \alpha(\{x_k\}).
 \]
 
-\(\alpha\) は \(\X \setminus \{x_1, \ldots, x_n\}\) で零ゆえ，
+\(\alpha\) は \(\X \setminus X\) で零ゆえ，
 両辺はすべての可測集合 \(A \in \Bb(\X)\) で一致し
 \((P_\X)\pushforward \Phi(\mathbf{P}) = \alpha\)．同様に \(\beta\) について．
 
@@ -427,20 +421,20 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 
 **(iii) 全射性．**
 \(\pi \in \Couplings(\alpha, \beta)\) を任意にとる．
-\(\alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0\) と周辺条件
+\(\alpha(\X \setminus X) = 0\) と周辺条件
 \((P_\X)\pushforward \pi = \alpha\) から
 
 \[
- \pi\bigl((\X \setminus \{x_1, \ldots, x_n\}) \times \Y\bigr)
- = \alpha(\X \setminus \{x_1, \ldots, x_n\}) = 0,
+ \pi\bigl((\X \setminus X) \times \Y\bigr)
+ = \alpha(\X \setminus X) = 0,
 \]
 
-同様に \(\pi(\X \times (\Y \setminus \{y_1, \ldots, y_m\})) = 0\)．
-したがって \(\pi\) は \(\{(x_i, y_j)\}_{i, j}\) の補集合で零となり，
+同様に \(\pi(\X \times (\Y \setminus Y)) = 0\)．
+したがって \(\pi\) は \(X \times Y\) 上のみ質量を持つ．
 \(P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0\) とおけば
 \(\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\)．
 単点 \(\{x_k\}\) における周辺条件
-\(a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times \Y) = \sum_j P_{k,j}\)
+\(a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times Y) = \sum_j P_{k,j}\)
 から \(\mathbf{P}\ones_m = \mathbf{a}\)．同様に \(\mathbf{P}^\top \ones_n = \mathbf{b}\)．
 ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(\Phi(\mathbf{P}) = \pi\)．
 
@@ -450,8 +444,8 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
 \[\begin{aligned}
- \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
- &= \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
+ \int_{X \times Y} c(x, y) \, \d\pi(x, y)
+ &= \sum_{i,j} P_{i,j} \int_{X \times Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
  && \text{（命題）} \\
  &= \sum_{i,j} P_{i,j}\, c(x_i, y_j)
  && \text{（主張）} \\
