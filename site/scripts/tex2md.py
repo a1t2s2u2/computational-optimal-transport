@@ -38,6 +38,7 @@ CHAPTERS = [
         "eyebrow": "4. Entropic Regularization",
         "title": "エントロピー正則化と Sinkhorn アルゴリズム",
     }),
+    # ch05 は vae-geodesic.html で独立レンダリングするため変換対象外
 ]
 
 # Named block environments and their markdown mappings.
@@ -143,6 +144,24 @@ def strip_ref(text: str) -> str:
     return text
 
 
+def _extract_brace_arg(text: str, start: int) -> tuple[str, int] | None:
+    """Extract a brace-balanced {…} argument starting at *start*.
+    Returns (content, end_index) or None if *start* is not '{'."""
+    if start >= len(text) or text[start] != "{":
+        return None
+    depth = 0
+    i = start
+    while i < len(text):
+        if text[i] == "{":
+            depth += 1
+        elif text[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start + 1 : i], i + 1
+        i += 1
+    return None
+
+
 def build_label_map():
     """Scan all TeX chapter files and build a map: 'prefix:label' -> title."""
     label_map = {}
@@ -152,21 +171,29 @@ def build_label_map():
             continue
         with open(tex_path, "r", encoding="utf-8") as f:
             content = f.read()
-        for m in re.finditer(r"\\begin\{(\w+)\}\{(.+?)\}\{(.+?)\}", content):
+        for m in re.finditer(r"\\begin\{(\w+)\}", content):
             env_name = m.group(1)
-            title = m.group(2)
-            label = m.group(3)
-            if env_name in ENV_TO_PREFIX:
-                prefix = ENV_TO_PREFIX[env_name]
-                label_map[f"{prefix}:{label}"] = title
+            if env_name not in ENV_TO_PREFIX:
+                continue
+            pos = m.end()
+            title_result = _extract_brace_arg(content, pos)
+            if title_result is None:
+                continue
+            title, pos = title_result
+            label_result = _extract_brace_arg(content, pos)
+            if label_result is None:
+                continue
+            label, _ = label_result
+            prefix = ENV_TO_PREFIX[env_name]
+            label_map[f"{prefix}:{label}"] = title
     return label_map
 
 
 def convert_refs(text: str) -> str:
     r"""Convert \ref{...} to clickable [ref:display|name] links."""
-    text = re.sub(r"第~?\\ref\{ch:[^}]*\}~?章", "", text)
-    text = re.sub(r"§~?\\ref\{sec:[^}]*\}", "", text)
-    text = re.sub(r"Algorithm~?\\ref\{alg:[^}]*\}", "", text)
+    text = re.sub(r"第~?\\ref\{ch:[^}]*\}~?章", "本章", text)
+    text = re.sub(r"§~?\\ref\{sec:[^}]*\}", "本節", text)
+    text = re.sub(r"Algorithm~?\\ref\{alg:[^}]*\}", "アルゴリズム", text)
 
     def _replace_typed(m):
         label = m.group(2)

@@ -17,14 +17,6 @@
       --font-serif: "Noto Serif JP","Hiragino Mincho ProN",serif;
       --font-sans: system-ui,-apple-system,sans-serif;
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #000; --paper: #000; --ink: #e4e6ea; --ink-2: #9ca3af;
-        --muted: #6b7280; --line: #2a2f3a;
-        --teal: #2dd4bf; --blue: #60a5fa; --gray-path: #aaa;
-        --scene-bg: #000;
-      }
-    }
     *, *::before, *::after { box-sizing: border-box; }
     body {
       margin: 0; background: var(--bg); color: var(--ink);
@@ -183,6 +175,11 @@ let minVol = 0, maxVol = 1;
 
 async function main() {
   const resp = await fetch("vae_geodesic_data.json");
+  if (!resp.ok) {
+    document.getElementById("wrap").innerHTML =
+      '<p style="padding:2em;color:var(--ink-2)">データの読み込みに失敗しました。</p>';
+    return;
+  }
   DATA = await resp.json();
 
   const vols = DATA.log_volume;
@@ -205,7 +202,7 @@ function initScene() {
 
   camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(devicePixelRatio);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(w, h);
   wrap.insertBefore(renderer.domElement, wrap.firstChild);
 
