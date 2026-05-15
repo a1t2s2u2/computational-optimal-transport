@@ -346,8 +346,8 @@ Monge 問題の実行可能集合
 :::
 
 
-:::theorem
-### 命題: 離散 Kantorovich 問題
+:::definition
+### 定義: 離散 Kantorovich 問題
 
 有限集合
 
@@ -366,7 +366,6 @@ Monge 問題の実行可能集合
 \end{aligned}\]
 
 と，コスト行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) に対して，
-Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 **離散カップリング集合**
 
 \[
@@ -376,7 +375,7 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
  \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
 \]
 
-上の有限次元線形計画
+を定める．最小化問題
 
 \[
  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
@@ -385,10 +384,47 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
  \inner{\mathbf{C}}{\mathbf{P}}
 \]
 
-に帰着される：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
+を**離散 Kantorovich 問題**という．
 ここで \(\inner{\mathbf{C}}{\mathbf{P}}\) はフロベニウス内積
 （[ref:定義: フロベニウス内積|フロベニウス内積]）を表す．
-この有限次元問題を**離散 Kantorovich 問題**という．
+:::
+
+
+:::definition
+### 定義: 線形計画問題
+
+\(N, M \in \N\)，\(\mathbf{c} \in \R^N\)，\(\mathbf{A} \in \R^{M \times N}\)，\(\mathbf{b} \in \R^M\) を所与とする．
+実行可能領域を
+
+\[
+ \mathcal{F} \defeq
+ \bigl\{\mathbf{x} \in \R^N \bigm| \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\bigr\}
+\]
+
+と定め，最小化問題
+
+\[
+ \min_{\mathbf{x} \in \mathcal{F}}\; \mathbf{c}^\top \mathbf{x}
+\]
+
+を**線形計画問題**（LP）という．
+\(\mathcal{F} \neq \emptyset\) のとき LP は**実行可能**，
+\(\inf_{\mathbf{x} \in \mathcal{F}} \mathbf{c}^\top \mathbf{x} > -\infty\) のとき**有界**であるという．
+:::
+
+
+:::theorem
+### 命題: 連続版との同値性
+
+[ref:定義: 離散 Kantorovich 問題|離散 Kantorovich 問題] の設定のもとで，
+
+\[
+ \MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
+\]
+
+すなわち，Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
+離散 Kantorovich 問題（[ref:定義: 離散 Kantorovich 問題|離散 Kantorovich 問題]），
+ひいては線形計画問題（[ref:定義: 線形計画問題|線形計画問題]）に帰着される．
 
 :::details-embedded 証明
 離散カップリング集合の各行列
