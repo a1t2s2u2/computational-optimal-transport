@@ -365,7 +365,9 @@ Monge 問題の実行可能集合
    \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
 \end{aligned}\]
 
-と，コスト行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) に対して，
+と，Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）のコスト関数
+\(c \colon \X \times \Y \to \R_+\) から定まるコスト行列
+\(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) に対して，
 Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 **離散カップリング集合**
 
