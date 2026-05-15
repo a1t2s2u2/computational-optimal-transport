@@ -325,6 +325,106 @@ $\R$ はその「完備化」として機能する．}
 \label{fig:sem-polish}
 \end{figure}
 
+\begin{definition}{連続写像}{sem-continuous}
+  距離空間 $(\Omega_1, d_1)$，$(\Omega_2, d_2)$ の間の写像
+  $f \colon \Omega_1 \to \Omega_2$ が点 $x \in \Omega_1$ で\textbf{連続}であるとは，
+  \[
+    \forall \varepsilon > 0,\; \exists \delta > 0,\;
+    d_1(x, y) < \delta \Longrightarrow d_2(f(x), f(y)) < \varepsilon
+  \]
+  が成り立つことをいう．$f$ が $\Omega_1$ の全点で連続であるとき，
+  $f$ は\textbf{連続写像}であるという．
+  同値な条件として，$\Omega_1$ の任意の収束列 $x_n \to x$ に対して
+  $f(x_n) \to f(x)$ が成り立つことが挙げられる．
+\end{definition}
+
+\begin{definition}{有界集合}{sem-bounded}
+  $\R^n$ の部分集合 $S \subset \R^n$ が\textbf{有界}であるとは，
+  ある $M > 0$ が存在して
+  \[
+    \forall x \in S,\quad \|x\| \leq M
+  \]
+  が成り立つことをいう．ここで $\|\cdot\|$ はユークリッドノルムを表す．
+\end{definition}
+
+\begin{definition}{コンパクト集合}{sem-compact}
+  距離空間 $(\Omega, d)$ の部分集合 $K \subset \Omega$ が
+  \textbf{コンパクト}であるとは，
+  $K$ における任意の点列 $(x_n)_{n \geq 1}$ が，
+  $K$ の点に収束する部分列 $(x_{n_k})_{k \geq 1}$ を持つことをいう
+  （列コンパクト性）．
+\end{definition}
+
+\begin{claim}{Bolzano-Weierstrass の定理}{sem-bolzano-weierstrass}
+  $\R^n$ における任意の有界列 $(x_n)_{n \geq 1} \subset \R^n$ は，
+  収束する部分列 $(x_{n_k})_{k \geq 1}$ を持つ．
+\end{claim}
+
+\begin{theorem}{Heine-Borel の定理}{sem-heine-borel}
+  $\R^n$ の部分集合 $K \subset \R^n$ に対して，
+  次の2条件は同値である：
+  \begin{enumerate}
+    \item[(i)] $K$ はコンパクト（定義~\ref{def:sem-compact}）である．
+    \item[(ii)] $K$ は閉集合（定義~\ref{def:sem-topological-space}）かつ
+      有界（定義~\ref{def:sem-bounded}）である．
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \textbf{(i) $\Rightarrow$ (ii)：コンパクト $\Rightarrow$ 有界かつ閉．}
+
+  \textit{有界性．}
+  $K$ が有界でないと仮定する．すると各 $n \in \N$ に対して
+  $\|x_n\| > n$ をみたす $x_n \in K$ が存在する．
+  $K$ のコンパクト性より $(x_n)$ はある収束部分列 $(x_{n_k})$ を持ち，
+  その極限 $x^* \in K$ について $\|x_{n_k}\| \to \|x^*\|$．
+  一方 $\|x_{n_k}\| > n_k \to \infty$ であり矛盾．
+  ゆえに $K$ は有界．
+
+  \textit{閉性．}
+  $K$ への収束列 $(x_n)$ を任意にとり，極限を $x^*$ とする（$x^* \in \R^n$）．
+  $K$ のコンパクト性より $(x_n)$ はある収束部分列 $(x_{n_k})$ を持ち，
+  その極限 $y^* \in K$ が存在する．
+  部分列も元の列の収束先と同じ極限を持つから $y^* = x^*$，
+  すなわち $x^* \in K$．ゆえに $K$ は閉集合．
+
+  \textbf{(ii) $\Rightarrow$ (i)：有界かつ閉 $\Rightarrow$ コンパクト．}
+
+  $K$ の任意の点列 $(x_n)$ をとる．
+  $K$ は有界ゆえ $(x_n)$ は $\R^n$ における有界列である．
+  Bolzano-Weierstrass の定理（主張~\ref{clm:sem-bolzano-weierstrass}）より
+  $(x_n)$ はある収束部分列 $(x_{n_k})$ を持ち，その極限を $x^* \in \R^n$ とする．
+  $x_{n_k} \in K$ かつ $K$ は閉集合だから $x^* \in K$．
+  ゆえに $K$ はコンパクト．
+\end{proof}
+
+\begin{theorem}{Weierstrass の最大値の定理}{sem-weierstrass}
+  $K \subset \R^n$ を空でないコンパクト集合，
+  $f \colon K \to \R$ を連続関数（定義~\ref{def:sem-continuous}）とする．
+  このとき $f$ は $K$ 上で最小値および最大値を達成する，すなわち
+  \[
+    \exists x^* \in K,\quad f(x^*) = \min_{x \in K} f(x).
+  \]
+\end{theorem}
+
+\begin{proof}
+  最小値について示す（最大値は $-f$ に適用すればよい）．
+
+  $p^* \defeq \inf_{x \in K} f(x) \in [-\infty, +\infty)$ とおく．
+  下限の定義より，各 $n \in \N$ に対して
+  \[
+    f(x_n) < p^* + \tfrac{1}{n}
+  \]
+  をみたす $x_n \in K$ が存在する（最小化列）．
+  $K$ のコンパクト性より $(x_n)$ はある収束部分列 $(x_{n_k})$ を持ち，
+  極限 $x^* \in K$ が存在する．
+  $f$ の連続性（定義~\ref{def:sem-continuous}）より
+  \[
+    f(x^*) = \lim_{k \to \infty} f(x_{n_k}) = p^*.
+  \]
+  特に $p^* = f(x^*) \in \R$ であり，最小値は $x^*$ で達成される．
+\end{proof}
+
 %% ============================================================
 %% 測度論
 %% ============================================================
