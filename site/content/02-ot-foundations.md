@@ -390,6 +390,30 @@ Monge 問題の実行可能集合
 :::
 
 
+:::fact
+### 周辺条件の行列表現
+
+連続版のカップリング集合（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の条件
+\(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）を
+離散測度の単点 \(A = \{x_k\}\) に適用すると，
+\(P_{i,j} \defeq \pi(\{(x_i, y_j)\})\) の関係から
+
+\[
+ \pi(\{x_k\} \times Y) = \sum_{j=1}^m P_{k,j} = a_k.
+\]
+
+これが全 \(k = 1, \ldots, n\) で成り立つことを，
+\(\ones_m = (1, \ldots, 1)^\top \in \R^m\) との積で一括表記したものが
+\(\mathbf{P} \ones_m = \mathbf{a}\) である（各行の総和が \(\mathbf{a}\) に等しい）．
+同様に \(\mathbf{P}^\top \ones_n = \mathbf{b}\) は列の総和条件に対応する．
+
+| 連続版 | 離散版（行列表記） |
+|---|---|
+| \(\pi(A \times \Y) = \alpha(A)\) | \(\mathbf{P} \ones_m = \mathbf{a}\) |
+| \(\pi(\X \times B) = \beta(B)\) | \(\mathbf{P}^\top \ones_n = \mathbf{b}\) |
+:::
+
+
 :::definition
 ### 定義: 線形計画問題
 
