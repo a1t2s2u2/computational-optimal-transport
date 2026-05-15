@@ -459,8 +459,25 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \end{aligned}\]
 
-\(\Phi\) の全単射性と (iv) から，\(\pi \in \Couplings(\alpha, \beta)\) にわたる下限は
-\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) にわたる下限に等しい．
+以上より最適値の一致を示す．
+\(\Phi\) は全単射であるから
+\(\{\Phi(\mathbf{P}) \mid \mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\} = \Couplings(\alpha, \beta)\)
+が成り立ち，\(\pi \in \Couplings(\alpha, \beta)\) にわたる下限は
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) にわたる下限に置き換えられる．
+そこに (iv) のコスト等式を適用すると，
+
+\[\begin{aligned}
+ \MK_c(\alpha, \beta)
+ &= \inf_{\pi \in \Couplings(\alpha, \beta)}
+    \int_{X \times Y} c(x, y) \, \d\pi(x, y) \\
+ &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \int_{X \times Y} c(x, y) \, \d(\Phi(\mathbf{P}))(x, y)
+   \quad \text{（$\Phi$ が全単射）} \\
+ &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \inner{\mathbf{C}}{\mathbf{P}}
+   \quad \text{（(iv)）} \\
+ &= \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
+\end{aligned}\]
 :::
 :::
 
