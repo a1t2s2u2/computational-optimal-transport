@@ -350,16 +350,14 @@ Monge 問題の実行可能集合
 ### 命題: 離散 Kantorovich 問題
 
 \(\alpha = \sum_{i=1}^n a_i\, \delta_{x_i}\)，\(\beta = \sum_{j=1}^m b_j\, \delta_{y_j}\)
-を離散測度（[ref:定義: 離散測度|離散測度]）とし，
+を離散測度（[ref:定義: 離散測度|離散測度]），
 
 \[
  X \defeq \{x_1, \ldots, x_n\} \subset \X, \qquad
  Y \defeq \{y_1, \ldots, y_m\} \subset \Y
 \]
 
-をその台（\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)，
-\(\sum_i a_i = \sum_j b_j = 1\)），
-\(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) をコスト行列とする．
+をその台とし，コスト行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) に対して，
 Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 **離散カップリング集合**
 
