@@ -429,22 +429,33 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 
 **(iii) 全射性．**
 \(\pi \in \Couplings(\alpha, \beta)\) を任意にとる．
-\(\alpha(\X \setminus X) = 0\) と周辺条件
-\(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）から
+\(P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0\) と定め，
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(\Phi(\mathbf{P}) = \pi\) を示す．
+
+*\(\Phi(\mathbf{P}) = \pi\) の確認．*
+まず \(\pi\) の台が \(X \times Y\) に含まれることを示す．
+周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
+\(\alpha(\X \setminus X) = 0\) から
 
 \[
- \pi\bigl((\X \setminus X) \times \Y\bigr)
- = \alpha(\X \setminus X) = 0,
+ \pi\bigl((\X \setminus X) \times \Y\bigr) = \alpha(\X \setminus X) = 0,
 \]
 
 同様に \(\pi(\X \times (\Y \setminus Y)) = 0\)．
-したがって \(\pi\) は \(X \times Y\) 上のみ質量を持つ．
-\(P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0\) とおけば
-\(\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\)．
-単点 \(\{x_k\}\) における周辺条件
-\(a_k = \alpha(\{x_k\}) = \pi(\{x_k\} \times Y) = \sum_j P_{k,j}\)
-から \(\mathbf{P}\ones_m = \mathbf{a}\)．同様に \(\mathbf{P}^\top \ones_n = \mathbf{b}\)．
-ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(\Phi(\mathbf{P}) = \pi\)．
+よって \(\pi\) は有限集合 \(X \times Y\) 上のみに質量を持つから，
+\(\sigma\)-加法性より任意の \(A \in \Bb(\X \times \Y)\) について
+
+\[
+ \pi(A) = \sum_{(x_i,y_j) \in A} P_{i,j} = \Phi(\mathbf{P})(A),
+\]
+
+すなわち \(\Phi(\mathbf{P}) = \pi\)．
+
+*\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) の確認．*
+周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
+\(\sum_j P_{k,j} = a_k\)，すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
+同様に \(\mathbf{P}^\top \ones_n = \mathbf{b}\)．
+\(P_{i,j} \geq 0\) と合わせて \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
 
 **(iv) コスト等式．**
 \(\pi = \Phi(\mathbf{P}) = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}\) に対し，
