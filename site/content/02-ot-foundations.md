@@ -404,7 +404,10 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 で定義する．\(\Phi\) が全単射かつコストを保つことを示せば，
 両問題の最適値の一致が従う．
 
-**(i)** \(\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)\).
+**(i) 値域の確認．**
+\(\Phi\) の式を定義しただけでは，\(\Phi(\mathbf{P})\) が
+\(\Couplings(\alpha,\beta)\) の条件（\(\alpha,\beta\) を周辺分布とする確率測度であること）を
+みたすかは自明でない．以下で計算して確かめる．
 \(\Phi(\mathbf{P})(X \times Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1\) より
 \(\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)\)．
 単点 \(\{x_k\}\) について
@@ -460,8 +463,9 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 \end{aligned}\]
 
 以上より最適値の一致を示す．
-(i)--(iii) より \(\Phi\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) から
-\(\Couplings(\alpha, \beta)\) への全単射であり，(iv) よりコストを保存する．
+(i) より \(\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)\) が確かめられ，
+(ii)(iii) より \(\Phi\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) から
+\(\Couplings(\alpha, \beta)\) への全単射である．(iv) よりコストを保存する．
 すなわち，連続版のカップリング \(\pi \in \Couplings(\alpha, \beta)\) と
 離散版の行列 \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) は
 \(\pi = \Phi(\mathbf{P})\) を通じてコストを変えずに一対一対応する．
