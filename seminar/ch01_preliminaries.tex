@@ -384,6 +384,20 @@ $\R$ はその「完備化」として機能する．}
   $(\X, \Bb(\X))$ と $(\Y, \Bb(\Y))$ の\textbf{積可測空間}という．
 \end{definition}
 
+\begin{definition}{射影}{sem-projection}
+  距離空間 $\X$, $\Y$ の積空間 $\X \times \Y$
+  （定義~\ref{def:sem-product-measurable}）に対して，
+  \textbf{射影} $P_\X \colon \X \times \Y \to \X$，
+  $P_\Y \colon \X \times \Y \to \Y$ を
+  \[
+    P_\X(x, y) \defeq x,
+    \qquad
+    P_\Y(x, y) \defeq y
+  \]
+  で定める．$P_\X$，$P_\Y$ はともに連続であり，可測写像
+  （定義~\ref{def:sem-measurable-map}）でもある．
+\end{definition}
+
 \begin{definition}{測度}{sem-measure}
   可測空間 $(\Omega, \mathcal{F})$ 上の\textbf{測度}とは，
   関数 $\mu \colon \mathcal{F} \to [0, \infty]$ であって，
@@ -658,7 +672,8 @@ $\R$ はその「完備化」として機能する．}
 
 \begin{definition}{有限集合と濃度}{sem-finite}
   集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
-  全単射 $f \colon \range{n} \to S$ が存在することをいう．
+  全単射 $f \colon \range{n} \to S$ が存在することをいう
+  （ここで $\range{n} \defeq \{1, 2, \ldots, n\}$）．
   この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
 \end{definition}
 

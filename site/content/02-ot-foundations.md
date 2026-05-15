@@ -296,15 +296,16 @@ Monge 問題の実行可能集合
 
 \(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
 可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
-射影 \(P_\X \colon \X \times \Y \to \X\)，
-\(P_\Y \colon \X \times \Y \to \Y\) を用いた
 **カップリング集合**
 
 \[
  \Couplings(\alpha, \beta) \defeq
  \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
- (P_\X)\pushforward \pi = \alpha, \;
- (P_\Y)\pushforward \pi = \beta \right\}
+   \begin{aligned}
+     &\pi(A \times \Y) = \alpha(A) \quad \forall\, A \in \Bb(\X), \\
+     &\pi(\X \times B) = \beta(B)  \quad \forall\, B \in \Bb(\Y)
+   \end{aligned}
+ \right\}
 \]
 
 上で輸送コストを最小化する問題
@@ -322,35 +323,28 @@ Monge 問題の実行可能集合
 
 
 :::fact
-### 周辺条件の意味
+### 押し出しを用いたコンパクトな表現
 
-カップリングの条件 \((P_\X)\pushforward \pi = \alpha\) を具体的に展開する．
-任意のボレル集合 \(A \in \Bb(\X)\) をとる．
-押し出しの定義（[ref:定義: 押し出し|押し出し]）により
+カップリング条件は，射影（[ref:定義: 射影|射影]）
+\(P_\X \colon (x,y) \mapsto x\)，\(P_\Y \colon (x,y) \mapsto y\) と
+押し出し（[ref:定義: 押し出し|押し出し]）を用いると
+
+\[
+ (P_\X)\pushforward \pi = \alpha, \qquad (P_\Y)\pushforward \pi = \beta
+\]
+
+とコンパクトに書ける．実際，任意の \(A \in \Bb(\X)\) に対して
 
 \[
  \bigl((P_\X)\pushforward \pi\bigr)(A)
- = \pi\bigl(P_\X^{-1}(A)\bigr).
+ = \pi\bigl(P_\X^{-1}(A)\bigr)
+ = \pi\bigl(\{(x,y) \mid x \in A\}\bigr)
+ = \pi(A \times \Y),
 \]
 
-ここで \(P_\X^{-1}(A)\) は射影 \(P_\X\) の逆像であり，
-
-\[
- P_\X^{-1}(A)
- = \{(x, y) \in \X \times \Y \mid P_\X(x, y) \in A\}
- = \{(x, y) \in \X \times \Y \mid x \in A\}
- = A \times \Y
-\]
-
-となる．したがって \((P_\X)\pushforward \pi = \alpha\) とは，
-
-\[
- \pi(A \times \Y) = \alpha(A)
- \qquad (\forall\, A \in \Bb(\X))
-\]
-
-を意味する．同様に \((P_\Y)\pushforward \pi = \beta\) は
-\(\pi(\X \times B) = \beta(B)\)（\(\forall\, B \in \Bb(\Y)\)）を意味する．
+ゆえに \((P_\X)\pushforward \pi = \alpha\) は
+\(\pi(A \times \Y) = \alpha(A)\)（\(\forall\, A \in \Bb(\X)\)）と同値である．
+\(P_\Y\) についても同様．
 :::
 
 
@@ -394,6 +388,8 @@ Kantorovich 問題（[ref:定義: Kantorovich 問題|Kantorovich 問題]）は
 \]
 
 に帰着される：\(\MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\)．
+ここで \(\inner{\mathbf{C}}{\mathbf{P}}\) はフロベニウス内積
+（[ref:定義: フロベニウス内積|フロベニウス内積]）を表す．
 この有限次元問題を**離散 Kantorovich 問題**という．
 
 :::details-embedded 証明
