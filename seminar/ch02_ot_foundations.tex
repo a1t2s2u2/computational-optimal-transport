@@ -544,9 +544,6 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \[
     \MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
   \]
-  すなわち，Kantorovich 問題（定義~\ref{def:sem-kantorovich}）は
-  離散 Kantorovich 問題（定義~\ref{def:sem-discrete-kantorovich}），
-  ひいては線形計画問題（定義~\ref{def:sem-lp}）に帰着される．
 \end{proposition}
 
 \begin{proof}
@@ -642,6 +639,16 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     &= \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
   \end{align*}
 \end{proof}
+
+\begin{remark}{離散 Kantorovich 問題と線形計画}{sem-discrete-kantorovich-lp}
+  離散 Kantorovich 問題（定義~\ref{def:sem-discrete-kantorovich}）は
+  線形計画問題（定義~\ref{def:sem-lp}）の特殊例である．
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は線形等式制約
+  $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$
+  と非負制約 $\mathbf{P} \geq \mathbf{0}$ で定まり，
+  目的関数 $\inner{\mathbf{C}}{\mathbf{P}}$ は $\mathbf{P}$ について線形であるから，
+  定義~\ref{def:sem-lp} の形に直接当てはまる．
+\end{remark}
 
 \begin{figure}[H]
 \centering
