@@ -390,6 +390,52 @@ Monge 問題の実行可能集合
 :::
 
 
+:::fact accent
+### 例: 工場からスーパーへの輸送
+
+2 つの工場 \(x_1, x_2\) から 2 つのスーパー \(y_1, y_2\) へ商品を輸送する状況を考える．
+各工場の供給割合を \(\mathbf{a} = (2/3,\; 1/3)^\top\)，
+各スーパーの需要割合を \(\mathbf{b} = (1/3,\; 2/3)^\top\) とし，
+輸送コスト行列を
+
+\[
+ \mathbf{C} =
+ \begin{pmatrix}
+   C_{1,1} & C_{1,2} \\
+   C_{2,1} & C_{2,2}
+ \end{pmatrix}
+ =
+ \begin{pmatrix}
+   1 & 2 \\
+   3 & 1
+ \end{pmatrix}
+\]
+
+とする．
+
+:::demo transport-cost
+
+コストの安い経路 \(x_1 \to y_1\)（コスト \(1\)）と \(x_2 \to y_2\)（コスト \(1\)）を
+最大限利用し，残りを \(x_1 \to y_2\)（コスト \(2\)）で補うのが最適であり，
+
+\[
+ \mathbf{P}^{\star} =
+ \begin{pmatrix}
+   1/3 & 1/3 \\
+   0 & 1/3
+ \end{pmatrix},
+ \qquad
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ = \inner{\mathbf{C}}{\mathbf{P}^{\star}}
+ = \sum_{i,j} C_{i,j} P_{i,j}^{\star}
+ = 1 \cdot \tfrac{1}{3} + 2 \cdot \tfrac{1}{3} + 3 \cdot 0 + 1 \cdot \tfrac{1}{3}
+ = \tfrac{4}{3}.
+\]
+
+:::demo transport-optimal
+:::
+
+
 :::fact
 ### 周辺条件の行列表現
 
@@ -552,11 +598,40 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 
 離散 Kantorovich 問題（[ref:定義: 離散 Kantorovich 問題|離散 Kantorovich 問題]）は
 線形計画問題（[ref:定義: 線形計画問題|線形計画問題]）の特殊例である．
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は線形等式制約
-\(\mathbf{P}\ones_m = \mathbf{a}\)，\(\mathbf{P}^\top \ones_n = \mathbf{b}\)
-と非負制約 \(\mathbf{P} \geq \mathbf{0}\) で定まり，
-目的関数 \(\inner{\mathbf{C}}{\mathbf{P}}\) は \(\mathbf{P}\) について線形であるから，
-[ref:定義: 線形計画問題|線形計画問題] の形に直接当てはまる．
+対応を明示するため，行列を列方向に並べてベクトル化する操作
+\(\operatorname{vec} \colon \R^{n \times m} \to \R^{nm}\) を用いる．
+
+\[
+ \mathbf{p} \defeq \operatorname{vec}(\mathbf{P}) \in \R^{nm}_+,
+ \qquad
+ \mathbf{c} \defeq \operatorname{vec}(\mathbf{C}) \in \R^{nm}
+\]
+
+と置くと，フロベニウス内積は通常の内積に帰着する：
+
+\[
+ \inner{\mathbf{C}}{\mathbf{P}}
+ = \sum_{i,j} C_{i,j} P_{i,j}
+ = \mathbf{c}^\top \mathbf{p}.
+\]
+
+また，行和条件 \(\mathbf{P}\ones_m = \mathbf{a}\) と
+列和条件 \(\mathbf{P}^\top \ones_n = \mathbf{b}\) は，
+適切な \((n{+}m) \times nm\) 行列 \(\mathbf{A}\) を用いて
+\(\mathbf{A}\mathbf{p} = \bigl[\begin{smallmatrix}\mathbf{a}\\ \mathbf{b}\end{smallmatrix}\bigr]\)
+と書ける．
+したがって離散 Kantorovich 問題は
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ = \min_{\substack{\mathbf{p} \in \R^{nm} \\
+     \mathbf{A}\mathbf{p}
+       = \left[\begin{smallmatrix}\mathbf{a}\\ \mathbf{b}\end{smallmatrix}\right],\;
+     \mathbf{p} \geq \mathbf{0}}}\;
+ \mathbf{c}^\top \mathbf{p}
+\]
+
+となり，[ref:定義: 線形計画問題|線形計画問題] の LP に他ならない．
 :::
 
 
@@ -582,17 +657,23 @@ Dirac 測度に対する積分（[ref:主張: Dirac 測度に対する積分|Dir
 (iii) 目的関数 \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は連続．
 
 **(i) 非空性．**
-積測度に相当する \(\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top\)，すなわち
-\((P_0)_{i,j} = a_i b_j\) をとると，
-\((\mathbf{P}_0 \ones_m)_i = a_i \sum_j b_j = a_i\)，
-\((\mathbf{P}_0^\top \ones_n)_j = b_j \sum_i a_i = b_j\)
-ゆえ \(\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+\(\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top\) を考える．
+これは各成分が \((P_0)_{i,j} = a_i b_j\) で定まる \(n \times m\) 行列であり，
+\(a_i, b_j > 0\) より \(\mathbf{P}_0 \geq \mathbf{0}\) である．
+行和について，\(\sum_j b_j = 1\) を用いて
+\((\mathbf{P}_0 \ones_m)_i = \sum_{j=1}^m a_i b_j = a_i \sum_{j=1}^m b_j = a_i\)，
+すなわち \(\mathbf{P}_0 \ones_m = \mathbf{a}\)．
+同様に \(\sum_i a_i = 1\) から \(\mathbf{P}_0^\top \ones_n = \mathbf{b}\)．
+よって \(\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+（\(\mathbf{P}_0\) は連続版における独立カップリング \(\alpha \otimes \beta\) の離散版に相当する．）
 
 **(ii) コンパクト性．**
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は線形等式
-\(\mathbf{P}\ones_m = \mathbf{a}\), \(\mathbf{P}^\top \ones_n = \mathbf{b}\)
-と非負性 \(\mathbf{P} \geq 0\) で定まる \(\R^{n \times m}\) の閉集合．
-さらに各成分は \(0 \leq P_{i,j} \leq \min(a_i, b_j) \leq 1\) をみたすから有界．
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の定義条件
+\(\mathbf{P}\ones_m = \mathbf{a}\)，\(\mathbf{P}^\top \ones_n = \mathbf{b}\)，\(\mathbf{P} \geq \mathbf{0}\)
+はいずれも各成分 \(P_{i,j}\) の連続関数による等式・不等式であるから，
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は \(\R^{n \times m}\) の閉集合である．
+さらに，行和条件 \(\sum_j P_{i,j} = a_i\) と \(P_{i,j} \geq 0\) から
+\(0 \leq P_{i,j} \leq a_i \leq 1\) が従い有界．
 \(\R^{n \times m}\) における有界閉集合はコンパクト
 （[ref:定理: Heine-Borel の定理|Heine-Borel の定理]）．
 

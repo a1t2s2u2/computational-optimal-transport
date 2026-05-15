@@ -713,6 +713,19 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
+### 定義: 全成分 1 のベクトル
+
+\(n \in \N\) に対し，\(\R^n\) の全成分が \(1\) のベクトルを
+
+\[
+ \ones_n \defeq (1, 1, \ldots, 1)^\top \in \R^n
+\]
+
+で表す．
+:::
+
+
+:::definition
 ### 定義: フロベニウス内積
 
 同じサイズの2つの行列 \(\mathbf{A}, \mathbf{B} \in \R^{n \times m}\) に対し，
