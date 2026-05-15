@@ -317,8 +317,6 @@ Monge 問題の実行可能集合
 \]
 
 を最小化する問題を**Kantorovich 問題**という．
-\(\Couplings(\alpha, \beta)\) の元を
-\(\alpha\) と \(\beta\) の**カップリング**という．
 :::
 
 
