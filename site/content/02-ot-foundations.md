@@ -308,7 +308,7 @@ Monge 問題の実行可能集合
  \right\}
 \]
 
-上で輸送コストを最小化する問題
+上で輸送コスト
 
 \[
  \MK_c(\alpha, \beta) \defeq
@@ -316,7 +316,7 @@ Monge 問題の実行可能集合
  \int_{\X \times \Y} c(x, y) \, \d\pi(x, y)
 \]
 
-を**Kantorovich 問題**という．
+を最小化する問題を**Kantorovich 問題**という．
 \(\Couplings(\alpha, \beta)\) の元を
 \(\alpha\) と \(\beta\) の**カップリング**という．
 :::
