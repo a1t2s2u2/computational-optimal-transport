@@ -394,22 +394,16 @@ Monge 問題の実行可能集合
 ### 定義: 線形計画問題
 
 \(N, M \in \N\)，\(\mathbf{c} \in \R^N\)，\(\mathbf{A} \in \R^{M \times N}\)，\(\mathbf{b} \in \R^M\) を所与とする．
-実行可能領域を
+最小化問題
 
 \[
- \mathcal{F} \defeq
- \bigl\{\mathbf{x} \in \R^N \bigm| \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\bigr\}
-\]
-
-と定め，最小化問題
-
-\[
- \min_{\mathbf{x} \in \mathcal{F}}\; \mathbf{c}^\top \mathbf{x}
+ \min_{\substack{\mathbf{x} \in \R^N \\ \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}}}\;
+ \mathbf{c}^\top \mathbf{x}
 \]
 
 を**線形計画問題**（LP）という．
-\(\mathcal{F} \neq \emptyset\) のとき LP は**実行可能**，
-\(\inf_{\mathbf{x} \in \mathcal{F}} \mathbf{c}^\top \mathbf{x} > -\infty\) のとき**有界**であるという．
+制約 \(\mathbf{A}\mathbf{x} = \mathbf{b}\)，\(\mathbf{x} \geq \mathbf{0}\) をみたす \(\mathbf{x} \in \R^N\) が存在するとき
+LP は**実行可能**，最適値が \(-\infty\) でないとき**有界**であるという．
 :::
 
 

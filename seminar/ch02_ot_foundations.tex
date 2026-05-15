@@ -529,18 +529,14 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \begin{definition}{線形計画問題}{sem-lp}
   $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
-  実行可能領域を
+  最小化問題
   \[
-    \mathcal{F} \defeq
-    \bigl\{\mathbf{x} \in \R^N \bigm| \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}\bigr\}
-  \]
-  と定め，最小化問題
-  \[
-    \min_{\mathbf{x} \in \mathcal{F}}\; \mathbf{c}^\top \mathbf{x}
+    \min_{\substack{\mathbf{x} \in \R^N \\ \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}}}\;
+    \mathbf{c}^\top \mathbf{x}
   \]
   を\textbf{線形計画問題}（LP）という．
-  $\mathcal{F} \neq \emptyset$ のとき LP は\textbf{実行可能}，
-  $\inf_{\mathbf{x} \in \mathcal{F}} \mathbf{c}^\top \mathbf{x} > -\infty$ のとき\textbf{有界}であるという．
+  制約 $\mathbf{A}\mathbf{x} = \mathbf{b}$，$\mathbf{x} \geq \mathbf{0}$ をみたす $\mathbf{x} \in \R^N$ が存在するとき
+  LP は\textbf{実行可能}，最適値が $-\infty$ でないとき\textbf{有界}であるという．
 \end{definition}
 
 \begin{proposition}{連続版との同値性}{sem-discrete-kantorovich-equiv}
