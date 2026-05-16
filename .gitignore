@@ -38,3 +38,5 @@ uv.lock
 # editor / linter caches
 .ruff_cache/
 .DS_Store
+__pycache__/
+*.pyc
