@@ -108,7 +108,7 @@ def main() -> None:
     with open(config_path) as f:
         cfg = yaml.safe_load(f)
 
-    num_iters   = int(cfg.get("num_iters", 2000))
+    num_iters   = int(cfg.get("iters", 2000))
     report_every = int(cfg.get("steps_per_report", 50))
 
     # ── Setup ─────────────────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ def main() -> None:
     print(f"Training {num_iters} iters, reporting every {report_every} steps\n")
 
     # ── Launch mlx-lm.lora ────────────────────────────────────────────────────
-    cmd = [sys.executable, "-m", "mlx_lm.lora", "--config", str(config_path)]
+    cmd = [sys.executable, "-m", "mlx_lm", "lora", "--config", str(config_path)]
     proc = subprocess.Popen(
         cmd,
         stdout=subprocess.PIPE,

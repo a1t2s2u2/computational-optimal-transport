@@ -82,6 +82,11 @@ ENV_JP = {
     "example":     "例",
 }
 
+SYSTEM_CPT = (
+    "あなたは計算的最適輸送の数学者です。"
+    "与えられた LaTeX テキストの続きを，同じ文体・記法で記述してください。"
+)
+
 SYSTEM_PROOF = (
     "あなたは計算的最適輸送の専門数学者です。"
     "セミナーの LaTeX マクロ（\\MKD, \\CouplingsD, \\Couplings, \\Hb, \\KLD, "
@@ -153,25 +158,44 @@ def build_cpt_chunks(tex_path: str) -> list[dict]:
     # Split at paragraph boundaries
     paragraphs = [p.strip() for p in re.split(r"\n{2,}", text) if p.strip()]
 
-    # Accumulate paragraphs into chunks
+    # Accumulate paragraphs into chunks, then split each chunk into
+    # context (user) / continuation (assistant) at the midpoint paragraph.
     chunks = []
     buf: list[str] = []
     buf_len = 0
+
+    def _emit(buf: list[str]) -> None:
+        if not buf:
+            return
+        full = "\n\n".join(buf)
+        if len(full) < CPT_MIN_CHARS:
+            return
+        # Split roughly at 60% into context and continuation.
+        mid = max(1, round(len(buf) * 0.6))
+        context      = "\n\n".join(buf[:mid])
+        continuation = "\n\n".join(buf[mid:])
+        if not continuation.strip():
+            continuation = context[-200:]  # fallback: last 200 chars as target
+            context      = context[:-200]
+        chunks.append({
+            "_src": tex_path,
+            "_format": "cpt",
+            "messages": [
+                {"role": "system",    "content": SYSTEM_CPT},
+                {"role": "user",      "content": context},
+                {"role": "assistant", "content": continuation},
+            ],
+        })
+
     for para in paragraphs:
         if buf_len + len(para) > CPT_CHUNK_CHARS and buf:
-            chunk_text = "\n\n".join(buf)
-            if len(chunk_text) >= CPT_MIN_CHARS:
-                chunks.append({"text": chunk_text, "_src": tex_path})
+            _emit(buf)
             buf = []
             buf_len = 0
         buf.append(para)
         buf_len += len(para)
 
-    if buf:
-        chunk_text = "\n\n".join(buf)
-        if len(chunk_text) >= CPT_MIN_CHARS:
-            chunks.append({"text": chunk_text, "_src": tex_path})
-
+    _emit(buf)
     return chunks
 
 
@@ -310,15 +334,14 @@ def main(seed: int = 42) -> None:
     train_lines: list[str] = []
     valid_lines: list[str] = []
 
-    # CPT records — split by source file
+    # All records now use {"messages": [...]} format for mlx-lm compatibility.
     for rec in cpt_records:
-        out = {"text": rec["text"]}
+        out = {"messages": rec["messages"]}
         if _is_valid(rec):
             valid_lines.append(json.dumps(out, ensure_ascii=False))
         else:
             train_lines.append(json.dumps(out, ensure_ascii=False))
 
-    # SFT records (proof completion + block continuation)
     for rec in all_sft:
         out = {"messages": rec["messages"]}
         if _is_valid(rec):
@@ -336,21 +359,9 @@ def main(seed: int = 42) -> None:
         f.write("\n".join(valid_lines) + "\n")
 
     # ── Summary ─────────────────────────────────
-    from collections import Counter
-    fmt_counts = Counter(
-        ("CPT" if "text" in json.loads(l) else json.loads(l)["messages"][0]["role"])
-        for l in train_lines
-    )
-    # Simpler summary
-    n_cpt   = sum(1 for l in train_lines if "text" in json.loads(l))
-    n_proof = sum(
-        1 for r in proof_records
-        if not _is_valid(r)
-    )
-    n_cont  = sum(
-        1 for r in cont_records
-        if not _is_valid(r)
-    )
+    n_cpt   = sum(1 for r in cpt_records   if not _is_valid(r))
+    n_proof = sum(1 for r in proof_records if not _is_valid(r))
+    n_cont  = sum(1 for r in cont_records  if not _is_valid(r))
 
     print(f"\n{'─'*40}")
     print(f"Train: {len(train_lines):>4}  (CPT {n_cpt}, proof {n_proof}, continuation {n_cont})")
