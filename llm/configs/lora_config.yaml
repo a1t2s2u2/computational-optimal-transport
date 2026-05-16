@@ -1,0 +1,30 @@
+# mlx-lm LoRA fine-tuning configuration for Qwen3-14B on OT seminar content.
+# Run: python -m mlx_lm.lora --config llm/configs/lora_config.yaml
+
+model: "mlx-community/Qwen3-14B-4bit"
+train: true
+data: "llm/data"
+
+# LoRA hyperparameters
+lora_layers: 32          # number of layers to apply LoRA (all layers)
+lora_rank: 16            # rank; ~128M trainable params on 14B
+lora_alpha: 32           # effective lr scale = alpha/rank = 2.0
+lora_dropout: 0.05
+
+# Training
+learning_rate: 1.0e-4
+lr_schedule: cosine_decay
+num_iters: 2000          # ~5 epochs over 1300 examples at batch 4
+warmup: 50
+batch_size: 4
+gradient_accumulation_steps: 2
+max_seq_length: 2048
+grad_clip: 1.0
+weight_decay: 0.01
+
+# Evaluation and checkpointing
+val_batches: 25
+steps_per_report: 50
+steps_per_eval: 200
+save_every: 500
+adapter_path: "llm/adapters/qwen3-14b-ot"

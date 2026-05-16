@@ -1,0 +1,10 @@
+# mlx-lm generation configuration for Qwen3-30B-A3B (content generation tasks).
+# Run:
+#   python -m mlx_lm.generate --config llm/configs/generate_config.yaml \
+#       --prompt "以下の定義の後に続く命題を書いてください..."
+
+model: "mlx-community/Qwen3-30B-A3B-4bit"
+max_tokens: 1024
+temp: 0.7
+top_p: 0.9
+repetition_penalty: 1.1
