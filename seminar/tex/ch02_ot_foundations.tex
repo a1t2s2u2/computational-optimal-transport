@@ -381,6 +381,8 @@ Monge 問題の実行可能集合
 \subsection{Kantorovich 緩和}
 \label{sec:sem-kantorovich}
 
+\subsubsection{問題の定義}
+
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
@@ -496,6 +498,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \caption{Monge 写像と Kantorovich カップリングの対比．Monge 写像は各点を1つの行き先に送るが，Kantorovich カップリングは質量の分割を許す．}
 \label{fig:sem-monge-vs-kantorovich}
 \end{figure}
+
+\subsubsection{離散化と線形計画への帰着}
 
 \begin{definition}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
   有限集合
@@ -838,6 +842,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \label{fig:sem-coupling-matrix}
 \end{figure}
 
+\subsubsection{最適解の存在と性質}
+
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
   任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
   （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
@@ -982,6 +988,44 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 %% ============================================================
 \subsection{Kantorovich 双対}
 \label{sec:sem-kantorovich-dual}
+
+\begin{definition}{双対ポテンシャル集合}{sem-dual-potentials-cont}
+  $c \colon \X \times \Y \to \R_+$ を可測コスト関数とする．
+  \textbf{双対実行可能集合}を
+  \[
+    \Potentials(c) \defeq
+    \bigl\{\, (f, g) \in L^1(\alpha) \times L^1(\beta)
+    \;\big|\; f(x) + g(y) \leq c(x, y) \;\text{a.e.} \,\bigr\}
+  \]
+  と定義する．$(f, g)$ を\textbf{双対ポテンシャル}と呼ぶ．
+\end{definition}
+
+\begin{theorem}{Kantorovich 双対定理}{sem-kantorovich-duality}
+  $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$，
+  $c \in \Cc(\X \times \Y, \R_+)$ に対して，
+  \[
+    \MK_c(\alpha, \beta)
+    = \sup_{(f,\, g)\,\in\, \Potentials(c)}
+      \int_\X f \,\d\alpha + \int_\Y g \,\d\beta.
+  \]
+\end{theorem}
+\begin{proof}
+  \begin{itemize}
+    \item[$(\geq)$] 任意の $(f, g) \in \Potentials(c)$ と $\pi \in \Couplings(\alpha, \beta)$ に対して，
+      $f(x) + g(y) \leq c(x, y)$ を $\pi$ について積分すると
+      \[
+        \int_{\X \times \Y} c(x,y) \,\d\pi
+        \geq \int_{\X \times \Y} \bigl(f(x) + g(y)\bigr) \,\d\pi
+        = \int_\X f \,\d\alpha + \int_\Y g \,\d\beta.
+      \]
+      $\pi$ と $(f, g)$ について下限・上限をとれば $\MK_c(\alpha, \beta) \geq \sup_{\Potentials(c)}(\cdots)$（弱双対性）．
+    \item[$(\leq)$] 最適輸送計画の存在と汎関数解析的な双対性定理から等号が成立する
+      （証明には弱収束と凸解析の道具を要するため，本ノートでは省略する）．
+  \end{itemize}
+\end{proof}
+
+本節では連続版の証明に必要な準備（LP 双対の一般論）を整備し，
+離散 Kantorovich 双対をその特殊ケースとして厳密に導出する．
 
 Kantorovich 問題は線形計画問題（定義~\ref{def:sem-lp}）に帰着される．
 LP は双対問題を持ち，実行可能かつ有界な場合に主問題と双対問題の最適値が一致する
