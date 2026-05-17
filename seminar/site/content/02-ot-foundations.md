@@ -485,13 +485,13 @@ Monge 問題の実行可能集合
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
 
 **コスト保存**：
-[ref:Prop: 積分の測度に関する線形性|積分の線形性]と
-[ref:Clm: Dirac 測度に対する積分|Dirac 測度の積分]から
+（[ref:Prop: 積分の測度に関する線形性|積分の線形性]，[ref:Clm: Dirac 測度に対する積分|Dirac 積分]を用いる）
 
 \[
  \int_{\X \times \Y} c\,\d\pi
- = \sum_{i,j} P_{i,j}\,c(x_i,y_j)
- = \inner{\mathbf{C}}{\mathbf{P}}.
+ \overset{\varphi^{-1}\text{の定義，積分の線形性，Dirac 積分}}{=}
+ \sum_{i,j} P_{i,j}\,c(x_i,y_j)
+ \overset{\text{内積の定義}}{=} \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
 以上より
