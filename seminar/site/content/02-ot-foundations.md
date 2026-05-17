@@ -390,15 +390,15 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
-\(\alpha, \beta\) が離散測度であることから \(\pi\) は有限集合
-\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上の離散測度であり，
+写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
 
 \[
- \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}, \qquad P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
+ \varphi(\pi)_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
 \]
 
-と表せる．この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
+で定める．任意の \(\pi \in \Couplings(\alpha, \beta)\) をとり，\(\mathbf{P} \defeq \varphi(\pi)\) とおく．
+\(\alpha, \beta\) が離散測度であることから \(\pi\) も離散測度であり，
+\(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) が成り立つ．
 
 \(\varphi\) が同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
