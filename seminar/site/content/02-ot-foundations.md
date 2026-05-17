@@ -391,6 +391,9 @@ Monge 問題の実行可能集合
 
 :::details-embedded 証明
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
+\(\alpha, \beta\) が離散測度であることから \(\pi\) の質量は有限集合
+\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上に集中するため，
+
 \[
  P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
 \]
