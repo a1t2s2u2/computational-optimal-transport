@@ -359,8 +359,8 @@ Monge 問題の実行可能集合
 ### Prop: 連続 Kantorovich 問題の離散化
 
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
-\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\) および
-可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
+\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
+可測関数 \(c \colon \X \times \Y \to \R_+\) とする．
 
 \[\begin{aligned}
  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
@@ -524,7 +524,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 :::definition
 ### Def: 線形計画問題
 
-\(N, M \in \N\)，\(\mathbf{c} \in \R^N\)，\(\mathbf{A} \in \R^{M \times N}\)，\(\mathbf{b} \in \R^M\) を所与とする．
+\(N, M \in \N\)，\(\mathbf{c} \in \R^N\)，\(\mathbf{A} \in \R^{M \times N}\)，\(\mathbf{b} \in \R^M\) とする．
 最小化問題
 
 \[
