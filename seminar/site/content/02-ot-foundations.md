@@ -390,8 +390,10 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-左辺は \(\Couplings(\alpha, \beta)\) 上，右辺は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上の最適化であり，
-両者の実行可能域がコストを保存しながら一対一対応するなら inf の値は等しい．
+左辺は \(\Couplings(\alpha, \beta)\) 上，右辺は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上の最適化である．
+対応する \(\pi\) と \(\mathbf{P}\) のコストが常に等しいような一対一対応
+\(\Couplings(\alpha,\beta) \leftrightarrow \CouplingsD(\mathbf{a},\mathbf{b})\)
+があれば，両辺の inf は一致する．
 そこで写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
 \(\varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定め，
 \(\varphi\) がコストを保存する全単射
