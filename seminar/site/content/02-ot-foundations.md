@@ -398,7 +398,8 @@ Monge 問題の実行可能集合
 :::fact
 ### Rem: 周辺条件の展開
 
-行列とベクトルの積の定義より，\((\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j}\) であるから，
+\(\ones_m = (1, \ldots, 1)^\top \in \R^m\) の各成分は \(1\) であるから，
+行列積の定義 \((\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}\) より
 
 \[
  \mathbf{P}\ones_m = \mathbf{a}
@@ -406,7 +407,7 @@ Monge 問題の実行可能集合
  \sum_{j=1}^m P_{i,j} = a_i \quad (\forall\, i = 1, \ldots, n).
 \]
 
-同様に \((\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}\) より，
+同様に \((\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}\) であるから，
 
 \[
  \mathbf{P}^\top\ones_n = \mathbf{b}
