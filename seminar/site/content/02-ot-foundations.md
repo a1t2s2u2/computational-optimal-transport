@@ -391,15 +391,14 @@ Monge 問題の実行可能集合
 
 :::details-embedded 証明
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
-\(\alpha, \beta\) が離散測度であることから \(\pi\) の質量は有限集合
-\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上に集中するため，
+\(\alpha, \beta\) が離散測度であることから \(\pi\) は有限集合
+\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上の離散測度であり，
 
 \[
- P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
+ \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}, \qquad P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
 \]
 
-とおくと \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
-この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
+と表せる．この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
 
 \(\varphi\) が同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
