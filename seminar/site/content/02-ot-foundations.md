@@ -392,11 +392,8 @@ Monge 問題の実行可能集合
 :::details-embedded 証明
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 
-\(\alpha = \sum_i a_i \delta_{x_i}\) の定義から
-\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = \sum_i a_i\,\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\}) = 0\)
-であり，周辺条件 \(\pi(A \times \Y) = \alpha(A)\) に
-\(A = \X \setminus \{x_1,\ldots,x_n\}\) を代入すると
-\(\pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0\)．
+\(\alpha\) の台は \(\{x_1,\ldots,x_n\}\) に含まれるから，
+周辺条件より \(\pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0\)，
 同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
 よって \(\pi\) の全質量は有限格子
 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中するから，
