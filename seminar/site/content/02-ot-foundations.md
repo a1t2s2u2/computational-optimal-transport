@@ -369,7 +369,7 @@ Polish 空間 \(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, 
  \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
 \end{aligned}\]
 
-に対して，行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) を定め，
+に対して，行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{1 \leq i \leq n,\, 1 \leq j \leq m} \in \R_+^{n \times m}\) を定め，
 **離散カップリング集合**
 
 \[
