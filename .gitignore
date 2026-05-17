@@ -25,6 +25,7 @@ site/tex-out/
 
 # LLM fine-tuning artifacts
 llm/models/
+llm/adapters/
 llm/data/raw/
 llm/data/train.jsonl
 llm/data/valid.jsonl
