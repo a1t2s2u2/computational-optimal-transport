@@ -358,8 +358,8 @@ Monge 問題の実行可能集合
 :::definition
 ### Def: 離散 Kantorovich 問題
 
-可測コスト関数 \(c \colon \X \times \Y \to \R_+\) と，
-Polish 空間 \(\X, \Y\) 上の有限個の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)
+可測関数 \(c \colon \X \times \Y \to \R_+\) と，
+Polish 空間 \(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)
 を台とする離散測度（[ref:Def: 離散測度|離散測度]）
 
 \[\begin{aligned}
@@ -369,7 +369,7 @@ Polish 空間 \(\X, \Y\) 上の有限個の点 \(x_1, \ldots, x_n \in \X\)，\(y
  \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
 \end{aligned}\]
 
-に対して，コスト行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) を定め，
+に対して，行列 \(\mathbf{C} \in \R_+^{n \times m}\)，\(C_{i,j} \defeq c(x_i, y_j)\) を定め，
 **離散カップリング集合**
 
 \[
