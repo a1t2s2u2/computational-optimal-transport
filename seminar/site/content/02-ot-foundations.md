@@ -390,24 +390,42 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
+写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
+\(\varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定める．
+\(\varphi\) がコストを保存する全単射
+\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
+であることを以下で示す．
 
 **(i) カップリングの台．**
-周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
-\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
+まず \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) を確認する．
+\(\alpha = \sum_i a_i \delta_{x_i}\) の定義から，
+各 \(i\) について \(\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\}) = 0\) なので
 
 \[
- \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
+ \alpha(\X \setminus \{x_1,\ldots,x_n\})
+ = \sum_{i=1}^n a_i\,\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\})
+ = 0.
 \]
 
-同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
-よって \(\pi\) は有限集合 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
+周辺条件 \(\pi(A \times \Y) = \alpha(A)\) に
+\(A = \X \setminus \{x_1,\ldots,x_n\}\) を代入すると
 
 \[
- P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+ \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0.
 \]
 
-と置けば \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
+同様に \(\beta(\Y \setminus \{y_1,\ldots,y_m\}) = 0\) から
+\(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
+
+以上より \(\pi\) の全質量は有限格子
+\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中する．
+各格子点の質量を \(P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0\) とおけば，
+
+\[
+ \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}
+\]
+
+と表せる．
 
 **(ii) 周辺条件と行列条件の対応．**
 \(\ones_m \in \R^m\) は全成分が \(1\) のベクトルであるから
@@ -422,8 +440,11 @@ Monge 問題の実行可能集合
 
 同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
 \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
-よって \(\pi \mapsto \mathbf{P}\) は \(\Couplings(\alpha,\beta)\) から
-\(\CouplingsD(\mathbf{a},\mathbf{b})\) への全単射である．
+よって \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対して
+\(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
+同様の計算から \(\pi \in \Couplings(\alpha, \beta)\) となる．
+したがって \(\varphi\) は全単射である．
 
 **(iii) コスト等式．**
 測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
