@@ -122,9 +122,11 @@ def convert_inline_math(text: str) -> str:
 
 
 def convert_text_commands(text: str) -> str:
-    r"""Convert \textbf{X} -> **X**, \textit{X} -> *X*."""
-    text = re.sub(r"\\textbf\{([^}]*)\}", r"**\1**", text)
-    text = re.sub(r"\\textit\{([^}]*)\}", r"*\1*", text)
+    r"""Convert \textbf{X} -> **X**, \textit{X} -> *X*.
+    Handles one level of nested braces (e.g. \textbf{...\mathbf{P}...})."""
+    nested = r"(?:[^{}]|\{[^{}]*\})*"
+    text = re.sub(rf"\\textbf\{{({nested})\}}", r"**\1**", text)
+    text = re.sub(rf"\\textit\{{({nested})\}}", r"*\1*", text)
     return text
 
 
