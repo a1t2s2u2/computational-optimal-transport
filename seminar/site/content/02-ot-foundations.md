@@ -451,8 +451,28 @@ Monge 問題の実行可能集合
  \begin{pmatrix}
  1/3 & 1/3 \\
  0 & 1/3
- \end{pmatrix},
+ \end{pmatrix}.
+\]
+
+
+\(\mathbf{P}^{\star} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) であることを周辺条件から確認する：
+
+\[
+ \mathbf{P}^{\star}\ones_2
+ = \begin{pmatrix} \tfrac{1}{3} + \tfrac{1}{3} \\ 0 + \tfrac{1}{3} \end{pmatrix}
+ = \begin{pmatrix} \tfrac{2}{3} \\ \tfrac{1}{3} \end{pmatrix}
+ = \mathbf{a},
  \qquad
+ (\mathbf{P}^{\star})^\top\ones_2
+ = \begin{pmatrix} \tfrac{1}{3} + 0 \\ \tfrac{1}{3} + \tfrac{1}{3} \end{pmatrix}
+ = \begin{pmatrix} \tfrac{1}{3} \\ \tfrac{2}{3} \end{pmatrix}
+ = \mathbf{b}.
+\]
+
+
+最適コストは
+
+\[
  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
  = \inner{\mathbf{C}}{\mathbf{P}^{\star}}
  = \sum_{i,j} C_{i,j} P_{i,j}^{\star}
