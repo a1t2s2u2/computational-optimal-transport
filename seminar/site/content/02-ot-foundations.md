@@ -401,6 +401,17 @@ Monge 問題の実行可能集合
 
 とおけば \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
 この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
+
+\(\varphi\) が同型写像
+\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
+であって，任意の \(\pi \in \Couplings(\alpha, \beta)\) に対して
+
+\[
+ \int_{\X \times \Y} c \, \d\pi = \inner{\mathbf{C}}{\varphi(\pi)}
+\]
+
+を満たすことを以下で示す．
+
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 \(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
 同様に \(\mathbf{P}^\top\ones_n = \mathbf{b}\) が成り立つから
