@@ -396,9 +396,15 @@ Monge 問題の実行可能集合
  \varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})
 \]
 
-で定める．\(\varphi\) がコストを保存する同型写像
+で定める．\(\varphi\) が同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であることを示す．
+であって，各 \(\pi\) に対して
+
+\[
+ \int_{\X \times \Y} c \, \d\pi = \inner{\mathbf{C}}{\varphi(\pi)}
+\]
+
+を満たすことを示す．
 
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 \(\pi\) の周辺分布が \(\alpha = \sum_i a_i\delta_{x_i}\)，\(\beta = \sum_j b_j\delta_{y_j}\) であるから，
