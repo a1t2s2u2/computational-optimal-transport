@@ -398,7 +398,7 @@ Monge 問題の実行可能集合
 
 で定める．\(\varphi\) が同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であって，各 \(\pi\) に対して
+であって，任意の \(\pi \in \Couplings(\alpha, \beta)\) に対して
 
 \[
  \int_{\X \times \Y} c \, \d\pi = \inner{\mathbf{C}}{\varphi(\pi)}
