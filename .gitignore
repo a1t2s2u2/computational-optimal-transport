@@ -28,8 +28,9 @@ llm/models/
 llm/data/raw/
 llm/data/train.jsonl
 llm/data/valid.jsonl
-llm/logs/*/stdout.log
+llm/logs/*/
 llm/logs/latest
+llm/logs/train.pid
 
 # uv
 .venv/
