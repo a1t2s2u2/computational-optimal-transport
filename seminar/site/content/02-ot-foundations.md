@@ -391,14 +391,11 @@ Monge 問題の実行可能集合
 
 :::details-embedded 証明
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
-\(\pi\) の周辺分布が \(\alpha = \sum_i a_i\delta_{x_i}\)，\(\beta = \sum_j b_j\delta_{y_j}\) であるから，
-各点 \((x_i, y_j)\) への割り当て質量
-
 \[
  P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
 \]
 
-によって \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
+とおくと \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
 この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
 
 \(\varphi\) が同型写像
