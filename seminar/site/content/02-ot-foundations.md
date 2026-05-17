@@ -457,6 +457,7 @@ Monge 問題の実行可能集合
 
 \[
  (\varphi \circ \varphi^{-1})(\mathbf{P})_{i,j}
+ = \varphi\bigl(\varphi^{-1}(\mathbf{P})\bigr)_{i,j}
  \overset{\varphi\text{ の定義}}{=}
  \varphi^{-1}(\mathbf{P})\bigl(\{(x_i,y_j)\}\bigr)
  \overset{\varphi^{-1}\text{ の定義}}{=}
@@ -474,8 +475,6 @@ Monge 問題の実行可能集合
  \sum_{i,j} \pi\bigl(\{(x_i,y_j)\}\bigr)\,\delta_{(x_i,y_j)}
  = \pi.
 \]
-
-最後の等号は，\(\alpha,\beta\) の離散性から \(\pi\) が \(\{(x_i,y_j)\}\) 上に集中することによる．
 
 よって \(\varphi\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
