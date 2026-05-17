@@ -355,6 +355,9 @@ Monge 問題の実行可能集合
 **離散化と線形計画への帰着**
 
 
+:::theorem
+### Prop: 連続 Kantorovich 問題の離散化
+
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\) および
 可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
@@ -364,13 +367,7 @@ Monge 問題の実行可能集合
  \beta \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
 \end{aligned}\]
 
-とおく．\(\alpha, \beta\) を Kantorovich 問題（[ref:Def: Kantorovich 問題|Kantorovich 問題]）に代入すると，
-次の命題が示すとおり連続問題は自然に行列最適化へ帰着する．
-
-:::theorem
-### Prop: 連続 Kantorovich 問題の離散化
-
-行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
+とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
 **離散カップリング集合**
 
 \[
