@@ -358,18 +358,17 @@ Monge 問題の実行可能集合
 :::definition
 ### Def: 離散 Kantorovich 問題
 
-離散確率測度（[ref:Def: 離散測度|離散測度]）
+台点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
+\(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
+（\(\sum_i a_i = 1\)，\(\sum_j b_j = 1\)），
+および可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
 
 \[\begin{aligned}
- \alpha &= \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \\
- \beta &= \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
+ \alpha &\defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \\
+ \beta &\defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
 \end{aligned}\]
 
-を考える．ここで \(x_i \in \X\)，\(y_j \in \Y\) は台点，\(a_i, b_j > 0\) は各台点の確率質量，
-\(\mathbf{a} = (a_i)_i \in \R_{++}^n\)，\(\mathbf{b} = (b_j)_j \in \R_{++}^m\) はその確率質量ベクトルであり，
-\(\sum_i a_i = \sum_j b_j = 1\) を満たす．
-可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
-行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) と，
+と定め，行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) と，
 **離散カップリング集合**
 
 \[
