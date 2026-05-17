@@ -392,7 +392,7 @@ Monge 問題の実行可能集合
 :::details-embedded 証明
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 \[
- P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+ P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
 \]
 
 とおくと \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
