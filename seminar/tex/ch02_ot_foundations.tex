@@ -501,16 +501,18 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \subsubsection{離散化と線形計画への帰着}
 
-\begin{definition}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
-  $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$，
-  $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
-  （$\sum_i a_i = 1$，$\sum_j b_j = 1$），
-  および可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
-  \begin{align*}
-    \alpha &\defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \\
-    \beta  &\defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
-  \end{align*}
-  と定め，行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ と，
+$\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
+$x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
+可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
+\begin{align*}
+  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
+  \beta  \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
+\end{align*}
+とおく．$\alpha, \beta$ を Kantorovich 問題（定義~\ref{def:sem-kantorovich}）に代入すると，
+次の命題が示すとおり連続問題は自然に行列最適化へ帰着する．
+
+\begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
+  行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ および
   \textbf{離散カップリング集合}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
@@ -519,35 +521,70 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
       \mathbf{P}^\top\ones_n = \mathbf{b}
     \right\}
   \]
-  を定める．
-  最小化問題
+  に対して
   \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    \defeq
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
+    \MK_c(\alpha, \beta)
+    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+      \inner{\mathbf{C}}{\mathbf{P}}
   \]
-  を\textbf{離散 Kantorovich 問題}という．
-  ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
-  （定義~\ref{def:sem-frobenius-inner}）を表す．
-\end{definition}
+  が成り立つ．ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
+  （定義~\ref{def:sem-frobenius-inner}）である．
+\end{proposition}
+\begin{proof}
+  任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
 
-\begin{remark}{周辺条件の展開}{sem-marginal-matrix}
-  $\ones_m \in \R^m$ は全成分が $1$ のベクトルであるから，
-  $(\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}$ より
+  \textbf{(i) カップリングの台．}
+  周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
+  $\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0$ から
   \[
-    \mathbf{P}\ones_m = \mathbf{a}
-    \iff
-    \sum_{j=1}^m P_{i,j} = a_i \quad (\forall\, i = 1, \ldots, n).
+    \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
   \]
-  同様に $(\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}$ であるから，
+  同様に $\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0$．
+  よって $\pi$ は有限集合 $\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}$ 上のみに質量を持ち，
   \[
-    \mathbf{P}^\top\ones_n = \mathbf{b}
-    \iff
-    \sum_{i=1}^n P_{i,j} = b_j \quad (\forall\, j = 1, \ldots, m).
+    P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
   \]
-  すなわち，$\mathbf{P}$ の各行の総和が $\mathbf{a}$，各列の総和が $\mathbf{b}$ に等しいことを要求している．
-\end{remark}
+  と置けば $\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}$ と書ける．
+
+  \textbf{(ii) 周辺条件と行列条件の対応．}
+  $\ones_m \in \R^m$ は全成分が $1$ のベクトルであるから
+  $(\mathbf{P}\ones_m)_k = \sum_j P_{k,j}$．
+  周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
+  \[
+    \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
+    \qquad\text{すなわち}\quad
+    \mathbf{P}\ones_m = \mathbf{a}.
+  \]
+  同様に $\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l$ から
+  $\mathbf{P}^\top\ones_n = \mathbf{b}$．
+  よって $\pi \mapsto \mathbf{P}$ は $\Couplings(\alpha,\beta)$ から
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ への全単射である．
+
+  \textbf{(iii) コスト等式．}
+  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
+  \[
+    \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
+    = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+    = \inner{\mathbf{C}}{\mathbf{P}}.
+  \]
+
+  以上より (ii) の全単射がコストを保存するから，
+  \[
+    \MK_c(\alpha, \beta)
+    = \inf_{\pi \in \Couplings(\alpha, \beta)}
+      \int_{\X \times \Y} c\, \d\pi
+    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+      \inner{\mathbf{C}}{\mathbf{P}}.
+  \]
+\end{proof}
+
+右辺の最適値を
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+\]
+と書き，\textbf{離散 Kantorovich 問題}と呼ぶ．
 
 \begin{example}{工場からスーパーへの輸送}{sem-factory-supermarket}
   2 つの工場 $x_1, x_2$ から 2 つのスーパー $y_1, y_2$ へ商品を輸送する状況を考える．
@@ -669,111 +706,6 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \end{figure}
 \end{example}
 
-$\alpha, \beta$ は $\X, \Y$ 上の離散確率測度であるから，
-連続 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の入力として有効である．
-次の命題は，連続版の最適値 $\MK_c(\alpha, \beta)$ と
-離散版の最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ が一致することを保証する．
-
-\begin{proposition}{離散測度に対する最適値の一致}{sem-discrete-kantorovich-equiv}
-  定義~\ref{def:sem-discrete-kantorovich} の $\alpha, \beta, \mathbf{C}$ に対して，
-  \[
-    \MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
-  \]
-\end{proposition}
-
-\begin{proof}
-  離散カップリング集合の各行列
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ に対し，
-  $X \times Y$ 上の測度を対応させる写像 $\Phi$ を
-  \[
-    \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
-    \qquad
-    \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
-  \]
-  で定義する．$\Phi$ が全単射かつコストを保つことを示せば，
-  両問題の最適値の一致が従う．
-
-  \textbf{(i) 値域の確認．}
-  $\Phi$ の式を定義しただけでは，$\Phi(\mathbf{P})$ が
-  $\Couplings(\alpha,\beta)$ の条件（$\alpha,\beta$ を周辺分布とする確率測度であること）を
-  みたすかは自明でない．以下で計算して確かめる．
-  $\Phi(\mathbf{P})(X \times Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1$ より
-  $\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)$．
-  単点 $\{x_k\}$ について
-  \[
-    \Phi(\mathbf{P})(\{x_k\} \times \Y)
-    = \sum_{j=1}^m P_{k,j}
-    = a_k
-    = \alpha(\{x_k\}).
-  \]
-  $\alpha$ は $\X \setminus X$ で零ゆえ，$\sigma$-加法性より
-  任意の $A \in \Bb(\X)$ で $\Phi(\mathbf{P})(A \times \Y) = \alpha(A)$．
-  同様に $\Phi(\mathbf{P})(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）．
-
-  \textbf{(ii) 単射性．}
-  $\Phi(\mathbf{P})(\{(x_k, y_l)\}) = P_{k,l}$ より
-  $\mathbf{P}$ は $\Phi(\mathbf{P})$ から一意に定まる．
-
-  \textbf{(iii) 全射性．}
-  $\pi \in \Couplings(\alpha, \beta)$ を任意にとる．
-  $P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0$ と定め，
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$ を示す．
-
-  \textit{$\Phi(\mathbf{P}) = \pi$ の確認．}
-  まず $\pi$ の台が $X \times Y$ に含まれることを示す．
-  周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
-  $\alpha(\X \setminus X) = 0$ から
-  \[
-    \pi\bigl((\X \setminus X) \times \Y\bigr) = \alpha(\X \setminus X) = 0,
-  \]
-  同様に $\pi(\X \times (\Y \setminus Y)) = 0$．
-  よって $\pi$ は有限集合 $X \times Y$ 上のみに質量を持つから，
-  $\sigma$-加法性より任意の $A \in \Bb(\X \times \Y)$ について
-  \[
-    \pi(A) = \sum_{(x_i,y_j) \in A} P_{i,j} = \Phi(\mathbf{P})(A),
-  \]
-  すなわち $\Phi(\mathbf{P}) = \pi$．
-
-  \textit{$\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の確認．}
-  周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
-  $\sum_j P_{k,j} = a_k$，すなわち $\mathbf{P}\ones_m = \mathbf{a}$．
-  同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
-  $P_{i,j} \geq 0$ と合わせて $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
-
-  \textbf{(iv) コスト等式．}
-  $\pi = \Phi(\mathbf{P}) = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ に対し，
-  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
-  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
-  \begin{align*}
-    \int_{X \times Y} c(x, y) \, \d\pi(x, y)
-    &= \sum_{i,j} P_{i,j} \int_{X \times Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
-      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
-    &= \sum_{i,j} P_{i,j}\, c(x_i, y_j)
-      && \text{（主張~\ref{clm:sem-dirac-integral}）} \\
-    &= \sum_{i,j} C_{i,j} P_{i,j}
-      = \inner{\mathbf{C}}{\mathbf{P}}.
-  \end{align*}
-  以上より最適値の一致を示す．
-  (i) より $\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)$ が確かめられ，
-  (ii)(iii) より $\Phi$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ から
-  $\Couplings(\alpha, \beta)$ への全単射である．(iv) よりコストを保存する．
-  すなわち，連続版のカップリング $\pi \in \Couplings(\alpha, \beta)$ と
-  離散版の行列 $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  $\pi = \Phi(\mathbf{P})$ を通じてコストを変えずに一対一対応する．
-  したがって，
-  \begin{align*}
-    \MK_c(\alpha, \beta)
-    &= \inf_{\pi \in \Couplings(\alpha, \beta)}
-       \int_{X \times Y} c(x, y) \, \d\pi(x, y) \\
-    &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-       \int_{X \times Y} c(x, y) \, \d(\Phi(\mathbf{P}))(x, y)
-      \quad \text{（$\Phi$ が全単射）} \\
-    &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-       \inner{\mathbf{C}}{\mathbf{P}}
-      \quad \text{（(iv)）} \\
-    &= \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
-  \end{align*}
-\end{proof}
 
 \begin{definition}{線形計画問題}{sem-lp}
   $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
@@ -788,7 +720,7 @@ $\alpha, \beta$ は $\X, \Y$ 上の離散確率測度であるから，
 \end{definition}
 
 \begin{remark}{離散 Kantorovich 問題と線形計画}{sem-discrete-kantorovich-lp}
-  離散 Kantorovich 問題（定義~\ref{def:sem-discrete-kantorovich}）は
+  離散 Kantorovich 問題（命題~\ref{prop:sem-discrete-kantorovich}）は
   線形計画問題（定義~\ref{def:sem-lp}）の特殊例である．
   対応を明示するため，行列を列方向に並べてベクトル化する操作
   $\operatorname{vec} \colon \R^{n \times m} \to \R^{nm}$ を用いる．
