@@ -477,8 +477,10 @@ Monge 問題の実行可能集合
  = \pi.
 \]
 
-\(\varphi \circ \varphi^{-1} = \mathrm{id}\) と \(\varphi^{-1} \circ \varphi = \mathrm{id}\) が成り立つから，
-\(\varphi^{-1}\) は \(\varphi\) の両側逆写像であり，
+\(\varphi \circ \varphi^{-1} = \mathrm{id}\) より任意の \(\mathbf{P}\) に対して
+\(\varphi(\varphi^{-1}(\mathbf{P})) = \mathbf{P}\) なので \(\varphi\) は全射．
+\(\varphi^{-1} \circ \varphi = \mathrm{id}\) より \(\varphi(\pi_1) = \varphi(\pi_2)\) ならば
+\(\pi_1 = \varphi^{-1}(\varphi(\pi_1)) = \varphi^{-1}(\varphi(\pi_2)) = \pi_2\) なので \(\varphi\) は単射．
 [ref:Def: 単射・全射・全単射・同型|全単射の定義]より
 \(\varphi\) は同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
