@@ -358,18 +358,18 @@ Monge 問題の実行可能集合
 :::definition
 ### Def: 離散 Kantorovich 問題
 
-可測関数 \(c \colon \X \times \Y \to \R_+\) と，
-Polish 空間 \(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)
-を台とする離散測度（[ref:Def: 離散測度|離散測度]）
+可測関数 \(c \colon \X \times \Y \to \R_+\)，
+Polish 空間 \(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
+および重みベクトル \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
+（\({\textstyle\sum_i} a_i = 1\)，\({\textstyle\sum_j} b_j = 1\)）を所与とする．
+これらが定める離散確率測度（[ref:Def: 離散測度|離散測度]）を
 
 \[\begin{aligned}
- \alpha &= \sum_{i=1}^n a_i\, \delta_{x_i}
- \quad (\mathbf{a} \in \R_{++}^n,\; \textstyle\sum_i a_i = 1), \\
- \beta &= \sum_{j=1}^m b_j\, \delta_{y_j}
- \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
+ \alpha &\defeq \sum_{i=1}^n a_i\, \delta_{x_i}, \\
+ \beta &\defeq \sum_{j=1}^m b_j\, \delta_{y_j}
 \end{aligned}\]
 
-に対して，行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{1 \leq i \leq n,\, 1 \leq j \leq m} \in \R_+^{n \times m}\) を定め，
+と書く．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{1 \leq i \leq n,\, 1 \leq j \leq m} \in \R_+^{n \times m}\) と，
 **離散カップリング集合**
 
 \[
