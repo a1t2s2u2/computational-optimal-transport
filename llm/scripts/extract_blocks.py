@@ -13,7 +13,7 @@ import sys
 from tqdm import tqdm
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-sys.path.insert(0, os.path.join(REPO_ROOT, "site", "scripts"))
+sys.path.insert(0, os.path.join(REPO_ROOT, "seminar", "site", "scripts"))
 
 import tex2md
 from tex2md import (
@@ -26,16 +26,16 @@ from tex2md import (
 
 SOURCE_FILES = [
     # Primary seminar content (Japanese, highest quality)
-    ("seminar/ch01_preliminaries.tex", "準備"),
-    ("seminar/ch02_ot_foundations.tex", "OT の基礎理論"),
-    ("seminar/ch03_algorithmic_foundations.tex", "アルゴリズムの基礎"),
-    ("seminar/ch04_entropic_regularization.tex", "エントロピー正則化"),
-    ("seminar/ch05_vae_geodesic.tex", "VAE と測地線"),
+    ("seminar/tex/ch01_preliminaries.tex", "準備"),
+    ("seminar/tex/ch02_ot_foundations.tex", "OT の基礎理論"),
+    ("seminar/tex/ch03_algorithmic_foundations.tex", "アルゴリズムの基礎"),
+    ("seminar/tex/ch04_entropic_regularization.tex", "エントロピー正則化"),
+    ("seminar/tex/ch05_vae_geodesic.tex", "VAE と測地線"),
     # Cuturi-Peyré Japanese translation (supplementary)
-    ("cuturi/translation/01_introduction.tex", "導入（翻訳）"),
-    ("cuturi/translation/02_theoretical_foundations.tex", "理論的基礎（翻訳）"),
-    ("cuturi/translation/03_algorithmic_foundations.tex", "アルゴリズム（翻訳）"),
-    ("cuturi/translation/04_entropic_regularization.tex", "エントロピー正則化（翻訳）"),
+    ("seminar/cuturi/translation/01_introduction.tex", "導入（翻訳）"),
+    ("seminar/cuturi/translation/02_theoretical_foundations.tex", "理論的基礎（翻訳）"),
+    ("seminar/cuturi/translation/03_algorithmic_foundations.tex", "アルゴリズム（翻訳）"),
+    ("seminar/cuturi/translation/04_entropic_regularization.tex", "エントロピー正則化（翻訳）"),
 ]
 
 OUTPUT_PATH = os.path.join(REPO_ROOT, "llm", "data", "raw", "blocks.jsonl")

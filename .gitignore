@@ -1,8 +1,8 @@
 # build output directories
 out/
-cuturi/translation/out/
-cuturi/original/out/
-seminar/out/
+seminar/cuturi/translation/out/
+seminar/cuturi/original/out/
+seminar/tex/out/
 
 # LaTeX intermediate files
 *.aux
@@ -16,12 +16,12 @@ seminar/out/
 
 # generated PDFs at repo root (cuturi/original の画像は明示的に追跡)
 /main.pdf
-/cuturi/translation/main.pdf
-/seminar/main.pdf
+/seminar/cuturi/translation/main.pdf
+/seminar/tex/main.pdf
 /translated_for_seminar.pdf
 
 # generated site artifacts
-site/tex-out/
+seminar/site/tex-out/
 
 # LLM fine-tuning artifacts
 llm/models/
