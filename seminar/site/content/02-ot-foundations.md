@@ -390,20 +390,20 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-\(\varphi\) が同型写像
+写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
+
+\[
+ \varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})
+\]
+
+で定める．\(\varphi\) がコストを保存する同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
 であることを示す．
 
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 \(\pi\) の周辺分布が \(\alpha = \sum_i a_i\delta_{x_i}\)，\(\beta = \sum_j b_j\delta_{y_j}\) であるから，
-\(\pi\) の全質量は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中する．
-各格子点の質量
-
-\[
- \varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0
-\]
-
-を成分とする行列 \(\mathbf{P} \defeq \varphi(\pi) \in \R_+^{n \times m}\) により
+\(\pi\) の全質量は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中し，
+\(\mathbf{P} \defeq \varphi(\pi)\) により
 \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 \(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
