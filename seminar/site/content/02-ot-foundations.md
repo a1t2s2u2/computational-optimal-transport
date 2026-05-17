@@ -390,24 +390,16 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-任意の \(\pi \in \Couplings(\alpha, \beta)\) をとり，
-\(P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)\) とおく．
-\(\alpha, \beta\) が離散測度であることから \(\pi\) も離散測度であり，
-\(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) が成り立つ．
-
-この対応 \(\pi \mapsto \mathbf{P} = (P_{i,j})_{i,j}\) により写像
-\(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\)
-が定まる．\(\mathbf{P} \defeq \varphi(\pi)\) と書く．
-
-\(\varphi\) が同型写像
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であって，任意の \(\pi \in \Couplings(\alpha, \beta)\) に対して
+写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
 
 \[
- \int_{\X \times \Y} c \, \d\pi = \inner{\mathbf{C}}{\varphi(\pi)}
+ \varphi(\pi)_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
 \]
 
-を満たすことを以下で示す．
+で定め，\(\mathbf{P} \defeq \varphi(\pi)\) と書く．
+\(\varphi\) がコストを保存する同型写像
+\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
+であることを示す．
 
 ```rawhtml
 <div class="bijection-diagram">
@@ -426,32 +418,84 @@ Monge 問題の実行可能集合
 </div>
 ```
 
-周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
-\(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
-同様に \(\mathbf{P}^\top\ones_n = \mathbf{b}\) が成り立つから
-\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
-
-また，積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
-Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
+**\(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)**：
+\(R \defeq \Y \setminus \{y_1,\ldots,y_m\}\) とおく．
+\(\beta = \sum_j b_j\,\delta_{y_j}\) より \(\beta(R) = 0\)．
+[ref:Def: Kantorovich 問題|カップリングの定義]の条件 \(\pi(\X \times B)=\beta(B)\) に
+\(B = R\) を代入すると \(\pi(\X \times R) = 0\)，
+測度の単調性 \(\{x_i\} \times R \subset \X \times R\) から
+\(\pi(\{x_i\} \times R) = 0\)．よって
 
 \[
- \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
- = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+ \sum_j P_{i,j}
+ = \pi\bigl(\{x_i\} \times \{y_1,\ldots,y_m\}\bigr)
+ = \pi\bigl(\{x_i\} \times \Y\bigr)
+ \overset{\pi(A \times \Y)=\alpha(A)}{=} \alpha(\{x_i\}) = a_i.
+\]
+
+\(\alpha\) 側も同様に \(\sum_i P_{i,j} = b_j\)，よって \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
+
+**\(\varphi\) の全単射性**：
+\(\varphi^{-1}(\mathbf{P}) \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) が
+\(\CouplingsD(\mathbf{a},\mathbf{b}) \to \Couplings(\alpha,\beta)\) の逆写像であることを示す．
+
+\(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し \(\pi' \defeq \varphi^{-1}(\mathbf{P})\) とおくと
+
+\[
+ \pi'(A \times \Y)
+ = \sum_{i:\,x_i\in A}\!\sum_j P_{i,j}
+ = \sum_{i:\,x_i\in A} a_i = \alpha(A), \qquad
+ \pi'(\X \times B)
+ = \sum_{j:\,y_j\in B}\!\sum_i P_{i,j}
+ = \beta(B)
+\]
+
+より \(\pi' \in \Couplings(\alpha,\beta)\)（逆写像の値域を確認）．
+
+\(\varphi \circ \varphi^{-1} = \mathrm{id}\)：
+任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して，
+
+\[
+ (\varphi \circ \varphi^{-1})(\mathbf{P})_{i,j}
+ \overset{\varphi\text{ の定義}}{=}
+ \varphi^{-1}(\mathbf{P})\bigl(\{(x_i,y_j)\}\bigr)
+ \overset{\varphi^{-1}\text{ の定義}}{=}
+ P_{i,j}.
+\]
+
+\(\varphi^{-1} \circ \varphi = \mathrm{id}\)：
+任意の \(\pi \in \Couplings(\alpha,\beta)\) に対して，
+
+\[
+ \varphi^{-1}(\varphi(\pi))
+ \overset{\varphi^{-1}\text{ の定義}}{=}
+ \sum_{i,j} \varphi(\pi)_{i,j}\,\delta_{(x_i,y_j)}
+ \overset{\varphi\text{ の定義}}{=}
+ \sum_{i,j} \pi\bigl(\{(x_i,y_j)\}\bigr)\,\delta_{(x_i,y_j)}
+ = \pi.
+\]
+
+最後の等号は，\(\alpha,\beta\) の離散性から \(\pi\) が \(\{(x_i,y_j)\}\) 上に集中することによる．
+
+よって \(\varphi\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
+\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
+
+**コスト保存**：
+[ref:Prop: 積分の測度に関する線形性|積分の線形性]と
+[ref:Clm: Dirac 測度に対する積分|Dirac 測度の積分]から
+
+\[
+ \int_{\X \times \Y} c\,\d\pi
+ = \sum_{i,j} P_{i,j}\,c(x_i,y_j)
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-以上より \(\varphi\) は \(\Couplings(\alpha,\beta)\) から
-\(\CouplingsD(\mathbf{a},\mathbf{b})\) へのコスト保存写像である．
-逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して
-\(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
-同様の計算から \(\pi \in \Couplings(\alpha,\beta)\) となるから，
-\(\varphi\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，
+以上より
 
 \[
  \MK_c(\alpha, \beta)
  = \inf_{\pi \in \Couplings(\alpha, \beta)}
- \int_{\X \times \Y} c\, \d\pi
+ \int_{\X \times \Y} c\,\d\pi
  = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]

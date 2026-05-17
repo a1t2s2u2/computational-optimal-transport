@@ -906,6 +906,53 @@ strong {
 }
 
 /* ==========================================================================
+   Coupling Table
+   ========================================================================== */
+
+.coupling-table-wrap {
+  margin: 1.2em auto;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.coupling-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.coupling-table th,
+.coupling-table td {
+  padding: 0.3em 0.75em;
+  text-align: center;
+}
+
+.coupling-table tbody td:not(.ct-rowsum) {
+  border: 1px solid var(--line);
+}
+
+.coupling-table tbody th,
+.coupling-table thead th:not(.ct-corner):not(.ct-marghead) {
+  font-weight: normal;
+  color: var(--ink-2);
+}
+
+.coupling-table .ct-rowsum,
+.coupling-table .ct-colsum {
+  color: var(--teal);
+  font-style: italic;
+}
+
+.coupling-table .ct-marghead {
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.coupling-table .ct-corner {
+  border: none;
+}
+
+/* ==========================================================================
    Bijection Diagram
    ========================================================================== */
 
