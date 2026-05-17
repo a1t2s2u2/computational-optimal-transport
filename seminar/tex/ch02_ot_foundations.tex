@@ -502,7 +502,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \subsubsection{離散化と線形計画への帰着}
 
 \begin{definition}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
-  $\X, \Y$ 上の点 $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$
+  可測コスト関数 $c \colon \X \times \Y \to \R_+$ と，
+  Polish 空間 $\X, \Y$ 上の有限個の点 $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$
   を台とする離散測度（定義~\ref{def:sem-discrete-measure}）
   \begin{align*}
     \alpha &= \sum_{i=1}^n a_i\, \delta_{x_i}
@@ -510,7 +511,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     \beta  &= \sum_{j=1}^m b_j\, \delta_{y_j}
       \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
   \end{align*}
-  と，コスト行列 $\mathbf{C} \in \R_+^{n \times m}$，$C_{i,j} \defeq c(x_i, y_j)$ に対して，
+  に対して，コスト行列 $\mathbf{C} \in \R_+^{n \times m}$，$C_{i,j} \defeq c(x_i, y_j)$ を定め，
   \textbf{離散カップリング集合}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
