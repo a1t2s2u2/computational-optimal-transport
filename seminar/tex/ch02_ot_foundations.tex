@@ -519,10 +519,13 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
     \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
-    \mathbf{P} \ones_m = \mathbf{a},\;
-    \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
+      \sum_{j=1}^m P_{i,j} = a_i \;\; (\forall\, i), \quad
+      \sum_{i=1}^n P_{i,j} = b_j \;\; (\forall\, j)
+    \right\}
   \]
-  を定める．最小化問題
+  を定める（各行 $i$ の総和が $a_i$，各列 $j$ の総和が $b_j$）．
+  これは行列記法では $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top\ones_n = \mathbf{b}$ と書く．
+  最小化問題
   \[
     \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
     \defeq
@@ -530,9 +533,26 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     \inner{\mathbf{C}}{\mathbf{P}}
   \]
   を\textbf{離散 Kantorovich 問題}という．
-  ここで $\inner{\mathbf{C}}{\mathbf{P}}$ はフロベニウス内積
+  ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
   （定義~\ref{def:sem-frobenius-inner}）を表す．
 \end{definition}
+
+\begin{remark}{連続版の周辺条件との対応}{sem-marginal-matrix}
+  連続版（定義~\ref{def:sem-kantorovich}）の周辺条件を
+  離散測度の1点集合 $A = \{x_i\}$，$B = \{y_j\}$ に適用すると，
+  $P_{i,j} \defeq \pi(\{(x_i, y_j)\})$ とおいたとき
+  $\pi(\{x_i\} \times \Y) = \sum_j P_{i,j}$ が成り立つので，
+  両版の周辺条件は次のように対応する：
+  \begin{center}
+  \renewcommand{\arraystretch}{1.6}
+  \begin{tabular}{ccc}
+    連続版 & $\longleftrightarrow$ & 離散版 \\
+    \hline
+    $\pi(A \times \Y) = \alpha(A)$ & & $\displaystyle\sum_{j=1}^m P_{i,j} = a_i$ \\
+    $\pi(\X \times B) = \beta(B)$ & & $\displaystyle\sum_{i=1}^n P_{i,j} = b_j$
+  \end{tabular}
+  \end{center}
+\end{remark}
 
 \begin{example}{工場からスーパーへの輸送}{sem-factory-supermarket}
   2 つの工場 $x_1, x_2$ から 2 つのスーパー $y_1, y_2$ へ商品を輸送する状況を考える．
@@ -636,29 +656,6 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     \label{fig:sem-factory-supermarket-opt}
   \end{figure}
 \end{example}
-
-\begin{remark}{周辺条件の行列表現}{sem-marginal-matrix}
-  連続版のカップリング集合（定義~\ref{def:sem-kantorovich}）の条件
-  $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）を
-  離散測度の単点 $A = \{x_k\}$ に適用すると，
-  命題~\ref{prop:sem-discrete-kantorovich-equiv} の証明における $P_{i,j} \defeq \pi(\{(x_i, y_j)\})$ の関係から
-  \[
-    \pi(\{x_k\} \times Y) = \sum_{j=1}^m P_{k,j} = a_k.
-  \]
-  これが全 $k = 1, \ldots, n$ で成り立つことを，
-  $\ones_m = (1, \ldots, 1)^\top \in \R^m$ との積で一括表記したものが
-  $\mathbf{P} \ones_m = \mathbf{a}$ である（各行の総和が $\mathbf{a}$ に等しい）．
-  同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$ は列の総和条件に対応する．
-  すなわち，
-
-  \begin{center}
-  \begin{tabular}{ccc}
-    連続版 & $\longleftrightarrow$ & 離散版（行列表記） \\[4pt]
-    $\pi(A \times \Y) = \alpha(A)$ & & $\mathbf{P} \ones_m = \mathbf{a}$ \\[2pt]
-    $\pi(\X \times B) = \beta(B)$ & & $\mathbf{P}^\top \ones_n = \mathbf{b}$
-  \end{tabular}
-  \end{center}
-\end{remark}
 
 \begin{definition}{線形計画問題}{sem-lp}
   $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
