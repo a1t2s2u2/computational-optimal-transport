@@ -308,6 +308,13 @@ class TexParser:
                 nodes.append(("blank",))
                 continue
 
+            # \demohint{NAME}  →  emit a demo block marker for the site
+            m_demo = re.match(r"\\demohint\{([^}]+)\}", stripped)
+            if m_demo:
+                self.advance()
+                nodes.append(("demo", m_demo.group(1)))
+                continue
+
             # Skip \chapter
             if stripped.startswith("\\chapter{"):
                 self.advance()
@@ -644,6 +651,11 @@ def render_nodes(nodes, indent=0):
         if kind == "subsubsection":
             title = apply_inline_conversions(node[1])
             output.append(f"**{title}**")
+            output.append("")
+            continue
+
+        if kind == "demo":
+            output.append(f":::demo {node[1]}")
             output.append("")
             continue
 

@@ -623,6 +623,40 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     = \mathbf{b}.
   \]
 
+  \demohint{marginal-check}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[font=\small]
+      \def\cs{1.8}
+      % outer border
+      \draw[thick] (0,0) rectangle (2*\cs, 2*\cs);
+      \draw[thick] (\cs,0) -- (\cs,2*\cs);
+      \draw[thick] (0,\cs) -- (2*\cs,\cs);
+      % column headers
+      \node[above] at (0.5*\cs, 2*\cs+0.15) {$y_1$};
+      \node[above] at (1.5*\cs, 2*\cs+0.15) {$y_2$};
+      % row headers
+      \node[left]  at (-0.15, 1.5*\cs) {$x_1$};
+      \node[left]  at (-0.15, 0.5*\cs) {$x_2$};
+      % entries
+      \node at (0.5*\cs, 1.5*\cs) {$\tfrac{1}{3}$};
+      \node at (1.5*\cs, 1.5*\cs) {$\tfrac{1}{3}$};
+      \node at (0.5*\cs, 0.5*\cs) {$0$};
+      \node at (1.5*\cs, 0.5*\cs) {$\tfrac{1}{3}$};
+      % row sums (blue)
+      \node[right, blue!70!black] at (2*\cs+0.2, 1.5*\cs) {$\tfrac{2}{3} = a_1$};
+      \node[right, blue!70!black] at (2*\cs+0.2, 0.5*\cs) {$\tfrac{1}{3} = a_2$};
+      \node[above, blue!70!black, font=\scriptsize] at (2*\cs+0.85, 2*\cs) {行和};
+      % column sums (green)
+      \node[below, green!50!black] at (0.5*\cs, -0.2) {$\tfrac{1}{3} = b_1$};
+      \node[below, green!50!black] at (1.5*\cs, -0.2) {$\tfrac{2}{3} = b_2$};
+      \node[below, green!50!black, font=\scriptsize] at (0.5*\cs, -0.6) {列和};
+      \node[below, green!50!black, font=\scriptsize] at (1.5*\cs, -0.6) {列和};
+    \end{tikzpicture}
+    \caption{$\mathbf{P}^{\star}$ の行和が $\mathbf{a}$（青），列和が $\mathbf{b}$（緑）に一致する．}
+    \label{fig:sem-marginal-check}
+  \end{figure}
+
   最適コストは
   \[
     \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})

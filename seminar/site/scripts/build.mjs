@@ -180,6 +180,53 @@ function transportOptimalDiagram() {
 </figure>`;
 }
 
+function marginalCheckDiagram() {
+  return `
+<figure aria-label="周辺条件の確認" style="margin:1em 0">
+  <div style="overflow-x:auto">
+    <table style="border-collapse:collapse;margin:0 auto;font-size:15px;text-align:center">
+      <thead>
+        <tr>
+          <th style="padding:6px 14px;border:none"></th>
+          <th style="padding:6px 14px;border:1.5px solid #888">\(y_1\)</th>
+          <th style="padding:6px 14px;border:1.5px solid #888">\(y_2\)</th>
+          <th style="padding:6px 14px;border:none;color:#2563eb;font-weight:normal">行和</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th style="padding:6px 14px;border:1.5px solid #888">\(x_1\)</th>
+          <td style="padding:6px 14px;border:1.5px solid #888">\(\tfrac{1}{3}\)</td>
+          <td style="padding:6px 14px;border:1.5px solid #888">\(\tfrac{1}{3}\)</td>
+          <td style="padding:6px 14px;color:#2563eb">\(\tfrac{2}{3} = a_1\)</td>
+        </tr>
+        <tr>
+          <th style="padding:6px 14px;border:1.5px solid #888">\(x_2\)</th>
+          <td style="padding:6px 14px;border:1.5px solid #888">\(0\)</td>
+          <td style="padding:6px 14px;border:1.5px solid #888">\(\tfrac{1}{3}\)</td>
+          <td style="padding:6px 14px;color:#2563eb">\(\tfrac{1}{3} = a_2\)</td>
+        </tr>
+        <tr>
+          <td style="border:none"></td>
+          <td style="padding:4px 14px;color:#16a34a;font-weight:normal">\(\tfrac{1}{3} = b_1\)</td>
+          <td style="padding:4px 14px;color:#16a34a;font-weight:normal">\(\tfrac{2}{3} = b_2\)</td>
+          <td style="border:none"></td>
+        </tr>
+        <tr>
+          <td style="border:none"></td>
+          <td style="padding:0 14px;font-size:12px;color:#16a34a">列和</td>
+          <td style="padding:0 14px;font-size:12px;color:#16a34a">列和</td>
+          <td style="border:none"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <figcaption style="text-align:center;font-size:0.9em;color:#666;margin-top:8px">
+    \(\\mathbf{P}^\\star\) の行和が \(\\mathbf{a}\)（青），列和が \(\\mathbf{b}\)（緑）に一致する．
+  </figcaption>
+</figure>`;
+}
+
 function sinkhornDemo() {
   return `
 <div class="demo" aria-label="Sinkhorn デモ">
@@ -314,6 +361,10 @@ function renderMarkdown(markdown) {
       const title = spec.slice("details ".length);
       html.push(`<details class="fold"><summary>${renderInline(title)}</summary>`);
       stack.push("</details>");
+      return;
+    }
+    if (spec === "demo marginal-check") {
+      html.push(marginalCheckDiagram());
       return;
     }
     if (spec === "demo sinkhorn") {

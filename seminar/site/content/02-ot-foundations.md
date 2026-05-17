@@ -470,6 +470,9 @@ Monge 問題の実行可能集合
 \]
 
 
+:::demo marginal-check
+
+
 最適コストは
 
 \[
