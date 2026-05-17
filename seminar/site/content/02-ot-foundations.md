@@ -390,27 +390,17 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
-
-\[
- \varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})
-\]
-
-で定める．\(\varphi\) が同型写像
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であって，任意の \(\pi \in \Couplings(\alpha, \beta)\) に対して
-
-\[
- \int_{\X \times \Y} c \, \d\pi = \inner{\mathbf{C}}{\varphi(\pi)}
-\]
-
-を満たすことを示す．
-
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 \(\pi\) の周辺分布が \(\alpha = \sum_i a_i\delta_{x_i}\)，\(\beta = \sum_j b_j\delta_{y_j}\) であるから，
-\(\pi\) の全質量は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中し，
-\(\mathbf{P} \defeq \varphi(\pi)\) により
-\(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
+\(\pi\) の全質量は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中する．
+よって各格子点 \((x_i, y_j)\) への \(\pi\) の割り当て質量を
+
+\[
+ P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+\]
+
+とおけば \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
+この対応 \(\pi \mapsto \mathbf{P}\) を \(\varphi\) と書く．
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 \(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
 同様に \(\mathbf{P}^\top\ones_n = \mathbf{b}\) が成り立つから
