@@ -468,7 +468,8 @@ Monge 問題の実行可能集合
 任意の \(\pi \in \Couplings(\alpha,\beta)\) に対して，
 
 \[
- \varphi^{-1}(\varphi(\pi))
+ (\varphi^{-1} \circ \varphi)(\pi)
+ = \varphi^{-1}(\varphi(\pi))
  \overset{\varphi^{-1}\text{ の定義}}{=}
  \sum_{i,j} \varphi(\pi)_{i,j}\,\delta_{(x_i,y_j)}
  \overset{\varphi\text{ の定義}}{=}
