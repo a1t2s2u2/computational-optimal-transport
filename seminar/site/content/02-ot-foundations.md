@@ -477,21 +477,27 @@ Monge 問題の実行可能集合
  = \pi.
 \]
 
-**全射**：任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し，
+**全射**
+（[ref:Def: 単射・全射・全単射・同型|全射の定義]より，
+任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して
+\(\varphi(\pi) = \mathbf{P}\) となる \(\pi \in \Couplings(\alpha,\beta)\) の存在を示す．）
+
 \(\pi \defeq \varphi^{-1}(\mathbf{P}) \in \Couplings(\alpha,\beta)\) とおくと，
 \(\varphi \circ \varphi^{-1} = \mathrm{id}\) より
 
 \[\varphi(\pi) = \varphi\bigl(\varphi^{-1}(\mathbf{P})\bigr) = (\varphi \circ \varphi^{-1})(\mathbf{P}) = \mathbf{P}.\]
 
-すなわち \(\pi\) は \(\mathbf{P}\) の原像であり，\(\mathbf{P}\) は任意だから \(\varphi\) は全射．
+よって \(\pi\) が求める原像となり，\(\varphi\) は全射．
 
-**単射**：\(\varphi(\pi_1) = \varphi(\pi_2)\) を仮定する．
+**単射**
+（[ref:Def: 単射・全射・全単射・同型|単射の定義]より，
+\(\varphi(\pi_1) = \varphi(\pi_2)\) を仮定して \(\pi_1 = \pi_2\) を示す．）
+
 \(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
 
 \[\pi_1 = (\varphi^{-1} \circ \varphi)(\pi_1) = \varphi^{-1}(\varphi(\pi_1)) = \varphi^{-1}(\varphi(\pi_2)) = (\varphi^{-1} \circ \varphi)(\pi_2) = \pi_2.\]
 
-よって \(\varphi\) は単射．[ref:Def: 単射・全射・全単射・同型|全単射の定義]より
-\(\varphi\) は同型写像
+よって \(\varphi\) は単射．以上より \(\varphi\) は全単射，すなわち同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
 
 **コスト保存**：
