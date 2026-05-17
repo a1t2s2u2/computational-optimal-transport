@@ -674,6 +674,68 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
+### Def: 逆写像
+
+全単射 \(f \colon A \xrightarrow{\sim} B\) に対し，
+
+\[
+  f(h(y)) = y \;\;(\forall y \in B), \qquad h(f(x)) = x \;\;(\forall x \in A)
+\]
+
+を満たす写像 \(h \colon B \to A\) を \(f\) の**逆写像**といい \(f^{-1}\) で表す．
+\(f\) の全単射性より逆写像は一意に存在する
+（\(h_1, h_2\) が共に条件を満たすとすると任意の \(y \in B\) で \(f(h_1(y)) = y = f(h_2(y))\)，
+\(f\) の単射性から \(h_1(y) = h_2(y)\)）．
+:::
+
+
+:::theorem
+### Prop: 合成写像と全射・単射・全単射
+
+写像 \(f \colon A \to B\)，\(g \colon B \to A\) について：
+
+(i) \(f \circ g = \mathrm{id}_B\) ならば，\(f\) は全射かつ \(g\) は単射である．
+
+(ii) \(f \circ g = \mathrm{id}_B\) かつ \(g \circ f = \mathrm{id}_A\) ならば，
+\(f\) と \(g\) はともに全単射であり，\(g = f^{-1}\) かつ \(f = g^{-1}\) が成り立つ．
+
+:::details-embedded 証明
+
+**(i)** \(f \circ g = \mathrm{id}_B\) を仮定する．
+
+**\(f\) は全射**（[ref:Def: 単射・全射・全単射・同型|全射の定義]より，任意の \(y \in B\) に対して \(f(x) = y\) となる \(x\) の存在を示す）：
+
+任意の \(y \in B\) に対し \(x \defeq g(y)\) とおくと，
+
+\[f(x) = f(g(y)) = (f \circ g)(y) = \mathrm{id}_B(y) = y.\]
+
+よって \(x = g(y)\) が \(y\) の原像となるので，\(f\) は全射．
+
+**\(g\) は単射**（[ref:Def: 単射・全射・全単射・同型|単射の定義]より，\(g(y_1) = g(y_2)\) を仮定して \(y_1 = y_2\) を示す）：
+
+両辺に \(f\) を作用させると，
+
+\[y_1 = \mathrm{id}_B(y_1) = (f \circ g)(y_1) = f(g(y_1)) = f(g(y_2)) = (f \circ g)(y_2) = \mathrm{id}_B(y_2) = y_2.\]
+
+よって \(g\) は単射．
+
+**(ii)** さらに \(g \circ f = \mathrm{id}_A\) も仮定する．
+
+(i) を写像の組 \((g \colon B \to A,\; f \colon A \to B)\) に適用すると，
+\(g \circ f = \mathrm{id}_A\) より \(g\) は全射かつ \(f\) は単射．
+(i) と合わせて \(f\) は全射かつ単射（全単射）．同様に \(g\) も全単射．
+
+**\(g = f^{-1}\)**：\(f\) の全単射性より \(f^{-1}\) が存在する（[ref:Def: 逆写像|逆写像の定義]）．
+\(g \circ f = \mathrm{id}_A\) より，任意の \(y \in B\) に対して
+
+\[g(y) = g\bigl(f(f^{-1}(y))\bigr) = (g \circ f)(f^{-1}(y)) = \mathrm{id}_A(f^{-1}(y)) = f^{-1}(y).\]
+
+よって \(g = f^{-1}\)．同様に \(f \circ g = \mathrm{id}_B\) より \(f = g^{-1}\)．
+:::
+:::
+
+
+:::definition
 ### Def: 有限集合と濃度
 
 集合 \(S\) が**有限集合**であるとは，ある \(n \in \N\) と

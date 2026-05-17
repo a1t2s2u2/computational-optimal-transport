@@ -477,27 +477,11 @@ Monge 問題の実行可能集合
  = \pi.
 \]
 
-**全射**
-（[ref:Def: 単射・全射・全単射・同型|全射の定義]より，
-任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して
-\(\varphi(\pi) = \mathbf{P}\) となる \(\pi \in \Couplings(\alpha,\beta)\) の存在を示す．）
-
-\(\pi \defeq \varphi^{-1}(\mathbf{P}) \in \Couplings(\alpha,\beta)\) とおくと，
-\(\varphi \circ \varphi^{-1} = \mathrm{id}\) より
-
-\[\varphi(\pi) = \varphi\bigl(\varphi^{-1}(\mathbf{P})\bigr) = (\varphi \circ \varphi^{-1})(\mathbf{P}) = \mathbf{P}.\]
-
-よって \(\pi\) が求める原像となり，\(\varphi\) は全射．
-
-**単射**
-（[ref:Def: 単射・全射・全単射・同型|単射の定義]より，
-\(\varphi(\pi_1) = \varphi(\pi_2)\) を仮定して \(\pi_1 = \pi_2\) を示す．）
-
-\(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
-
-\[\pi_1 = (\varphi^{-1} \circ \varphi)(\pi_1) = \varphi^{-1}(\varphi(\pi_1)) = \varphi^{-1}(\varphi(\pi_2)) = (\varphi^{-1} \circ \varphi)(\pi_2) = \pi_2.\]
-
-よって \(\varphi\) は単射．以上より \(\varphi\) は全単射，すなわち同型写像
+[ref:Prop: 合成写像と全射・単射・全単射|合成写像と全射・単射・全単射] を
+\(f = \varphi\)，\(g = \varphi^{-1}\) に適用すると，
+\(\varphi \circ \varphi^{-1} = \mathrm{id}\) かつ \(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
+\(\varphi\) は全単射であり，\(\varphi^{-1}\) は \(\varphi\) の逆写像である．
+すなわち \(\varphi\) は同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
 
 **コスト保存**：
