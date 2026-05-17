@@ -44,21 +44,26 @@ CHAPTERS = [
 # Named block environments and their markdown mappings.
 # (env_name, container_class, heading_prefix)
 BLOCK_ENVS = {
-    "definition": ("definition", "定義"),
-    "claim":      ("theorem",    "主張"),
-    "theorem":    ("theorem",    "定理"),
-    "proposition":("theorem",    "命題"),
-    "remark":     ("fact",       None),       # title only, no prefix
-    "example":    ("fact accent","例"),
+    "definition": ("definition", "Def"),
+    "claim":      ("theorem",    "Clm"),
+    "theorem":    ("theorem",    "Thm"),
+    "proposition":("theorem",    "Prop"),
+    "remark":     ("fact",       "Rem"),
+    "example":    ("fact accent","Ex"),
 }
 
 LABEL_PREFIX_MAP = {
-    "def": "定義",
-    "clm": "主張",
-    "thm": "定理",
-    "prop": "命題",
-    "rem": "注意",
-    "ex": "例",
+    "def": "Def",
+    "clm": "Clm",
+    "thm": "Thm",
+    "prop": "Prop",
+    "rem": "Rem",
+    "ex": "Ex",
+}
+
+_JP_TO_ABBREV = {
+    "定義": "Def", "主張": "Clm", "命題": "Prop",
+    "定理": "Thm", "例": "Ex", "注意": "Rem", "Claim": "Clm",
 }
 
 ENV_TO_PREFIX = {
@@ -201,8 +206,8 @@ def convert_refs(text: str) -> str:
         if not title:
             return ""
         prefix = label.split(":")[0] if ":" in label else ""
-        jp_type = LABEL_PREFIX_MAP.get(prefix, m.group(1))
-        return f"[ref:{jp_type}: {title}|{title}]"
+        abbrev = LABEL_PREFIX_MAP.get(prefix) or _JP_TO_ABBREV.get(m.group(1), m.group(1))
+        return f"[ref:{abbrev}: {title}|{title}]"
 
     text = re.sub(
         r"(定義|主張|命題|定理|例|注意|Claim|正則化問題)~?\\ref\{([^}]+)\}",

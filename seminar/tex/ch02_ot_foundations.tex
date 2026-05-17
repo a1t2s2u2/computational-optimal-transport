@@ -651,17 +651,10 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \end{figure}
 \end{example}
 
-\begin{definition}{線形計画問題}{sem-lp}
-  $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
-  最小化問題
-  \[
-    \min_{\substack{\mathbf{x} \in \R^N \\ \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}}}\;
-    \mathbf{c}^\top \mathbf{x}
-  \]
-  を\textbf{線形計画問題}（LP）という．
-  制約 $\mathbf{A}\mathbf{x} = \mathbf{b}$，$\mathbf{x} \geq \mathbf{0}$ をみたす $\mathbf{x} \in \R^N$ が存在するとき
-  LP は\textbf{実行可能}，最適値が $-\infty$ でないとき\textbf{有界}であるという．
-\end{definition}
+$\alpha, \beta$ は $\X, \Y$ 上の離散確率測度であるから，
+連続 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の入力として有効である．
+次の命題は，連続版の最適値 $\MK_c(\alpha, \beta)$ と
+離散版の最適値 $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ が一致することを保証する．
 
 \begin{proposition}{離散測度に対する最適値の一致}{sem-discrete-kantorovich-equiv}
   定義~\ref{def:sem-discrete-kantorovich} の $\alpha, \beta, \mathbf{C}$ に対して，
@@ -763,6 +756,18 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     &= \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
   \end{align*}
 \end{proof}
+
+\begin{definition}{線形計画問題}{sem-lp}
+  $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
+  最小化問題
+  \[
+    \min_{\substack{\mathbf{x} \in \R^N \\ \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}}}\;
+    \mathbf{c}^\top \mathbf{x}
+  \]
+  を\textbf{線形計画問題}（LP）という．
+  制約 $\mathbf{A}\mathbf{x} = \mathbf{b}$，$\mathbf{x} \geq \mathbf{0}$ をみたす $\mathbf{x} \in \R^N$ が存在するとき
+  LP は\textbf{実行可能}，最適値が $-\infty$ でないとき\textbf{有界}であるという．
+\end{definition}
 
 \begin{remark}{離散 Kantorovich 問題と線形計画}{sem-discrete-kantorovich-lp}
   離散 Kantorovich 問題（定義~\ref{def:sem-discrete-kantorovich}）は
