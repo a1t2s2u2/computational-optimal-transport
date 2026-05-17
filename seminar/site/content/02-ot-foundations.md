@@ -390,62 +390,31 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-写像 \(\pi \mapsto \mathbf{P}\) がコストを保存する同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であることを示す（\(\mathbf{P}\) の構成は (i) で行う）．
+任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 
-**(i) カップリングの台．**
-まず \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) を確認する．
-\(\alpha = \sum_i a_i \delta_{x_i}\) の定義から，
-各 \(i\) について \(\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\}) = 0\) なので
-
-\[
- \alpha(\X \setminus \{x_1,\ldots,x_n\})
- = \sum_{i=1}^n a_i\,\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\})
- = 0.
-\]
-
-周辺条件 \(\pi(A \times \Y) = \alpha(A)\) に
+\(\alpha = \sum_i a_i \delta_{x_i}\) の定義から
+\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = \sum_i a_i\,\delta_{x_i}(\X \setminus \{x_1,\ldots,x_n\}) = 0\)
+であり，周辺条件 \(\pi(A \times \Y) = \alpha(A)\) に
 \(A = \X \setminus \{x_1,\ldots,x_n\}\) を代入すると
+\(\pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0\)．
+同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
+よって \(\pi\) の全質量は有限格子
+\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中するから，
+各格子点の質量
 
 \[
- \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0.
+ P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0
 \]
 
-同様に \(\beta(\Y \setminus \{y_1,\ldots,y_m\}) = 0\) から
-\(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
+を成分とする行列 \(\mathbf{P} \in \R_+^{n \times m}\) により
+\(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
 
-以上より \(\pi\) の全質量は有限格子
-\(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) に集中する．
-各格子点の質量を \(P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0\) とおけば，
+次に，周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
+\(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
+同様に \(\mathbf{P}^\top\ones_n = \mathbf{b}\) が成り立つから
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
 
-\[
- \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}
-\]
-
-と表せる．
-
-**(ii) 周辺条件と行列条件の対応．**
-\(\ones_m \in \R^m\) は全成分が \(1\) のベクトルであるから
-\((\mathbf{P}\ones_m)_k = \sum_j P_{k,j}\)．
-周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
-
-\[
- \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
- \qquad\text{すなわち}\quad
- \mathbf{P}\ones_m = \mathbf{a}.
-\]
-
-同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
-\(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
-よって \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
-逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対して
-\(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
-同様の計算から \(\pi \in \Couplings(\alpha, \beta)\) となる．
-したがって \(\pi \mapsto \mathbf{P}\) は同型写像である．
-
-**(iii) コスト等式．**
-測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
+また，積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
 Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
 \[
@@ -454,8 +423,13 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-
-以上より (ii) の全単射がコストを保存するから，
+以上より \(\pi \mapsto \mathbf{P}\) は \(\Couplings(\alpha,\beta)\) から
+\(\CouplingsD(\mathbf{a},\mathbf{b})\) へのコスト保存写像である．
+逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して
+\(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
+同様の計算から \(\pi \in \Couplings(\alpha,\beta)\) となるから，
+\(\pi \mapsto \mathbf{P}\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
+\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，
 
 \[
  \MK_c(\alpha, \beta)
