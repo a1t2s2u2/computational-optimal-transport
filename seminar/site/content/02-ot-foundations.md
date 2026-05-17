@@ -486,11 +486,13 @@ Monge 問題の実行可能集合
 
 **コスト保存**
 （[ref:Prop: 積分の測度に関する線形性|積分の線形性]，[ref:Clm: Dirac 測度に対する積分|Dirac 積分]）：
+\(\mathbf{P} = \varphi(\pi)\) かつ \(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
+\(\pi = \varphi^{-1}(\mathbf{P}) = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) であるから，
 
 \[
 \begin{aligned}
  \int_{\X \times \Y} c\,\d\pi
- &\overset{\varphi^{-1}\text{の定義}}{=}
+ &\overset{\pi = \varphi^{-1}(\mathbf{P})}{=}
   \int_{\X \times \Y} c\,\d\!\left(\sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\right) \\
  &\overset{\text{積分の線形性}}{=}
   \sum_{i,j} P_{i,j} \int_{\X \times \Y} c\,\d\delta_{(x_i,y_j)} \\
