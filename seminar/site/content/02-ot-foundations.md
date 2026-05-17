@@ -360,7 +360,7 @@ Monge 問題の実行可能集合
 
 可測関数 \(c \colon \X \times \Y \to \R_+\)，
 Polish 空間 \(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
-および重みベクトル \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
+および \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
 （\({\textstyle\sum_i} a_i = 1\)，\({\textstyle\sum_j} b_j = 1\)）を所与とする．
 これらが定める離散確率測度（[ref:Def: 離散測度|離散測度]）を
 
