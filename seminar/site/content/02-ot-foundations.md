@@ -390,15 +390,10 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-左辺は \(\Couplings(\alpha, \beta)\) 上，右辺は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上の最適化である．
-対応する \(\pi\) と \(\mathbf{P}\) のコストが常に等しいような一対一対応
-\(\Couplings(\alpha,\beta) \leftrightarrow \CouplingsD(\mathbf{a},\mathbf{b})\)
-があれば，測度上の最小化を行列上の最小化に置き換えられる．
-そこで写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
-\(\varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定め，
-\(\varphi\) がコストを保存する全単射
+\(P_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定まる写像 \(\pi \mapsto \mathbf{P}\) が
+コストを保存する全単射
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であることを以下で示す．
+であることを示す．
 
 **(i) カップリングの台．**
 まず \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) を確認する．
