@@ -9,9 +9,9 @@ import re
 # Configuration
 # ---------------------------------------------------------------------------
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar")
-CONTENT_DIR = os.path.join(REPO_ROOT, "site", "content")
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
+CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
 CHAPTERS = [
     ("ch01_preliminaries.tex", "01-preliminaries.md", {
