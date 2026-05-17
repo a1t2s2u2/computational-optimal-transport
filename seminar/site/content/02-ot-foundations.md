@@ -358,13 +358,7 @@ Monge 問題の実行可能集合
 :::definition
 ### 定義: 離散 Kantorovich 問題
 
-有限集合
-
-\[
- X \defeq \{x_1, \ldots, x_n\} \subset \X, \qquad
- Y \defeq \{y_1, \ldots, y_m\} \subset \Y
-\]
-
+\(\X, \Y\) 上の点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)
 を台とする離散測度（[ref:定義: 離散測度|離散測度]）
 
 \[\begin{aligned}
@@ -380,13 +374,12 @@ Monge 問題の実行可能集合
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
  \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
- \sum_{j=1}^m P_{i,j} = a_i \;\; (\forall\, i), \quad
- \sum_{i=1}^n P_{i,j} = b_j \;\; (\forall\, j)
+ \mathbf{P}\ones_m = \mathbf{a},\;
+ \mathbf{P}^\top\ones_n = \mathbf{b}
  \right\}
 \]
 
-を定める（各行 \(i\) の総和が \(a_i\)，各列 \(j\) の総和が \(b_j\)）．
-これは行列記法では \(\mathbf{P}\ones_m = \mathbf{a}\)，\(\mathbf{P}^\top\ones_n = \mathbf{b}\) と書く．
+を定める．
 最小化問題
 
 \[
@@ -403,17 +396,25 @@ Monge 問題の実行可能集合
 
 
 :::fact
-### 行列記法 \(\mathbf{P}\ones_m = \mathbf{a}\) の導出
+### 周辺条件の展開
 
-行列とベクトルの積の定義より，\(\mathbf{P}\ones_m\) の第 \(i\) 成分は
+行列とベクトルの積の定義より，\((\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j}\) であるから，
 
 \[
- (\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}.
+ \mathbf{P}\ones_m = \mathbf{a}
+ \iff
+ \sum_{j=1}^m P_{i,j} = a_i \quad (\forall\, i = 1, \ldots, n).
 \]
 
-よって \(\mathbf{P}\ones_m = \mathbf{a}\) は，各 \(i\) について \(\sum_{j=1}^m P_{i,j} = a_i\)（行和条件）と同値である．
-同様に \((\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}\) であるから，
-\(\mathbf{P}^\top\ones_n = \mathbf{b}\) は各 \(j\) について \(\sum_{i=1}^n P_{i,j} = b_j\)（列和条件）と同値である．
+同様に \((\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}\) より，
+
+\[
+ \mathbf{P}^\top\ones_n = \mathbf{b}
+ \iff
+ \sum_{i=1}^n P_{i,j} = b_j \quad (\forall\, j = 1, \ldots, m).
+\]
+
+すなわち，\(\mathbf{P}\) の各行の総和が \(\mathbf{a}\)，各列の総和が \(\mathbf{b}\) に等しいことを要求している．
 :::
 
 
