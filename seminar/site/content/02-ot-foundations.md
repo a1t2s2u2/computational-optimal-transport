@@ -390,6 +390,7 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
+写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を以下で定める．
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 
 \(\alpha\) の台は \(\{x_1,\ldots,x_n\}\) に含まれるから，
@@ -400,13 +401,14 @@ Monge 問題の実行可能集合
 各格子点の質量
 
 \[
- P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0
+ \varphi(\pi)_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0
 \]
 
-を成分とする行列 \(\mathbf{P} \in \R_+^{n \times m}\) により
-\(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
+を成分とする行列 \(\varphi(\pi) \in \R_+^{n \times m}\) により
+\(\pi = \sum_{i,j} \varphi(\pi)_{i,j}\,\delta_{(x_i, y_j)}\) と表せる．
 
-次に，周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
+\(\mathbf{P} \defeq \varphi(\pi)\) とおく．
+周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 \(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
 同様に \(\mathbf{P}^\top\ones_n = \mathbf{b}\) が成り立つから
 \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
@@ -420,12 +422,12 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-以上より \(\pi \mapsto \mathbf{P}\) は \(\Couplings(\alpha,\beta)\) から
+以上より \(\varphi\) は \(\Couplings(\alpha,\beta)\) から
 \(\CouplingsD(\mathbf{a},\mathbf{b})\) へのコスト保存写像である．
 逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して
 \(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
 同様の計算から \(\pi \in \Couplings(\alpha,\beta)\) となるから，
-\(\pi \mapsto \mathbf{P}\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
+\(\varphi\) は同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，
 
 \[
