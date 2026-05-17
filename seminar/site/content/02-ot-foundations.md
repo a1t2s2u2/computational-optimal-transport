@@ -390,10 +390,9 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-\(P_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定まる写像 \(\pi \mapsto \mathbf{P}\) が
-コストを保存する同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
+写像 \(\pi \mapsto \mathbf{P}\) がコストを保存する同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であることを示す．
+であることを示す（\(\mathbf{P}\) の構成は (i) で行う）．
 
 **(i) カップリングの台．**
 まず \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) を確認する．
