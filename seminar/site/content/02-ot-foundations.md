@@ -398,8 +398,8 @@ Monge 問題の実行可能集合
 :::fact
 ### Rem: 周辺条件の展開
 
-\(\ones_m = (1, \ldots, 1)^\top \in \R^m\) の各成分は \(1\) であるから，
-行列積の定義 \((\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}\) より
+\(\ones_m \in \R^m\) は全成分が \(1\) のベクトルであるから，
+\((\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}\) より
 
 \[
  \mathbf{P}\ones_m = \mathbf{a}
