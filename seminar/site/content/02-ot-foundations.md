@@ -403,13 +403,17 @@ Monge 問題の実行可能集合
 
 
 :::fact
-### 連続版の周辺条件との対応
+### 行列記法 \(\mathbf{P}\ones_m = \mathbf{a}\) の導出
 
-連続版（[ref:定義: Kantorovich 問題|Kantorovich 問題]）の周辺条件を
-離散測度の1点集合 \(A = \{x_i\}\)，\(B = \{y_j\}\) に適用すると，
-\(P_{i,j} \defeq \pi(\{(x_i, y_j)\})\) とおいたとき
-\(\pi(\{x_i\} \times \Y) = \sum_j P_{i,j}\) が成り立つので，
-両版の周辺条件は次のように対応する：
+行列とベクトルの積の定義より，\(\mathbf{P}\ones_m\) の第 \(i\) 成分は
+
+\[
+ (\mathbf{P}\ones_m)_i = \sum_{j=1}^m P_{i,j} \cdot 1 = \sum_{j=1}^m P_{i,j}.
+\]
+
+よって \(\mathbf{P}\ones_m = \mathbf{a}\) は，各 \(i\) について \(\sum_{j=1}^m P_{i,j} = a_i\)（行和条件）と同値である．
+同様に \((\mathbf{P}^\top\ones_n)_j = \sum_{i=1}^n P_{i,j}\) であるから，
+\(\mathbf{P}^\top\ones_n = \mathbf{b}\) は各 \(j\) について \(\sum_{i=1}^n P_{i,j} = b_j\)（列和条件）と同値である．
 :::
 
 
