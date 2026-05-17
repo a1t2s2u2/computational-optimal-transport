@@ -1,0 +1,103 @@
+---
+id: algorithms
+nav: アルゴリズムの基礎
+eyebrow: 3. Algorithms
+title: アルゴリズムの基礎
+---
+
+
+## 線形計画としての定式化
+
+
+離散 Kantorovich 問題
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \inner{\mathbf{C}}{\mathbf{P}}
+\]
+
+は線形計画である．
+\(\mathbf{P}\) と \(\mathbf{C}\) をそれぞれベクトル化した
+\(\mathbf{p}, \mathbf{c} \in \R^{nm}\)，
+周辺条件をまとめた制約行列 \(\mathbf{A} \in \R^{(n+m) \times nm}\) を用いると，
+標準形
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ = \min_{\substack{\mathbf{p} \in \R_+^{nm} \\
+ \mathbf{A}\mathbf{p} = [\mathbf{a}^\top, \mathbf{b}^\top]^\top}}
+ \mathbf{c}^\top \mathbf{p}
+\]
+
+と表される．\(nm\) 個の変数と \(n + m\) 本の等式制約を持つ有限次元の線形計画であり，
+**ネットワーク単体法**（network simplex）をはじめとする
+LP アルゴリズムで厳密に解ける．
+
+## 主双対最適性条件
+
+
+線形計画の双対理論から，最適解を特徴付ける主双対条件が得られる．
+
+:::theorem
+### 主張: 主双対最適性
+
+\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と
+\((\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m\) が以下を満たすとする：
+
+(i) **相補性**：\(P_{i,j} > 0 \Longrightarrow f_i + g_j = C_{i,j}\)，
+(ii) **双対実行可能性**：\(f_i + g_j \leq C_{i,j}\)（\(\forall i, j\)）．
+
+このとき \(\mathbf{P}\) は離散 Kantorovich 問題の最適解であり，
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ = \inner{\mathbf{C}}{\mathbf{P}}
+ = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+\]
+
+:::details-embedded 証明
+任意の \(\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対し，
+双対実行可能性 (ii) と \(Q_{i,j} \geq 0\) から
+
+\[
+ \inner{\mathbf{C}}{\mathbf{Q}}
+ = \sum_{i,j} C_{i,j} Q_{i,j}
+ \geq \sum_{i,j} (f_i + g_j) Q_{i,j}
+ = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+\]
+
+\(\mathbf{P}\) については相補性 (i) から \(P_{i,j} > 0\) の項で等号が成り立ち，
+\(P_{i,j} = 0\) の項は和に寄与しないから
+
+\[
+ \inner{\mathbf{C}}{\mathbf{P}}
+ = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
+\]
+
+以上から
+\(\inner{\mathbf{C}}{\mathbf{P}} \leq \inner{\mathbf{C}}{\mathbf{Q}}\)
+が任意の \(\mathbf{Q}\) で成立し，\(\mathbf{P}\) は最適．
+:::
+:::
+
+
+ネットワーク単体法はこの条件に基づき，
+実行可能解を改善しながらコストを単調に減少させ，
+多項式時間で最適解に到達する（Orlin, 1997）．
+
+## エントロピー正則化への動機付け
+
+
+ネットワーク単体法は厳密解を与えるが，
+大規模応用の観点では根本的な制約をもつ：
+
+
+- **計算量**：\(O(nm)\) 個の変数に対する反復・データ構造管理は， \(n, m\) が \(10^5\) オーダーになると現実的でない． GPU 並列化にも本質的に向かない（離散探索的）．
+- **微分不可能性**：最適値 \(\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\) は \(\mathbf{a}, \mathbf{b}\) について区分線形にしかならず， 自動微分による勾配最適化に組み込みにくい．
+
+
+これらの困難は，目的関数にエントロピー項を加えて
+正則化することで大きく緩和される．
+正則化された問題は **Sinkhorn アルゴリズム**で効率的に解け，
+計算は GPU 並列に適し，最適値は周辺分布に関して微分可能となる．

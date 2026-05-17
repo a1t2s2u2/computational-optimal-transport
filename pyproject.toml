@@ -1,0 +1,11 @@
+[project]
+name = "ot-llm"
+version = "0.1.0"
+description = "Qwen3 fine-tuning on computational optimal transport seminar content"
+requires-python = ">=3.11"
+dependencies = [
+    "mlx-lm>=0.21.0",
+    "huggingface_hub>=0.23.0",
+    "tqdm>=4.66.0",
+    "pyyaml>=6.0",
+]

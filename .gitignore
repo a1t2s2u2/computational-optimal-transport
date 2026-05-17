@@ -23,6 +23,22 @@ seminar/out/
 # generated site artifacts
 site/tex-out/
 
+# LLM fine-tuning artifacts
+llm/models/
+llm/adapters/
+llm/data/raw/
+llm/data/train.jsonl
+llm/data/valid.jsonl
+llm/logs/*/
+llm/logs/latest
+llm/logs/train.pid
+
+# uv
+.venv/
+uv.lock
+
 # editor / linter caches
 .ruff_cache/
 .DS_Store
+__pycache__/
+*.pyc

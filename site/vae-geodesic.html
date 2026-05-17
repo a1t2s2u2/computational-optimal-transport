@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VAE 潜在空間の測地線 (3D) — 計算最適輸送セミナー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #000; --paper: #000; --ink: #e4e6ea; --ink-2: #9ca3af;
+      --muted: #6b7280; --line: #2a2f3a;
+      --teal: #2dd4bf; --blue: #60a5fa; --gray-path: #aaa;
+      --scene-bg: #000;
+      --font-serif: "Noto Serif JP","Hiragino Mincho ProN",serif;
+      --font-sans: system-ui,-apple-system,sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: var(--font-serif); line-height: 1.7;
+    }
+    .header {
+      padding: 12px 24px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; gap: 16px;
+    }
+    .header a { color: var(--teal); text-decoration: none; font-size: 14px; }
+    .header h1 { font-size: 18px; margin: 0; font-weight: 700; }
+    .app {
+      display: grid; grid-template-columns: 1fr 320px;
+      height: calc(100vh - 49px);
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; grid-template-rows: 60vh auto; }
+      .sidebar { max-height: 40vh; overflow-y: auto; }
+    }
+    .canvas-wrap {
+      position: relative; overflow: hidden; background: var(--scene-bg);
+    }
+    .canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+    .sidebar {
+      border-left: 1px solid var(--line); padding: 16px;
+      overflow-y: auto; background: var(--bg);
+    }
+    .sidebar h2 { font-size: 13px; margin: 0 0 8px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.05em; }
+    .sidebar h3 { font-size: 14px; margin: 14px 0 6px; }
+    .ctrl label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; cursor: pointer; padding: 2px 0;
+    }
+    .ctrl input[type="checkbox"] { accent-color: var(--teal); }
+    .pair-btn {
+      display: inline-block; padding: 4px 12px; margin: 2px;
+      border: 1px solid var(--line); border-radius: 4px;
+      background: var(--paper); color: var(--ink); cursor: pointer;
+      font-size: 13px; font-family: var(--font-sans);
+    }
+    .pair-btn.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .decoded-strip { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 4px; }
+    .decoded-strip img {
+      width: 34px; height: 34px; image-rendering: pixelated;
+      border: 1px solid var(--line); border-radius: 2px;
+    }
+    .strip-label {
+      font-size: 11px; color: var(--muted); margin-top: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .strip-label .sw { width: 16px; height: 3px; display: inline-block; border-radius: 1px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+    .legend-item { display: flex; align-items: center; gap: 3px; font-size: 11px; }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .tooltip {
+      position: absolute; pointer-events: none; display: none;
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 6px; padding: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      z-index: 10;
+    }
+    .tooltip img { width: 56px; height: 56px; image-rendering: pixelated; display: block; }
+    .tooltip.show { display: block; }
+    .info { font-size: 11px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+    .color-toggle {
+      display: flex; gap: 4px; margin: 4px 0;
+    }
+    .color-toggle button {
+      padding: 3px 10px; font-size: 12px; border: 1px solid var(--line);
+      border-radius: 3px; background: var(--paper); color: var(--ink);
+      cursor: pointer; font-family: var(--font-sans);
+    }
+    .color-toggle button.active { background: var(--teal); color: #fff; border-color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="index.html">&larr; 目次</a>
+    <h1>VAE 潜在空間の測地線 (3D)</h1>
+  </div>
+  <div class="app">
+    <div class="canvas-wrap" id="wrap">
+      <div class="tooltip" id="tip"><img id="tipImg" /></div>
+    </div>
+    <div class="sidebar">
+      <h2>表示設定</h2>
+      <div class="ctrl">
+        <label><input type="checkbox" id="ckScatter" checked> 潜在空間散布図</label>
+        <label><input type="checkbox" id="ckLinear" checked> 直線補間</label>
+        <label><input type="checkbox" id="ckGeodesic" checked> Pullback 測地線</label>
+      </div>
+      <h3>数字ペア</h3>
+      <div id="pairBtns"></div>
+      <h3>色分け</h3>
+      <div class="color-toggle" id="colorToggle">
+        <button class="active" data-mode="digit">数字ラベル</button>
+        <button data-mode="volume">計量体積</button>
+      </div>
+      <h3>デコード画像</h3>
+      <div id="decArea"></div>
+      <div class="legend" id="leg"></div>
+      <div class="info">
+        <strong>操作:</strong> ドラッグで回転 / 右ドラッグで移動 / スクロールで拡大縮小<br>
+        測地線にカーソルを近づけるとデコード画像を表示
+      </div>
+    </div>
+  </div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const TAB10 = [
+  [0.122,0.467,0.706],[1.000,0.498,0.055],[0.173,0.627,0.173],
+  [0.839,0.153,0.157],[0.580,0.404,0.741],[0.549,0.337,0.294],
+  [0.890,0.467,0.761],[0.498,0.498,0.498],[0.737,0.741,0.133],
+  [0.090,0.745,0.812]
+];
+const TAB10_HEX = [
+  "#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd",
+  "#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"
+];
+const VIRIDIS_STOPS = [
+  [0.267,0.004,0.329],[0.283,0.141,0.458],[0.254,0.265,0.530],
+  [0.207,0.372,0.553],[0.164,0.471,0.558],[0.128,0.567,0.551],
+  [0.135,0.659,0.518],[0.267,0.749,0.441],[0.478,0.821,0.318],
+  [0.741,0.873,0.150],[0.993,0.906,0.144]
+];
+
+function viridis(t) {
+  t = Math.max(0, Math.min(1, t));
+  const n = VIRIDIS_STOPS.length - 1;
+  const i = Math.min(Math.floor(t * n), n - 1);
+  const f = t * n - i;
+  const a = VIRIDIS_STOPS[i], b = VIRIDIS_STOPS[i + 1];
+  return [a[0]+(b[0]-a[0])*f, a[1]+(b[1]-a[1])*f, a[2]+(b[2]-a[2])*f];
+}
+
+const isDark = matchMedia("(prefers-color-scheme:dark)").matches;
+
+let DATA;
+let scene, camera, renderer, controls;
+let scatterPoints, scatterColors;
+let pathGroup = new THREE.Group();
+let currentPair = 0;
+let colorMode = "digit";
+let minVol = 0, maxVol = 1;
+
+async function main() {
+  const resp = await fetch("vae_geodesic_data.json");
+  if (!resp.ok) {
+    document.getElementById("wrap").innerHTML =
+      '<p style="padding:2em;color:var(--ink-2)">データの読み込みに失敗しました。</p>';
+    return;
+  }
+  DATA = await resp.json();
+
+  const vols = DATA.log_volume;
+  minVol = Math.min(...vols);
+  maxVol = Math.max(...vols);
+
+  initScene();
+  createScatter();
+  createPaths(0);
+  initUI();
+  animate();
+}
+
+function initScene() {
+  const wrap = document.getElementById("wrap");
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000000);
+
+  camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 200);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  wrap.insertBefore(renderer.domElement, wrap.firstChild);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+  dir.position.set(5, 10, 7);
+  scene.add(dir);
+
+  const axes = new THREE.AxesHelper(1.5);
+  axes.material.transparent = true;
+  axes.material.opacity = 0.3;
+  scene.add(axes);
+
+  fitCamera();
+
+  window.addEventListener("resize", () => {
+    const w2 = wrap.clientWidth, h2 = wrap.clientHeight;
+    camera.aspect = w2 / h2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w2, h2);
+  });
+
+  wrap.addEventListener("pointermove", onPointerMove);
+}
+
+function fitCamera() {
+  if (!DATA) return;
+  const pts = DATA.points;
+  let cx=0, cy=0, cz=0;
+  for (const p of pts) { cx += p[0]; cy += p[1]; cz += p[2]; }
+  const n = pts.length;
+  cx /= n; cy /= n; cz /= n;
+
+  let maxR = 0;
+  for (const p of pts) {
+    const r = Math.sqrt((p[0]-cx)**2 + (p[1]-cy)**2 + (p[2]-cz)**2);
+    if (r > maxR) maxR = r;
+  }
+  const dist = maxR * 2.5;
+  camera.position.set(cx + dist * 0.7, cy + dist * 0.5, cz + dist * 0.7);
+  controls.target.set(cx, cy, cz);
+  controls.update();
+}
+
+function createScatter() {
+  const pts = DATA.points;
+  const positions = new Float32Array(pts.length * 3);
+  const colors = new Float32Array(pts.length * 3);
+
+  for (let i = 0; i < pts.length; i++) {
+    positions[i*3]   = pts[i][0];
+    positions[i*3+1] = pts[i][1];
+    positions[i*3+2] = pts[i][2];
+    const c = TAB10[DATA.labels[i]];
+    colors[i*3] = c[0]; colors[i*3+1] = c[1]; colors[i*3+2] = c[2];
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  scatterPoints = new THREE.Points(geo, new THREE.PointsMaterial({
+    size: 0.06, vertexColors: true, transparent: true,
+    opacity: 0.4, sizeAttenuation: true, depthWrite: false,
+  }));
+  scatterColors = colors;
+  scene.add(scatterPoints);
+}
+
+function updateColors() {
+  const colors = scatterPoints.geometry.attributes.color;
+  for (let i = 0; i < DATA.points.length; i++) {
+    let c;
+    if (colorMode === "volume") {
+      const t = (DATA.log_volume[i] - minVol) / (maxVol - minVol + 1e-10);
+      c = viridis(t);
+    } else {
+      c = TAB10[DATA.labels[i]];
+    }
+    colors.setXYZ(i, c[0], c[1], c[2]);
+  }
+  colors.needsUpdate = true;
+}
+
+function createPaths(pairIdx) {
+  scene.remove(pathGroup);
+  pathGroup = new THREE.Group();
+
+  const g = DATA.geodesics[pairIdx];
+  if (!g) return;
+
+  const linearMesh = createTube(g.linear, isDark ? 0xaaaaaa : 0x999999, 0.02, 0.7);
+  linearMesh.name = "linear";
+  pathGroup.add(linearMesh);
+
+  const geoMesh = createTube(g.pullback, isDark ? 0x60a5fa : 0x2563eb, 0.04, 0.85);
+  geoMesh.name = "geodesic";
+  pathGroup.add(geoMesh);
+
+  const sphereColor = isDark ? 0xffffff : 0x000000;
+  const sGeo = new THREE.SphereGeometry(0.08, 16, 16);
+  const sMat = new THREE.MeshPhongMaterial({ color: sphereColor });
+
+  const s1 = new THREE.Mesh(sGeo, sMat);
+  s1.position.set(g.linear[0][0], g.linear[0][1], g.linear[0][2]);
+  pathGroup.add(s1);
+
+  const last = g.linear[g.linear.length - 1];
+  const s2 = new THREE.Mesh(sGeo.clone(), sMat.clone());
+  s2.position.set(last[0], last[1], last[2]);
+  pathGroup.add(s2);
+
+  scene.add(pathGroup);
+  updateVisibility();
+}
+
+function createTube(pathArr, color, radius, opacity) {
+  const vecs = pathArr.map(p => new THREE.Vector3(p[0], p[1], p[2]));
+  const curve = new THREE.CatmullRomCurve3(vecs, false, "centripetal");
+  const geo = new THREE.TubeGeometry(curve, pathArr.length * 4, radius, 8, false);
+  const mat = new THREE.MeshPhongMaterial({
+    color, transparent: true, opacity, side: THREE.DoubleSide
+  });
+  return new THREE.Mesh(geo, mat);
+}
+
+function updateVisibility() {
+  const ckS = document.getElementById("ckScatter").checked;
+  const ckL = document.getElementById("ckLinear").checked;
+  const ckG = document.getElementById("ckGeodesic").checked;
+  scatterPoints.visible = ckS;
+  pathGroup.children.forEach(c => {
+    if (c.name === "linear") c.visible = ckL;
+    else if (c.name === "geodesic") c.visible = ckG;
+  });
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+function onPointerMove(e) {
+  const tip = document.getElementById("tip");
+  const tipImg = document.getElementById("tipImg");
+  const wrap = document.getElementById("wrap");
+  const rect = wrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  const g = DATA.geodesics[currentPair];
+  if (!g) { tip.classList.remove("show"); return; }
+
+  let best = 25, bk = null, bt = 0;
+  const tempV = new THREE.Vector3();
+
+  for (const kind of ["linear", "pullback"]) {
+    const ck = kind === "linear" ?
+      document.getElementById("ckLinear").checked :
+      document.getElementById("ckGeodesic").checked;
+    if (!ck) continue;
+
+    const path = g[kind];
+    for (let i = 0; i < path.length; i++) {
+      tempV.set(path[i][0], path[i][1], path[i][2]);
+      tempV.project(camera);
+      const sx = (tempV.x * 0.5 + 0.5) * rect.width;
+      const sy = (-tempV.y * 0.5 + 0.5) * rect.height;
+      const d = Math.hypot(sx - mx, sy - my);
+      if (d < best) { best = d; bk = kind; bt = i / (path.length - 1); }
+    }
+  }
+
+  if (bk) {
+    const imgs = g[bk + "_imgs"];
+    const idx = Math.round(bt * (imgs.length - 1));
+    tipImg.src = "data:image/png;base64," + imgs[idx];
+    tip.style.left = Math.min(mx + 12, rect.width - 70) + "px";
+    tip.style.top = Math.max(my - 68, 4) + "px";
+    tip.classList.add("show");
+  } else {
+    tip.classList.remove("show");
+  }
+}
+
+function initUI() {
+  document.getElementById("ckScatter").addEventListener("change", updateVisibility);
+  document.getElementById("ckLinear").addEventListener("change", updateVisibility);
+  document.getElementById("ckGeodesic").addEventListener("change", updateVisibility);
+
+  const btns = document.getElementById("pairBtns");
+  DATA.geodesics.forEach((g, i) => {
+    const b = document.createElement("button");
+    b.className = "pair-btn" + (i === 0 ? " active" : "");
+    b.textContent = g.pair[0] + " → " + g.pair[1];
+    b.onclick = () => {
+      currentPair = i;
+      btns.querySelectorAll(".pair-btn").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      createPaths(i);
+      showDecoded();
+    };
+    btns.appendChild(b);
+  });
+
+  const colorBtns = document.getElementById("colorToggle");
+  colorBtns.querySelectorAll("button").forEach(b => {
+    b.addEventListener("click", () => {
+      colorBtns.querySelectorAll("button").forEach(x => x.classList.remove("active"));
+      b.classList.add("active");
+      colorMode = b.dataset.mode;
+      updateColors();
+    });
+  });
+
+  const leg = document.getElementById("leg");
+  for (let d = 0; d < 10; d++) {
+    const s = document.createElement("span");
+    s.className = "legend-item";
+    s.innerHTML = `<span class="legend-dot" style="background:${TAB10_HEX[d]}"></span>${d}`;
+    leg.appendChild(s);
+  }
+  showDecoded();
+}
+
+function showDecoded() {
+  const a = document.getElementById("decArea");
+  a.innerHTML = "";
+  const g = DATA.geodesics[currentPair];
+  if (!g) return;
+  const defs = [
+    { key: "linear", label: "Linear", color: isDark ? "#aaa" : "#999", dash: true },
+    { key: "pullback", label: "Geodesic", color: isDark ? "#60a5fa" : "#2563eb", dash: false },
+  ];
+  for (const { key, label, color, dash } of defs) {
+    const lbl = document.createElement("div");
+    lbl.className = "strip-label";
+    const style = dash
+      ? `border-top:2px dashed ${color};background:none;height:0`
+      : `background:${color}`;
+    lbl.innerHTML = `<span class="sw" style="${style}"></span>${label}`;
+    a.appendChild(lbl);
+    const strip = document.createElement("div");
+    strip.className = "decoded-strip";
+    for (const b64 of g[key + "_imgs"]) {
+      const img = document.createElement("img");
+      img.src = "data:image/png;base64," + b64;
+      strip.appendChild(img);
+    }
+    a.appendChild(strip);
+  }
+}
+
+main();
+</script>
+</body>
+</html>

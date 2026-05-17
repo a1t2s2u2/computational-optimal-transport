@@ -1,0 +1,23 @@
+# mlx-lm 0.31+ LoRA fine-tuning config for Qwen3-14B on OT seminar content.
+# Run: uv run python llm/scripts/train.py
+
+model: "llm/models/Qwen3-14B-4bit"
+train: true
+data: "llm/data"
+
+# LoRA: apply to top 32 transformer layers (half the model depth)
+num_layers: 32
+
+# Training — batch_size=1 + seq=2048 で証明を切り捨てない（ピーク ~50GB 想定）
+learning_rate: 1.0e-4
+iters: 2000
+batch_size: 1
+grad_accumulation_steps: 8
+max_seq_length: 2048
+
+# Evaluation and checkpointing
+val_batches: 25
+steps_per_report: 50
+steps_per_eval: 200
+save_every: 500
+adapter_path: "llm/adapters/qwen3-14b-ot"

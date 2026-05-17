@@ -18,7 +18,7 @@
 
 \subsection*{一般記号}
 \begin{tabular}{ll}
-  $\X,\; \Y$ & 距離空間にボレル $\sigma$-代数を入れた可測空間 \\
+  $(\X, d_\X),\; (\Y, d_\Y)$ & Polish 空間（完備可分距離空間） \\
   $\N$ & 正の整数全体 $\{1, 2, 3, \ldots\}$ \\
   $\R_+$ & $[0,\infty)$ \\
   $\R_{++}$ & $(0,\infty)$ \\
@@ -30,7 +30,7 @@
   $\Mm_+^1(\X)$ & $\X$ 上の確率測度の全体 \\
   $\delta_x$ & 点 $x$ に質量1を集中させた Dirac 測度 \\
   $T\pushforward \alpha$ & ボレル可測写像 $T$ による $\alpha$ の押し出し \\
-  $P_\X,\; P_\Y$ & 積空間 $\X \times \Y$ 上の写像 $P_\X(x,y)=x$, $P_\Y(x,y)=y$ \\
+  $P_\X,\; P_\Y$ & 積空間 $\X \times \Y$ からの射影 \\
 \end{tabular}
 
 \subsection*{離散版}
@@ -47,17 +47,10 @@
 \subsection*{最適輸送}
 \begin{tabular}{ll}
   $\Couplings(\alpha, \beta)$ & $\alpha$ と $\beta$ のカップリングの集合 \\
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ & 離散版カップリング（輸送多面体） \\
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ & 離散カップリング集合 \\
   $\MK_c(\alpha, \beta)$ & Kantorovich 問題の最適値（連続版） \\
   $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$ & Kantorovich 問題の最適値（離散版） \\
   $\PotentialsD(\mathbf{C})$ & Kantorovich 双対ポテンシャルの実行可能集合 \\
-\end{tabular}
-
-\subsection*{Wasserstein 距離}
-\begin{tabular}{ll}
-  $\WassD_p(\mathbf{a}, \mathbf{b})$ & ヒストグラム上の $p$-Wasserstein 距離 \\
-  $\Wass_p(\alpha, \beta)$ & 測度上の $p$-Wasserstein 距離 \\
-  $\dist,\; \distD$ & ground 距離（関数 / 行列） \\
 \end{tabular}
 
 \subsection*{エントロピー正則化}
@@ -70,6 +63,14 @@
   $\smin_\varepsilon$ & ソフト最小値 $-\varepsilon \log \sum_i e^{-z_i/\varepsilon}$ \\
 \end{tabular}
 
+\subsection*{VAE・リーマン幾何}
+\begin{tabular}{ll}
+  $\Zz$ & VAE の潜在空間 ($\cong \R^d$) \\
+  $G(z)$ & 点 $z$ におけるリーマン計量テンソル \\
+  $J_\mu(z)$ & デコーダ平均 $\mu_\theta$ のヤコビ行列 \\
+  $G_W(z)$ & Wasserstein 引き戻し計量テンソル \\
+\end{tabular}
+
 \vspace{1em}
 \hrule
 
@@ -77,5 +78,6 @@
 \input{ch02_ot_foundations}
 \input{ch03_algorithmic_foundations}
 \input{ch04_entropic_regularization}
+\input{ch05_vae_geodesic}
 
 \end{document}

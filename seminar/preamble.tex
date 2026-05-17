@@ -13,6 +13,8 @@
 \usetikzlibrary{decorations.pathreplacing,calc,arrows.meta,patterns,positioning}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usepackage{graphicx}
+\graphicspath{{fig/}}
 
 % --- 定理環境 (tcolorbox) ---
 \usepackage{tcolorbox}
@@ -107,7 +109,7 @@
 
 % --- 最適輸送固有 ---
 \newcommand{\Couplings}{\mathcal{U}}
-\newcommand{\CouplingsD}{\mathbf{U}}
+\newcommand{\CouplingsD}{\Pi}
 \newcommand{\Wass}{\mathcal{W}}
 \newcommand{\WassD}{\mathrm{W}}
 \newcommand{\MK}{\mathcal{L}}
@@ -136,6 +138,9 @@
 % --- 範囲記法 ---
 \usepackage{stmaryrd}
 \newcommand{\range}[1]{\llbracket #1 \rrbracket}
+
+% --- 潜在空間 ---
+\newcommand{\Zz}{\mathcal{Z}}
 
 % --- 参考文献 ---
 \usepackage[numbers,sort&compress]{natbib}
