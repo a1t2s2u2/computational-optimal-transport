@@ -391,7 +391,7 @@ Monge 問題の実行可能集合
 
 :::details-embedded 証明
 \(P_{i,j} \defeq \pi(\{(x_i, y_j)\})\) で定まる写像 \(\pi \mapsto \mathbf{P}\) が
-コストを保存する全単射
+コストを保存する同型写像（[ref:Def: 単射・全射・全単射・同型|全単射]）
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
 であることを示す．
 
@@ -443,7 +443,7 @@ Monge 問題の実行可能集合
 逆に任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) に対して
 \(\pi \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおけば
 同様の計算から \(\pi \in \Couplings(\alpha, \beta)\) となる．
-したがって \(\varphi\) は全単射である．
+したがって \(\pi \mapsto \mathbf{P}\) は同型写像である．
 
 **(iii) コスト等式．**
 測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
