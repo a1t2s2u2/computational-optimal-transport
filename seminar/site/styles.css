@@ -906,6 +906,69 @@ strong {
 }
 
 /* ==========================================================================
+   Bijection Diagram
+   ========================================================================== */
+
+.bijection-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 1.5em auto;
+  font-size: 0.95em;
+}
+
+.bijection-diagram__space {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  padding: 1em 1.5em;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  min-width: 12em;
+  text-align: center;
+}
+
+.bijection-diagram__label {
+  font-size: 0.85em;
+  color: var(--fg2, #666);
+  line-height: 1.4;
+}
+
+.bijection-diagram__elem {
+  font-size: 1.2em;
+}
+
+.bijection-diagram__arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0 1em;
+}
+
+.bijection-diagram__fwd,
+.bijection-diagram__bwd {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.bijection-diagram__fwd::after {
+  content: "⟶";
+  font-size: 1.3em;
+}
+
+.bijection-diagram__bwd::before {
+  content: "⟵";
+  font-size: 1.3em;
+}
+
+/* ==========================================================================
    Mermaid
    ========================================================================== */
 

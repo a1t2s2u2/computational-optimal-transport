@@ -359,6 +359,8 @@ function renderMarkdown(markdown) {
       }
       if (language === "mermaid") {
         html.push(`<div class="map-wrap"><pre class="mermaid">${escapeHtml(code.join("\n"))}</pre></div>`);
+      } else if (language === "rawhtml") {
+        html.push(code.join("\n"));
       } else {
         html.push(`<pre class="code-block"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
       }

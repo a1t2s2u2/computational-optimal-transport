@@ -390,15 +390,14 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
-
-\[
- \varphi(\pi)_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
-\]
-
-で定める．任意の \(\pi \in \Couplings(\alpha, \beta)\) をとり，\(\mathbf{P} \defeq \varphi(\pi)\) とおく．
+任意の \(\pi \in \Couplings(\alpha, \beta)\) をとり，
+\(P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)\) とおく．
 \(\alpha, \beta\) が離散測度であることから \(\pi\) も離散測度であり，
 \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i, y_j)}\) が成り立つ．
+
+この対応 \(\pi \mapsto \mathbf{P} = (P_{i,j})_{i,j}\) により写像
+\(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\)
+が定まる．\(\mathbf{P} \defeq \varphi(\pi)\) と書く．
 
 \(\varphi\) が同型写像
 \(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
@@ -409,6 +408,23 @@ Monge 問題の実行可能集合
 \]
 
 を満たすことを以下で示す．
+
+```rawhtml
+<div class="bijection-diagram">
+  <div class="bijection-diagram__space">
+    <div class="bijection-diagram__label">\(\Couplings(\alpha,\beta) \subset \Mm_+^1(\X \times \Y)\)</div>
+    <div class="bijection-diagram__elem">\(\pi\)</div>
+  </div>
+  <div class="bijection-diagram__arrows">
+    <div class="bijection-diagram__fwd">\(\varphi\)</div>
+    <div class="bijection-diagram__bwd">\(\varphi^{-1}\)</div>
+  </div>
+  <div class="bijection-diagram__space">
+    <div class="bijection-diagram__label">\(\CouplingsD(\mathbf{a},\mathbf{b}) \subset \R_+^{n \times m}\)</div>
+    <div class="bijection-diagram__elem">\(\mathbf{P}\)</div>
+  </div>
+</div>
+```
 
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 \(\sum_j P_{k,j} = a_k\)（\(\forall k\)），すなわち \(\mathbf{P}\ones_m = \mathbf{a}\)．
