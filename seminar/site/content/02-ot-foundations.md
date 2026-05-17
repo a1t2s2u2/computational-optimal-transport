@@ -358,7 +358,7 @@ Monge 問題の実行可能集合
 :::definition
 ### Def: 離散 Kantorovich 問題
 
-台点 \(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
+\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
 \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
 （\(\sum_i a_i = 1\)，\(\sum_j b_j = 1\)），
 および可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
