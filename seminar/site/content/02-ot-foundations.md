@@ -354,6 +354,10 @@ Monge 問題の実行可能集合
 
 **離散化**
 
+連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
+
+:::theorem
+### Prop: 連続 Kantorovich 問題の離散化
 
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
 互いに相異なる点 \(x_1, \ldots, x_n \in \X\) および \(y_1, \ldots, y_m \in \Y\)，
@@ -364,13 +368,7 @@ Monge 問題の実行可能集合
  \beta \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
 \end{aligned}\]
 
-とおく．\(\alpha, \beta\) を Kantorovich 問題（[ref:Def: Kantorovich 問題|Kantorovich 問題]）に代入すると，
-次の命題が示すとおり連続問題は自然に行列最適化へ帰着する．
-
-:::theorem
-### Prop: 連続 Kantorovich 問題の離散化
-
-行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
+とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
 **離散カップリング集合**
 
 \[
@@ -396,15 +394,11 @@ Monge 問題の実行可能集合
 次の 2 点を示す：
 
 (A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する．
-(B) \(\varphi\) はコストを保存する： \(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
 
-(A)(B) が示されれば，\(\Couplings(\alpha,\beta)\) 上の inf と
-\(\CouplingsD(\mathbf{a},\mathbf{b})\) 上の inf が一致し，
-後者は後続の[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] のコンパクト性から
-最小値として達成される．
+(B) \(\varphi\) はコストを保存する：\(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
 
-\medskip
 **(A-1) \(\varphi\) の構成（カップリングの台）．**
+
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
 \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
@@ -416,12 +410,12 @@ Monge 問題の実行可能集合
 同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
 測度の劣加法性から
 
-\[
- \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
- \;\leq\;
+\[\begin{aligned}
+ &\pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr) \\
+ &\quad\leq\;
  \pi\bigl((\X\setminus\{x_1,\ldots,x_n\})\times\Y\bigr)
  + \pi\bigl(\X\times(\Y\setminus\{y_1,\ldots,y_m\})\bigr) = 0.
-\]
+\end{aligned}\]
 
 よって \(\pi\) は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
 
@@ -431,8 +425,8 @@ Monge 問題の実行可能集合
 
 と定めると \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
 
-\medskip
 **(A-2) \(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)（周辺条件 \(\leftrightarrow\) 行・列和条件）．**
+
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 
 \[
@@ -445,8 +439,8 @@ Monge 問題の実行可能集合
 \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
 ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
 
-\medskip
 **(A-3) \(\varphi\) は全単射．**
+
 *全射*：任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
 \(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，
 任意の \(A \in \Bb(\X)\) について
@@ -460,11 +454,12 @@ Monge 問題の実行可能集合
 
 同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）だから
 \(\pi' \in \Couplings(\alpha,\beta)\)，かつ \(\varphi(\pi') = \mathbf{P}\)．
+
 *単射*：\(\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}\) とすれば，
 (A-1) より \(\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\)．
 
-\medskip
 **(B) \(\varphi\) はコストを保存する．**
+
 測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
 Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
@@ -475,8 +470,8 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 \]
 
 
-\medskip
 **結論．**
+
 (A)(B) より \(\varphi\) はコストを保存する全単射だから，
 
 \[
@@ -487,7 +482,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は線形ゆえ連続であり，
+\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は有限次元ノルム空間 \(\R^{n \times m}\) 上の線形写像であり，したがって連続であり，
 \(\CouplingsD(\mathbf{a},\mathbf{b})\) は非空（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）
 かつコンパクト（同主張）であるから，
 Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より
@@ -614,15 +609,13 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 はいずれも各成分 \(P_{i,j}\) の連続関数による等式・不等式であるから，
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は \(\R^{n \times m}\) の閉集合である．
 さらに，行和条件 \(\sum_j P_{i,j} = a_i\) と \(P_{i,j} \geq 0\) から
-\(0 \leq P_{i,j} \leq a_i \leq 1\) が従い有界．
+\(0 \leq P_{i,j} \leq a_i\) が従い，\(\sum_i a_i = 1\) より \(a_i \leq 1\) だから有界．
 \(\R^{n \times m}\) における有界閉集合はコンパクト
 （[ref:Thm: Heine-Borel の定理|Heine-Borel の定理]）．
 
 **(iii) 連続性．**
-各 \(P_{i,j} \colon \R^{n \times m} \to \R\) は座標射影であるから連続であり，
-定数 \(C_{i,j}\) との積 \(C_{i,j} P_{i,j}\) も連続である．
-よって \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}\)
-は連続関数の有限和として連続．
+\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は有限次元ノルム空間 \(\R^{n \times m}\) 上の
+線形写像であり，したがって連続．
 
 以上 (i)--(iii) と Weierstrass の最大値の定理
 （[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より，
@@ -650,10 +643,15 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 
 :::details-embedded 証明
 **凸性．**
+
 \(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
-\(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) は
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性から
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) に属し，
+\(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) とおく．
+\(\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}\) より \(\mathbf{R} \geq \mathbf{0}\) であり，
+行・列和条件の線形性から
+\(\mathbf{R}\ones_m = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}\)，
+同様に \(\mathbf{R}^\top\ones_n = \mathbf{b}\) ゆえ
+\(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+さらに，内積の線形性から
 
 \[
  \inner{\mathbf{C}}{\mathbf{R}}
@@ -661,10 +659,16 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
 \]
 
+よって \(\mathbf{R} \in S^*\)．
 
 **コンパクト性．**
+
+\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は連続であるから，
+その水準集合 \(\{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
+は閉集合である．
+したがって
 \(S^* = \CouplingsD(\mathbf{a}, \mathbf{b}) \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
-はコンパクト集合と閉集合の共通部分．
+はコンパクト集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) の閉部分集合であるからコンパクト．
 :::
 :::
 

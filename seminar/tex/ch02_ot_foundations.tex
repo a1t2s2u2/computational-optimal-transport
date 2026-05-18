@@ -501,18 +501,17 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \subsubsection{離散化}
 
-$\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
-互いに相異なる点 $x_1, \ldots, x_n \in \X$ および $y_1, \ldots, y_m \in \Y$，
-可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
-\begin{align*}
-  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
-  \beta  \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
-\end{align*}
-とおく．$\alpha, \beta$ を Kantorovich 問題（定義~\ref{def:sem-kantorovich}）に代入すると，
-次の命題が示すとおり連続問題は自然に行列最適化へ帰着する．
+連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
 
 \begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
-  行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ および
+  $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
+  互いに相異なる点 $x_1, \ldots, x_n \in \X$ および $y_1, \ldots, y_m \in \Y$，
+  可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
+  \[
+    \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
+    \beta  \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
+  \]
+  とおく．行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ および
   \textbf{離散カップリング集合}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
@@ -539,11 +538,6 @@ $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（
     \item[(B)] $\varphi$ はコストを保存する：
       $\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}$．
   \end{itemize}
-  (A)(B) が示されれば，$\Couplings(\alpha,\beta)$ 上の inf と
-  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上の inf が一致し，
-  後者は後続の主張~\ref{clm:sem-discrete-kantorovich-existence} のコンパクト性から
-  最小値として達成される．
-
   \medskip
   \textbf{(A-1) $\varphi$ の構成（カップリングの台）．}
   任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
@@ -614,7 +608,7 @@ $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（
     = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}.
   \]
-  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は線形ゆえ連続であり，
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は有限次元ノルム空間 $\R^{n \times m}$ 上の線形写像であり，したがって連続であり，
   $\CouplingsD(\mathbf{a},\mathbf{b})$ は非空（主張~\ref{clm:sem-discrete-kantorovich-existence}）
   かつコンパクト（同主張）であるから，
   Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より
@@ -825,15 +819,13 @@ $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（
   はいずれも各成分 $P_{i,j}$ の連続関数による等式・不等式であるから，
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ は $\R^{n \times m}$ の閉集合である．
   さらに，行和条件 $\sum_j P_{i,j} = a_i$ と $P_{i,j} \geq 0$ から
-  $0 \leq P_{i,j} \leq a_i \leq 1$ が従い有界．
+  $0 \leq P_{i,j} \leq a_i$ が従い，$\sum_i a_i = 1$ より $a_i \leq 1$ だから有界．
   $\R^{n \times m}$ における有界閉集合はコンパクト
   （定理~\ref{thm:sem-heine-borel}）．
 
   \textbf{(iii) 連続性．}
-  各 $P_{i,j} \colon \R^{n \times m} \to \R$ は座標射影であるから連続であり，
-  定数 $C_{i,j}$ との積 $C_{i,j} P_{i,j}$ も連続である．
-  よって $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}$
-  は連続関数の有限和として連続．
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は有限次元ノルム空間 $\R^{n \times m}$ 上の
+  線形写像であり，したがって連続．
 
   以上 (i)--(iii) と Weierstrass の最大値の定理
   （定理~\ref{thm:sem-weierstrass}）より，
@@ -857,21 +849,28 @@ $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（
 \begin{proof}
   \textbf{凸性．}
   $\mathbf{P}^*, \mathbf{Q}^* \in S^*$ と $t \in [0,1]$ に対し，
-  $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ は
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性から
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属し，
+  $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ とおく．
+  $\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}$ より $\mathbf{R} \geq \mathbf{0}$ であり，
+  行・列和条件の線形性から
+  $\mathbf{R}\ones_m = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}$，
+  同様に $\mathbf{R}^\top\ones_n = \mathbf{b}$ ゆえ
+  $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+  さらに，内積の線形性から
   \[
     \inner{\mathbf{C}}{\mathbf{R}}
     = t\inner{\mathbf{C}}{\mathbf{P}^*} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}^*}
     = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
   \]
+  よって $\mathbf{R} \in S^*$．
 
   \textbf{コンパクト性．}
-  $S^*
-  = \CouplingsD(\mathbf{a}, \mathbf{b})
-  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}}
-  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
-  はコンパクト集合と閉集合の共通部分．
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は連続であるから，
+  その水準集合 $\{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  は閉集合である．
+  したがって
+  $S^* = \CouplingsD(\mathbf{a}, \mathbf{b})
+  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  はコンパクト集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ の閉部分集合であるからコンパクト．
 \end{proof}
 
 \begin{example}{最適解の非一意性}{sem-nonunique-example}
