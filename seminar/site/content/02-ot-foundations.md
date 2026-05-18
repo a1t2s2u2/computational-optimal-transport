@@ -360,7 +360,8 @@ Monge 問題の実行可能集合
 ### Prop: 連続 Kantorovich 問題の離散化
 
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
-互いに相異なる点 \(x_1, \ldots, x_n \in \X\) および \(y_1, \ldots, y_m \in \Y\)，
+\(x_1, \ldots, x_n \in \X\)（\(i \neq j \Rightarrow x_i \neq x_j\)），
+\(y_1, \ldots, y_m \in \Y\)（\(i \neq j \Rightarrow y_i \neq y_j\)），
 可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
 
 \[\begin{aligned}
@@ -499,6 +500,18 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 \]
 
 と書き，**離散 Kantorovich 問題**と呼ぶ．
+
+:::fact
+### Rem: 相異性条件の必要性
+
+命題の仮定「\(i \neq j \Rightarrow x_i \neq x_j\)」は全単射 \(\varphi\) の全射性に本質的である．
+もし \(x_i = x_k\)（\(i \neq k\)）であれば，\(\varphi(\pi)_{i,j} = \varphi(\pi)_{k,j} = \pi(\{x_i\} \times \{y_j\})\)
+となり，\(\varphi\) の値域は常に \(P_{i,j} = P_{k,j}\) を満たす行列に限定される．
+一方 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) には \(P_{i,j} \neq P_{k,j}\) な行列が存在するため，
+\(\varphi\) は全射とならず命題の等式が崩れる．
+なお，重複点を統合すれば（\(a_i + a_k\) をまとめた）より小さい次元の多面体との全単射が取れるため，
+離散 Kantorovich 問題の枠組み自体は相異性なしでも成立する．
+:::
 
 :::fact accent
 ### Ex: 工場からスーパーへの輸送
