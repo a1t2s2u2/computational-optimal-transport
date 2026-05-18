@@ -871,7 +871,12 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
 
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
   離散 Kantorovich 問題の最適解は一般に一意でないが，
-  正則化パラメータ $\varepsilon > 0$ を用いたエントロピー正則化
+  \textbf{離散エントロピー}
+  \[
+    \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)
+  \]
+  （定義~\ref{def:sem-discrete-entropy}）を用いた正則化パラメータ $\varepsilon > 0$
+  によるエントロピー正則化
   \[
     \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
     \left\{
@@ -879,6 +884,6 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
       - \varepsilon \Hb(\mathbf{P})
     \right\}
   \]
-  は狭義凸最適化であり，最適解は一意に定まる．
+  は狭義凸最適化であり，最適解は一意に定まる（第~\ref{ch:seminar-03-entropic}章）．
 \end{remark}
 

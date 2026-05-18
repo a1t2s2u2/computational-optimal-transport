@@ -20,7 +20,7 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 
 および \(\mathbf{C} \in \R_+^{n \times m}\) を固定する．
 離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
-[ref:Prop: Kantorovich 問題の離散化|Kantorovich 問題の離散化] の通り
+[ref:Prop: 連続 Kantorovich 問題の離散化|連続 Kantorovich 問題の離散化] の通り
 
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b})

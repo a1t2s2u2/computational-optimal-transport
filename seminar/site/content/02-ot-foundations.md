@@ -355,19 +355,22 @@ Monge 問題の実行可能集合
 **離散化**
 
 
-:::theorem
-### Prop: Kantorovich 問題の離散化
-
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
-\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\)，
-可測関数 \(c \colon \X \times \Y \to \R_+\) とする．
+\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\) および
+可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
 
 \[\begin{aligned}
  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
  \beta \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
 \end{aligned}\]
 
-とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
+とおく．\(\alpha, \beta\) を Kantorovich 問題（[ref:Def: Kantorovich 問題|Kantorovich 問題]）に代入すると，
+次の命題が示すとおり連続問題は自然に行列最適化へ帰着する．
+
+:::theorem
+### Prop: 連続 Kantorovich 問題の離散化
+
+行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
 **離散カップリング集合**
 
 \[
@@ -390,125 +393,58 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-写像 \(\varphi \colon \Couplings(\alpha, \beta) \to \R_+^{n \times m}\) を
+任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
+
+**(i) カップリングの台．**
+周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
+\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
 
 \[
- \varphi(\pi)_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr)
+ \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
 \]
 
-で定め，\(\mathbf{P} \defeq \varphi(\pi)\) と書く．
-\(\varphi\) がコストを保存する同型写像
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\)
-であることを示す．
-
-```rawhtml
-<div class="bijection-diagram">
-  <div class="bijection-diagram__space">
-    <div class="bijection-diagram__label">\(\Couplings(\alpha,\beta) \subset \Mm_+^1(\X \times \Y)\)</div>
-    <div class="bijection-diagram__elem">\(\pi\)</div>
-  </div>
-  <div class="bijection-diagram__arrows">
-    <div class="bijection-diagram__fwd">\(\varphi\)</div>
-    <div class="bijection-diagram__bwd">\(\varphi^{-1}\)</div>
-  </div>
-  <div class="bijection-diagram__space">
-    <div class="bijection-diagram__label">\(\CouplingsD(\mathbf{a},\mathbf{b}) \subset \R_+^{n \times m}\)</div>
-    <div class="bijection-diagram__elem">\(\mathbf{P}\)</div>
-  </div>
-</div>
-```
-
-**\(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)**：
-\(R \defeq \Y \setminus \{y_1,\ldots,y_m\}\) とおく．
-\(\beta = \sum_j b_j\,\delta_{y_j}\) より \(\beta(R) = 0\)．
-[ref:Def: Kantorovich 問題|カップリングの定義]の条件 \(\pi(\X \times B)=\beta(B)\) に
-\(B = R\) を代入すると \(\pi(\X \times R) = 0\)，
-測度の単調性 \(\{x_i\} \times R \subset \X \times R\) から
-\(\pi(\{x_i\} \times R) = 0\)．よって
+同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
+よって \(\pi\) は有限集合 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
 
 \[
- \sum_j P_{i,j}
- = \pi\bigl(\{x_i\} \times \{y_1,\ldots,y_m\}\bigr)
- = \pi\bigl(\{x_i\} \times \Y\bigr)
- \overset{\pi(A \times \Y)=\alpha(A)}{=} \alpha(\{x_i\}) = a_i.
+ P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
 \]
 
-\(\alpha\) 側も同様に \(\sum_i P_{i,j} = b_j\)，よって \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
+と置けば \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
 
-**\(\varphi\) の全単射性**：
-\(\varphi^{-1}(\mathbf{P}) \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) が
-\(\CouplingsD(\mathbf{a},\mathbf{b}) \to \Couplings(\alpha,\beta)\) の逆写像であることを示す．
-
-\(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し \(\pi' \defeq \varphi^{-1}(\mathbf{P})\) とおくと
+**(ii) 周辺条件と行列条件の対応．**
+\(\ones_m \in \R^m\) は全成分が \(1\) のベクトルであるから
+\((\mathbf{P}\ones_m)_k = \sum_j P_{k,j}\)．
+周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 
 \[
- \pi'(A \times \Y)
- = \sum_{i:\,x_i\in A}\!\sum_j P_{i,j}
- = \sum_{i:\,x_i\in A} a_i = \alpha(A), \qquad
- \pi'(\X \times B)
- = \sum_{j:\,y_j\in B}\!\sum_i P_{i,j}
- = \beta(B)
+ \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
+ \qquad\text{すなわち}\quad
+ \mathbf{P}\ones_m = \mathbf{a}.
 \]
 
-より \(\pi' \in \Couplings(\alpha,\beta)\)（逆写像の値域を確認）．
+同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
+\(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
+よって \(\pi \mapsto \mathbf{P}\) は \(\Couplings(\alpha,\beta)\) から
+\(\CouplingsD(\mathbf{a},\mathbf{b})\) への全単射である．
 
-\(\varphi \circ \varphi^{-1} = \mathrm{id}\)：
-任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して，
+**(iii) コスト等式．**
+測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
+Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
 \[
- (\varphi \circ \varphi^{-1})(\mathbf{P})_{i,j}
- = \varphi\bigl(\varphi^{-1}(\mathbf{P})\bigr)_{i,j}
- \overset{\varphi\text{ の定義}}{=}
- \varphi^{-1}(\mathbf{P})\bigl(\{(x_i,y_j)\}\bigr)
- \overset{\varphi^{-1}\text{ の定義}}{=}
- P_{i,j}.
+ \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
+ = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+ = \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-\(\varphi^{-1} \circ \varphi = \mathrm{id}\)：
-任意の \(\pi \in \Couplings(\alpha,\beta)\) に対して，
 
-\[
- (\varphi^{-1} \circ \varphi)(\pi)
- = \varphi^{-1}(\varphi(\pi))
- \overset{\varphi^{-1}\text{ の定義}}{=}
- \sum_{i,j} \varphi(\pi)_{i,j}\,\delta_{(x_i,y_j)}
- \overset{\varphi\text{ の定義}}{=}
- \sum_{i,j} \pi\bigl(\{(x_i,y_j)\}\bigr)\,\delta_{(x_i,y_j)}
- = \pi.
-\]
-
-[ref:Prop: 合成写像と全射・単射・全単射|合成写像と全射・単射・全単射] を
-\(f = \varphi\)，\(g = \varphi^{-1}\) に適用すると，
-\(\varphi \circ \varphi^{-1} = \mathrm{id}\) かつ \(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
-\(\varphi\) は全単射であり，\(\varphi^{-1}\) は \(\varphi\) の逆写像である．
-すなわち \(\varphi\) は同型写像
-\(\Couplings(\alpha, \beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
-
-**コスト保存**
-（[ref:Prop: 積分の測度に関する線形性|積分の線形性]，[ref:Clm: Dirac 測度に対する積分|Dirac 積分]）：
-\(\mathbf{P} = \varphi(\pi)\) かつ \(\varphi^{-1} \circ \varphi = \mathrm{id}\) より
-\(\pi = \varphi^{-1}(\mathbf{P}) = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) であるから，
-
-\[
-\begin{aligned}
- \int_{\X \times \Y} c\,\d\pi
- &\overset{\pi = \varphi^{-1}(\mathbf{P})}{=}
-  \int_{\X \times \Y} c\,\d\!\left(\sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\right) \\
- &\overset{\text{積分の線形性}}{=}
-  \sum_{i,j} P_{i,j} \int_{\X \times \Y} c\,\d\delta_{(x_i,y_j)} \\
- &\overset{\text{Dirac 積分}}{=}
-  \sum_{i,j} P_{i,j}\,c(x_i,y_j) \\
- &\overset{\text{内積の定義}}{=}
-  \inner{\mathbf{C}}{\mathbf{P}}.
-\end{aligned}
-\]
-
-以上より
+以上より (ii) の全単射がコストを保存するから，
 
 \[
  \MK_c(\alpha, \beta)
  = \inf_{\pi \in \Couplings(\alpha, \beta)}
- \int_{\X \times \Y} c\,\d\pi
+ \int_{\X \times \Y} c\, \d\pi
  = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
@@ -586,7 +522,6 @@ Monge 問題の実行可能集合
  = \tfrac{4}{3}.
 \]
 :::
-
 
 
 **最適解の存在と性質**
@@ -735,3 +670,27 @@ Monge 問題の実行可能集合
 2頂点のコストが異なるため最適解は一意となる．
 :::
 
+
+:::fact
+### Rem: エントロピー正則化による一意性の回復
+
+離散 Kantorovich 問題の最適解は一般に一意でないが，
+**離散エントロピー**
+
+\[
+ \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)
+\]
+
+（[ref:Def: 離散エントロピー|離散エントロピー]）を用いた正則化パラメータ \(\varepsilon > 0\)
+によるエントロピー正則化
+
+\[
+ \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \left\{
+ \inner{\mathbf{C}}{\mathbf{P}}
+ - \varepsilon \Hb(\mathbf{P})
+ \right\}
+\]
+
+は狭義凸最適化であり，最適解は一意に定まる（本章）．
+:::
