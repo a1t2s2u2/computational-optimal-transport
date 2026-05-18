@@ -393,9 +393,19 @@ Monge 問題の実行可能集合
 （[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
-任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
+次の 2 点を示す：
 
-**(i) カップリングの台．**
+(A) コスト保存全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する．
+(B) \(\varphi\) はコストを保存する： \(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
+
+(A)(B) が示されれば，\(\Couplings(\alpha,\beta)\) 上の inf と
+\(\CouplingsD(\mathbf{a},\mathbf{b})\) 上の inf が一致し，
+後者は後続の[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] のコンパクト性から
+最小値として達成される．
+
+\medskip
+**(A-1) \(\varphi\) の構成（カップリングの台）．**
+任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
 \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
 
@@ -404,17 +414,16 @@ Monge 問題の実行可能集合
 \]
 
 同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
-よって \(\pi\) は有限集合 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
+よって \(\pi\) は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
 
 \[
- P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+ \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
 \]
 
-と置けば \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
+と定めると \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
 
-**(ii) 周辺条件と行列条件の対応．**
-\(\ones_m \in \R^m\) は全成分が \(1\) のベクトルであるから
-\((\mathbf{P}\ones_m)_k = \sum_j P_{k,j}\)．
+\medskip
+**(A-2) \(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)（周辺条件 \(\leftrightarrow\) 行・列和条件）．**
 周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
 
 \[
@@ -425,10 +434,11 @@ Monge 問題の実行可能集合
 
 同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
 \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
-よって写像 \(\varphi \colon \pi \mapsto \mathbf{P}\) は
-\(\Couplings(\alpha,\beta)\) から \(\CouplingsD(\mathbf{a},\mathbf{b})\) への写像である．
+ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
 
-逆に，任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
+\medskip
+**(A-3) \(\varphi\) は全単射．**
+*全射*：任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
 \(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，
 任意の \(A \in \Bb(\X)\) について
 
@@ -439,15 +449,13 @@ Monge 問題の実行可能集合
  = \alpha(A),
 \]
 
-同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）が成り立つから
-\(\pi' \in \Couplings(\alpha,\beta)\)．
-また \(\varphi(\pi') = \mathbf{P}\) であるから \(\varphi\) は全射．
-さらに \(\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}\) とすれば，
-(i) より \(\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) だから
-\(\varphi\) は単射でもある．
-したがって \(\varphi\) は全単射である．
+同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）だから
+\(\pi' \in \Couplings(\alpha,\beta)\)，かつ \(\varphi(\pi') = \mathbf{P}\)．
+*単射*：\(\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}\) とすれば，
+(A-1) より \(\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\)．
 
-**(iii) コスト等式．**
+\medskip
+**(B) \(\varphi\) はコストを保存する．**
 測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
 Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
 
@@ -458,7 +466,9 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 \]
 
 
-以上より \(\varphi\) の全単射性とコスト等式から，
+\medskip
+**結論．**
+(A)(B) より \(\varphi\) はコストを保存する全単射だから，
 
 \[
  \MK_c(\alpha, \beta)
@@ -468,8 +478,9 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-右辺の inf は，\(\CouplingsD(\mathbf{a},\mathbf{b})\) のコンパクト性（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）
-により最小値として達成されるから \(\inf = \min\) が成り立つ．
+右辺の inf は \(\CouplingsD(\mathbf{a},\mathbf{b})\) のコンパクト性
+（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）により達成されるから
+\(\inf = \min\) が成り立つ．
 :::
 :::
 

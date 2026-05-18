@@ -531,24 +531,36 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
   （定義~\ref{def:sem-frobenius-inner}）である．
 \end{proposition}
 \begin{proof}
-  任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
+  次の 2 点を示す：
+  \begin{itemize}
+    \item[(A)] コスト保存全単射
+      $\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})$
+      が存在する．
+    \item[(B)] $\varphi$ はコストを保存する：
+      $\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}$．
+  \end{itemize}
+  (A)(B) が示されれば，$\Couplings(\alpha,\beta)$ 上の inf と
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上の inf が一致し，
+  後者は後続の主張~\ref{clm:sem-discrete-kantorovich-existence} のコンパクト性から
+  最小値として達成される．
 
-  \textbf{(i) カップリングの台．}
+  \medskip
+  \textbf{(A-1) $\varphi$ の構成（カップリングの台）．}
+  任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
   周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
   $\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0$ から
   \[
     \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
   \]
   同様に $\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0$．
-  よって $\pi$ は有限集合 $\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}$ 上のみに質量を持ち，
+  よって $\pi$ は有限格子 $\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}$ 上のみに質量を持ち，
   \[
-    P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+    \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
   \]
-  と置けば $\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}$ と書ける．
+  と定めると $\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}$ と書ける．
 
-  \textbf{(ii) 周辺条件と行列条件の対応．}
-  $\ones_m \in \R^m$ は全成分が $1$ のベクトルであるから
-  $(\mathbf{P}\ones_m)_k = \sum_j P_{k,j}$．
+  \medskip
+  \textbf{(A-2) $\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})$（周辺条件 $\leftrightarrow$ 行・列和条件）．}
   周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
   \[
     \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
@@ -557,10 +569,11 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
   \]
   同様に $\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l$ から
   $\mathbf{P}^\top\ones_n = \mathbf{b}$．
-  よって写像 $\varphi \colon \pi \mapsto \mathbf{P}$ は
-  $\Couplings(\alpha,\beta)$ から $\CouplingsD(\mathbf{a},\mathbf{b})$ への写像である．
+  ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$．
 
-  逆に，任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し
+  \medskip
+  \textbf{(A-3) $\varphi$ は全単射．}
+  \textit{全射}：任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し
   $\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$ とおくと，
   任意の $A \in \Bb(\X)$ について
   \[
@@ -569,15 +582,13 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
     = \sum_{i:\,x_i \in A} a_i
     = \alpha(A),
   \]
-  同様に $\pi'(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）が成り立つから
-  $\pi' \in \Couplings(\alpha,\beta)$．
-  また $\varphi(\pi') = \mathbf{P}$ であるから $\varphi$ は全射．
-  さらに $\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}$ とすれば，
-  (i) より $\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$ だから
-  $\varphi$ は単射でもある．
-  したがって $\varphi$ は全単射である．
+  同様に $\pi'(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）だから
+  $\pi' \in \Couplings(\alpha,\beta)$，かつ $\varphi(\pi') = \mathbf{P}$．
+  \textit{単射}：$\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}$ とすれば，
+  (A-1) より $\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$．
 
-  \textbf{(iii) コスト等式．}
+  \medskip
+  \textbf{(B) $\varphi$ はコストを保存する．}
   測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
   Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
   \[
@@ -586,7 +597,9 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
     = \inner{\mathbf{C}}{\mathbf{P}}.
   \]
 
-  以上より $\varphi$ の全単射性とコスト等式から，
+  \medskip
+  \textbf{結論．}
+  (A)(B) より $\varphi$ はコストを保存する全単射だから，
   \[
     \MK_c(\alpha, \beta)
     = \inf_{\pi \in \Couplings(\alpha, \beta)}
@@ -594,8 +607,9 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
     = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}.
   \]
-  右辺の inf は，$\CouplingsD(\mathbf{a},\mathbf{b})$ のコンパクト性（主張~\ref{clm:sem-discrete-kantorovich-existence}）
-  により最小値として達成されるから $\inf = \min$ が成り立つ．
+  右辺の inf は $\CouplingsD(\mathbf{a},\mathbf{b})$ のコンパクト性
+  （主張~\ref{clm:sem-discrete-kantorovich-existence}）により達成されるから
+  $\inf = \min$ が成り立つ．
 \end{proof}
 
 右辺の最適値を
