@@ -502,7 +502,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \subsubsection{離散化}
 
 $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
-$x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
+互いに相異なる点 $x_1, \ldots, x_n \in \X$ および $y_1, \ldots, y_m \in \Y$，
 可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
 \begin{align*}
   \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
@@ -553,9 +553,16 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
     \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
   \]
   同様に $\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0$．
+  測度の劣加法性から
+  \[
+    \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
+    \;\leq\;
+    \pi\bigl((\X\setminus\{x_1,\ldots,x_n\})\times\Y\bigr)
+    + \pi\bigl(\X\times(\Y\setminus\{y_1,\ldots,y_m\})\bigr) = 0.
+  \]
   よって $\pi$ は有限格子 $\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}$ 上のみに質量を持ち，
   \[
-    \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+    \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{x_i\} \times \{y_j\}\bigr) \geq 0
   \]
   と定めると $\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}$ と書ける．
 
@@ -607,9 +614,11 @@ $x_1, \ldots, x_n \in \X$，$y_1, \ldots, y_m \in \Y$ および
     = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}.
   \]
-  右辺の inf は $\CouplingsD(\mathbf{a},\mathbf{b})$ のコンパクト性
-  （主張~\ref{clm:sem-discrete-kantorovich-existence}）により達成されるから
-  $\inf = \min$ が成り立つ．
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は線形ゆえ連続であり，
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ は非空（主張~\ref{clm:sem-discrete-kantorovich-existence}）
+  かつコンパクト（同主張）であるから，
+  Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より
+  右辺の inf は最小値として達成され，$\inf = \min$ が成り立つ．
 \end{proof}
 
 右辺の最適値を

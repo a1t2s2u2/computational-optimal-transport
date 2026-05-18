@@ -356,7 +356,7 @@ Monge 問題の実行可能集合
 
 
 \(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
-\(x_1, \ldots, x_n \in \X\)，\(y_1, \ldots, y_m \in \Y\) および
+互いに相異なる点 \(x_1, \ldots, x_n \in \X\) および \(y_1, \ldots, y_m \in \Y\)，
 可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
 
 \[\begin{aligned}
@@ -414,10 +414,19 @@ Monge 問題の実行可能集合
 \]
 
 同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
+測度の劣加法性から
+
+\[
+ \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
+ \;\leq\;
+ \pi\bigl((\X\setminus\{x_1,\ldots,x_n\})\times\Y\bigr)
+ + \pi\bigl(\X\times(\Y\setminus\{y_1,\ldots,y_m\})\bigr) = 0.
+\]
+
 よって \(\pi\) は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
 
 \[
- \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{(x_i, y_j)\}\bigr) \geq 0
+ \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{x_i\} \times \{y_j\}\bigr) \geq 0
 \]
 
 と定めると \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
@@ -478,9 +487,11 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
-右辺の inf は \(\CouplingsD(\mathbf{a},\mathbf{b})\) のコンパクト性
-（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）により達成されるから
-\(\inf = \min\) が成り立つ．
+\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は線形ゆえ連続であり，
+\(\CouplingsD(\mathbf{a},\mathbf{b})\) は非空（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）
+かつコンパクト（同主張）であるから，
+Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より
+右辺の inf は最小値として達成され，\(\inf = \min\) が成り立つ．
 :::
 :::
 
