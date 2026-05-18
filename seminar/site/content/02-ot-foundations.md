@@ -395,7 +395,7 @@ Monge 問題の実行可能集合
 :::details-embedded 証明
 次の 2 点を示す：
 
-(A) コスト保存全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する．
+(A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する．
 (B) \(\varphi\) はコストを保存する： \(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
 
 (A)(B) が示されれば，\(\Couplings(\alpha,\beta)\) 上の inf と
