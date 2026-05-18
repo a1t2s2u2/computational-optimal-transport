@@ -427,6 +427,11 @@ class TexParser:
                 nodes.append(("itemize", items))
                 continue
 
+            # Skip vertical spacing commands
+            if re.match(r"\\(medskip|bigskip|smallskip|vspace\*?\{[^}]*\})\s*$", stripped):
+                self.advance()
+                continue
+
             # Regular text line
             self.advance()
             nodes.append(("text", line))

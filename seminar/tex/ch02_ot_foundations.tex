@@ -525,7 +525,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \[
     \inf_{\pi \in \Couplings(\alpha,\beta)}
       \int_{\X\times\Y} c\,\d\pi
-    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}
   \]
   が成り立つ．ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
@@ -534,14 +534,13 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \begin{proof}
   次の 2 点を示す：
   \begin{itemize}
-    \item[(A)] 全単射
-      $\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})$
-      が存在する．
+    \item[(A)] 全単射 $\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})$
+      が存在する（(A-1) $\varphi$ の構成，(A-2) 値域の確認，(A-3) 全射性，(A-4) 単射性）．
     \item[(B)] $\varphi$ はコストを保存する：
       $\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}$．
   \end{itemize}
   \medskip
-  \textbf{(A-1) $\varphi$ の構成（カップリングの台）．}
+  \textbf{(A-1) $\varphi$ の構成．}
   任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
   周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
   $\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0$ から
@@ -564,19 +563,23 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
   \medskip
   \textbf{(A-2) $\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})$（周辺条件 $\leftrightarrow$ 行・列和条件）．}
-  周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
+  任意の $k$ に対し，
   \[
-    \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
-    \qquad\text{すなわち}\quad
-    \mathbf{P}\ones_m = \mathbf{a}.
+    \sum_{j=1}^m P_{k,j}
+    = \sum_{j=1}^m \pi\bigl(\{x_k\} \times \{y_j\}\bigr)
+    = \pi\!\left(\{x_k\} \times \{y_1,\ldots,y_m\}\right)
+    = \pi(\{x_k\} \times \Y)
+    = \alpha(\{x_k\}) = a_k.
   \]
-  同様に $\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l$ から
-  $\mathbf{P}^\top\ones_n = \mathbf{b}$．
+  第二の等号は $\{y_j\}$ が互いに素であることによる $\sigma$-加法性，
+  第三の等号は (A-1) より $\pi$ の質量が格子上のみに集中することによる．
+  ゆえに $\mathbf{P}\ones_m = \mathbf{a}$．
+  同様に $\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l$ から $\mathbf{P}^\top\ones_n = \mathbf{b}$．
   ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$．
 
   \medskip
-  \textbf{(A-3) $\varphi$ は全単射．}
-  \textit{全射}：任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し
+  \textbf{(A-3) 全射性．}
+  任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し
   $\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$ とおくと，
   任意の $A \in \Bb(\X)$ について
   \[
@@ -586,17 +589,39 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     = \alpha(A),
   \]
   同様に $\pi'(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）だから
-  $\pi' \in \Couplings(\alpha,\beta)$，かつ $\varphi(\pi') = \mathbf{P}$．
-  \textit{単射}：$\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}$ とすれば，
-  (A-1) より $\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$．
+  $\pi' \in \Couplings(\alpha,\beta)$．
+  また $\varphi(\pi')_{i,j} = \pi'(\{x_i\} \times \{y_j\})$ に $\pi' = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}$ を代入すると，
+  \[
+    \pi'(\{x_i\} \times \{y_j\})
+    = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}(\{x_i\} \times \{y_j\})
+    = P_{i,j}.
+  \]
+  最後の等号は，$x_k$ はすべて互いに異なり $y_l$ もすべて互いに異なるという仮定より，$\delta_{(x_k,y_l)}(\{x_i\}\times\{y_j\})=1$ となるのは $(k,l)=(i,j)$ のときに限ることによる．
+  ゆえに $\varphi(\pi') = \mathbf{P}$ であり，任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対して $\varphi(\pi') = \mathbf{P}$ を満たす $\pi' \in \Couplings(\alpha,\beta)$ が存在するから，$\varphi$ は全射である．
+
+  \medskip
+  \textbf{(A-4) 単射性．}
+  任意の $\pi \in \Couplings(\alpha,\beta)$ をとり $\mathbf{P} \defeq \varphi(\pi)$ とおくと，
+  (A-1) より
+  \[
+    \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}
+  \]
+  と一意に表せる．ゆえに $\varphi(\pi)$ が等しければ $\pi$ も等しく，$\varphi$ は単射である．
 
   \medskip
   \textbf{(B) $\varphi$ はコストを保存する．}
-  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
-  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
+  任意の $\pi \in \Couplings(\alpha,\beta)$ をとり $\mathbf{P} \defeq \varphi(\pi)$ とおく．
+  (A-1) より $\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$ だから，
+  積分の線形性（命題~\ref{prop:sem-measure-linearity}）を適用すると
   \[
     \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
-    = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+    = \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y)\, \d\delta_{(x_i,y_j)}(x,y).
+  \]
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）より
+  $\int c\,\d\delta_{(x_i,y_j)} = c(x_i,y_j) = C_{i,j}$ だから，
+  \[
+    \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
+    = \sum_{i,j} P_{i,j}\, C_{i,j}
     = \inner{\mathbf{C}}{\mathbf{P}}.
   \]
 
@@ -610,17 +635,12 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}.
   \]
-  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は有限次元ノルム空間 $\R^{n \times m}$ 上の線形写像であり，したがって連続であり，
-  $\CouplingsD(\mathbf{a},\mathbf{b})$ は非空（主張~\ref{clm:sem-discrete-kantorovich-existence}）
-  かつコンパクト（同主張）であるから，
-  Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より
-  右辺の inf は最小値として達成され，$\inf = \min$ が成り立つ．
 \end{proof}
 
 右辺の最適値を
 \[
   \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-  \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+  \defeq \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
 \]
 と書き，\textbf{離散 Kantorovich 問題}と呼ぶ．
 
@@ -836,7 +856,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   （命題~\ref{prop:sem-finite-dim-linear-continuous}），
   $f$ は連続である．
   よって $f^{-1}(\{(\mathbf{a}, \mathbf{b})\})$ は
-  一点集合（閉集合）の逆像として閉集合である
+  一点集合（閉集合）の引き戻しとして閉集合である
   （命題~\ref{prop:sem-preimage-closed}）．
   また $\R_+^{n \times m}$ は $\R^{n \times m}$ の閉集合であるから，
   \[
@@ -863,6 +883,13 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   したがって最適解 $\mathbf{P}^*$ が存在する．
 \end{proof}
 
+以上より inf は最小値として達成されるから，
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+\]
+と書ける．
+
 \begin{claim}{最適解集合は凸かつコンパクト}{sem-optimal-face}
   最適解の集合
   \[
@@ -881,10 +908,13 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   $\mathbf{P}^*, \mathbf{Q}^* \in S^*$ と $t \in [0,1]$ に対し，
   $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ とおく．
   $\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}$ より $\mathbf{R} \geq \mathbf{0}$ であり，
-  行・列和条件の線形性から
-  $\mathbf{R}\ones_m = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}$，
-  同様に $\mathbf{R}^\top\ones_n = \mathbf{b}$ ゆえ
-  $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+  \[
+    \mathbf{R}\ones_m
+    = (t\mathbf{P}^* + (1-t)\mathbf{Q}^*)\ones_m
+    = t\mathbf{P}^*\ones_m + (1-t)\mathbf{Q}^*\ones_m
+    = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}.
+  \]
+  同様に $\mathbf{R}^\top\ones_n = \mathbf{b}$ ゆえ $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
   さらに，内積の線形性から
   \[
     \inner{\mathbf{C}}{\mathbf{R}}
@@ -894,50 +924,53 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   よって $\mathbf{R} \in S^*$．
 
   \textbf{コンパクト性．}
-  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は連続であるから，
-  その水準集合 $\{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  $g(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}}$ は連続写像であり，
+  $\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}$ は閉集合だから，
+  命題~\ref{prop:sem-preimage-closed} より
+  $g^{-1}(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}) = \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}$
   は閉集合である．
-  したがって
-  $S^* = \CouplingsD(\mathbf{a}, \mathbf{b})
-  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
-  はコンパクト集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ の閉部分集合であるからコンパクト．
+  したがって $S^*$ はコンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ とこの閉集合の共通部分であるからコンパクト．
 \end{proof}
 
 \begin{example}{最適解の非一意性}{sem-nonunique-example}
-  $n = m = 2$，$\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)$ とし，
+  $n = m = 2$，$\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)^\top$ とし，
   コスト行列を
   \[
     \mathbf{C} = \begin{pmatrix} 1 & 3 \\ 3 & 5 \end{pmatrix}
   \]
-  とする（$C_{11} + C_{22} = 6 = C_{12} + C_{21}$）．
-  周辺条件の連立を解くと自由変数は $P_{1,1} \in [0,1/2]$ の1つで，
-  残りは $P_{1,2} = P_{2,1} = 1/2 - P_{1,1}$，$P_{2,2} = P_{1,1}$ と定まる．
-  $s \defeq 1 - 2P_{1,1} \in [0,1]$ とおけば $\mathbf{P} = (1-s)\mathbf{P}_1 + s\mathbf{P}_2$ となり，
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  \[
-    \mathbf{P}_1
-    = \begin{pmatrix} 1/2 & 0 \\ 0 & 1/2 \end{pmatrix},
-    \qquad
-    \mathbf{P}_2
-    = \begin{pmatrix} 0 & 1/2 \\ 1/2 & 0 \end{pmatrix}
-  \]
-  を端点とする線分である．両者のコストはともに
-  \[
-    \inner{\mathbf{C}}{\mathbf{P}_1}
-    = \tfrac{1}{2} + \tfrac{5}{2} = 3,
-    \qquad
-    \inner{\mathbf{C}}{\mathbf{P}_2}
-    = \tfrac{3}{2} + \tfrac{3}{2} = 3
-  \]
-  で等しい．
-  したがって任意の $t \in [0, 1]$ に対して
-  $t\mathbf{P}_1 + (1-t)\mathbf{P}_2$ が最適であり，
-  $S^* = \CouplingsD(\mathbf{a}, \mathbf{b})$ となる．
+  とする．
 
-  この非一意性は
-  $C_{11} + C_{22} = C_{12} + C_{21}$ から生じる．
-  逆に $C_{11} + C_{22} \neq C_{12} + C_{21}$ ならば
-  2頂点のコストが異なるため最適解は一意となる．
+  \textbf{自由変数の導出．}
+  $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ の周辺条件は
+  \[
+    P_{1,1} + P_{1,2} = \tfrac{1}{2}, \quad
+    P_{2,1} + P_{2,2} = \tfrac{1}{2}, \quad
+    P_{1,1} + P_{2,1} = \tfrac{1}{2}, \quad
+    P_{1,2} + P_{2,2} = \tfrac{1}{2}
+  \]
+  の4式だが，行和の総和と列和の総和がともに1になるため独立な式は3つである．
+  4変数 $P_{i,j} \geq 0$ に対して独立な制約が3つなので自由度は1であり，
+  $P_{1,1} \in [0, 1/2]$ を自由変数にとると残りは一意に
+  \[
+    P_{1,2} = P_{2,1} = \tfrac{1}{2} - P_{1,1}, \quad P_{2,2} = P_{1,1}
+  \]
+  と定まる．よって $\CouplingsD(\mathbf{a},\mathbf{b})$ は
+  \[
+    \mathbf{P}_1 = \begin{pmatrix} 1/2 & 0 \\ 0 & 1/2 \end{pmatrix}, \qquad
+    \mathbf{P}_2 = \begin{pmatrix} 0 & 1/2 \\ 1/2 & 0 \end{pmatrix}
+  \]
+  を端点とする線分である．
+
+  \textbf{両端点のコストが等しい理由．}
+  各端点のコストを計算すると
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_1} = \tfrac{1}{2}C_{1,1} + \tfrac{1}{2}C_{2,2} = 3, \qquad
+    \inner{\mathbf{C}}{\mathbf{P}_2} = \tfrac{1}{2}C_{1,2} + \tfrac{1}{2}C_{2,1} = 3.
+  \]
+  これらが等しいのは $C_{1,1} + C_{2,2} = C_{1,2} + C_{2,1} = 6$ が成り立つからである．
+  この条件が満たされると両端点が同じコストを持ち，凸性（主張~\ref{clm:sem-optimal-face}）より
+  線分全体が最適解となるため $S^* = \CouplingsD(\mathbf{a},\mathbf{b})$．
+  逆に $C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}$ ならば両端点のコストが異なり，最適解は一意となる．
 \end{example}
 
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
