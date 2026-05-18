@@ -383,7 +383,8 @@ Monge 問題の実行可能集合
 に対して
 
 \[
- \MK_c(\alpha, \beta)
+ \inf_{\pi \in \Couplings(\alpha,\beta)}
+ \int_{\X\times\Y} c\,\d\pi
  = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}
 \]
