@@ -425,8 +425,26 @@ Monge 問題の実行可能集合
 
 同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
 \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
-よって \(\pi \mapsto \mathbf{P}\) は \(\Couplings(\alpha,\beta)\) から
-\(\CouplingsD(\mathbf{a},\mathbf{b})\) への全単射である．
+よって写像 \(\varphi \colon \pi \mapsto \mathbf{P}\) は
+\(\Couplings(\alpha,\beta)\) から \(\CouplingsD(\mathbf{a},\mathbf{b})\) への写像である．
+
+逆に，任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
+\(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，
+任意の \(A \in \Bb(\X)\) について
+
+\[
+ \pi'(A \times \Y)
+ = \sum_{i:\,x_i \in A} \sum_j P_{i,j}
+ = \sum_{i:\,x_i \in A} a_i
+ = \alpha(A),
+\]
+
+同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）が成り立つから
+\(\pi' \in \Couplings(\alpha,\beta)\)．
+また (i) より \(\varphi(\pi') = \mathbf{P}\) であるから \(\varphi\) は全射．
+さらに (i) の表現 \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) は \(\mathbf{P}\) を一意に定めるから
+\(\varphi\) は単射でもある．
+したがって \(\varphi\) は全単射である．
 
 **(iii) コスト等式．**
 測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
@@ -439,15 +457,18 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 \]
 
 
-以上より (ii) の全単射がコストを保存するから，
+以上より \(\varphi\) の全単射性とコスト等式から，
 
 \[
  \MK_c(\alpha, \beta)
  = \inf_{\pi \in \Couplings(\alpha, \beta)}
  \int_{\X \times \Y} c\, \d\pi
- = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
+
+右辺の inf は，\(\CouplingsD(\mathbf{a},\mathbf{b})\) のコンパクト性（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）
+により最小値として達成されるから \(\inf = \min\) が成り立つ．
 :::
 :::
 
