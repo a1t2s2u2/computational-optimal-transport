@@ -26,12 +26,6 @@ CHAPTERS = [
         "eyebrow": "2. OT Foundations",
         "title": "Optimal Transport の基礎理論",
     }),
-    ("ch03_algorithmic_foundations.tex", "03-algorithms.md", {
-        "id": "algorithms",
-        "nav": "アルゴリズムの基礎",
-        "eyebrow": "3. Algorithms",
-        "title": "アルゴリズムの基礎",
-    }),
     ("ch04_entropic_regularization.tex", "04-entropic.md", {
         "id": "entropic",
         "nav": "エントロピー正則化",

@@ -751,45 +751,34 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 
 とする．
 
-**自由変数の導出．**
-\(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) の周辺条件は
+**\(\CouplingsD(\mathbf{a},\mathbf{b})\) の構造．**
+\(P_{1,1} = t \in [0, 1/2]\) と置くと，行和・列和の条件から順に
+
+\[\begin{aligned}
+ P_{1,2} &= \tfrac{1}{2} - t \quad \text{（1行目の行和）},\\
+ P_{2,1} &= \tfrac{1}{2} - t \quad \text{（1列目の列和）},\\
+ P_{2,2} &= t \quad \text{（2行目の行和）}
+\end{aligned}\]
+
+と定まるので，
 
 \[
- P_{1,1} + P_{1,2} = \tfrac{1}{2}, \quad
- P_{2,1} + P_{2,2} = \tfrac{1}{2}, \quad
- P_{1,1} + P_{2,1} = \tfrac{1}{2}, \quad
- P_{1,2} + P_{2,2} = \tfrac{1}{2}
+ \mathbf{P} = \begin{pmatrix} t & \tfrac{1}{2}-t \\ \tfrac{1}{2}-t & t \end{pmatrix}, \quad t \in \bigl[0,\tfrac{1}{2}\bigr].
 \]
 
-の4式だが，行和の総和と列和の総和がともに1になるため独立な式は3つである．
-4変数 \(P_{i,j} \geq 0\) に対して独立な制約が3つなので自由度は1であり，
-\(P_{1,1} \in [0, 1/2]\) を自由変数にとると残りは一意に
+
+**全元が最適解である理由．**
+この \(\mathbf{P}\) のコストを \(t\) で計算すると
 
 \[
- P_{1,2} = P_{2,1} = \tfrac{1}{2} - P_{1,1}, \quad P_{2,2} = P_{1,1}
+ \inner{\mathbf{C}}{\mathbf{P}}
+ = 1 \cdot t + 3\!\left(\tfrac{1}{2}-t\right) + 3\!\left(\tfrac{1}{2}-t\right) + 5t
+ = (1 - 3 - 3 + 5)t + 3 = 3.
 \]
 
-と定まる．よって \(\CouplingsD(\mathbf{a},\mathbf{b})\) は
-
-\[
- \mathbf{P}_1 = \begin{pmatrix} 1/2 & 0 \\ 0 & 1/2 \end{pmatrix}, \qquad
- \mathbf{P}_2 = \begin{pmatrix} 0 & 1/2 \\ 1/2 & 0 \end{pmatrix}
-\]
-
-を端点とする線分である．
-
-**両端点のコストが等しい理由．**
-各端点のコストを計算すると
-
-\[
- \inner{\mathbf{C}}{\mathbf{P}_1} = \tfrac{1}{2}C_{1,1} + \tfrac{1}{2}C_{2,2} = 3, \qquad
- \inner{\mathbf{C}}{\mathbf{P}_2} = \tfrac{1}{2}C_{1,2} + \tfrac{1}{2}C_{2,1} = 3.
-\]
-
-これらが等しいのは \(C_{1,1} + C_{2,2} = C_{1,2} + C_{2,1} = 6\) が成り立つからである．
-この条件が満たされると両端点が同じコストを持ち，凸性（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]）より
-線分全体が最適解となるため \(S^* = \CouplingsD(\mathbf{a},\mathbf{b})\)．
-逆に \(C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}\) ならば両端点のコストが異なり，最適解は一意となる．
+\(t\) が消えてコストが定数になるため，\(\CouplingsD(\mathbf{a},\mathbf{b})\) の全元が最適解であり
+\(S^* = \CouplingsD(\mathbf{a},\mathbf{b})\)．
+逆に \(C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}\) ならば \(t\) の係数が非ゼロとなり，最適解は一意となる．
 :::
 
 
