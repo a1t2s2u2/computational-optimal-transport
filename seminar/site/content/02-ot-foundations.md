@@ -628,8 +628,11 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 （[ref:Thm: Heine-Borel の定理|Heine-Borel の定理]）．
 
 **(iii) 連続性．**
-\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は有限次元ノルム空間 \(\R^{n \times m}\) 上の
-線形写像であり，したがって連続．
+目的関数を \(f(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}\) とおく．
+これは \(\mathbf{P}\) の各成分 \(P_{i,j}\) に関する一次式である．
+したがって \(f\) は \(\R^{n\times m}\) 上の線形関数であり，
+有限次元ノルム空間上の線形関数は連続であるから
+（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），\(f\) は連続である．
 
 以上 (i)--(iii) と Weierstrass の最大値の定理
 （[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より，

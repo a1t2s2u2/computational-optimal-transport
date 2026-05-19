@@ -269,6 +269,13 @@ Bolzano-Weierstrass の定理（[ref:Clm: Bolzano-Weierstrass の定理|Bolzano-
 :::
 
 
+:::theorem
+### Prop: 有限次元ノルム空間上の線形関数の連続性
+
+有限次元ノルム空間 \(V\) 上の任意の線形関数 \(f \colon V \to \R\) は連続である．
+:::
+
+
 ## 測度論
 
 
