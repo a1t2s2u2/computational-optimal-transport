@@ -34,7 +34,7 @@ import sys
 from tqdm import tqdm
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-sys.path.insert(0, os.path.join(REPO_ROOT, "site", "scripts"))
+sys.path.insert(0, os.path.join(REPO_ROOT, "seminar", "site", "scripts"))
 
 from tex2md import strip_comments, _join_multiline_inline_math
 
@@ -47,15 +47,15 @@ VALID_PATH  = os.path.join(REPO_ROOT, "llm", "data", "valid.jsonl")
 # ──────────────────────────────────────────────
 
 CPT_FILES = [
-    "seminar/ch01_preliminaries.tex",
-    "seminar/ch02_ot_foundations.tex",
-    "seminar/ch03_algorithmic_foundations.tex",
-    "seminar/ch04_entropic_regularization.tex",
-    "seminar/ch05_vae_geodesic.tex",
-    "cuturi/translation/01_introduction.tex",
-    "cuturi/translation/02_theoretical_foundations.tex",
-    "cuturi/translation/03_algorithmic_foundations.tex",
-    "cuturi/translation/04_entropic_regularization.tex",
+    "seminar/tex/ch01_preliminaries.tex",
+    "seminar/tex/ch02_ot_foundations.tex",
+    "seminar/tex/ch03_algorithmic_foundations.tex",
+    "seminar/tex/ch04_entropic_regularization.tex",
+    "seminar/tex/ch05_vae_geodesic.tex",
+    "seminar/cuturi/translation/01_introduction.tex",
+    "seminar/cuturi/translation/02_theoretical_foundations.tex",
+    "seminar/cuturi/translation/03_algorithmic_foundations.tex",
+    "seminar/cuturi/translation/04_entropic_regularization.tex",
 ]
 
 # Lines starting with these are preamble / structure directives, not math content.

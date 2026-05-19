@@ -484,7 +484,7 @@ if __name__ == "__main__":
     parser.add_argument("--latent-dim", type=int, default=3)
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--output-dir", type=str, default="../../seminar/fig")
+    parser.add_argument("--output-dir", type=str, default="../../seminar/tex/fig")
     parser.add_argument("--device", type=str, default="cpu")
     args = parser.parse_args()
     main(args)

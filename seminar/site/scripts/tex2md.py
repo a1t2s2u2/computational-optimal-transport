@@ -9,9 +9,9 @@ import re
 # Configuration
 # ---------------------------------------------------------------------------
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar")
-CONTENT_DIR = os.path.join(REPO_ROOT, "site", "content")
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
+CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
 CHAPTERS = [
     ("ch01_preliminaries.tex", "01-preliminaries.md", {
@@ -44,21 +44,26 @@ CHAPTERS = [
 # Named block environments and their markdown mappings.
 # (env_name, container_class, heading_prefix)
 BLOCK_ENVS = {
-    "definition": ("definition", "定義"),
-    "claim":      ("theorem",    "主張"),
-    "theorem":    ("theorem",    "定理"),
-    "proposition":("theorem",    "命題"),
-    "remark":     ("fact",       None),       # title only, no prefix
-    "example":    ("fact accent","例"),
+    "definition": ("definition", "Def"),
+    "claim":      ("theorem",    "Clm"),
+    "theorem":    ("theorem",    "Thm"),
+    "proposition":("theorem",    "Prop"),
+    "remark":     ("fact",       "Rem"),
+    "example":    ("fact accent","Ex"),
 }
 
 LABEL_PREFIX_MAP = {
-    "def": "定義",
-    "clm": "主張",
-    "thm": "定理",
-    "prop": "命題",
-    "rem": "注意",
-    "ex": "例",
+    "def": "Def",
+    "clm": "Clm",
+    "thm": "Thm",
+    "prop": "Prop",
+    "rem": "Rem",
+    "ex": "Ex",
+}
+
+_JP_TO_ABBREV = {
+    "定義": "Def", "主張": "Clm", "命題": "Prop",
+    "定理": "Thm", "例": "Ex", "注意": "Rem", "Claim": "Clm",
 }
 
 ENV_TO_PREFIX = {
@@ -117,9 +122,11 @@ def convert_inline_math(text: str) -> str:
 
 
 def convert_text_commands(text: str) -> str:
-    r"""Convert \textbf{X} -> **X**, \textit{X} -> *X*."""
-    text = re.sub(r"\\textbf\{([^}]*)\}", r"**\1**", text)
-    text = re.sub(r"\\textit\{([^}]*)\}", r"*\1*", text)
+    r"""Convert \textbf{X} -> **X**, \textit{X} -> *X*.
+    Handles one level of nested braces (e.g. \textbf{...\mathbf{P}...})."""
+    nested = r"(?:[^{}]|\{[^{}]*\})*"
+    text = re.sub(rf"\\textbf\{{({nested})\}}", r"**\1**", text)
+    text = re.sub(rf"\\textit\{{({nested})\}}", r"*\1*", text)
     return text
 
 
@@ -201,8 +208,8 @@ def convert_refs(text: str) -> str:
         if not title:
             return ""
         prefix = label.split(":")[0] if ":" in label else ""
-        jp_type = LABEL_PREFIX_MAP.get(prefix, m.group(1))
-        return f"[ref:{jp_type}: {title}|{title}]"
+        abbrev = LABEL_PREFIX_MAP.get(prefix) or _JP_TO_ABBREV.get(m.group(1), m.group(1))
+        return f"[ref:{abbrev}: {title}|{title}]"
 
     text = re.sub(
         r"(定義|主張|命題|定理|例|注意|Claim|正則化問題)~?\\ref\{([^}]+)\}",
@@ -301,6 +308,13 @@ class TexParser:
                 while not self.at_end() and not self.peek().strip():
                     self.advance()
                 nodes.append(("blank",))
+                continue
+
+            # \demohint{NAME}  →  emit a demo block marker for the site
+            m_demo = re.match(r"\\demohint\{([^}]+)\}", stripped)
+            if m_demo:
+                self.advance()
+                nodes.append(("demo", m_demo.group(1)))
                 continue
 
             # Skip \chapter
@@ -639,6 +653,11 @@ def render_nodes(nodes, indent=0):
         if kind == "subsubsection":
             title = apply_inline_conversions(node[1])
             output.append(f"**{title}**")
+            output.append("")
+            continue
+
+        if kind == "demo":
+            output.append(f":::demo {node[1]}")
             output.append("")
             continue
 

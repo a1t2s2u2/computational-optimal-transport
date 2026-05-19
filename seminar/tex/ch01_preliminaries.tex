@@ -108,6 +108,25 @@ $d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
   関数 $d$ を $\Omega$ 上の\textbf{距離関数}という．
 \end{definition}
 
+\begin{definition}{ノルム空間}{sem-normed-space}
+  実ベクトル空間 $V$ と関数 $\|\cdot\| \colon V \to [0, \infty)$ の組
+  $(V, \|\cdot\|)$ が\textbf{ノルム空間}であるとは，
+  次の3条件がすべての $x, y \in V$ と $\lambda \in \R$ に対して
+  成り立つことをいう：
+  \begin{enumerate}
+    \item[(i)] 正定値性：$\|x\| = 0 \iff x = 0$，
+    \item[(ii)] 斉次性：$\|\lambda x\| = |\lambda|\,\|x\|$，
+    \item[(iii)] 三角不等式：$\|x + y\| \leq \|x\| + \|y\|$．
+  \end{enumerate}
+  関数 $\|\cdot\|$ を $V$ 上の\textbf{ノルム}という．
+  ノルム空間は $d(x, y) \defeq \|x - y\|$ により
+  距離空間（定義~\ref{def:sem-metric-space}）となる．
+  $V$ が有限次元のとき，$(V, \|\cdot\|)$ を
+  \textbf{有限次元ノルム空間}という．
+  例えば $\R^n$ や $\R^{n \times m}$ はユークリッドノルム（フロベニウスノルム）により
+  有限次元ノルム空間となる．
+\end{definition}
+
 \begin{definition}{開球}{sem-open-ball}
   距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{++}$ に対して，
   中心 $x$，半径 $r$ の\textbf{開球}を
@@ -338,6 +357,19 @@ $\R$ はその「完備化」として機能する．}
   $f(x_n) \to f(x)$ が成り立つことが挙げられる．
 \end{definition}
 
+\begin{proposition}{連続写像による閉集合の逆像}{sem-preimage-closed}
+  距離空間 $(\Omega_1, d_1)$，$(\Omega_2, d_2)$ の間の連続写像
+  $f \colon \Omega_1 \to \Omega_2$（定義~\ref{def:sem-continuous}）に対して，
+  $F \subset \Omega_2$ が閉集合ならば $f^{-1}(F)$ も閉集合である．
+\end{proposition}
+
+\begin{proof}
+  $f^{-1}(F)$ の任意の収束列 $(x_n)$ をとり，極限を $x^*$ とする．
+  $f(x_n) \in F$ であり，$f$ の連続性から $f(x_n) \to f(x^*)$．
+  $F$ は閉集合だから $f(x^*) \in F$，すなわち $x^* \in f^{-1}(F)$．
+  ゆえに $f^{-1}(F)$ は閉集合．
+\end{proof}
+
 \begin{definition}{有界集合}{sem-bounded}
   $\R^n$ の部分集合 $S \subset \R^n$ が\textbf{有界}であるとは，
   ある $M > 0$ が存在して
@@ -424,6 +456,10 @@ $\R$ はその「完備化」として機能する．}
   \]
   特に $p^* = f(x^*) \in \R$ であり，最小値は $x^*$ で達成される．
 \end{proof}
+
+\begin{proposition}{有限次元ノルム空間上の線形関数の連続性}{sem-finite-dim-linear-continuous}
+  有限次元ノルム空間 $V$ 上の任意の線形関数 $f \colon V \to \R$ は連続である．
+\end{proposition}
 
 %% ============================================================
 %% 測度論
@@ -814,6 +850,17 @@ $\R$ はその「完備化」として機能する．}
   \]
   で表す．$\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合
   （定義~\ref{def:sem-finite}）である．
+\end{definition}
+
+\begin{definition}{線形関数}{sem-linear-function}
+  ベクトル空間 $V$ から $\R$ への関数 $f \colon V \to \R$ が
+  \textbf{線形関数}であるとは，
+  任意の $v_1, v_2 \in V$ と $\lambda \in \R$ に対して
+  \begin{enumerate}
+    \item[(i)] 加法性：$f(v_1 + v_2) = f(v_1) + f(v_2)$，
+    \item[(ii)] 斉次性：$f(\lambda v_1) = \lambda f(v_1)$
+  \end{enumerate}
+  が成り立つことをいう．
 \end{definition}
 
 \begin{definition}{全成分 $1$ のベクトル}{sem-ones-vector}

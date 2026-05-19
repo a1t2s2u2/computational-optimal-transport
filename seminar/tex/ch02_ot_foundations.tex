@@ -373,10 +373,15 @@ Monge 問題の実行可能集合
 \end{example}
 
 %% ============================================================
-%% Kantorovich 緩和
+%% Kantorovich 問題
 %% ============================================================
-\section{Kantorovich 緩和}
+\section{Kantorovich 問題}
+\label{sec:sem-kantorovich-problem}
+
+\subsection{Kantorovich 緩和}
 \label{sec:sem-kantorovich}
+
+\subsubsection{問題の定義}
 
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
@@ -494,38 +499,140 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \label{fig:sem-monge-vs-kantorovich}
 \end{figure}
 
-\begin{definition}{離散 Kantorovich 問題}{sem-discrete-kantorovich}
-  有限集合
+\subsubsection{離散化}
+
+連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
+
+\begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
+  $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
+  $x_1, \ldots, x_n \in \X$（$i \neq j \Rightarrow x_i \neq x_j$），
+  $y_1, \ldots, y_m \in \Y$（$i \neq j \Rightarrow y_i \neq y_j$），
+  可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
   \[
-    X \defeq \{x_1, \ldots, x_n\} \subset \X, \qquad
-    Y \defeq \{y_1, \ldots, y_m\} \subset \Y
+    \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
+    \beta  \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
   \]
-  を台とする離散測度（定義~\ref{def:sem-discrete-measure}）
-  \begin{align*}
-    \alpha &= \sum_{i=1}^n a_i\, \delta_{x_i}
-      \quad (\mathbf{a} \in \R_{++}^n,\; \textstyle\sum_i a_i = 1), \\
-    \beta  &= \sum_{j=1}^m b_j\, \delta_{y_j}
-      \quad (\mathbf{b} \in \R_{++}^m,\; \textstyle\sum_j b_j = 1)
-  \end{align*}
-  と，コスト行列 $\mathbf{C} \in \R_+^{n \times m}$，$C_{i,j} \defeq c(x_i, y_j)$ に対して，
+  とおく．行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ および
   \textbf{離散カップリング集合}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
     \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
-    \mathbf{P} \ones_m = \mathbf{a},\;
-    \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
+      \mathbf{P}\ones_m = \mathbf{a},\;
+      \mathbf{P}^\top\ones_n = \mathbf{b}
+    \right\}
   \]
-  を定める．最小化問題
+  に対して
   \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    \defeq
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
+    \inf_{\pi \in \Couplings(\alpha,\beta)}
+      \int_{\X\times\Y} c\,\d\pi
+    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+      \inner{\mathbf{C}}{\mathbf{P}}
   \]
-  を\textbf{離散 Kantorovich 問題}という．
-  ここで $\inner{\mathbf{C}}{\mathbf{P}}$ はフロベニウス内積
-  （定義~\ref{def:sem-frobenius-inner}）を表す．
-\end{definition}
+  が成り立つ．ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
+  （定義~\ref{def:sem-frobenius-inner}）である．
+\end{proposition}
+\begin{proof}
+  次の 2 点を示す：
+  \begin{itemize}
+    \item[(A)] 全単射
+      $\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})$
+      が存在する．
+    \item[(B)] $\varphi$ はコストを保存する：
+      $\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}$．
+  \end{itemize}
+  \medskip
+  \textbf{(A-1) $\varphi$ の構成（カップリングの台）．}
+  任意の $\pi \in \Couplings(\alpha, \beta)$ をとる．
+  周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
+  $\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0$ から
+  \[
+    \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
+  \]
+  同様に $\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0$．
+  測度の劣加法性から
+  \[
+    \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
+    \;\leq\;
+    \pi\bigl((\X\setminus\{x_1,\ldots,x_n\})\times\Y\bigr)
+    + \pi\bigl(\X\times(\Y\setminus\{y_1,\ldots,y_m\})\bigr) = 0.
+  \]
+  よって $\pi$ は有限格子 $\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}$ 上のみに質量を持ち，
+  \[
+    \varphi(\pi)_{i,j} \defeq P_{i,j} \defeq \pi\bigl(\{x_i\} \times \{y_j\}\bigr) \geq 0
+  \]
+  と定めると $\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}$ と書ける．
+
+  \medskip
+  \textbf{(A-2) $\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})$（周辺条件 $\leftrightarrow$ 行・列和条件）．}
+  周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
+  \[
+    \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
+    \qquad\text{すなわち}\quad
+    \mathbf{P}\ones_m = \mathbf{a}.
+  \]
+  同様に $\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l$ から
+  $\mathbf{P}^\top\ones_n = \mathbf{b}$．
+  ゆえに $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$．
+
+  \medskip
+  \textbf{(A-3) $\varphi$ は全単射．}
+  \textit{全射}：任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し
+  $\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$ とおくと，
+  任意の $A \in \Bb(\X)$ について
+  \[
+    \pi'(A \times \Y)
+    = \sum_{i:\,x_i \in A} \sum_j P_{i,j}
+    = \sum_{i:\,x_i \in A} a_i
+    = \alpha(A),
+  \]
+  同様に $\pi'(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）だから
+  $\pi' \in \Couplings(\alpha,\beta)$，かつ $\varphi(\pi') = \mathbf{P}$．
+  \textit{単射}：$\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}$ とすれば，
+  (A-1) より $\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}$．
+
+  \medskip
+  \textbf{(B) $\varphi$ はコストを保存する．}
+  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
+  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
+  \[
+    \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
+    = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+    = \inner{\mathbf{C}}{\mathbf{P}}.
+  \]
+
+  \medskip
+  \textbf{結論．}
+  (A)(B) より $\varphi$ はコストを保存する全単射だから，
+  \[
+    \MK_c(\alpha, \beta)
+    = \inf_{\pi \in \Couplings(\alpha, \beta)}
+      \int_{\X \times \Y} c\, \d\pi
+    = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+      \inner{\mathbf{C}}{\mathbf{P}}.
+  \]
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は有限次元ノルム空間 $\R^{n \times m}$ 上の線形写像であり，したがって連続であり，
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ は非空（主張~\ref{clm:sem-discrete-kantorovich-existence}）
+  かつコンパクト（同主張）であるから，
+  Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より
+  右辺の inf は最小値として達成され，$\inf = \min$ が成り立つ．
+\end{proof}
+
+右辺の最適値を
+\[
+  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+  \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+\]
+と書き，\textbf{離散 Kantorovich 問題}と呼ぶ．
+
+\begin{remark}{相異性条件の必要性}{sem-distinct-points}
+  命題の仮定「$i \neq j \Rightarrow x_i \neq x_j$」は全単射 $\varphi$ の全射性に本質的である．
+  もし $x_i = x_k$（$i \neq k$）であれば，$\varphi(\pi)_{i,j} = \varphi(\pi)_{k,j} = \pi(\{x_i\} \times \{y_j\})$
+  となり，$\varphi$ の値域は常に $P_{i,j} = P_{k,j}$ を満たす行列に限定される．
+  一方 $\CouplingsD(\mathbf{a}, \mathbf{b})$ には $P_{i,j} \neq P_{k,j}$ な行列が存在するため，
+  $\varphi$ は全射とならず命題の等式が崩れる．
+  なお，重複点を統合すれば（$a_i + a_k$ をまとめた）より小さい次元の多面体との全単射が取れるため，
+  離散 Kantorovich 問題の枠組み自体は相異性なしでも成立する．
+\end{remark}
 
 \begin{example}{工場からスーパーへの輸送}{sem-factory-supermarket}
   2 つの工場 $x_1, x_2$ から 2 つのスーパー $y_1, y_2$ へ商品を輸送する状況を考える．
@@ -585,8 +692,25 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     \begin{pmatrix}
       1/3 & 1/3 \\
       0 & 1/3
-    \end{pmatrix},
+    \end{pmatrix}.
+  \]
+
+  $\mathbf{P}^{\star} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ であることを周辺条件から確認する：
+  \[
+    \mathbf{P}^{\star}\ones_2
+    = \begin{pmatrix} \tfrac{1}{3} + \tfrac{1}{3} \\ 0 + \tfrac{1}{3} \end{pmatrix}
+    = \begin{pmatrix} \tfrac{2}{3} \\ \tfrac{1}{3} \end{pmatrix}
+    = \mathbf{a},
     \qquad
+    (\mathbf{P}^{\star})^\top\ones_2
+    = \begin{pmatrix} \tfrac{1}{3} + 0 \\ \tfrac{1}{3} + \tfrac{1}{3} \end{pmatrix}
+    = \begin{pmatrix} \tfrac{1}{3} \\ \tfrac{2}{3} \end{pmatrix}
+    = \mathbf{b}.
+  \]
+
+
+  最適コストは
+  \[
     \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
     = \inner{\mathbf{C}}{\mathbf{P}^{\star}}
     = \sum_{i,j} C_{i,j} P_{i,j}^{\star}
@@ -630,174 +754,6 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   \end{figure}
 \end{example}
 
-\begin{remark}{周辺条件の行列表現}{sem-marginal-matrix}
-  連続版のカップリング集合（定義~\ref{def:sem-kantorovich}）の条件
-  $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）を
-  離散測度の単点 $A = \{x_k\}$ に適用すると，
-  命題~\ref{prop:sem-discrete-kantorovich-equiv} の証明における $P_{i,j} \defeq \pi(\{(x_i, y_j)\})$ の関係から
-  \[
-    \pi(\{x_k\} \times Y) = \sum_{j=1}^m P_{k,j} = a_k.
-  \]
-  これが全 $k = 1, \ldots, n$ で成り立つことを，
-  $\ones_m = (1, \ldots, 1)^\top \in \R^m$ との積で一括表記したものが
-  $\mathbf{P} \ones_m = \mathbf{a}$ である（各行の総和が $\mathbf{a}$ に等しい）．
-  同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$ は列の総和条件に対応する．
-  すなわち，
-
-  \begin{center}
-  \begin{tabular}{ccc}
-    連続版 & $\longleftrightarrow$ & 離散版（行列表記） \\[4pt]
-    $\pi(A \times \Y) = \alpha(A)$ & & $\mathbf{P} \ones_m = \mathbf{a}$ \\[2pt]
-    $\pi(\X \times B) = \beta(B)$ & & $\mathbf{P}^\top \ones_n = \mathbf{b}$
-  \end{tabular}
-  \end{center}
-\end{remark}
-
-\begin{definition}{線形計画問題}{sem-lp}
-  $N, M \in \N$，$\mathbf{c} \in \R^N$，$\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ を所与とする．
-  最小化問題
-  \[
-    \min_{\substack{\mathbf{x} \in \R^N \\ \mathbf{A}\mathbf{x} = \mathbf{b},\; \mathbf{x} \geq \mathbf{0}}}\;
-    \mathbf{c}^\top \mathbf{x}
-  \]
-  を\textbf{線形計画問題}（LP）という．
-  制約 $\mathbf{A}\mathbf{x} = \mathbf{b}$，$\mathbf{x} \geq \mathbf{0}$ をみたす $\mathbf{x} \in \R^N$ が存在するとき
-  LP は\textbf{実行可能}，最適値が $-\infty$ でないとき\textbf{有界}であるという．
-\end{definition}
-
-\begin{proposition}{離散測度に対する最適値の一致}{sem-discrete-kantorovich-equiv}
-  定義~\ref{def:sem-discrete-kantorovich} の $\alpha, \beta, \mathbf{C}$ に対して，
-  \[
-    \MK_c(\alpha, \beta) = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
-  \]
-\end{proposition}
-
-\begin{proof}
-  離散カップリング集合の各行列
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ に対し，
-  $X \times Y$ 上の測度を対応させる写像 $\Phi$ を
-  \[
-    \Phi \colon \CouplingsD(\mathbf{a}, \mathbf{b}) \to \Couplings(\alpha, \beta),
-    \qquad
-    \Phi(\mathbf{P}) \defeq \sum_{i=1}^n \sum_{j=1}^m P_{i,j}\, \delta_{(x_i, y_j)}
-  \]
-  で定義する．$\Phi$ が全単射かつコストを保つことを示せば，
-  両問題の最適値の一致が従う．
-
-  \textbf{(i) 値域の確認．}
-  $\Phi$ の式を定義しただけでは，$\Phi(\mathbf{P})$ が
-  $\Couplings(\alpha,\beta)$ の条件（$\alpha,\beta$ を周辺分布とする確率測度であること）を
-  みたすかは自明でない．以下で計算して確かめる．
-  $\Phi(\mathbf{P})(X \times Y) = \sum_{i,j} P_{i,j} = \sum_i a_i = 1$ より
-  $\Phi(\mathbf{P}) \in \Mm_+^1(\X \times \Y)$．
-  単点 $\{x_k\}$ について
-  \[
-    \Phi(\mathbf{P})(\{x_k\} \times \Y)
-    = \sum_{j=1}^m P_{k,j}
-    = a_k
-    = \alpha(\{x_k\}).
-  \]
-  $\alpha$ は $\X \setminus X$ で零ゆえ，$\sigma$-加法性より
-  任意の $A \in \Bb(\X)$ で $\Phi(\mathbf{P})(A \times \Y) = \alpha(A)$．
-  同様に $\Phi(\mathbf{P})(\X \times B) = \beta(B)$（$\forall B \in \Bb(\Y)$）．
-
-  \textbf{(ii) 単射性．}
-  $\Phi(\mathbf{P})(\{(x_k, y_l)\}) = P_{k,l}$ より
-  $\mathbf{P}$ は $\Phi(\mathbf{P})$ から一意に定まる．
-
-  \textbf{(iii) 全射性．}
-  $\pi \in \Couplings(\alpha, \beta)$ を任意にとる．
-  $P_{i,j} \defeq \pi(\{(x_i, y_j)\}) \geq 0$ と定め，
-  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $\Phi(\mathbf{P}) = \pi$ を示す．
-
-  \textit{$\Phi(\mathbf{P}) = \pi$ の確認．}
-  まず $\pi$ の台が $X \times Y$ に含まれることを示す．
-  周辺条件 $\pi(A \times \Y) = \alpha(A)$（$\forall A \in \Bb(\X)$）と
-  $\alpha(\X \setminus X) = 0$ から
-  \[
-    \pi\bigl((\X \setminus X) \times \Y\bigr) = \alpha(\X \setminus X) = 0,
-  \]
-  同様に $\pi(\X \times (\Y \setminus Y)) = 0$．
-  よって $\pi$ は有限集合 $X \times Y$ 上のみに質量を持つから，
-  $\sigma$-加法性より任意の $A \in \Bb(\X \times \Y)$ について
-  \[
-    \pi(A) = \sum_{(x_i,y_j) \in A} P_{i,j} = \Phi(\mathbf{P})(A),
-  \]
-  すなわち $\Phi(\mathbf{P}) = \pi$．
-
-  \textit{$\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ の確認．}
-  周辺条件 $\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k$ から
-  $\sum_j P_{k,j} = a_k$，すなわち $\mathbf{P}\ones_m = \mathbf{a}$．
-  同様に $\mathbf{P}^\top \ones_n = \mathbf{b}$．
-  $P_{i,j} \geq 0$ と合わせて $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
-
-  \textbf{(iv) コスト等式．}
-  $\pi = \Phi(\mathbf{P}) = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$ に対し，
-  測度に関する積分の線形性（命題~\ref{prop:sem-measure-linearity}）と
-  Dirac 測度に対する積分（主張~\ref{clm:sem-dirac-integral}）から
-  \begin{align*}
-    \int_{X \times Y} c(x, y) \, \d\pi(x, y)
-    &= \sum_{i,j} P_{i,j} \int_{X \times Y} c(x, y) \, \d\delta_{(x_i, y_j)}(x, y)
-      && \text{（命題~\ref{prop:sem-measure-linearity}）} \\
-    &= \sum_{i,j} P_{i,j}\, c(x_i, y_j)
-      && \text{（主張~\ref{clm:sem-dirac-integral}）} \\
-    &= \sum_{i,j} C_{i,j} P_{i,j}
-      = \inner{\mathbf{C}}{\mathbf{P}}.
-  \end{align*}
-  以上より最適値の一致を示す．
-  (i) より $\Phi(\mathbf{P}) \in \Couplings(\alpha, \beta)$ が確かめられ，
-  (ii)(iii) より $\Phi$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ から
-  $\Couplings(\alpha, \beta)$ への全単射である．(iv) よりコストを保存する．
-  すなわち，連続版のカップリング $\pi \in \Couplings(\alpha, \beta)$ と
-  離散版の行列 $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  $\pi = \Phi(\mathbf{P})$ を通じてコストを変えずに一対一対応する．
-  したがって，
-  \begin{align*}
-    \MK_c(\alpha, \beta)
-    &= \inf_{\pi \in \Couplings(\alpha, \beta)}
-       \int_{X \times Y} c(x, y) \, \d\pi(x, y) \\
-    &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-       \int_{X \times Y} c(x, y) \, \d(\Phi(\mathbf{P}))(x, y)
-      \quad \text{（$\Phi$ が全単射）} \\
-    &= \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-       \inner{\mathbf{C}}{\mathbf{P}}
-      \quad \text{（(iv)）} \\
-    &= \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
-  \end{align*}
-\end{proof}
-
-\begin{remark}{離散 Kantorovich 問題と線形計画}{sem-discrete-kantorovich-lp}
-  離散 Kantorovich 問題（定義~\ref{def:sem-discrete-kantorovich}）は
-  線形計画問題（定義~\ref{def:sem-lp}）の特殊例である．
-  対応を明示するため，行列を列方向に並べてベクトル化する操作
-  $\operatorname{vec} \colon \R^{n \times m} \to \R^{nm}$ を用いる．
-  \[
-    \mathbf{p} \defeq \operatorname{vec}(\mathbf{P}) \in \R^{nm}_+,
-    \qquad
-    \mathbf{c} \defeq \operatorname{vec}(\mathbf{C}) \in \R^{nm}
-  \]
-  と置くと，フロベニウス内積は通常の内積に帰着する：
-  \[
-    \inner{\mathbf{C}}{\mathbf{P}}
-    = \sum_{i,j} C_{i,j} P_{i,j}
-    = \mathbf{c}^\top \mathbf{p}.
-  \]
-  また，行和条件 $\mathbf{P}\ones_m = \mathbf{a}$ と
-  列和条件 $\mathbf{P}^\top \ones_n = \mathbf{b}$ は，
-  適切な $(n{+}m) \times nm$ 行列 $\mathbf{A}$ を用いて
-  $\mathbf{A}\mathbf{p} = \bigl[\begin{smallmatrix}\mathbf{a}\\ \mathbf{b}\end{smallmatrix}\bigr]$
-  と書ける．
-  したがって離散 Kantorovich 問題は
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    = \min_{\substack{\mathbf{p} \in \R^{nm} \\
-        \mathbf{A}\mathbf{p}
-          = \left[\begin{smallmatrix}\mathbf{a}\\ \mathbf{b}\end{smallmatrix}\right],\;
-        \mathbf{p} \geq \mathbf{0}}}\;
-    \mathbf{c}^\top \mathbf{p}
-  \]
-  となり，定義~\ref{def:sem-lp} の LP に他ならない．
-\end{remark}
 
 \begin{figure}[H]
 \centering
@@ -835,14 +791,13 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \label{fig:sem-coupling-matrix}
 \end{figure}
 
+\subsubsection{最適解の存在と性質}
+
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
   任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
   （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
-  離散 Kantorovich 問題の下限は最小値として達成される：
   \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
-    = \inner{\mathbf{C}}{\mathbf{P}^*}
+    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) = \inner{\mathbf{C}}{\mathbf{P}^*}
   \]
   をみたす $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ が存在する．
 \end{claim}
@@ -871,19 +826,36 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   の離散版に相当する．）
 
   \textbf{(ii) コンパクト性．}
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の定義条件
-  $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$，$\mathbf{P} \geq \mathbf{0}$
-  はいずれも各成分 $P_{i,j}$ の連続関数による等式・不等式であるから，
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ は $\R^{n \times m}$ の閉集合である．
+  周辺条件を定める関数
+  $f(\mathbf{P}) \defeq (\mathbf{P}\ones_m,\, \mathbf{P}^\top \ones_n)$
+  は $\R^{n \times m}$ から $\R^n \times \R^m$ への写像である．
+  $f$ の各成分 $\sum_j P_{i,j}$，$\sum_i P_{i,j}$ は
+  $P_{i,j}$ の一次式であるから $\R^{n \times m}$ 上の線形関数
+  （定義~\ref{def:sem-linear-function}）であり，
+  有限次元ノルム空間上の線形関数は連続であるから
+  （命題~\ref{prop:sem-finite-dim-linear-continuous}），
+  $f$ は連続である．
+  よって $f^{-1}(\{(\mathbf{a}, \mathbf{b})\})$ は
+  一点集合（閉集合）の逆像として閉集合である
+  （命題~\ref{prop:sem-preimage-closed}）．
+  また $\R_+^{n \times m}$ は $\R^{n \times m}$ の閉集合であるから，
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b})
+    = f^{-1}\bigl(\{(\mathbf{a}, \mathbf{b})\}\bigr)
+      \cap \R_+^{n \times m}
+  \]
+  は閉集合の共通部分として閉集合である．
   さらに，行和条件 $\sum_j P_{i,j} = a_i$ と $P_{i,j} \geq 0$ から
-  $0 \leq P_{i,j} \leq a_i \leq 1$ が従い有界．
+  $0 \leq P_{i,j} \leq a_i$ が従い，$\sum_i a_i = 1$ より $a_i \leq 1$ だから有界．
   $\R^{n \times m}$ における有界閉集合はコンパクト
   （定理~\ref{thm:sem-heine-borel}）．
 
   \textbf{(iii) 連続性．}
-  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}$
-  は線形写像であり，有限次元線形空間上で連続
-  （定義~\ref{def:sem-continuous}）．
+  目的関数を $f(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}$ とおく．
+  これは $\mathbf{P}$ の各成分 $P_{i,j}$ に関する一次式である．
+  したがって $f$ は $\R^{n \times m}$ 上の線形関数であり，
+  有限次元ノルム空間上の線形関数は連続であるから
+  （命題~\ref{prop:sem-finite-dim-linear-continuous}），$f$ は連続である．
 
   以上 (i)--(iii) と Weierstrass の最大値の定理
   （定理~\ref{thm:sem-weierstrass}）より，
@@ -907,21 +879,28 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \begin{proof}
   \textbf{凸性．}
   $\mathbf{P}^*, \mathbf{Q}^* \in S^*$ と $t \in [0,1]$ に対し，
-  $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ は
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性から
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属し，
+  $\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*$ とおく．
+  $\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}$ より $\mathbf{R} \geq \mathbf{0}$ であり，
+  行・列和条件の線形性から
+  $\mathbf{R}\ones_m = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}$，
+  同様に $\mathbf{R}^\top\ones_n = \mathbf{b}$ ゆえ
+  $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+  さらに，内積の線形性から
   \[
     \inner{\mathbf{C}}{\mathbf{R}}
     = t\inner{\mathbf{C}}{\mathbf{P}^*} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}^*}
     = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}).
   \]
+  よって $\mathbf{R} \in S^*$．
 
   \textbf{コンパクト性．}
-  $S^*
-  = \CouplingsD(\mathbf{a}, \mathbf{b})
-  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}}
-  = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
-  はコンパクト集合と閉集合の共通部分．
+  $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}$ は連続であるから，
+  その水準集合 $\{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  は閉集合である．
+  したがって
+  $S^* = \CouplingsD(\mathbf{a}, \mathbf{b})
+  \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}$
+  はコンパクト集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ の閉部分集合であるからコンパクト．
 \end{proof}
 
 \begin{example}{最適解の非一意性}{sem-nonunique-example}
@@ -963,7 +942,12 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
   離散 Kantorovich 問題の最適解は一般に一意でないが，
-  正則化パラメータ $\varepsilon > 0$ を用いたエントロピー正則化
+  \textbf{離散エントロピー}
+  \[
+    \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)
+  \]
+  （定義~\ref{def:sem-discrete-entropy}）を用いた正則化パラメータ $\varepsilon > 0$
+  によるエントロピー正則化
   \[
     \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
     \left\{
@@ -971,334 +955,6 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
       - \varepsilon \Hb(\mathbf{P})
     \right\}
   \]
-  は狭義凸最適化であり，最適解は一意に定まる．
+  は狭義凸最適化であり，最適解は一意に定まる（第~\ref{ch:seminar-03-entropic}章）．
 \end{remark}
-
-%% ============================================================
-%% Kantorovich 双対
-%% ============================================================
-\section{Kantorovich 双対}
-\label{sec:sem-kantorovich-dual}
-
-Kantorovich 問題は線形計画問題（定義~\ref{def:sem-lp}）に帰着される．
-LP は双対問題を持ち，実行可能かつ有界な場合に主問題と双対問題の最適値が一致する
-（強双対性，定理~\ref{thm:sem-lp-strong-duality}）．
-本節ではまず LP 双対の一般論を整備し，離散 Kantorovich 双対をその特殊ケースとして導出する．
-
-双対問題を論じる主な意義は次の2点にある．
-第一に，強双対性（定理~\ref{thm:sem-lp-strong-duality}）より主問題の最適値は
-双対問題の最大値に等しく，双対実行可能な $(\mathbf{f}, \mathbf{g})$ を1つ構成するだけで
-主問題の最適値と一致する下界が得られる．
-第二に，第~\ref{ch:seminar-03-entropic}章で扱うエントロピー正則化版では
-双対変数が Sinkhorn アルゴリズムの更新変数に直接対応しており，
-双対の構造の理解が Sinkhorn の導出の鍵になる．
-
-\begin{definition}{LP 双対問題}{sem-lp-dual}
-  定義~\ref{def:sem-lp} の LP に対し，
-  \[
-    \max_{\mathbf{y} \in \R^M}
-    \left\{
-      \mathbf{b}^\top \mathbf{y}
-      \;\middle|\;
-      \mathbf{A}^\top \mathbf{y} \leq \mathbf{c}
-    \right\}
-  \]
-  を\textbf{LP 双対問題}，元の最小化問題を\textbf{主問題}という．
-  $\mathbf{y}$ を\textbf{双対変数}という．
-  双対の実行可能領域を
-  $\mathcal{G} \defeq \{\mathbf{y} \in \R^M \mid \mathbf{A}^\top \mathbf{y} \leq \mathbf{c}\}$ と記す．
-\end{definition}
-
-\begin{claim}{弱双対性}{sem-lp-weak-duality}
-  主問題の実行可能解 $\mathbf{x} \in \mathcal{F}$ と双対の実行可能解
-  $\mathbf{y} \in \mathcal{G}$ に対して，$\mathbf{c}^\top \mathbf{x} \geq \mathbf{b}^\top \mathbf{y}$．
-  特に
-  \[
-    \inf_{\mathbf{x} \in \mathcal{F}}\, \mathbf{c}^\top \mathbf{x}
-    \;\geq\;
-    \sup_{\mathbf{y} \in \mathcal{G}}\, \mathbf{b}^\top \mathbf{y}.
-  \]
-\end{claim}
-
-\begin{proof}
-  $\mathbf{A}^\top \mathbf{y} \leq \mathbf{c}$ かつ $\mathbf{x} \geq \mathbf{0}$ より
-  $(\mathbf{c} - \mathbf{A}^\top \mathbf{y})^\top \mathbf{x} \geq 0$，すなわち
-  \[
-    \mathbf{c}^\top \mathbf{x}
-    \;\geq\;
-    (\mathbf{A}^\top \mathbf{y})^\top \mathbf{x}
-    = \mathbf{y}^\top(\mathbf{A}\mathbf{x})
-    = \mathbf{y}^\top \mathbf{b}
-    = \mathbf{b}^\top \mathbf{y}. \qedhere
-  \]
-\end{proof}
-
-\begin{claim}{Farkas の補題}{sem-farkas}
-  $\mathbf{A} \in \R^{M \times N}$，$\mathbf{b} \in \R^M$ に対して，
-  以下の二系のうちちょうど一方が解を持つ：
-  \begin{enumerate}
-    \item[(I)] $\mathbf{A}\mathbf{x} = \mathbf{b}$，$\mathbf{x} \geq \mathbf{0}$
-               をみたす $\mathbf{x} \in \R^N$ が存在する；
-    \item[(II)] $\mathbf{A}^\top \mathbf{y} \leq \mathbf{0}$，$\mathbf{b}^\top \mathbf{y} > 0$
-                をみたす $\mathbf{y} \in \R^M$ が存在する．
-  \end{enumerate}
-\end{claim}
-
-\begin{remark}{Farkas の補題の証明について}{sem-farkas-remark}
-  Farkas の補題は，$\R^N$ における有限生成凸錐の閉性と超平面分離定理を組み合わせることで証明される（Farkas, 1902）．
-  本セミナーでは標準結果として証明なしに引用する．
-\end{remark}
-
-\begin{theorem}{LP 強双対性}{sem-lp-strong-duality}
-  主問題が実行可能かつ有界ならば，双対問題も実行可能かつ有界であり，
-  \[
-    \min_{\mathbf{x} \in \mathcal{F}}\; \mathbf{c}^\top \mathbf{x}
-    \;=\;
-    \max_{\mathbf{y} \in \mathcal{G}}\; \mathbf{b}^\top \mathbf{y}.
-  \]
-\end{theorem}
-
-\begin{proof}
-  $p^* \defeq \min_{\mathbf{x} \in \mathcal{F}} \mathbf{c}^\top \mathbf{x}$（有限値），
-  $d^* \defeq \sup_{\mathbf{y} \in \mathcal{G}} \mathbf{b}^\top \mathbf{y}$ とおく．
-  弱双対性（主張~\ref{clm:sem-lp-weak-duality}）より $d^* \leq p^*$ が成立する（$\leq$ 方向）．
-
-  以下，$d^* \geq p^*$ を示す．
-  任意の $\varepsilon > 0$ に対して，変数 $(\mathbf{x}; s) \in \R^{N+1}$，
-  $(\mathbf{x}; s) \geq \mathbf{0}$ に関する拡張された系
-  \[
-    \mathbf{A}' (\mathbf{x}; s) = \mathbf{b}',
-    \qquad
-    \mathbf{A}' \defeq
-    \begin{pmatrix} \mathbf{A} & \mathbf{0} \\ \mathbf{c}^\top & 1 \end{pmatrix}
-    \in \R^{(M+1)\times(N+1)},
-    \qquad
-    \mathbf{b}' \defeq
-    \begin{pmatrix} \mathbf{b} \\ p^* - \varepsilon \end{pmatrix}
-    \in \R^{M+1}
-  \]
-  は解を持たない．
-  実際，もし解 $(\mathbf{x}, s)$ が存在すれば $\mathbf{A}\mathbf{x} = \mathbf{b}$，
-  $s \geq 0$，$\mathbf{c}^\top \mathbf{x} = p^* - \varepsilon - s \leq p^* - \varepsilon$
-  となり $\mathbf{x} \in \mathcal{F}$ かつ $\mathbf{c}^\top \mathbf{x} < p^*$ が成立して，
-  $p^*$ の最適性に矛盾する．
-
-  上の系は解を持たないから，Farkas の補題（主張~\ref{clm:sem-farkas}）を
-  $\mathbf{A}' (\mathbf{x}; s) = \mathbf{b}'$，$(\mathbf{x}; s) \geq \mathbf{0}$ に適用すると，
-  $(\mathbf{y}; \mu) \in \R^M \times \R$ が存在して
-  \[
-    (\mathbf{A}')^\top (\mathbf{y}; \mu) \leq \mathbf{0},
-    \qquad
-    (\mathbf{b}')^\top (\mathbf{y}; \mu) > 0.
-  \]
-  $(\mathbf{A}')^\top
-    = \begin{pmatrix} \mathbf{A}^\top & \mathbf{c} \\ \mathbf{0}^\top & 1 \end{pmatrix}$
-  を計算すると，上の条件は
-  \begin{align*}
-    \mathbf{A}^\top \mathbf{y} + \mu\,\mathbf{c} &\leq \mathbf{0}, \\
-    \mu &\leq 0, \\
-    \mathbf{b}^\top \mathbf{y} + (p^* - \varepsilon)\,\mu &> 0
-  \end{align*}
-  と同値になる．
-
-  \textbf{$\mu = 0$ の場合．}
-  $\mathbf{A}^\top \mathbf{y} \leq \mathbf{0}$ かつ $\mathbf{b}^\top \mathbf{y} > 0$
-  となり，Farkas の系 (II) が $\mathbf{A}, \mathbf{b}$ に対して成立する．
-  しかし主問題の実行可能性から系 (I) が成立し，Farkas の補題により系 (II) は成立しない．矛盾．
-
-  \textbf{$\mu < 0$ の場合．}
-  $\lambda \defeq -\mu > 0$ とおく．$\mathbf{A}^\top \mathbf{y} \leq \lambda\,\mathbf{c}$，
-  すなわち $\mathbf{A}^\top (\mathbf{y}/\lambda) \leq \mathbf{c}$ より
-  $\mathbf{z} \defeq \mathbf{y}/\lambda \in \mathcal{G}$ は双対実行可能である．
-  $\mathbf{b}^\top \mathbf{y} + (p^* - \varepsilon)\mu > 0$，
-  すなわち $\mathbf{b}^\top \mathbf{y} > \lambda(p^* - \varepsilon)$ より
-  \[
-    \mathbf{b}^\top \mathbf{z}
-    = \mathbf{b}^\top (\mathbf{y}/\lambda)
-    > p^* - \varepsilon.
-  \]
-  ゆえに $d^* \geq \mathbf{b}^\top \mathbf{z} > p^* - \varepsilon$．
-
-  $\varepsilon > 0$ は任意なので $d^* \geq p^*$．
-  弱双対性 $d^* \leq p^*$ と合わせて $d^* = p^*$．
-\end{proof}
-
-\subsection{離散版の双対問題}
-
-\begin{definition}{離散双対実行可能集合}{sem-dual-feasible}
-  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対し，
-  \textbf{離散 Kantorovich 双対ポテンシャル}の実行可能集合を
-  \[
-    \PotentialsD(\mathbf{C})
-    \defeq
-    \left\{(\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m
-    \;\middle|\;
-    f_i + g_j \leq C_{i,j}
-    \quad(\forall\, i \in \range{n},\, j \in \range{m})
-    \right\}
-  \]
-  と定める．$\mathbf{f}$ と $\mathbf{g}$ を
-  \textbf{双対ポテンシャル}または\textbf{双対変数}という．
-\end{definition}
-
-\begin{theorem}{Kantorovich 双対定理（離散版）}{sem-kantorovich-duality-discrete}
-  $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$，
-  $\sum_i a_i = \sum_j b_j = 1$，および
-  $\mathbf{C} \in \R_+^{n \times m}$ に対して，
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    =
-    \max_{(\mathbf{f}, \mathbf{g}) \in \PotentialsD(\mathbf{C})}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
-  \]
-\end{theorem}
-
-\begin{proof}
-  主問題は
-  \[
-    \min_{\mathbf{P} \geq 0}
-    \left\{
-      \inner{\mathbf{C}}{\mathbf{P}}
-      \;\middle|\;
-      \mathbf{P}\ones_m = \mathbf{a},\;
-      \mathbf{P}^\top \ones_n = \mathbf{b}
-    \right\}
-  \]
-  である．等式制約に対するラグランジュ乗数を
-  $\mathbf{f} \in \R^n$，$\mathbf{g} \in \R^m$ とし，
-  ラグランジュ関数を
-  \[
-    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    \defeq
-    \inner{\mathbf{C}}{\mathbf{P}}
-    + \inner{\mathbf{f}}{\mathbf{a} - \mathbf{P}\ones_m}
-    + \inner{\mathbf{g}}{\mathbf{b} - \mathbf{P}^\top\ones_n}
-  \]
-  とおく．これを整理すると
-  \[
-    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    =
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-    + \sum_{i=1}^n \sum_{j=1}^m
-      \bigl(C_{i,j} - f_i - g_j\bigr) P_{i,j}.
-  \]
-  $\mathbf{P} \geq 0$ の下で $L$ を $\mathbf{P}$ について最小化すると，
-  ある $(i,j)$ で $C_{i,j} - f_i - g_j < 0$ なら
-  $P_{i,j} \to +\infty$ により $\inf_{\mathbf{P} \geq 0} L = -\infty$ となる．
-  一方，すべての $(i,j)$ で $f_i + g_j \leq C_{i,j}$ なら，
-  最後の和は非負であり，$\mathbf{P}=\mathbf{0}$ で最小値
-  $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ を達成する．
-  よって双対問題は
-  \[
-    \max_{(\mathbf{f}, \mathbf{g}) \in \PotentialsD(\mathbf{C})}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-  \]
-  である．$\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でなく有界（主張~\ref{clm:sem-discrete-kantorovich-existence}）であるから，
-  主問題は定義~\ref{def:sem-lp} の LP として実行可能かつ有界である．
-  定理~\ref{thm:sem-lp-strong-duality} の強双対性より主問題と双対問題の最適値は一致する．
-\end{proof}
-
-\begin{proposition}{相補性条件}{sem-complementary-slackness}
-  $\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
-  $(\mathbf{f}^*, \mathbf{g}^*) \in \PotentialsD(\mathbf{C})$ が
-  それぞれ主問題と双対問題の最適解ならば，
-  \[
-    P^*_{i,j} > 0
-    \quad\Longrightarrow\quad
-    f^*_i + g^*_j = C_{i,j}.
-  \]
-  同値に，すべての $(i,j)$ について
-  \[
-    P^*_{i,j}\bigl(C_{i,j} - f^*_i - g^*_j\bigr) = 0.
-  \]
-\end{proposition}
-
-\begin{proof}
-  強双対性より
-  \[
-    \inner{\mathbf{C}}{\mathbf{P}^*}
-    =
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}.
-  \]
-  周辺条件 $\sum_j P^*_{i,j} = a_i$，$\sum_i P^*_{i,j} = b_j$ を代入すると
-  \begin{align*}
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    &= \sum_i f_i^* \Bigl(\sum_j P^*_{i,j}\Bigr)
-      + \sum_j g_j^* \Bigl(\sum_i P^*_{i,j}\Bigr)
-    = \sum_{i,j} (f_i^* + g_j^*) P^*_{i,j}.
-  \end{align*}
-  したがって
-  \[
-    \sum_{i,j}
-    \bigl(C_{i,j} - f_i^* - g_j^*\bigr) P^*_{i,j}
-    = 0.
-  \]
-  ここで $C_{i,j} - f_i^* - g_j^* \geq 0$ は双対実行可能性
-  $(f^*, g^*) \in \PotentialsD(\mathbf{C})$（定義~\ref{def:sem-dual-feasible}）から，
-  $P^*_{i,j} \geq 0$ はカップリングの定義から従うので，各項は非負である．
-  非負項の和が $0$ であるから，各項が $0$ である．
-\end{proof}
-
-\begin{remark}{双対変数と Sinkhorn アルゴリズムの接続}{sem-dual-sinkhorn-connection}
-  ここで導入した双対変数 $(\mathbf{f}, \mathbf{g})$ は，
-  第~\ref{ch:seminar-03-entropic}章で扱うエントロピー正則化 Kantorovich 問題においても
-  中心的な役割を果たす．
-  正則化版の最適解は双対変数を通じて陽に表現でき，
-  Sinkhorn アルゴリズムの反復はその双対変数の交互更新として解釈できる．
-\end{remark}
-
-\subsection{離散 $C$-変換と半双対}
-\label{subsec:sem-discrete-c-transform}
-
-\begin{definition}{離散 $C$-変換}{sem-discrete-c-transform}
-  コスト行列 $\mathbf{C} \in \R^{n \times m}$ と
-  ベクトル $\mathbf{f} \in \R^n$ に対して，
-  $\mathbf{f}$ の\textbf{離散 $C$-変換}
-  $\mathbf{f}^{\,C} \in \R^m$ を
-  \[
-    (\mathbf{f}^{\,C})_j
-    \defeq
-    \min_{i \in \range{n}} \bigl(C_{i,j} - f_i\bigr)
-    \qquad (j \in \range{m})
-  \]
-  で定める．同様に，$\mathbf{g} \in \R^m$ の
-  \textbf{離散 $\bar C$-変換} $\mathbf{g}^{\,\bar C} \in \R^n$ を
-  \[
-    (\mathbf{g}^{\,\bar C})_i
-    \defeq
-    \min_{j \in \range{m}} \bigl(C_{i,j} - g_j\bigr)
-    \qquad (i \in \range{n})
-  \]
-  で定める．最小値は有限集合上の最小値なので必ず存在する．
-\end{definition}
-
-\begin{claim}{離散半双対}{sem-discrete-semidual}
-  離散 Kantorovich 問題の双対値は
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    =
-    \max_{\mathbf{f} \in \R^n}
-    \left\{
-      \inner{\mathbf{f}}{\mathbf{a}}
-      + \inner{\mathbf{f}^{\,C}}{\mathbf{b}}
-    \right\}
-  \]
-  と書ける．この形を\textbf{半双対}という．
-\end{claim}
-
-\begin{proof}
-  $\mathbf{f}$ を固定する．双対制約
-  $f_i + g_j \leq C_{i,j}$ がすべての $i$ で成り立つことは，
-  各 $j$ について
-  \[
-    g_j \leq \min_i (C_{i,j} - f_i) = (\mathbf{f}^{\,C})_j
-  \]
-  と同値である．したがって，固定した $\mathbf{f}$ に対し，
-  制約を満たす $\mathbf{g}$ のうち目的関数
-  $\inner{\mathbf{g}}{\mathbf{b}}$ を最大にするものは
-  $\mathbf{g} = \mathbf{f}^{\,C}$ である
-  （$b_j > 0$ を用いる）．
-  定理~\ref{thm:sem-kantorovich-duality-discrete} の双対問題で
-  $\mathbf{g}$ を消去すれば結論を得る．
-\end{proof}
 

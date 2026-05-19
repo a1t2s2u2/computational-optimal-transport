@@ -40,7 +40,7 @@ LP アルゴリズムで厳密に解ける．
 線形計画の双対理論から，最適解を特徴付ける主双対条件が得られる．
 
 :::theorem
-### 主張: 主双対最適性
+### Clm: 主双対最適性
 
 \(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と
 \((\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m\) が以下を満たすとする：

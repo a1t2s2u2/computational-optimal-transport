@@ -85,9 +85,10 @@ function renderInline(source) {
     .replace(
       /\[ref:([^|\]]+?)(?:\|([^\]]+))?\]/g,
       (_match, first, second) => {
-        const display = first;
         const refName = second || first;
-        return `<button type="button" class="ref" data-ref="${refName}">${display}</button>`;
+        const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex):\s*(.+)$/.exec(first);
+        const display = typeMatch ? typeMatch[1] : first;
+        return `<button type="button" class="ref" data-ref="${refName}" title="${escapeHtml(first)}">${escapeHtml(display)}</button>`;
       }
     );
 
@@ -358,6 +359,8 @@ function renderMarkdown(markdown) {
       }
       if (language === "mermaid") {
         html.push(`<div class="map-wrap"><pre class="mermaid">${escapeHtml(code.join("\n"))}</pre></div>`);
+      } else if (language === "rawhtml") {
+        html.push(code.join("\n"));
       } else {
         html.push(`<pre class="code-block"><code>${escapeHtml(code.join("\n"))}</code></pre>`);
       }
@@ -397,7 +400,7 @@ function renderMarkdown(markdown) {
       const level = heading[1].length;
       if (currentBlock && level === 3 && !currentBlock.name) {
         const rawTitle = heading[2];
-        const nameMatch = /^(?:定義|命題|定理|補題|主張|例):\s*(.+)$/.exec(rawTitle);
+        const nameMatch = /^(?:Def|Clm|Thm|Prop|Rem|Ex):\s*(.+)$/.exec(rawTitle);
         const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
         const id = makeBlockId(currentBlock.type, name);
         currentBlock.name = name;

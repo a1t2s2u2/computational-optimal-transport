@@ -7,7 +7,7 @@ title: 準備
 
 
 :::definition
-### 定義: 冪集合
+### Def: 冪集合
 
 集合 \(\Omega\) に対し，\(\Omega\) の部分集合全体を
 
@@ -23,7 +23,7 @@ title: 準備
 
 
 :::definition
-### 定義: 位相空間
+### Def: 位相空間
 
 集合 \(\Omega\) と部分集合族 \(\mathcal{O} \subset 2^{\Omega}\) の組
 \((\Omega, \mathcal{O})\) が**位相空間**であるとは，
@@ -40,7 +40,7 @@ title: 準備
 
 
 :::definition
-### 定義: 稠密集合
+### Def: 稠密集合
 
 位相空間 \((\Omega, \mathcal{O})\) の部分集合 \(D \subset \Omega\) が**稠密**とは，
 任意の空でない開集合 \(U \in \mathcal{O}\) に対して \(D \cap U \neq \emptyset\)
@@ -49,10 +49,10 @@ title: 準備
 
 
 :::definition
-### 定義: 可分性
+### Def: 可分性
 
 位相空間 \((\Omega, \mathcal{O})\) が可算な稠密部分集合
-（[ref:定義: 稠密集合|稠密集合]）をもつとき，
+（[ref:Def: 稠密集合|稠密集合]）をもつとき，
 \((\Omega, \mathcal{O})\) は**可分**であるという．
 :::
 
@@ -61,7 +61,7 @@ title: 準備
 
 
 :::definition
-### 定義: 距離空間
+### Def: 距離空間
 
 集合 \(\Omega\) と関数 \(d \colon \Omega \times \Omega \to [0, \infty)\) の組
 \((\Omega, d)\) が**距離空間**であるとは，
@@ -76,7 +76,29 @@ title: 準備
 
 
 :::definition
-### 定義: 開球
+### Def: ノルム空間
+
+実ベクトル空間 \(V\) と関数 \(\|\cdot\| \colon V \to [0, \infty)\) の組
+\((V, \|\cdot\|)\) が**ノルム空間**であるとは，
+次の3条件がすべての \(x, y \in V\) と \(\lambda \in \R\) に対して
+成り立つことをいう：
+
+(i) 正定値性：\(\|x\| = 0 \iff x = 0\)，
+(ii) 斉次性：\(\|\lambda x\| = |\lambda|\,\|x\|\)，
+(iii) 三角不等式：\(\|x + y\| \leq \|x\| + \|y\|\)．
+
+関数 \(\|\cdot\|\) を \(V\) 上の**ノルム**という．
+ノルム空間は \(d(x, y) \defeq \|x - y\|\) により
+距離空間（[ref:Def: 距離空間|距離空間]）となる．
+\(V\) が有限次元のとき，\((V, \|\cdot\|)\) を
+**有限次元ノルム空間**という．
+例えば \(\R^n\) や \(\R^{n \times m}\) はユークリッドノルム（フロベニウスノルム）により
+有限次元ノルム空間となる．
+:::
+
+
+:::definition
+### Def: 開球
 
 距離空間 \((\Omega, d)\) 上の点 \(x \in \Omega\) と半径 \(r \in \R_{++}\) に対して，
 中心 \(x\)，半径 \(r\) の**開球**を
@@ -89,14 +111,14 @@ title: 準備
 :::
 
 
-距離空間 \((\Omega, d)\) における開集合（[ref:定義: 位相空間|位相空間]）は，
+距離空間 \((\Omega, d)\) における開集合（[ref:Def: 位相空間|位相空間]）は，
 開球 \(B_r(x)\) を用いて次のように特徴付けられる：
 \(U \subset \Omega\) が開集合であるとは，任意の \(x \in U\) に対し
 \(B_r(x) \subset U\) をみたす \(r \in \R_{++}\) が存在することをいう．
 
 
 :::definition
-### 定義: 収束列
+### Def: 収束列
 
 距離空間 \((\Omega, d)\) における列 \((x_n)_{n \geq 1} \subset \Omega\) が
 点 \(x \in \Omega\) に**収束**するとは，
@@ -107,7 +129,7 @@ title: 準備
 
 
 :::definition
-### 定義: 完備性
+### Def: 完備性
 
 距離空間 \((\Omega, d)\) の列 \((x_n)_{n \geq 1} \subset \Omega\) が
 **Cauchy 列**であるとは，
@@ -115,7 +137,7 @@ title: 準備
 \(n, m \geq N \Longrightarrow d(x_n, x_m) < \varepsilon\) となることをいう．
 \((\Omega, d)\) が**完備**であるとは，
 \(\Omega\) における任意の Cauchy 列が \(\Omega\) の点に収束する
-（[ref:定義: 収束列|収束列]）ことをいう．すなわち
+（[ref:Def: 収束列|収束列]）ことをいう．すなわち
 
 \[
  \forall (x_n)_{n \geq 1} \subset \Omega \text{ Cauchy 列},\;
@@ -136,7 +158,7 @@ title: 準備
 
 
 :::definition
-### 定義: Polish 空間
+### Def: Polish 空間
 
 完備かつ可分な距離空間を**Polish 空間**という．
 例：\(\R^d\) はユークリッド距離に関して Polish 空間である
@@ -145,7 +167,7 @@ title: 準備
 
 
 :::definition
-### 定義: 連続写像
+### Def: 連続写像
 
 距離空間 \((\Omega_1, d_1)\)，\((\Omega_2, d_2)\) の間の写像
 \(f \colon \Omega_1 \to \Omega_2\) が点 \(x \in \Omega_1\) で**連続**であるとは，
@@ -162,8 +184,24 @@ title: 準備
 :::
 
 
+:::theorem
+### Prop: 連続写像による閉集合の逆像
+
+距離空間 \((\Omega_1, d_1)\)，\((\Omega_2, d_2)\) の間の連続写像
+\(f \colon \Omega_1 \to \Omega_2\)（[ref:Def: 連続写像|連続写像]）に対して，
+\(F \subset \Omega_2\) が閉集合ならば \(f^{-1}(F)\) も閉集合である．
+
+:::details-embedded 証明
+\(f^{-1}(F)\) の任意の収束列 \((x_n)\) をとり，極限を \(x^*\) とする．
+\(f(x_n) \in F\) であり，\(f\) の連続性から \(f(x_n) \to f(x^*)\)．
+\(F\) は閉集合だから \(f(x^*) \in F\)，すなわち \(x^* \in f^{-1}(F)\)．
+ゆえに \(f^{-1}(F)\) は閉集合．
+:::
+:::
+
+
 :::definition
-### 定義: 有界集合
+### Def: 有界集合
 
 \(\R^n\) の部分集合 \(S \subset \R^n\) が**有界**であるとは，
 ある \(M > 0\) が存在して
@@ -177,7 +215,7 @@ title: 準備
 
 
 :::definition
-### 定義: コンパクト集合
+### Def: コンパクト集合
 
 距離空間 \((\Omega, d)\) の部分集合 \(K \subset \Omega\) が
 **コンパクト**であるとは，
@@ -188,7 +226,7 @@ title: 準備
 
 
 :::theorem
-### 主張: Bolzano-Weierstrass の定理
+### Clm: Bolzano-Weierstrass の定理
 
 \(\R^n\) における任意の有界列 \((x_n)_{n \geq 1} \subset \R^n\) は，
 収束する部分列 \((x_{n_k})_{k \geq 1}\) を持つ．
@@ -196,13 +234,13 @@ title: 準備
 
 
 :::theorem
-### 定理: Heine-Borel の定理
+### Thm: Heine-Borel の定理
 
 \(\R^n\) の部分集合 \(K \subset \R^n\) に対して，
 次の2条件は同値である：
 
-(i) \(K\) はコンパクト（[ref:定義: コンパクト集合|コンパクト集合]）である．
-(ii) \(K\) は閉集合（[ref:定義: 位相空間|位相空間]）かつ 有界（[ref:定義: 有界集合|有界集合]）である．
+(i) \(K\) はコンパクト（[ref:Def: コンパクト集合|コンパクト集合]）である．
+(ii) \(K\) は閉集合（[ref:Def: 位相空間|位相空間]）かつ 有界（[ref:Def: 有界集合|有界集合]）である．
 
 :::details-embedded 証明
 **(i) \(\Rightarrow\) (ii)：コンパクト \(\Rightarrow\) 有界かつ閉．**
@@ -226,7 +264,7 @@ title: 準備
 
 \(K\) の任意の点列 \((x_n)\) をとる．
 \(K\) は有界ゆえ \((x_n)\) は \(\R^n\) における有界列である．
-Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolzano-Weierstrass の定理]）より
+Bolzano-Weierstrass の定理（[ref:Clm: Bolzano-Weierstrass の定理|Bolzano-Weierstrass の定理]）より
 \((x_n)\) はある収束部分列 \((x_{n_k})\) を持ち，その極限を \(x^* \in \R^n\) とする．
 \(x_{n_k} \in K\) かつ \(K\) は閉集合だから \(x^* \in K\)．
 ゆえに \(K\) はコンパクト．
@@ -235,10 +273,10 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::theorem
-### 定理: Weierstrass の最大値の定理
+### Thm: Weierstrass の最大値の定理
 
 \(K \subset \R^n\) を空でないコンパクト集合，
-\(f \colon K \to \R\) を連続関数（[ref:定義: 連続写像|連続写像]）とする．
+\(f \colon K \to \R\) を連続関数（[ref:Def: 連続写像|連続写像]）とする．
 このとき \(f\) は \(K\) 上で最小値および最大値を達成する，すなわち
 
 \[
@@ -258,7 +296,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 をみたす \(x_n \in K\) が存在する（最小化列）．
 \(K\) のコンパクト性より \((x_n)\) はある収束部分列 \((x_{n_k})\) を持ち，
 極限 \(x^* \in K\) が存在する．
-\(f\) の連続性（[ref:定義: 連続写像|連続写像]）より
+\(f\) の連続性（[ref:Def: 連続写像|連続写像]）より
 
 \[
  f(x^*) = \lim_{k \to \infty} f(x_{n_k}) = p^*.
@@ -269,6 +307,13 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 :::
 
 
+:::theorem
+### Prop: 有限次元ノルム空間上の線形関数の連続性
+
+有限次元ノルム空間 \(V\) 上の任意の線形関数 \(f \colon V \to \R\) は連続である．
+:::
+
+
 ## 測度論
 
 
@@ -276,7 +321,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: \(\sigma\)-代数
+### Def: \(\sigma\)-代数
 
 集合 \(\Omega\) の部分集合族 \(\mathcal{F} \subset 2^{\Omega}\) が
 **\(\sigma\)-代数**であるとは，
@@ -289,7 +334,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 可測空間
+### Def: 可測空間
 
 集合 \(\Omega\) と \(\Omega\) 上の \(\sigma\)-代数 \(\mathcal{F}\) の組
 \((\Omega, \mathcal{F})\) を**可測空間**という．
@@ -298,7 +343,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 可測写像
+### Def: 可測写像
 
 可測空間 \((\Omega_1, \mathcal{F}_1)\) から \((\Omega_2, \mathcal{F}_2)\) への
 写像 \(T \colon \Omega_1 \to \Omega_2\) が**可測**であるとは，
@@ -307,20 +352,20 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: ボレル \(\sigma\)-代数
+### Def: ボレル \(\sigma\)-代数
 
 位相空間 \((\Omega, \mathcal{O})\) のすべての開集合
-（[ref:定義: 位相空間|位相空間]）
+（[ref:Def: 位相空間|位相空間]）
 を含む最小の \(\sigma\)-代数を
 **ボレル \(\sigma\)-代数**といい，\(\Bb(\Omega)\) と記す．
 :::
 
 
 :::definition
-### 定義: 可測関数
+### Def: 可測関数
 
 可測空間 \((\Omega, \mathcal{F})\) から \((\R, \Bb(\R))\) への可測写像
-\(f \colon \Omega \to \R\)（[ref:定義: 可測写像|可測写像]）を
+\(f \colon \Omega \to \R\)（[ref:Def: 可測写像|可測写像]）を
 **可測関数**という．
 特に Polish 空間 \(\X\) にボレル \(\sigma\)-代数 \(\Bb(\X)\) を入れた
 可測空間上の可測関数を**ボレル可測関数**ともいう．
@@ -328,7 +373,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 積可測空間
+### Def: 積可測空間
 
 距離空間 \((\X, d_\X)\), \((\Y, d_\Y)\) に対して，
 積空間 \(\X \times \Y\) に**積距離**
@@ -344,10 +389,10 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 射影
+### Def: 射影
 
 距離空間 \(\X\), \(\Y\) の積空間 \(\X \times \Y\)
-（[ref:定義: 積可測空間|積可測空間]）に対して，
+（[ref:Def: 積可測空間|積可測空間]）に対して，
 **射影** \(P_\X \colon \X \times \Y \to \X\)，
 \(P_\Y \colon \X \times \Y \to \Y\) を
 
@@ -358,12 +403,12 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 \]
 
 で定める．\(P_\X\)，\(P_\Y\) はともに連続であり，可測写像
-（[ref:定義: 可測写像|可測写像]）でもある．
+（[ref:Def: 可測写像|可測写像]）でもある．
 :::
 
 
 :::definition
-### 定義: 測度
+### Def: 測度
 
 可測空間 \((\Omega, \mathcal{F})\) 上の**測度**とは，
 関数 \(\mu \colon \mathcal{F} \to [0, \infty]\) であって，
@@ -375,7 +420,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 確率測度
+### Def: 確率測度
 
 可測空間 \((\Omega, \mathcal{F})\) 上の測度 \(\mu\) が \(\mu(\Omega) = 1\) を満たすとき，
 \(\mu\) を**確率測度**という．
@@ -387,7 +432,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 指示関数
+### Def: 指示関数
 
 集合 \(\Omega\) の部分集合 \(A \subset \Omega\) に対して，
 **指示関数** \(\mathbf{1}_A \colon \Omega \to \{0, 1\}\) を
@@ -405,7 +450,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 単関数
+### Def: 単関数
 
 可測空間 \((\Omega, \mathcal{F})\) 上の関数 \(s \colon \Omega \to \R_+\) が
 **単関数**であるとは，互いに素な可測集合
@@ -420,12 +465,12 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 非負可測関数の積分
+### Def: 非負可測関数の積分
 
 可測空間 \((\Omega, \mathcal{F})\) 上の測度 \(\mu\) に対し，
 非負可測関数の積分を以下の 2 段階で定める：
 
-(i) 単関数 \(s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}\) （[ref:定義: 単関数|単関数]）の積分を
+(i) 単関数 \(s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}\) （[ref:Def: 単関数|単関数]）の積分を
 
 \[
  \int_\Omega s \, \d\mu \defeq \sum_{k=1}^{m} c_k \, \mu(A_k)
@@ -445,7 +490,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::theorem
-### 命題: 単調収束定理と単関数近似
+### Prop: 単調収束定理と単関数近似
 
 可測空間 \((\Omega, \mathcal{F})\) 上の測度 \(\mu\) に対して次が成り立つ．
 
@@ -455,7 +500,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::theorem
-### 命題: 積分の測度に関する線形性
+### Prop: 積分の測度に関する線形性
 
 可測空間 \((\Omega, \mathcal{F})\) 上の測度 \(\mu_1, \ldots, \mu_n\)，
 非負係数 \(a_1, \ldots, a_n \geq 0\)，および非負可測関数
@@ -483,7 +528,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 \]
 
 一般の非負可測関数 \(f\) に対しては，
-[ref:命題: 単調収束定理と単関数近似|単調収束定理と単関数近似] により単関数の単調増加列 \(f_n \uparrow f\) が取れ，
+[ref:Prop: 単調収束定理と単関数近似|単調収束定理と単関数近似] により単関数の単調増加列 \(f_n \uparrow f\) が取れ，
 単調収束定理を両辺に適用すれば結論が得られる．
 :::
 :::
@@ -493,7 +538,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: Dirac 測度
+### Def: Dirac 測度
 
 可測空間 \((\Omega, \mathcal{F})\) 上の点 \(x \in \Omega\) に対して，
 **Dirac 測度** \(\delta_x \in \Mm_+^1(\Omega)\) を
@@ -512,7 +557,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::theorem
-### 主張: Dirac 測度に対する積分
+### Clm: Dirac 測度に対する積分
 
 任意の非負可測関数 \(f \colon \X \to [0, \infty]\) に対して，
 
@@ -533,7 +578,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 \]
 
 一般の非負可測関数 \(f\) に対しては，
-[ref:命題: 単調収束定理と単関数近似|単調収束定理と単関数近似] により単関数の単調増加列 \(f_n \uparrow f\) が取れ，
+[ref:Prop: 単調収束定理と単関数近似|単調収束定理と単関数近似] により単関数の単調増加列 \(f_n \uparrow f\) が取れ，
 単調収束定理から
 
 \[
@@ -547,7 +592,7 @@ Bolzano-Weierstrass の定理（[ref:主張: Bolzano-Weierstrass の定理|Bolza
 
 
 :::definition
-### 定義: 離散測度
+### Def: 離散測度
 
 Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 **離散測度**であるとは，
@@ -563,7 +608,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::theorem
-### 主張: 離散測度の表示の一意性
+### Clm: 離散測度の表示の一意性
 
 離散測度 \(\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}\) の表示について
 \(a_i = \mu(\{x_i\})\) が成り立ち，
@@ -592,7 +637,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: 押し出し
+### Def: 押し出し
 
 可測写像 \(T \colon \X \to \Y\) と測度 \(\mu \in \Mm_+^1(\X)\) に対して，
 \(T\) による \(\mu\) の**押し出し** \(T\pushforward \mu \in \Mm_+^1(\Y)\) を
@@ -607,7 +652,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::theorem
-### 命題: Dirac 測度と離散測度の押し出し
+### Prop: Dirac 測度と離散測度の押し出し
 
 可測写像 \(T \colon \X \to \Y\) に対して，次が成り立つ．
 
@@ -653,7 +698,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: 有限集合と濃度
+### Def: 有限集合と濃度
 
 集合 \(S\) が**有限集合**であるとは，ある \(n \in \N\) と
 全単射 \(f \colon \range{n} \to S\) が存在することをいう
@@ -663,9 +708,9 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::theorem
-### 主張: 有限集合の最小元
+### Clm: 有限集合の最小元
 
-\(\R\) の空でない有限部分集合 \(S\)（[ref:定義: 有限集合と濃度|有限集合と濃度]）には
+\(\R\) の空でない有限部分集合 \(S\)（[ref:Def: 有限集合と濃度|有限集合と濃度]）には
 最小元が存在する：
 
 \[
@@ -697,7 +742,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: 置換
+### Def: 置換
 
 \(n \in \N\) について，全単射
 \(\sigma \colon \range{n} \to \range{n}\) を \(\range{n}\) 上の**置換**という．
@@ -708,12 +753,26 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 \]
 
 で表す．\(\Perm(n)\) は \(|\Perm(n)| = n!\) の有限集合
-（[ref:定義: 有限集合と濃度|有限集合と濃度]）である．
+（[ref:Def: 有限集合と濃度|有限集合と濃度]）である．
 :::
 
 
 :::definition
-### 定義: 全成分 \(1\) のベクトル
+### Def: 線形関数
+
+ベクトル空間 \(V\) から \(\R\) への関数 \(f \colon V \to \R\) が
+**線形関数**であるとは，
+任意の \(v_1, v_2 \in V\) と \(\lambda \in \R\) に対して
+
+(i) 加法性：\(f(v_1 + v_2) = f(v_1) + f(v_2)\)，
+(ii) 斉次性：\(f(\lambda v_1) = \lambda f(v_1)\)
+
+が成り立つことをいう．
+:::
+
+
+:::definition
+### Def: 全成分 \(1\) のベクトル
 
 \(n \in \N\) に対し，\(\R^n\) の全成分が \(1\) のベクトルを
 
@@ -726,7 +785,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: フロベニウス内積
+### Def: フロベニウス内積
 
 同じサイズの2つの行列 \(\mathbf{A}, \mathbf{B} \in \R^{n \times m}\) に対し，
 **フロベニウス内積**を
@@ -742,7 +801,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: 凸集合
+### Def: 凸集合
 
 ベクトル空間 \(V\) の部分集合 \(S \subset V\) が**凸**であるとは，
 任意の \(v_1, v_2 \in S\) と任意の \(t \in [0,1]\) に対して
@@ -756,7 +815,7 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 
 :::definition
-### 定義: 凸関数と狭義凸関数
+### Def: 凸関数と狭義凸関数
 
 凸集合 \(S \subset V\) 上の関数 \(f \colon S \to \R\) が
 **凸関数**であるとは，任意の \(v_1, v_2 \in S\) と
