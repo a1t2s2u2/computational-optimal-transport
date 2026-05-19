@@ -98,8 +98,18 @@
   は各成分の連続関数の和だから連続であり，コンパクト集合上の連続関数として最小値を達成する．
 
   \textbf{目的関数の狭義凸性．}
-  $x > 0$ において $g''(x) = 1/x > 0$ だから，$g$ は $(0,\infty)$ 上で狭義凸
-  （定義~\ref{def:sem-convex-function}）．
+  $x > 0$ において $g''(x) = 1/x > 0$ だから $g'$ は $(0,\infty)$ 上で狭義単調増加である．
+  任意の $x_1 < x_2$ と $\lambda \in (0,1)$ をとり $x^* := \lambda x_1 + (1-\lambda)x_2$ とおく．
+  平均値定理を $[x_1, x^*]$ と $[x^*, x_2]$ に適用すると
+  $c_1 \in (x_1, x^*),\; c_2 \in (x^*, x_2)$ が存在して
+  \begin{align*}
+    \lambda g(x_1) + (1-\lambda)g(x_2) - g(x^*)
+    &= \lambda\bigl[g(x_1)-g(x^*)\bigr] + (1-\lambda)\bigl[g(x_2)-g(x^*)\bigr] \\
+    &= \lambda(1-\lambda)(x_2-x_1)\bigl[g'(c_2)-g'(c_1)\bigr] > 0.
+  \end{align*}
+  ここで $c_1 < c_2$ と $g'$ の狭義単調増加性から $g'(c_2) > g'(c_1)$，
+  また $\lambda(1-\lambda)(x_2-x_1) > 0$ だから不等式が成立する．
+  よって $g$ は $(0,\infty)$ 上で狭義凸（定義~\ref{def:sem-convex-function}）．
   $x = 0$ での連続性と合わせて $[0,\infty)$ 上でも狭義凸である．
   各成分の狭義凸関数の和として，目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$ も $\mathbf{P}$ について狭義凸である．
 
