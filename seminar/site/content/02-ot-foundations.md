@@ -618,10 +618,27 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 の離散版に相当する．）
 
 **(ii) コンパクト性．**
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の定義条件
-\(\mathbf{P}\ones_m = \mathbf{a}\)，\(\mathbf{P}^\top \ones_n = \mathbf{b}\)，\(\mathbf{P} \geq \mathbf{0}\)
-はいずれも各成分 \(P_{i,j}\) の連続関数による等式・不等式であるから，
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は \(\R^{n \times m}\) の閉集合である．
+周辺条件を定める関数
+\(f(\mathbf{P}) \defeq (\mathbf{P}\ones_m,\, \mathbf{P}^\top \ones_n)\)
+は \(\R^{n \times m}\) から \(\R^n \times \R^m\) への写像である．
+\(f\) の各成分 \(\sum_j P_{i,j}\)，\(\sum_i P_{i,j}\) は
+\(P_{i,j}\) の一次式であるから \(\R^{n \times m}\) 上の線形関数
+（[ref:Def: 線形関数|線形関数]）であり，
+有限次元ノルム空間上の線形関数は連続であるから
+（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），
+\(f\) は連続である．
+よって \(f^{-1}(\{(\mathbf{a}, \mathbf{b})\})\) は
+一点集合（閉集合）の逆像として閉集合である
+（[ref:Prop: 連続写像による閉集合の逆像|連続写像による閉集合の逆像]）．
+また \(\R_+^{n \times m}\) は \(\R^{n \times m}\) の閉集合であるから，
+
+\[
+  \CouplingsD(\mathbf{a}, \mathbf{b})
+  = f^{-1}\bigl(\{(\mathbf{a}, \mathbf{b})\}\bigr)
+    \cap \R_+^{n \times m}
+\]
+
+は閉集合の共通部分として閉集合である．
 さらに，行和条件 \(\sum_j P_{i,j} = a_i\) と \(P_{i,j} \geq 0\) から
 \(0 \leq P_{i,j} \leq a_i\) が従い，\(\sum_i a_i = 1\) より \(a_i \leq 1\) だから有界．
 \(\R^{n \times m}\) における有界閉集合はコンパクト
