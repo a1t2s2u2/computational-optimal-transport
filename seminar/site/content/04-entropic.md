@@ -147,7 +147,16 @@ title: エントロピー正則化と Sinkhorn アルゴリズム
 また \(\lambda(1-\lambda)(x_2-x_1) > 0\) だから右辺 \(> 0\)．
 よって \(g(x^*) < \lambda g(x_1) + (1-\lambda)g(x_2)\) となり，
 \(g\) は \((0,\infty)\) 上で狭義凸（[ref:Def: 凸関数と狭義凸関数|凸関数と狭義凸関数]）．
-\(x = 0\) での連続性と合わせて \([0,\infty)\) 上でも狭義凸である．
+\(x_1 = 0\)，\(x_2 > 0\) の場合は \(g(0) = 0\) を用いると
+
+\[\begin{aligned}
+ \lambda g(0) + (1-\lambda)g(x_2) - g((1-\lambda)x_2)
+ &= (1-\lambda)(x_2\log x_2 - x_2) - \bigl[(1-\lambda)x_2\log(1-\lambda)x_2 - (1-\lambda)x_2\bigr] \\
+ &= (1-\lambda)x_2\bigl[\log x_2 - \log(1-\lambda)x_2\bigr] \\
+ &= (1-\lambda)x_2\log\frac{1}{1-\lambda} > 0.
+\end{aligned}\]
+
+よって \(g\) は \([0,\infty)\) 上でも狭義凸である．
 各成分の狭義凸関数の和として，目的関数 \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})\) も \(\mathbf{P}\) について狭義凸である．
 
 **最適解の一意性．**
