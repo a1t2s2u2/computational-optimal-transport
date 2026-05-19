@@ -97,13 +97,21 @@
   目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$
   は各成分の連続関数の和だから連続であり，コンパクト集合上の連続関数として最小値を達成する．
 
-  \textbf{目的関数の狭義凸性（一意性）．}
+  \textbf{目的関数の狭義凸性．}
   $x > 0$ において $g''(x) = 1/x > 0$ だから，$g$ は $(0,\infty)$ 上で狭義凸
   （定義~\ref{def:sem-convex-function}）．
   $x = 0$ での連続性と合わせて $[0,\infty)$ 上でも狭義凸である．
-  したがって目的関数は $\mathbf{P}$ について狭義凸であり，
-  異なる2つの最適解があればその中点で目的関数がより小さくなり矛盾する．
-  よって最適解は一意である．
+  各成分の狭義凸関数の和として，目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$ も $\mathbf{P}$ について狭義凸である．
+
+  \textbf{最適解の一意性．}
+  目的関数が狭義凸であるとき，最適解は高々1つである．
+  実際，$\mathbf{P}_1 \neq \mathbf{P}_2$ がともに最適解であるとすると，
+  中点 $\mathbf{P}^* = (\mathbf{P}_1 + \mathbf{P}_2)/2$ も $\CouplingsD(\mathbf{a},\mathbf{b})$ に属し（凸集合），
+  狭義凸性から
+  \[
+    f(\mathbf{P}^*) < \tfrac{1}{2}f(\mathbf{P}_1) + \tfrac{1}{2}f(\mathbf{P}_2) = f(\mathbf{P}_1)
+  \]
+  となり，$\mathbf{P}_1$ が最適解であることに矛盾する．よって最適解は一意である．
 \end{proof}
 
 \begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
