@@ -319,6 +319,19 @@ Bolzano-Weierstrass の定理（[ref:Clm: Bolzano-Weierstrass の定理|Bolzano-
 :::
 
 
+:::theorem
+### Thm: 平均値定理
+
+\(f \colon [a, b] \to \R\) が連続で \((a, b)\) 上で微分可能であるとき，
+
+\[
+ f(b) - f(a) = f'(c)(b - a)
+\]
+
+をみたす \(c \in (a, b)\) が存在する．
+:::
+
+
 ## 測度論
 
 
