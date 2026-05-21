@@ -354,6 +354,7 @@ Monge 問題の実行可能集合
 
 **離散化**
 
+
 連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
 
 :::theorem
@@ -364,10 +365,10 @@ Monge 問題の実行可能集合
 \(y_1, \ldots, y_m \in \Y\)（\(i \neq j \Rightarrow y_i \neq y_j\)），
 可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
 
-\[\begin{aligned}
+\[
  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
  \beta \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
-\end{aligned}\]
+\]
 
 とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
 **離散カップリング集合**
@@ -385,7 +386,7 @@ Monge 問題の実行可能集合
 \[
  \inf_{\pi \in \Couplings(\alpha,\beta)}
  \int_{\X\times\Y} c\,\d\pi
- = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}
 \]
 
@@ -395,12 +396,10 @@ Monge 問題の実行可能集合
 :::details-embedded 証明
 次の 2 点を示す：
 
-(A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する．
+(A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する（(A-1) \(\varphi\) の構成，(A-2) 値域の確認，(A-3) 全射性，(A-4) 単射性）．
+(B) \(\varphi\) はコストを保存する： \(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
 
-(B) \(\varphi\) はコストを保存する：\(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
-
-**(A-1) \(\varphi\) の構成（カップリングの台）．**
-
+**(A-1) \(\varphi\) の構成．**
 任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
 周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
 \(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
@@ -412,12 +411,12 @@ Monge 問題の実行可能集合
 同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
 測度の劣加法性から
 
-\[\begin{aligned}
- &\pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr) \\
- &\quad\leq\;
+\[
+ \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
+ \;\leq\;
  \pi\bigl((\X\setminus\{x_1,\ldots,x_n\})\times\Y\bigr)
  + \pi\bigl(\X\times(\Y\setminus\{y_1,\ldots,y_m\})\bigr) = 0.
-\end{aligned}\]
+\]
 
 よって \(\pi\) は有限格子 \(\{x_1,\ldots,x_n\} \times \{y_1,\ldots,y_m\}\) 上のみに質量を持ち，
 
@@ -428,22 +427,24 @@ Monge 問題の実行可能集合
 と定めると \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
 
 **(A-2) \(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)（周辺条件 \(\leftrightarrow\) 行・列和条件）．**
-
-周辺条件 \(\pi(\{x_k\} \times \Y) = \alpha(\{x_k\}) = a_k\) から
+任意の \(k\) に対し，
 
 \[
- \sum_{j=1}^m P_{k,j} = a_k \quad (\forall k),
- \qquad\text{すなわち}\quad
- \mathbf{P}\ones_m = \mathbf{a}.
+ \sum_{j=1}^m P_{k,j}
+ = \sum_{j=1}^m \pi\bigl(\{x_k\} \times \{y_j\}\bigr)
+ = \pi\!\left(\{x_k\} \times \{y_1,\ldots,y_m\}\right)
+ = \pi(\{x_k\} \times \Y)
+ = \alpha(\{x_k\}) = a_k.
 \]
 
-同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から
-\(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
+第二の等号は \(\{y_j\}\) が互いに素であることによる \(\sigma\)-加法性，
+第三の等号は (A-1) より \(\pi\) の質量が格子上のみに集中することによる．
+ゆえに \(\mathbf{P}\ones_m = \mathbf{a}\)．
+同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
 ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
 
-**(A-3) \(\varphi\) は全単射．**
-
-*全射*：任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
+**(A-3) 全射性．**
+任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
 \(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，
 任意の \(A \in \Bb(\X)\) について
 
@@ -455,25 +456,49 @@ Monge 問題の実行可能集合
 \]
 
 同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）だから
-\(\pi' \in \Couplings(\alpha,\beta)\)，かつ \(\varphi(\pi') = \mathbf{P}\)．
+\(\pi' \in \Couplings(\alpha,\beta)\)．
+また \(\varphi(\pi')_{i,j} = \pi'(\{x_i\} \times \{y_j\})\) に \(\pi' = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}\) を代入すると，
 
-*単射*：\(\varphi(\pi_1) = \varphi(\pi_2) = \mathbf{P}\) とすれば，
-(A-1) より \(\pi_1 = \pi_2 = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\)．
+\[
+ \pi'(\{x_i\} \times \{y_j\})
+ = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}(\{x_i\} \times \{y_j\})
+ = P_{i,j}.
+\]
+
+最後の等号は，\(x_k\) はすべて互いに異なり \(y_l\) もすべて互いに異なるという仮定より，\(\delta_{(x_k,y_l)}(\{x_i\}\times\{y_j\})=1\) となるのは \((k,l)=(i,j)\) のときに限ることによる．
+ゆえに \(\varphi(\pi') = \mathbf{P}\) であり，任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して \(\varphi(\pi') = \mathbf{P}\) を満たす \(\pi' \in \Couplings(\alpha,\beta)\) が存在するから，\(\varphi\) は全射である．
+
+**(A-4) 単射性．**
+任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおくと，
+(A-1) より
+
+\[
+ \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}
+\]
+
+と一意に表せる．ゆえに \(\varphi(\pi)\) が等しければ \(\pi\) も等しく，\(\varphi\) は単射である．
 
 **(B) \(\varphi\) はコストを保存する．**
-
-測度に関する積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）と
-Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）から
+任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおく．
+(A-1) より \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) だから，
+積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）を適用すると
 
 \[
  \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
- = \sum_{i,j} P_{i,j}\, c(x_i, y_j)
+ = \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y)\, \d\delta_{(x_i,y_j)}(x,y).
+\]
+
+Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）より
+\(\int c\,\d\delta_{(x_i,y_j)} = c(x_i,y_j) = C_{i,j}\) だから，
+
+\[
+ \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
+ = \sum_{i,j} P_{i,j}\, C_{i,j}
  = \inner{\mathbf{C}}{\mathbf{P}}.
 \]
 
 
 **結論．**
-
 (A)(B) より \(\varphi\) はコストを保存する全単射だから，
 
 \[
@@ -483,12 +508,6 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
  \inner{\mathbf{C}}{\mathbf{P}}.
 \]
-
-\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は有限次元ノルム空間 \(\R^{n \times m}\) 上の線形写像であり，したがって連続であり，
-\(\CouplingsD(\mathbf{a},\mathbf{b})\) は非空（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在]）
-かつコンパクト（同主張）であるから，
-Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より
-右辺の inf は最小値として達成され，\(\inf = \min\) が成り立つ．
 :::
 :::
 
@@ -497,7 +516,7 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 
 \[
  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
- \defeq \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+ \defeq \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
 \]
 
 と書き，**離散 Kantorovich 問題**と呼ぶ．
@@ -513,6 +532,7 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 なお，重複点を統合すれば（\(a_i + a_k\) をまとめた）より小さい次元の多面体との全単射が取れるため，
 離散 Kantorovich 問題の枠組み自体は相異性なしでも成立する．
 :::
+
 
 :::fact accent
 ### Ex: 工場からスーパーへの輸送
@@ -628,8 +648,8 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 （[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），
 \(f\) は連続である．
 よって \(f^{-1}(\{(\mathbf{a}, \mathbf{b})\})\) は
-一点集合（閉集合）の逆像として閉集合である
-（[ref:Prop: 連続写像による閉集合の逆像|連続写像による閉集合の逆像]）．
+一点集合（閉集合）の引き戻しとして閉集合である
+（[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し]）．
 また \(\R_+^{n \times m}\) は \(\R^{n \times m}\) の閉集合であるから，
 
 \[
@@ -659,6 +679,15 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 :::
 
 
+以上より inf は最小値として達成されるから，
+
+\[
+ \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
+ = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}
+\]
+
+と書ける．
+
 :::theorem
 ### Clm: 最適解集合は凸かつコンパクト
 
@@ -677,14 +706,18 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 
 :::details-embedded 証明
 **凸性．**
-
 \(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
 \(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) とおく．
 \(\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}\) より \(\mathbf{R} \geq \mathbf{0}\) であり，
-行・列和条件の線形性から
-\(\mathbf{R}\ones_m = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}\)，
-同様に \(\mathbf{R}^\top\ones_n = \mathbf{b}\) ゆえ
-\(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+
+\[
+ \mathbf{R}\ones_m
+ = (t\mathbf{P}^* + (1-t)\mathbf{Q}^*)\ones_m
+ = t\mathbf{P}^*\ones_m + (1-t)\mathbf{Q}^*\ones_m
+ = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}.
+\]
+
+同様に \(\mathbf{R}^\top\ones_n = \mathbf{b}\) ゆえ \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
 さらに，内積の線形性から
 
 \[
@@ -696,13 +729,12 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 よって \(\mathbf{R} \in S^*\)．
 
 **コンパクト性．**
-
-\(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は連続であるから，
-その水準集合 \(\{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
+\(g(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}}\) は連続写像であり，
+\(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\) は閉集合だから，
+[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し] より
+\(g^{-1}(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}) = \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\)
 は閉集合である．
-したがって
-\(S^* = \CouplingsD(\mathbf{a}, \mathbf{b}) \cap \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})\}\)
-はコンパクト集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) の閉部分集合であるからコンパクト．
+したがって \(S^*\) はコンパクト集合 \(\CouplingsD(\mathbf{a},\mathbf{b})\) とこの閉集合の共通部分であるからコンパクト．
 :::
 :::
 
@@ -710,46 +742,43 @@ Weierstrass の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass 
 :::fact accent
 ### Ex: 最適解の非一意性
 
-\(n = m = 2\)，\(\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)\) とし，
+\(n = m = 2\)，\(\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)^\top\) とし，
 コスト行列を
 
 \[
  \mathbf{C} = \begin{pmatrix} 1 & 3 \\ 3 & 5 \end{pmatrix}
 \]
 
-とする（\(C_{11} + C_{22} = 6 = C_{12} + C_{21}\)）．
-周辺条件の連立を解くと自由変数は \(P_{1,1} \in [0,1/2]\) の1つで，
-残りは \(P_{1,2} = P_{2,1} = 1/2 - P_{1,1}\)，\(P_{2,2} = P_{1,1}\) と定まる．
-\(s \defeq 1 - 2P_{1,1} \in [0,1]\) とおけば \(\mathbf{P} = (1-s)\mathbf{P}_1 + s\mathbf{P}_2\) となり，
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
+とする．
+
+**\(\CouplingsD(\mathbf{a},\mathbf{b})\) の構造．**
+\(P_{1,1} = t \in [0, 1/2]\) と置くと，行和・列和の条件から順に
+
+\[\begin{aligned}
+ P_{1,2} &= \tfrac{1}{2} - t \quad \text{（1行目の行和）},\\
+ P_{2,1} &= \tfrac{1}{2} - t \quad \text{（1列目の列和）},\\
+ P_{2,2} &= t \quad \text{（2行目の行和）}
+\end{aligned}\]
+
+と定まるので，
 
 \[
- \mathbf{P}_1
- = \begin{pmatrix} 1/2 & 0 \\ 0 & 1/2 \end{pmatrix},
- \qquad
- \mathbf{P}_2
- = \begin{pmatrix} 0 & 1/2 \\ 1/2 & 0 \end{pmatrix}
+ \mathbf{P} = \begin{pmatrix} t & \tfrac{1}{2}-t \\ \tfrac{1}{2}-t & t \end{pmatrix}, \quad t \in \bigl[0,\tfrac{1}{2}\bigr].
 \]
 
-を端点とする線分である．両者のコストはともに
+
+**全元が最適解である理由．**
+この \(\mathbf{P}\) のコストを \(t\) で計算すると
 
 \[
- \inner{\mathbf{C}}{\mathbf{P}_1}
- = \tfrac{1}{2} + \tfrac{5}{2} = 3,
- \qquad
- \inner{\mathbf{C}}{\mathbf{P}_2}
- = \tfrac{3}{2} + \tfrac{3}{2} = 3
+ \inner{\mathbf{C}}{\mathbf{P}}
+ = 1 \cdot t + 3\!\left(\tfrac{1}{2}-t\right) + 3\!\left(\tfrac{1}{2}-t\right) + 5t
+ = (1 - 3 - 3 + 5)t + 3 = 3.
 \]
 
-で等しい．
-したがって任意の \(t \in [0, 1]\) に対して
-\(t\mathbf{P}_1 + (1-t)\mathbf{P}_2\) が最適であり，
-\(S^* = \CouplingsD(\mathbf{a}, \mathbf{b})\) となる．
-
-この非一意性は
-\(C_{11} + C_{22} = C_{12} + C_{21}\) から生じる．
-逆に \(C_{11} + C_{22} \neq C_{12} + C_{21}\) ならば
-2頂点のコストが異なるため最適解は一意となる．
+\(t\) が消えてコストが定数になるため，\(\CouplingsD(\mathbf{a},\mathbf{b})\) の全元が最適解であり
+\(S^* = \CouplingsD(\mathbf{a},\mathbf{b})\)．
+逆に \(C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}\) ならば \(t\) の係数が非ゼロとなり，最適解は一意となる．
 :::
 
 

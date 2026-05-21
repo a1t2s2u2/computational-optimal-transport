@@ -185,17 +185,22 @@ title: 準備
 
 
 :::theorem
-### Prop: 連続写像による閉集合の逆像
+### Prop: 連続写像による閉集合の引き戻し
 
-距離空間 \((\Omega_1, d_1)\)，\((\Omega_2, d_2)\) の間の連続写像
-\(f \colon \Omega_1 \to \Omega_2\)（[ref:Def: 連続写像|連続写像]）に対して，
-\(F \subset \Omega_2\) が閉集合ならば \(f^{-1}(F)\) も閉集合である．
+距離空間 \((\Omega_1, d_1)\)，\((\Omega_2, d_2)\) の間の連続写像 \(f \colon \Omega_1 \to \Omega_2\) と
+閉集合 \(F \subset \Omega_2\) に対して，逆像
+
+\[
+ f^{-1}(F) \defeq \{ x \in \Omega_1 \mid f(x) \in F \}
+\]
+
+は \(\Omega_1\) の閉集合である．
 
 :::details-embedded 証明
-\(f^{-1}(F)\) の任意の収束列 \((x_n)\) をとり，極限を \(x^*\) とする．
-\(f(x_n) \in F\) であり，\(f\) の連続性から \(f(x_n) \to f(x^*)\)．
-\(F\) は閉集合だから \(f(x^*) \in F\)，すなわち \(x^* \in f^{-1}(F)\)．
-ゆえに \(f^{-1}(F)\) は閉集合．
+\(f^{-1}(F)\) に含まれる任意の収束列 \(x_n \to x\)（\(x \in \Omega_1\)）をとる．
+\(f\) の連続性（[ref:Def: 連続写像|連続写像]の同値条件）より \(f(x_n) \to f(x)\)．
+仮定より \(f(x_n) \in F\) であり，距離空間における閉集合は収束列の極限を含むから
+\(f(x) \in F\)，すなわち \(x \in f^{-1}(F)\)．
 :::
 :::
 
@@ -311,6 +316,19 @@ Bolzano-Weierstrass の定理（[ref:Clm: Bolzano-Weierstrass の定理|Bolzano-
 ### Prop: 有限次元ノルム空間上の線形関数の連続性
 
 有限次元ノルム空間 \(V\) 上の任意の線形関数 \(f \colon V \to \R\) は連続である．
+:::
+
+
+:::theorem
+### Thm: 平均値定理
+
+\(f \colon [a, b] \to \R\) が連続で \((a, b)\) 上で微分可能であるとき，
+
+\[
+ f(b) - f(a) = f'(c)(b - a)
+\]
+
+をみたす \(c \in (a, b)\) が存在する．
 :::
 
 

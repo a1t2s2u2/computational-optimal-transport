@@ -20,8 +20,8 @@
 \begin{tabular}{ll}
   $(\X, d_\X),\; (\Y, d_\Y)$ & Polish 空間（完備可分距離空間） \\
   $\N$ & 正の整数全体 $\{1, 2, 3, \ldots\}$ \\
-  $\R_+$ & $[0,\infty)$ \\
-  $\R_{++}$ & $(0,\infty)$ \\
+  $\R_{\geq 0}$ & $[0,\infty)$ \\
+  $\R_{>0}$ & $(0,\infty)$ \\
   $\Bb(\X)$ & $\X$ 上のボレル $\sigma$-代数（$\Bb(\Y)$ も同様） \\
 \end{tabular}
 
@@ -36,9 +36,9 @@
 \subsection*{離散版}
 \begin{tabular}{ll}
   $\range{n}$ & 整数の集合 $\{1, \ldots, n\}$ \\
-  $\mathbf{a} \in \R_+^n$, $\mathbf{b} \in \R_+^m$
+  $\mathbf{a} \in \R_{\geq 0}^n$, $\mathbf{b} \in \R_{\geq 0}^m$
     & 輸送元・輸送先のヒストグラム（$\sum_i a_i = \sum_j b_j = 1$） \\
-  $\mathbf{C} \in \R_+^{n \times m}$ & 行列（$C_{i,j}$：ビン $i$ から $j$ への輸送コストと解釈） \\
+  $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ & 行列（$C_{i,j}$：ビン $i$ から $j$ への輸送コストと解釈） \\
   $\ones_n$ & 成分がすべて $1$ の $n$ 次元ベクトル \\
   $\inner{\cdot}{\cdot}$ & フロベニウス内積 $\inner{\mathbf{A}}{\mathbf{B}} = \tr(\mathbf{A}^\top \mathbf{B})$ \\
   $\odot,\; \oslash$ & 成分ごとの積（アダマール積）・成分ごとの除算 \\
@@ -76,7 +76,6 @@
 
 \input{ch01_preliminaries}
 \input{ch02_ot_foundations}
-\input{ch03_algorithmic_foundations}
 \input{ch04_entropic_regularization}
 \input{ch05_vae_geodesic}
 

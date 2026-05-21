@@ -128,7 +128,7 @@ $d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
 \end{definition}
 
 \begin{definition}{開球}{sem-open-ball}
-  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{++}$ に対して，
+  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{>0}$ に対して，
   中心 $x$，半径 $r$ の\textbf{開球}を
   \[
     B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
@@ -139,7 +139,7 @@ $d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
 距離空間 $(\Omega, d)$ における開集合（定義~\ref{def:sem-topological-space}）は，
 開球 $B_r(x)$ を用いて次のように特徴付けられる：
 $U \subset \Omega$ が開集合であるとは，任意の $x \in U$ に対し
-$B_r(x) \subset U$ をみたす $r \in \R_{++}$ が存在することをいう．
+$B_r(x) \subset U$ をみたす $r \in \R_{>0}$ が存在することをいう．
 
 \begin{figure}[H]
 \centering
@@ -357,17 +357,19 @@ $\R$ はその「完備化」として機能する．}
   $f(x_n) \to f(x)$ が成り立つことが挙げられる．
 \end{definition}
 
-\begin{proposition}{連続写像による閉集合の逆像}{sem-preimage-closed}
-  距離空間 $(\Omega_1, d_1)$，$(\Omega_2, d_2)$ の間の連続写像
-  $f \colon \Omega_1 \to \Omega_2$（定義~\ref{def:sem-continuous}）に対して，
-  $F \subset \Omega_2$ が閉集合ならば $f^{-1}(F)$ も閉集合である．
+\begin{proposition}{連続写像による閉集合の引き戻し}{sem-preimage-closed}
+  距離空間 $(\Omega_1, d_1)$，$(\Omega_2, d_2)$ の間の連続写像 $f \colon \Omega_1 \to \Omega_2$ と
+  閉集合 $F \subset \Omega_2$ に対して，逆像
+  \[
+    f^{-1}(F) \defeq \{ x \in \Omega_1 \mid f(x) \in F \}
+  \]
+  は $\Omega_1$ の閉集合である．
 \end{proposition}
-
 \begin{proof}
-  $f^{-1}(F)$ の任意の収束列 $(x_n)$ をとり，極限を $x^*$ とする．
-  $f(x_n) \in F$ であり，$f$ の連続性から $f(x_n) \to f(x^*)$．
-  $F$ は閉集合だから $f(x^*) \in F$，すなわち $x^* \in f^{-1}(F)$．
-  ゆえに $f^{-1}(F)$ は閉集合．
+  $f^{-1}(F)$ に含まれる任意の収束列 $x_n \to x$（$x \in \Omega_1$）をとる．
+  $f$ の連続性（定義~\ref{def:sem-continuous}の同値条件）より $f(x_n) \to f(x)$．
+  仮定より $f(x_n) \in F$ であり，距離空間における閉集合は収束列の極限を含むから
+  $f(x) \in F$，すなわち $x \in f^{-1}(F)$．
 \end{proof}
 
 \begin{definition}{有界集合}{sem-bounded}
@@ -460,6 +462,14 @@ $\R$ はその「完備化」として機能する．}
 \begin{proposition}{有限次元ノルム空間上の線形関数の連続性}{sem-finite-dim-linear-continuous}
   有限次元ノルム空間 $V$ 上の任意の線形関数 $f \colon V \to \R$ は連続である．
 \end{proposition}
+
+\begin{theorem}{平均値定理}{sem-mvt}
+  $f \colon [a, b] \to \R$ が連続で $(a, b)$ 上で微分可能であるとき，
+  \[
+    f(b) - f(a) = f'(c)(b - a)
+  \]
+  をみたす $c \in (a, b)$ が存在する．
+\end{theorem}
 
 %% ============================================================
 %% 測度論
@@ -569,7 +579,7 @@ $\R$ はその「完備化」として機能する．}
 \end{definition}
 
 \begin{definition}{単関数}{sem-simple-function}
-  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_+$ が
+  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_{\geq 0}$ が
   \textbf{単関数}であるとは，互いに素な可測集合
   $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ を用いて
   \[

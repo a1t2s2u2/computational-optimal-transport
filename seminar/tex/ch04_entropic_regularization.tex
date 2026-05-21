@@ -2,23 +2,22 @@
 \label{ch:seminar-03-entropic}
 
 エントロピー正則化は，
-最適輸送問題にエントロピー項を加えることで問題を狭義凸化し，
-行列スケーリングの反復（Sinkhorn アルゴリズム）で効率的に解を得る手法である．
+最適輸送問題にエントロピー項を加えることで問題を狭義凸化する手法である．
 
 以下，
 \[
-  \mathbf{a} \in \R_{++}^{n},\qquad
-  \mathbf{b} \in \R_{++}^{m},\qquad
+  \mathbf{a} \in \R_{>0}^{n},\qquad
+  \mathbf{b} \in \R_{>0}^{m},\qquad
   \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
 \]
-および $\mathbf{C} \in \R_+^{n \times m}$ を固定する．
+および $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ を固定する．
 離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
 命題~\ref{prop:sem-discrete-kantorovich} の通り
 \[
   \CouplingsD(\mathbf{a}, \mathbf{b})
   =
   \left\{
-    \mathbf{P} \in \R_+^{n \times m}
+    \mathbf{P} \in \R_{\geq 0}^{n \times m}
     \;\middle|\;
     \mathbf{P}\ones_m = \mathbf{a},\;
     \mathbf{P}^\top \ones_n = \mathbf{b}
@@ -33,7 +32,7 @@
 \label{sec:sem-entropic-regularization}
 
 \begin{definition}{離散エントロピー}{sem-discrete-entropy}
-  非負行列 $\mathbf{P} \in \R_+^{n \times m}$ に対して，
+  非負行列 $\mathbf{P} \in \R_{\geq 0}^{n \times m}$ に対して，
   \textbf{離散エントロピー}を
   \[
     \Hb(\mathbf{P})
@@ -53,11 +52,14 @@
   \]
   であり，通常の Shannon エントロピーとは定数 $1$ だけ異なる．
   この定数は最適化の解には影響しない．この形を使う理由は，
-  $-\Hb$ の微分が
+  $-\Hb$ の微分が簡単になるからである．積の微分則より
   \[
-    \frac{\partial(-\Hb)}{\partial P_{i,j}} = \log P_{i,j}
+    \frac{\partial(-\Hb)}{\partial P_{i,j}}
+    = \frac{\partial}{\partial P_{i,j}}\bigl[P_{i,j}(\log P_{i,j} - 1)\bigr]
+    = (\log P_{i,j} - 1) + P_{i,j} \cdot \frac{1}{P_{i,j}}
+    = \log P_{i,j},
   \]
-  と簡単になるからである．
+  定義中の $-1$ と積の微分で生じる $+1$ が打ち消し合い，$\log P_{i,j}$ のみが残る．
 \end{remark}
 
 \begin{definition}{エントロピー正則化された離散最適輸送}{sem-entropic-ot}
@@ -84,20 +86,56 @@
 \begin{proof}
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
   （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）．
-  関数 $x \mapsto x\log x - x$ は $[0,\infty)$ 上で連続かつ狭義凸である．
-  したがって
+
+  \textbf{目的関数の連続性．}
+  $g(x) \defeq x\log x - x$（$x > 0$），$g(0) \defeq 0$ とおく．
+  $x > 0$ では $g$ は連続．$x = 0$ では $x = e^{-t}$（$t \to +\infty$）と置換すると
   \[
-    \mathbf{P}
-    \mapsto
-    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
-    =
-    \inner{\mathbf{C}}{\mathbf{P}}
-    + \varepsilon \sum_{i,j} P_{i,j}(\log P_{i,j}-1)
+    x\log x = -\frac{t}{e^t} \to 0,
   \]
-  は連続かつ凸である．コンパクト集合上の連続関数なので最小値を達成する．
-  $x\log x-x$ の狭義凸性により，異なる2つの最適解があれば
-  その中点で目的関数がより小さくなるため矛盾する．
-  よって最適解は一意である．
+  よって $\lim_{x\to 0+} g(x) = 0 = g(0)$ であり $g$ は $[0,\infty)$ 上で連続．
+  目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$
+  は各成分の連続関数の和だから連続であり，コンパクト集合上の連続関数として最小値を達成する．
+
+  \textbf{目的関数の狭義凸性．}
+  任意の $x_1, x_2 > 0$，$x_1 \neq x_2$，$\lambda \in (0,1)$ をとり
+  $x^* := \lambda x_1 + (1-\lambda)x_2$ とおく．
+  平均値定理（定理~\ref{thm:sem-mvt}）を $[x_1, x^*]$ と $[x^*, x_2]$ にそれぞれ適用すると，
+  $c_1 \in (x_1, x^*)$，$c_2 \in (x^*, x_2)$ が存在して
+  \begin{align*}
+    g(x_1) - g(x^*) &= g'(c_1)(x_1 - x^*)
+                     = -g'(c_1)(1-\lambda)(x_2 - x_1), \\
+    g(x_2) - g(x^*) &= g'(c_2)(x_2 - x^*)
+                     = \phantom{-}g'(c_2)\,\lambda(x_2 - x_1).
+  \end{align*}
+  それぞれ $\lambda$，$(1-\lambda)$ 倍して加えると
+  \[
+    \lambda g(x_1) + (1-\lambda)g(x_2) - g(x^*)
+    = \lambda(1-\lambda)(x_2 - x_1)\bigl[g'(c_2) - g'(c_1)\bigr].
+  \]
+  $c_1 < c_2$ より $g'(c_1) = \log c_1 < \log c_2 = g'(c_2)$ だから $g'(c_2) - g'(c_1) > 0$，
+  また $\lambda(1-\lambda)(x_2-x_1) > 0$ だから右辺 $> 0$．
+  よって $g(x^*) < \lambda g(x_1) + (1-\lambda)g(x_2)$ となり，
+  $g$ は $(0,\infty)$ 上で狭義凸（定義~\ref{def:sem-convex-function}）．
+  $x_1 = 0$，$x_2 > 0$ の場合は $g(0) = 0$ を用いると
+  \begin{align*}
+    \lambda g(0) + (1-\lambda)g(x_2) - g((1-\lambda)x_2)
+    &= (1-\lambda)(x_2\log x_2 - x_2) - \bigl[(1-\lambda)x_2\log(1-\lambda)x_2 - (1-\lambda)x_2\bigr] \\
+    &= (1-\lambda)x_2\bigl[\log x_2 - \log(1-\lambda)x_2\bigr] \\
+    &= (1-\lambda)x_2\log\frac{1}{1-\lambda} > 0.
+  \end{align*}
+  よって $g$ は $[0,\infty)$ 上でも狭義凸である．
+  各成分の狭義凸関数の和として，目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$ も $\mathbf{P}$ について狭義凸である．
+
+  \textbf{最適解の一意性．}
+  目的関数が狭義凸であるとき，最適解は高々1つである．
+  実際，$\mathbf{P}_1 \neq \mathbf{P}_2$ がともに最適解であるとすると，
+  中点 $\mathbf{P}^* = (\mathbf{P}_1 + \mathbf{P}_2)/2$ も $\CouplingsD(\mathbf{a},\mathbf{b})$ に属し（凸集合），
+  狭義凸性から
+  \[
+    f(\mathbf{P}^*) < \tfrac{1}{2}f(\mathbf{P}_1) + \tfrac{1}{2}f(\mathbf{P}_2) = f(\mathbf{P}_1)
+  \]
+  となり，$\mathbf{P}_1$ が最適解であることに矛盾する．よって最適解は一意である．
 \end{proof}
 
 \begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
@@ -157,7 +195,7 @@
 \label{subsec:sem-kl-formulation}
 
 \begin{definition}{離散 KL ダイバージェンス}{sem-kl-divergence}
-  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  非負行列 $\mathbf{P}, \mathbf{K} \in \R_{\geq 0}^{n \times m}$ に対して，
   \textbf{KL ダイバージェンス}を
   \[
     \KLD(\mathbf{P} \| \mathbf{K})
@@ -175,7 +213,7 @@
 
 \begin{definition}{Gibbs カーネル}{sem-gibbs-kernel}
   コスト行列 $\mathbf{C}$ と $\varepsilon > 0$ に対して，
-  \textbf{Gibbs カーネル} $\mathbf{K} \in \R_{++}^{n \times m}$ を
+  \textbf{Gibbs カーネル} $\mathbf{K} \in \R_{>0}^{n \times m}$ を
   \[
     K_{i,j} \defeq \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
   \]
@@ -294,330 +332,3 @@
   独立カップリング $\mathbf{a}\mathbf{b}^\top$ である．
 \end{remark}
 
-%% ============================================================
-%% 4.2 Sinkhorn アルゴリズム
-%% ============================================================
-\section{Sinkhorn アルゴリズム}
-\label{sec:sem-sinkhorn}
-
-\subsection{最適解の構造}
-
-\begin{theorem}{スケーリング形式}{sem-sinkhorn-scaling-form}
-  正則化問題~\ref{def:sem-entropic-ot} の最適解
-  $\mathbf{P}_\varepsilon$ は，ある正ベクトル
-  $\mathbf{u} \in \R_{++}^{n}$，$\mathbf{v} \in \R_{++}^{m}$ により
-  \[
-    \mathbf{P}_\varepsilon
-    =
-    \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
-  \]
-  と表される．すなわち
-  \[
-    (P_\varepsilon)_{i,j} = u_i K_{i,j} v_j.
-  \]
-\end{theorem}
-
-\begin{proof}
-  ラグランジュ関数を
-  \[
-    \mathcal{L}(\mathbf{P},\mathbf{f},\mathbf{g})
-    =
-    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
-    - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
-    - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
-  \]
-  とおく．命題~\ref{prop:sem-entropic-positive-solution} より
-  最適解では $P_{i,j}>0$ であり，その点での一階条件は
-  \[
-    \frac{\partial \mathcal{L}}{\partial P_{i,j}}
-    =
-    C_{i,j} + \varepsilon\log P_{i,j} - f_i - g_j
-    = 0
-  \]
-  である．したがって
-  \[
-    P_{i,j}
-    =
-    \exp\!\left(\frac{f_i}{\varepsilon}\right)
-    \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
-    \exp\!\left(\frac{g_j}{\varepsilon}\right).
-  \]
-  $u_i \defeq \exp(f_i/\varepsilon)$，
-  $v_j \defeq \exp(g_j/\varepsilon)$ とおけば，
-  $P_{i,j}=u_iK_{i,j}v_j$ を得る．
-\end{proof}
-
-\subsection{Sinkhorn の反復}
-
-スケーリング形式を周辺条件に代入すると，
-\[
-  \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
-  \qquad
-  \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}
-\]
-が得られる（$\odot$ はアダマール積）．
-Sinkhorn アルゴリズムは，この2つの条件を交互に満たすよう
-$\mathbf{u}$ と $\mathbf{v}$ を更新する．
-
-\begin{algorithm}{alg:sem-sinkhorn}
-  \textbf{Input:}
-  $\mathbf{a} \in \R_{++}^{n}$，$\mathbf{b} \in \R_{++}^{m}$，
-  $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$，反復回数 $L$ \\
-  \textbf{Output:}
-  $\mathbf{P}^{(L)} = \diag(\mathbf{u}^{(L)})\mathbf{K}\diag(\mathbf{v}^{(L)})$ \\[4pt]
-  1. $\mathbf{v}^{(0)} \leftarrow \ones_m$ \\
-  2. \textbf{for} $\ell = 0,1,\ldots,L-1$ \textbf{do} \\
-  3. \quad $\mathbf{u}^{(\ell+1)}
-      \leftarrow \mathbf{a} \oslash (\mathbf{K}\mathbf{v}^{(\ell)})$ \\
-  4. \quad $\mathbf{v}^{(\ell+1)}
-      \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}^{(\ell+1)})$ \\
-  5. \textbf{return}
-      $\diag(\mathbf{u}^{(L)})\mathbf{K}\diag(\mathbf{v}^{(L)})$
-\end{algorithm}
-
-各反復は行列ベクトル積 $\mathbf{K}\mathbf{v}$ および $\mathbf{K}^\top \mathbf{u}$ を
-計算するだけであり，計算量は $O(nm)$ である．
-
-\begin{remark}{Bregman 射影としての解釈}{sem-bregman-projection}
-  Sinkhorn の各ステップは，KL ダイバージェンスに関する交互射影と解釈できる：
-  \begin{align*}
-    \mathbf{P}^{(\ell+1/2)}
-      &= \argmin_{\mathbf{P}\ones_m = \mathbf{a}} \KLD(\mathbf{P} \| \mathbf{P}^{(\ell)}),
-    \\
-    \mathbf{P}^{(\ell+1)}
-      &= \argmin_{\mathbf{P}^\top \ones_n = \mathbf{b}}
-      \KLD(\mathbf{P} \| \mathbf{P}^{(\ell+1/2)}).
-  \end{align*}
-  行制約と列制約への KL 射影を交互に行うことに対応する．
-\end{remark}
-
-\begin{remark}{GPU 並列化}{sem-gpu-parallelization}
-  複数の入力対 $(\mathbf{a}_1, \mathbf{b}_1), \ldots, (\mathbf{a}_N, \mathbf{b}_N)$ に対して
-  同一コスト行列 $\mathbf{C}$ のもとでの計算は，
-  行列 $\mathbf{A} = [\mathbf{a}_1, \ldots, \mathbf{a}_N]$，
-  $\mathbf{B} = [\mathbf{b}_1, \ldots, \mathbf{b}_N]$ を用いて
-  \[
-    \mathbf{U}^{(\ell+1)} = \mathbf{A} \oslash (\mathbf{K} \mathbf{V}^{(\ell)}), \qquad
-    \mathbf{V}^{(\ell+1)} = \mathbf{B} \oslash (\mathbf{K}^\top \mathbf{U}^{(\ell+1)})
-  \]
-  と行列--行列積でバッチ化でき，GPU 上で効率的に実行できる．
-\end{remark}
-
-%% ============================================================
-%% 4.3 収束性
-%% ============================================================
-\section{収束性}
-\label{sec:sem-sinkhorn-convergence}
-
-Sinkhorn アルゴリズムの収束は Hilbert 射影距離を用いて解析される．
-
-\begin{definition}{Hilbert 射影距離}{sem-hilbert-metric}
-  正ベクトル $\mathbf{u}, \mathbf{u}' \in \R_{++}^n$ に対して，
-  \textbf{Hilbert 射影距離}を
-  \[
-    d_{\mathrm{H}}(\mathbf{u}, \mathbf{u}')
-    \defeq \log \max_{i,j} \frac{u_i \, u'_j}{u_j \, u'_i}
-  \]
-  で定義する．$d_{\mathrm{H}}(\mathbf{u}, \mathbf{u}') = 0$ は
-  $\mathbf{u}$ と $\mathbf{u}'$ が定数倍の関係にあることと同値であり，
-  射影空間 $\R_{++}^n / {\sim}$ 上の距離となる．
-\end{definition}
-
-\begin{theorem}{Birkhoff の縮小定理}{sem-birkhoff-contraction}
-  正行列 $\mathbf{K} \in \R_{++}^{n \times m}$ に対して，
-  任意の $\mathbf{v}, \mathbf{v}' \in \R_{++}^m$ について
-  \[
-    d_{\mathrm{H}}(\mathbf{K}\mathbf{v},\, \mathbf{K}\mathbf{v}')
-    \leq \lambda(\mathbf{K}) \, d_{\mathrm{H}}(\mathbf{v},\, \mathbf{v}')
-  \]
-  が成り立つ．ここで \textbf{Birkhoff 縮小率}
-  $\lambda(\mathbf{K}) \in [0, 1)$ は
-  \[
-    \lambda(\mathbf{K})
-    = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1},
-    \qquad
-    \eta(\mathbf{K})
-    = \max_{i,j,k,\ell}
-    \frac{K_{i,k} \, K_{j,\ell}}{K_{j,k} \, K_{i,\ell}}
-  \]
-  で定義される．Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ に対しては
-  $\eta(\mathbf{K}) = e^{2\norm{\mathbf{C}}_\infty / \varepsilon}$ であり，
-  $\varepsilon$ が大きいほど $\lambda(\mathbf{K})$ は小さくなる（収束が速い）．
-\end{theorem}
-
-\begin{proposition}{Sinkhorn の線形収束}{sem-sinkhorn-linear-convergence}
-  Algorithm~\ref{alg:sem-sinkhorn} のスケーリングベクトルは，
-  Hilbert 距離の意味で最適スケーリング $(\mathbf{u}^*, \mathbf{v}^*)$ に線形収束する：
-  \[
-    d_{\mathrm{H}}(\mathbf{u}^{(\ell)}, \mathbf{u}^*)
-    = O(\lambda(\mathbf{K})^{2\ell}).
-  \]
-  停止条件としては，周辺分布の制約違反
-  $\norm{\mathbf{P}^{(\ell)} \ones_m - \mathbf{a}}_1$ の監視が実用的である．
-\end{proposition}
-
-%% ============================================================
-%% 4.4 数値安定性と対数領域計算
-%% ============================================================
-\section{数値安定性と対数領域計算}
-\label{sec:sem-log-domain}
-
-$\varepsilon$ が小さいとき，Gibbs カーネルの成分 $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ は
-機械精度のアンダーフローを起こしうる．
-この問題は，\textbf{対数領域}（log-domain）で計算を行うことで回避できる．
-
-\subsection{正則化問題の双対}
-
-\begin{proposition}{エントロピー正則化の双対問題}{sem-entropic-dual}
-  エントロピー正則化された最適輸送の双対問題は
-  \[
-    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
-    = \max_{\mathbf{f} \in \R^n,\, \mathbf{g} \in \R^m}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-    - \varepsilon \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}
-  \]
-  で与えられる．ここで $(\mathbf{f}, \mathbf{g})$ とスケーリング変数の関係は
-  $u_i = e^{f_i/\varepsilon}$，$v_j = e^{g_j/\varepsilon}$ である．
-\end{proposition}
-
-\begin{proof}
-  定理~\ref{thm:sem-sinkhorn-scaling-form} の証明における
-  ラグランジュ関数に最適解 $P_{i,j} = u_i K_{i,j} v_j$ を代入する．
-  $P_{i,j} = e^{(f_i + g_j - C_{i,j})/\varepsilon}$ なので
-  \begin{align*}
-    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-    - \varepsilon\Hb(\mathbf{P}_\varepsilon)
-    &= \sum_{i,j} P_{i,j}(C_{i,j} + \varepsilon\log P_{i,j} - \varepsilon) \\
-    &= \sum_{i,j} P_{i,j}(f_i + g_j - \varepsilon) \\
-    &= \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-       - \varepsilon \sum_{i,j} P_{i,j}.
-  \end{align*}
-  $\sum_{i,j} P_{i,j} = \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}$
-  を代入すれば結論を得る．
-\end{proof}
-
-\subsection{対数領域 Sinkhorn}
-
-双対変数 $f_i = \varepsilon \log u_i$，$g_j = \varepsilon \log v_j$ を
-直接更新すれば，Gibbs カーネルの成分を陽に計算する必要がない．
-
-\begin{proposition}{対数領域の更新式}{sem-log-domain-updates}
-  Sinkhorn の更新は，双対ポテンシャル $(\mathbf{f},\mathbf{g})$ に対して
-  \[
-    f_i
-    \leftarrow
-    \varepsilon\log a_i
-    +
-    \smin_\varepsilon
-    \bigl(C_{i,1}-g_1,\ldots,C_{i,m}-g_m\bigr),
-  \]
-  \[
-    g_j
-    \leftarrow
-    \varepsilon\log b_j
-    +
-    \smin_\varepsilon
-    \bigl(C_{1,j}-f_1,\ldots,C_{n,j}-f_n\bigr)
-  \]
-  と書ける．ここで $\smin_\varepsilon$ は
-  定義~\ref{def:sem-soft-min} のソフト最小値である．
-\end{proposition}
-
-\begin{proof}
-  $\mathbf{u} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v})$ の第 $i$ 成分は
-  \[
-    u_i
-    =
-    \frac{a_i}{\sum_j \exp(-C_{i,j}/\varepsilon)\exp(g_j/\varepsilon)}.
-  \]
-  両辺の対数を取り $\varepsilon$ を掛けると
-  \[
-    f_i
-    =
-    \varepsilon\log a_i
-    -
-    \varepsilon\log
-    \sum_j \exp\!\left(-\frac{C_{i,j}-g_j}{\varepsilon}\right)
-    =
-    \varepsilon\log a_i
-    +
-    \smin_\varepsilon(C_{i,1}-g_1,\ldots,C_{i,m}-g_m).
-  \]
-  $\mathbf{v}$ の更新も同様である．
-\end{proof}
-
-\subsection{ソフト最小値と log-sum-exp}
-
-\begin{definition}{ソフト最小値}{sem-soft-min}
-  $z_1,\ldots,z_m \in \R$ と $\varepsilon>0$ に対し，
-  \textbf{ソフト最小値}を
-  \[
-    \smin_\varepsilon(z_1,\ldots,z_m)
-    \defeq
-    -\varepsilon\log\left(\sum_{j=1}^{m} e^{-z_j/\varepsilon}\right)
-  \]
-  で定める．$\varepsilon \to 0$ のとき
-  $\smin_\varepsilon \mathbf{z} \to \min_j z_j$ となる．
-\end{definition}
-
-\begin{remark}{log-sum-exp の安定化}{sem-log-sum-exp-trick}
-  $\smin_\varepsilon$ の計算では，指数関数のオーバーフローを避けるために
-  \textbf{log-sum-exp トリック}を用いる：
-  \[
-    \smin_\varepsilon \mathbf{z}
-    = \underline{z} - \varepsilon \log \sum_j e^{-(z_j - \underline{z})/\varepsilon},
-    \qquad \underline{z} = \min_j z_j.
-  \]
-  指数関数の引数が非正となるため，オーバーフローが回避される．
-\end{remark}
-
-%% ============================================================
-%% 4.5 正則化された輸送コストの近似
-%% ============================================================
-\section{正則化された輸送コストの近似}
-\label{sec:sem-sinkhorn-divergence}
-
-$\MKD_{\mathbf{C}}^\varepsilon$ は正則化によりバイアスを含む．
-双対変数から非正則化コスト $\MKD_{\mathbf{C}}$ の近似が得られる．
-
-\begin{proposition}{双対変数からの下界}{sem-dual-lower-bound}
-  エントロピー正則化問題の最適双対変数 $(\mathbf{f}^*, \mathbf{g}^*)$ は
-  非正則化問題の双対実行可能集合 $\PotentialsD(\mathbf{C})$ に属し，
-  \[
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    \leq \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-  \]
-  が成り立つ．
-\end{proposition}
-
-\begin{proof}
-  一階条件 $f_i^* + g_j^* - C_{i,j} = \varepsilon \log P_{i,j}^*$ において
-  $P_{i,j}^* > 0$（命題~\ref{prop:sem-entropic-positive-solution}）であるから
-  $\log P_{i,j}^*$ は有限であり，特に $f_i^* + g_j^* \leq C_{i,j}$ が
-  任意の $(i,j)$ で成り立つ．
-  したがって $(\mathbf{f}^*, \mathbf{g}^*) \in \PotentialsD(\mathbf{C})$ であり，
-  非正則化問題の弱双対性から下界が従う．
-\end{proof}
-
-これを利用して，2種類の \textbf{Sinkhorn ダイバージェンス}を定義する：
-\begin{align*}
-  \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{dual}}(\mathbf{a}, \mathbf{b})
-    &\defeq \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    &&(\text{下界}),
-  \\
-  \mathrm{S}_{\mathbf{C}}^{\varepsilon,\,\mathrm{primal}}(\mathbf{a}, \mathbf{b})
-    &\defeq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-    &&(\text{上界}).
-\end{align*}
-両者の差は
-$\mathrm{S}^{\varepsilon,\,\mathrm{primal}} - \mathrm{S}^{\varepsilon,\,\mathrm{dual}}
-= \varepsilon(\Hb(\mathbf{P}_\varepsilon) + 1)$
-であり，$\varepsilon \to 0$ で消失する．
-
-\begin{remark}{$(\mathbf{a}, \mathbf{b})$ に関する凸性}{sem-convexity-in-marginals}
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ は $(\mathbf{a}, \mathbf{b})$ に関して
-  凸であり，$\varepsilon > 0$ のとき微分可能で
-  $\nabla_{\mathbf{a}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{f}^*$，
-  $\nabla_{\mathbf{b}} \MKD_{\mathbf{C}}^\varepsilon = \mathbf{g}^*$
-  が成り立つ．この性質は Wasserstein 重心の計算などで重要である．
-\end{remark}
