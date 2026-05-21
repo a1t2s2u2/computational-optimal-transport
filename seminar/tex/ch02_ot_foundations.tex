@@ -105,7 +105,7 @@
 
 \begin{definition}{最適割当問題}{sem-assignment}
   $n \in \N$，置換 $\sigma \in \Perm(n)$，
-  および行列 $\mathbf{C} \in \R_+^{n \times n}$ に対して，
+  および行列 $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ に対して，
   \[
     \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
   \]
@@ -123,7 +123,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
     \begin{pmatrix}
       1 & 4 \\
       2 & 1
-    \end{pmatrix} \in \R_+^{2 \times 2}
+    \end{pmatrix} \in \R_{\geq 0}^{2 \times 2}
   \]
   を考える．$\Perm(2) = \{(1,2),\, (2,1)\}$ の $2! = 2$ 通りの割当を以下に図示する．
 
@@ -164,7 +164,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \end{example}
 
 \begin{claim}{最適解の存在}{sem-assignment-existence}
-  任意の $n \in \N$ と任意の $\mathbf{C} \in \R_+^{n \times n}$ に対して，
+  任意の $n \in \N$ と任意の $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ に対して，
   最適割当問題の最小値は達成される．
 \end{claim}
 
@@ -181,7 +181,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \begin{claim}{最適解が一意でない場合の存在}{sem-uniqueness}
   任意の $n \geq 2$ に対して，
   異なる $\sigma_1, \sigma_2 \in \Perm(n)$ がともに最小値を達成するような
-  $\mathbf{C} \in \R_+^{n \times n}$ が存在する．
+  $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ が存在する．
 \end{claim}
 
 \begin{proof}
@@ -213,7 +213,7 @@ $\X, \Y$ と任意の確率測度に拡張する：
 
 \begin{definition}{Monge 問題}{sem-monge}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
-  可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
+  可測関数 $c \colon \X \times \Y \to \R_{\geq 0}$ に対して，
   \textbf{Monge 問題}とは
   \[
     \inf_{T}
@@ -385,7 +385,7 @@ Monge 問題の実行可能集合
 
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
   $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
-  可測関数 $c \colon \X \times \Y \to \R_+$ に対して，
+  可測関数 $c \colon \X \times \Y \to \R_{\geq 0}$ に対して，
   \textbf{カップリング集合}
   \[
     \Couplings(\alpha, \beta) \defeq
@@ -504,19 +504,19 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
 
 \begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
-  $\mathbf{a} \in \R_{++}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{++}^m$（$\sum_j b_j = 1$），
+  $\mathbf{a} \in \R_{>0}^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \R_{>0}^m$（$\sum_j b_j = 1$），
   $x_1, \ldots, x_n \in \X$（$i \neq j \Rightarrow x_i \neq x_j$），
   $y_1, \ldots, y_m \in \Y$（$i \neq j \Rightarrow y_i \neq y_j$），
-  可測関数 $c \colon \X \times \Y \to \R_+$ を所与とし，
+  可測関数 $c \colon \X \times \Y \to \R_{\geq 0}$ を所与とし，
   \[
     \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
     \beta  \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
   \]
-  とおく．行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}$ および
+  とおく．行列 $\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_{\geq 0}^{n \times m}$ および
   \textbf{離散カップリング集合}
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
-    \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
+    \left\{ \mathbf{P} \in \R_{\geq 0}^{n \times m} \;\middle|\;
       \mathbf{P}\ones_m = \mathbf{a},\;
       \mathbf{P}^\top\ones_n = \mathbf{b}
     \right\}
@@ -814,8 +814,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \subsubsection{最適解の存在と性質}
 
 \begin{claim}{離散 Kantorovich 問題の解の存在}{sem-discrete-kantorovich-existence}
-  任意の $\mathbf{a} \in \R_{++}^n$，$\mathbf{b} \in \R_{++}^m$
-  （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_+^{n \times m}$ に対して，
+  任意の $\mathbf{a} \in \R_{>0}^n$，$\mathbf{b} \in \R_{>0}^m$
+  （$\sum_i a_i = \sum_j b_j = 1$）と $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ に対して，
   \[
     \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) = \inner{\mathbf{C}}{\mathbf{P}^*}
   \]
@@ -858,11 +858,11 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   よって $f^{-1}(\{(\mathbf{a}, \mathbf{b})\})$ は
   一点集合（閉集合）の引き戻しとして閉集合である
   （命題~\ref{prop:sem-preimage-closed}）．
-  また $\R_+^{n \times m}$ は $\R^{n \times m}$ の閉集合であるから，
+  また $\R_{\geq 0}^{n \times m}$ は $\R^{n \times m}$ の閉集合であるから，
   \[
     \CouplingsD(\mathbf{a}, \mathbf{b})
     = f^{-1}\bigl(\{(\mathbf{a}, \mathbf{b})\}\bigr)
-      \cap \R_+^{n \times m}
+      \cap \R_{\geq 0}^{n \times m}
   \]
   は閉集合の共通部分として閉集合である．
   さらに，行和条件 $\sum_j P_{i,j} = a_i$ と $P_{i,j} \geq 0$ から

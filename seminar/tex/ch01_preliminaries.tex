@@ -128,7 +128,7 @@ $d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
 \end{definition}
 
 \begin{definition}{開球}{sem-open-ball}
-  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{++}$ に対して，
+  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \R_{>0}$ に対して，
   中心 $x$，半径 $r$ の\textbf{開球}を
   \[
     B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
@@ -139,7 +139,7 @@ $d(x, q_k) < \varepsilon$ をみたす $q_k$ がとれる（稠密）．
 距離空間 $(\Omega, d)$ における開集合（定義~\ref{def:sem-topological-space}）は，
 開球 $B_r(x)$ を用いて次のように特徴付けられる：
 $U \subset \Omega$ が開集合であるとは，任意の $x \in U$ に対し
-$B_r(x) \subset U$ をみたす $r \in \R_{++}$ が存在することをいう．
+$B_r(x) \subset U$ をみたす $r \in \R_{>0}$ が存在することをいう．
 
 \begin{figure}[H]
 \centering
@@ -579,7 +579,7 @@ $\R$ はその「完備化」として機能する．}
 \end{definition}
 
 \begin{definition}{単関数}{sem-simple-function}
-  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_+$ が
+  可測空間 $(\Omega, \mathcal{F})$ 上の関数 $s \colon \Omega \to \R_{\geq 0}$ が
   \textbf{単関数}であるとは，互いに素な可測集合
   $A_1, \ldots, A_m \in \mathcal{F}$ と非負定数 $c_1, \ldots, c_m \geq 0$ を用いて
   \[

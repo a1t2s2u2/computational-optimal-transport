@@ -6,18 +6,18 @@
 
 以下，
 \[
-  \mathbf{a} \in \R_{++}^{n},\qquad
-  \mathbf{b} \in \R_{++}^{m},\qquad
+  \mathbf{a} \in \R_{>0}^{n},\qquad
+  \mathbf{b} \in \R_{>0}^{m},\qquad
   \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
 \]
-および $\mathbf{C} \in \R_+^{n \times m}$ を固定する．
+および $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ を固定する．
 離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
 命題~\ref{prop:sem-discrete-kantorovich} の通り
 \[
   \CouplingsD(\mathbf{a}, \mathbf{b})
   =
   \left\{
-    \mathbf{P} \in \R_+^{n \times m}
+    \mathbf{P} \in \R_{\geq 0}^{n \times m}
     \;\middle|\;
     \mathbf{P}\ones_m = \mathbf{a},\;
     \mathbf{P}^\top \ones_n = \mathbf{b}
@@ -32,7 +32,7 @@
 \label{sec:sem-entropic-regularization}
 
 \begin{definition}{離散エントロピー}{sem-discrete-entropy}
-  非負行列 $\mathbf{P} \in \R_+^{n \times m}$ に対して，
+  非負行列 $\mathbf{P} \in \R_{\geq 0}^{n \times m}$ に対して，
   \textbf{離散エントロピー}を
   \[
     \Hb(\mathbf{P})
@@ -195,7 +195,7 @@
 \label{subsec:sem-kl-formulation}
 
 \begin{definition}{離散 KL ダイバージェンス}{sem-kl-divergence}
-  非負行列 $\mathbf{P}, \mathbf{K} \in \R_+^{n \times m}$ に対して，
+  非負行列 $\mathbf{P}, \mathbf{K} \in \R_{\geq 0}^{n \times m}$ に対して，
   \textbf{KL ダイバージェンス}を
   \[
     \KLD(\mathbf{P} \| \mathbf{K})
@@ -213,7 +213,7 @@
 
 \begin{definition}{Gibbs カーネル}{sem-gibbs-kernel}
   コスト行列 $\mathbf{C}$ と $\varepsilon > 0$ に対して，
-  \textbf{Gibbs カーネル} $\mathbf{K} \in \R_{++}^{n \times m}$ を
+  \textbf{Gibbs カーネル} $\mathbf{K} \in \R_{>0}^{n \times m}$ を
   \[
     K_{i,j} \defeq \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
   \]
