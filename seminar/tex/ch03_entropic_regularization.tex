@@ -3,9 +3,12 @@
 
 離散 Kantorovich 問題の最適解は一般に一意でない
 （例~\ref{ex:sem-nonunique-example}）．
-本章では，目的関数にエントロピー項を加えて
-問題を狭義凸化する\textbf{エントロピー正則化}を導入し，
-最適解の一意性が任意のコスト行列・周辺分布に対して保証されることを示す．
+本章では，目的関数に負エントロピー項を加えた
+\textbf{エントロピー正則化問題}を導入する．
+正則化された目的関数は狭義凸となるため，
+任意の $\varepsilon > 0$ に対して正則化問題の最適解は一意に定まる．
+さらに $\varepsilon \to 0$ の極限では，
+非正則化問題の最適解の中で最大エントロピーのものが選ばれる．
 
 以下，
 \[
@@ -14,6 +17,10 @@
   \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
 \]
 および $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ を固定する．
+なお，正則化問題の一意性自体は $\mathbf{a}, \mathbf{b}$ に
+ゼロ成分を許しても成立する．
+全成分正の仮定は正値性
+（命題~\ref{prop:sem-entropic-positive-solution}）に用いる．
 離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
 命題~\ref{prop:sem-discrete-kantorovich} の通り
 \[
@@ -175,14 +182,17 @@
 
   この変化による目的関数の変化を評価する．
   線形コストの変化は $\theta$ に比例する．
-  残り3成分の負エントロピー $\varphi(x) = x\log x - x$ の変化は，
-  正の点における微分 $\varphi'(x)=\log x$ が有限であることから
-  いずれも $O(\theta)$ である．
-  一方，$0$ だった成分の変化は
+  $(i,j_1)$ 成分と $(i_1,j)$ 成分は正であるから，
+  これらの負エントロピー $\varphi(x) = x\log x - x$ の変化は
+  $\varphi'(x) = \log x$ が有限であることから $O(\theta)$ である．
+  $(i_1,j_1)$ 成分は，正ならば同様に $O(\theta)$ であり，
+  ゼロならば $\varphi(\theta)-\varphi(0) = \theta\log\theta - \theta$
+  が加わるが，これは目的関数をさらに減少させる方向に働く．
+  一方，$(i,j)$ 成分（もともとゼロ）の変化は
   \[
     \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
   \]
-  であり，これを $\theta$ で割ると $\log\theta-1 \to -\infty$
+  であり，$\theta$ で割ると $\log\theta-1 \to -\infty$
   （$\theta \to 0^+$）となる．
   したがって十分小さい $\theta>0$ では
   この項が支配的となり，目的関数全体が減少する．
