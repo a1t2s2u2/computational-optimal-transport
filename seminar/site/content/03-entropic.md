@@ -115,6 +115,31 @@ title: エントロピー正則化
 :::
 
 
+:::theorem
+### Prop: 狭義凸関数の最小点の一意性
+
+凸集合 \(S\) 上の狭義凸関数 \(f\)
+（[ref:Def: 凸関数と狭義凸関数|凸関数と狭義凸関数]）が
+\(S\) 上で最小値を達成するならば，その最小点は一意である．
+
+---
+
+\(\mathbf{x}, \mathbf{y} \in S\) がともに \(f\) の最小点とし，
+\(\mathbf{x} \neq \mathbf{y}\) と仮定する．
+\(S\) の凸性から
+\(\tfrac{1}{2}(\mathbf{x}+\mathbf{y}) \in S\) であり，
+狭義凸性から
+
+\[
+  f\!\left(\tfrac{\mathbf{x}+\mathbf{y}}{2}\right)
+  < \tfrac{1}{2}f(\mathbf{x}) + \tfrac{1}{2}f(\mathbf{y})
+  = f(\mathbf{x})
+\]
+
+となり，\(\mathbf{x}\) の最小性に矛盾する．\(\square\)
+:::
+
+
 :::proposition
 ### Prop: 正則化問題の解の存在と一意性
 
@@ -144,33 +169,18 @@ Weierstrass の最大値の定理より，
 コンパクト集合上の連続関数は最小値を達成する．
 
 **一意性．**
-\(\varphi(x) = x\log x - x\) の二階微分は
-\(\varphi''(x) = 1/x > 0\)（\(x > 0\)）であるから，
-\(\varphi\) は \((0, \infty)\) 上で狭義凸であり，\([0,\infty)\) 上で凸である．
-したがって
-\(\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})\) は凸であり，
-異なる2つの \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})\)
-に対して
-\(\mathbf{P} \neq \mathbf{Q}\) かつある \((i_0, j_0)\) で
-\(P_{i_0,j_0} \neq Q_{i_0,j_0}\) ならば，\(\varphi\) の狭義凸性から
-
-\[
-  \varphi\!\left(\tfrac{P_{i_0,j_0}+Q_{i_0,j_0}}{2}\right)
-  <
-  \tfrac{1}{2}\varphi(P_{i_0,j_0}) + \tfrac{1}{2}\varphi(Q_{i_0,j_0}).
-\]
-
-他の成分では凸性から \(\leq\) が成り立つので，
-
-\[
-  F\!\left(\tfrac{\mathbf{P}+\mathbf{Q}}{2}\right)
-  <
-  \tfrac{1}{2}F(\mathbf{P}) + \tfrac{1}{2}F(\mathbf{Q}).
-\]
-
-\(\mathbf{P}, \mathbf{Q}\) がともに最適解ならば
-中点でより小さい値をとるため矛盾する．
-よって最適解は一意である．\(\square\)
+\(\varphi\) は \([0,\infty)\) 上で狭義凸である：
+\((0,\infty)\) 上では \(\varphi''(x) = 1/x > 0\) から従い，
+\(x = 0\), \(y > 0\), \(t \in (0,1)\) に対しては
+\(\varphi(ty) - t\varphi(y) = ty\log t < 0\)
+で直接確認できる．
+\(\mathbf{P} \neq \mathbf{Q}\) ならばある成分で
+狭義凸性が効くので，\(\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})\)
+は \(\CouplingsD(\mathbf{a},\mathbf{b})\) 上で狭義凸である．
+\(\inner{\mathbf{C}}{\mathbf{P}}\) は線形（したがって凸）であるから，
+\(F = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})\)
+も狭義凸である．
+狭義凸関数の最小点の一意性より最小点は一意．\(\square\)
 :::
 
 
@@ -206,9 +216,12 @@ Weierstrass の最大値の定理より，
 \((P_\varepsilon)_{i,j_1}\) と \((P_\varepsilon)_{i_1,j}\) より小さく取れば，
 非負性と周辺条件は保たれる．
 
-この変化による線形コストの変化は \(\theta\) に比例する．
-一方，エントロピー項のうち \(0\) だった成分に対応する負エントロピー
-\(\varphi(x) = x\log x - x\) の変化は
+この変化による目的関数の変化を評価する．
+線形コストの変化は \(\theta\) に比例する．
+残り3成分の負エントロピー \(\varphi(x) = x\log x - x\) の変化は，
+正の点における微分 \(\varphi'(x)=\log x\) が有限であることから
+いずれも \(O(\theta)\) である．
+一方，\(0\) だった成分の変化は
 
 \[
   \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
@@ -216,10 +229,9 @@ Weierstrass の最大値の定理より，
 
 であり，これを \(\theta\) で割ると \(\log\theta-1 \to -\infty\)
 （\(\theta \to 0^+\)）となる．
-したがって十分小さい \(\theta>0\) では，
-全体の目的関数
-\(\inner{\mathbf{C}}{\mathbf{P}}-\varepsilon\Hb(\mathbf{P})\)
-は減少する．これは \(\mathbf{P}_\varepsilon\) の最適性に矛盾する．
+したがって十分小さい \(\theta>0\) では
+この項が支配的となり，目的関数全体が減少する．
+これは \(\mathbf{P}_\varepsilon\) の最適性に矛盾する．
 よって全成分が正である．\(\square\)
 :::
 
@@ -406,9 +418,12 @@ Weierstrass の最大値の定理より，
 非正則化最適解の中で \(\Hb\) を最大化する．
 最適解集合 \(S^*\) は凸であり（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]），
 \(-\Hb\) は狭義凸であるから，
+狭義凸関数の最小点の一意性より
 \(\Hb\) を最大化する \(S^*\) の元は一意である．
-したがって極限点は一意であり，
-\(\mathbf{P}_\varepsilon\) 全体がその最大エントロピー最適解に収束する．\(\square\)
+したがって \(\{\mathbf{P}_\varepsilon\}\) の任意の収束部分列は
+同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは
+全体として収束するから，
+\(\mathbf{P}_\varepsilon\) は最大エントロピー最適解に収束する．\(\square\)
 :::
 
 
