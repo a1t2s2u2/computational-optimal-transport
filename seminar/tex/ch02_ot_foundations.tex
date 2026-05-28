@@ -964,6 +964,23 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
   逆に $C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}$ ならば $t$ の係数が非ゼロとなり，最適解は一意となる．
 \end{example}
 
+\begin{remark}{線形計画と一意性}{sem-lp-uniqueness}
+  離散 Kantorovich 問題は線形計画であるため，
+  非一意性は目的関数の線形性に本質的に起因する：
+  2つの異なる最適解 $\mathbf{P}_1, \mathbf{P}_2 \in S^*$ があれば，
+  $\inner{\mathbf{C}}{t\mathbf{P}_1 + (1-t)\mathbf{P}_2}
+  = t\inner{\mathbf{C}}{\mathbf{P}_1} + (1-t)\inner{\mathbf{C}}{\mathbf{P}_2}
+  = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
+  より任意の凸結合も最適となる．
+
+  Lebesgue 測度に関して「ほとんどすべて」のコスト行列
+  $\mathbf{C} \in \R^{n \times m}$ に対して
+  最適解は一意であることが知られているが，
+  この一意性は特定の $\mathbf{C}$ に対して
+  構造的に保証されるものではなく，
+  実用上の検証も困難である．
+\end{remark}
+
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
   離散 Kantorovich 問題の最適解は一般に一意でないが，
   \textbf{離散エントロピー}
