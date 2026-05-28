@@ -856,3 +856,27 @@ Polish 空間 \(\X\) 上のボレル確率測度 \(\mu \in \Mm_+^1(\X)\) が
 
 が成り立つとき，\(f\) は**狭義凸関数**であるという．
 :::
+
+
+:::theorem
+### Prop: 狭義凸関数の最小点の一意性
+
+凸集合 \(S\) 上の狭義凸関数 \(f\) が
+\(S\) 上で最小値を達成するならば，その最小点は一意である．
+
+:::details-embedded 証明
+\(\mathbf{x}, \mathbf{y} \in S\) がともに \(f\) の最小点とし，
+\(\mathbf{x} \neq \mathbf{y}\) と仮定する．
+\(S\) の凸性から
+\(\tfrac{1}{2}(\mathbf{x}+\mathbf{y}) \in S\) であり，
+狭義凸性から
+
+\[
+  f\!\left(\tfrac{\mathbf{x}+\mathbf{y}}{2}\right)
+  < \tfrac{1}{2}f(\mathbf{x}) + \tfrac{1}{2}f(\mathbf{y})
+  = f(\mathbf{x})
+\]
+
+となり，\(\mathbf{x}\) の最小性に矛盾する．
+:::
+:::

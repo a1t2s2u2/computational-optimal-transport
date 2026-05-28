@@ -118,32 +118,8 @@ title: エントロピー正則化
 目的関数は狭義凸となる．
 凸集合上の狭義凸関数の最小化問題では
 最適解が存在すれば一意であるから，
-一意性が構造的に保証される．
-:::
-
-
-:::theorem
-### Prop: 狭義凸関数の最小点の一意性
-
-凸集合 \(S\) 上の狭義凸関数 \(f\)
-（[ref:Def: 凸関数と狭義凸関数|凸関数と狭義凸関数]）が
-\(S\) 上で最小値を達成するならば，その最小点は一意である．
-
----
-
-\(\mathbf{x}, \mathbf{y} \in S\) がともに \(f\) の最小点とし，
-\(\mathbf{x} \neq \mathbf{y}\) と仮定する．
-\(S\) の凸性から
-\(\tfrac{1}{2}(\mathbf{x}+\mathbf{y}) \in S\) であり，
-狭義凸性から
-
-\[
-  f\!\left(\tfrac{\mathbf{x}+\mathbf{y}}{2}\right)
-  < \tfrac{1}{2}f(\mathbf{x}) + \tfrac{1}{2}f(\mathbf{y})
-  = f(\mathbf{x})
-\]
-
-となり，\(\mathbf{x}\) の最小性に矛盾する．\(\square\)
+一意性が構造的に保証される
+（[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]）．
 :::
 
 
@@ -154,8 +130,7 @@ title: エントロピー正則化
 正則化問題は一意な最適解
 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
----
-
+:::details-embedded 証明
 **存在．**
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
 （[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．
@@ -187,7 +162,8 @@ Weierstrass の最大値の定理より，
 \(\inner{\mathbf{C}}{\mathbf{P}}\) は線形（したがって凸）であるから，
 \(F = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})\)
 も狭義凸である．
-狭義凸関数の最小点の一意性より最小点は一意．\(\square\)
+狭義凸関数の最小点の一意性より最小点は一意．
+:::
 :::
 
 
@@ -203,8 +179,7 @@ Weierstrass の最大値の定理より，
 
 を満たす．
 
----
-
+:::details-embedded 証明
 背理法で示す．ある \((i,j)\) で
 \((P_\varepsilon)_{i,j}=0\) とする．
 \(a_i>0\) なので同じ行に \((P_\varepsilon)_{i,j_1}>0\) となる
@@ -242,7 +217,8 @@ Weierstrass の最大値の定理より，
 したがって十分小さい \(\theta>0\) では
 この項が支配的となり，目的関数全体が減少する．
 これは \(\mathbf{P}_\varepsilon\) の最適性に矛盾する．
-よって全成分が正である．\(\square\)
+よって全成分が正である．
+:::
 :::
 
 
@@ -313,8 +289,7 @@ Weierstrass の最大値の定理より，
 
 と書ける．
 
----
-
+:::details-embedded 証明
 \(\log K_{i,j} = -C_{i,j}/\varepsilon\) より
 
 \[\begin{aligned}
@@ -337,7 +312,8 @@ Weierstrass の最大値の定理より，
 \end{aligned}\]
 
 最後の項は \(\mathbf{P}\) に依存しない定数なので，
-両者の最小化問題は同じ最適解を持つ．\(\square\)
+両者の最小化問題は同じ最適解を持つ．
+:::
 :::
 
 
@@ -380,8 +356,7 @@ Weierstrass の最大値の定理より，
   \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
 \]
 
----
-
+:::details-embedded 証明
 非正則化問題の任意の最適解を \(\mathbf{P}^*\) とする．
 
 **(i), (ii).**
@@ -433,7 +408,8 @@ Weierstrass の最大値の定理より，
 したがって \(\{\mathbf{P}_\varepsilon\}\) の任意の収束部分列は
 同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは
 全体として収束するから，
-\(\mathbf{P}_\varepsilon\) は最大エントロピー最適解に収束する．\(\square\)
+\(\mathbf{P}_\varepsilon\) は最大エントロピー最適解に収束する．
+:::
 :::
 
 
