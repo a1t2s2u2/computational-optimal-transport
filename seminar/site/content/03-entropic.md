@@ -151,23 +151,43 @@ title: エントロピー正則化
 最適解が存在する．
 
 **一意性．**
-\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
-\(0 < x < y\)，\(t \in (0,1)\) とし \(s \defeq tx+(1-t)y\) とおく．
-平均値の定理より
-\(\varphi(x)-\varphi(s) = \varphi'(c_1)(x-s)\)，
-\(\varphi(y)-\varphi(s) = \varphi'(c_2)(y-s)\)
-なる \(c_1 \in (x,s)\)，\(c_2 \in (s,y)\) が存在し，
-\(x-s = (1-t)(x-y)\)，\(y-s = t(y-x)\) から
+\(\varphi\) は \([0,\infty)\) 上で狭義凸であることを示す．
+すなわち，\(x \neq y\)，\(t \in (0,1)\)，
+\(s \defeq tx+(1-t)y\) に対して
 
 \[
-  t\varphi(x)+(1-t)\varphi(y)-\varphi(s)
-  = t(1-t)(y-x)\bigl[\varphi'(c_2)-\varphi'(c_1)\bigr].
+  \varphi(s) < t\varphi(x)+(1-t)\varphi(y) \quad \cdots (\ast)
 \]
 
+を示せばよい．
+
+**\(0 < x < y\) の場合．**
+平均値の定理より，ある \(c_1 \in (x,s)\)，\(c_2 \in (s,y)\) が存在して
+
+\[\begin{aligned}
+  \varphi(x)-\varphi(s) &= \varphi'(c_1)(x-s), \\
+  \varphi(y)-\varphi(s) &= \varphi'(c_2)(y-s).
+\end{aligned}\]
+
+\(t\) 倍，\((1-t)\) 倍してそれぞれ足すと
+
+\[\begin{aligned}
+  t\varphi(x)+(1-t)\varphi(y)-\varphi(s)
+  &= t\varphi'(c_1)(x-s) + (1-t)\varphi'(c_2)(y-s) \\
+  &= t\varphi'(c_1)\cdot(1-t)(x-y)
+     + (1-t)\varphi'(c_2)\cdot t(y-x) \\
+  &= t(1-t)(y-x)\bigl[\varphi'(c_2)-\varphi'(c_1)\bigr].
+\end{aligned}\]
+
 \(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加であり
-\(c_1 < c_2\) なので右辺は正である．
-\(x = 0\)，\(y > 0\) の場合は
-\(\varphi(ty)-t\varphi(y) = ty\log t < 0\) で確認できる．
+\(c_1 < c_2\) なので \(\varphi'(c_2)-\varphi'(c_1) > 0\)．
+他の因子 \(t(1-t)(y-x)\) も正であるから，\((\ast)\) が成り立つ．
+
+**\(x = 0\)，\(y > 0\) の場合（対称も同様）．**
+\(\varphi(0) = 0\) より
+\(t\varphi(0)+(1-t)\varphi(y)-\varphi(ty)
+= -ty\log t > 0\)
+（\(t \in (0,1)\) なので \(\log t < 0\)）．
 \(\mathbf{P} \neq \mathbf{Q}\) ならばある成分で
 狭義凸性が効くので，\(\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})\)
 は \(\CouplingsD(\mathbf{a},\mathbf{b})\) 上で狭義凸である．
