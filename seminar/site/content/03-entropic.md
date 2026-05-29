@@ -152,42 +152,37 @@ title: エントロピー正則化
 
 **一意性．**
 \(\varphi\) は \([0,\infty)\) 上で狭義凸であることを示す．
-すなわち，\(x \neq y\)，\(t \in (0,1)\)，
-\(s \defeq tx+(1-t)y\) に対して
+任意の \(x_1 \neq x_2 \in [0,\infty)\)，\(\lambda \in (0,1)\) に対し
+\(x^* \defeq \lambda x_1+(1-\lambda)x_2\) とおく．
+\(\varphi\) は \([0,\infty)\) 上で連続かつ \((0,\infty)\) 上で微分可能であるから，
+平均値の定理より
+
+\[\begin{aligned}
+  \varphi(x_1)-\varphi(x^*) &= \varphi'(c_1)(x_1-x^*), \\
+  \varphi(x_2)-\varphi(x^*) &= \varphi'(c_2)(x_2-x^*)
+\end{aligned}\]
+
+なる \(c_1\)（\(x_1\) と \(x^*\) の間），
+\(c_2\)（\(x^*\) と \(x_2\) の間）が存在する．
+\(\lambda\) 倍，\((1-\lambda)\) 倍してそれぞれ足すと，
+\(x_1-x^* = (1-\lambda)(x_1-x_2)\)，
+\(x_2-x^* = \lambda(x_2-x_1)\) であるから
 
 \[
-  \varphi(s) < t\varphi(x)+(1-t)\varphi(y) \quad \cdots (\ast)
+  \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)-\varphi(x^*)
+  = \lambda(1-\lambda)(x_1-x_2)
+    \bigl[\varphi'(c_1)-\varphi'(c_2)\bigr].
 \]
 
-を示せばよい．
-
-**\(0 < x < y\) の場合（\(x > y\) は対称）．**
-平均値の定理より，ある \(c_1 \in (x,s)\)，\(c_2 \in (s,y)\) が存在して
-
-\[\begin{aligned}
-  \varphi(x)-\varphi(s) &= \varphi'(c_1)(x-s), \\
-  \varphi(y)-\varphi(s) &= \varphi'(c_2)(y-s).
-\end{aligned}\]
-
-\(t\) 倍，\((1-t)\) 倍してそれぞれ足すと
-
-\[\begin{aligned}
-  t\varphi(x)+(1-t)\varphi(y)-\varphi(s)
-  &= t\varphi'(c_1)(x-s) + (1-t)\varphi'(c_2)(y-s) \\
-  &= t\varphi'(c_1)\cdot(1-t)(x-y)
-     + (1-t)\varphi'(c_2)\cdot t(y-x) \\
-  &= t(1-t)(y-x)\bigl[\varphi'(c_2)-\varphi'(c_1)\bigr].
-\end{aligned}\]
-
-\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加であり
-\(c_1 < c_2\) なので \(\varphi'(c_2)-\varphi'(c_1) > 0\)．
-他の因子 \(t(1-t)(y-x)\) も正であるから，\((\ast)\) が成り立つ．
-
-**\(x = 0\)，\(y > 0\) の場合（対称も同様）．**
-\(\varphi(0) = 0\) より
-\(t\varphi(0)+(1-t)\varphi(y)-\varphi(ty)
-= -ty\log t > 0\)
-（\(t \in (0,1)\) なので \(\log t < 0\)）．
+\(c_1\) と \(c_2\) は \(x^*\) の反対側にあるので
+\((x_1-x_2)\) と \((c_1-c_2)\) は同符号であり，
+\(\varphi'(x)=\log x\) は狭義単調増加なので
+\((c_1-c_2)\) と \((\varphi'(c_1)-\varphi'(c_2))\) も同符号である．
+したがって
+\((x_1-x_2)[\varphi'(c_1)-\varphi'(c_2)] > 0\) であり，
+\(\lambda(1-\lambda) > 0\) と合わせて
+\(\varphi(x^*) < \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)\)
+を得る．
 \(\mathbf{P} \neq \mathbf{Q}\) ならばある成分で
 狭義凸性が効くので，\(\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})\)
 は \(\CouplingsD(\mathbf{a},\mathbf{b})\) 上で狭義凸である．
