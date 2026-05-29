@@ -151,11 +151,23 @@ title: エントロピー正則化
 最適解が存在する．
 
 **一意性．**
-\(\varphi\) は \([0,\infty)\) 上で狭義凸である：
-\((0,\infty)\) 上では \(\varphi''(x) = 1/x > 0\) から従い，
-\(x = 0\), \(y > 0\), \(t \in (0,1)\) に対しては
-\(\varphi(ty) - t\varphi(y) = ty\log t < 0\)
-で直接確認できる．
+\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
+\(0 < x < y\)，\(t \in (0,1)\) とし \(s \defeq tx+(1-t)y\) とおく．
+平均値の定理より
+\(\varphi(x)-\varphi(s) = \varphi'(c_1)(x-s)\)，
+\(\varphi(y)-\varphi(s) = \varphi'(c_2)(y-s)\)
+なる \(c_1 \in (x,s)\)，\(c_2 \in (s,y)\) が存在し，
+\(x-s = (1-t)(x-y)\)，\(y-s = t(y-x)\) から
+
+\[
+  t\varphi(x)+(1-t)\varphi(y)-\varphi(s)
+  = t(1-t)(y-x)\bigl[\varphi'(c_2)-\varphi'(c_1)\bigr].
+\]
+
+\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加であり
+\(c_1 < c_2\) なので右辺は正である．
+\(x = 0\)，\(y > 0\) の場合は
+\(\varphi(ty)-t\varphi(y) = ty\log t < 0\) で確認できる．
 \(\mathbf{P} \neq \mathbf{Q}\) ならばある成分で
 狭義凸性が効くので，\(\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})\)
 は \(\CouplingsD(\mathbf{a},\mathbf{b})\) 上で狭義凸である．
