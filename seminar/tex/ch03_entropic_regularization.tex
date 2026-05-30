@@ -1,8 +1,14 @@
 \chapter{エントロピー正則化}
 \label{ch:seminar-03-entropic}
 
-エントロピー正則化は，
-最適輸送問題にエントロピー項を加えることで問題を狭義凸化する手法である．
+離散 Kantorovich 問題の最適解は一般に一意でない
+（例~\ref{ex:sem-nonunique-example}）．
+本章では，目的関数に負エントロピー項を加えた
+\textbf{エントロピー正則化問題}を導入する．
+正則化された目的関数は狭義凸となるため，
+任意の $\varepsilon > 0$ に対して正則化問題の最適解は一意に定まる．
+さらに $\varepsilon \to 0$ の極限では，
+非正則化問題の最適解の中で最大エントロピーのものが選ばれる．
 
 以下，
 \[
@@ -11,6 +17,10 @@
   \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
 \]
 および $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ を固定する．
+なお，正則化問題の一意性自体は $\mathbf{a}, \mathbf{b}$ に
+ゼロ成分を許しても成立する．
+全成分正の仮定は正値性
+（命題~\ref{prop:sem-entropic-positive-solution}）に用いる．
 離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
 命題~\ref{prop:sem-discrete-kantorovich} の通り
 \[
@@ -26,7 +36,7 @@
 である．
 
 %% ============================================================
-%% 4.1 エントロピー正則化
+%% 3.1 エントロピー正則化
 %% ============================================================
 \section{エントロピー正則化}
 \label{sec:sem-entropic-regularization}
@@ -52,14 +62,11 @@
   \]
   であり，通常の Shannon エントロピーとは定数 $1$ だけ異なる．
   この定数は最適化の解には影響しない．この形を使う理由は，
-  $-\Hb$ の微分が簡単になるからである．積の微分則より
+  $-\Hb$ の微分が
   \[
-    \frac{\partial(-\Hb)}{\partial P_{i,j}}
-    = \frac{\partial}{\partial P_{i,j}}\bigl[P_{i,j}(\log P_{i,j} - 1)\bigr]
-    = (\log P_{i,j} - 1) + P_{i,j} \cdot \frac{1}{P_{i,j}}
-    = \log P_{i,j},
+    \frac{\partial(-\Hb)}{\partial P_{i,j}} = \log P_{i,j}
   \]
-  定義中の $-1$ と積の微分で生じる $+1$ が打ち消し合い，$\log P_{i,j}$ のみが残る．
+  と簡単になるからである．
 \end{remark}
 
 \begin{definition}{エントロピー正則化された離散最適輸送}{sem-entropic-ot}
@@ -77,6 +84,18 @@
   と定める．この問題の最適解を $\mathbf{P}_\varepsilon$ と書く．
 \end{definition}
 
+\begin{remark}{狭義凸化の仕組み}{sem-strict-convexification}
+  元の Kantorovich 問題の目的関数 $\inner{\mathbf{C}}{\mathbf{P}}$ は
+  $\mathbf{P}$ に関して線形（したがって凸だが狭義凸でない）であった．
+  エントロピー項 $-\varepsilon\Hb(\mathbf{P})
+  = \varepsilon\sum_{i,j}P_{i,j}(\log P_{i,j}-1)$ を加えることで，
+  目的関数は狭義凸となる．
+  凸集合上の狭義凸関数の最小化問題では
+  最適解が存在すれば一意であるから，
+  一意性が構造的に保証される
+  （命題~\ref{prop:sem-strict-convex-unique-min}）．
+\end{remark}
+
 \begin{proposition}{正則化問題の解の存在と一意性}{sem-entropic-existence-unique}
   任意の $\varepsilon > 0$ に対して，
   正則化問題~\ref{def:sem-entropic-ot} は一意な最適解
@@ -84,58 +103,59 @@
 \end{proposition}
 
 \begin{proof}
+  \textbf{存在．}
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
   （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）．
-
-  \textbf{目的関数の連続性．}
-  $g(x) \defeq x\log x - x$（$x > 0$），$g(0) \defeq 0$ とおく．
-  $x > 0$ では $g$ は連続．$x = 0$ では $x = e^{-t}$（$t \to +\infty$）と置換すると
+  関数 $\varphi(x) \defeq x\log x - x$ は $[0,\infty)$ 上で連続であるから，
+  目的関数
   \[
-    x\log x = -\frac{t}{e^t} \to 0,
+    F(\mathbf{P})
+    \defeq
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+    =
+    \inner{\mathbf{C}}{\mathbf{P}}
+    + \varepsilon \sum_{i,j} \varphi(P_{i,j})
   \]
-  よって $\lim_{x\to 0+} g(x) = 0 = g(0)$ であり $g$ は $[0,\infty)$ 上で連続．
-  目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$
-  は各成分の連続関数の和だから連続であり，コンパクト集合上の連続関数として最小値を達成する．
+  も連続である．
+  コンパクト集合上の連続関数は最小値を達成するから，
+  最適解が存在する．
 
-  \textbf{目的関数の狭義凸性．}
-  任意の $x_1, x_2 > 0$，$x_1 \neq x_2$，$\lambda \in (0,1)$ をとり
-  $x^* := \lambda x_1 + (1-\lambda)x_2$ とおく．
-  平均値定理（定理~\ref{thm:sem-mvt}）を $[x_1, x^*]$ と $[x^*, x_2]$ にそれぞれ適用すると，
-  $c_1 \in (x_1, x^*)$，$c_2 \in (x^*, x_2)$ が存在して
+  \textbf{一意性．}
+  $\varphi$ は $[0,\infty)$ 上で狭義凸であることを示す．
+  任意の $x_1 \neq x_2 \in [0,\infty)$，$\lambda \in (0,1)$ に対し
+  $x^* \defeq \lambda x_1+(1-\lambda)x_2$ とおく．
+  $\varphi$ は $[0,\infty)$ 上で連続かつ $(0,\infty)$ 上で微分可能であるから，
+  平均値の定理より
   \begin{align*}
-    g(x_1) - g(x^*) &= g'(c_1)(x_1 - x^*)
-                     = -g'(c_1)(1-\lambda)(x_2 - x_1), \\
-    g(x_2) - g(x^*) &= g'(c_2)(x_2 - x^*)
-                     = \phantom{-}g'(c_2)\,\lambda(x_2 - x_1).
+    \varphi(x_1)-\varphi(x^*) &= \varphi'(c_1)(x_1-x^*), \\
+    \varphi(x_2)-\varphi(x^*) &= \varphi'(c_2)(x_2-x^*)
   \end{align*}
-  それぞれ $\lambda$，$(1-\lambda)$ 倍して加えると
+  なる $c_1$（$x_1$ と $x^*$ の間），
+  $c_2$（$x^*$ と $x_2$ の間）が存在する．
+  $\lambda$ 倍，$(1-\lambda)$ 倍してそれぞれ足すと，
+  $x_1-x^* = (1-\lambda)(x_1-x_2)$，
+  $x_2-x^* = \lambda(x_2-x_1)$ であるから
   \[
-    \lambda g(x_1) + (1-\lambda)g(x_2) - g(x^*)
-    = \lambda(1-\lambda)(x_2 - x_1)\bigl[g'(c_2) - g'(c_1)\bigr].
+    \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)-\varphi(x^*)
+    = \lambda(1-\lambda)(x_1-x_2)
+      \bigl[\varphi'(c_1)-\varphi'(c_2)\bigr].
   \]
-  $c_1 < c_2$ より $g'(c_1) = \log c_1 < \log c_2 = g'(c_2)$ だから $g'(c_2) - g'(c_1) > 0$，
-  また $\lambda(1-\lambda)(x_2-x_1) > 0$ だから右辺 $> 0$．
-  よって $g(x^*) < \lambda g(x_1) + (1-\lambda)g(x_2)$ となり，
-  $g$ は $(0,\infty)$ 上で狭義凸（定義~\ref{def:sem-convex-function}）．
-  $x_1 = 0$，$x_2 > 0$ の場合は $g(0) = 0$ を用いると
-  \begin{align*}
-    \lambda g(0) + (1-\lambda)g(x_2) - g((1-\lambda)x_2)
-    &= (1-\lambda)(x_2\log x_2 - x_2) - \bigl[(1-\lambda)x_2\log(1-\lambda)x_2 - (1-\lambda)x_2\bigr] \\
-    &= (1-\lambda)x_2\bigl[\log x_2 - \log(1-\lambda)x_2\bigr] \\
-    &= (1-\lambda)x_2\log\frac{1}{1-\lambda} > 0.
-  \end{align*}
-  よって $g$ は $[0,\infty)$ 上でも狭義凸である．
-  各成分の狭義凸関数の和として，目的関数 $\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}g(P_{i,j})$ も $\mathbf{P}$ について狭義凸である．
-
-  \textbf{最適解の一意性．}
-  目的関数が狭義凸であるとき，最適解は高々1つである．
-  実際，$\mathbf{P}_1 \neq \mathbf{P}_2$ がともに最適解であるとすると，
-  中点 $\mathbf{P}^* = (\mathbf{P}_1 + \mathbf{P}_2)/2$ も $\CouplingsD(\mathbf{a},\mathbf{b})$ に属し（凸集合），
-  狭義凸性から
-  \[
-    f(\mathbf{P}^*) < \tfrac{1}{2}f(\mathbf{P}_1) + \tfrac{1}{2}f(\mathbf{P}_2) = f(\mathbf{P}_1)
-  \]
-  となり，$\mathbf{P}_1$ が最適解であることに矛盾する．よって最適解は一意である．
+  $c_1$ と $c_2$ は $x^*$ の反対側にあるので
+  $(x_1-x_2)$ と $(c_1-c_2)$ は同符号であり，
+  $\varphi'(x)=\log x$ は狭義単調増加なので
+  $(c_1-c_2)$ と $(\varphi'(c_1)-\varphi'(c_2))$ も同符号である．
+  したがって
+  $(x_1-x_2)[\varphi'(c_1)-\varphi'(c_2)] > 0$ であり，
+  $\lambda(1-\lambda) > 0$ と合わせて
+  $\varphi(x^*) < \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)$
+  を得る．
+  $\mathbf{P} \neq \mathbf{Q}$ ならばある成分で
+  狭義凸性が効くので，$\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})$
+  は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で狭義凸である．
+  $\inner{\mathbf{C}}{\mathbf{P}}$ は線形（したがって凸）であるから，
+  $F = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$
+  も狭義凸である．
+  命題~\ref{prop:sem-strict-convex-unique-min} より最小点は一意．
 \end{proof}
 
 \begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
@@ -164,17 +184,23 @@
   $(P_\varepsilon)_{i,j_1}$ と $(P_\varepsilon)_{i_1,j}$ より小さく取れば，
   非負性と周辺条件は保たれる．
 
-  この変化による線形コストの変化は $\theta$ に比例する．
-  一方，エントロピー項のうち $0$ だった成分に対応する負エントロピー
-  $x\log x-x$ の変化は
+  この変化による目的関数の変化を評価する．
+  線形コストの変化は $\theta$ に比例する．
+  $(i,j_1)$ 成分と $(i_1,j)$ 成分は正であるから，
+  これらの負エントロピー $\varphi(x) = x\log x - x$ の変化は
+  $\varphi'(x) = \log x$ が有限であることから $O(\theta)$ である．
+  $(i_1,j_1)$ 成分は，正ならば同様に $O(\theta)$ であり，
+  ゼロならば $\varphi(\theta)-\varphi(0) = \theta\log\theta - \theta$
+  が加わるが，これは目的関数をさらに減少させる方向に働く．
+  一方，$(i,j)$ 成分（もともとゼロ）の変化は
   \[
-    \theta\log\theta - \theta
+    \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
   \]
-  であり，これを $\theta$ で割ると $\log\theta-1 \to -\infty$
-  となる．したがって十分小さい $\theta>0$ では，
-  全体の目的関数
-  $\inner{\mathbf{C}}{\mathbf{P}}-\varepsilon\Hb(\mathbf{P})$
-  は小さくなる．これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
+  であり，$\theta$ で割ると $\log\theta-1 \to -\infty$
+  （$\theta \to 0^+$）となる．
+  したがって十分小さい $\theta>0$ では
+  この項が支配的となり，目的関数全体が減少する．
+  これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
   よって全成分が正である．
 \end{proof}
 
@@ -187,12 +213,15 @@
       （定理~\ref{thm:sem-entropic-convergence-eps-zero}）．
     \item $\varepsilon \to +\infty$ のとき，$\mathbf{P}_\varepsilon$ は
       積測度 $\mathbf{a} \mathbf{b}^\top$ に収束する
-      （注意~\ref{rem:sem-entropic-convergence-eps-infty}）．
+      （備考~\ref{rem:sem-entropic-convergence-eps-infty}）．
   \end{itemize}
 \end{remark}
 
-\subsection{KL ダイバージェンスによる定式化}
-\label{subsec:sem-kl-formulation}
+%% ============================================================
+%% 3.2 KL ダイバージェンスによる定式化
+%% ============================================================
+\section{KL ダイバージェンスによる定式化}
+\label{sec:sem-kl-formulation}
 
 \begin{definition}{離散 KL ダイバージェンス}{sem-kl-divergence}
   非負行列 $\mathbf{P}, \mathbf{K} \in \R_{\geq 0}^{n \times m}$ に対して，
@@ -256,32 +285,49 @@
   両者の最小化問題は同じ最適解を持つ．
 \end{proof}
 
-\subsection{正則化パラメータの極限}
-\label{subsec:sem-epsilon-limits}
+%% ============================================================
+%% 3.3 正則化パラメータの極限
+%% ============================================================
+\section{正則化パラメータの極限}
+\label{sec:sem-epsilon-limits}
+
+非正則化 Kantorovich 問題が複数の最適解を持つとき，
+エントロピー正則化はそのうちの一つ——
+エントロピーが最大のもの——を自然に選び出す．
 
 \begin{theorem}{$\varepsilon \to 0$ による非正則化 OT への収束}{sem-entropic-convergence-eps-zero}
   $\varepsilon_k > 0$，$\varepsilon_k \to 0$ とし，
   $\mathbf{P}_{\varepsilon_k}$ を正則化問題の一意解とする．
-  もし部分列 $\mathbf{P}_{\varepsilon_{k_\ell}}$ が
-  $\mathbf{P}^0$ に収束するならば，
-  $\mathbf{P}^0$ は非正則化問題
-  \[
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
-  \]
-  の最適解である．また最適値は
-  \[
-    \lim_{\varepsilon \to 0}
-    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
-    =
-    \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
-  \]
-  を満たす．さらに，非正則化問題の最適解が複数ある場合，
-  $\mathbf{P}_\varepsilon$ はその中でエントロピー $\Hb$ が最大のものに収束する．
+  このとき，以下が成り立つ．
+
+  \begin{enumerate}
+    \item[\textrm{(i)}]
+      最適値は収束する：
+      $\displaystyle
+        \lim_{\varepsilon \to 0}
+        \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
+        =
+        \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}).
+      $
+    \item[\textrm{(ii)}]
+      $\mathbf{P}_{\varepsilon_k}$ の任意の極限点は
+      非正則化問題の最適解である．
+    \item[\textrm{(iii)}]
+      $\{\mathbf{P}_\varepsilon\}_{\varepsilon > 0}$ 全体が，
+      非正則化最適解の中でエントロピー $\Hb$ を最大化する
+      一意な解に収束する：
+      \[
+        \mathbf{P}_\varepsilon
+        \;\xrightarrow{\varepsilon \to 0}\;
+        \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
+      \]
+  \end{enumerate}
 \end{theorem}
 
 \begin{proof}
   非正則化問題の任意の最適解を $\mathbf{P}^*$ とする．
+
+  \textbf{(i), (ii).}
   $\mathbf{P}_\varepsilon$ の最適性より
   \[
     \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
@@ -291,6 +337,8 @@
     - \varepsilon\Hb(\mathbf{P}^*).
   \]
   一方，$\mathbf{P}^*$ は非正則化問題の最適解なので
+  $\inner{\mathbf{C}}{\mathbf{P}^*}
+  \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}$ であり，
   \[
     0
     \leq
@@ -303,21 +351,28 @@
   右辺は $\varepsilon \to 0$ で $0$ に収束する．
   したがって
   $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-  \to \inner{\mathbf{C}}{\mathbf{P}^*}$ である．また
-  $\varepsilon\Hb(\mathbf{P}_\varepsilon) \to 0$ なので，
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
-  \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ である．
-  任意の極限点 $\mathbf{P}^0$ は非正則化問題の最適値を達成する．
-  さらに上の不等式から
-  \[
-    \Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)
-  \]
+  \to \inner{\mathbf{C}}{\mathbf{P}^*}
+  = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ であり，
+  $\varepsilon\Hb(\mathbf{P}_\varepsilon) \to 0$ なので
+  $\MKD_{\mathbf{C}}^\varepsilon \to \MKD_{\mathbf{C}}$ を得る．
+  コンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 内の
+  任意の極限点は非正則化問題の最適値を達成するから，
+  最適解である．
+
+  \textbf{(iii).}
+  上の不等式から
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)$
   が任意の非正則化最適解 $\mathbf{P}^*$ について成り立つ．
-  $\Hb$ は連続なので，任意の極限点 $\mathbf{P}^0$ は
+  $\Hb$ は連続であるから，任意の極限点 $\mathbf{P}^0$ は
   非正則化最適解の中で $\Hb$ を最大化する．
-  非正則化最適解集合は凸であり，$-\Hb$ は狭義凸であるから，
-  $\Hb$ を最大化する非正則化最適解は一意である．したがって
-  $\mathbf{P}_\varepsilon$ 全体がその最大エントロピー最適解に収束する．
+  最適解集合 $S^*$ は凸であり（主張~\ref{clm:sem-optimal-face}），
+  $-\Hb$ は狭義凸であるから，
+  命題~\ref{prop:sem-strict-convex-unique-min} より
+  $\Hb$ を最大化する $S^*$ の元は一意である．
+  したがって $\{\mathbf{P}_\varepsilon\}$ の任意の収束部分列は
+  同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは
+  全体として収束するから，
+  $\mathbf{P}_\varepsilon$ は最大エントロピー最適解に収束する．
 \end{proof}
 
 \begin{remark}{$\varepsilon \to +\infty$ による独立カップリングへの収束}{sem-entropic-convergence-eps-infty}
@@ -331,4 +386,3 @@
   に帰着する．周辺分布を固定したエントロピー最大化の解は
   独立カップリング $\mathbf{a}\mathbf{b}^\top$ である．
 \end{remark}
-

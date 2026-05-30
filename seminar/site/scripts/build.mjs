@@ -19,7 +19,7 @@ const usedBlockIds = new Set();
 let currentChapterId = null;
 
 function makeBlockId(type, rawName) {
-  const prefixMap = { definition: "def", theorem: "thm", remark: "rem", example: "ex" };
+  const prefixMap = { definition: "def", theorem: "thm", proposition: "prop", remark: "rem", example: "ex" };
   const prefix = prefixMap[type] || type;
   const slug = rawName
     .replace(/\\\(([^)]*)\\\)/g, (_, tex) =>
@@ -283,6 +283,12 @@ function renderMarkdown(markdown) {
     if (spec === "theorem") {
       currentBlock = { type: "theorem", divIndex: html.length, depth: stack.length };
       html.push('<div class="block block--thm">');
+      stack.push("</div>");
+      return;
+    }
+    if (spec === "proposition") {
+      currentBlock = { type: "proposition", divIndex: html.length, depth: stack.length };
+      html.push('<div class="block block--prop">');
       stack.push("</div>");
       return;
     }

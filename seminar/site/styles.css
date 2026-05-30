@@ -21,6 +21,8 @@
   --amber-bg: #fffbeb;
   --indigo: #4338ca;
   --indigo-bg: #eef2ff;
+  --orange: #ea580c;
+  --orange-bg: #fff7ed;
 
   --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-sans: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
@@ -53,6 +55,8 @@
     --amber-bg: #2a1f0d;
     --indigo: #a5b4fc;
     --indigo-bg: #1c1d36;
+    --orange: #fb923c;
+    --orange-bg: #2a1a0d;
   }
 
   mjx-container svg {
@@ -533,6 +537,15 @@ strong {
 
 .block--thm > p {
   font-style: italic;
+}
+
+.block--prop {
+  background: var(--orange-bg);
+  border-left-color: var(--orange);
+}
+
+.block--prop > h3 {
+  color: var(--orange);
 }
 
 .block--algo {
