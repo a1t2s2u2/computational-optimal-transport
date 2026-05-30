@@ -103,26 +103,7 @@
         </div>
 
         <article class="prose" id="entropic">
-          <p>離散 Kantorovich 問題の最適解は一般に一意でない （<button type="button" class="ref" data-ref="最適解の非一意性" title="Ex: 最適解の非一意性">Ex</button>）． 本章では，目的関数に負エントロピー項を加えた <strong>エントロピー正則化問題</strong>を導入する． 正則化された目的関数は狭義凸となるため， 任意の \(\varepsilon &gt; 0\) に対して正則化問題の最適解は一意に定まる． さらに \(\varepsilon \to 0\) の極限では， 非正則化問題の最適解の中で最大エントロピーのものが選ばれる．</p>
-<p>以下，</p>
-<div class="math-block">\[
-  \mathbf{a} \in \R_{&gt;0}^{n},\qquad
-  \mathbf{b} \in \R_{&gt;0}^{m},\qquad
-  \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
-\]</div>
-<p>および \(\mathbf{C} \in \R_{\geq 0}^{n \times m}\) を固定する． なお，正則化問題の一意性自体は \(\mathbf{a}, \mathbf{b}\) に ゼロ成分を許しても成立する． 全成分正の仮定は正値性 （正則化解の正値性）に用いる． 離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は <button type="button" class="ref" data-ref="連続 Kantorovich 問題の離散化" title="Prop: 連続 Kantorovich 問題の離散化">Prop</button> の通り</p>
-<div class="math-block">\[
-  \CouplingsD(\mathbf{a}, \mathbf{b})
-  =
-  \left\{
-    \mathbf{P} \in \R_{\geq 0}^{n \times m}
-    \;\middle|\;
-    \mathbf{P}\ones_m = \mathbf{a},\;
-    \mathbf{P}^\top \ones_n = \mathbf{b}
-  \right\}
-\]</div>
-<p>である．</p>
-<h2 id="sec-エントロピー正則化">エントロピー正則化</h2>
+          <h2 id="sec-エントロピー正則化">エントロピー正則化</h2>
 <div class="block block--def" id="def-離散エントロピー">
 <h3>Def: 離散エントロピー</h3>
 <p>非負行列 \(\mathbf{P} \in \R_{\geq 0}^{n \times m}\) に対して， <strong>離散エントロピー</strong>を</p>

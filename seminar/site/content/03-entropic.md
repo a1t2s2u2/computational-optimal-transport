@@ -6,45 +6,6 @@ title: エントロピー正則化
 ---
 
 
-離散 Kantorovich 問題の最適解は一般に一意でない
-（[ref:Ex: 最適解の非一意性|最適解の非一意性]）．
-本章では，目的関数に負エントロピー項を加えた
-**エントロピー正則化問題**を導入する．
-正則化された目的関数は狭義凸となるため，
-任意の \(\varepsilon > 0\) に対して正則化問題の最適解は一意に定まる．
-さらに \(\varepsilon \to 0\) の極限では，
-非正則化問題の最適解の中で最大エントロピーのものが選ばれる．
-
-以下，
-
-\[
-  \mathbf{a} \in \R_{>0}^{n},\qquad
-  \mathbf{b} \in \R_{>0}^{m},\qquad
-  \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
-\]
-
-および \(\mathbf{C} \in \R_{\geq 0}^{n \times m}\) を固定する．
-なお，正則化問題の一意性自体は \(\mathbf{a}, \mathbf{b}\) に
-ゼロ成分を許しても成立する．
-全成分正の仮定は正値性
-（正則化解の正値性）に用いる．
-離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
-[ref:Prop: 連続 Kantorovich 問題の離散化|連続 Kantorovich 問題の離散化] の通り
-
-\[
-  \CouplingsD(\mathbf{a}, \mathbf{b})
-  =
-  \left\{
-    \mathbf{P} \in \R_{\geq 0}^{n \times m}
-    \;\middle|\;
-    \mathbf{P}\ones_m = \mathbf{a},\;
-    \mathbf{P}^\top \ones_n = \mathbf{b}
-  \right\}
-\]
-
-である．
-
-
 ## エントロピー正則化
 
 
