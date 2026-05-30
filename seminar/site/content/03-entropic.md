@@ -70,10 +70,10 @@ title: エントロピー正則化
 
 
 :::proposition
-### Prop: 正則化問題の解の存在と一意性
+### Prop: 正則化解の存在と一意性
 
 任意の \(\varepsilon > 0\) に対して，
-正則化問題は一意な最適解
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) は一意な最適解
 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
 :::details-embedded 証明
@@ -144,7 +144,7 @@ title: エントロピー正則化
 :::proposition
 ### Prop: 正則化解の正値性
 
-正則化問題の一意解 \(\mathbf{P}_\varepsilon\) は
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解 \(\mathbf{P}_\varepsilon\) は
 
 \[
   (P_\varepsilon)_{i,j} > 0
@@ -252,7 +252,7 @@ title: エントロピー正則化
 ### Prop: 正則化 OT は KL 射影である
 
 \(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) とすると，
-正則化問題の最適解は
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の最適解は
 
 \[
   \mathbf{P}_\varepsilon
@@ -302,9 +302,9 @@ title: エントロピー正則化
 :::theorem
 ### Thm: \(\varepsilon \to 0\) による非正則化 OT への収束
 
-\(\varepsilon_k > 0\)，\(\varepsilon_k \to 0\) とし，
-\(\mathbf{P}_{\varepsilon_k}\) を正則化問題の一意解とする．
-このとき，以下が成り立つ．
+各 \(\varepsilon > 0\) に対し，\(\mathbf{P}_\varepsilon\) を
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解とする．
+\(\varepsilon \to 0\) のとき，以下が成り立つ．
 
 **(i)**
 最適値は収束する：
@@ -316,7 +316,7 @@ title: エントロピー正則化
 \)
 
 **(ii)**
-\(\mathbf{P}_{\varepsilon_k}\) の任意の極限点は
+\(\mathbf{P}_\varepsilon\) の \(\varepsilon \to 0\) における任意の極限点は
 非正則化問題の最適解である．
 
 **(iii)**

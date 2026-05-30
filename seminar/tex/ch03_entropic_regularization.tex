@@ -50,9 +50,9 @@
   と定める．この問題の最適解を $\mathbf{P}_\varepsilon$ と書く．
 \end{definition}
 
-\begin{proposition}{正則化問題の解の存在と一意性}{sem-entropic-existence-unique}
+\begin{proposition}{正則化解の存在と一意性}{sem-entropic-existence-unique}
   任意の $\varepsilon > 0$ に対して，
-  正則化問題~\ref{def:sem-entropic-ot} は一意な最適解
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ は一意な最適解
   $\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})$ を持つ．
 \end{proposition}
 
@@ -114,7 +114,7 @@
 \end{proof}
 
 \begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
-  正則化問題の一意解 $\mathbf{P}_\varepsilon$ は
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ は
   \[
     (P_\varepsilon)_{i,j} > 0
     \qquad(\forall\, i \in \range{n},\, j \in \range{m})
@@ -206,7 +206,7 @@
 
 \begin{proposition}{正則化 OT は KL 射影である}{sem-entropic-kl-projection}
   $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ とすると，
-  正則化問題~\ref{def:sem-entropic-ot} の最適解は
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解は
   \[
     \mathbf{P}_\varepsilon
     =
@@ -251,9 +251,9 @@
 エントロピーが最大のもの——を自然に選び出す．
 
 \begin{theorem}{$\varepsilon \to 0$ による非正則化 OT への収束}{sem-entropic-convergence-eps-zero}
-  $\varepsilon_k > 0$，$\varepsilon_k \to 0$ とし，
-  $\mathbf{P}_{\varepsilon_k}$ を正則化問題の一意解とする．
-  このとき，以下が成り立つ．
+  各 $\varepsilon > 0$ に対し，$\mathbf{P}_\varepsilon$ を
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解とする．
+  $\varepsilon \to 0$ のとき，以下が成り立つ．
 
   \begin{enumerate}
     \item[\textrm{(i)}]
@@ -265,7 +265,7 @@
         \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}).
       $
     \item[\textrm{(ii)}]
-      $\mathbf{P}_{\varepsilon_k}$ の任意の極限点は
+      $\mathbf{P}_\varepsilon$ の $\varepsilon \to 0$ における任意の極限点は
       非正則化問題の最適解である．
     \item[\textrm{(iii)}]
       $\{\mathbf{P}_\varepsilon\}_{\varepsilon > 0}$ 全体が，
