@@ -127,8 +127,14 @@
   \]
   が成り立つ．ここで $P_{i,j} = Q_{i,j}$ の成分では両辺が一致して等号，
   $P_{i,j} \neq Q_{i,j}$ の成分では狭義の不等号である．
-  $\mathbf{P} \neq \mathbf{Q}$ より後者の成分が少なくとも 1 つ存在するので，
-  $(i,j)$ について加えると
+  $\mathbf{P} \neq \mathbf{Q}$ より後者の成分が少なくとも 1 つ存在する．
+  これらの不等式を全成分について加える．行列 $(1-t)\mathbf{P} + t\mathbf{Q}$ の
+  $(i,j)$ 成分は $(1-t)P_{i,j} + tQ_{i,j}$ であり，
+  任意の行列 $\mathbf{R}$ に対し $-\Hb(\mathbf{R}) = \sum_{i,j}\varphi(R_{i,j})$ だから，
+  左辺の総和は $-\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)$，
+  右辺の総和はスカラー $(1-t), t$ をくくり出して
+  $(1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)$ となる．
+  少なくとも 1 成分が狭義不等号だから和も狭義となり，
   \[
     -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
     < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
