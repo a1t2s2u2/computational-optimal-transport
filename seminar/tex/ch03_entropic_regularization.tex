@@ -266,17 +266,23 @@
 \end{proposition}
 
 \begin{proof}
-  $\log K_{i,j} = -C_{i,j}/\varepsilon$ より
+  $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ すなわち $\log K_{i,j} = -C_{i,j}/\varepsilon$ である．
+  $\log\tfrac{P_{i,j}}{K_{i,j}} = \log P_{i,j} - \log K_{i,j}$ を用いて $\varepsilon$ を配ると
   \begin{align*}
     \varepsilon \KLD(\mathbf{P}\|\mathbf{K})
     &=
     \varepsilon\sum_{i,j}
-    \left(
+    \Bigl(
       P_{i,j}\log P_{i,j}
       - P_{i,j}\log K_{i,j}
       - P_{i,j}
       + K_{i,j}
-    \right) \\
+    \Bigr) \\
+    &=
+    \varepsilon\sum_{i,j} P_{i,j}\log P_{i,j}
+    - \varepsilon\sum_{i,j} P_{i,j}\log K_{i,j}
+    - \varepsilon\sum_{i,j} P_{i,j}
+    + \varepsilon\sum_{i,j} K_{i,j} \\
     &=
     \sum_{i,j} C_{i,j}P_{i,j}
     + \varepsilon\sum_{i,j} P_{i,j}(\log P_{i,j}-1)
@@ -285,8 +291,13 @@
     \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
     + \varepsilon\sum_{i,j} K_{i,j}.
   \end{align*}
-  最後の項は $\mathbf{P}$ に依存しない定数なので，
-  両者の最小化問題は同じ最適解を持つ．
+  第 2 行から第 3 行へは，$\log K_{i,j} = -C_{i,j}/\varepsilon$ より
+  第 2 項が $-\varepsilon\sum_{i,j} P_{i,j}\log K_{i,j} = \sum_{i,j} C_{i,j}P_{i,j} = \inner{\mathbf{C}}{\mathbf{P}}$（$\varepsilon$ が約分）となり，
+  第 1・3 項を $\varepsilon\sum_{i,j} P_{i,j}(\log P_{i,j}-1)$ にまとめた．
+  さらに第 4 行は $\Hb(\mathbf{P}) = -\sum_{i,j} P_{i,j}(\log P_{i,j}-1)$ による．
+  最後の項 $\varepsilon\sum_{i,j} K_{i,j}$ は $\mathbf{P}$ に依存しない定数なので，
+  $\KLD(\mathbf{P}\|\mathbf{K})$ の最小化と
+  $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の最小化は同じ最適解を持つ．
 \end{proof}
 
 %% ============================================================
