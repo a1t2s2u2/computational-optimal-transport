@@ -36,8 +36,20 @@
 \end{remark}
 
 \begin{definition}{エントロピー正則化された離散最適輸送}{sem-entropic-ot}
-  正則化パラメータ $\varepsilon > 0$ に対して，
-  \textbf{エントロピー正則化された離散 Kantorovich 問題}を
+  $\mathbf{a} \in \R_{>0}^n$（$\sum_{i=1}^n a_i = 1$），
+  $\mathbf{b} \in \R_{>0}^m$（$\sum_{j=1}^m b_j = 1$），
+  $\mathbf{C} \in \R_{\geq 0}^{n \times m}$，$\varepsilon > 0$ とし，
+  \[
+    \CouplingsD(\mathbf{a}, \mathbf{b})
+    \defeq
+    \left\{
+      \mathbf{P} \in \R_{\geq 0}^{n \times m}
+      \;\middle|\;
+      \mathbf{P}\ones_m = \mathbf{a},\;
+      \mathbf{P}^\top\ones_n = \mathbf{b}
+    \right\}
+  \]
+  とおく．\textbf{エントロピー正則化された離散 Kantorovich 問題}を
   \[
     \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
     \defeq
@@ -47,8 +59,81 @@
       - \varepsilon \Hb(\mathbf{P})
     \right\}
   \]
-  と定める．この問題の最適解を $\mathbf{P}_\varepsilon$ と書く．
+  と定める．
 \end{definition}
+
+\begin{claim}{負エントロピーの狭義凸性}{sem-neg-entropy-strict-convex}
+  負エントロピー
+  \[
+    -\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j}),
+    \qquad \varphi(x) \defeq x\log x - x
+  \]
+  は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で狭義凸である．
+\end{claim}
+
+\begin{proof}
+  $-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})$（$\varphi(x) = x\log x - x$）であるから，
+  \textbf{(1)} $\varphi$ が $[0,\infty)$ 上で狭義凸であること，
+  \textbf{(2)} そこから和 $\sum_{i,j}\varphi(P_{i,j})$ が狭義凸になること，
+  の順に示す．
+
+  \textbf{(1) $\varphi$ の狭義凸性．}
+  $\varphi$ は $[0,\infty)$ 上で連続，$(0,\infty)$ 上で微分可能で，
+  $\varphi'(x) = \log x$ は $(0,\infty)$ 上で狭義単調増加である．
+  相異なる $x_1, x_2 \in [0,\infty)$ と $\lambda \in (0,1)$ をとり，
+  $x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)$ とおく．
+  目標は
+  \[
+    \varphi(x^*) < \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2)
+  \]
+  を示すことである．
+
+  $\varphi$ は閉区間 $[x_1, x^*]$, $[x^*, x_2]$ 上で連続，その内部で微分可能だから，
+  平均値定理（定理~\ref{thm:sem-mvt}）より
+  \[
+    \varphi(x_1) - \varphi(x^*) = \varphi'(c_1)\,(x_1 - x^*),
+    \qquad
+    \varphi(x_2) - \varphi(x^*) = \varphi'(c_2)\,(x_2 - x^*)
+  \]
+  をみたす $c_1$（$x_1$ と $x^*$ の間），$c_2$（$x^*$ と $x_2$ の間）が存在する．
+  $x_1 = 0$ のときも $c_1 \in (0, x^*)$ は内点なので $\varphi'(c_1) = \log c_1$ は定義される．
+
+  内分点の定義から
+  $x_1 - x^* = (1-\lambda)(x_1 - x_2)$ かつ
+  $x_2 - x^* = \lambda(x_2 - x_1) = -\lambda(x_1 - x_2)$ なので，
+  第 1 式を $\lambda$ 倍，第 2 式を $(1-\lambda)$ 倍して加えると
+  \begin{align*}
+    \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2) - \varphi(x^*)
+    &= \lambda(1-\lambda)(x_1 - x_2)\,\varphi'(c_1)
+       - (1-\lambda)\lambda(x_1 - x_2)\,\varphi'(c_2) \\
+    &= \lambda(1-\lambda)(x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr)
+  \end{align*}
+  を得る（左辺は $\lambda + (1-\lambda) = 1$ より $\varphi(x^*)$ がまとまる）．
+
+  最後にこの符号を調べる．$c_1, c_2$ は $x^*$ をはさんで反対側にあるから
+  $c_1 - c_2$ は $x_1 - x_2$ と同符号であり，$\varphi'$ が狭義単調増加だから
+  $\varphi'(c_1) - \varphi'(c_2)$ も $c_1 - c_2$（ひいては $x_1 - x_2$）と同符号である．
+  ゆえに $(x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr) > 0$ となり，
+  $\lambda(1-\lambda) > 0$ と合わせて右辺は正．したがって目標の不等式が成り立ち，
+  $\varphi$ は $[0,\infty)$ 上で狭義凸である．
+
+  \textbf{(2) $-\Hb$ の狭義凸性．}
+  相異なる $\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と $t \in (0,1)$ をとる．
+  各成分で $\varphi$ は凸だから
+  \[
+    \varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr)
+    \leq (1-t)\varphi(P_{i,j}) + t\,\varphi(Q_{i,j})
+    \qquad (\forall\, i, j)
+  \]
+  が成り立ち，$\mathbf{P} \neq \mathbf{Q}$ より $P_{i_0,j_0} \neq Q_{i_0,j_0}$ をみたす成分
+  $(i_0, j_0)$ が存在して，そこでは (1) より上の不等号が狭義に成り立つ．
+  これらを $(i,j)$ について加えると
+  \[
+    -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
+    < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
+  \]
+  を得る．よって $-\Hb$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で狭義凸である．
+\end{proof}
 
 \begin{proposition}{正則化解の存在と一意性}{sem-entropic-existence-unique}
   任意の $\varepsilon > 0$ に対して，
@@ -76,41 +161,28 @@
 
   \textbf{一意性．}
   正則化項がコストの線形性を破り，目的関数を狭義凸化する点が鍵である．
-  これを示すため，$\varphi$ が $[0,\infty)$ 上で狭義凸であることを確認する．
-  任意の $x_1 \neq x_2 \in [0,\infty)$，$\lambda \in (0,1)$ に対し
-  $x^* \defeq \lambda x_1+(1-\lambda)x_2$ とおく．
-  $\varphi$ は $[0,\infty)$ 上で連続かつ $(0,\infty)$ 上で微分可能であるから，
-  平均値の定理より
-  \begin{align*}
-    \varphi(x_1)-\varphi(x^*) &= \varphi'(c_1)(x_1-x^*), \\
-    \varphi(x_2)-\varphi(x^*) &= \varphi'(c_2)(x_2-x^*)
-  \end{align*}
-  なる $c_1$（$x_1$ と $x^*$ の間），
-  $c_2$（$x^*$ と $x_2$ の間）が存在する．
-  $\lambda$ 倍，$(1-\lambda)$ 倍してそれぞれ足すと，
-  $x_1-x^* = (1-\lambda)(x_1-x_2)$，
-  $x_2-x^* = \lambda(x_2-x_1)$ であるから
+  主張~\ref{clm:sem-neg-entropy-strict-convex} より
+  $-\Hb$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で狭義凸である．
+  相異なる $\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
+  $t \in (0,1)$ に対し，$\inner{\mathbf{C}}{\cdot}$ の線形性より
   \[
-    \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)-\varphi(x^*)
-    = \lambda(1-\lambda)(x_1-x_2)
-      \bigl[\varphi'(c_1)-\varphi'(c_2)\bigr].
+    \inner{\mathbf{C}}{t\mathbf{P}+(1-t)\mathbf{Q}}
+    = t\inner{\mathbf{C}}{\mathbf{P}} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}}
   \]
-  $c_1$ と $c_2$ は $x^*$ の反対側にあるので
-  $(x_1-x_2)$ と $(c_1-c_2)$ は同符号であり，
-  $\varphi'(x)=\log x$ は狭義単調増加なので
-  $(c_1-c_2)$ と $(\varphi'(c_1)-\varphi'(c_2))$ も同符号である．
-  したがって
-  $(x_1-x_2)[\varphi'(c_1)-\varphi'(c_2)] > 0$ であり，
-  $\lambda(1-\lambda) > 0$ と合わせて
-  $\varphi(x^*) < \lambda\varphi(x_1)+(1-\lambda)\varphi(x_2)$
-  を得る．
-  $\mathbf{P} \neq \mathbf{Q}$ ならばある成分で
-  狭義凸性が効くので，$\mathbf{P} \mapsto \sum_{i,j}\varphi(P_{i,j})$
-  は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で狭義凸である．
-  $\inner{\mathbf{C}}{\mathbf{P}}$ は線形（したがって凸）であるから，
-  $F = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$
-  も狭義凸である．
-  命題~\ref{prop:sem-strict-convex-unique-min} より最小点は一意．
+  が等号で成り立ち，$\varepsilon > 0$ と $-\Hb$ の狭義凸性より
+  \[
+    -\varepsilon\Hb\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr)
+    < t\bigl(-\varepsilon\Hb(\mathbf{P})\bigr)
+      + (1-t)\bigl(-\varepsilon\Hb(\mathbf{Q})\bigr)
+  \]
+  が狭義不等号で成り立つ．辺々を加えると，
+  $F(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ について
+  \[
+    F\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr)
+    < tF(\mathbf{P}) + (1-t)F(\mathbf{Q})
+  \]
+  を得る．すなわち $F$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で狭義凸である．
+  命題~\ref{prop:sem-strict-convex-unique-min} より最小点は一意である．
 \end{proof}
 
 \begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
@@ -321,7 +393,8 @@
   $\Hb$ は連続であるから，任意の極限点 $\mathbf{P}^0$ は
   非正則化最適解の中で $\Hb$ を最大化する．
   最適解集合 $S^*$ は凸であり（主張~\ref{clm:sem-optimal-face}），
-  $-\Hb$ は狭義凸であるから，
+  主張~\ref{clm:sem-neg-entropy-strict-convex} より $-\Hb$ は
+  （凸部分集合 $S^*$ 上でも）狭義凸であるから，
   命題~\ref{prop:sem-strict-convex-unique-min} より
   $\Hb$ を最大化する $S^*$ の元は一意である．
   したがって $\{\mathbf{P}_\varepsilon\}$ の任意の収束部分列は
