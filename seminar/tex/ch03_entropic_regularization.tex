@@ -221,65 +221,6 @@
   よって $\mathbf{P}^\star = \mathbf{Q}^\star$，すなわち最適解は一意である．
 \end{proof}
 
-\begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ は
-  \[
-    (P_\varepsilon)_{i,j} > 0
-    \qquad(\forall\, i \in \range{n},\, j \in \range{m})
-  \]
-  を満たす．
-\end{proposition}
-
-\begin{proof}
-  背理法で示す．ある $(i,j)$ で
-  $(P_\varepsilon)_{i,j}=0$ とする．
-  $a_i>0$ なので同じ行に $(P_\varepsilon)_{i,j_1}>0$ となる
-  $j_1$ が存在する．また $b_j>0$ なので同じ列に
-  $(P_\varepsilon)_{i_1,j}>0$ となる $i_1$ が存在する．
-  小さい $\theta>0$ に対し，4成分だけを
-  \[
-    P_{i,j} \leftarrow P_{i,j}+\theta,\quad
-    P_{i,j_1} \leftarrow P_{i,j_1}-\theta,\quad
-    P_{i_1,j} \leftarrow P_{i_1,j}-\theta,\quad
-    P_{i_1,j_1} \leftarrow P_{i_1,j_1}+\theta
-  \]
-  と変化させる．$\theta$ を
-  $(P_\varepsilon)_{i,j_1}$ と $(P_\varepsilon)_{i_1,j}$ より小さく取れば，
-  非負性と周辺条件は保たれる．
-
-  この変化による目的関数の変化を評価する．
-  線形コストの変化は $\theta$ に比例する．
-  $(i,j_1)$ 成分と $(i_1,j)$ 成分は正であるから，
-  これらの負エントロピー $\varphi(x) = x\log x - x$ の変化は
-  $\varphi'(x) = \log x$ が有限であることから $O(\theta)$ である．
-  $(i_1,j_1)$ 成分は，正ならば同様に $O(\theta)$ であり，
-  ゼロならば $\varphi(\theta)-\varphi(0) = \theta\log\theta - \theta$
-  が加わるが，これは目的関数をさらに減少させる方向に働く．
-  一方，$(i,j)$ 成分（もともとゼロ）の変化は
-  \[
-    \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
-  \]
-  であり，$\theta$ で割ると $\log\theta-1 \to -\infty$
-  （$\theta \to 0^+$）となる．
-  したがって十分小さい $\theta>0$ では
-  この項が支配的となり，目的関数全体が減少する．
-  これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
-  よって全成分が正である．
-\end{proof}
-
-\begin{remark}{$\varepsilon$ の役割}{sem-epsilon-role}
-  $\varepsilon$ は，元の線形計画と独立カップリングの間を補間する量である：
-  \begin{itemize}
-    \item $\varepsilon \to 0$ のとき，$\mathbf{P}_\varepsilon$ は
-      非正則化問題 $\MKD_{\mathbf{C}}$ の最適解のうち
-      エントロピーが最大のものに収束する
-      （定理~\ref{thm:sem-entropic-convergence-eps-zero}）．
-    \item $\varepsilon \to +\infty$ のとき，$\mathbf{P}_\varepsilon$ は
-      積測度 $\mathbf{a} \mathbf{b}^\top$ に収束する
-      （備考~\ref{rem:sem-entropic-convergence-eps-infty}）．
-  \end{itemize}
-\end{remark}
-
 %% ============================================================
 %% 3.2 KL ダイバージェンスによる定式化
 %% ============================================================

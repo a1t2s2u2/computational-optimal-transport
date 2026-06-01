@@ -3,10 +3,9 @@
 
 前章で，エントロピー正則化された離散 Kantorovich 問題
 $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ が
-一意な最適解 $\mathbf{P}_\varepsilon$ を持ち，
-さらにその全成分が正である
-（命題~\ref{prop:sem-entropic-positive-solution}）ことを見た．
-本章では，この\textbf{狭義凸性}と\textbf{内点性}を活用して，
+一意な最適解 $\mathbf{P}_\varepsilon$ を持つことを見た．
+本章ではまず，その解が\textbf{全成分正}（＝輸送多面体の内点）であることを示し，
+この\textbf{狭義凸性}と\textbf{内点性}を活用して，
 最適解が $n+m$ 個の変数で表せること——
 すなわち $nm$ 変数の問題が本質的に双対的であること——を示す．
 この構造から，行列ベクトル積のみで最適解を反復計算する
@@ -23,6 +22,55 @@ $\mathbf{a} \in \R_{>0}^n$，$\mathbf{b} \in \R_{>0}^m$ は
 %% ============================================================
 \section{正則化問題の双対とスケーリング形式}
 \label{sec:sem-scaling-form}
+
+まず，最適解が輸送多面体の内点（全成分が正）であることを確認する．
+これは以降の一次条件・スケーリング形式の前提となる．
+
+\begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ は
+  \[
+    (P_\varepsilon)_{i,j} > 0
+    \qquad(\forall\, i \in \range{n},\, j \in \range{m})
+  \]
+  を満たす．
+\end{proposition}
+
+\begin{proof}
+  背理法で示す．ある $(i,j)$ で
+  $(P_\varepsilon)_{i,j}=0$ とする．
+  $a_i>0$ なので同じ行に $(P_\varepsilon)_{i,j_1}>0$ となる
+  $j_1$ が存在する．また $b_j>0$ なので同じ列に
+  $(P_\varepsilon)_{i_1,j}>0$ となる $i_1$ が存在する．
+  小さい $\theta>0$ に対し，4成分だけを
+  \[
+    P_{i,j} \leftarrow P_{i,j}+\theta,\quad
+    P_{i,j_1} \leftarrow P_{i,j_1}-\theta,\quad
+    P_{i_1,j} \leftarrow P_{i_1,j}-\theta,\quad
+    P_{i_1,j_1} \leftarrow P_{i_1,j_1}+\theta
+  \]
+  と変化させる．$\theta$ を
+  $(P_\varepsilon)_{i,j_1}$ と $(P_\varepsilon)_{i_1,j}$ より小さく取れば，
+  非負性と周辺条件は保たれる．
+
+  この変化による目的関数の変化を評価する．
+  線形コストの変化は $\theta$ に比例する．
+  $(i,j_1)$ 成分と $(i_1,j)$ 成分は正であるから，
+  これらの負エントロピー $\varphi(x) = x\log x - x$ の変化は
+  $\varphi'(x) = \log x$ が有限であることから $O(\theta)$ である．
+  $(i_1,j_1)$ 成分は，正ならば同様に $O(\theta)$ であり，
+  ゼロならば $\varphi(\theta)-\varphi(0) = \theta\log\theta - \theta$
+  が加わるが，これは目的関数をさらに減少させる方向に働く．
+  一方，$(i,j)$ 成分（もともとゼロ）の変化は
+  \[
+    \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
+  \]
+  であり，$\theta$ で割ると $\log\theta-1 \to -\infty$
+  （$\theta \to 0^+$）となる．
+  したがって十分小さい $\theta>0$ では
+  この項が支配的となり，目的関数全体が減少する．
+  これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
+  よって全成分が正である．
+\end{proof}
 
 最適解の構造を取り出す鍵は，目的関数
 $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})$
