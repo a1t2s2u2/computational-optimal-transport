@@ -130,24 +130,24 @@ title: エントロピー正則化
 最後にこの符号を調べる．\(c_1, c_2\) は \(x^*\) をはさんで反対側にあるから \(c_1 - c_2\) は \(x_1 - x_2\) と同符号であり，\(\varphi'\) が狭義単調増加だから \(\varphi'(c_1) - \varphi'(c_2)\) も \(c_1 - c_2\)（ひいては \(x_1 - x_2\)）と同符号である．ゆえに \((x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr) > 0\) となり，\(\lambda(1-\lambda) > 0\) と合わせて右辺は正．したがって目標の不等式が成り立ち，\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
 
 **(2) \(-\Hb\) の狭義凸性．**
-相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとる．(1) の狭義凸性より，各成分 \((i,j)\) について
+相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとり，凸結合 \((1-t)\mathbf{P} + t\mathbf{Q}\) における \(-\Hb\) を評価する．\(-\Hb(\mathbf{R}) = \sum_{i,j}\varphi(R_{i,j})\) であり，行列 \((1-t)\mathbf{P} + t\mathbf{Q}\) の \((i,j)\) 成分は \((1-t)P_{i,j} + tQ_{i,j}\) だから，
 
-\[
-  \varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr)
-  \leq (1-t)\varphi(P_{i,j}) + t\,\varphi(Q_{i,j})
-  \qquad (\forall\, i, j)
-\]
+\[\begin{aligned}
+  -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
+  &= \sum_{i,j}\varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr) \\
+  &\leq \sum_{i,j}\bigl[(1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\bigr] \\
+  &= (1-t)\sum_{i,j}\varphi(P_{i,j}) + t\sum_{i,j}\varphi(Q_{i,j}) \\
+  &= (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
+\end{aligned}\]
 
-が成り立つ．ここで \(P_{i,j} = Q_{i,j}\) の成分では両辺が一致して等号，\(P_{i,j} \neq Q_{i,j}\) の成分では狭義の不等号である．\(\mathbf{P} \neq \mathbf{Q}\) より後者の成分が少なくとも 1 つ存在する．
-
-これらの不等式を全成分について加える．行列 \((1-t)\mathbf{P} + t\mathbf{Q}\) の \((i,j)\) 成分は \((1-t)P_{i,j} + tQ_{i,j}\) であり，任意の行列 \(\mathbf{R}\) に対し \(-\Hb(\mathbf{R}) = \sum_{i,j}\varphi(R_{i,j})\) だから，左辺の総和は \(-\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)\)，右辺の総和はスカラー \((1-t), t\) をくくり出して \((1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)\) となる．少なくとも 1 成分が狭義不等号だから和も狭義となり，
+となる．等号の各行は \(-\Hb = \sum_{i,j}\varphi\) の定義と和の線形性（スカラーのくくり出し）による．第 2 行の不等号は，各成分に (1) の狭義凸性 \(\varphi\bigl((1-t)P_{i,j}+tQ_{i,j}\bigr) \leq (1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\) を適用したもので，\(P_{i,j} \neq Q_{i,j}\) の成分では狭義（\(<\)），\(P_{i,j} = Q_{i,j}\) の成分では等号である．\(\mathbf{P} \neq \mathbf{Q}\) より狭義となる成分が少なくとも 1 つあるので，上の不等号は全体として狭義であり，
 
 \[
   -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
-  < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
+  < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr).
 \]
 
-を得る．よって \(-\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
+よって \(-\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
 :::
 :::
 
