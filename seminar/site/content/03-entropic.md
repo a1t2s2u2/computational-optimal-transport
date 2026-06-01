@@ -130,7 +130,7 @@ title: エントロピー正則化
 最後にこの符号を調べる．\(c_1, c_2\) は \(x^*\) をはさんで反対側にあるから \(c_1 - c_2\) は \(x_1 - x_2\) と同符号であり，\(\varphi'\) が狭義単調増加だから \(\varphi'(c_1) - \varphi'(c_2)\) も \(c_1 - c_2\)（ひいては \(x_1 - x_2\)）と同符号である．ゆえに \((x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr) > 0\) となり，\(\lambda(1-\lambda) > 0\) と合わせて右辺は正．したがって目標の不等式が成り立ち，\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
 
 **(2) \(-\Hb\) の狭義凸性．**
-相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとる．各成分で \(\varphi\) は凸だから
+相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとる．(1) の狭義凸性より，各成分 \((i,j)\) について
 
 \[
   \varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr)
@@ -138,7 +138,7 @@ title: エントロピー正則化
   \qquad (\forall\, i, j)
 \]
 
-が成り立ち，\(\mathbf{P} \neq \mathbf{Q}\) より \(P_{i_0,j_0} \neq Q_{i_0,j_0}\) をみたす成分 \((i_0, j_0)\) が存在して，そこでは (1) より上の不等号が狭義に成り立つ．これらを \((i,j)\) について加えると
+が成り立つ．ここで \(P_{i,j} = Q_{i,j}\) の成分では両辺が一致して等号，\(P_{i,j} \neq Q_{i,j}\) の成分では狭義の不等号である．\(\mathbf{P} \neq \mathbf{Q}\) より後者の成分が少なくとも 1 つ存在するので，\((i,j)\) について加えると
 
 \[
   -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
