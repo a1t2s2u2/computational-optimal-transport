@@ -190,23 +190,26 @@
   $\mathbf{P}^\star \neq \mathbf{Q}^\star$ と仮定する．
   中点 $\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)$ は，
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性よりこれに属する．
-  $\inner{\mathbf{C}}{\cdot}$ の線形性より
+  主張~\ref{clm:sem-neg-entropy-strict-convex}（$-\Hb$ の狭義凸性）を
+  中点 $\mathbf{R} = \tfrac{1}{2}\mathbf{P}^\star + \tfrac{1}{2}\mathbf{Q}^\star$ に適用すると，
+  $\mathbf{P}^\star \neq \mathbf{Q}^\star$ より狭義不等号
+  \[
+    -\Hb(\mathbf{R})
+    < \tfrac{1}{2}\bigl(-\Hb(\mathbf{P}^\star)\bigr) + \tfrac{1}{2}\bigl(-\Hb(\mathbf{Q}^\star)\bigr)
+  \]
+  が成り立つ．また $\inner{\mathbf{C}}{\cdot}$ は線形だから
   \[
     \inner{\mathbf{C}}{\mathbf{R}}
     = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
   \]
-  が等号で成り立ち，主張~\ref{clm:sem-neg-entropy-strict-convex}（$-\Hb$ の狭義凸性）と
-  $\varepsilon > 0$, $\mathbf{P}^\star \neq \mathbf{Q}^\star$ より
+  が等号で成り立つ．$\varepsilon > 0$ は狭義不等号の向きを保つので，両者を合わせて
   \[
-    -\varepsilon\Hb(\mathbf{R})
-    < \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
-      + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr)
+    F(\mathbf{R})
+    = \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R})
+    < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star)
+    = m
   \]
-  が狭義不等号で成り立つ．辺々を加えると
-  \[
-    F(\mathbf{R}) < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
-  \]
-  となる．しかし $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $m$ は $F$ の最小値だから
+  を得る．しかし $\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $m$ は $F$ の最小値だから
   $F(\mathbf{R}) \geq m$ でなければならず，矛盾．
   よって $\mathbf{P}^\star = \mathbf{Q}^\star$，すなわち最適解は一意である．
 \end{proof}

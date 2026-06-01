@@ -196,28 +196,30 @@ title: エントロピー正則化
 **一意性．**
 正則化項がコストの線形性を破り，目的関数 \(F\) を狭義凸化する点が鍵である．
 \(\mathbf{P}^\star, \mathbf{Q}^\star \in \CouplingsD(\mathbf{a}, \mathbf{b})\) をともに最適解とし，最適値を \(m \defeq \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}) = F(\mathbf{P}^\star) = F(\mathbf{Q}^\star)\) とおく．\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) と仮定する．
-中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性よりこれに属する．\(\inner{\mathbf{C}}{\cdot}\) の線形性より
+中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性よりこれに属する．[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）を中点 \(\mathbf{R} = \tfrac{1}{2}\mathbf{P}^\star + \tfrac{1}{2}\mathbf{Q}^\star\) に適用すると，\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より狭義不等号
+
+\[
+  -\Hb(\mathbf{R})
+  < \tfrac{1}{2}\bigl(-\Hb(\mathbf{P}^\star)\bigr) + \tfrac{1}{2}\bigl(-\Hb(\mathbf{Q}^\star)\bigr)
+\]
+
+が成り立つ．また \(\inner{\mathbf{C}}{\cdot}\) は線形だから
 
 \[
   \inner{\mathbf{C}}{\mathbf{R}}
   = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
 \]
 
-が等号で成り立ち，[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）と \(\varepsilon > 0\), \(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より
+が等号で成り立つ．\(\varepsilon > 0\) は狭義不等号の向きを保つので，両者を合わせて
 
 \[
-  -\varepsilon\Hb(\mathbf{R})
-  < \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
-    + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr)
+  F(\mathbf{R})
+  = \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R})
+  < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star)
+  = m
 \]
 
-が狭義不等号で成り立つ．辺々を加えると
-
-\[
-  F(\mathbf{R}) < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
-\]
-
-となる．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
+を得る．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
 :::
 :::
 
