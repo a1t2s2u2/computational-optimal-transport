@@ -180,35 +180,30 @@ title: エントロピー正則化
 最適解が存在する．
 
 **一意性．**
-正則化項がコストの線形性を破り，目的関数を狭義凸化する点が鍵である．
-[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]より
-\(-\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
-相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と
-\(t \in (0,1)\) に対し，\(\inner{\mathbf{C}}{\cdot}\) の線形性より
+正則化項がコストの線形性を破り，目的関数 \(F\) を狭義凸化する点が鍵である．
+\(\mathbf{P}^\star, \mathbf{Q}^\star \in \CouplingsD(\mathbf{a}, \mathbf{b})\) をともに最適解とし，最適値を \(m \defeq \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}) = F(\mathbf{P}^\star) = F(\mathbf{Q}^\star)\) とおく．\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) と仮定する．
+中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性よりこれに属する．\(\inner{\mathbf{C}}{\cdot}\) の線形性より
 
 \[
-  \inner{\mathbf{C}}{t\mathbf{P}+(1-t)\mathbf{Q}}
-  = t\inner{\mathbf{C}}{\mathbf{P}} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}}
+  \inner{\mathbf{C}}{\mathbf{R}}
+  = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
 \]
 
-が等号で成り立ち，\(\varepsilon > 0\) と \(-\Hb\) の狭義凸性より
+が等号で成り立ち，[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）と \(\varepsilon > 0\), \(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より
 
 \[
-  -\varepsilon\Hb\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr)
-  < t\bigl(-\varepsilon\Hb(\mathbf{P})\bigr)
-    + (1-t)\bigl(-\varepsilon\Hb(\mathbf{Q})\bigr)
+  -\varepsilon\Hb(\mathbf{R})
+  < \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
+    + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr)
 \]
 
-が狭義不等号で成り立つ．辺々を加えると，
-\(F(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})\) について
+が狭義不等号で成り立つ．辺々を加えると
 
 \[
-  F\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr)
-  < tF(\mathbf{P}) + (1-t)F(\mathbf{Q})
+  F(\mathbf{R}) < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
 \]
 
-を得る．すなわち \(F\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
-[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]より最小点は一意である．
+となる．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
 :::
 :::
 
