@@ -210,16 +210,22 @@ title: エントロピー正則化
   = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
 \]
 
-が等号で成り立つ．\(\varepsilon > 0\) は狭義不等号の向きを保つので，両者を合わせて
+が等号で成り立つ．これらより（\(\varepsilon > 0\) は不等号の向きを保つ）
 
-\[
+\[\begin{aligned}
   F(\mathbf{R})
-  = \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R})
-  < \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star)
-  = m
-\]
+  &= \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R}) \\
+  &= \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
+     - \varepsilon\Hb(\mathbf{R}) \\
+  &< \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
+     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
+     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
+  &= \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{P}^\star} - \varepsilon\Hb(\mathbf{P}^\star)\bigr)
+     + \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{Q}^\star} - \varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
+  &= \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
+\end{aligned}\]
 
-を得る．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
+を得る．ここで第 2 行で線形性の等式を \(\inner{\mathbf{C}}{\mathbf{R}}\) に代入し，第 3 行で \(-\varepsilon\Hb(\mathbf{R})\) を狭義凸性（の \(\varepsilon\) 倍）で上から押さえた．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
 :::
 :::
 
