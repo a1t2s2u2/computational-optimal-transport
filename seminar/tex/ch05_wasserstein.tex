@@ -198,176 +198,19 @@ $\mathbf{a}, \mathbf{b}, \mathbf{c}$ は同一の地の集合 $\range{n}$ 上の
 \end{remark}
 
 %% ============================================================
-%% 5.3 連続版への一般化
+%% 本章のまとめ
 %% ============================================================
-\section{連続版への一般化}
-\label{sec:sem-wasserstein-continuous}
-
-同じ構成は任意の確率測度に拡張される．
-$\X$ を Polish 空間，$d$ を $\X$ 上の距離とし，
-$p$ 次モーメントが有限な確率測度の空間
-\[
-  \Pp_p(\X)
-  \defeq
-  \left\{
-    \alpha \in \Mm_+^1(\X)
-    \;\middle|\;
-    \int_\X d(x, x_0)^p \,\d\alpha(x) < \infty
-    \ (\exists\, x_0 \in \X)
-  \right\}
-\]
-を考える（有限性は基準点 $x_0$ の取り方によらない）．
-
-\begin{definition}{Wasserstein 距離}{sem-wasserstein-cont-def}
-  $p \geq 1$ と $\alpha, \beta \in \Pp_p(\X)$ に対して，
-  \textbf{$p$-Wasserstein 距離}を
-  \[
-    \Wass_p(\alpha, \beta)
-    \defeq
-    \MK_{d^p}(\alpha, \beta)^{1/p}
-    =
-    \left(
-      \inf_{\pi \in \Couplings(\alpha, \beta)}
-      \int_{\X \times \X} d(x, y)^p \,\d\pi(x, y)
-    \right)^{1/p}
-  \]
-  で定める．
-\end{definition}
-
-連続版の三角不等式には，貼り合わせ行列
-$\mathbf{P}\diag(1/\tilde{\mathbf{b}})\mathbf{Q}$ の連続版が必要となる．
-
-\begin{claim}{貼り合わせ補題}{sem-gluing-lemma}
-  $\alpha, \beta, \gamma \in \Mm_+^1(\X)$ とし，
-  $\pi \in \Couplings(\alpha, \beta)$,
-  $\sigma \in \Couplings(\beta, \gamma)$ とする．
-  このとき $\X^3$ 上の確率測度 $\mu$ が存在して，
-  $(x,y)$ 成分の周辺が $\pi$，$(y,z)$ 成分の周辺が $\sigma$ となる．
-  とくに $(x,z)$ 成分の周辺
-  $\mathbf{S} \defeq (P_{x,z})_\sharp \mu$ は
-  $\Couplings(\alpha, \gamma)$ に属する．
-\end{claim}
-
-\begin{proof}[証明の方針]
-  $\beta$ に関して $\pi, \sigma$ を分解（disintegration）し，
-  $y$ で条件づけた測度 $\pi_y, \sigma_y$ を用いて
-  $\d\mu(x,y,z) = \d\beta(y)\,\d\pi_y(x)\,\d\sigma_y(z)$ とおけばよい．
-  これは離散の $S_{i,k} = \sum_j P_{i,j}Q_{j,k}/\tilde{b}_j$ の連続版である．
-  分解定理（Polish 空間上で成立）の詳細は測度論の標準的結果に譲る．
-\end{proof}
-
-\begin{proposition}{Wasserstein 距離の距離性}{sem-wasserstein-cont-distance}
-  $d$ が $\X$ 上の距離，$p \geq 1$ のとき，
-  $\Wass_p$ は $\Pp_p(\X)$ 上の距離である．
-\end{proposition}
-
-\begin{proof}
-  対称性と非退化性は離散の場合（定理~\ref{thm:sem-wasserstein-is-distance}）と
-  同様に，$d^p$ の対称性と，対角線
-  $\{(x,x)\}$ に台を持つカップリング（$\alpha = \beta$ のとき）の利用，
-  および $d(x,y) > 0$（$x \neq y$）から従う．
-
-  三角不等式を示す．$\pi \in \Couplings(\alpha, \beta)$,
-  $\sigma \in \Couplings(\beta, \gamma)$ を最適カップリングとし，
-  主張~\ref{clm:sem-gluing-lemma} の $\mu$ をとる．
-  $\mathbf{S} = (P_{x,z})_\sharp \mu \in \Couplings(\alpha, \gamma)$ の
-  劣最適性，$d$ の三角不等式，測度 $\mu$ に関する Minkowski の不等式より
-  \begin{align*}
-    \Wass_p(\alpha, \gamma)
-    &\leq \left(\int d(x,z)^p \,\d\mu\right)^{1/p}
-     \leq \left(\int \bigl(d(x,y) + d(y,z)\bigr)^p \,\d\mu\right)^{1/p} \\
-    &\leq \left(\int d(x,y)^p \,\d\mu\right)^{1/p}
-       + \left(\int d(y,z)^p \,\d\mu\right)^{1/p} \\
-    &= \left(\int d(x,y)^p \,\d\pi\right)^{1/p}
-       + \left(\int d(y,z)^p \,\d\sigma\right)^{1/p}
-     = \Wass_p(\alpha, \beta) + \Wass_p(\beta, \gamma).
-  \end{align*}
-  最後の等号は $\mu$ の $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ で
-  あることによる．
-\end{proof}
-
-\begin{remark}{離散版との整合}{sem-wasserstein-disc-cont}
-  ヒストグラム $\mathbf{a} = \sum_i a_i\delta_{x_i}$,
-  $\mathbf{b} = \sum_j b_j\delta_{x_j}$ を同一の台
-  $\{x_1, \ldots, x_n\} \subset \X$ 上の離散測度と見なすと，
-  $\distD_{i,j} = d(x_i, x_j)$ のもとで
-  $\Wass_p$ は $\WassD_p$ に一致する．
-  定理~\ref{thm:sem-wasserstein-is-distance} は
-  命題~\ref{prop:sem-wasserstein-cont-distance} の離散特別な場合である．
-\end{remark}
-
-%% ============================================================
-%% 5.4 弱距離としての Wasserstein 距離
-%% ============================================================
-\section{弱距離としての Wasserstein 距離}
-\label{sec:sem-wasserstein-weak}
-
-Wasserstein 距離の重要な特長は，台が重ならない測度
-（たとえば離散測度）の間の「ずれ」を測れる\textbf{弱距離}である点である．
-これは古典的な $L^2$ ノルムなどにはない性質である．
-
-\begin{proposition}{Dirac 測度間の Wasserstein 距離}{sem-wasserstein-dirac}
-  任意の $x, y \in \X$ と $p \geq 1$ に対して
-  \[
-    \Wass_p(\delta_x, \delta_y) = d(x, y).
-  \]
-\end{proposition}
-
-\begin{proof}
-  $\Couplings(\delta_x, \delta_y)$ の唯一の元は積測度
-  $\delta_x \otimes \delta_y = \delta_{(x,y)}$ である
-  （周辺が $\delta_x, \delta_y$ となる測度は $(x,y)$ に全質量を置くものに限る）．
-  ゆえに
-  $\Wass_p(\delta_x, \delta_y)^p
-  = \int d^p \,\d\delta_{(x,y)} = d(x,y)^p$．
-\end{proof}
-
-とくに $x \to y$ のとき $\Wass_p(\delta_x, \delta_y) \to 0$ となり，
-Wasserstein 距離は台の位置の連続的な移動を捉える．
-これを一般化するのが\textbf{弱収束}である．
-
-\begin{definition}{測度の弱収束}{sem-weak-convergence}
-  $\X$ 上の有界連続関数全体を $\Cc_b(\X)$ と書く．
-  $\Mm_+^1(\X)$ の列 $(\alpha_k)_k$ が $\alpha$ に\textbf{弱収束}するとは，
-  任意の $g \in \Cc_b(\X)$ に対して
-  \[
-    \int_\X g \,\d\alpha_k \;\longrightarrow\; \int_\X g \,\d\alpha
-    \qquad (k \to \infty)
-  \]
-  が成り立つことをいい，$\alpha_k \rightharpoonup \alpha$ と書く．
-  これは確率変数の分布収束に対応する．
-\end{definition}
-
-\begin{claim}{Wasserstein 距離は弱収束を距離化する}{sem-wasserstein-metrizes-weak}
-  $\alpha_k, \alpha \in \Pp_p(\X)$ とする．このとき
-  \[
-    \Wass_p(\alpha_k, \alpha) \to 0
-    \iff
-    \alpha_k \rightharpoonup \alpha
-    \ \text{かつ}\
-    \int d(x, x_0)^p \,\d\alpha_k \to \int d(x, x_0)^p \,\d\alpha.
-  \]
-  すなわち $\Wass_p$ は，$p$ 次モーメントの収束を伴う弱収束を距離化する．
-  とくに $\X$ が有界距離空間ならモーメント条件は自動的に成り立ち，
-  $\Wass_p$ 収束は弱収束と同値である．
-\end{claim}
-
-\begin{proof}[証明の方針]
-  有界距離空間では右辺のモーメント条件は不要となり，
-  $\Wass_p$ 収束と弱収束が同値になる．
-  一般の場合の証明は測度の弱位相と
-  輸送コストの下半連続性を用いる（標準的結果に譲る）．
-\end{proof}
-
 \begin{remark}{本章のまとめと展望}{sem-ch5-summary}
-  地のコストが距離の $p$ 乗のとき，最適輸送は確率測度の空間
-  $\Pp_p(\X)$ 上の距離 $\Wass_p$ を定める
-  （定理~\ref{thm:sem-wasserstein-is-distance}，
-  命題~\ref{prop:sem-wasserstein-cont-distance}）．
-  これにより $(\Pp_p(\X), \Wass_p)$ は距離空間となり，
-  その中で「測地線」や「曲率」を論じる舞台が整う．
-  測地線を具体的に構成するには，最適カップリングが写像
-  $T = \nabla\phi$ に台を持つという Brenier の定理が必要であり，
-  そのためにまず非正則化 Kantorovich 問題の双対と
-  $c$-変換を整備する．これが次章以降の主題である．
+  地のコストが距離の $p$ 乗のとき，最適輸送はヒストグラムの空間
+  $\simplex_n$ 上の距離 $\WassD_p$ を定める
+  （定理~\ref{thm:sem-wasserstein-is-distance}）．
+  証明の核心は，2 つの最適カップリングを貼り合わせて
+  $\mathbf{S} = \mathbf{P}\diag(1/\tilde{\mathbf{b}})\mathbf{Q}$ を作る構成にあった．
+
+  この距離の上で「測地線」や「曲率」といった幾何を論じるには，
+  質量を中間点へ連続的に動かす必要があり，地の空間を
+  $\R^d$ のような連続空間にとらねばならない（有限ビン上では
+  測地線が存在しない）．その連続版の道具立ては，必要となる
+  幾何の章（Brenier 定理以降）で最小限に導入する．
+  次章ではまず，非正則化 Kantorovich 問題の双対と $c$-変換を整備する．
 \end{remark}
