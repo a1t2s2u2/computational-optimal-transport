@@ -35,6 +35,20 @@
   と簡単になるからである．
 \end{remark}
 
+\begin{remark}{$\varphi(x)=x\log x-x$ の連続性}{sem-phi-continuous}
+  $-\Hb$ の被加数 $\varphi(x) \defeq x\log x - x$ は $[0,\infty)$ 上で連続である．
+  実際，$(0,\infty)$ 上では連続関数の積・和として連続であり，
+  $x = 0$ では，約束 $0\log 0 = 0$ により $\varphi(0) = 0$ と定めると，
+  $\lim_{x\to0+} x\log x = 0$ から
+  \[
+    \lim_{x \to 0+} \varphi(x)
+    = \lim_{x \to 0+}\bigl(x\log x - x\bigr) = 0 = \varphi(0)
+  \]
+  となって $x = 0$ でも（右）連続である．
+  ゆえに $-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})$ は
+  $\R_{\geq 0}^{n\times m}$ 上で連続である．
+\end{remark}
+
 \begin{definition}{エントロピー正則化された離散最適輸送}{sem-entropic-ot}
   $\mathbf{a} \in \R_{>0}^n$（$\sum_{i=1}^n a_i = 1$），
   $\mathbf{b} \in \R_{>0}^m$（$\sum_{j=1}^m b_j = 1$），
@@ -78,7 +92,8 @@
   の順に示す．
 
   \textbf{(1) $\varphi$ の狭義凸性．}
-  $\varphi$ は $[0,\infty)$ 上で連続，$(0,\infty)$ 上で微分可能で，
+  $\varphi$ は $[0,\infty)$ 上で連続（注意~\ref{rem:sem-phi-continuous}），
+  $(0,\infty)$ 上で微分可能で，
   $\varphi'(x) = \log x$ は $(0,\infty)$ 上で狭義単調増加である．
   相異なる $x_1, x_2 \in [0,\infty)$ と $\lambda \in (0,1)$ をとり，
   $x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)$ とおく．
@@ -154,7 +169,7 @@
   \textbf{存在．}
   $\CouplingsD(\mathbf{a}, \mathbf{b})$ は空でないコンパクト集合である
   （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）．
-  関数 $\varphi(x) \defeq x\log x - x$ は $[0,\infty)$ 上で連続であるから，
+  $\varphi(x) = x\log x - x$ は $[0,\infty)$ 上で連続（注意~\ref{rem:sem-phi-continuous}）だから，
   目的関数
   \[
     F(\mathbf{P})

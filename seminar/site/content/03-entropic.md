@@ -49,6 +49,20 @@ title: エントロピー正則化
 :::
 
 
+:::fact
+### Rem: \(\varphi(x)=x\log x-x\) の連続性
+
+\(-\Hb\) の被加数 \(\varphi(x) \defeq x\log x - x\) は \([0,\infty)\) 上で連続である．実際，\((0,\infty)\) 上では連続関数の積・和として連続であり，\(x = 0\) では，約束 \(0\log 0 = 0\) により \(\varphi(0) = 0\) と定めると，\(\lim_{x\to0+} x\log x = 0\) から
+
+\[
+  \lim_{x \to 0+} \varphi(x)
+  = \lim_{x \to 0+}\bigl(x\log x - x\bigr) = 0 = \varphi(0)
+\]
+
+となって \(x = 0\) でも（右）連続である．ゆえに \(-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})\) は \(\R_{\geq 0}^{n\times m}\) 上で連続である．
+:::
+
+
 :::definition
 ### Def: エントロピー正則化された離散最適輸送
 
@@ -97,7 +111,7 @@ title: エントロピー正則化
 \(-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})\)（\(\varphi(x) = x\log x - x\)）であるから，**(1)** \(\varphi\) が \([0,\infty)\) 上で狭義凸であること，**(2)** そこから和 \(\sum_{i,j}\varphi(P_{i,j})\) が狭義凸になること，の順に示す．
 
 **(1) \(\varphi\) の狭義凸性．**
-\(\varphi\) は \([0,\infty)\) 上で連続，\((0,\infty)\) 上で微分可能で，\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加である．
+\(\varphi\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]），\((0,\infty)\) 上で微分可能で，\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加である．
 相異なる \(x_1, x_2 \in [0,\infty)\) と \(\lambda \in (0,1)\) をとり，\(x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)\) とおく．目標は
 
 \[
@@ -163,7 +177,7 @@ title: エントロピー正則化
 **存在．**
 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
 （[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．
-関数 \(\varphi(x) \defeq x\log x - x\) は \([0,\infty)\) 上で連続であるから，
+\(\varphi(x) = x\log x - x\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]）だから，
 目的関数
 
 \[
