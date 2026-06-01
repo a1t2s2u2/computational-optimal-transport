@@ -6,45 +6,6 @@ title: エントロピー正則化
 ---
 
 
-離散 Kantorovich 問題の最適解は一般に一意でない
-（[ref:Ex: 最適解の非一意性|最適解の非一意性]）．
-本章では，目的関数に負エントロピー項を加えた
-**エントロピー正則化問題**を導入する．
-正則化された目的関数は狭義凸となるため，
-任意の \(\varepsilon > 0\) に対して正則化問題の最適解は一意に定まる．
-さらに \(\varepsilon \to 0\) の極限では，
-非正則化問題の最適解の中で最大エントロピーのものが選ばれる．
-
-以下，
-
-\[
-  \mathbf{a} \in \R_{>0}^{n},\qquad
-  \mathbf{b} \in \R_{>0}^{m},\qquad
-  \sum_{i=1}^{n} a_i = \sum_{j=1}^{m} b_j = 1,
-\]
-
-および \(\mathbf{C} \in \R_{\geq 0}^{n \times m}\) を固定する．
-なお，正則化問題の一意性自体は \(\mathbf{a}, \mathbf{b}\) に
-ゼロ成分を許しても成立する．
-全成分正の仮定は正値性
-（正則化解の正値性）に用いる．
-離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は
-[ref:Prop: 連続 Kantorovich 問題の離散化|連続 Kantorovich 問題の離散化] の通り
-
-\[
-  \CouplingsD(\mathbf{a}, \mathbf{b})
-  =
-  \left\{
-    \mathbf{P} \in \R_{\geq 0}^{n \times m}
-    \;\middle|\;
-    \mathbf{P}\ones_m = \mathbf{a},\;
-    \mathbf{P}^\top \ones_n = \mathbf{b}
-  \right\}
-\]
-
-である．
-
-
 ## エントロピー正則化
 
 
@@ -108,26 +69,11 @@ title: エントロピー正則化
 :::
 
 
-:::fact
-### Rem: 狭義凸化の仕組み
-
-元の Kantorovich 問題の目的関数 \(\inner{\mathbf{C}}{\mathbf{P}}\) は
-\(\mathbf{P}\) に関して線形（したがって凸だが狭義凸でない）であった．
-エントロピー項 \(-\varepsilon\Hb(\mathbf{P})
-= \varepsilon\sum_{i,j}P_{i,j}(\log P_{i,j}-1)\) を加えることで，
-目的関数は狭義凸となる．
-凸集合上の狭義凸関数の最小化問題では
-最適解が存在すれば一意であるから，
-一意性が構造的に保証される
-（[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]）．
-:::
-
-
 :::proposition
-### Prop: 正則化問題の解の存在と一意性
+### Prop: 正則化解の存在と一意性
 
 任意の \(\varepsilon > 0\) に対して，
-正則化問題は一意な最適解
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) は一意な最適解
 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
 :::details-embedded 証明
@@ -151,7 +97,8 @@ title: エントロピー正則化
 最適解が存在する．
 
 **一意性．**
-\(\varphi\) は \([0,\infty)\) 上で狭義凸であることを示す．
+正則化項がコストの線形性を破り，目的関数を狭義凸化する点が鍵である．
+これを示すため，\(\varphi\) が \([0,\infty)\) 上で狭義凸であることを確認する．
 任意の \(x_1 \neq x_2 \in [0,\infty)\)，\(\lambda \in (0,1)\) に対し
 \(x^* \defeq \lambda x_1+(1-\lambda)x_2\) とおく．
 \(\varphi\) は \([0,\infty)\) 上で連続かつ \((0,\infty)\) 上で微分可能であるから，
@@ -197,7 +144,7 @@ title: エントロピー正則化
 :::proposition
 ### Prop: 正則化解の正値性
 
-正則化問題の一意解 \(\mathbf{P}_\varepsilon\) は
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解 \(\mathbf{P}_\varepsilon\) は
 
 \[
   (P_\varepsilon)_{i,j} > 0
@@ -305,7 +252,7 @@ title: エントロピー正則化
 ### Prop: 正則化 OT は KL 射影である
 
 \(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) とすると，
-正則化問題の最適解は
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の最適解は
 
 \[
   \mathbf{P}_\varepsilon
@@ -355,9 +302,9 @@ title: エントロピー正則化
 :::theorem
 ### Thm: \(\varepsilon \to 0\) による非正則化 OT への収束
 
-\(\varepsilon_k > 0\)，\(\varepsilon_k \to 0\) とし，
-\(\mathbf{P}_{\varepsilon_k}\) を正則化問題の一意解とする．
-このとき，以下が成り立つ．
+各 \(\varepsilon > 0\) に対し，\(\mathbf{P}_\varepsilon\) を
+\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解とする．
+\(\varepsilon \to 0\) のとき，以下が成り立つ．
 
 **(i)**
 最適値は収束する：
@@ -369,7 +316,7 @@ title: エントロピー正則化
 \)
 
 **(ii)**
-\(\mathbf{P}_{\varepsilon_k}\) の任意の極限点は
+\(\mathbf{P}_\varepsilon\) の \(\varepsilon \to 0\) における任意の極限点は
 非正則化問題の最適解である．
 
 **(iii)**
