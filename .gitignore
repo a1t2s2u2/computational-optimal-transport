@@ -42,3 +42,6 @@ uv.lock
 .DS_Store
 __pycache__/
 *.pyc
+
+# proofgraph viewer smoke artifacts
+proofgraph/viewer/_smoke.png

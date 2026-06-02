@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>proofgraph — 依存グラフ俯瞰</title>
+<link rel="stylesheet" href="styles.css" />
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      macros: {
+        R: '\\mathbb{R}', N: '\\mathbb{N}', X: '\\mathcal{X}', Y: '\\mathcal{Y}',
+        Mm: '\\mathcal{M}', Bb: '\\mathcal{B}', Pp: '\\mathcal{P}',
+        Couplings: '\\mathcal{U}', CouplingsD: '\\Pi', Wass: '\\mathcal{W}',
+        defeq: '\\mathrel{:=}', pushforward: '_{\\#}', inner: ['\\langle #1,#2\\rangle', 2],
+        MKD: '\\mathrm{L}', PotentialsD: '\\mathbf{R}', ones: '\\mathbf{1}', range: ['[#1]', 1]
+      }
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.30.2/dist/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+</head>
+<body>
+<header>
+  <h1>proofgraph</h1>
+  <span class="subtitle">数学ブロック依存グラフ — 空間レイヤ & 証明ルート俯瞰</span>
+  <span id="stats" class="stats"></span>
+</header>
+
+<div id="app">
+  <aside id="controls">
+    <section>
+      <h2>空間で層別</h2>
+      <p class="hint">選んだ空間で<strong>成り立つ</strong>結果だけを強調（より強い空間を要する結果は淡色化）。</p>
+      <select id="space-filter"><option value="">（フィルタなし）</option></select>
+    </section>
+
+    <section>
+      <h2>表示する種類</h2>
+      <div id="env-filters" class="checks"></div>
+    </section>
+
+    <section>
+      <h2>章</h2>
+      <div id="chapter-filters" class="checks"></div>
+    </section>
+
+    <section>
+      <h2>辺の種類</h2>
+      <label><input type="checkbox" id="show-uses" checked> uses（前提・実線）</label>
+      <label><input type="checkbox" id="show-proof" checked> proof（証明・破線）</label>
+    </section>
+
+    <section>
+      <h2>レイアウト</h2>
+      <select id="layout-select">
+        <option value="dagre">階層（dagre, 依存方向）</option>
+        <option value="cose">力学（cose）</option>
+        <option value="breadthfirst">幅優先</option>
+      </select>
+      <button id="fit-btn">全体表示</button>
+    </section>
+  </aside>
+
+  <main id="cy"></main>
+
+  <aside id="detail">
+    <div id="detail-empty" class="hint">ノードをクリックすると詳細が表示されます。</div>
+    <div id="detail-body" hidden>
+      <span id="d-env" class="badge"></span>
+      <h2 id="d-title"></h2>
+      <div id="d-loc" class="muted"></div>
+      <div id="d-spaces"></div>
+      <div id="d-lean"></div>
+
+      <div id="d-routes-wrap">
+        <h3>証明ルート（AND/OR）</h3>
+        <div id="d-routes"></div>
+      </div>
+
+      <h3>依存（このブロックが使う）</h3>
+      <ul id="d-deps"></ul>
+      <h3>被依存（このブロックを使う）</h3>
+      <ul id="d-rdeps"></ul>
+    </div>
+  </aside>
+</div>
+
+<div id="error" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
