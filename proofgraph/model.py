@@ -183,6 +183,46 @@ class DependencyGraph:
         grounded = self.grounded_set(ignore_missing=ignore_missing)
         return sorted(nid for nid in self.nodes if nid not in grounded)
 
+    # --- 支持集合（到達可能な依存の推移閉包） -----------------------------
+    def support_set(self, node_id: str, route: str | None = None) -> set:
+        """node を選んだルートで支える全ブロックの推移閉包を返す（node 自身は除く）。
+
+        各ノードについて uses は常に辿り、証明ルートは:
+          - 起点 node では指定 route（None なら最初のルート）を辿る
+          - 以降のノードでは接地可能な最初のルートを辿る（最小支持の近似）
+        未定義依存は無視する。
+        """
+        start = self.nodes.get(node_id)
+        if start is None:
+            return set()
+        grounded = self.grounded_set()
+        support: set = set()
+        stack = list(self._deps_for(start, route, grounded))
+        while stack:
+            nid = stack.pop()
+            if nid in support or nid not in self.nodes:
+                continue
+            support.add(nid)
+            stack.extend(self._deps_for(self.nodes[nid], None, grounded))
+        support.discard(node_id)
+        return support
+
+    def _deps_for(self, node: Node, route: str | None, grounded: set) -> set:
+        deps = set(node.uses)
+        if node.routes:
+            chosen = None
+            if route is not None:
+                chosen = next((r for r in node.routes if r.name == route), None)
+            if chosen is None:
+                # 接地可能な最初のルート、無ければ最初のルート
+                chosen = next(
+                    (r for r in node.routes
+                     if all(d in grounded for d in r.deps)),
+                    node.routes[0],
+                )
+            deps.update(chosen.deps)
+        return deps
+
     # --- 空間前提充足 -----------------------------------------------------
     def space_violations(self) -> list:
         """(node_id, dep_id, dep_tags) — 弱い空間の結果が強い空間に依存する違反。

@@ -126,6 +126,10 @@ function buildGraph() {
       { selector: 'node.sel', style: {
         'border-width': 3, 'border-color': '#111827', 'width': 22, 'height': 22 }},
       { selector: 'node.hl', style: { 'border-width': 2, 'border-color': '#111827' }},
+      { selector: 'node.support', style: {
+        'border-width': 2, 'border-color': '#16a34a', 'opacity': 1 }},
+      { selector: 'node.faded', style: { 'opacity': 0.08 }},
+      { selector: 'edge.faded', style: { 'opacity': 0.03 }},
       { selector: 'edge', style: {
         'width': 1.2, 'line-color': '#b8b8c0', 'target-arrow-color': '#b8b8c0',
         'target-arrow-shape': 'triangle', 'arrow-scale': 0.7,
@@ -213,7 +217,7 @@ function selectNode(id) {
 }
 
 function clearSelection(clearPanel = true) {
-  cy.elements().removeClass('sel hl route-on');
+  cy.elements().removeClass('sel hl route-on support faded');
   if (clearPanel) {
     document.getElementById('detail-empty').hidden = false;
     document.getElementById('detail-body').hidden = true;
@@ -262,10 +266,15 @@ function renderDetail(d) {
         : '<span class="muted">（外部依存のみ／依存なし）</span>';
       div.innerHTML =
         `<div class="route-head">${name} ` +
-        `<button data-route="${r.route}">強調</button></div>${deps}`;
-      div.querySelector('button').addEventListener('click', () => {
+        `<button data-route="${r.route}">辺を強調</button> ` +
+        `<button data-support="${r.route}">支持集合</button></div>${deps}`;
+      div.querySelector('[data-route]').addEventListener('click', () => {
         activeRouteByNode[d.id] = r.route;
         highlightRoute(d, r.route);
+      });
+      div.querySelector('[data-support]').addEventListener('click', () => {
+        activeRouteByNode[d.id] = r.route;
+        highlightSupport(d.id, r.route);
       });
       rdiv.appendChild(div);
     });
@@ -310,6 +319,54 @@ function highlightRoute(d, routeName) {
     const btn = div.querySelector('button');
     div.classList.toggle('active', btn && btn.dataset.route === routeName);
   });
+}
+
+// 支持集合: node を route で支える全ブロックの推移閉包を計算して強調する。
+// model.py DependencyGraph.support_set と同じ意味論（downstream は最初のルート）。
+function depsFor(id, route) {
+  const n = NODE_BY_ID[id];
+  if (!n) return [];
+  const deps = new Set();
+  GRAPH.edges.filter(e => e.from === id && e.kind === 'uses').forEach(e => deps.add(e.to));
+  const routes = routesOf(id);
+  if (routes.length) {
+    let chosen = route != null ? routes.find(r => r.route === route) : null;
+    if (!chosen) chosen = routes[0];
+    chosen.deps.forEach(x => deps.add(x));
+  }
+  return [...deps];
+}
+
+function computeSupport(id, route) {
+  const support = new Set();
+  const stack = depsFor(id, route);
+  while (stack.length) {
+    const nid = stack.pop();
+    if (support.has(nid) || !NODE_BY_ID[nid]) continue;
+    support.add(nid);
+    depsFor(nid, null).forEach(x => stack.push(x));
+  }
+  support.delete(id);
+  return support;
+}
+
+function highlightSupport(id, route) {
+  const support = computeSupport(id, route);
+  const inSet = nid => nid === id || support.has(nid);
+  cy.batch(() => {
+    cy.nodes().forEach(n => {
+      const s = inSet(n.id());
+      n.toggleClass('support', s);
+      n.toggleClass('faded', !s);
+    });
+    cy.edges().removeClass('route-on');
+    cy.edges().forEach(e => {
+      e.toggleClass('faded', !(inSet(e.source().id()) && inSet(e.target().id())));
+    });
+  });
+  const label = route === '_auto' ? '自動ルート' : `ルート ${route}`;
+  document.getElementById('stats').textContent =
+    `支持集合（${stripMath(NODE_BY_ID[id].title)} / ${label}）: ${support.size} ブロック`;
 }
 
 // ---------------------------------------------------------------------------

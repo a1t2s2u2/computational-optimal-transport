@@ -32,16 +32,23 @@ await page.waitForTimeout(300);
 const routeCount = await page.locator('#d-routes .route').count();
 const detailTitle = await page.locator('#d-title').textContent();
 
+// 支持集合: ルート A を強調し、支持された(faded でない)ノード集合を取得
+const supportA = await page.evaluate(() => {
+  highlightSupport('thm:sem-kantorovich-duality', 'A');
+  return cy.nodes('.support').map(n => n.id());
+});
+
 await page.screenshot({ path: 'viewer/_smoke.png', fullPage: false });
 await browser.close();
 
 console.log(JSON.stringify({
   errVisible, stats, nodeCount, edgeCount,
   dimmedCount: dimmed.length, dimmedSample: dimmed.slice(0, 5),
-  selected: sel, routeCount, detailTitle, errors,
+  selected: sel, routeCount, detailTitle,
+  supportA, errors,
 }, null, 2));
 
-if (errVisible || nodeCount < 100 || routeCount < 2) {
+if (errVisible || nodeCount < 100 || routeCount < 2 || supportA.length < 1) {
   console.error('SMOKE FAIL');
   process.exit(1);
 }
