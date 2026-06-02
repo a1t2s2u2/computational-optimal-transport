@@ -8,27 +8,26 @@ const ENV_LABEL = {
   definition: 'Def', proposition: 'Prop', theorem: 'Thm',
   claim: 'Clm', remark: 'Rem', example: 'Ex',
 };
-// 章コンテナの淡色タイル（出現順に循環割当）
-const CHAP_TINT = ['#dbeafe', '#dcfce7', '#fef3c7', '#fae8ff',
-                   '#ffedd5', '#cffafe', '#fee2e2', '#ede9fe', '#f1f5f9', '#fce7f3'];
-const LABEL_ZOOM = 0.95;   // このズーム以上で全ラベルを自動表示
+// 「結果（主要定理）」とみなす種類。概要図はこれらだけを残す。
+const RESULT_ENVS = new Set(['theorem', 'proposition', 'claim']);
+const SNIPPET_LEN = 80;     // カードに出す文面冒頭の文字数
+const SKEL_Z = 0.42;        // これ未満にズームアウトすると概要図（結果のみ）に切替
+const Z_MIN = 0.55;         // 既定表示の最小ズーム（最初から詳細＝密度を保つ）
 
 let GRAPH = null;
 let cy = null;
 let NODE_BY_ID = {};
-let CHAP_ORDER = [];                 // 章ラベルの出現順
-let UP = {}, DOWN = {};              // 隣接（描画される辺ベース）up=依存先, down=被依存
+let UP = {}, DOWN = {};
 let activeRouteByNode = {};
-let focusSet = null;                 // null=全体表示。Set のときフォーカス中
+let focusSet = null;
 let selectedId = null;
+let lodPending = false;
+
+const DATA_SRC = new URLSearchParams(location.search).get('data') || '../out/graph.json';
 
 // ---------------------------------------------------------------------------
 // 読み込み
 // ---------------------------------------------------------------------------
-// ?data=... で読み込むグラフを差し替え可能（既定はセミナー抽出結果）。
-// 例: viewer/?data=sample.graph.json はデモ用の小さなサンプルを開く。
-const DATA_SRC = new URLSearchParams(location.search).get('data') || '../out/graph.json';
-
 async function load() {
   let data;
   try {
@@ -48,7 +47,6 @@ async function load() {
   }
   GRAPH = data;
   GRAPH.nodes.forEach(n => { NODE_BY_ID[n.id] = n; });
-  CHAP_ORDER = [...new Set(GRAPH.nodes.map(n => n.chapter).filter(Boolean))];
   buildAdjacency();
   buildControls();
   buildGraph();
@@ -63,21 +61,31 @@ function showError(msg) {
   el.textContent = msg;
 }
 
-// 描画される辺（dangling 除去後）から隣接リストを作る
 function buildAdjacency() {
   GRAPH.nodes.forEach(n => { UP[n.id] = new Set(); DOWN[n.id] = new Set(); });
   GRAPH.edges.forEach(e => {
     if (!NODE_BY_ID[e.to] || !NODE_BY_ID[e.from]) return;
-    UP[e.from].add(e.to);     // from は to を使う → to は依存先
-    DOWN[e.to].add(e.from);   // to は from に使われる → from は被依存
+    UP[e.from].add(e.to);
+    DOWN[e.to].add(e.from);
   });
 }
 
-function chapTint(ch) {
-  const i = CHAP_ORDER.indexOf(ch);
-  return CHAP_TINT[(i < 0 ? 0 : i) % CHAP_TINT.length];
+function isResult(d) { return d && RESULT_ENVS.has(d.env); }
+
+// 結果 r から上流へたどり、最初に出会う結果（定義・補題は飛ばす）を集める
+function firstResults(rid) {
+  const out = new Set(), seen = new Set(), stack = [...(UP[rid] || [])];
+  while (stack.length) {
+    const x = stack.pop();
+    if (seen.has(x)) continue;
+    seen.add(x);
+    const d = NODE_BY_ID[x];
+    if (!d) continue;
+    if (isResult(d)) out.add(x);
+    else (UP[x] || []).forEach(y => stack.push(y));
+  }
+  return out;
 }
-function chapId(ch) { return 'chap::' + ch; }
 
 // ---------------------------------------------------------------------------
 // コントロール構築
@@ -90,75 +98,56 @@ function buildControls() {
     o.textContent = `${GRAPH.spaces[key].label}（${key}）まで`;
     sf.appendChild(o);
   });
-  sf.addEventListener('change', applyFilters);
+  sf.addEventListener('change', updateView);
 
-  const ef = document.getElementById('env-filters');
-  Object.keys(ENV_LABEL).forEach(env => {
-    if (!GRAPH.nodes.some(n => n.env === env)) return;
-    const lab = document.createElement('label');
-    lab.innerHTML =
-      `<input type="checkbox" value="${env}" checked> ` +
-      `<span style="color:${ENV_COLOR[env]};font-weight:700">${ENV_LABEL[env]}</span>`;
-    lab.querySelector('input').addEventListener('change', applyFilters);
-    ef.appendChild(lab);
-  });
-
-  const cf = document.getElementById('chapter-filters');
-  CHAP_ORDER.forEach(ch => {
-    const lab = document.createElement('label');
-    lab.innerHTML =
-      `<input type="checkbox" checked> ` +
-      `<span class="chap-swatch" style="background:${chapTint(ch)}"></span>${stripMath(ch)}`;
-    lab.querySelector('input').dataset.chapter = ch;
-    lab.querySelector('input').addEventListener('change', applyFilters);
-    cf.appendChild(lab);
-  });
-
-  // 現在のデータセットのリンクを active 表示
-  const isSample = /sample\.graph\.json/.test(DATA_SRC);
-  document.querySelectorAll('.dataset a').forEach(a => {
-    const sample = a.getAttribute('href').includes('data=');
-    a.classList.toggle('active', sample === isSample);
-  });
-
-  document.getElementById('show-uses').addEventListener('change', applyFilters);
-  document.getElementById('show-proof').addEventListener('change', applyFilters);
-  document.getElementById('group-chapter').addEventListener('change', rebuild);
-  document.getElementById('label-mode').addEventListener('change', refreshLabels);
+  document.getElementById('show-uses').addEventListener('change', updateView);
+  document.getElementById('show-proof').addEventListener('change', updateView);
   document.getElementById('focus-scope').addEventListener('change', () => {
     if (selectedId) applyFocus(selectedId); else clearFocus();
   });
-  document.getElementById('layout-select').addEventListener('change', () => runLayout(true));
   document.getElementById('fit-btn').addEventListener('click', clearFocus);
+
+  const curData = new URLSearchParams(location.search).get('data') || '';
+  document.querySelectorAll('.dataset a').forEach(a => {
+    const linkData = new URL(a.getAttribute('href'), location.href).searchParams.get('data') || '';
+    a.classList.toggle('active', linkData === curData);
+  });
 }
 
 // ---------------------------------------------------------------------------
 // グラフ構築
 // ---------------------------------------------------------------------------
-function grouped() { return document.getElementById('group-chapter').checked; }
+function cardLabel(n) {
+  const head = `${ENV_LABEL[n.env]}. ${mathToText(n.title) || stripMath(n.title)}`;
+  const snip = mathToText(n.statement || '');
+  const body = snip.length > SNIPPET_LEN ? snip.slice(0, SNIPPET_LEN) + '…' : snip;
+  return body ? head + '\n' + body : head;
+}
 
 function buildGraph() {
   const elements = [];
-  if (grouped()) {
-    CHAP_ORDER.forEach(ch => {
-      elements.push({ data: {
-        id: chapId(ch), label: stripMath(ch), isParent: true, tint: chapTint(ch),
-      }, classes: 'chapter' });
-    });
-  }
   GRAPH.nodes.forEach(n => {
     elements.push({ data: {
-      id: n.id, label: `${ENV_LABEL[n.env]}. ${stripMath(n.title)}`,
-      env: n.env, chapter: n.chapter, spaces: n.spaces,
-      parent: grouped() && n.chapter ? chapId(n.chapter) : undefined,
-    }, classes: 'leaf' });
+      id: n.id, label: cardLabel(n), env: n.env, chapter: n.chapter, spaces: n.spaces,
+      result: isResult(n) ? 1 : 0,
+    }, classes: 'leaf' + (isResult(n) ? ' result' : '') });
   });
   GRAPH.edges.forEach((e, i) => {
     if (!NODE_BY_ID[e.to]) return;
     elements.push({ data: {
-      id: 'e' + i, source: e.from, target: e.to,
-      kind: e.kind, route: e.route || '',
+      id: 'e' + i, source: e.from, target: e.to, kind: e.kind, route: e.route || '',
     }});
+  });
+  // 概要図用の結果間スケルトン辺（定義・補題を飛ばした結果→結果の依存）
+  const skelSeen = new Set();
+  GRAPH.nodes.forEach(n => {
+    if (!isResult(n)) return;
+    firstResults(n.id).forEach(t => {
+      const id = 'sk::' + n.id + '>>' + t;
+      if (skelSeen.has(id)) return;
+      skelSeen.add(id);
+      elements.push({ data: { id, source: n.id, target: t }, classes: 'skel' });
+    });
   });
 
   cy = cytoscape({
@@ -167,146 +156,145 @@ function buildGraph() {
     wheelSensitivity: 0.2,
     style: [
       { selector: 'node.leaf', style: {
-        'background-color': ele => ENV_COLOR[ele.data('env')] || '#888',
-        'label': 'data(label)', 'font-size': '10px', 'color': '#0f172a',
-        'text-wrap': 'wrap', 'text-max-width': '130px',
-        'text-valign': 'bottom', 'text-margin-y': 4,
-        'text-background-color': '#ffffff', 'text-background-opacity': 0.82,
-        'text-background-padding': '2px', 'text-background-shape': 'roundrectangle',
-        'text-opacity': 0,                       // 既定は非表示（refreshLabels で制御）
-        'width': 22, 'height': 22, 'border-width': 0,
-        'transition-property': 'opacity, text-opacity', 'transition-duration': '120ms',
+        'shape': 'round-rectangle',
+        'background-color': '#ffffff', 'background-opacity': 1,
+        'border-width': 2, 'border-color': ele => ENV_COLOR[ele.data('env')] || '#888',
+        'label': 'data(label)', 'text-wrap': 'wrap', 'text-max-width': '170px',
+        'text-valign': 'center', 'text-halign': 'center',
+        'font-size': '9px', 'line-height': 1.3, 'color': '#0f172a',
+        'width': 'label', 'height': 'label', 'padding': '7px',
       }},
-      { selector: 'node.leaf.lbl', style: { 'text-opacity': 1 }},
-      // 章コンテナ
-      { selector: 'node.chapter', style: {
-        'background-color': 'data(tint)', 'background-opacity': 0.45,
-        'border-width': 1, 'border-color': '#cbd5e1', 'border-style': 'dashed',
-        'shape': 'roundrectangle', 'padding': '22px',
-        'label': 'data(label)', 'text-valign': 'top', 'text-halign': 'center',
-        'font-size': '13px', 'font-weight': 'bold', 'color': '#475569',
-        'text-margin-y': 2, 'text-opacity': 1,
-      }},
-      { selector: 'node.chapter.collapsed-empty', style: { 'display': 'none' }},
+      // 概要図では結果カードをやや強調
+      { selector: 'node.result', style: { 'border-width': 3 }},
       { selector: 'node.leaf.dim', style: { 'opacity': 0.12 }},
       { selector: 'node.leaf.sel', style: {
-        'border-width': 4, 'border-color': '#0f172a', 'width': 28, 'height': 28 }},
+        'border-width': 4, 'border-color': '#0f172a', 'background-color': '#f8fafc' }},
       { selector: 'node.leaf.hl', style: { 'border-width': 3, 'border-color': '#0f172a' }},
       { selector: 'node.leaf.support', style: {
         'border-width': 3, 'border-color': '#16a34a', 'opacity': 1 }},
-      { selector: 'node.leaf.faded', style: { 'opacity': 0.06 }},
+      { selector: 'node.leaf.faded', style: { 'opacity': 0.07 }},
       { selector: 'edge.faded', style: { 'opacity': 0.025 }},
       { selector: 'edge', style: {
-        'width': 1.2, 'line-color': '#c4c4cc', 'target-arrow-color': '#c4c4cc',
-        'target-arrow-shape': 'triangle', 'arrow-scale': 0.8,
-        'curve-style': 'bezier', 'opacity': 0.4,
+        'width': 1.4, 'line-color': '#c4c4cc', 'target-arrow-color': '#c4c4cc',
+        'target-arrow-shape': 'triangle', 'arrow-scale': 0.9,
+        'curve-style': 'bezier', 'opacity': 0.45,
       }},
       { selector: 'edge[kind = "proof"]', style: { 'line-style': 'dashed' }},
+      // 結果間スケルトン辺（概要図でのみ表示）
+      { selector: 'edge.skel', style: {
+        'display': 'none', 'width': 2.4, 'line-color': '#94a3b8',
+        'target-arrow-color': '#94a3b8', 'target-arrow-shape': 'triangle',
+        'arrow-scale': 1.1, 'opacity': 0.6, 'curve-style': 'bezier',
+      }},
       { selector: 'edge.dim', style: { 'opacity': 0.03 }},
-      // フォーカス時の方向別の色: 依存先＝青、被依存＝紫
       { selector: 'edge.up', style: {
-        'line-color': '#2563eb', 'target-arrow-color': '#2563eb', 'width': 2.4, 'opacity': 0.95 }},
+        'line-color': '#2563eb', 'target-arrow-color': '#2563eb', 'width': 2.6, 'opacity': 0.95 }},
       { selector: 'edge.down', style: {
-        'line-color': '#7c3aed', 'target-arrow-color': '#7c3aed', 'width': 2.4, 'opacity': 0.95 }},
+        'line-color': '#7c3aed', 'target-arrow-color': '#7c3aed', 'width': 2.6, 'opacity': 0.95 }},
       { selector: 'edge.hl', style: {
-        'line-color': '#0f172a', 'target-arrow-color': '#0f172a', 'width': 2.6, 'opacity': 1 }},
+        'line-color': '#0f172a', 'target-arrow-color': '#0f172a', 'width': 2.8, 'opacity': 1 }},
       { selector: 'edge.route-on', style: {
-        'line-color': '#dc2626', 'target-arrow-color': '#dc2626', 'width': 2.8, 'opacity': 1 }},
+        'line-color': '#dc2626', 'target-arrow-color': '#dc2626', 'width': 3, 'opacity': 1 }},
     ],
   });
 
   cy.on('tap', 'node.leaf', evt => selectNode(evt.target.id()));
   cy.on('tap', evt => { if (evt.target === cy) clearSelection(); });
-  cy.on('mouseover', 'node.leaf', evt => { evt.target.addClass('hov'); refreshLabels(); });
-  cy.on('mouseout', 'node.leaf', evt => { evt.target.removeClass('hov'); refreshLabels(); });
-  let zt = null;
-  cy.on('zoom', () => { if (zt) return; zt = requestAnimationFrame(() => { zt = null; refreshLabels(); }); });
+  cy.on('zoom', () => {
+    if (focusSet || lodPending) return;
+    lodPending = true;
+    requestAnimationFrame(() => { lodPending = false; applyLOD(); });
+  });
 
   runLayout();
-  applyFilters();
 }
 
-// グループ化トグル時に作り直す
-function rebuild() {
-  const z = cy ? cy.zoom() : null;
-  if (cy) cy.destroy();
-  selectedId = null; focusSet = null;
-  document.getElementById('detail-empty').hidden = false;
-  document.getElementById('detail-body').hidden = true;
-  buildGraph();
-}
-
-function runLayout(refit) {
-  const name = document.getElementById('layout-select').value;
-  const eles = focusSet ? cy.elements(':visible') : cy.elements();
-  const opts = { name, animate: false, fit: true, padding: 36 };
-  if (name === 'dagre') {
-    opts.rankDir = 'BT'; opts.nodeSep = 26; opts.rankSep = 70;
-    opts.spacingFactor = 1.0;
-  }
-  if (name === 'breadthfirst') { opts.directed = true; opts.spacingFactor = 1.2; }
-  if (name === 'cose') { opts.idealEdgeLength = 90; opts.nodeRepulsion = 12000; }
-  eles.layout(opts).run();
-  refreshLabels();
-}
-
-// ---------------------------------------------------------------------------
-// ラベルの出し分け（俯瞰では消し、ズーム / hover / 選択 / フォーカスで出す）
-// ---------------------------------------------------------------------------
-function refreshLabels() {
-  if (!cy) return;
-  const mode = document.getElementById('label-mode').value;  // auto | always
-  const z = cy.zoom();
+function runLayout() {
   const focusing = !!focusSet;
-  cy.batch(() => {
-    cy.nodes('.leaf').forEach(n => {
-      if (n.style('display') === 'none') { n.removeClass('lbl'); return; }
-      const show = mode === 'always' || focusing || z >= LABEL_ZOOM
-        || n.hasClass('sel') || n.hasClass('hl') || n.hasClass('hov');
-      n.toggleClass('lbl', show);
-    });
-  });
+  const eles = (focusing ? cy.elements(':visible') : cy.elements())
+    .filter(el => !el.hasClass('skel'));
+  eles.layout({
+    name: 'dagre', animate: false, fit: true, padding: 36,
+    rankDir: 'BT', nodeSep: 24, rankSep: 70,
+  }).run();
+  if (!focusing) {
+    cy.nodes('.leaf').style('display', 'element');   // 寸法測定のため一旦可視化
+    fitDefault();
+  }
+  updateView();
+}
+
+// 既定は詳細レイアウト全体を枠に収めつつ、引きすぎない（最初から密度を保つ）
+function fitDefault() {
+  cy.fit(cy.nodes('.leaf'), 30);
+  if (cy.zoom() < Z_MIN) { cy.zoom(Z_MIN); cy.center(cy.nodes('.leaf')); }
 }
 
 // ---------------------------------------------------------------------------
-// フィルタ（env / 章 / 辺 / 空間）＋ フォーカス制限
+// 表示更新（フィルタ + セマンティックズーム）
 // ---------------------------------------------------------------------------
-function applyFilters() {
-  const envOn = new Set([...document.querySelectorAll('#env-filters input:checked')].map(i => i.value));
-  const chOn = new Set([...document.querySelectorAll('#chapter-filters input:checked')].map(i => i.dataset.chapter));
-  const showUses = document.getElementById('show-uses').checked;
-  const showProof = document.getElementById('show-proof').checked;
+function filterCtx() {
   const spaceKey = document.getElementById('space-filter').value;
-  const provided = spaceKey ? new Set(GRAPH.spaces[spaceKey].closure) : null;
+  return {
+    showUses: document.getElementById('show-uses').checked,
+    showProof: document.getElementById('show-proof').checked,
+    provided: spaceKey ? new Set(GRAPH.spaces[spaceKey].closure) : null,
+  };
+}
 
+function setEdgeVis(e, showUses, showProof) {
+  const okKind = (e.data('kind') === 'uses' && showUses) || (e.data('kind') === 'proof' && showProof);
+  const ends = e.source().style('display') === 'element' && e.target().style('display') === 'element';
+  e.style('display', (okKind && ends) ? 'element' : 'none');
+}
+
+function dimLeaf(n, provided) {
+  const d = NODE_BY_ID[n.id()];
+  const holds = !(provided && d.spaces.length) || d.spaces.every(s => provided.has(s));
+  n.toggleClass('dim', n.style('display') === 'element' && provided && !holds);
+}
+
+function updateView() {
+  if (!cy) return;
+  if (focusSet) applyExplicit(); else applyLOD();
+}
+
+// フォーカス中: フォーカス集合だけを表示
+function applyExplicit() {
+  const { showUses, showProof, provided } = filterCtx();
+  cy.batch(() => {
+    cy.edges('.skel').style('display', 'none');
+    cy.nodes('.leaf').forEach(n => {
+      const visible = !(focusSet && !focusSet.has(n.id()));
+      n.style('display', visible ? 'element' : 'none');
+      dimLeaf(n, provided);
+    });
+    cy.edges().filter(e => !e.hasClass('skel')).forEach(e => setEdgeVis(e, showUses, showProof));
+  });
+}
+
+// 俯瞰: 近い（詳細）= 全ブロック、引く（概要）= 結果のみ + 結果間スケルトン
+function applyLOD() {
+  const { showUses, showProof, provided } = filterCtx();
+  const detail = cy.zoom() >= SKEL_Z;
   cy.batch(() => {
     cy.nodes('.leaf').forEach(n => {
-      const d = NODE_BY_ID[n.id()];
-      let visible = envOn.has(d.env) && chOn.has(d.chapter);
-      if (focusSet && !focusSet.has(n.id())) visible = false;
-      let holds = true;
-      if (provided && d.spaces.length) holds = d.spaces.every(s => provided.has(s));
-      n.style('display', visible ? 'element' : 'none');
-      n.toggleClass('dim', visible && provided && !holds);
+      const show = detail || n.hasClass('result');
+      n.style('display', show ? 'element' : 'none');
+      dimLeaf(n, provided);
     });
-    cy.edges().forEach(e => {
-      const okKind = (e.data('kind') === 'uses' && showUses) ||
-                     (e.data('kind') === 'proof' && showProof);
-      const ends = e.source().style('display') === 'element' &&
-                   e.target().style('display') === 'element';
-      e.style('display', (okKind && ends) ? 'element' : 'none');
+    cy.edges().filter(e => !e.hasClass('skel')).forEach(e => {
+      if (detail) setEdgeVis(e, showUses, showProof); else e.style('display', 'none');
     });
-    // 空の章コンテナは隠す
-    cy.nodes('.chapter').forEach(p => {
-      const anyVisible = p.children().some(c => c.style('display') === 'element');
-      p.style('display', anyVisible ? 'element' : 'none');
+    cy.edges('.skel').forEach(e => {
+      const ends = e.source().style('display') === 'element' && e.target().style('display') === 'element';
+      e.style('display', (!detail && ends) ? 'element' : 'none');
     });
   });
-  refreshLabels();
 }
 
 // ---------------------------------------------------------------------------
-// フォーカス：選択ノードの依存近傍だけに絞る
+// フォーカス
 // ---------------------------------------------------------------------------
 function closure(id, adj, transitive) {
   const out = new Set();
@@ -327,20 +315,18 @@ function applyFocus(id) {
   const up = closure(id, UP, trans);
   const down = closure(id, DOWN, trans);
   focusSet = new Set([id, ...up, ...down]);
-  applyFilters();
-  // 方向で辺を色分け（依存先＝青 up、被依存＝紫 down）
+  updateView();
   cy.batch(() => {
     cy.edges().removeClass('up down');
     cy.edges(':visible').forEach(e => {
       const s = e.source().id(), t = e.target().id();
       if (focusSet.has(s) && focusSet.has(t)) {
-        // s が t を使う。t が id 側（上流）なら up、s が id 側（下流）なら down
         if (up.has(t) || t === id) e.addClass('up');
         else if (down.has(s) || s === id) e.addClass('down');
       }
     });
   });
-  runLayout(true);
+  runLayout();
   const n = NODE_BY_ID[id];
   document.getElementById('stats').textContent =
     `フォーカス: ${ENV_LABEL[n.env]}. ${stripMath(n.title)} — 依存 ${up.size} / 被依存 ${down.size}` +
@@ -352,10 +338,11 @@ function clearFocus() {
   if (focusSet) {
     focusSet = null;
     cy.edges().removeClass('up down');
-    applyFilters();
-    runLayout(true);
+    runLayout();
   } else {
-    cy.fit(null, 36);
+    cy.nodes('.leaf').style('display', 'element');
+    fitDefault();
+    applyLOD();
   }
   document.getElementById('stats').textContent =
     `${GRAPH.stats.n_nodes} blocks · ${GRAPH.stats.n_edges} edges · ` +
@@ -383,7 +370,6 @@ function selectNode(id) {
   highlightRoute(d, defaultRoute);
 
   if (document.getElementById('focus-scope').value !== 'off') applyFocus(id);
-  refreshLabels();
 }
 
 function clearSelection(clearPanel = true) {
@@ -393,7 +379,6 @@ function clearSelection(clearPanel = true) {
     document.getElementById('detail-empty').hidden = false;
     document.getElementById('detail-body').hidden = true;
   }
-  refreshLabels();
 }
 
 function routesOf(id) { return GRAPH.routes.filter(r => r.node === id); }
@@ -411,11 +396,12 @@ function renderDetail(d) {
   const loc = [d.chapter, d.section, d.subsection].filter(Boolean).map(stripMath).join(' › ');
   document.getElementById('d-loc').textContent = loc + '  ·  ' + d.id;
 
+  document.getElementById('d-statement').innerHTML = texToHtml(d.statement);
+
   document.getElementById('d-spaces').innerHTML = d.spaces.length
     ? d.spaces.map(s => `<span class="chip">${GRAPH.spaces[s] ? GRAPH.spaces[s].label : s}</span>`).join('')
     : '<span class="muted">空間タグなし</span>';
 
-  // フォーカスボタン
   const fwrap = document.getElementById('d-focus');
   fwrap.innerHTML =
     `<button id="d-focus-direct">前後に絞る（直接）</button>` +
@@ -539,15 +525,63 @@ function highlightSupport(id, route) {
       e.toggleClass('faded', !(inSet(e.source().id()) && inSet(e.target().id())));
     });
   });
-  refreshLabels();
   const label = route === '_auto' ? '自動ルート' : `ルート ${route}`;
   document.getElementById('stats').textContent =
     `支持集合（${stripMath(NODE_BY_ID[id].title)} / ${label}）: ${support.size} ブロック`;
 }
 
 // ---------------------------------------------------------------------------
-// ユーティリティ
+// TeX → 表示テキスト変換
 // ---------------------------------------------------------------------------
+const SYM = {
+  alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε',
+  zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'ϑ', iota: 'ι', kappa: 'κ', lambda: 'λ',
+  mu: 'μ', nu: 'ν', xi: 'ξ', pi: 'π', rho: 'ρ', sigma: 'σ', tau: 'τ', upsilon: 'υ',
+  phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω',
+  Gamma: 'Γ', Delta: 'Δ', Theta: 'Θ', Lambda: 'Λ', Xi: 'Ξ', Pi: 'Π', Sigma: 'Σ',
+  Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', nabla: '∇', partial: '∂', infty: '∞',
+  to: '→', mapsto: '↦', times: '×', cdot: '·', leq: '≤', le: '≤', geq: '≥', ge: '≥',
+  neq: '≠', in: '∈', notin: '∉', subset: '⊂', subseteq: '⊆', supset: '⊃', supseteq: '⊇',
+  cup: '∪', cap: '∩', emptyset: '∅', forall: '∀', exists: '∃', Rightarrow: '⇒',
+  rightarrow: '→', leftrightarrow: '↔', iff: '⇔', langle: '⟨', rangle: '⟩', sum: 'Σ',
+  prod: '∏', int: '∫', sqrt: '√', pm: '±', approx: '≈', sim: '∼', equiv: '≡', circ: '∘',
+  ldots: '…', dots: '…', cdots: '…', sharp: '#', setminus: '∖', otimes: '⊗',
+  min: 'min', max: 'max', sup: 'sup', inf: 'inf', lim: 'lim', log: 'log', exp: 'exp', ln: 'ln',
+  R: 'ℝ', N: 'ℕ', Z: 'ℤ', Q: 'ℚ', E: '𝔼', X: '𝒳', Y: '𝒴', Pp: '𝒫', Mm: 'ℳ',
+  Bb: 'ℬ', Cc: '𝒞', Lcal: 'ℒ', Zz: '𝒵', Wass: '𝒲', WassD: 'W', MK: 'ℒ', MKD: 'L',
+  Couplings: '𝒰', CouplingsD: 'Π', Potentials: 'ℛ', PotentialsD: 'R', ones: '1',
+  Identity: 'I', simplex: 'Σ', defeq: ':=', dist: 'd', distD: 'D', CD: 'CD', Ric: 'Ric',
+  KL: 'KL', KLD: 'KL', supp: 'supp', tr: 'tr', diag: 'diag',
+  argmin: 'argmin', argmax: 'argmax', smin: 'smin', Tan: 'Tan', diverg: '∇·', d: 'd',
+};
+
+function mathToText(s) {
+  if (!s) return '';
+  let t = s;
+  for (let i = 0; i < 5; i++) {
+    t = t.replace(
+      /\\(?:textbf|textit|textrm|textsf|emph|text|operatorname\*?|mathrm|mathbb|mathcal|mathbf|mathsf|mathfrak|boldsymbol|pmb|underline|mathop|hat|bar|tilde|vec|overline)\s*\{([^{}]*)\}/g,
+      '$1');
+  }
+  t = t.replace(/\\[dt]?frac\s*\{([^{}]*)\}\s*\{([^{}]*)\}/g, '$1/$2');
+  t = t.replace(/\\sqrt\s*\{([^{}]*)\}/g, '√($1)');
+  t = t.replace(/\\[A-Za-z]+/g, m => { const v = SYM[m.slice(1)]; return v !== undefined ? v : ''; });
+  t = t.replace(/\\[\[\]()]/g, ' ')
+       .replace(/\\[^A-Za-z]/g, ' ')
+       .replace(/[\${}&]/g, '')
+       .replace(/[\^_]/g, '')
+       .replace(/~/g, ' ');
+  return t.replace(/\s+/g, ' ').trim();
+}
+
+function texToHtml(s) {
+  if (!s) return '<span class="muted">（本文なし）</span>';
+  return s
+    .replace(/\\textbf\{([^{}]*)\}/g, '<strong>$1</strong>')
+    .replace(/\\(?:emph|textit)\{([^{}]*)\}/g, '<em>$1</em>')
+    .replace(/\\textrm\{([^{}]*)\}/g, '$1');
+}
+
 function stripMath(s) {
   if (!s) return '';
   return s.replace(/\$([^$]*)\$/g, '$1')

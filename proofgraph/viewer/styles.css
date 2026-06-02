@@ -50,6 +50,10 @@ button:hover { background: #e5e7eb; }
 #detail h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--muted); margin: 16px 0 6px; }
 .muted { color: var(--muted); font-size: 12px; }
+.statement { font-size: 13px; line-height: 1.7; margin: 10px 0; padding: 10px 12px;
+  background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
+  max-height: 40vh; overflow-y: auto; overflow-x: hidden; }
+.statement :is(mjx-container) { margin: 4px 0; }
 #d-spaces .chip { display: inline-block; background: #eef2ff; color: #3730a3;
   font-size: 11px; padding: 2px 8px; border-radius: 6px; margin: 2px 4px 2px 0; }
 #detail ul { margin: 4px 0; padding-left: 18px; }
