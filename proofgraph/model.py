@@ -111,6 +111,7 @@ class Node:
     spaces: list = field(default_factory=list)   # 空間タグ
     uses: list = field(default_factory=list)     # statement 依存（AND）
     routes: list = field(default_factory=list)   # 証明ルート（OR of AND）: list[Route]
+    statement: str = ""          # ブロック本文（statement テキスト、TeX のまま）
     has_proof: bool = False
 
     @property

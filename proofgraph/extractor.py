@@ -163,6 +163,37 @@ def _refs_in(text: str) -> list:
 # ブロック抽出
 # ---------------------------------------------------------------------------
 
+def _clean_statement(body: str) -> str:
+    r"""ブロック本文を statement テキストとして整える。
+
+    数式・マクロは MathJax で描画するため TeX のまま残し、表示の邪魔になる
+    \label / \index / \demohint と余分な空白だけを除去する。
+    """
+    s = body
+    s = re.sub(r"\\label\{[^}]*\}", "", s)
+    s = re.sub(r"\\index\{[^}]*\}", "", s)
+    s = re.sub(r"\\demohint\{[^}]*\}", "", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def _dedupe_routes(routes: list) -> list:
+    """依存集合（使った定理・Prop の集合）が等しいルートを 1 本に統合する。
+
+    証明方法が複数あっても、引用するブロックの集合が同じなら同一の証明とみなす方針。
+    記号や記述が違うだけの「別証明」を重複ルートとして数えないため、最初の 1 本を残す。
+    """
+    seen = set()
+    out = []
+    for r in routes:
+        key = frozenset(r.deps)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(r)
+    return out
+
+
 def _parse_proofs_after(content: str, pos: int) -> list:
     r"""pos 直後に連続する \begin{proof}[opt]...\end{proof} の本文リストを返す。"""
     proofs = []
@@ -243,13 +274,17 @@ def _build_node(env, title, label, chapter, section, subsection,
         deps = [d for d in dict.fromkeys(proof_refs) if d != node_id]
         routes.append(Route(name="_auto", deps=deps))
 
+    # 証明方法が複数あっても、使った定理・Prop の集合が同じなら同一の証明とみなす。
+    # 依存集合が等しいルートは最初の 1 本に統合する（記号差だけの別証明を作らない）。
+    routes = _dedupe_routes(routes)
+
     spaces = meta.get("space", []) or meta.get("spaces", [])
 
     return Node(
         id=node_id, env=env, title=title,
         chapter=chapter, section=section, subsection=subsection,
         source_file=source_file, spaces=spaces, uses=uses, routes=routes,
-        has_proof=bool(proofs),
+        statement=_clean_statement(body), has_proof=bool(proofs),
     )
 
 
@@ -266,6 +301,7 @@ def build_graph(nodes: list, lattice: SpaceLattice) -> dict:
             "id": n.id, "env": n.env, "title": n.title,
             "chapter": n.chapter, "section": n.section, "subsection": n.subsection,
             "source_file": n.source_file, "spaces": n.spaces,
+            "statement": n.statement,
             "has_proof": n.has_proof, "is_axiomatic": n.is_axiomatic,
         })
         for u in n.uses:
