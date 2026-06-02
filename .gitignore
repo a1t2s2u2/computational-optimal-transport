@@ -45,3 +45,7 @@ __pycache__/
 
 # proofgraph viewer smoke artifacts
 proofgraph/viewer/_smoke.png
+
+# Lean build artifacts
+lean/.lake/
+lean/lake-manifest.json

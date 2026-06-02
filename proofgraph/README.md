@@ -68,10 +68,47 @@ ch06 の Kantorovich 双対定理は、本文中に「$c$-変換による別証�
 `route.A`（LP 強双対、弱双対性を使う）と `route.B`（$c$-変換）を明示すると、ルート A が定理を
 独立に接地し、OR 解決で循環が解ける。これが本ツールが扱う「ルート A / ルート B」構造の実例。
 
+## Lean4 連携（`lean_gen.py` → `lean/`）
+
+`graph.json` から 2 つの Lean ファイルを生成する。
+
+```bash
+python3 proofgraph/lean_gen.py
+```
+
+### 1. `lean/Ot/Generated/Skeleton.lean`（Mathlib 不要・即検証可能）
+
+各ブロックを `opaque … : Prop` として宣言し、その「証明済み性」を同名 `_pf` 項で表す。
+証明付きブロックは採択ルートの依存 `_pf` を `have` で参照し `sorry` で閉じる。
+
+```bash
+cd lean && lean Ot/Generated/Skeleton.lean     # Mathlib 不要、数秒
+# あるいは  lake build Ot
+```
+
+これにより Lean の型検査が次を保証する:
+- **依存先の存在**（dangling なら unknown identifier エラー）
+- **非循環性**（循環なら位相順に並べられず前方参照エラー）
+- **未証明 obligation 数** = `sorry` の数
+
+数学的内容ではなく「証明の骨格」を検証する層。`validate.py` の構造検査を Lean に二重化したもの。
+
+### 2. `lean/Ot/Generated/MathlibCheck.lean`（`import Mathlib`）
+
+`\blockmeta{lean=...}` の対応先（例 `MetricSpace`, `PolishSpace`, `CompleteSpace`）が
+Mathlib に実在するかを `#check @…` で検証する。初回のみ Mathlib キャッシュ取得が必要:
+
+```bash
+cd lean && lake update && lake exe cache get && lake build Ot.Generated.MathlibCheck
+```
+
+`lean/lakefile.toml` が Mathlib を `require` している（実連携）。`lean-toolchain` は
+Mathlib リリースに合わせて `v4.30.0` に固定。
+
 ## 状態
 
 - [x] Phase 0: 注釈スキーマ・空間語彙
 - [x] Phase 1: 抽出器 `extractor.py` / 検証器 `validate.py` / モデル `model.py`
-- [ ] Phase 2: 可視化 viewer（Cytoscape.js）
-- [ ] Phase 3: AND/OR ルートの可視化（到達可能集合）
-- [ ] Phase 4: Lean4 + Mathlib 連携（`lean_gen.py`, `lean/`）
+- [x] Phase 2: 可視化 viewer（Cytoscape.js）
+- [x] Phase 3: AND/OR ルートの支持集合可視化
+- [x] Phase 4: Lean4 スケルトン生成 `lean_gen.py` + Mathlib マッピング検証

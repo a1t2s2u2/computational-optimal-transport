@@ -100,6 +100,7 @@ function buildGraph() {
     elements.push({ data: {
       id: n.id, label: `${ENV_LABEL[n.env]}. ${stripMath(n.title)}`,
       env: n.env, chapter: n.chapter, spaces: n.spaces,
+      lean: n.lean || undefined,
     }});
   });
   GRAPH.edges.forEach((e, i) => {
@@ -125,6 +126,8 @@ function buildGraph() {
       { selector: 'node.dim', style: { 'opacity': 0.12 } },
       { selector: 'node.sel', style: {
         'border-width': 3, 'border-color': '#111827', 'width': 22, 'height': 22 }},
+      { selector: 'node[lean]', style: {
+        'border-width': 2, 'border-color': '#065f46', 'border-style': 'double' }},
       { selector: 'node.hl', style: { 'border-width': 2, 'border-color': '#111827' }},
       { selector: 'node.support', style: {
         'border-width': 2, 'border-color': '#16a34a', 'opacity': 1 }},
