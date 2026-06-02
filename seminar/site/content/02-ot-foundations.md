@@ -689,6 +689,31 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 と書ける．
 
 :::theorem
+### Clm: 離散カップリング集合は凸
+
+離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸集合である．
+すなわち \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in [0,1]\) に対して
+\(t\mathbf{P} + (1-t)\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+
+:::details-embedded 証明
+\(\mathbf{R} \defeq t\mathbf{P} + (1-t)\mathbf{Q}\) とおく．
+\(\mathbf{P}, \mathbf{Q} \geq \mathbf{0}\) かつ \(t \in [0,1]\) より \(\mathbf{R} \geq \mathbf{0}\)．
+また周辺条件は線形だから
+
+\[
+  \mathbf{R}\ones_m
+  = t\mathbf{P}\ones_m + (1-t)\mathbf{Q}\ones_m
+  = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a},
+  \qquad
+  \mathbf{R}^\top\ones_n
+  = t\mathbf{b} + (1-t)\mathbf{b} = \mathbf{b}.
+\]
+
+ゆえに \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．非負制約と線形な周辺制約だけで定まる集合だから凸である．
+:::
+:::
+
+:::theorem
 ### Clm: 最適解集合は凸かつコンパクト
 
 最適解の集合
@@ -708,17 +733,8 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 **凸性．**
 \(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
 \(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) とおく．
-\(\mathbf{P}^*, \mathbf{Q}^* \geq \mathbf{0}\) より \(\mathbf{R} \geq \mathbf{0}\) であり，
-
-\[
- \mathbf{R}\ones_m
- = (t\mathbf{P}^* + (1-t)\mathbf{Q}^*)\ones_m
- = t\mathbf{P}^*\ones_m + (1-t)\mathbf{Q}^*\ones_m
- = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a}.
-\]
-
-同様に \(\mathbf{R}^\top\ones_n = \mathbf{b}\) ゆえ \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
-さらに，内積の線形性から
+[ref:Clm: 離散カップリング集合は凸|離散カップリング集合は凸]より \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，
+さらに内積の線形性から
 
 \[
  \inner{\mathbf{C}}{\mathbf{R}}
