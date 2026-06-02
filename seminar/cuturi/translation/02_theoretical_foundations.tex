@@ -1,1819 +1,1048 @@
+% 原文: chapters/theory.tex
+
 \chapter{理論的基礎}
-\label{ch:theoretical-foundations}
+\label{c-continuous}
 
-%% ============================================================
-%%  2.1 基本的な定義
-%% ============================================================
-\section{基本的な定義}
-\label{sec:prerequisites}
+本章では最適輸送の基礎を述べる．まず確率ベクトル $(\a,\b)$ の間の最適マッチングとカップリングという関連する概念を導入し，この計算を離散測度 $(\al,\be)$ の間の輸送へと徐々に一般化し，最後に任意の測度という一般的な設定までを扱う．初読の際にはこれら最後の微妙な点を省略してもよく，読者は確率ベクトル，すなわちヒストグラムの間の計算のみに焦点を当てることができる．これは第\ref{c-algo-basics}章および第\ref{c-entropic}章で詳述するアルゴリズムを実装するうえで唯一必要となるものである．より経験を積んだ読者は，任意の測度に適用される定式化を考えることで問題のより良い理解に達し，それをより高度な問題（たとえば点群の位置を動かすため，あるいは点が連続な密度から標本抽出される統計的設定において）へ応用できるようになるであろう．
 
-本節では，距離空間，測度，確率測度，コスト関数などの基本概念を定義し，
-以降の議論で用いる記法を定める．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histograms and Measures}
 
-%% --- 2.1.1 基本的な記法と概念 ---
-\subsection{基本的な記法と概念}
-\label{subsec:basic-notation}
+確率単体
+\eq{
+	\simplex_n \eqdef \enscond{\a \in \RR_+^n}{ \sum_{i=1}^n \a_i = 1 }
+}
+に属する任意の元 $\a \in \simplex_n$ に対し，ヒストグラムと確率ベクトルという用語を互換的に用いる．本概説の大部分は，単体上で最適輸送が誘導する幾何の研究にもっぱら焦点を当てる．% より汎用的な提示の仕方は離散測度の形式論を活用するものであり，これは確率ベクトルに含まれる重みと，ヒストグラムのビン（測度の台）に付随する位置の両方を扱うことに対応する．% この形式論は，任意のサイズ $n$ で位置が変化しうるヒストグラムを暗黙的に扱うために用いることができる．最後に，最も技巧的な第三の説明の層では，任意の測度（すなわち離散である必要はなく，典型的には基準測度に関して連続なもの）を扱う．
 
-\begin{definition}{非負実数の空間}{nonneg-reals}
-  $\R_{\geq 0} \defeq \{x \in \R \mid x \geq 0\}$ と記す．
-  $\R_{\geq 0}^n$ は $n$ 次元ベクトルで全成分が非負であるものの集合を表す．
-\end{definition}
 
-\begin{definition}{凸集合}{convex-set}
-  $\R^n$ の部分集合 $S$ が\textbf{凸}（convex）であるとは，
-  任意の $x, y \in S$ と $t \in [0, 1]$ に対して
-  $tx + (1-t)y \in S$ が成り立つことをいう．
-  すなわち，$S$ の任意の2点を結ぶ線分が $S$ に含まれる．
-\end{definition}
+%%%%%%%%%%%%%%
+\begin{rem1}{Discrete measures}
+重み $\a$ と位置 $x_1,\dots,x_n\in\X$ をもつ離散測度は
+\eql{\label{eq-discr-meas}
+	\al = \sum_{i=1}^n \a_i \de_{x_i},
+}
+と書かれる．ここで $\de_x$ は位置 $x$ における Dirac であり，直感的には位置 $x$ に無限に集中した単位質量である．このような測度は，さらに $\a\in\simplex_n$ であれば確率測度を記述し，より一般にベクトル $\a$ のすべての要素が非負であれば正測度を記述する．質量のない位置が考慮される退化の問題を避けるため，離散測度を考える際には $\a$ のすべての要素が正であると仮定する．
+\end{rem1}
+%%%%%%%%%%%%%%
 
-\begin{definition}{凸包}{convex-hull}
-  集合 $A \subset \R^n$ の\textbf{凸包}（convex hull）とは，
-  $A$ を含むすべての凸集合の共通部分をいい，$\operatorname{conv}(A)$ と表す：
-  \[
-    \operatorname{conv}(A) \defeq \bigcap \{ S \subset \R^n \mid A \subset S,\; S \text{ は凸} \}.
-  \]
-\end{definition}
 
-\begin{proposition}{凸包の特徴づけ}{convex-hull-char}
-  集合 $A \subset \R^n$ に対して，
-  \[
-    \operatorname{conv}(A) = \left\{
-    \sum_{i=1}^k \lambda_i x_i \;\middle|\;
-    k \in \N,\; x_i \in A,\; \lambda_i \geq 0,\; \sum_{i=1}^k \lambda_i = 1
-    \right\}.
-  \]
-  すなわち，凸包は $A$ の有限個の点の凸結合全体に一致する．
-\end{proposition}
 
-\begin{definition}{端点}{extreme-point}
-  凸集合 $S$ の点 $x \in S$ が\textbf{端点}（extreme point）であるとは，
-  $x = \frac{y + z}{2}$ かつ $y, z \in S$ ならば $x = y = z$ が成り立つことをいう．
-  すなわち，$x$ は $S$ の他の2点の中点としては表せない．
-\end{definition}
+%%%%%%%%%%%%%%
+\begin{rem2}{General measures}
+OT の便利な特徴は，同じ枠組みの中で離散・連続のいずれか，あるいは両方である測度を扱えることである．これを行うために，空間 $\X$ 上の Radon 測度の集合 $\Mm(\X)$ に依拠する．この集合の形式的な定義は $\X$ が距離（通常 $\dist$ と表記される）を備えていることを要求する．というのも，測度には連続関数（$f \in \Cc(\X)$ と表記される）に対して「検証する」（積分する）ことによってのみアクセスできるからである．
 
-\begin{figure}[htbp]
-  \centering
-  \begin{tikzpicture}[scale=1.2]
-    % 三角形の頂点
-    \coordinate (A) at (0, 0);
-    \coordinate (B) at (3, 0);
-    \coordinate (C) at (1.5, 2.6);
+$f \in \Cc(\X)$ の離散測度 $\al$ に対する積分は和
+\eq{
+	\int_\X f(x) \d\al(x) = \sum_{i=1}^n \a_i f(x_i).
+}
+を計算する．
+%
+たとえば $\X=\RR^\dim$（$\dim \in \NN^*$ は次元）上のより一般の測度は，Lebesgue 測度に関して密度 $\d\al(x)=\density{\al}(x)\d x$（しばしば $\density{\al} = \frac{\d\al}{\d x}$ と表記される）をもちうる．これは
+\eq{
+	\foralls h \in \Cc(\RR^\dim), \quad
+	\int_{\RR^\dim} h(x) \d\al(x) =  \int_{\RR^\dim} h(x) \density{\al}(x) \d x.
+}
+を意味する．
+%
+任意の測度 $\al \in \Mm(\X)$（密度をもつ必要も Dirac の和である必要もない）は，任意の連続関数 $f \in \Cc(\X)$ に対して積分でき $\int_\X f(x) \d\al(x) \in \RR$ を得るという事実によって定義される．$\X$ がコンパクトでない場合には，$f$ がコンパクトな台をもつ，あるいは少なくとも無限遠で $0$ に収束することも課すべきである．
+%
+したがって測度はある意味で関数より「正則でない」が，超関数（滑らかな関数に双対なもの）よりは正則である．たとえば Dirac の微分は測度ではない．
+%
+$\X$ 上のすべての正測度の集合を $\Mm_+(\X)$ と表記する．確率測度の集合は $\Mm_+^1(\X)$ と表記される．これは任意の $\al \in \Mm_+^1(\X)$ が正であり，かつ $\al(\X)=\int_\Xx \d\al = 1$ であることを意味する．
+%
+図~\ref{fig-measures} は，本論で考察するヒストグラムを超えた様々なクラスの測度の可視化を提供する．
+\end{rem2}
+%%%%%%%%%%%%%%
 
-    % 三角形の内部（塗りつぶし）
-    \fill[blue!8] (A) -- (B) -- (C) -- cycle;
-    % 三角形の辺
-    \draw[thick] (A) -- (B) -- (C) -- cycle;
 
-    % 端点（頂点）
-    \fill (A) circle (2.5pt) node[below left] {$x_1$};
-    \fill (B) circle (2.5pt) node[below right] {$x_2$};
-    \fill (C) circle (2.5pt) node[above] {$x_3$};
-
-    % 辺上の点（端点でない）
-    \coordinate (P) at ($(A)!0.35!(B)$);
-    \fill[white] (P) circle (2.5pt);
-    \draw (P) circle (2.5pt) node[below] {$p$};
-
-    % 凸包の注釈
-    \node[right] at (3.5, 1.3) {$S = \operatorname{conv}(x_1, x_2, x_3)$};
-    \node[right] at (3.5, 0.7) {端点：$x_1, x_2, x_3$};
-    \node[right, text width=5cm] at (3.5, 0.0) {辺上・内部の点は端点でない\\（例：$p = tx_1 + (1-t)x_2$）};
-  \end{tikzpicture}
-  \caption{凸集合・凸包・端点の例．三角形 $S$ は3点 $x_1, x_2, x_3$ の凸包であり，凸集合である．
-  頂点 $x_1, x_2, x_3$ は $S$ の端点であるが，辺上の点 $p$ や内部の点は $S$ 内の他の2点の中点として表せるため端点ではない．}
-  \label{fig:convex-hull-extreme}
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{}}
+\includegraphics[width=.24\linewidth]{measures/discrete-1d.pdf}&
+\includegraphics[width=.15\linewidth]{measures/discrete-2d}&
+\includegraphics[width=.24\linewidth]{measures/density-1d}&
+\includegraphics[width=.22\linewidth]{measures/density-2d}\\
+Discrete $d=1$ & Discrete $d=2$ & Density $d=1$ & Density $d=2$
+\end{tabular}
+\caption{\label{fig-measures}
+離散分布 $\al = \sum_{i=1}^n \a_i \de_{x_i}$（赤は経験的一様分布 $\a_i=1/n$ に対応し，青は任意の分布に対応する）と密度 $\d\al(x)=\density{\al}(x)\d x$（紫色）の一次元および二次元における概略図．一次元の離散分布は（長さが $\a_i$ に等しい）幹葉図として表示され，二次元では点群を用いて表示される（この場合，その半径が $\a_i$ に等しいか，あるいはより視覚的に正確な表現としてその面積が $\a_i$ に等しいとする）．
+}
 \end{figure}
 
-\begin{definition}{ほとんどいたるところ}{almost-everywhere}
-  測度 $\mu$ に関して，性質 $P(x)$ が
-  \textbf{ほとんどいたるところ}（almost everywhere; a.e.）成り立つとは，
-  $P(x)$ が成り立たない点の集合 $\{x \mid \lnot P(x)\}$ が $\mu$-零集合
-  （$\mu(\{x \mid \lnot P(x)\}) = 0$）であることをいう．
-  $\mu$ がルベーグ測度の場合は単に「a.e.」と書く．
-\end{definition}
 
-\begin{definition}{上極限と下極限}{limsup-liminf}
-  実数列 $(a_n)_{n \geq 1}$ に対して，
-  \textbf{上極限}（limit superior）と\textbf{下極限}（limit inferior）を
-  \[
-    \limsup_{n \to \infty} a_n \defeq \lim_{n \to \infty} \sup_{k \geq n} a_k, \qquad
-    \liminf_{n \to \infty} a_n \defeq \lim_{n \to \infty} \inf_{k \geq n} a_k
-  \]
-  で定義する．
-  $\liminf a_n \leq \limsup a_n$ が常に成り立ち，
-  両者が一致するとき通常の極限 $\lim a_n$ が存在してその値に等しい．
-\end{definition}
 
-\begin{figure}[htbp]
-  \centering
-  \begin{tikzpicture}[scale=0.85]
-    \draw[->] (0, 0) -- (11.5, 0) node[right] {$n$};
-    \draw[->] (0, -0.3) -- (0, 4.8);
 
-    % 数列の値（振動するが収束しない，上極限と下極限が異なる）
-    % 上のピークは 3.0 に，下の谷は 1.5 に近づく
-    \draw[thin, gray]
-      (0.75, 4.2) -- (1.5, 0.2) -- (2.25, 3.7) -- (3.0, 0.6) --
-      (3.75, 3.5) -- (4.5, 0.9) -- (5.25, 3.3) -- (6.0, 1.1) --
-      (6.75, 3.2) -- (7.5, 1.25) -- (8.25, 3.15) -- (9.0, 1.35) --
-      (9.75, 3.1) -- (10.5, 1.4);
-    \foreach \n/\val in {1/4.2, 2/0.2, 3/3.7, 4/0.6, 5/3.5, 6/0.9, 7/3.3, 8/1.1, 9/3.2, 10/1.25, 11/3.15, 12/1.35, 13/3.1, 14/1.4} {
-      \fill (0.75*\n, \val) circle (2pt);
-    }
-    \node[above right] at (10.5, 1.4) {$a_n$};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Assignment and Monge Problem}
 
-    % sup_{k>=n} の折れ線（上から下降，limsup に収束）
-    \draw[thick, red, dashed]
-      (0.75, 4.2) -- (2.25, 3.7) -- (3.75, 3.5) -- (5.25, 3.3) --
-      (6.75, 3.2) -- (8.25, 3.15) -- (9.75, 3.1) -- (10.5, 3.05);
-    \node[red, right] at (10.5, 3.3) {$\sup_{k \geq n} a_k$};
+コスト行列 $(\C_{i,j})_{i \in \range{n}, j \in \range{m}}$ が与えられ $n=m$ と仮定するとき，最適割当問題は $n$ 個の元の置換の集合 $\Perm(n)$ の中で
+\eql{\label{eq-optimal-assignment}
+	\umin{\si \in \Perm(n)} \frac{1}{n}\sum_{i=1}^n \C_{i,\si(i)}.
+}
+を解く全単射 $\si$ を求める．上記のコスト関数を，集合 $\Perm(n)$ のすべての置換を用いて素朴に評価することもできよう．しかしながら，この集合のサイズは $n!$ であり，これは小さな $n$ に対してさえ膨大である．たとえば，$n$ が 70 程度の小ささでもそのような集合は $10^{100}$ 個を超える元をもつ~\citep{Dantzig1983}．したがってこの問題は，置換の集合上でこのコスト関数を最適化する効率的なアルゴリズムが存在する場合にのみ解くことができ，これは\S\ref{s-auction}の主題である．
 
-    % inf_{k>=n} の折れ線（下から上昇，liminf に収束）
-    \draw[thick, blue, dashed]
-      (0.75, 0.2) -- (1.5, 0.2) -- (3.0, 0.6) -- (4.5, 0.9) --
-      (6.0, 1.1) -- (7.5, 1.25) -- (9.0, 1.35) -- (10.5, 1.4);
-    \node[blue, right] at (10.5, 0.9) {$\inf_{k \geq n} a_k$};
+\begin{rem}[一意性] 最適割当問題は複数の最適解をもちうることに注意する．たとえば $n=m=2$ で，行列 $\C$ が一辺の長さ $1$ の二次元正方形の四隅の間の対距離行列であるとしよう．これは図~\ref{fig-non-unique-matching}の左の図に表されている．この場合，割当はちょうど二つしか存在せず，そのいずれもが最適である．
+\end{rem}
 
-    % limsup の水平線（上）
-    \draw[red, thin, dotted] (0, 3.0) -- (11, 3.0);
-    \node[red, left] at (0, 3.0) {$\limsup a_n$};
 
-    % liminf の水平線（下）
-    \draw[blue, thin, dotted] (0, 1.5) -- (11, 1.5);
-    \node[blue, left] at (0, 1.5) {$\liminf a_n$};
-  \end{tikzpicture}
-  \caption{上極限と下極限．黒点が数列 $(a_n)$ の各項を表す．
-  $\sup_{k \geq n} a_k$ は単調減少，$\inf_{k \geq n} a_k$ は単調増加であり，
-  それぞれの極限が $\limsup a_n$，$\liminf a_n$ を与える．}
-  \label{fig:limsup-liminf}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.8\linewidth]{non-unique-optimal-matching/non-unique-optimal-matching}
+\caption{\label{fig-non-unique-matching}
+左：測度 $\alpha$ からの青点と測度 $\beta$ からの赤点は対ごとに等距離である．ゆえにマッチング $\sigma=(1,2)$（実線）または $\sigma=(2,1)$（点線）のいずれもが最適である．右：Monge 写像は青の測度 $\alpha$ を赤の測度 $\beta$ に対応づけることができる．重み $\alpha_i$ は各位置に印された円板の面積に比例して表示されている．ここでの写像は $T(x_1)=T(x_2)=y_2$, $T(x_3)=y_3$ であり，一方 $4\leq i\leq 7$ に対しては $T(x_i)=y_1$ となるようなものである．
+}
 \end{figure}
 
-\begin{definition}{下半連続}{lower-semicontinuous}
-  距離空間 $(X, d)$ 上の関数 $f \colon X \to \R \cup \{+\infty\}$ が
-  \textbf{下半連続}（lower semicontinuous）であるとは，
-  任意の $x \in X$ と $x_n \to x$ なる任意の列に対して
-  $f(x) \leq \liminf_{n \to \infty} f(x_n)$ が成り立つことをいう．
-  連続関数は下半連続であるが，逆は成り立たない．
-\end{definition}
 
-%% --- 2.1.2 距離空間 ---
-\subsection{距離空間}
-\label{subsec:metric-space}
-
-\begin{definition}{距離空間}{metric-space}
-  集合 $X$ と関数 $d \colon X \times X \to [0, \infty)$ の組 $(X, d)$ が
-  \textbf{距離空間}（metric space）であるとは，
-  以下の3条件がすべての $x, y, z \in X$ に対して成り立つことをいう：
-  \begin{enumerate}
-    \item \textbf{同一性}：$d(x, y) = 0 \iff x = y$．
-    \item \textbf{対称性}：$d(x, y) = d(y, x)$．
-    \item \textbf{三角不等式}：$d(x, z) \leq d(x, y) + d(y, z)$．
-  \end{enumerate}
-  このとき $d$ を $X$ 上の\textbf{距離関数}（metric）と呼ぶ．
-\end{definition}
-
-\begin{example}{$\ell^p$ 距離空間}{metric-lp}
-  実数 $p \geq 1$ に対して，$\R^n$ 上の $\ell^p$ 距離を
-  \[
-    d_p(x, y) = \norm{x - y}_p
-    = \left(\sum_{i=1}^n \abs{x_i - y_i}^p\right)^{1/p}
-  \]
-  で定義する．特に $p = 2$ のときユークリッド距離となる．
-  同一性と対称性は定義から直ちに従い，
-  三角不等式はミンコフスキーの不等式（Minkowski's inequality）から成り立つ．
-\end{example}
-
-\begin{definition}{コーシー列}{cauchy-sequence}
-  距離空間 $(X, d)$ における列 $(x_n)_{n \geq 1} \subset X$ が
-  \textbf{コーシー列}（Cauchy sequence）であるとは，
-  任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在し，
-  $n, m \geq N$ ならば $d(x_n, x_m) < \varepsilon$ が成り立つことをいう．
-\end{definition}
-
-\begin{definition}{完備距離空間}{complete-metric-space}
-  距離空間 $(X, d)$ が\textbf{完備}（complete）であるとは，
-  $X$ 上のすべてのコーシー列が $X$ の点に収束することをいう．
-  すなわち，$(x_n)_{n \geq 1}$ が $X$ のコーシー列ならば，
-  ある $x \in X$ が存在して $\lim_{n \to \infty} d(x_n, x) = 0$ となる．
-\end{definition}
-
-\begin{remark}{完備でない距離空間の例}{not-complete}
-  有理数全体 $\Q$ にユークリッド距離 $d(x,y) = \abs{x - y}$ を入れた空間 $(\Q, d)$ は完備でない．
-  例えば，$\sqrt{2}$ の十進展開を途中で打ち切った有理数列
-  $x_1 = 1,\; x_2 = 1.4,\; x_3 = 1.41,\; x_4 = 1.414,\; \ldots$
-  は $\Q$ 上のコーシー列であるが，極限 $\sqrt{2} \notin \Q$ であるから
-  $\Q$ の中では収束しない．
-  $\R$ は $\Q$ をこのような「穴」がないように完備化した空間と見なせる．
-\end{remark}
-
-\begin{definition}{コンパクト集合}{compact}
-  距離空間 $(X, d)$ の部分集合 $K \subset X$ が\textbf{コンパクト}（compact）であるとは，
-  $K$ の任意の点列が $K$ の点に収束する部分列を持つことをいう．
-\end{definition}
-
-\begin{example}{$\R^d$ におけるコンパクト集合}{compact-example}
-  $\R^d$ の部分集合がコンパクトであることは，
-  その集合が\textbf{有界}（ある開球 $B(0, R)$ に含まれる）かつ
-  \textbf{閉}であることと同値である（Heine--Borel の定理）．
-  例えば閉区間 $[a, b] \subset \R$ はコンパクトであるが，
-  開区間 $(a, b)$ は閉でないためコンパクトでなく，
-  $\R$ 自身は有界でないためコンパクトでない．
-\end{example}
-
-\begin{definition}{可算集合}{countable}
-  集合 $A$ が\textbf{可算}（countable）であるとは，
-  $A$ から自然数全体 $\N$ への単射が存在することをいう．
-  すなわち，$A$ の元を $a_1, a_2, a_3, \ldots$ と番号付けできる．
-  有限集合は可算であり，$\N$，$\Z$，$\Q$ は可算である．
-  一方，$\R$ は可算でない（非可算である）．
-\end{definition}
-
-\begin{definition}{稠密部分集合と可分性}{separable}
-  距離空間 $(X, d)$ の部分集合 $D \subset X$ が\textbf{稠密}（dense）であるとは，
-  任意の $x \in X$ と任意の $\varepsilon > 0$ に対して，
-  ある $y \in D$ が存在して $d(x, y) < \varepsilon$ が成り立つことをいう．
-  $X$ が\textbf{可算}な稠密部分集合を持つとき，$X$ は\textbf{可分}（separable）であるという．
-\end{definition}
-
-\begin{example}{$\R$ の可分性}{separable-example}
-  $\Q$ は $\R$ の稠密部分集合である．
-  実際，任意の $x \in \R$ と任意の $\varepsilon > 0$ に対して，
-  $\R$ のアルキメデスの性質
-  （任意の $\varepsilon > 0$ に対して $n\varepsilon > 1$ となる $n \in \N$ が存在する）
-  から $1/n < \varepsilon$ となる $n$ が取れる．
-  すると $\abs{x - m/n} < 1/n < \varepsilon$ を満たす整数 $m$ が存在し，
-  $q = m/n \in \Q$ が所望の有理数を与える．
-  $\Q$ は可算集合であるから（定義~\ref{def:countable}），$\R$ は可分である．
-
-  一方，$\Z$ は $\R$ の稠密部分集合ではない．
-  例えば $x = 0.5$，$\varepsilon = 0.1$ に対して
-  $\abs{0.5 - n} < 0.1$ を満たす $n \in \Z$ は存在しない．
-\end{example}
-
-\begin{definition}{ポーランド空間}{polish-space}
-  完備かつ可分な距離空間を\textbf{ポーランド空間}（Polish space）と呼ぶ．
-\end{definition}
-
-\begin{example}{$\R^d$ はポーランド空間}{rd-polish}
-  ユークリッド距離を備えた $\R^d$ はポーランド空間である．
-  完備性は解析学の基本定理であり，
-  可分性は $\Q^d$ が可算稠密部分集合であることから従う
-  （例~\ref{ex:separable-example}）．
-\end{example}
-
-ポーランド空間を導入する理由は，この空間上で確率測度の集合に良いコンパクト性が成り立ち，
-最適輸送問題の解の存在が保証されるためである．
-詳細は確率測度を定義した後，\ref{subsec:prokhorov}~節で述べる．
-
-%% --- 2.1.2 可測空間とボレル σ-代数 ---
-\subsection{可測空間とボレル集合族}
-\label{subsec:measurable-space}
-
-測度を定義するためには，まず「測定可能な」集合の族を定める必要がある．
-その準備として，距離空間における開集合と閉集合を定義する．
-
-\begin{definition}{開球}{open-ball}
-  距離空間 $(X, d)$ において，点 $x \in X$ と実数 $r > 0$ に対して，
-  \textbf{開球}（open ball）を
-  $B(x, r) \defeq \{y \in X \mid d(x, y) < r\}$
-  で定義する．
-\end{definition}
-
-\begin{definition}{開集合と閉集合}{open-closed}
-  距離空間 $(X, d)$ の部分集合 $U \subset X$ が\textbf{開集合}（open set）であるとは，
-  任意の $x \in U$ に対してある $r > 0$ が存在して
-  $B(x, r) \subset U$ が成り立つことをいう．
-  すなわち，$U$ の各点のまわりに $U$ に含まれる開球が取れる．
-
-  部分集合 $F \subset X$ が\textbf{閉集合}（closed set）であるとは，
-  その補集合 $F^c = X \setminus F$ が開集合であることをいう．
-  同値な特徴づけとして，$F$ が閉集合であることは，
-  $F$ の点列の極限が常に $F$ に属すること
-  （すなわち $x_n \in F$，$x_n \to x$ ならば $x \in F$）と同値である．
-\end{definition}
-
-\begin{definition}{$\sigma$-代数}{sigma-algebra}
-  集合 $X$ の部分集合族 $\Bb \subset 2^X$ が\textbf{$\sigma$-代数}
-  （$\sigma$-algebra）であるとは，以下の3条件を満たすことをいう：
-  \begin{enumerate}
-    \item $X \in \Bb$．
-    \item $A \in \Bb$ ならば $A^c = X \setminus A \in \Bb$（補集合で閉じている）．
-    \item $A_1, A_2, \ldots \in \Bb$ ならば
-      $\bigcup_{k=1}^{\infty} A_k \in \Bb$（可算合併で閉じている）．
-  \end{enumerate}
-  組 $(X, \Bb)$ を\textbf{可測空間}（measurable space）と呼ぶ．
-\end{definition}
-
-\begin{definition}{ボレル $\sigma$-代数}{borel}
-  距離空間 $(X, d)$ に対して，$X$ の\textbf{すべての開集合}を含む最小の $\sigma$-代数を
-  \textbf{ボレル $\sigma$-代数}（Borel $\sigma$-algebra）と呼び，$\Bb(X)$ と記す．
-  $\Bb(X)$ の元を\textbf{ボレル集合}（Borel set）と呼ぶ．
-\end{definition}
-
-直感的には，ボレル $\sigma$-代数は「開集合と閉集合を基本ブロックとして，
-可算回の集合演算で構成できるすべての集合」の族と理解できる．
-確率や統計，最適輸送で自然に現れる集合はほぼすべてボレル集合であり，
-以降，距離空間上の測度は常にボレル $\sigma$-代数に関して定義されるものとする．
-
-%% --- 2.1.4 測度と確率測度 ---
-\subsection{測度と確率測度}
-\label{subsec:measures}
-
-\begin{definition}{測度}{measure}
-  可測空間 $(X, \Bb)$ 上の\textbf{測度}（measure）とは，
-  関数 $\mu \colon \Bb \to [0, \infty]$ であって，以下を満たすものをいう：
-  \begin{enumerate}
-    \item $\mu(\emptyset) = 0$．
-    \item \textbf{可算加法性}：互いに素な列 $A_1, A_2, \ldots \in \Bb$
-      に対して $\mu\!\left(\bigcup_{k=1}^{\infty} A_k\right) = \sum_{k=1}^{\infty} \mu(A_k)$．
-  \end{enumerate}
-\end{definition}
-
-\begin{definition}{確率測度}{probability-measure}
-  距離空間 $X$ 上の\textbf{確率測度}（probability measure）とは，
-  ボレル $\sigma$-代数 $\Bb(X)$ 上の測度 $\mu$ であって $\mu(X) = 1$ を満たすものをいう．
-  $X$ 上のすべての確率測度の集合を
-  \[
-    \Mm_+^1(X) \defeq \left\{ \mu \in \Mm_+(X) \;\middle|\; \mu(X) = 1 \right\}
-  \]
-  と記す．ここで $\Mm_+(X)$ は $X$ 上のすべての非負ボレル測度の集合である．
-\end{definition}
-
-\begin{remark}{測度の直感的理解}{measure-intuition}
-  測度とは，集合の各部分に「大きさ」や「質量」を割り当てる関数である．
-  確率測度は全体の質量が1に正規化されたものであり，「確率分布」と同義に用いられる．
-  砂山の比喩を使えば，確率測度は「各領域にどれだけの砂があるか」を記述する．
-\end{remark}
-
-\begin{definition}{測度の台}{support}
-  距離空間 $X$ 上の測度 $\mu$ の\textbf{台}（support）とは，
-  \[
-    \supp(\mu) \defeq \left\{ x \in X \;\middle|\;
-    \text{$x$ を含むすべての開集合 $U$ に対して } \mu(U) > 0 \right\}
-  \]
-  で定義される $X$ の部分集合をいう．
-\end{definition}
-
-$\supp(\mu)$ は閉集合である．
-実際，補集合
-\[
-  \supp(\mu)^c = \{x \in X \mid x \in U,\; \mu(U) = 0 \text{ なる開集合 } U \text{ が存在する}\}
-\]
-が開集合であることを示せばよい．
-$x \in \supp(\mu)^c$ ならば $x \in U$，$\mu(U) = 0$ なる開集合 $U$ が存在する．
-任意の $y \in U$ に対して，$U$ は $y$ の開近傍でもあり $\mu(U) = 0$ であるから，
-$y \in \supp(\mu)^c$ となる．よって $U \subset \supp(\mu)^c$ であり，
-$\supp(\mu)^c$ は開集合である．
-
-\begin{definition}{Dirac測度}{dirac}
-  距離空間 $X$ の点 $x \in X$ に対して，\textbf{Dirac測度}（Dirac measure）
-  $\delta_x$ を
-  \[
-    \delta_x(A) \defeq
-    \begin{cases}
-      1 & x \in A, \\
-      0 & x \notin A
-    \end{cases}
-    \qquad (A \in \Bb(X))
-  \]
-  で定義する．すなわち，$\delta_x$ は点 $x$ に全質量を集中させた確率測度である．
-  Dirac測度に対する積分は
-  $\int_X f(y) \, \d\delta_x(y) = f(x)$
-  で与えられる．
-\end{definition}
-
-%% --- 2.1.5 確率測度のコンパクト性と Prokhorov の定理 ---
-\subsection{確率測度のコンパクト性と Prokhorov の定理}
-\label{subsec:prokhorov}
-
-最適輸送の Kantorovich 問題（\ref{sec:kantorovich-overview}~節で定式化）では，
-カップリング測度の集合の上でコストの下限を取る．
-この下限が実際に達成される（最適解が存在する）ためには，
-カップリングの集合がある種のコンパクト性を持つ必要がある．
-
-ポーランド空間上では，確率測度の集合のコンパクト性を
-「緊密性」という条件で特徴づけることができる．
-これが Prokhorov の定理であり，
-ポーランド空間を導入する根本的な理由である．
-完備性がなければ極限測度が空間上の測度とならない可能性があり，
-可分性がなければ以下の同値関係が成り立たない．
-
-まず，確率測度の列が「収束する」とはどういう意味かを定める．
-直感的には，測度 $\mu_n$ が $\mu$ に近づくとは，
-任意の連続関数 $f$ に対して $f$ の $\mu_n$ による積分が $f$ の $\mu$ による積分に近づくことをいう．
-
-\begin{definition}{有界関数}{bounded-function}
-  距離空間 $X$ 上の関数 $f \colon X \to \R$ が\textbf{有界}（bounded）であるとは，
-  ある定数 $M \geq 0$ が存在して，すべての $x \in X$ に対して $\abs{f(x)} \leq M$
-  が成り立つことをいう．
-\end{definition}
-
-\begin{definition}{確率測度の弱収束}{weak-convergence}
-  ポーランド空間 $X$ 上の確率測度の列 $(\mu_n)_{n \geq 1}$ が
-  確率測度 $\mu$ に\textbf{弱収束}（weakly converge）するとは，
-  すべての有界連続関数 $f \colon X \to \R$ に対して
-  \[
-    \lim_{n \to \infty} \int_X f \, \d\mu_n = \int_X f \, \d\mu
-  \]
-  が成り立つことをいう．
-\end{definition}
-
-弱収束に関する基本的な特徴づけとして，以下の定理がある．
-
-\begin{theorem}{Portmanteau の定理}{portmanteau}
-  ポーランド空間 $X$ 上の確率測度の列 $(\mu_n)$ と確率測度 $\mu$ に対して，
-  以下は同値である：
-  \begin{enumerate}
-    \item $\mu_n$ が $\mu$ に弱収束する．
-    \item すべての閉集合 $F \subset X$ に対して
-      $\limsup_{n \to \infty} \mu_n(F) \leq \mu(F)$．
-    \item すべての開集合 $U \subset X$ に対して
-      $\liminf_{n \to \infty} \mu_n(U) \geq \mu(U)$．
-  \end{enumerate}
-\end{theorem}
-
-\begin{remark}{}{portmanteau-remark}
-  (2) と (3) は互いに補集合を取れば同値であることがわかる．
-  Portmanteau の定理は，弱収束が「閉集合上では測度が増えない」
-  「開集合上では測度が減らない」という直感的な性質と同値であることを述べている．
-\end{remark}
-
-弱収束する部分列を取るためには，
-測度の質量が無限遠に「逃げない」ことが必要である．
-例えば，$\R$ 上のDirac測度の列 $\mu_n = \delta_n$
-（点 $n$ に全質量を集中させた測度）を考える．
-
-\begin{center}
-\begin{tikzpicture}[scale=0.85]
-  % --- 緊密でない例（上段） ---
-  \node[left, font=\small\bfseries] at (-1, 1.5) {緊密でない：};
-  \draw[thick, ->] (-0.5, 0) -- (10.5, 0);
-  % mu_1
-  \draw[thick, blue] (1, 0) -- (1, 1.0);
-  \fill[blue] (1, 1.0) circle (2pt);
-  \node[below, font=\small] at (1, -0.1) {$1$};
-  \node[above, blue, font=\small] at (1, 1.1) {$\mu_1$};
-  % mu_2
-  \draw[thick, blue] (3, 0) -- (3, 1.0);
-  \fill[blue] (3, 1.0) circle (2pt);
-  \node[below, font=\small] at (3, -0.1) {$2$};
-  \node[above, blue, font=\small] at (3, 1.1) {$\mu_2$};
-  % mu_3
-  \draw[thick, blue] (5, 0) -- (5, 1.0);
-  \fill[blue] (5, 1.0) circle (2pt);
-  \node[below, font=\small] at (5, -0.1) {$3$};
-  \node[above, blue, font=\small] at (5, 1.1) {$\mu_3$};
-  % mu_4
-  \draw[thick, blue] (7, 0) -- (7, 1.0);
-  \fill[blue] (7, 1.0) circle (2pt);
-  \node[below, font=\small] at (7, -0.1) {$4$};
-  \node[above, blue, font=\small] at (7, 1.1) {$\mu_4$};
-  % dots
-  \node at (9, 0.5) {$\cdots$};
-  % arrow
-  \draw[->, thick, gray, dashed] (1.5, -0.6) -- (8.5, -0.6);
-  \node[below, gray, font=\small] at (5, -0.7) {質量が右へ逃げていく};
-
-  % --- 緊密な例（下段） ---
-  \begin{scope}[yshift=-3.8cm]
-    \node[left, font=\small\bfseries] at (-1, 1.5) {緊密：};
-    \draw[thick, ->] (-0.5, 0) -- (10.5, 0);
-    % compact set K (bracket below axis)
-    \draw[thick, red!70!black, decorate, decoration={brace, mirror, amplitude=5pt}]
-      (0.8, -0.4) -- (6.2, -0.4)
-      node[midway, below=6pt, red!70!black, font=\small] {コンパクト集合 $K$};
-    % mu_1
-    \draw[thick, blue] (1.5, 0) -- (1.5, 0.8);
-    \fill[blue] (1.5, 0.8) circle (2pt);
-    \node[above, blue, font=\small] at (1.5, 0.9) {$\mu_1$};
-    % mu_4
-    \draw[thick, blue] (2.3, 0) -- (2.3, 0.9);
-    \fill[blue] (2.3, 0.9) circle (2pt);
-    \node[above, blue, font=\small] at (2.3, 1.0) {$\mu_4$};
-    % mu_2
-    \draw[thick, blue] (3.5, 0) -- (3.5, 1.0);
-    \fill[blue] (3.5, 1.0) circle (2pt);
-    \node[above, blue, font=\small] at (3.5, 1.1) {$\mu_2$};
-    % mu_3
-    \draw[thick, blue] (5, 0) -- (5, 0.6);
-    \fill[blue] (5, 0.6) circle (2pt);
-    \node[above, blue, font=\small] at (5, 0.7) {$\mu_3$};
-    % dots
-    \node at (5.8, 0.5) {$\cdots$};
-  \end{scope}
-\end{tikzpicture}
-\end{center}
-
-上段は緊密でない場合：各 $\mu_n = \delta_n$ の質量が際限なく移動し，
-どのコンパクト集合 $K$ を取っても，十分大きな $n$ で $\mu_n(K) = 0$ となるため，
-収束する部分列が存在しない．
-下段は緊密な場合：すべての $\mu_n$ の質量が共通のコンパクト集合 $K$ にほぼ収まっており，
-収束する部分列を取ることができる．
-緊密性はこのような状況を排除する条件である．
-
-\begin{definition}{緊密性}{tightness}
-  ポーランド空間 $X$ 上の確率測度の集合 $\Pi \subset \Mm_+^1(X)$ が
-  \textbf{緊密}（tight）であるとは，
-  任意の $\varepsilon > 0$ に対してコンパクト集合 $K \subset X$ が存在し，
-  すべての $\mu \in \Pi$ に対して $\mu(K) \geq 1 - \varepsilon$ が成り立つことをいう．
-  すなわち，$\Pi$ に属するすべての測度の質量が，共通のコンパクト集合にほぼ集中している．
-\end{definition}
-
-\begin{definition}{相対コンパクト性}{relatively-compact}
-  距離空間の部分集合 $S$ が\textbf{相対コンパクト}（relatively compact）であるとは，
-  $S$ の任意の列が収束する部分列を持つことをいう．
-\end{definition}
-
-コンパクト集合の定義（定義~\ref{def:compact}）では
-部分列の極限が元の集合に属することを要求するが，
-相対コンパクトでは極限が $S$ の外にあってもよい．
-$\R^d$ において「有界な列は収束部分列を持つ」（Bolzano--Weierstrass の定理）は，
-有界集合が相対コンパクトであることの主張に他ならない．
-
-\begin{theorem}{Prokhorov の定理}{prokhorov}
-  ポーランド空間 $X$ 上の確率測度の集合 $\Pi \subset \Mm_+^1(X)$ に対して，
-  以下は同値である：
-  \begin{enumerate}
-    \item $\Pi$ は緊密である．
-    \item $\Pi$ は弱収束に関して相対コンパクトである．
-  \end{enumerate}
-\end{theorem}
-
-証明は Billingsley, \textit{Convergence of Probability Measures} (1999) 等の
-測度論の教科書を参照されたい．
-直感的には，(1) $\Rightarrow$ (2) は対角線論法と Riesz の表現定理により
-弱収束する部分列を構成し，緊密性から極限が確率測度であることを示す．
-(2) $\Rightarrow$ (1) は対偶を取り，緊密でなければ
-弱収束する部分列が取れないことを示す．
-
-%% --- 2.1.6 確率単体 ---
-\subsection{確率単体}
-\label{subsec:simplex}
-
-有限集合 $\{1, \ldots, n\}$ 上の確率測度は，
-非負の重みベクトル $\mathbf{a} = (a_1, \ldots, a_n)$ で $\sum_i a_i = 1$ を満たすものと
-同一視できる．このようなベクトルの全体が確率単体である．
-
-\begin{definition}{確率単体}{simplex}
-  $n$ 次元の\textbf{確率単体}（probability simplex）とは，
-  $\R^n$ の部分集合
-  \[
-    \simplex_n \defeq
-    \left\{ \mathbf{a} \in \R_{\geq 0}^n \;\middle|\; \sum_{i=1}^n a_i = 1 \right\}
-  \]
-  をいう．$\simplex_n$ の元を\textbf{確率ベクトル}（probability vector）
-  または\textbf{ヒストグラム}（histogram）と呼ぶ．
-\end{definition}
-
-\begin{remark}{}{simplex-properties}
-  $\simplex_n$ は $\R^n$ の\textbf{凸}かつ\textbf{コンパクト}な部分集合である．
-  その端点（extreme points）は標準基底ベクトル $e_1, \ldots, e_n$ であり，
-  $\simplex_n$ はこれらの凸包に等しい：
-  $\simplex_n = \operatorname{conv}(e_1, \ldots, e_n)$．
-\end{remark}
-
-\begin{example}{低次元の確率単体}{simplex-low-dim}
-  \begin{itemize}
-    \item $n = 2$ のとき，$\simplex_2 = \{(a_1, a_2) \in \R_{\geq 0}^2 \mid a_1 + a_2 = 1\}$
-      は $(1, 0)$ と $(0, 1)$ を結ぶ線分である．
-    \item $n = 3$ のとき，$\simplex_3$ は $\R^3$ 内の三角形であり，
-      頂点 $(1,0,0)$, $(0,1,0)$, $(0,0,1)$ を持つ．
-  \end{itemize}
-
-  \begin{center}
-  \begin{tikzpicture}[scale=2.2]
-    % 2-simplex (triangle) in 2D projection
-    \coordinate (A) at (0, 0);
-    \coordinate (B) at (2, 0);
-    \coordinate (C) at (1, 1.732);
-
-    \fill[blue!8] (A) -- (B) -- (C) -- cycle;
-    \draw[blue!40!black, thick] (A) -- (B) -- (C) -- cycle;
-
-    \fill (A) circle (1.2pt) node[below left] {$e_1 = (1,0,0)$};
-    \fill (B) circle (1.2pt) node[below right] {$e_2 = (0,1,0)$};
-    \fill (C) circle (1.2pt) node[above] {$e_3 = (0,0,1)$};
-
-    % sample point
-    \coordinate (P) at (1, 0.577);
-    \fill[red] (P) circle (1.2pt) node[right] {\small $\mathbf{a} = (1/3, 1/3, 1/3)$};
-
-    \node at (1, -0.5) {$\simplex_3$};
-  \end{tikzpicture}
-  \end{center}
-\end{example}
-
-%% --- 2.1.7 離散測度 ---
-\subsection{離散測度}
-\label{subsec:discrete-measures}
-
-Dirac測度（定義~\ref{def:dirac}）を用いて，有限個の点に質量を持つ測度を構成できる．
-
-\begin{remark}{}{dirac-integration}
-  離散測度に対する積分を和に帰着させる際の基本は，
-  Dirac測度に対する積分の性質
-  $\int_X f(y) \, \d\delta_x(y) = f(x)$（定義~\ref{def:dirac}）である．
-\end{remark}
-
-\begin{definition}{離散測度}{discrete-measure}
-  距離空間 $X$ 上の\textbf{離散測度}（discrete measure）とは，
-  有限個の点 $x_1, \ldots, x_n \in X$ と非負の重み $a_1, \ldots, a_n > 0$ に対して
-  \[
-    \alpha = \sum_{i=1}^n a_i \, \delta_{x_i}
-  \]
-  の形で表される測度をいう．
-  さらに $\mathbf{a} = (a_1, \ldots, a_n) \in \simplex_n$ が成り立つとき，
-  $\alpha$ は\textbf{離散確率測度}（discrete probability measure）と呼ばれる．
-\end{definition}
-
-\begin{remark}{ヒストグラムと離散測度の関係}{histogram-vs-discrete}
-  ヒストグラム $\mathbf{a} \in \simplex_n$ は，ビンの位置が固定された場合の確率ベクトルである．
-  離散測度 $\alpha = \sum_i a_i \delta_{x_i}$ は，
-  確率ベクトル $\mathbf{a}$ に加えて，各ビンの\textbf{位置} $(x_1, \ldots, x_n)$ の情報も持つ．
-  ヒストグラムは「重みのみ」を記述し，離散測度は「重みと位置の両方」を記述する．
-  この区別は，特に異なる台を持つ離散測度を比較する際に本質的な意味を持つ．
-\end{remark}
-
-\begin{example}{経験分布}{empirical}
-  データ点 $x_1, \ldots, x_n \in X$ が何らかの確率分布から独立にサンプルされたとき，
-  \textbf{経験分布}（empirical distribution）
-  \[
-    \hat{\mu}_n = \frac{1}{n} \sum_{i=1}^n \delta_{x_i}
-  \]
-  は，データの分布を近似する離散確率測度である．
-  大数の法則により，$n \to \infty$ で $\hat{\mu}_n$ は真の分布に弱収束する．
-  経験分布は最適輸送の応用（特に統計的推定）において重要な対象である．
-\end{example}
-
-%% --- 2.1.6 測度の密度 ---
-\subsection{測度の密度}
-\label{subsec:density}
-
-離散測度に対する対極として，ルベーグ測度に関して連続的な密度を持つ測度がある．
-
-\begin{definition}{ルベーグ測度に関する密度}{lebesgue-density}
-  $X = \R^d$ 上の測度 $\alpha$ が
-  ルベーグ測度に関して\textbf{密度}（density）$\rho_\alpha$ を持つとは，
-  非負可測関数 $\rho_\alpha \colon \R^d \to [0, \infty)$ が存在して，
-  すべてのボレル集合 $A \in \Bb(\R^d)$ に対して
-  \[
-    \alpha(A) = \int_A \rho_\alpha(x) \, \d x
-  \]
-  が成り立つことをいう．ここで右辺はルベーグ積分である．
-  このとき $\rho_\alpha = \frac{\d\alpha}{\d x}$ と記す．
-  $\alpha$ が確率測度であるためには，$\int_{\R^d} \rho_\alpha(x) \, \d x = 1$ が必要十分である．
-\end{definition}
-
-\begin{definition}{ラドン--ニコディム導関数}{radon-nikodym}
-  より一般に，測度 $\alpha$ が測度 $\beta$ に関して\textbf{絶対連続}
-  （absolutely continuous; $\alpha \ll \beta$ と記す）であるとは，
-  $\beta(A) = 0$ ならば $\alpha(A) = 0$ が成り立つことをいう．
-  このとき，ラドン--ニコディムの定理により，
-  $\beta$-可測関数 $\frac{\d\alpha}{\d\beta} \geq 0$ が $\beta$-a.e.\ に一意的に存在して，
-  \[
-    \alpha(A) = \int_A \frac{\d\alpha}{\d\beta}(x) \, \d\beta(x)
-    \qquad (\forall\, A \in \Bb(X))
-  \]
-  が成り立つ．この関数 $\frac{\d\alpha}{\d\beta}$ を
-  $\alpha$ の $\beta$ に関する\textbf{ラドン--ニコディム導関数}
-  （Radon--Nikodym derivative）または\textbf{相対密度}と呼ぶ．
-\end{definition}
-
-\begin{remark}{測度の3つの類型}{three-types}
-  最適輸送の理論では，主に以下の3種類の測度を扱う：
-  \begin{enumerate}
-    \item \textbf{ヒストグラム}：$\mathbf{a} \in \simplex_n$（有限次元の確率ベクトル）．
-      ビンの位置は固定されており，最も単純な設定である．
-    \item \textbf{離散測度}：$\alpha = \sum_i a_i \delta_{x_i}$（有限個の点に台を持つ測度）．
-      重みと位置の両方が自由度を持つ．
-    \item \textbf{連続測度}：$\d\alpha(x) = \rho_\alpha(x) \, \d x$
-      （ルベーグ測度に関して密度を持つ測度）．
-      最も一般的であるが，計算上は最も扱いが難しい．
-  \end{enumerate}
-  本書では，主にヒストグラムと離散測度を扱い，
-  必要に応じて連続測度への拡張にも触れる．
-\end{remark}
-
-%% --- 2.1.7 コスト関数 ---
-\subsection{コスト関数}
-\label{subsec:cost-function}
-
-最適輸送の目的関数を定めるのがコスト関数である．
-
-\begin{definition}{コスト関数}{cost-function}
-  空間 $\X$ と $\Y$ に対して，\textbf{コスト関数}（cost function）とは，
-  可測関数
-  \[
-    c \colon \X \times \Y \to \R_{\geq 0} \cup \{+\infty\}
-  \]
-  をいう．$c(x, y)$ は，点 $x \in \X$ から点 $y \in \Y$ へ単位質量を輸送するコストを表す．
-\end{definition}
-
-\begin{example}{典型的なコスト関数}{cost-examples}
-  $(X, d)$ を距離空間とし，$\X = \Y = X$ とする．
-  \begin{enumerate}
-    \item \textbf{距離コスト}：$c(x, y) = d(x, y)$．
-      $p$-Wasserstein 距離（$p=1$）に対応する．
-    \item \textbf{二乗距離コスト}：$c(x, y) = d(x, y)^2$．
-      最もよく研究されているケースであり，Brenier の定理の仮定となる．
-      特に $X = \R^d$ では $c(x,y) = \norm{x-y}_2^2$ である．
-    \item \textbf{$p$ 乗距離コスト}：$c(x, y) = d(x, y)^p$（$p \geq 1$）．
-      $p$-Wasserstein 距離を導く．
-    \item \textbf{離散コスト行列}：
-      点集合 $x_1, \ldots, x_n \in \X$ と $y_1, \ldots, y_m \in \Y$ が固定されているとき，
-      $n \times m$ 行列 $\mathbf{C}$ を $C_{i,j} = c(x_i, y_j)$ で定義する．
-      これを\textbf{コスト行列}（cost matrix）と呼ぶ．
-  \end{enumerate}
-\end{example}
-
-%% ============================================================
-%%  2.2 最適割当問題と Monge 問題
-%% ============================================================
-\section{最適割当問題と Monge 問題}
-\label{sec:monge-overview}
-
-%% --- 2.2.1 最適割当問題 ---
-\subsection{最適割当問題}
-\label{subsec:assignment}
-
-Monge 問題を定式化する前に，その特殊な場合である最適割当問題を導入する．
-
-\begin{definition}{置換}{permutation}
-  有限集合 $\range{n} = \{1, \ldots, n\}$ 上の\textbf{置換}（permutation）とは，
-  $\range{n}$ から $\range{n}$ への全単射 $\sigma \colon \range{n} \to \range{n}$ をいう．
-  $\range{n}$ 上のすべての置換の集合を $\Perm(n)$ と記す．
-  $\Perm(n)$ の元の個数は $n!$ である．
-\end{definition}
-
-\begin{definition}{置換行列}{permutation-matrix}
-  置換 $\sigma \in \Perm(n)$ に対して，\textbf{置換行列} $\mathbf{P}_\sigma \in \{0, 1\}^{n \times n}$ を
-  \[
-    (\mathbf{P}_\sigma)_{i,j} =
-    \begin{cases}
-      1 & j = \sigma(i), \\
-      0 & j \neq \sigma(i)
-    \end{cases}
-  \]
-  で定義する．置換行列は各行・各列にちょうど1つの $1$ を持つ行列であり，
-  $\mathbf{P}_\sigma \ones_n = \ones_n$ かつ $\mathbf{P}_\sigma^\top \ones_n = \ones_n$ を満たす．
-\end{definition}
-
-\begin{setting}{最適割当問題}{assignment}
-  コスト行列 $\mathbf{C} \in \R^{n \times n}$ が与えられたとき，
-  \textbf{最適割当問題}（optimal assignment problem）とは，
-  \[
-    \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^n C_{i, \sigma(i)}
-  \]
-  を求める問題である．
-  これは $n$ 個のソースと $n$ 個のターゲットの間に
-  1対1対応を見つけ，総コストを最小化する問題である．
-\end{setting}
-
-\begin{remark}{}{assignment-complexity}
-  置換の全探索は $n!$ 通りの列挙を要し，$n = 70$ でも $n! > 10^{100}$ となるため
-  実用上不可能である．
-  効率的な解法（オークションアルゴリズムやハンガリアン法など）は第3章で扱う．
-\end{remark}
-
-最適割当問題は，ソースとターゲットの個数が等しく（$n = m$），
-すべての重みが均一（$a_i = b_j = 1/n$）という特殊な設定であった．
-次に扱う Monge 問題は，個数が異なる場合（$n \neq m$）や
-重みが不均一な場合を含む一般化である．
-割当問題では写像が全単射（置換）であったのに対し，
-Monge 問題では複数のソース点が同じターゲット点に送られることも許される．
-
-%% --- 2.2.2 Monge 問題 ---
-\subsection{Monge 問題}
-\label{subsec:monge}
-
-Monge (1781) は，ある分布の質量を別の分布へ写像によって移すとき，
-総コストを最小にする問題を定式化した．
-この問題を正確に述べるためには，写像による測度の「移動」を定義する必要がある．
-
-\begin{definition}{可測写像}{measurable-map}
-  可測空間 $(X, \Bb(X))$ と $(Y, \Bb(Y))$ の間の写像 $T \colon X \to Y$ が
-  \textbf{可測}（measurable）であるとは，
-  任意の $B \in \Bb(Y)$ に対して $T^{-1}(B) \in \Bb(X)$ が成り立つことをいう．
-\end{definition}
-
-\begin{proposition}{連続写像は可測}{continuous-is-measurable}
-  距離空間 $(X, d_X)$ と $(Y, d_Y)$ の間の連続写像 $T \colon X \to Y$ は，
-  ボレル $\sigma$-代数に関して可測である．
-\end{proposition}
+%%%%%%%%%
+\begin{rem1}{Monge problem between discrete measures}\label{rem-monge1}
+離散測度
+\eql{\label{eq-pair-discr}
+	\al = \sum_{i=1}^n \a_i \de_{x_i}
+	\qandq
+	\be = \sum_{j=1}^m \b_j \de_{y_j},
+}
+に対し，\citeauthor{Monge1781} の問題~\citeyearpar{Monge1781}は，各点 $x_i$ に単一の点 $y_j$ を対応づけ，かつ $\al$ の質量を $\be$ の質量へと押し出さなければならない写像を求める．すなわち，そのような写像 $T:\{x_1,\dots, x_n\}\rightarrow \{y_1,\dots,y_m\}$ は
+\eql{\label{eq-monge-constr}
+	\foralls j \in \range{m}, \quad
+	\b_j = \sum_{ i : \T(x_i) = y_j } \a_i ,
+}
+を満たさねばならない．これを簡潔な形で $\T_\sharp \al = \be$ と書く．$\b$ のすべての要素が正であるから，この写像は必然的に全射である．
+%
+この写像は何らかの輸送コストを最小化すべきであり，それは点 $(x,y) \in \X \times \Y$ に対して定義される関数 $\c(x,y)$ によって径数づけられる．
+\eql{\label{eq-monge-discr}
+	\umin{\T} \enscond{ \sum_{i} \c(x_i,\T(x_i))  }{ \T_\sharp \al = \be } .
+}
+離散点の間のこのような写像は，もちろん，すべての $x$ と $y$ が相異なると仮定すれば，$j=\si(i)$ となるような添字 $\si : \range{n} \rightarrow \range{m}$ を用いて符号化でき，質量保存は
+\eq{
+	\sum_{i \in \si^{-1}(j)} \a_i = \b_j,
+}
+と書かれる．ここで逆 $\si^{-1}(j)$ は $j$ の原像集合として理解されるべきである．$n=m$ かつすべての重みが一様である特別な場合，すなわち $\a_i=\b_j=1/n$ のとき，質量保存制約は $\T$ が全単射であって $\T(x_i)=y_{\si(i)}$ となることを含意し，Monge 問題は最適マッチング問題~\eqref{eq-optimal-assignment}と等価である．ここでコスト行列は
+\eq{
+	\C_{i,j} \eqdef \c(x_i,y_j).
+}
+である．$n\ne m$ のとき，最適性を別にしても，離散測度から別の離散測度への Monge 写像は存在すらしないことがある点に注意する．これはそれらの重みベクトルが両立しないときに起こり，標的測度が始点測度より多くの点をもつとき，すなわち $n<m$ のときには常に起こる．たとえば図~\ref{fig-non-unique-matching}の右の図は $\al$ から $\be$ への（最適な）Monge 写像を示しているが，$\be$ から $\al$ への Monge 写像は存在しない．
+\end{rem1}
+%%%%%%%%%
+
+
+%%%%%%%
+\begin{rem2}{Push-forward operator}\label{rem-push-f}
+連続写像 $\T : \X \rightarrow \Y$ に対し，対応する押し出し作用素 $\T_\sharp : \Mm(\X) \rightarrow \Mm(\Y)$ を定義する．
+%
+離散測度~\eqref{eq-discr-meas}に対しては，押し出し操作は単に測度の台のすべての点の位置を動かすことからなる．
+\eq{
+	\T_{\sharp} \al \eqdef \sum_i \a_i \de_{\T(x_i)}.
+}
+より一般の測度，たとえば密度をもつものに対しては，押し出しの概念は確率測度の空間的な変形（あるいは輸送）を記述するうえで基本的な役割を果たす．形式的な定義は以下のとおりである．
+
+\begin{defn}[押し出し]\label{defn-pushfwd}
+$\T : \X \rightarrow \Y$ に対し，ある $\al \in \Mm(\X)$ の押し出し測度 $\be = \T_\sharp \al \in \Mm(\Y)$ は
+\eql{\label{eq-push-fwd}
+	\foralls h \in \Cc(\Y), \quad \int_\Y h(y) \d \be(y) = \int_\X h(\T(x)) \d\al(x).
+	% = \int_X h(T(x)) \density{\al}(x) \d x %%%% y=T(x)   dy=|T'(x)| dx
+	% = \int_Y h(y) \density{\al}(T^{-1}(y)) 1/|T'(x)| \d y
+	% = \int_Y h(y) \density{\be}(y) \d y
+	%  \density{\al}(T^{-1}(y)) 1/|T'(x)| = \density{\be}(y)
+}
+を満たす．同値だが，任意の可測集合 $B \subset \Y$ に対し
+\eql{\label{eq-equiv-pushfwd}
+	\be(B) = \al( \enscond{x \in \X}{\T(x) \in B} ) = \al( T^{-1}(B) ).
+}
+が成り立つ．$\T_\sharp$ は正値性と全質量を保存するので，$\al \in \Mm_+^1(\X)$ ならば $\T_\sharp \al \in \Mm_+^1(\Y)$ となることに注意する．
+\end{defn}
+
+直感的には，可測写像 $T: \X\rightarrow \Y$ は，ある可測空間から別の可測空間へ単一の点を動かす関数として解釈できる．$T_\sharp$ は $T$ の拡張であり，$\X$ 上の確率測度全体を $\Y$ 上の新しい確率測度へと動かすことができる．作用素 $T_\sharp$ は，$\X$ 上の測度 $\al$ の各微小質量に写像 $T$ を適用することでそれを\emph{押し出し}，$\Y$ における微小質量を得る．押し出し作用素 $\T_\sharp : \Mm_+^1(\X) \rightarrow \Mm_+^1(\Y)$ は，$\X$ 上の二つの測度 $\al_1,\al_2$ に対し $T_\sharp(\al_1+\al_2)=T_\sharp\al_1+ T_\sharp\al_2$ が成り立つという意味で\emph{線形}である点に注意する．
+\end{rem2}
+%%%%%%%
+
+%%%%%%%
+\begin{rem2}{Push-forward for multivariate densities}
+$\RR^\dim$ 上で密度 $(\density{\al},\density{\be})$ をもつ測度について（$\T$ が滑らかかつ全単射と仮定して）公式~\eqref{eq-push-fwd}における変数変換を明示的に行うと，押し出しが密度に対し，積分公式における変数変換として線形に作用することがわかる．実際，
+\eql{\label{eq-pfwd-density}
+	\density{\al}(x) = |\det(\T'(x))|  \density{\be}(\T(x)),
+}
+が成り立つ．ここで $\T'(x) \in \RR^{\dim \times \dim}$ は $T$ のヤコビ行列（$T$ の各座標の勾配をとってできる行列）である．これは
+\eq{
+	|\det(\T'(x))| = \frac{ \density{\al}(x) }{ \density{\be}(\T(x)) }.
+}
+を含意する．
+\end{rem2}
+%%%%%%%
+
+
+%%%%%%%
+\begin{rem2}{Monge problem between arbitrary measures}\label{rem-monge2}
+Monge 問題~\eqref{eq-monge-discr}は，二つの空間 $(\X,\Y)$ 上に台をもつ二つの任意の確率測度 $(\al,\be)$ が，
+\eql{\label{eq-monge-continuous}
+	\umin{\T} \enscond{ \int_{\X} \c(x,\T(x)) \d \al(x)  }{  \T_\sharp \al = \be }.
+}
+を最小化する写像 $\T : \X \rightarrow \Y$ によって結びつけられる場合へと拡張できる．制約 $\T_\sharp \al = \be$ は，注意~\ref{rem-push-f}で定義した押し出し作用素を用いて，$\T$ が $\al$ の質量を $\be$ へ押し出すことを意味する．
+\end{rem2}
+%%%%%%%
+
+
+%%%%%%%
+\begin{rem2}{Push-forward vs. pull-back}
+測度の押し出し $\T_\sharp$ は，関数の引き戻し $\T^\sharp : \Cc(\Y) \rightarrow \Cc(\X)$ と混同してはならない．後者は関数の間の「ゆがめ」に対応し，$g \in \Cc(\Y)$ に $\T^\sharp g = g \circ \T$ を対応づける線形写像として定義される．押し出しと引き戻しは実は互いに随伴であり，すなわち
+\eq{
+	\foralls (\al,g) \in \Mm(\X) \times \Cc(\Y), \quad
+	\int_\Y g \d( \T_\sharp\al ) = \int_\X (\T^\sharp g) \d\al.
+}
+が成り立つ．たとえ $(\al,\be)$ が固定された測度（\emph{たとえば} $\RR^\dim$ 上の Lebesgue 測度）に関して密度 $(\density{\al},\density{\be})$ をもつとしても，~\eqref{eq-pfwd-density}におけるヤコビアンの存在のため，$\T_\sharp \al$ は $\T^\sharp \density{\be}$ を密度としてもたない点に注意する．
+%
+これは OT が画像位置合わせの実行に注意して用いられるべき理由を説明する．というのも，それは画像のゆがめ手法としては作用しないからである．
+%
+図~\ref{fig-push-pull}はこれら押し出しと引き戻しの作用素の違いを示している．
+\end{rem2}
+%%%%%%%
+
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{5mm}}c@{}}
+\includegraphics[width=.3\linewidth]{push-pull/push-forward}&
+\includegraphics[width=.3\linewidth]{push-pull/pull-back}\\
+Push-forward of measures & Pull-back of functions
+\end{tabular}
+\caption{\label{fig-push-pull}
+任意の測度を入力としてとれる押し出し作用素 $\T_\sharp$ と，関数，特に密度に作用する引き戻し作用素 $\T^\sharp$ の比較．
+}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%
+\begin{rem2}{Measures and random variables}\label{rem-meas-random}
+	Radon 測度は確率変数の分布を表すものと見ることもできる．$\X$ 上の確率変数 $X$ は，実は何らかの抽象的な（しばしば明示されない）確率空間 $(\Om,\PP)$ からの写像 $X : \Om \rightarrow \X$ であり，その分布 $\al$ は $\PP(X \in A) = \al(A)=\int_A \d\al(x)$ を満たす Radon 測度 $\al \in \Mm_+^1(\X)$ である．
+	%
+	同値だが，それは $X$ による $\PP$ の押し出し $\al=X_\sharp\PP$ である．
+	%
+	$\T : \X \rightarrow \Y$ に対して別の押し出し $\be = \T_\sharp\al$ を~\eqref{eq-push-fwd}にしたがって適用することは，別の確率変数 $Y=\T(X) : \om \in \Om \rightarrow \T(X(\om)) \in Y$ を定義することと等価であり，こうして $\be$ は $Y$ の分布となる．
+	%
+	$Y$ から無作為標本 $y$ を引くことは，このように単に $y=\T(x)$ を計算することで達成される．ここで $x$ は $X$ から引かれる．
+\end{rem2}
+%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kantorovich Relaxation}\label{sec-kantorovich-relaxation}
+
+%%%%%
+%\paragraph{Limitations of the Monge Problem}
+
+割当問題，および注意~\ref{rem-monge1}で展開した Monge 問題に見られるその一般化は，実際的な問題に見られるような離散測度を研究するのに必ずしも適切ではない．実際，割当問題は置換問題として定式化されるため，\emph{同じ}サイズの\emph{一様な}ヒストグラムを比較するためにしか用いることができない．非一様な重みをもつ離散測度への直接の一般化は，Monge の押し出し写像の形式論を用いて遂行できるが，その定式化もまた質量保存制約~\eqref{eq-monge-constr}を満たす実行可能解が存在しない場合には退化しうる（注意~\ref{rem-monge1}の末尾を参照）．加えて，割当問題~\eqref{eq-monge-discr}は組合せ的であり，Monge 問題~\eqref{eq-monge-continuous}の実行可能集合は，質量保存制約を満たすすべての押し出し測度からなる集合として連続的に径数づけられているにもかかわらず，\emph{非凸}である．したがって両者とも，元の定式化のまま取り組むと解くのが難しい．
+
+%%%%%%
+% \paragraph{Kantorovich's relaxation} Redundant
+\citet{Kantorovich42} の鍵となる着想は，輸送の決定論的な性質，すなわち始点 $x_i$ が別の点ないし位置 $y_{\sigma_i}$ または $T(x_i)$ にのみ割り当てられるという事実を緩めることである．Kantorovich は代わりに，任意の点 $x_i$ における質量が複数の位置に分配されうると提案する．Kantorovich は質量輸送が\emph{決定論的}であるべきだという考えから離れ，代わりに\emph{確率論的}な輸送を考える．これは，始点から複数の標的への，今日一般に\emph{質量分割}として知られるものを許す．この柔軟性は，置換 $\sigma$ や写像 $T$ の代わりに，カップリング行列 $\P  \in \RR_+^{n \times m}$ を用いて符号化される．ここで $\P_{i,j}$ はビン $i$ からビン $j$ へ，あるいは離散測度~\eqref{eq-pair-discr}の形式論では $x_i$ にある質量から $y_j$ へ流れる質量の量を記述する．許容されるカップリングは Monge 写像よりはるかに単純な特徴づけを許す．
+\eql{\label{eq-discr-couplings}
+	\CouplingsD(\a,\b) \eqdef \enscond{ \P \in \RR_+^{n \times m} }{
+		\P \ones_m = \a \qandq
+		\transp{\P} \ones_n = \b
+	},
+}
+ここで以下の行列・ベクトル記法を用いた．
+\eq{
+	\P \ones_m = \left(\sum_j \P_{i,j}\right)_i \in \RR^n
+	\qandq
+	\transp{\P} \ones_n = \left(\sum_i \P_{i,j}\right)_j \in \RR^m.
+}
+行列の集合 $\CouplingsD(\a,\b)$ は有界であり $n+m$ 個の等式制約によって定義されるので，凸多面体（有限個の行列の凸包）である~\citep[\S8.1]{brualdi2006combinatorial}．
+
+%
+さらに，Monge の定式化（図~\ref{fig-non-unique-matching}の右の図に示されているように）が本質的に非対称であったのに対し，Kantorovich の緩和した定式化は常に対称的である．すなわち，カップリング $\P$ が $\CouplingsD(\a,\b)$ に属するのは $\transp{\P}$ が $\CouplingsD(\b,\a)$ に属するとき，かつそのときに限る．Kantorovich の最適輸送問題は今や
+\eql{\label{eq-mk-discr}
+	\MKD_{\C}(\a,\b) \eqdef
+	\umin{\P \in \CouplingsD(\a,\b)}
+		\dotp{\C}{\P} \eqdef \sum_{i,j} \C_{i,j} \P_{i,j}.
+}
+と書かれる．これは線形計画（第\ref{c-algo-basics}章を参照）であり，そのような計画では通常そうであるように，その最適解は必ずしも一意ではない．
+
+\begin{rem}[鉱山と工場]\label{rem-kantorovich-primal} Kantorovich 問題は，以下の資源配分問題において非常に自然な例を見出す（\citet{Hitchcock41} も参照）．ある事業者が $n$ 個の倉庫と $m$ 個の工場を運営しているとしよう．各倉庫には，工場が適切に稼働するために必要な貴重な原材料が含まれている．より正確には，各倉庫は整数 $i$ で添字づけられ，原材料 $\a_i$ 単位を含む．これらの原材料はすべて工場へ運ばれねばならず，工場 $j$ が適切に機能するには規定量 $\b_j$ が必要である．倉庫 $i$ から工場 $j$ へ資源を移すために，事業者は運送会社を利用でき，その会社は資源 1 単位を位置 $i$ から位置 $j$ へ動かすのに $\C_{i,j}$ を請求する．運送会社は物品輸送を独占しており，経済のすべての主体に同じ線形価格体系を適用すると仮定する．すなわち資源 $a$ 単位を $i$ から $j$ へ運ぶコストは $a\times \C_{i,j}$ に等しい．
+
+上記の問題に直面して，事業者は方程式~\eqref{eq-mk-discr}に記述された線形計画を解くことを選び，各対 $i,j$ について倉庫 $i$ から工場 $j$ へ輸送されねばならない物品の量 $\P_{i,j}$ を定量化する輸送計画 $\P^\star$ を得る．事業者はその計画を実行するために運送会社へ総額 $\dotp{\P^\star}{\C}$ を支払う．
+\end{rem}
+
+%%%%%%%
+\paragraph{Permutation matrices as couplings.}
+
+置換 $\si\in\Perm(n)$ に対し，対応する置換行列を $\P_{\si}$ と書く．
+	\eql{\label{eq-perm-matrices}
+		\foralls (i,j) \in \range{n}^2, \quad
+		(\P_{\si})_{i,j} = \choice{
+			1/n \qifq j=\si_i, \\
+			0 \quad\text{otherwise.}
+		}
+	}
+この場合
+\eq{\dotp{\C}{\P_{\si}}=\frac{1}{n}\sum_{i=1}^n \C_{i,\si_i},}
+が確かめられる．これは割当問題~\eqref{eq-optimal-assignment}が，カップリング $\P$ をちょうど置換行列に制限した Kantorovich 問題~\eqref{eq-mk-discr}として書き換えられることを示す．
+\eq{\umin{\si \in \Perm(n)} \frac{1}{n}\sum_{i=1}^n \C_{i,\si(i)} = \umin{\si \in \Perm(n)} \dotp{\C}{\P_{\si}}.}
+次に，置換行列の集合が \citeauthor{birkhoff} 多面体 $\CouplingsD(\ones_n/n,\ones_n/n)$ に真に含まれることが容易に確かめられる．実際，任意の置換 $\si$ に対し $\P_{\si}\ones=\ones_n$ かつ $\transp{\P_{\si}}\ones=\ones_n$ である一方，$\ones_n\transp{\ones_n}/n^2$ は有効なカップリングであるが置換行列ではない．したがって $\dotp{\C}{\P}$ の最小値は，すべての輸送を考えるときのほうが置換行列のみを考えるときより必然的に小さい．
+$$ \MKD_{\C}(\ones_n/n,\ones_n/n) \leq \umin{\si \in \Perm(n)} \dotp{\C}{\P_{\si}}.$$
+
+次の命題は，これらの問題が実は同じ最適値に帰着すること，すなわち二つの一様測度 $\a=\b=\ones_n/n$ の間の Kantorovich 問題~\eqref{eq-mk-discr}を最小化する置換行列を常に見出せることを示す．したがって Kantorovich 緩和は，割当問題に適用したとき\emph{密}である．%しかしながら，本質的に組合せ的な計算アルゴリズムのなかには，同じ点数をもつ一様ヒストグラムの場合に特化したものもある点に注意する（第\ref{c-algo-basics}章を参照）．
+%
+図~\ref{fig-matching-kantorovitch}は左に，この特別な場合に対応する最適マッチングの二次元の例を示す．
+%
+
+\begin{prop}[マッチングに対する Kantorovich]\label{prop-matching-kanto}
+	$m=n$ かつ $\a=\b=\ones_n/n$ ならば，問題~\eqref{eq-mk-discr}に対し最適解 $\P_{\si^\star}$ が存在する．これは問題~\eqref{eq-optimal-assignment}に対する最適置換 $\si^\star \in \Perm(n)$ に付随する置換行列である．
+\end{prop}
 
 \begin{proof}
-  $U \subset Y$ を開集合とする．$T$ は連続であるから，$T^{-1}(U)$ は $X$ の開集合であり，
-  $T^{-1}(U) \in \Bb(X)$ が成り立つ．
-  $\Bb(Y)$ は $Y$ のすべての開集合を含む最小の $\sigma$-代数であるから，
-  $\{B \in \Bb(Y) \mid T^{-1}(B) \in \Bb(X)\}$ が $\sigma$-代数であること
-  （$T^{-1}$ が合併・補集合と可換であることから従う）と，
-  この $\sigma$-代数がすべての開集合を含むことを合わせると，
-  $\Bb(Y) \subset \{B \in \Bb(Y) \mid T^{-1}(B) \in \Bb(X)\}$ が得られる．
+	\citeauthor{birkhoff} の定理~\citeyearpar{birkhoff}は，$\CouplingsD(\ones_n/n,\ones_n/n)$ の極点の集合が置換行列の集合に等しいことを述べている．線形計画法の基本定理~\citep[Theorem 2.7]{bertsimas1997introduction}は，空でない多面体上の線形目的関数の最小値が，有限であれば，多面体の極点で達成されることを述べている．
 \end{proof}
 
-\begin{definition}{押し出し（push-forward）}{pushforward}
-  $(X, \Bb(X))$ と $(Y, \Bb(Y))$ を可測空間とし，
-  $T \colon X \to Y$ を可測写像とする．
-  測度 $\alpha \in \Mm_+(X)$ の $T$ による\textbf{押し出し}
-  $T\pushforward \alpha \in \Mm_+(Y)$ を
-  \[
-    (T\pushforward \alpha)(B) \defeq \alpha(T^{-1}(B))
-    \qquad (\forall\, B \in \Bb(Y))
-  \]
-  で定義する．ここで $T^{-1}(B) = \{x \in X \mid T(x) \in B\}$ は $B$ の逆像である．
-\end{definition}
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{5mm}}c@{}}
+\includegraphics[width=.4\linewidth]{matching-kantorovitch/matching}&
+\includegraphics[width=.4\linewidth]{matching-kantorovitch/weighted}
+\end{tabular}
+\caption{\label{fig-matching-kantorovitch}
+%
+最適マッチングと一般的なカップリングの比較．$x_i$ と $y_j$ の間の黒い線分は，表示された最適カップリング $\P_{i,j}$（~\eqref{eq-mk-discr}を解く）における非零要素を示す．
+%
+左：最適マッチング．命題~\ref{prop-matching-kanto}の設定（同じ点数 $n=m$ をもつ経験測度）に対応する．
+%
+右：これら二つの重みつき点群はマッチングできない．代わりに，任意の二つの離散測度を対応づけるために Kantorovich カップリングを用いることができる．
+}
+\end{figure}
 
-\begin{remark}{}{pushforward-integration}
-  押し出しの定義を積分の言葉で述べると，
-  すべての可測関数 $h \colon Y \to \R$ に対して
-  \[
-    \int_Y h(y) \, \d(T\pushforward \alpha)(y) = \int_X h(T(x)) \, \d\alpha(x)
-  \]
-  が成り立つ．離散測度 $\alpha = \sum_i a_i \delta_{x_i}$ に対しては，
-  \[
-    T\pushforward \alpha = \sum_{i=1}^n a_i \, \delta_{T(x_i)}
-  \]
-  となる．すなわち，押し出しは各点 $x_i$ の位置を $T(x_i)$ に移し，重み $a_i$ は保存する操作である．
-\end{remark}
 
-以上を用いて，Monge 問題を定式化する．
+%%%%%%%
+\begin{rem1}{Kantorovich problem between discrete measures}
+~\eqref{eq-pair-discr}の形の離散測度 $\al,\be$ に対し，$\al,\be$ の台にある点の間のすべての対コスト，すなわち $\C_{i,j} \eqdef \c(x_i,y_j)$ を行列 $\C$ に格納し，
+\eql{\label{eq-kanto-discr}
+	\MK_\c(\al,\be) \eqdef \MKD_{\C}(\a,\b).
+}
+を定義する．したがって，離散測度の間の最適輸送の Kantorovich 定式化は，付随する確率重みベクトル $\a,\b$ の間の問題と同じであるが，ただしコスト行列 $\C$ が $\al$ と $\be$ の台に依存する点だけが異なる．しかしながら記法 $\MK_\c(\al,\be)$ は，確率重みと支持点の\emph{両方}への依存性を明示するため，状況によっては有用である．後者はもっぱらコスト関数 $\c$ を通じて考慮される．
+\end{rem1}
+%%%%%%%
 
-\begin{setting}{Monge 問題}{monge}
-  ソース空間 $\X$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$，
-  ターゲット空間 $\Y$ 上の確率測度 $\beta \in \Mm_+^1(\Y)$，
-  およびコスト関数 $c \colon \X \times \Y \to \R_{\geq 0}$ が与えられたとき，
-  \textbf{Monge 問題}とは次の最適化問題をいう：
-  \[
-    \inf_{\substack{T \colon \X \to \Y \\ T\pushforward \alpha = \beta}}
-    \int_{\X} c(x, T(x)) \, \d\alpha(x).
-  \]
-  ここで最適化は，$T\pushforward \alpha = \beta$ を満たすすべての可測写像 $T$ にわたって行う．
-  条件 $T\pushforward \alpha = \beta$ は，写像 $T$ が
-  ソースの質量分布をターゲットの質量分布に正確に移すことを要求する．
-\end{setting}
 
-Monge 問題には，以下の本質的な困難がある．
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{5mm}}c@{\hspace{5mm}}c@{}}
+\includegraphics[width=.3\linewidth]{settings/discrete}&
+\includegraphics[width=.3\linewidth]{settings/semi-discrete}&
+\includegraphics[width=.3\linewidth]{settings/continuous}\\
+Discrete & Semidiscrete & Continuous
+\end{tabular}
+\caption{\label{fig-settings}
+Kantorovich OT の三つの主要な場面で出会う入力測度 $(\al,\be)$ とカップリング $\Couplings(\al,\be)$ の概略図．第\ref{c-algo-semidiscr}章は半離散の設定に充てられている．
+}
+\end{figure}
 
-\begin{remark}{Monge 問題の困難}{monge-difficulty}
-  \begin{enumerate}
-    \item \textbf{非凸性}：
-      実行可能集合 $\{T \colon T\pushforward \alpha = \beta\}$ は一般に\textbf{凸でない}．
-      すなわち，2つの実行可能な写像 $T_1, T_2$ に対して，
-      その凸結合 $(1-t)T_1 + tT_2$ は一般に実行可能でない
-      （押し出し条件は写像に関して非線形だからである）．
-      このため，標準的な凸最適化の手法が直接は適用できない．
 
-    \item \textbf{解の非存在}：
-      以下の例~\ref{ex:monge-nonexistence} に示すように，
-      実行可能な写像 $T$ が\textbf{存在しない}場合がある．
-      特に，ソース測度がターゲット測度より「粗い」
-      （少数の点に質量が集中している）場合に，質量を分割できないという制約が障害となる．
-  \end{enumerate}
-\end{remark}
 
-\begin{example}{Monge 写像が存在しない場合}{monge-nonexistence}
-  $\X = \Y = \R$ 上で，ソース測度 $\alpha = \delta_0$（原点に全質量を集中），
-  ターゲット測度 $\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$
-  （$-1$ と $1$ に半分ずつ質量を配置）を考える．
+%%%%%%%
+\begin{rem1}{Using optimal assignments and couplings}
+最適輸送計画それ自体（カップリング $\P$ として，あるいは存在する場合には Monge 写像 $\T$ として）は，データ科学，特に画像処理において多くの応用を見出してきた．たとえばコントラスト均等化~\citep{delon2004midway}やテクスチャ合成~\citet{gutierrez2017optimal}に用いられてきた．
+%
+OT の画像科学への応用の重要な部分は，画像マッチング~\citep{zhu2007image,wang2013linear,museyko2009application,li2013novel}，画像融合~\citep{courty2016optimal}，医用画像~\citep{wang2011optimal}，形状位置合わせ~\citep{makihara2010earth,lai2014multi,su2015optimal}，および画像電子透かし~\citep{mathon2014optimal}のためのものである．天体物理学では，OT は初期宇宙の再構成に用いられてきた~\citep{FrischNaturee}．
+%
+OT はまた音楽の採譜~\citep{flamary2016optimal}にも用いられ，マッチングデータを解釈するために経済学において数多くの応用を見出している~\citep{galichon2016optimal}．
+%
+最後に，OT 技法を用いて（あるいはそれに着想を得て）計算される輸送写像の計算は，標本抽出~\citep{reich2013nonparametric,oliver2014minimization}やベイズ推論~\citep{kim2013efficient,el2012bayesian}を行うのにも有用である点に注意する．
+\end{rem1}
+%%%%%%%
 
-  $T\pushforward \alpha = \beta$ を満たす写像 $T \colon \R \to \R$ が存在すると仮定する．
-  $\alpha = \delta_0$ であるから，
-  $T\pushforward \delta_0 = \delta_{T(0)}$ となる．
-  しかし $\delta_{T(0)}$ は1点に集中した測度であり，
-  $\beta = \frac{1}{2}\delta_{-1} + \frac{1}{2}\delta_1$ は2点に質量を持つ．
-  よって $\delta_{T(0)} \neq \beta$ であり，矛盾する．
 
-  \begin{center}
-  \begin{tikzpicture}[scale=1.1]
-    % Source
-    \draw[->] (-2, 0) -- (2, 0);
-    \draw[thick, blue] (0, 0) -- (0, 1.2);
-    \fill[blue] (0, 1.2) circle (2pt);
-    \node[below] at (0, -0.1) {$0$};
-    \node[above, blue] at (0, 1.35) {$\alpha = \delta_0$};
+%%%%%%%
+\begin{rem2}{Kantorovich problem between arbitrary measures} $\MK_\c$ の定義~\eqref{eq-kanto-discr}は，積空間上の同時分布であるカップリング $\pi \in \Mm_+^1(\X \times \Y)$ を考えることで任意の測度へ拡張される．離散の場合は，この積測度を $\pi = \sum_{i,j} \P_{i,j} \de_{(x_i,y_j)}$ の形に課す特別な状況である．一般の場合，質量保存制約~\eqref{eq-discr-couplings}は，同時確率分布に対する周辺制約として書き直されるべきである．
+\eql{\label{eq-coupling-generic}
+	\Couplings(\al,\be) \eqdef
+	\enscond{
+		\pi \in \Mm_+^1(\X \times \Y)
+	}{
+		P_{\X\sharp} \pi = \al
+		\qandq
+		P_{\Y\sharp} \pi = \be
+	}.
+}
+ここで $P_{\X\sharp}$ と $P_{\Y\sharp}$ は射影 $P_\X(x,y)=x$ および $P_\Y(x,y)=y$ の押し出し（定義~\ref{defn-pushfwd}を参照）である．
+%
+図~\ref{fig-settings}は，これらのカップリング制約が様々なクラスの問題（離散測度と密度）に対しどのように翻訳されるかを示している．
+%
+~\eqref{eq-equiv-pushfwd}を用いると，これらの周辺制約は，集合 $A \subset \X$ および $B \subset \Y$ に対して $\pi(A \times \Y)=\al(A)$ かつ $\pi(\X \times B)=\be(B)$ を課すことと同値である．
+%
+Kantorovich 問題~\eqref{eq-mk-discr}はそのとき
+\eql{\label{eq-mk-generic}
+	\MK_\c(\al,\be) \eqdef
+	\umin{\pi \in \Couplings(\al,\be)}
+		\int_{\X \times \Y} \c(x,y) \d\pi(x,y).
+}
+と一般化される．これは測度の空間上の無限次元線形計画である．$(\X,\Y)$ がコンパクト空間で $c$ が連続であれば，それが常に解をもつことは容易に示せる．実際 $\Couplings(\al,\be)$ は測度の弱位相に対しコンパクトであり（注意~\ref{dfn-weak-conv}を参照），$\pi \mapsto \int c \d\pi$ はこの位相に対し連続関数であり，制約集合は空でない（たとえば $\al \otimes \be \in \Couplings(\al,\be)$）．
+%
+図~\ref{fig-couplings}は~\eqref{eq-mk-generic}を解く離散および連続な最適カップリングの例を示す．
+%
+図~\ref{fig-couplings-simple}は，離散および連続な周辺分布を含む，他の最適な一次元カップリングの例を示す．
+%
+\todoK{Explain that proof of existence of minimizers (\ie the inf is a min) follows from classical reasoning in variational calculus, especially if the spaces $(\X,\Y)$ are compact (or the support of the input measure) and the cost $\c$ is continuous. Indeed, the topology to use is the weak topology of measure (Definition~\ref{dfn-weak-conv}) and then the function is continuous on a compact. }
+\end{rem2}
+%%%%%%%
 
-    % Arrow
-    \draw[->, thick, dashed, gray] (2.5, 0.6) -- (3.5, 0.6);
-    \node[above, gray] at (3, 0.6) {$T\, ?$};
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{10mm}}c@{}}
+\includegraphics[width=.3\linewidth]{couplings/couplings-continuous}&
+\includegraphics[width=.3\linewidth]{couplings/couplings-discr}
+\end{tabular}
+\caption{\label{fig-couplings}
+左：密度をもつ二つの一次元測度の間の，~\eqref{eq-coupling-generic}を解く「連続な」カップリング $\pi$．このカップリングは Monge 写像のグラフ $(x,\T(x))$（黒で表示）に沿って局在化している．
+%
+右：~\eqref{eq-pair-discr}の形の二つの離散測度の間の，~\eqref{eq-mk-discr}を解く「離散的な」カップリング $\T$．正の成分 $\T_{i,j}$ は，位置 $(i,j)$ に $\T_{i,j}$ に比例する半径の黒い円板として表示されている．
+}
+\end{figure}
 
-    % Target
-    \begin{scope}[xshift=5.5cm]
-      \draw[->] (-2, 0) -- (2, 0);
-      \draw[thick, red] (-1, 0) -- (-1, 0.6);
-      \fill[red] (-1, 0.6) circle (2pt);
-      \draw[thick, red] (1, 0) -- (1, 0.6);
-      \fill[red] (1, 0.6) circle (2pt);
-      \node[below] at (-1, -0.1) {$-1$};
-      \node[below] at (1, -0.1) {$1$};
-      \node[above, red] at (0, 0.8) {$\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$};
-    \end{scope}
-  \end{tikzpicture}
-  \end{center}
 
-  この例は，Monge の定式化では質量の「分割」が許されないために
-  解が存在しないことを端的に示している．
-  Kantorovich の緩和（次節）は，まさにこの困難を解消するものである．
-\end{example}
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\includegraphics[width=.24\linewidth]{couplings/couplings-1}&
+\includegraphics[width=.24\linewidth]{couplings/couplings-2}&
+\includegraphics[width=.24\linewidth]{couplings/couplings-3}&
+\includegraphics[width=.24\linewidth]{couplings/couplings-4}
+\end{tabular}
+\caption{\label{fig-couplings-simple}
+一次元分布の間の最適カップリングの四つの単純な例．上に写像（矢印）として，下にカップリングとして表されている．\citet{Levy2017review} に着想を得た．
+}
+\end{figure}
 
-%% ============================================================
-%%  2.3 Kantorovich 緩和の概要
-%% ============================================================
-\section{Kantorovich 緩和の概要}
-\label{sec:kantorovich-overview}
 
-Kantorovich (1942) の革命的なアイデアは，
-Monge の決定論的な輸送写像 $T$ を\textbf{輸送計画}に置き換えることである．
-すなわち，各点 $x$ の質量を\textbf{1つの行き先に集中させる}代わりに，
-\textbf{複数の行き先に分割して}送ることを許す．
-この輸送計画は，$\X \times \Y$ 上の結合測度（カップリング）として定式化される．
 
-\begin{definition}{カップリング}{coupling}
-  確率測度 $\alpha \in \Mm_+^1(\X)$ と $\beta \in \Mm_+^1(\Y)$ に対して，
-  $\alpha$ と $\beta$ の\textbf{カップリング}（coupling）の集合を
-  \[
-    \Couplings(\alpha, \beta) \defeq
-    \left\{ \pi \in \Mm_+^1(\X \times \Y) \;\middle|\;
-    (P_\X)\pushforward \pi = \alpha, \;
-    (P_\Y)\pushforward \pi = \beta \right\}
-  \]
-  で定義する．ここで $P_\X(x, y) = x$，$P_\Y(x, y) = y$ はそれぞれ
-  第1成分・第2成分への射影である．
-  すなわち，$\pi$ の\textbf{周辺分布}（marginals）がそれぞれ $\alpha$, $\beta$ に一致することを要求する．
-\end{definition}
+%%%%%%%%%%%%%%
+\begin{rem2}{Probabilistic interpretation}
+Kantorovich の問題は，注意~\ref{rem-meas-random}にしたがって確率変数のプリズムを通じて再解釈できる．実際，問題~\eqref{eq-mk-generic}は
+\eql{\label{eq-ot-proba-interpretation}
+	\MK_\c(\al,\be) = \umin{(X,Y)} \enscond{ \EE_{(X,Y)}(c(X,Y)) }{ X \sim \al, Y \sim \be },
+}
+と等価である．ここで $(X,Y)$ は $\X \times \Y$ 上の確率変数の組であり，$X \sim \al$（それぞれ $Y \sim \be$）は，測度として表される $X$（それぞれ $Y$）の法則が $\al$（それぞれ $\be$）でなければならないことを意味する．組 $(X,Y)$ の法則はそのとき積空間 $\X \times \Y$ 上の $\pi \in \Couplings(\al,\be)$ である．
+\end{rem2}
+%%%%%%%%%%%%%%
 
-\begin{remark}{周辺分布の条件}{marginal-condition}
-  周辺分布の条件を積分で書くと，任意の可測関数 $\varphi, \psi$ に対して
-  \begin{align*}
-    \int_{\X \times \Y} \varphi(x) \, \d\pi(x, y) &= \int_\X \varphi(x) \, \d\alpha(x), \\
-    \int_{\X \times \Y} \psi(y) \, \d\pi(x, y) &= \int_\Y \psi(y) \, \d\beta(y)
-  \end{align*}
-  が成り立つことと同値である．
-  直感的には，$\pi(A \times \Y) = \alpha(A)$（$A \subset \X$）および
-  $\pi(\X \times B) = \beta(B)$（$B \subset \Y$）が要求されている．
-\end{remark}
 
-\begin{remark}{離散版カップリング}{discrete-coupling}
-  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$ に対する
-  離散的なカップリングは $n \times m$ の非負行列 $\mathbf{P}$ で表され，
-  \[
-    \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
-    \left\{ \mathbf{P} \in \R_{\geq 0}^{n \times m} \;\middle|\;
-    \mathbf{P} \ones_m = \mathbf{a}, \;
-    \mathbf{P}^\top \ones_n = \mathbf{b} \right\}
-  \]
-  で定義される．ここで $\ones_k$ は成分がすべて1の $k$ 次元ベクトルである．
-  $P_{i,j}$ は「ソースのビン $i$ からターゲットのビン $j$ へ輸送される質量」を表す．
-  行和の条件 $\mathbf{P} \ones_m = \mathbf{a}$ は供給制約，
-  列和の条件 $\mathbf{P}^\top \ones_n = \mathbf{b}$ は需要制約に対応する．
-\end{remark}
 
-\begin{definition}{Birkhoff 多面体}{birkhoff}
-  $n = m$ かつ $\mathbf{a} = \mathbf{b} = \ones_n / n$（均一重み）のとき，
-  $\CouplingsD(\ones_n/n, \ones_n/n)$ を\textbf{Birkhoff 多面体}（Birkhoff polytope）と呼ぶ．
-  これは二重確率行列（doubly stochastic matrix;
-  すべての行和・列和が $1/n$ の非負行列）の集合に等しい．
-\end{definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Metric Properties of Optimal Transport}
 
-\begin{theorem}{Birkhoff--von Neumann の定理}{birkhoff-von-neumann}
-  Birkhoff 多面体の\textbf{端点}（extreme point）は
-  $\frac{1}{n}\mathbf{P}_\sigma$（$\sigma \in \Perm(n)$）の形の置換行列に限る．
-  すなわち，任意の二重確率行列は置換行列の凸結合として表される．
-\end{theorem}
+OT の重要な特徴は，コスト行列がある適切な性質を満たしさえすれば，ヒストグラムおよび確率測度の間の距離を定義することである．実際，OT は，点の間の基底距離をヒストグラムまたは測度の間の距離へと持ち上げる正準的な方法として理解できる．
 
-\begin{remark}{}{birkhoff-consequence}
-  線形計画問題の最適解は多面体の端点で達成されるから，
-  均一重みの場合の Kantorovich 問題は置換行列で最適解を持つ．
-  これは最適割当問題（設定~\ref{set:assignment}）の最適値と一致し，
-  Kantorovich 緩和が割当問題のタイトな緩和であることを意味する．
-\end{remark}
+まず，\citet{RubTomGui00} によって初めて導入された用語を用いて「基底距離」行列 $\C$ が固定され，ビンの間の置換コストを表し，比較したい複数のヒストグラムにわたって共有される場合を考える．次の命題は，OT がこれらのビン上に台をもつヒストグラムの間の妥当な距離を提供することを述べる．
 
-\begin{remark}{カップリングの存在}{coupling-existence}
-  $\Couplings(\alpha, \beta)$ は常に\textbf{空でない}．
-  実際，\textbf{積測度}（product measure）$\alpha \otimes \beta$ はカップリングの一つである：
-  \[
-    (\alpha \otimes \beta)(A \times B) = \alpha(A) \cdot \beta(B)
-    \qquad (\forall\, A \in \Bb(\X), \; B \in \Bb(\Y)).
-  \]
-  これは「ソースとターゲットを独立に結合する」最も情報を持たないカップリングであり，
-  一般に最適ではないが，実行可能性を保証する．
-  離散版では $\mathbf{P} = \mathbf{a} \mathbf{b}^\top$（外積）が対応する．
-\end{remark}
-
-以上を用いて，Kantorovich 問題を定式化する．
-
-\begin{setting}{Kantorovich 問題}{kantorovich}
-  確率測度 $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$，
-  およびコスト関数 $c \colon \X \times \Y \to \R_{\geq 0}$ に対して，
-  \textbf{Kantorovich 問題}とは次の最適化問題をいう：
-  \[
-    \MK_c(\alpha, \beta) \defeq
-    \inf_{\pi \in \Couplings(\alpha, \beta)}
-    \int_{\X \times \Y} c(x, y) \, \d\pi(x, y).
-  \]
-  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$ と
-  コスト行列 $\mathbf{C} \in \R_{\geq 0}^{n \times m}$ に対する離散版は
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) \defeq
-    \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \sum_{i,j} C_{i,j} P_{i,j}
-    = \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-    \inner{\mathbf{C}}{\mathbf{P}}
-  \]
-  で与えられる．ここで $\inner{\mathbf{C}}{\mathbf{P}} = \tr(\mathbf{C}^\top \mathbf{P})$
-  はフロベニウス内積である．
-\end{setting}
-
-\begin{remark}{確率論的解釈}{probabilistic-interpretation}
-  Kantorovich 問題は確率論の言葉で次のように述べられる．
-  確率変数 $X \sim \alpha$，$Y \sim \beta$ の同時分布 $(X, Y)$ のうち，
-  周辺分布がそれぞれ $\alpha$, $\beta$ に一致するものを考えて，
-  \[
-    \MK_c(\alpha, \beta) = \inf_{\substack{(X, Y) \\ X \sim \alpha,\; Y \sim \beta}}
-    \E\bigl[c(X, Y)\bigr].
-  \]
-  すなわち，周辺分布を固定したもとでの輸送コストの期待値を最小化する問題である．
-  カップリング $\pi$ は同時分布に対応し，
-  周辺分布の制約は $X \sim \alpha$，$Y \sim \beta$ に対応する．
-\end{remark}
-
-Kantorovich 緩和が Monge の定式化より優れている理由を整理する．
-
-\begin{remark}{Kantorovich 緩和の利点}{kantorovich-advantages}
-  \begin{enumerate}
-    \item \textbf{凸性}：$\Couplings(\alpha, \beta)$ は凸集合である
-      （2つのカップリングの凸結合は再びカップリング）．
-      目的関数 $\pi \mapsto \int c \, \d\pi$ は $\pi$ に関して線形であるから，
-      Kantorovich 問題は\textbf{凸最適化問題}である．
-    \item \textbf{線形計画}：離散版は有限次元の\textbf{線形計画問題}（LP）であり，
-      単体法や内点法などの効率的なアルゴリズムで解ける．
-    \item \textbf{解の存在}：$\X, \Y$ がポーランド空間かつ $c$ が下半連続ならば，
-      $\Couplings(\alpha, \beta)$ は緊密かつ弱位相で閉であることが示される．
-      したがって Prokhorov の定理（定理~\ref{thm:prokhorov}）から
-      $\Couplings(\alpha, \beta)$ は弱収束に関してコンパクトとなり，
-      目的関数は弱収束に関して下半連続であるから，
-      最適なカップリング $\pi^*$ が\textbf{常に存在}する．
-      離散版でも，$\CouplingsD(\mathbf{a}, \mathbf{b})$ はコンパクト凸集合であるから，
-      最適な輸送計画は常に存在する．
-  \end{enumerate}
-\end{remark}
-
-Monge 問題と Kantorovich 問題の関係を明確にしておく．
-
-\begin{proposition}{Monge 問題との関係}{monge-kantorovich-relation}
-  $T\pushforward \alpha = \beta$ を満たす可測写像 $T \colon \X \to \Y$ に対して，
-  \[
-    \pi_T \defeq (\operatorname{Id}, T)\pushforward \alpha
-  \]
-  で定義される測度 $\pi_T \in \Mm_+^1(\X \times \Y)$ は
-  $\Couplings(\alpha, \beta)$ の元であり，
-  \[
-    \int_{\X \times \Y} c(x, y) \, \d\pi_T(x, y)
-    = \int_\X c(x, T(x)) \, \d\alpha(x)
-  \]
-  が成り立つ．ここで $(\operatorname{Id}, T)(x) = (x, T(x))$ である．
-  したがって，
-  \[
-    \MK_c(\alpha, \beta) \leq
-    \inf_{\substack{T \colon \X \to \Y \\ T\pushforward \alpha = \beta}}
-    \int_\X c(x, T(x)) \, \d\alpha(x).
-  \]
-  すなわち，Kantorovich 問題は Monge 問題の\textbf{緩和}である．
-\end{proposition}
+\begin{prop}\label{prop-metric-histo}
+$n=m$ を仮定し，ある $p \geq 1$ に対し $\C=\distD^p=(\distD_{i,j}^p)_{i,j} \in \RR^{n \times n}$ であると仮定する．ここで $\distD \in \RR_+^{n \times n}$ は $\range{n}$ 上の距離である．すなわち
+\begin{enumerate}[label=(\roman*)]
+	\item $\distD \in \RR_+^{n \times n}$ は対称である；
+	\item $\distD_{i,j}=0$ であるのは $i=j$ のとき，かつそのときに限る；
+	\item $\foralls (i,j,k) \in \range{n}^3, \distD_{i,k} \leq \distD_{i,j}+\distD_{j,k}$．
+\end{enumerate}
+このとき
+\eql{\label{eq-wass-p-disc}
+	\WassD_p(\a,\b) \eqdef \MKD_{\distD^p}(\a,\b)^{1/p}
+}
+（$\WassD_p$ は $\distD$ に依存する点に注意）は $\Si_n$ 上の $p$-Wasserstein 距離を定義する．すなわち $\WassD_p$ は対称かつ正であり，$\WassD_p(\a,\b)=0$ であるのは $\a = \b$ のとき，かつそのときに限り，三角不等式
+\eq{
+	\foralls \a,\b,\VectMode{c} \in \Si_n, \quad \WassD_p(\a,\VectMode{c}) \leq \WassD_p(\a,\b) + \WassD_p(\b,\VectMode{c}).
+}
+を満たす．
+\end{prop}
 
 \begin{proof}
-  $\pi_T = (\operatorname{Id}, T)\pushforward \alpha$ の周辺分布を確認する．
-  任意のボレル集合 $A \subset \X$ に対して，
-  \[
-    \pi_T(A \times \Y)
-    = \alpha\bigl(\{x \in \X \mid (x, T(x)) \in A \times \Y\}\bigr)
-    = \alpha(A),
-  \]
-  また任意のボレル集合 $B \subset \Y$ に対して，
-  \[
-    \pi_T(\X \times B)
-    = \alpha\bigl(\{x \in \X \mid T(x) \in B\}\bigr)
-    = \alpha(T^{-1}(B))
-    = (T\pushforward \alpha)(B)
-    = \beta(B).
-  \]
-  よって $\pi_T \in \Couplings(\alpha, \beta)$ である．
+距離の対称性と確定性を示すのは容易である．$\C = \distD^p$ は対角成分が零であるから $\WassD_p(\a,\a)=0$ であり，対応する最適輸送行列は $\P^\star=\diag(\a)$ である．$\distD^p$ のすべての非対角要素の正値性により，$\a\ne \b$ のときは常に $\WassD_p(\a,\b)>0$ である（というのも，この場合，許容されるカップリングは必然的に対角以外に非零要素をもつからである）．$\distD^p$ の対称性により，$\WassD_p(\a,\b)$ はそれ自体対称な関数である．
 
-  コストの等式は，押し出しの定義から直ちに従う：
-  \[
-    \int_{\X \times \Y} c(x, y) \, \d\pi_T(x, y)
-    = \int_\X c(x, T(x)) \, \d\alpha(x).
-  \]
-  Kantorovich 問題は $\Couplings(\alpha, \beta)$ 全体にわたる下限であるから，
-  特に $\pi_T$ に対するコスト以下であり，不等式が得られる．
+
+任意の測度に対する Wasserstein 距離の三角不等式を示すために，\citet[Theorem 7.3]{Villani03} は貼り合わせ補題を用いる．これは規定された構造をもつカップリングの存在を強調するものである．
+% Closed forms for such couplings exist in the discrete case which we can readily use.
+離散の設定では，この貼り合わせカップリングの明示的な構成は単純である．
+%
+$\a,\b,\VectMode{c} \in\simplex_n$ とする．$\P$ と $\Q$ をそれぞれ $\a$ と $\b$ の間，および $\b$ と $\VectMode{c}$ の間の輸送問題の二つの最適解とする．
+%
+$\b$ の零座標から生じうる問題を避けるため，$\b_j>0$ ならば $\tilde\b_j \eqdef \b_j$，そうでなければ $\tilde{\b}_j\eqdef 1$ となるベクトル $\tilde{\b}$ を定義し，
+\eq{
+	\SS \eqdef \P \diag(1/\tilde{\b}) \Q \in \RR_+^{n \times n},
+}
+と書く．そして
+\eq{
+	\SS \ones_n  = \P \diag(1/\tilde{\b}) \Q \ones_n = \P (\b / \tilde{\b}) = \P \ones_{\Supp(\b)} = \a,
+}
+であるから $\SS \in \CouplingsD(\a,\VectMode{c})$ であることに気づく．ここで $\ones_{\Supp(\b)}$ は，$\b_j>0$ となる添字 $j$ に 1 を，それ以外に零を置いた大きさ $n$ のベクトルを表し，$\P \ones_{\Supp(\b)} = \P \ones = \a$ という事実を用いた．これは，$\b_j=0$ となる $j$ に対しては必然的に $\P_{i,j} = 0$ であるからである．同様に $\transp{\SS} \ones_n = \VectMode{c}$ が確かめられる．三角不等式はそのとき
+\begin{align*}
+\WassD_p(\a,\VectMode{c})&=\left(\min_{\P\in U(\a,\VectMode{c})}\dotp{\P}{\distD^p}\right)^{1/p} \leq \dotp{\SS}{\distD^p}^{1/p}\\
+&= \left(\sum_{ik} \distD^p_{ik}\sum_{j} \frac{\P_{ij}\Q_{jk}}{\tilde{\b}_j}\right)^{1/p} \leq \left(\sum_{ijk} \left(\distD_{ij}+\distD_{jk}\right)^p \frac{\P_{ij}\Q_{jk}}{\tilde{\b}_j}\right)^{1/p} \\
+& \leq \left(\sum_{ijk} \distD^p_{ij} \frac{\P_{ij}\Q_{jk}}{\tilde{\b}_j}\right)^{1/p} + \left(\sum_{ijk}\distD^p_{jk} \frac{\P_{ij}\Q_{jk}}{\tilde{\b}_j}\right)^{1/p}.
+\end{align*}
+から従う．第一の不等式は $\SS$ の準最適性によるものであり，第二は $\distD$ の要素に対する三角不等式であり，第三は Minkowski の不等式から来る．こうして
+\begin{align*}
+\WassD_p(\a,\VectMode{c})& \leq \left(\sum_{ij} \distD^p_{ij}\P_{ij} \sum_k \frac{\Q_{jk}}{\tilde{\b}_j}\right)^{1/p} + \left(\sum_{jk} \distD^p_{jk} \Q_{jk} \sum_i \frac{\P_{ij}}{\tilde{\b}_j}\right)^{1/p}\\
+&= \left(\sum_{ij} \distD^p_{ij}\P_{ij}\right)^{1/p} + \left(\sum_{jk} \distD^p_{jk} \Q_{jk}\right)^{1/p}\\
+&= \WassD_p(\a,\b) +\WassD_p(\b,\c),
+\end{align*}
+が得られ，証明を完結する．
 \end{proof}
 
-\begin{remark}{}{monge-kantorovich-comparison}
-  上の命題は，Monge 写像 $T$ による輸送がカップリングの特殊な場合
-  ---すなわち，$\pi$ が $T$ のグラフ $\{(x, T(x))\}$ 上に集中しているもの---
-  であることを示している．
-  Kantorovich の緩和は，このグラフ上への集中の要求を外すことで，
-  より広い実行可能領域を得ている．
 
-  \begin{center}
-  \begin{tikzpicture}[scale=1.0]
-    % Monge (left)
-    \node[above] at (1.5, 3.3) {\textbf{Monge 写像}};
-    \fill[blue] (0.5, 2.5) circle (3pt) node[left] {\small $x_1$};
-    \fill[blue] (0.5, 1.5) circle (3pt) node[left] {\small $x_2$};
-    \fill[blue] (0.5, 0.5) circle (3pt) node[left] {\small $x_3$};
-    \fill[red] (2.5, 2.5) circle (3pt) node[right] {\small $y_1$};
-    \fill[red] (2.5, 1.5) circle (3pt) node[right] {\small $y_2$};
-    \draw[->, thick] (0.7, 2.5) -- (2.3, 2.5);
-    \draw[->, thick] (0.7, 1.5) -- (2.3, 2.5);
-    \draw[->, thick] (0.7, 0.5) -- (2.3, 1.5);
+%%%%%%%
+\begin{rem}[$0<p\leq 1$ の場合]
+$0 < p \leq 1$ ならば，$\distD^p$ はそれ自体距離である点に注意する．これは，$p\geq 1$ に対しては $\WassD_p(\a,\b)$ が距離である一方，$p \leq 1$ の場合には，実際には $\WassD_p(\a,\b)^p$ が単体上の距離を定義することを含意する．
+\end{rem}
+%%%%%%%
 
-    % Kantorovich (right)
-    \begin{scope}[xshift=5cm]
-      \node[above] at (1.5, 3.3) {\textbf{Kantorovich カップリング}};
-      \fill[blue] (0.5, 2.5) circle (3pt) node[left] {\small $x_1$};
-      \fill[blue] (0.5, 1.5) circle (3pt) node[left] {\small $x_2$};
-      \fill[blue] (0.5, 0.5) circle (3pt) node[left] {\small $x_3$};
-      \fill[red] (2.5, 2.5) circle (3pt) node[right] {\small $y_1$};
-      \fill[red] (2.5, 1.5) circle (3pt) node[right] {\small $y_2$};
-      \draw[->, thick] (0.7, 2.5) -- (2.3, 2.5);
-      \draw[->, thick, blue!60] (0.7, 1.5) -- (2.3, 2.5);
-      \draw[->, thick, red!60] (0.7, 1.5) -- (2.3, 1.5);
-      \draw[->, thick] (0.7, 0.5) -- (2.3, 1.5);
 
-      \node[right, font=\small] at (1.6, 1.8) {分割};
-    \end{scope}
-  \end{tikzpicture}
-  \end{center}
+%%%%%%%
+\begin{rem1}{Applications of Wasserstein distances}
+OT 距離が，ビンの間の基底距離をそのようなビン上のヒストグラムの間の距離へ自動的に「持ち上げる」という事実は，ヒストグラムを比較するためのコンピュータビジョンや機械学習の応用において選好される手法たらしめている．
+%
+これらの分野での古典的なアプローチは，局所的特徴（たとえば画像記述子）を「プールし」，特徴の経験分布のヒストグラム（いわゆる特徴の袋）を計算して，検索・クラスタリング・分類を行うことである．たとえば~\citep{oliva2001modeling}を参照．
+%
+同様の発想に沿って，OT 距離は信号および画像解析を行うために何らかの持ち上げられた特徴空間上で用いることができる~\citep{thorpe2017transportation}．
+%
+検索とクラスタリングへの応用は画期的な論文~\citep{RubTomGui00}によって始められ，たとえばコンピュータビジョン~\citep{pele2008linear,Pele-iccv2009}など一部の応用に適合する閾値行列 $\C$ に対するより高速なアルゴリズムに続いて応用が新たに行われた．
+%
+より最近の応用は，単語の袋に対する earth mover's 距離の利用を強調し，次元削減を遂行する~\citep{pmlr-v51-rolet16}か，文書を分類する~\citep{kusner2015word,huang2016supervised}か，あるいは単語の袋を出力する多クラス分類器を訓練するための代替の損失を定義する~\citep{FrognerNIPS}．
+%
+\citet{kolouri2017optimal} は，信号処理と機械学習へのそのような応用の最近の概観を提供している．
+\end{rem1}
+%%%%%%%
 
-  左の Monge 写像では各点 $x_i$ は1つの行き先にのみ送られるが，
-  右の Kantorovich カップリングでは $x_2$ の質量が $y_1$ と $y_2$ に分割されている．
-\end{remark}
 
-%% ============================================================
-%%  2.4 Wasserstein 距離の概要
-%% ============================================================
-\section{Wasserstein 距離の概要}
-\label{sec:wasserstein-overview}
 
-コスト関数が距離から導かれる場合，最適輸送コストは確率測度の空間に
-自然な距離構造を導入する．これが Wasserstein 距離である．
 
-\begin{definition}{$p$-Wasserstein 距離}{wasserstein}
-  $(X, d)$ を距離空間とし，$p \geq 1$ とする．
-  確率測度 $\alpha, \beta \in \Mm_+^1(X)$ に対して，
-  \textbf{$p$-Wasserstein 距離}（$p$-Wasserstein distance）を
-  \[
-    \Wass_p(\alpha, \beta) \defeq
-    \left(
-    \inf_{\pi \in \Couplings(\alpha, \beta)}
-    \int_{X \times X} d(x, y)^p \, \d\pi(x, y)
-    \right)^{1/p}
-  \]
-  で定義する．すなわち，$\Wass_p(\alpha, \beta) = \MK_{d^p}(\alpha, \beta)^{1/p}$ である．
 
-  ヒストグラム $\mathbf{a}, \mathbf{b}$ と距離行列 $\mathbf{D}$（$D_{i,j} = d(x_i, y_j)$）に対する
-  離散版は
-  \[
-    \WassD_p(\mathbf{a}, \mathbf{b})
-    = \MKD_{\mathbf{D}^{\circ p}}(\mathbf{a}, \mathbf{b})^{1/p}
-  \]
-  で与えられる．ここで $\mathbf{D}^{\circ p}$ は $D_{i,j}^p$ を成分とする行列である．
-\end{definition}
+%%%%%%%
+\begin{rem1}{Wasserstein distance between measures}
+命題~\ref{prop-metric-histo}は，離散である必要のない任意の測度を扱うように一般化できる．
 
-\begin{proposition}{$\Wass_p$ は距離である}{wasserstein-metric}
-  $(X, d)$ を距離空間，$p \geq 1$ とする．
-  有限 $p$ 次モーメントを持つ確率測度の空間
-  \[
-    \Mm_+^{1,p}(X) \defeq
-    \left\{ \alpha \in \Mm_+^1(X) \;\middle|\;
-    \int_X d(x, x_0)^p \, \d\alpha(x) < \infty \right\}
-  \]
-  （ここで $x_0 \in X$ は任意の固定点）において，
-  $\Wass_p$ は距離の公理を満たす：
-  \begin{enumerate}
-    \item $\Wass_p(\alpha, \beta) = 0 \iff \alpha = \beta$．
-    \item $\Wass_p(\alpha, \beta) = \Wass_p(\beta, \alpha)$．
-    \item $\Wass_p(\alpha, \gamma) \leq \Wass_p(\alpha, \beta) + \Wass_p(\beta, \gamma)$．
-  \end{enumerate}
-\end{proposition}
+\begin{prop}\label{prop-metric-measure}
+$\X=\Y$ を仮定し，ある $p \geq 1$ に対し $\c(x,y)=\dist(x,y)^p$ であると仮定する．ここで $\dist$ は $\X$ 上の距離である．すなわち
+\begin{enumerate}[label=(\roman*)]
+	\item  $\dist(x,y) = \dist(y,x) \geq 0$；
+	\item  $\dist(x,y)=0$ であるのは $x=y$ のとき，かつそのときに限る；
+	\item  $\foralls (x,y,z) \in \X^3, \dist(x,z) \leq \dist(x,y)+\dist(y,z)$．
+\end{enumerate}
+このとき $\X$ 上の $p$-Wasserstein 距離
+\eql{\label{eq-defn-wass-dist}
+	\Wass_p(\al,\be) \eqdef \MK_{\dist^p}(\al,\be)^{1/p}
+}
+（$\Wass_p$ は $\dist$ に依存する点に注意）は，実際に距離である．すなわち $\Wass_p$ は対称かつ非負であり，$\Wass_p(\al,\be)=0$ であるのは $\al = \be$ のとき，かつそのときに限り，三角不等式
+\eq{
+	\foralls (\al,\be,\ga) \in  \Mm_+^1(\X)^3, \quad \Wass_p(\al,\ga) \leq \Wass_p(\al,\be) + \Wass_p(\be,\ga).
+}
+を満たす．
+\end{prop}
+\begin{proof}
+証明は命題~\ref{prop-metric-histo}に対するものと同じアプローチに従い，$(\al,\be)$ と $(\be,\ga)$ の間の最適カップリングを「貼り合わせる」ことで得られる $(\al,\ga)$ の間のカップリングの存在に依拠する．
+\end{proof}
+\end{rem1}
+%%%%%%%
 
-三角不等式の証明には以下の補題が必要である．
 
-\begin{proposition}{糊付け補題}{gluing-lemma}
-  ポーランド空間 $X, Y, Z$ 上の確率測度に対して，
-  $\pi_1 \in \Couplings(\alpha, \beta)$（$X \times Y$ 上）と
-  $\pi_2 \in \Couplings(\beta, \gamma)$（$Y \times Z$ 上）が与えられたとき，
-  $X \times Y \times Z$ 上の確率測度 $\mu$ であって，
-  $(X \times Y)$ への周辺分布が $\pi_1$ に，
-  $(Y \times Z)$ への周辺分布が $\pi_2$ に一致するものが存在する．
-\end{proposition}
+%%%%%%%
+\begin{rem2}{Geometric intuition and weak convergence}
+Wasserstein 距離 $\Wass_p$ は多くの重要な性質をもつが，最も重要なのは，それが弱距離であること，すなわち台が重ならない特異な分布（たとえば離散なもの）を比較し，二つの分布の台の間の空間的なずれを定量化できることである．
+%
+特に「古典的な」距離（あるいはダイバージェンス）は，離散分布の間では定義すらされない（$L^2$ ノルムは基準測度に関して密度をもつ連続測度にしか適用できず，離散 $\ell^2$ ノルムは適切に機能するために位置 $(x_i,y_j)$ があらかじめ定められた離散集合に値をとることを要求する）．これとは際立って対照的に，任意の $p> 0$ に対して $\Wass_p^p(\de_x,\de_y) = \dist(x,y)$ が成り立つ．実際，$\Couplings(\de_x,\de_y)=\{ \delta_{x,y}\}$ であり，したがって Kantorovich 問題は実行可能解を一つしかもたないので，$\Wass_p^p(\de_x,\de_y)$ は必然的に $(\dist(x,y)^p)^{1/p}=\dist(x,y)$ であることに気づけば十分である．これは $x \rightarrow y$ ならば $\Wass_p(\de_x,\de_y) \rightarrow 0$ となることを示す．
+%
+この性質は，$\Wass_p$ が弱収束を定量化する方法であるという事実に対応する．これを以下に定義する．
+
+\begin{defn}[弱収束]\label{dfn-weak-conv}
+	コンパクトな領域 $\Xx$ 上で，$(\al_k)_k$ が $\Mm_+^1(\Xx)$ において $\al$ に弱収束する（$\al_k \rightharpoonup \al$ と表記）のは，任意の連続関数 $g \in \Cc(\Xx)$ に対し $\int_\Xx g \d\al_k \rightarrow \int_\Xx g \d\al$ が成り立つとき，かつそのときに限る．
+	%
+	非コンパクトな領域上では $g$ に追加の減衰条件を加える必要がある．
+	%
+	この弱収束の概念は確率ベクトルの法則収束に対応する．
+\end{defn}
+
+この収束は $\Wass_p(\al_k,\al) \rightarrow 0$ と等価であることが示せる~\citep[Theorem 6.8]{Villani09}（非有界な距離空間に対しては $p$ 次までのモーメントの収束も併せて）．
+\end{rem2}
+%%%%%%%
+
+
+%%%%%%%%%%%%%%
+\begin{rem1}{Translations}
+基底コスト $c(x,y)=\norm{x-y}^2$ に対する Euclid 空間 $\X=\RR^\dim$ 上の Wasserstein 距離の良い特徴は，平行移動を括り出せることである．実際，平行移動作用素 $T_{\tau} : x \mapsto x-\tau$ を表記すると，
+\eq{
+	\Wass_2(T_{\tau\sharp} \al,T_{\tau'\sharp} \be)^2  =
+	\Wass_2(\al,\be)^2 - 2\dotp{\tau-\tau'}{ \mean_{\al}-\mean_{\be} } + \norm{\tau-\tau'}^2,
+}
+が成り立つ．
+\todoK{Check this!}
+ここで $\mean_{\al} \eqdef \int_\X x \d\al(x) \in \RR^\dim$ は $\al$ の平均である．
+%
+特に，これは距離の良い分解
+\eq{
+	\Wass_2(\al,\be)^2  = \Wass_2(\tilde\al,\tilde{\be})^2  + \norm{\mean_{\al}-\mean_{\be}}^2,
+}
+を含意する．ここで $(\tilde\al,\tilde{\be})$ は「中心化された」零平均測度 $\tilde\al=T_{\mean_{\al}\sharp}\al$ である．
+\end{rem1}
+%%%%%%%%%%%%%%
+\pagebreak
+%%%%%%%
+\begin{rem1}{The case $p = +\infty$}\label{rem-p-inf}
+非形式的には，$p \rightarrow +\infty$ のときの $\Wass_p^p$ の極限は
+\eql{\label{eq-wass-infty}
+	\Wass_{\infty}(\al,\be) \eqdef
+	\umin{\pi \in \Couplings(\al,\be)}
+		\usup{(x,y) \in \Supp(\pi)} d(x,y),
+}
+である．ここで上限は $\X^2$ 上の測度 $\pi$ に関する本質的上限として理解されるべきである．
+%
+$p<+\infty$ の場合とは対照的に，これは非凸最適化問題であり，数値的に解くのも理論的に研究するのも難しい．$\Wass_{\infty}$ 距離は $(\al,\be)$ の台の間の Hausdorff 距離に関係する．\S~\ref{sec-hausdorff}を参照．詳細は~\citep{champion2008wasserstein}を参照されたい．
+\end{rem1}
+%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Dual Problem}
+
+Kantorovich 問題~\eqref{eq-mk-discr}は制約つき凸最小化問題であり，そのようなものとして，いわゆる双対問題（制約つき凹最大化問題）と自然に対にされうる．次の基本的な命題は主問題と双対問題の関係を説明する．
+
+\begin{prop}\label{prop-duality-discr}
+Kantorovich 問題~\eqref{eq-mk-discr}は双対
+\eql{\label{eq-dual}
+	\MKD_\C(\a,\b) =
+	\umax{(\fD,\gD) \in \PotentialsD(\C)} \dotp{\fD}{\a} + \dotp{\gD}{\b},
+}
+を許す．ここで許容される双対変数の集合は
+\eql{\label{eq-feasible-potential}
+	\PotentialsD(\C) \eqdef \enscond{
+		(\fD,\gD) \in \RR^n \times \RR^m
+	}{ \foralls (i,j) \in \range{n} \times \range{m}, \fD \oplus \gD \leq \C }.
+}
+である．このような双対変数はしばしば「Kantorovich ポテンシャル」と呼ばれる．
+\end{prop}
 
 \begin{proof}
-  $\pi_1$ の $Y$ 上の条件付き分布を $\pi_1(\cdot \mid y)$，
-  $\pi_2$ の $Y$ 上の条件付き分布を $\pi_2(\cdot \mid y)$ と書くと，
-  $\mu$ を
-  \[
-    \d\mu(x, y, z) = \d\pi_1(x \mid y) \, \d\beta(y) \, \d\pi_2(z \mid y)
-  \]
-  で定義すればよい．
-  $(X \times Y)$ への周辺は $\d\pi_1(x \mid y) \d\beta(y) = \d\pi_1(x, y)$，
-  $(Y \times Z)$ への周辺は $\d\beta(y) \d\pi_2(z \mid y) = \d\pi_2(y, z)$
-  となり，所望の性質を持つ．
+この結果は，線形計画の強双対性に関するより一般的な結果~\citep[p. 148, Theo. 4.4]{bertsimas1997introduction}の直接の帰結である．証明のより容易な部分，すなわち方程式~\eqref{eq-dual}の右辺が $\MKD_\C(\a,\b)$ の下界であることを確立する部分は，次節の注意~\ref{rem-duality}で論じる．
+%
+完全を期すため，Lagrange 双対性を用いて結果を導こう．~\eqref{eq-mk-discr}に付随する Lagrangian は
+\eql{\label{eq-mk-lagr}
+	\umin{\P \geq 0} \umax{ (\fD,\gD) \in \RR^n \times \RR^m }
+		\dotp{\C}{\P} + \dotp{\a - \P\ones_m}{\fD} + \dotp{\b - \transp{\P} \ones_n}{\gD}.
+}
+と書かれる．上記の min と max を入れ替える．これは線形計画（有限次元）を考える際には常に可能である\todoK{donner une ref}．こうして
+\eq{
+	\umax{ (\fD,\gD) \in \RR^n \times \RR^m }
+	\dotp{\a}{\fD} + \dotp{\b}{\gD}
+	+ \umin{\P \geq 0}
+		\dotp{\C - \fD\transp{\ones_m} - \ones_n \transp{\gD}}{\P}.
+}
+を得る．
+\eq{
+	\umin{\P \geq 0} \dotp{\Q}{\P} =
+	\choice{
+		0 \qifq \Q \geq 0,\\
+		-\infty \quad \text{otherwise}
+	}
+}
+と注意することで結論を得る．こうして制約は $\C - \fD\transp{\ones_m} - \ones_n \transp{\gD} = \C-\fD\oplus \gD \geq 0$ と書かれる．
 \end{proof}
 
-\begin{proof}[命題~\ref{prop:wasserstein-metric} の証明]
-  \textbf{(1) 同一性}：
-  $\alpha = \beta$ ならば $\pi = (\operatorname{Id}, \operatorname{Id})\pushforward \alpha$
-  （対角線上に集中したカップリング）が $\Couplings(\alpha, \alpha)$ の元であり，
-  $\int d(x,y)^p \, \d\pi = \int d(x,x)^p \, \d\alpha = 0$ であるから $\Wass_p(\alpha, \alpha) = 0$．
-  逆に $\Wass_p(\alpha, \beta) = 0$ ならば，最適カップリング $\pi^*$ に対して
-  $\int d(x,y)^p \, \d\pi^* = 0$ であるから，$\pi^*$ は $\{(x,y) \mid x = y\}$ 上に集中し，
-  $\alpha = (P_\X)\pushforward \pi^* = (P_\Y)\pushforward \pi^* = \beta$ が従う．
+Lagrangian~\eqref{eq-mk-lagr}の主問題・双対問題の最適性関係により，最適輸送計画の台を特定できる（\S\ref{s-complementary}も参照）．
+\eql{\label{eq-mk-pd-rel}
+\{(i,j) \in \range{n} \times \range{m} : \P_{i,j}>0\} \subset \enscond{(i,j) \in \range{n} \times \range{m}}{ \fD_i+\gD_j=\C_{i,j} }.
+}
 
-  \textbf{(2) 対称性}：
-  写像 $S(x, y) = (y, x)$ による押し出しは $\Couplings(\alpha, \beta)$ と $\Couplings(\beta, \alpha)$
-  の間の全単射を与え，$d(x,y) = d(y,x)$ から $\Wass_p(\alpha, \beta) = \Wass_p(\beta, \alpha)$ が従う．
 
-  \textbf{(3) 三角不等式}：
-  $\pi_1 \in \Couplings(\alpha, \beta)$ と $\pi_2 \in \Couplings(\beta, \gamma)$ を
-  それぞれ $\Wass_p(\alpha, \beta)$ と $\Wass_p(\beta, \gamma)$ の最適カップリングとする．
-  \textbf{糊付け補題}（gluing lemma）により，
-  $\X \times \Y \times \X$ 上の測度 $\mu$ であって，
-  $(\X \times \Y)$ への周辺が $\pi_1$ に，$(\Y \times \X)$ への周辺が $\pi_2$ に
-  一致するものが存在する．
-  $(P_1, P_3)\pushforward \mu \in \Couplings(\alpha, \gamma)$
-  （$P_1, P_3$ はそれぞれ第1・第3成分への射影）を
-  $\alpha$ と $\gamma$ のカップリングとして用いると，
-  ミンコフスキーの不等式から
-  \begin{align*}
-    \Wass_p(\alpha, \gamma)
-    &\leq \left( \int d(x, z)^p \, \d\mu(x, y, z) \right)^{1/p} \\
-    &\leq \left( \int d(x, y)^p \, \d\mu(x, y, z) \right)^{1/p}
-    + \left( \int d(y, z)^p \, \d\mu(x, y, z) \right)^{1/p} \\
-    &= \Wass_p(\alpha, \beta) + \Wass_p(\beta, \gamma)
-  \end{align*}
-  が得られる．2行目では距離の三角不等式 $d(x,z) \leq d(x,y) + d(y,z)$ と
-  $L^p$ 空間のミンコフスキーの不等式を用いた．
-\end{proof}
+\begin{rem}\label{rem-kantorovich-dual}
+注意~\ref{rem-kantorovich-primal}で Kantorovich 問題に与えた解釈にしたがって，双対の直感的な提示を続ける．その設定では，事業者が倉庫から工場へ全体量の資源を可能な限り少ないコストで動かそうとしていたことを思い出そう．事業者はそれを~\eqref{eq-mk-discr}を解くことで行い，$\P^\star$ に定められた指示に従い，運送会社へ $\dotp{\P^\star}{\C}$ を支払うことができる．
 
-\begin{remark}{Wasserstein 距離の意義}{wasserstein-significance}
-  Wasserstein 距離は，確率測度の空間に\textbf{基底空間の幾何学を反映した}距離を与える．
-  この性質は，\textbf{KL ダイバージェンス}（Kullback--Leibler divergence）
-  \[
-    \KL(\alpha \| \beta) \defeq \int \log\frac{\d\alpha}{\d\beta} \, \d\alpha
-    \qquad (\alpha \ll \beta \text{ のとき；そうでなければ } +\infty)
-  \]
-  など他の分布間の乖離度とは対照的である．
-  ここで $\frac{\d\alpha}{\d\beta}$ はラドン--ニコディム導関数
-  （定義~\ref{def:radon-nikodym}）である．
-  KL ダイバージェンスは基底空間の距離構造を一切考慮しないが，
-  Wasserstein 距離は点間の距離 $d(x, y)$ を通じてこれを取り込む．
+\emph{物流の外注．} 事業者が線形計画~\eqref{eq-mk-discr}を解く計算手段をもたないとしよう．彼は代わりにその仕事を業者に外注することにする．業者は以下の構造をもつ価格体系を選ぶ．業者は物流の仕事を物品の集荷と配送に分割し，各倉庫 $i$ で資源 1 単位を集荷するのに（その単位がどこへ送られるかにかかわらず）集荷価格 $\fD_i$ を適用し，工場 $j$ へ資源 1 単位を配送するのに（その単位がどの倉庫から来るかにかかわらず）価格 $\gD_j$ を適用する．全体として，倉庫 $i$ にはちょうど $\a_i$ 単位があり工場 $j$ では $\b_j$ が必要であるから，業者はその価格体系の帰結として，事業者の物流問題を解くのに $\dotp{\fD}{\a}+\dotp{\gD}{\b}$ の価格を求める．
 
-  また，KL ダイバージェンスは台が重ならない分布間では $+\infty$ となるが，
-  Wasserstein 距離は台が異なる場合でも有限の値を取り得る．
-  このため，Wasserstein 距離は機械学習（特に生成モデル）において
-  分布間の類似度を測る指標として広く用いられている．
-\end{remark}
+\emph{価格の設定．} 業者が用いる価格体系は，かなり自然に任意に負の価格を許す点に注意する．実際，業者が倉庫に価格ベクトル $\fD$ を，工場に価格ベクトル $\gD$ を適用するならば，すべての倉庫の資源の総量は工場へ配送されねばならない量に等しいので，$\fD$ のすべての成分を任意の数だけ同時に減らし $\gD$ のすべての成分を同じ数だけ増やしても総請求額は変わらない．言い換えれば，業者は事業者に，物品の一部を集荷するのに彼に支払うことで極めて好条件を提示する錯覚を与えつつ，その損失を単にそれらを配送するのにより多く請求することで埋め合わせることができる．これを知っているので，業者はこのサービスにできるだけ多く請求しようとして，ベクトル $\fD$ と $\gD$ をできるだけ高く設定する．
 
-\begin{example}{Dirac測度間の Wasserstein 距離}{wasserstein-dirac}
-  2つのDirac測度 $\delta_x$ と $\delta_y$（$x, y \in X$）に対して，
-  唯一のカップリングは $\pi = \delta_{(x,y)}$ であるから，
-  \[
-    \Wass_p(\delta_x, \delta_y)
-    = \left( \int_{X \times X} d(u, v)^p \, \d\delta_{(x,y)}(u,v) \right)^{1/p}
-    = d(x, y).
-  \]
-  すなわち，Wasserstein 距離は\textbf{点間の距離を確率測度の距離に自然に持ち上げる}．
-\end{example}
+\emph{価格の確認．} 別の競合する業者がいない場合，事業者はしたがって業者の価格が妥当であるかを手早く確認する方法を考えねばならない．そうする一つの可能な方法は，事業者が問題~\eqref{eq-mk-discr}を解くことで最も効率的な計画の価格 $\MKD_{\C}(\a,\b)$ を計算し，業者の提示額が少なくともその額を上回らないかを確認することであろう．しかしながら，そもそも事業者はそのような長たらしい計算を行う余裕がないことを思い出そう．幸い，事業者が業者に競争力のある提示があるかを確認するはるかに効率的な方法がある．$\fD_i$ は業者が $i$ で 1 単位を集荷するのに請求する価格であり，$\gD_j$ は $j$ で 1 単位を配送するのに請求する価格であることを思い出そう．したがって，業者の価格体系は，資源 1 単位を $i$ から $j$ へ移すのにちょうど $\fD_i+\gD_j$ かかることを含意する．しかし事業者は，運送会社が値づけする 1 単位を $i$ から $j$ へ運ぶコストが $\C_{i,j}$ であることも知っている．したがって，もしある対 $i,j$ について総価格 $\fD_i+\gD_j$ が $\C_{i,j}$ より厳密に大きければ，業者はその仕事に対し運送会社が請求する公正な価格より多く請求しており，事業者は業者の提示を断るべきである．
 
-\begin{proposition}{Wasserstein 距離と弱収束}{wasserstein-weak-convergence}
-  $(X, d)$ をポーランド空間，$p \geq 1$ とする．
-  確率測度の列 $(\alpha_k)_{k \geq 1} \subset \Mm_+^{1,p}(X)$ と
-  $\alpha \in \Mm_+^{1,p}(X)$ に対して，以下は同値である：
-  \begin{enumerate}
-    \item $\Wass_p(\alpha_k, \alpha) \to 0$．
-    \item $\alpha_k$ が $\alpha$ に弱収束し，
-      かつ $p$ 次モーメントが収束する：
-      $\int_X d(x, x_0)^p \, \d\alpha_k(x) \to \int_X d(x, x_0)^p \, \d\alpha(x)$．
-  \end{enumerate}
-  特に $(X, d)$ がコンパクトならば，$\Wass_p$ による収束と弱収束は同値である．
-\end{proposition}
 
-\begin{remark}{$\Wass_\infty$ 距離}{wasserstein-infinity}
-  $p \to \infty$ の極限として，\textbf{$\Wass_\infty$ 距離}を
-  \[
-    \Wass_\infty(\alpha, \beta) \defeq
-    \inf_{\pi \in \Couplings(\alpha, \beta)}
-    \sup_{(x,y) \in \supp(\pi)} d(x, y)
-  \]
-  で定義する（より正確には $\pi$ に関する本質的上限を取る）．
-  $\Wass_\infty$ は台の間の Hausdorff 距離と関連するが，
-  有限 $p$ の場合と異なり非凸最適化問題となる．
-\end{remark}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\linewidth]{dual-solutions-overlay/dual_sols_final}
+\caption{\label{dual-solutions-overlay}
+左の図に，それぞれ青点と赤い四角で表される二つの離散測度 $\al$ と $\be$ の間の最適輸送問題を考える．これらの印の面積は各位置の重みに比例する．その図はまた二次の Euclid コストを用いた最適輸送 $\P^\star$ も表示している．その配置に対応する双対（Kantorovich）ポテンシャル $\fD^\star$ と $\gD^\star$ も右の図に表示されている．$\alpha$ の各点に「価格」$\fD_i^\star$ があり（$\gD$ と $\beta$ についても同様），その点の色は右のカラーマップを用いて得られた値を表す．これらのポテンシャルは相対価格として解釈でき，すなわち最良の輸送方式のもとで，$\al$ の各位置で質量を運び去る，あるいは逆に $\be$ の任意の点へ質量を送る個別のコストを示す．したがって最適輸送コストは，左のすべての弧の二乗長をその太さで重みづけた和に等しいか，あるいは双対定式化を用いて，右の図の各印の面積に乗じた値（色で符号化されたもの）の和に等しい．}
+\end{figure}
 
-\begin{remark}{平行移動の分解}{translation-decomposition}
-  $X = \R^d$，$c(x,y) = \norm{x - y}_2^2$ のとき，
-  確率測度 $\alpha$ の\textbf{平均}を
-  $\bar{x}_\alpha \defeq \int_{\R^d} x \, \d\alpha(x)$
-  と定め，$\tilde{\alpha}$ を $\alpha$ を平均が原点になるよう平行移動した測度とする．
-  すなわち，$\tilde{\alpha} \defeq (x \mapsto x - \bar{x}_\alpha)\pushforward \alpha$ とすると，
-  \[
-    \Wass_2(\alpha, \beta)^2
-    = \Wass_2(\tilde{\alpha}, \tilde{\beta})^2
-    + \norm{\bar{x}_\alpha - \bar{x}_\beta}_2^2
-  \]
-  が成り立つ．Wasserstein 距離は「平均の差」と「平均を揃えた後の分布形状の差」に
-  直交分解される．
-  この分解はガウス分布の場合（定理~\ref{thm:wasserstein-gaussian}）の
-  平均項と Bures 距離項への分解の一般化である．
-\end{remark}
 
-%% ============================================================
-%%  2.5 双対問題
-%% ============================================================
-\section{双対問題}
-\label{sec:dual}
+\emph{双対問題としての最適価格．} したがって，すべての対 $i,j$ について業者が提示する価格が $\fD_i+\gD_j \leq \C_{i,j}$ を満たすことを確認するのは事業者の利益にかなう．事業者が，業者がこれら $n\times m$ 個の不等式に従う価格ベクトルを提供したことを確認したとしよう．彼は業者の提案が魅力的であると結論できるだろうか．手早い概算を行えば，事業者は確かにその提示を受け入れることが自分の利益にかなうと結論する．実際，彼のどの輸送計画 $\P$ もコスト $\dotp{\P}{\C}=\sum_{i,j} \P_{i,j}\C_{i,j}$ をもつので，事業者はこれら $n\times m$ 個の不等式を適用することで，任意の輸送計画 $\P$（最適なもの $\P^\star$ を含む）に対し，周辺制約が
+\eq{\begin{aligned}
+	\sum_{i,j} \P_{i,j}\C_{i,j} &\geq \sum_{i,j} \P_{i,j} \left(\fD_{i} + \gD_j\right) = \left(\sum_{i} \fD_{i} \sum_{j} \P_{i,j}\right) + \left(\sum_{j} \gD_{j} \sum_{i} \P_{i,j}\right)\\ 	& =\dotp{\fD}{\a}+\dotp{\gD}{\b},
+\end{aligned}}
+を含意すると結論でき，したがって自分自身で仕事をしようとする\emph{いかなる}試みも必然的に業者の価格より高くつくと観察できる．
 
-Kantorovich 問題は線形計画問題であるから，線形計画の双対理論が適用できる．
-双対問題は最適輸送の理論的理解と計算手法の両面で重要な役割を果たす．
-ここではまず必要な最適化の概念を導入し，その後で双対問題を定式化する．
+これを知っているので，業者はしたがって $\dotp{\fD}{\a}+\dotp{\gD}{\b}$ を最大化する価格の組 $\fD,\gD$ を見つけねばならないが，提示が受け入れられるためには少なくともすべての $i,j$ に対し基本的な不等式 $\fD_i+\gD_j\leq \C_{i,j}$ を満たさねばならず，これが問題~\eqref{eq-dual}に帰着する．後に\S\ref{s-kantorovich}で示すように，業者が得る最良の価格は，実は事業者が $\MKD_{\C}(\a,\b)$ を計算して得る最良の可能なコストにちょうど等しいことが示せる．
 
-%% --- 2.5.1 線形計画と双対理論 ---
-\subsection{線形計画と双対理論}
-\label{subsec:lp-duality}
+図~\ref{dual-solutions-overlay}は，同じ輸送問題から生じる主問題および双対問題の解を示している．左で，青点は倉庫を表し赤点は工場を表す．これらの点の面積は確率重み $\a,\b$ を表し，それらの間の連結は最適輸送を表し，その幅は移送量に比例する．問題~\eqref{eq-dual}を最適化した結果として業者が得る最適価格は右に示されている．価格はその平均が 0 に等しくなるように選ばれている．最も高い相対価格は，図の左下にある孤立した倉庫で物品を集荷すること，および右上の領域に位置する工場で物品を配送することから来る．
+\end{rem}
 
-\begin{definition}{線形計画問題}{linear-program}
-  ベクトル $\mathbf{c} \in \R^N$，行列 $\mathbf{A} \in \R^{M \times N}$，
-  ベクトル $\mathbf{b} \in \R^M$ に対して，\textbf{線形計画問題}（linear program; LP）とは
-  \[
-    \min_{\mathbf{x} \in \R^N} \left\{
-    \inner{\mathbf{c}}{\mathbf{x}} \;\middle|\;
-    \mathbf{A}\mathbf{x} = \mathbf{b}, \; \mathbf{x} \geq 0
-    \right\}
-  \]
-  の形の最適化問題をいう．
-  目的関数 $\inner{\mathbf{c}}{\mathbf{x}}$ と制約がいずれも $\mathbf{x}$ に関して線形である．
-\end{definition}
 
-\begin{remark}{Kantorovich 問題は線形計画である}{kantorovich-as-lp}
-  離散版の Kantorovich 問題
-  $\min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \inner{\mathbf{C}}{\mathbf{P}}$
-  は，行列 $\mathbf{P}$ をベクトルに並べ直すことで
-  上の形式の線形計画に帰着される．
-  制約 $\mathbf{P}\ones_m = \mathbf{a}$，$\mathbf{P}^\top \ones_n = \mathbf{b}$，
-  $\mathbf{P} \geq 0$ はいずれも線形である．
-\end{remark}
 
-\begin{definition}{ラグランジュ関数}{lagrangian}
-  等式制約付き最適化問題 $\min_{\mathbf{x}} \{f(\mathbf{x}) \mid h_k(\mathbf{x}) = 0,\; k = 1, \ldots, M\}$
-  に対して，\textbf{ラグランジュ関数}（Lagrangian）を
-  \[
-    L(\mathbf{x}, \boldsymbol{\lambda})
-    \defeq f(\mathbf{x}) + \sum_{k=1}^M \lambda_k h_k(\mathbf{x})
-  \]
-  で定義する．ベクトル $\boldsymbol{\lambda} = (\lambda_1, \ldots, \lambda_M) \in \R^M$ を
-  \textbf{ラグランジュ乗数}（Lagrange multiplier）と呼ぶ．
-\end{definition}
+%%%%%%%
+\begin{rem2}{Dual problem between arbitrary measures}
+	この主問題・双対問題の構成を任意の測度へ拡張するには，測度が連続関数と自然に双対の対をなすこと（測度には連続関数に対する積分を通じてのみアクセスできる）を認識することが重要である．この双対性は次の命題に形式化され，離散測度を扱う際には命題~\ref{prop-duality-discr}に帰着する．
 
-\begin{definition}{双対問題}{dual-problem}
-  主問題（primal problem）$\min_{\mathbf{x}} \{f(\mathbf{x}) \mid \mathbf{x} \in \mathcal{C}\}$
-  に対して，ラグランジュ関数を用いた
-  \[
-    \max_{\boldsymbol{\lambda}} \inf_{\mathbf{x}} L(\mathbf{x}, \boldsymbol{\lambda})
-  \]
-  を\textbf{双対問題}（dual problem）と呼ぶ．
-  一般に $\inf_{\mathbf{x}} L \leq f(\mathbf{x}^*)$ であるから，
-  双対問題の最適値は主問題の最適値以下である（\textbf{弱双対性}; weak duality）．
-  等号が成り立つとき\textbf{強双対性}（strong duality）が成り立つという．
-  線形計画問題では，主問題が実行可能解を持つならば強双対性が常に成り立つ．
-\end{definition}
+	\begin{prop}
+	次が成り立つ．
+	\eql{\label{eq-dual-generic}
+		\MK_\c(\al,\be) =
+		\usup{(\f,\g) \in \Potentials(\c)}
+			\int_\X \f(x) \d\al(x) + \int_\Y \g(y) \d\be(y),
+	}
+	ここで許容される双対ポテンシャルの集合は
+	\eql{\label{eq-dfn-pot-dual}
+		\Potentials(\c) \eqdef \enscond{
+			(\f,\g) \in \Cc(\X) \times \Cc(\Y)
+		}{
+			\forall (x,y), \f(x)+\g(y) \leq \c(x,y)
+		}.
+	}
+	である．ここで $(\f,\g)$ は連続関数の対であり，離散の場合と同様に「Kantorovich ポテンシャル」とも呼ばれる．
+	\end{prop}
 
-%% --- 2.5.2 離散版の双対 ---
-\subsection{離散版の双対問題}
-\label{subsec:discrete-dual}
+	\todoK{\begin{proof}
+	TODO.
+	\end{proof}
+	}
 
-\begin{definition}{双対実行可能集合}{dual-feasible}
-  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対して，
-  \textbf{Kantorovich 双対ポテンシャル}の実行可能集合を
-  \[
-    \PotentialsD(\mathbf{C}) \defeq
-    \left\{ (\mathbf{f}, \mathbf{g}) \in \R^n \times \R^m \;\middle|\;
-    \forall\, (i, j), \; f_i + g_j \leq C_{i,j} \right\}
-  \]
-  で定義する．ベクトル $\mathbf{f}$, $\mathbf{g}$ を\textbf{双対変数}
-  または\textbf{Kantorovich ポテンシャル}と呼ぶ．
-\end{definition}
+	離散の場合~\eqref{eq-dual}は，双対ベクトルが連続ポテンシャルの標本であること，すなわち $(\fD_i,\gD_j)=(\f(x_i),\g(y_j))$ に対応する．
+	%
+	主問題・双対問題の最適性条件により最適計画の台を追跡でき，~\eqref{eq-mk-pd-rel}は
+	\eql{\label{eq-mk-pd-rel-cont}
+		\Supp(\pi) \subset \enscond{(x,y) \in \X \times \Y}{ \f(x)+\g(y)=\c(x,y) }.
+	}
+	と一般化される．
 
-\begin{theorem}{Kantorovich 双対定理（離散版）}{kantorovich-duality-discrete}
-  ヒストグラム $\mathbf{a} \in \simplex_n$，$\mathbf{b} \in \simplex_m$ と
-  コスト行列 $\mathbf{C} \in \R^{n \times m}$ に対して，
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    = \max_{(\mathbf{f}, \mathbf{g}) \in \PotentialsD(\mathbf{C})}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}.
-  \]
-  すなわち，Kantorovich 問題（主問題）の最適値は双対問題の最適値に等しい．
-\end{theorem}
+	主問題~\eqref{eq-mk-generic}とは対照的に，~\eqref{eq-dual-generic}の解の存在を示すのは自明でない点に注意する．というのも，制約集合 $\Potentials(\c)$ がコンパクトでなく最小化すべき関数が強圧的でないからである．
+	%
+	\S~\ref{s-c-transform}で詳述する $c$-変換の機構を用いると，$c(x,y)=\dist(x,y)^p$ で $p\geq 1$ の場合には，最適な $(\f,\g)$ が必然的に Lipschitz 正則であることを示せ，これにより制約をコンパクトなものに置き換えることが可能になる．
+\end{rem2}
+%%%%%%%
+
+%%%%%%%
+\begin{rem2}{Unconstrained dual}\label{rem-uncons-dual}
+$\int_\X \d\mu=\int_\Y\d\nu = 1$ の場合，制約つき双対問題~\eqref{eq-dual-generic}は制約なしのもの
+\eql{\label{eq-dual-uncons}
+	\MK_\c(\al,\be) =
+		\usup{(\f,\g) \in \Cc(\X) \times \Cc(\Y)}
+			\int_\X \f\d\al + \int_\Y \g \d\be
+			+ \umin{\X \otimes \Y} ( c - f \oplus g ),
+}
+に置き換えることができる．ここで $(f\oplus g)(x,y)=f(x)+g(y)$ と表記した．ここで最小値は測度 $\mu \otimes \nu$ に付随する本質的上限と考えるべきである．すなわち，$f$ や $g$ を $\mu$ と $\nu$ に関して零測度の集合上で変更しても変わらない．
+%
+この別の双対定式化は Francis Bach によって我々に指摘された．
+%
+これは主問題~\eqref{eq-mk-generic}に冗長な制約 $\int \d\pi=1$ を加えることで得られる．
+\end{rem2}
+%%%%%%%
+
+
+%%%%%%%
+\begin{rem2}{Monge--Kantorovich equivalence---Brenier theorem}\label{rem-exist-mongemap}
+次の定理はしばしば~\citet{Brenier91}に帰せられ，$\RR^\dim$ において $p=2$ の場合，二つの入力測度のうち少なくとも一方が密度をもち，かつ測度が二次のモーメントをもつならば，Kantorovich 問題と Monge 問題が等価であることを保証する．関心のある読者は，ほぼ同時期に \citet{cuesta1989,ruschendorf1990characterization} によって発表された同じ結果の変種，特に~\citep{MR923203}における元の結果や \citet{knott1984optimal} による先駆けも参照されたい．
+
+\begin{thm}[Brenier]
+	$\X=\Y=\RR^\dim$ かつ $c(x,y)=\norm{x-y}^2$ の場合，二つの入力測度のうち少なくとも一方（$\al$ と表記）が Lebesgue 測度に関して密度 $\density{\al}$ をもつならば，Kantorovich 定式化~\eqref{eq-mk-generic}における最適 $\pi$ は一意であり，「Monge 写像」$\T : \RR^\dim \rightarrow \RR^\dim$ のグラフ $(x,\T(x))$ 上に台をもつ．これは $\pi = (\Id,\T)_{\sharp} \mu$ を意味する．すなわち
+\eql{\label{eq-brenier-map}
+	\foralls h \in \Cc(\X \times \Y), \quad
+		\int_{\X \times \Y} h(x,y) \d \pi(x,y) = \int_{\X} h(x,\T(x)) \d\mu(x).
+}
+である．さらに，この写像 $\T$ は凸関数 $\phi$ の勾配 $\T(x) = \nabla\phi(x)$ として一意に定義される．ここで $\phi$ は $(\nabla\phi)_\sharp \mu=\nu$ となる（加法定数を除いて）一意な凸関数である．この凸関数は~\eqref{eq-dual-generic}を解く双対ポテンシャル $\f$ と $\phi(x)=\frac{\norm{x}^2}{2}-\f(x)$ によって関係づけられる．
+\end{thm}
 
 \begin{proof}
-  Kantorovich 問題の主問題は
-  \[
-    \min_{\mathbf{P} \geq 0} \left\{
-    \inner{\mathbf{C}}{\mathbf{P}} \;\middle|\;
-    \mathbf{P} \ones_m = \mathbf{a}, \;
-    \mathbf{P}^\top \ones_n = \mathbf{b}
-    \right\}
-  \]
-  である．等式制約 $\mathbf{P} \ones_m = \mathbf{a}$，
-  $\mathbf{P}^\top \ones_n = \mathbf{b}$ に対するラグランジュ乗数を
-  $\mathbf{f} \in \R^n$，$\mathbf{g} \in \R^m$ とおくと，ラグランジュ関数は
-  \[
-    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    = \inner{\mathbf{C}}{\mathbf{P}}
-    + \inner{\mathbf{f}}{\mathbf{a} - \mathbf{P} \ones_m}
-    + \inner{\mathbf{g}}{\mathbf{b} - \mathbf{P}^\top \ones_n}
-  \]
-  となる．これを整理すると，
-  \[
-    L(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-    + \inner{\mathbf{C} - \mathbf{f} \ones_m^\top - \ones_n \mathbf{g}^\top}{\mathbf{P}}.
-  \]
-  $\mathbf{P} \geq 0$ のもとで $L$ を $\mathbf{P}$ について最小化すると，
-  $C_{i,j} - f_i - g_j \geq 0$（すなわち $f_i + g_j \leq C_{i,j}$）のとき
-  最小値は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ であり，
-  そうでなければ $-\infty$ となる．
-  したがって双対問題は
-  \[
-    \max_{(\mathbf{f}, \mathbf{g}) \in \PotentialsD(\mathbf{C})}
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-  \]
-  となる．主問題は有界な実行可能領域を持つ線形計画であるから，
-  強双対性が成り立ち，主問題と双対問題の最適値は一致する．
+	証明の主要な構成要素を概略する．より詳細はたとえば~\citep{SantambrogioBook}に見出せる．
+	%
+	$\int c \d\pi = C_{\al,\be} - 2 \int \dotp{x}{y}\d\pi(x,y)$ であることに注意する．ここで定数は $C_{\al,\be} = \int \norm{x}^2\d\al(x) + \int \norm{y}^2\d\be(y)$ である．~\eqref{eq-mk-generic}を解く代わりに，こうして問題
+	\eq{
+		\umax{\pi \in \Couplings(\al,\be)}
+			\int_{\X \times \Y} \dotp{x}{y} \d\pi(x,y),
+	}
+	を考えることができる．その双対は
+	\eql{\label{eq-brenier-proof-1}
+		\umin{(\phi,\psi)}
+		\enscond{
+			\int_\X \phi \d\al + \int_\Y \psi \d\be
+		}{
+			\forall (x,y), \quad \phi(x)+\psi(y) \geq \dotp{x}{y}
+		}.
+	}
+	と書かれる．これらの変数と~\eqref{eq-dfn-pot-dual}のものとの関係は $(\phi,\psi) = (\frac{\norm{\cdot}^2}{2}-\f,\frac{\norm{\cdot}^2}{2}-\g)$ である．
+	%
+	制約を
+	\eql{\label{eq-brenier-proof-leg}
+		\foralls y, \quad \psi(y) \geq \phi^*(y) \eqdef \usup{x} \dotp{x}{y} - \phi(x).
+	}
+	で置き換えることができる．ここで $\phi^*$ は $\phi$ の Legendre 変換であり，線形形式の上限として凸関数である（~\eqref{eq-legendre}も参照）．~\eqref{eq-brenier-proof-2}に現れる目的関数は線形で積分する測度は正であるから，$\psi$ に関して明示的に最小化でき，制約なしの問題
+	\eql{\label{eq-brenier-proof-2}
+		\umin{\phi} \int_\X \phi \d\al + \int_\Y \phi^* \d\be;
+	}
+	を考えるために $\psi=\phi^*$ と置くことができる．その着想がそれぞれ離散の設定および一般のコスト $\c(x,y)$ に適用される\S\ref{sec-c-transforms}および\S\ref{s-c-transform}も参照．
+	%
+	この議論を二度反復することで，$\phi$ を凸関数 $\phi^{**}$ で置き換えることができ，こうして~\eqref{eq-brenier-proof-2}において $\phi$ が凸であると課すことができる．
+	%
+	条件~\eqref{eq-mk-pd-rel-cont}は，最適 $\pi$ が $\enscond{(x,y)}{\phi(x)+\phi^*(y)=\dotp{x}{y}}$ 上に台をもつことを示し，これはそのような $y$ が Legendre 変換の最小化~\eqref{eq-brenier-proof-leg}に対し最適であることを示す．その最適性条件は $y \in \partial \phi(x)$ と書かれる．
+	%
+	$\phi$ は凸であるからほとんど至るところ微分可能であり，$\al$ は密度をもつから $\al$-ほとんど至るところでも微分可能である．
+	%
+	これは各 $x$ に対し付随する $y$ が $\al$-ほとんど至るところ $y = \nabla\phi(x)$ として一意に定義されることを示し，必然的に $\pi = (\Id,\nabla\phi)_\sharp \al$ であることを示す．
 \end{proof}
 
-\begin{proposition}{主双対最適性条件}{primal-dual-optimality}
-  $\mathbf{P}^*$ と $(\mathbf{f}^*, \mathbf{g}^*)$ がそれぞれ主問題と双対問題の最適解ならば，
-  \textbf{相補性条件}（complementary slackness）
-  \[
-    P^*_{i,j} > 0 \implies f^*_i + g^*_j = C_{i,j}
-  \]
-  が成り立つ．すなわち，最適輸送計画で正の質量が輸送される経路 $(i, j)$ では，
-  双対ポテンシャルの和がコストに一致する．
-\end{proposition}
+この結果は，特異でない密度をもつ $\Wass_2$ の設定において，Monge 問題~\eqref{eq-monge-continuous}とその Kantorovich 緩和~\eqref{eq-mk-generic}が等しいこと（緩和が密であること）を示す．これは，周辺分布が等しく一様であるとき最適輸送問題の最小値が置換行列（離散写像）で達成されることを述べる，割当の場合~\eqref{prop-matching-kanto}に対する命題~\ref{prop-matching-kanto}の連続版である．
+%
+最適輸送写像が凸関数の勾配でなければならないことを述べる Brenier の定理は，一次元を超える次元における増加関数の概念の有用な一般化を提供する．これは，最適輸送が任意次元で分位点関数を定義するのに用いられる主たる理由であり，これが翻って分位点回帰問題への応用に有用である~\citep{carlier2016vector}．
 
-\begin{proof}
-  強双対性から $\inner{\mathbf{C}}{\mathbf{P}^*}
-  = \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}$ が成り立つ．
-  主問題の制約から
-  $\inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-  = \inner{\mathbf{f}^* \ones_m^\top + \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*}$ であるから，
-  \[
-    \inner{\mathbf{C} - \mathbf{f}^* \ones_m^\top - \ones_n {\mathbf{g}^*}^\top}{\mathbf{P}^*} = 0.
-  \]
-  $\mathbf{P}^* \geq 0$ かつ $C_{i,j} - f^*_i - g^*_j \geq 0$ であるから，
-  各成分の積が非負でその和が $0$ となるためには，
-  $P^*_{i,j} (C_{i,j} - f^*_i - g^*_j) = 0$ が
-  すべての $(i, j)$ で成り立たなければならない．
-\end{proof}
+この定理は多くの方向に拡張できる点にも注意する．
+%
+$\al$ が密度をもつという条件は，それが Hausdorff 次元が $\dim-1$ より小さい「小さな集合」（\emph{たとえば}超曲面）に質量を与えないという条件に弱めることができる．
+%
+$\c(x,y)=h(x-y)$ の形のコストも考えることができる．ここで $h$ は狭義凸関数である．
+\end{rem2}
+%%%%%%%
 
-\begin{remark}{双対問題の経済学的解釈}{dual-economic}
-  双対問題は次のように解釈できる．
-  輸送業者が，倉庫 $i$ での集荷に $f_i$，工場 $j$ への配送に $g_j$ の料金を設定し，
-  元の輸送会社に代わってすべての輸送を引き受けるとする．
-  輸送業者の収入は $\inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}$ である．
 
-  輸送会社がこの契約を受け入れるためには，
-  どの経路 $(i, j)$ についても輸送業者の料金が自前の輸送コスト以下でなければならない：
-  $f_i + g_j \leq C_{i,j}$．
-  この条件のもとで輸送業者が収入を最大化する問題が双対問題であり，
-  その最適値が最適輸送コストに一致する．
-\end{remark}
+%%%%%%%
+\begin{rem2}{Monge--Amp\`ere equation}\label{rem:MA}
+密度をもつ測度に対し，~\eqref{eq-pfwd-density}を用いると，$\phi$ が次の Monge--Amp\`ere 型方程式
+\eql{\label{eq-monge-ampere}
+	\det(\partial^2\phi(x))  \density{\be}(\nabla\phi(x)) = \density{\al}(x)
+}
+を解く（定数の加法を除いて）一意な凸関数であることが得られる．ここで $\partial^2\phi(x) \in \RR^{\dim \times \dim}$ は $\phi$ のヘッセ行列である．Monge--Amp\`ere 作用素 $\det(\partial^2\phi(x))$ は非線形の退化ラプラシアンとして理解できる．小さな変位の極限 $\phi=\Id + \epsilon\psi$ では，実際にラプラシアン $\Delta$ を線形化として回復する．というのも滑らかな写像に対し
+\eq{
+	\det(\partial^2\phi(x)) = 1 + \epsilon \Delta \psi(x) + o(\epsilon).
+}
+だからである．
+%
+凸性制約は $\det(\partial^2\phi(x)) \geq 0$ を強制し，この方程式が解をもつために必要である．
+%
+Monge--Amp\`ere 方程式の理論的解析，特にその解の正則性に関する膨大な文献がある．たとえば~\citep{gutierrez2016monge}を参照．関心のある読者には~\citet{caffarelli2003monge}による概説論文を勧める．
+%
+主要な困難は，完全な一般性においては解が滑らかである必要がなく，入力測度が任意（\emph{たとえば} Dirac 質量）であるときには Alexandrov 解の機構に頼らねばならないことである．
+%
+より単純な，固定された右辺 $f$ に対する Monge--Amp\`ere 方程式 $\det(\partial^2 \phi(x)) = f(x)$ の場合には多くのソルバーが提案されてきた．たとえば~\citep{benamou2016monotone}とその参考文献を参照．特に，異方的な凸関数を捉えるには特別な注意を要し，通常の有限差分は不正確になりうる．
+%
+最適輸送では，$f$ が実際に $\nabla \phi$ に依存するので，方程式~\eqref{eq-monge-ampere}の離散化と境界条件は~\citep{benamou2014numerical}とその参考文献に概説された技巧的な課題を生じる．
+%
+不動点反復に基づく関連するソルバーが画像位置合わせに適用されてきた点にも注意する~\citep{haker2004optimal}．
+\end{rem2}
+%%%%%%%
 
-%% --- 2.5.3 連続版の双対 ---
-\subsection{連続版の双対問題}
-\label{subsec:continuous-dual}
 
-離散版の双対問題では，制約 $f_i + g_j \leq C_{i,j}$ を満たすベクトルの組
-$(\mathbf{f}, \mathbf{g})$ を最適化した．
-連続版では，これが関数の組 $(f, g)$ に対する制約 $f(x) + g(y) \leq c(x, y)$ に置き換わる．
-このとき，$f$ が与えられたときに制約を満たす最良の $g$ は
-$g(y) = \inf_x [c(x, y) - f(x)]$ で定まる．
-この操作を $c$-変換と呼ぶ．
-$c$-変換により，双対問題を2つの関数 $(f, g)$ ではなく
-1つの関数 $f$ のみで記述できるようになる．
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Special Cases}\label{sec:specialcases}
 
-\begin{definition}{$c$-変換}{c-transform}
-  コスト関数 $c \colon \X \times \Y \to \R \cup \{+\infty\}$ と
-  関数 $f \colon \X \to \R \cup \{-\infty\}$ に対して，
-  $f$ の\textbf{$c$-変換}（$c$-transform）$f^c \colon \Y \to \R \cup \{-\infty\}$ を
-  \[
-    f^c(y) \defeq \inf_{x \in \X} \left[ c(x, y) - f(x) \right]
-  \]
-  で定義する．同様に，$g \colon \Y \to \R \cup \{-\infty\}$ の
-  $\bar{c}$-変換 $g^{\bar{c}} \colon \X \to \R \cup \{-\infty\}$ を
-  \[
-    g^{\bar{c}}(x) \defeq \inf_{y \in \Y} \left[ c(x, y) - g(y) \right]
-  \]
-  で定義する．関数 $f$ が $f = g^{\bar{c}}$ なる $g$ をもつとき，
-  $f$ は\textbf{$c$-凸}（$c$-convex）であるという．
-\end{definition}
+一般に，OT 距離を計算するのは数値的に込み入っている．\S\S \ref{c-algo-basics},\ref{c-entropic}, \ref{c-dynamic}で様々な数値ソルバーを詳述する前に，まず OT 問題の解決が比較的容易な特別な好都合の場合を概観する．
 
-\begin{remark}{$c$-変換と凸共役}{c-transform-legendre}
-  $c(x, y) = \inner{x}{y}$（$\X = \Y = \R^d$）のとき，
-  $f^c(y) = \inf_x [\inner{x}{y} - f(x)]= -\sup_x [f(x) - \inner{x}{y}] = -f^*(y)$
-  となる．ここで $f^*(y) = \sup_x [\inner{x}{y} - f(x)]$ は凸解析における
-  ルジャンドル--フェンシェル変換（Legendre--Fenchel transform）である．
-  すなわち，$c$-変換はルジャンドル変換のコスト関数 $c$ への一般化である．
-\end{remark}
 
-\begin{theorem}{Kantorovich 双対定理（連続版）}{kantorovich-duality-continuous}
-  ポーランド空間 $\X, \Y$ 上の確率測度 $\alpha, \beta$ と
-  下半連続なコスト関数 $c \colon \X \times \Y \to \R_{\geq 0} \cup \{+\infty\}$ に対して，
-  \[
-    \MK_c(\alpha, \beta)
-    = \sup_{\substack{f \in L^1(\alpha),\; g \in L^1(\beta) \\ f(x) + g(y) \leq c(x,y)}}
-    \int_\X f \, \d\alpha + \int_\Y g \, \d\beta.
-  \]
-  さらに，双対問題の最適解 $(f^*, g^*)$ が存在し，$g^* = {f^*}^c$ と取れる．
-\end{theorem}
+%%%%%%%
+\begin{rem}[二値コスト行列と 1-ノルム]\label{rem-binary}
+コスト行列 $\C$ が対角で 0，それ以外で $1$ であるとき，すなわち $\C=\ones_{n\times n}-\Identity_n$ のとき，$\a$ と $\b$ の間の 1-Wasserstein 距離がそれらの差の 1-ノルム $\MKD_\C(\a,\b)=\norm{\a-\b}_1$ に等しいことは容易に確かめられる．
+\end{rem}
+%%%%%%%
 
-\begin{remark}{制約なし双対}{unconstrained-dual}
-  $c$-変換を用いると，双対問題を $f$ のみの制約なし最適化として書き直せる：
-  \[
-    \MK_c(\alpha, \beta)
-    = \sup_{f}
-    \left\{
-    \int_\X f \, \d\alpha + \int_\Y f^c \, \d\beta
-    \right\}.
-  \]
-  制約 $f(x) + g(y) \leq c(x, y)$ は $g = f^c$ と置くことで自動的に満たされる．
-  この定式化はエントロピー正則化（第4章）や半離散最適輸送の計算において重要な役割を果たす．
-\end{remark}
+%%%%%%%
+\begin{rem1}{Kronecker cost function and total variation}
+上記の注意~\ref{rem-binary}に加えて，この結果が，$c(x,y)$ が $x=y$ で $0$ かつ $x\ne y$ で 1 である場合に任意の測度へ拡張されることも容易に確かめられる．二つの離散測度 $\al$ と $\be$ の間の OT 距離はそれらの全変動距離に等しい（例~\ref{exmp-tv}も参照）．
+\end{rem1}
+%%%%%%%
 
-%% ============================================================
-%%  2.6 特殊な場合
-%% ============================================================
-\section{特殊な場合}
-\label{sec:special-cases}
 
-最適輸送は一般には計算が困難であるが，
-特定の設定では閉じた形の解や効率的な計算法が得られる．
 
-%% --- 2.6.1 全変動距離との関係 ---
-\subsection{全変動距離との関係}
-\label{subsec:total-variation}
+%%%%%%%
+\begin{rem1}{1-D case---Empirical measures}\label{rem-1d-empir}
+ここで $\X=\RR$ である．$\al = \frac{1}{n}\sum_{i=1}^n \de_{x_i}$ かつ $\be = \frac{1}{n}\sum_{j=1}^n \de_{y_j}$ と仮定し，（一般性を失わずに）点が順序づけられている，すなわち $x_1 \leq x_2 \leq \cdots \leq x_n$ かつ $y_1 \leq y_2 \leq \cdots \leq y_n$ と仮定すると，単純な公式
+\eql{\label{eq-1d-empirical}
+	\Wass_p(\al,\be)^p = \frac{1}{n} \sum_{i=1}^n |x_i-y_i|^p,
+}
+が成り立つ．すなわち局所的には（点が相異なると仮定すれば）$\Wass_p(\al,\be)$ は，$\al$ と $\be$ の順序づけられた値の二つのベクトルの間の $\ell^p$ ノルムである．その主張は局所的にのみ妥当であり，すなわち順序（およびそれらのベクトル表現）は値のいくつかが変わるたびに変わりうるという意味においてである．その公式は，注意~\ref{rem-1d-ot-generic}で詳述するより一般的な設定の単純な帰結である．
+%
+図~\ref{fig-1d-discrete}の上段は，同じ点数をもつ経験測度の間の一次元輸送写像を示している．下段は，この単調写像が任意の離散測度へどのように一般化されるかを示している．
 
-コスト関数の選び方によって，最適輸送コストは既知の確率分布間の距離と一致する．
 
-\begin{remark}{Kronecker コスト関数と全変動}{kronecker-tv}
-  有限集合 $X = \{x_1, \ldots, x_n\}$ 上の2つのヒストグラム
-  $\mathbf{a}, \mathbf{b} \in \simplex_n$ を考える．
-  コスト行列を $C_{i,j} = 1 - \delta_{i,j}$
-  （$i = j$ のとき $0$，$i \neq j$ のとき $1$）と取ると，
-  \[
-    \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})
-    = \frac{1}{2}\norm{\mathbf{a} - \mathbf{b}}_1
-    = \frac{1}{2}\sum_{i=1}^n \abs{a_i - b_i}.
-  \]
-  右辺は\textbf{全変動距離}（total variation distance）に等しい．
-  すなわち，移動先を区別しないコスト（同じ場所なら $0$，異なれば $1$）のもとでの
-  最適輸送コストは，どれだけの質量を「動かす必要があるか」のみを測り，
-  基底空間の幾何学的構造は反映しない．
-\end{remark}
+この一次元計算を活用して，\citet{delon-circle} が示すように円周上の OT も効率的に計算することができる．
+%
+コストが距離の凹関数である場合，特に $p<1$ のときには，最適輸送計画の挙動は非常に異なるが，効率的なソルバーもまた存在する点に注意する~\citep{delon-concave}．
+\end{rem1}
+%%%%%%%
 
-%% --- 2.6.2 1次元の場合 ---
-\subsection{1次元の場合}
-\label{subsec:one-dimensional}
 
-$\X = \Y = \R$ の場合，最適輸送には美しい閉じた形の解が存在する．
-この結果は累積分布関数と分位関数を用いて述べられる．
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.65\linewidth]{1d-discrete/1d-schematic}
+\caption{\label{fig-1d-discrete}
+一次元の最適カップリング：各矢印 $x_i \rightarrow y_j$ は最適カップリングにおける非零の $\P_{i,j}$ を示す．
+%
+上：同じ点数をもつ経験測度（最適マッチング）．
+下：一般の場合．
+%
+これは単調再配列に対応する．すなわち $x_i \leq x_{i'}$ が $\P_{i,j} \neq 0, \P_{i',j'} \neq 0$ となるようなものであれば，必然的に $y_j \leq y_{j'}$ である．
+}
+\end{figure}
 
-\begin{definition}{累積分布関数}{cdf}
-  $\R$ 上の確率測度 $\alpha$ に対して，
-  \textbf{累積分布関数}（cumulative distribution function; CDF）を
-  \[
-    F_\alpha(x) \defeq \alpha((-\infty, x]) = \int_{-\infty}^x \d\alpha
-  \]
-  で定義する．$F_\alpha$ は右連続かつ単調非減少であり，
-  $\lim_{x \to -\infty} F_\alpha(x) = 0$，$\lim_{x \to +\infty} F_\alpha(x) = 1$ を満たす．
-\end{definition}
 
-\begin{definition}{分位関数}{quantile}
-  累積分布関数 $F_\alpha$ に対して，
-  \textbf{分位関数}（quantile function）または\textbf{一般化逆関数}を
-  \[
-    F_\alpha^{-1}(r) \defeq \inf \left\{ x \in \R \;\middle|\; F_\alpha(x) \geq r \right\}
-    \qquad (r \in (0, 1])
-  \]
-  で定義する．$F_\alpha$ が狭義単調増加であるとき，$F_\alpha^{-1}$ は通常の逆関数に一致する．
-\end{definition}
+% \bar x_{\si_1(i)} --> \bar y_{\si_2(i)}  k --> \si_2(\si_1^{-1}(k))
+%%%%%%%
+\begin{rem1}{Histogram equalization}
+一次元の最適輸送はヒストグラム均等化を行うのに用いることができ，グレースケール画像のパレットの正規化への応用がある．図~\ref{fig-hist-eq}を参照．この場合，あらかじめ定められた順序で（すなわち列ごとに）列挙された二つの入力画像のすべての画素の灰色の色レベル（黒に対し $0$，白に対し $1$，その間のすべての値）を $(\bar x_i)_i$ および $(\bar y_j)_j$ と表記する．各画像の画素数が同じで $n\times m$ に等しいと仮定すると，これらの色レベルを並び替えることで，注意~\ref{rem-1d-empir}と同様に $x_i = \bar x_{\si_1(i)}$ および $y_j = \bar y_{\si_2(j)}$ が定義される．ここで $\si_1, \si_2 : \{1,\ldots,nm\} \rightarrow \{1,\ldots,nm\}$ は置換であり，こうして $\si \eqdef \si_2 \circ \si_1^{-1}$ は二つの離散分布の間の最適割当である．画像処理の応用では，$(\bar y_{\si(i)})_i$ は $\bar x$ の均等化版の色値を定義し，その経験分布は $\bar y$ のものとちょうど一致する．その画像の均等化版は，その $nm$ 次元ベクトルを大きさ $n\times m$ の画像として折り畳み直すことで回復できる．また $t \in [0,1] \mapsto (1-t) \bar x_{i} + t \bar y_{\si(i)}$ は元の画像と均等化されたものの間の補間を定義し，その画素の経験分布は入力のものの間の変位補間（~\eqref{eq-displacement-1d-cumul}で定義される）である．
+\end{rem1}
+%%%%%%%
 
-\begin{theorem}{1次元の最適輸送}{ot-one-dimensional}
-  $\R$ 上の確率測度 $\alpha, \beta$ と実数 $p \geq 1$ に対して，
-  \[
-    \Wass_p(\alpha, \beta)^p
-    = \int_0^1 \abs{F_\alpha^{-1}(r) - F_\beta^{-1}(r)}^p \, \d r.
-  \]
-  さらに，最適な Monge 写像は $T = F_\beta^{-1} \circ F_\alpha$ で与えられる．
-\end{theorem}
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{\hspace{1mm}}@{}}
+\includegraphics[width=.19\linewidth]{hist-eq/equalized-1}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalized-3}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalized-5}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalized-7}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalized-9}\\
+\includegraphics[width=.19\linewidth]{hist-eq/equalize-1}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalize-3}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalize-5}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalize-7}&
+\includegraphics[width=.19\linewidth]{hist-eq/equalize-9}\\
+$t=0$ & $t=0.25$& $t=0.5$& $t=.75$& $t=1$
+\end{tabular}
+\caption{\label{fig-hist-eq}
+画像処理のためのヒストグラム均等化．ここで $t$ はヒストグラムの間の変位補間を径数づける．
+}
+\end{figure}
 
-\begin{proof}
-  $T = F_\beta^{-1} \circ F_\alpha$ が $\alpha$ から $\beta$ への Monge 写像であることを確認する．
-  $r \in (0, 1)$ に対して，分位関数の定義から
-  $F_\alpha(F_\alpha^{-1}(r)) \geq r$ かつ $F_\beta^{-1}(F_\beta(y)) \leq y$ が成り立つ．
-  任意のボレル集合 $B \subset \R$ に対して，
-  \begin{align*}
-    (T\pushforward \alpha)(B)
-    &= \alpha(T^{-1}(B))
-    = \alpha(\{x \mid F_\beta^{-1}(F_\alpha(x)) \in B\}) \\
-    &= \alpha(\{x \mid F_\alpha(x) \in F_\beta(B)\}).
-  \end{align*}
-  ここで，$[0, 1]$ 上の一様分布を $\lambda$ とすると，
-  $F_\alpha^{-1}$ が $\lambda$ から $\alpha$ への Monge 写像であること
-  （すなわち $(F_\alpha^{-1})\pushforward \lambda = \alpha$）から，
-  $F_\alpha$ は $\alpha$ を $[0,1]$ 上の一様分布に移す．
-  同様に $F_\beta^{-1}$ は $\lambda$ を $\beta$ に移すから，
-  合成 $T = F_\beta^{-1} \circ F_\alpha$ は $\alpha$ を $\beta$ に移す：
-  $T\pushforward \alpha = \beta$．
 
-  この $T$ による輸送コストは
-  \[
-    \int_\R \abs{x - T(x)}^p \, \d\alpha(x)
-    = \int_0^1 \abs{F_\alpha^{-1}(r) - F_\beta^{-1}(r)}^p \, \d r
-  \]
-  となる（$x = F_\alpha^{-1}(r)$ と変数変換）．
-  この値が Kantorovich 問題の最適値以下であること，
-  および Kantorovich 問題の最適値がこの値以上であること
-  （双対問題の実行可能解を構成すれば示せる）を合わせると，
-  $T$ が最適な Monge 写像であり，
-  上の積分が $\Wass_p(\alpha, \beta)^p$ に一致する．
-\end{proof}
+%%%%%%%
+\begin{rem2}{1-D case---Generic case}\label{rem-1d-ot-generic}
+$\RR$ 上の測度 $\al$ に対し，$\RR$ から $\rightarrow [0,1]$ への累積分布関数を
+\eql{\label{eq-cumul-defn}
+	\foralls x \in \RR, \quad \cumul{\al}(x) \eqdef \int_{-\infty}^x \d\al,
+}
+と定義し，その擬逆 $\cumul{\al}^{-1} : [0,1] \rightarrow \RR \cup \{-\infty\}$ を
+\eql{\label{eq-pseudo-inv-cum}
+	\foralls r \in [0,1], \quad \cumul{\al}^{-1}(r) = \umin{x} \enscond{x \in \RR \cup \{-\infty\} }{ \cumul{\al}(x) \geq r }.
+}
+と定義する．
+%
+その関数は $\alpha$ の一般化された分位点関数とも呼ばれる．任意の $p \geq 1$ に対し
+\eql{\label{eq-wass-cumul}
+	\Wass_p(\al,\be)^p = \norm{ \cumul{\al}^{-1} - \cumul{\be}^{-1} }_{L^p([0,1])}^p = \int_0^1 | \cumul{\al}^{-1}(r) - \cumul{\be}^{-1}(r) |^p \d r.
+}
+が成り立つ．これは，写像 $\al \mapsto \cumul{\al}^{-1}$ を通じて，Wasserstein 距離が $L^p$ ノルムを備えた線形空間に等長であること，あるいは同値だが，実数直線上の測度に対する Wasserstein 距離が Hilbert 的距離であることを意味する．これは一次元の最適輸送の幾何を非常に単純にするが，より高次元におけるその幾何とは非常に異なるものにもする．後者は命題~\ref{prop-negative-definite}で，より一般には\S\ref{sec-non-embeddability}で論じるように Hilbert 的ではない．
+%
+$p=1$ に対しては，さらに単純な公式
+\begin{align}\label{eq-w1-1d}
+	\Wass_1(\al,\be) &= \norm{ \cumul{\al} - \cumul{\be} }_{L^1(\RR)} =
+	\int_\RR | \cumul{\al}(x) - \cumul{\be}(x) | \d x \\
+	&= \int_\RR \abs{ \int_{-\infty}^x \d(\al-\be) } \d x,
+\end{align}
+が成り立つ．これは $\Wass_1$ がノルムであることを示す（任意次元への一般化については\S\ref{sec-w1-eucl}を参照）．
+%
+$\T_\sharp \al=\be$ となる最適 Monge 写像 $\T$ はそのとき
+\eql{\label{eq-OT-map-1d}
+ 	\T = \cumul{\be}^{-1} \circ \cumul{\al}.
+}
+で定義される．図~\ref{fig-1d-ot}は累積関数を通じた一次元 OT の計算を示している．それはまた~\eqref{eq-displacement-1d-cumul}で詳述するように計算される変位補間も表示している．注意~\ref{rem-bary-1d}も参照．一次元における最適輸送の性質の詳細な概観については，読者は~\cite[Chapter 2]{SantambrogioBook}を参照されたい．
+\end{rem2}
+%%%%%%%
 
-\begin{remark}{}{one-dim-remark}
-  1次元では，Wasserstein 距離は分位関数の $L^p$ ノルムの差として表される．
-  この等長性は高次元では成り立たず，1次元特有の性質である．
-  最適な Monge 写像は「$\alpha$ の $r$-分位点を $\beta$ の $r$-分位点に送る」
-  という自然な対応である．
-\end{remark}
 
-\begin{example}{1次元の離散的な場合}{one-dim-discrete}
-  $\alpha = \frac{1}{n}\sum_{i=1}^n \delta_{x_i}$，
-  $\beta = \frac{1}{n}\sum_{i=1}^n \delta_{y_i}$
-  （$x_1 \leq \cdots \leq x_n$，$y_1 \leq \cdots \leq y_n$ と整列済み）のとき，
-  最適な割当は $\sigma(i) = i$（順序を保つ対応）であり，
-  \[
-    \Wass_p(\alpha, \beta)^p = \frac{1}{n} \sum_{i=1}^n \abs{x_i - y_i}^p.
-  \]
-\end{example}
+\newcommand{\MyFigCumulMeas}[1]{\includegraphics[width=.33\linewidth]{1d-cumulative/#1}}
+\newcommand{\MyFigCumulCum}[1]{\includegraphics[width=.24\linewidth]{1d-cumulative/#1}}
+\begin{figure}[ht!]
+\centering
+\begin{tabular}{@{}c@{\hspace{1mm}}c@{\hspace{1mm}}c@{}}
+\MyFigCumulMeas{input-mu}&
+\MyFigCumulMeas{input-nu}&
+\MyFigCumulMeas{interp-bary}\\
+$\mu$ & $\nu$ & ${ (t\T+(1-t)\Id)_\sharp \mu}$
+\end{tabular}
+%%%%
+\begin{tabular}{@{}c@{\hspace{2mm}}c@{\hspace{2mm}}c@{\hspace{2mm}}c@{}}
+\MyFigCumulCum{cumul}&
+\MyFigCumulCum{icumul}&
+\MyFigCumulCum{transports}&
+\MyFigCumulCum{interp-cumul}\\
+$(\cumul{\al},\cumul{\be})$ &
+$(\cumul{\al}^{-1},\cumul{\be}^{-1})$ &
+$(T,T^{-1})$ &
+$(1-t)\cumul{\al}^{-1}+t\cumul{\be}^{-1}$
+\end{tabular}
+\caption{\label{fig-1d-ot}
+~\eqref{eq-OT-map-1d}で詳述するように累積関数を用いた，二つの一次元測度の間の OT と変位補間の計算．
+}
+\end{figure}
 
-%% --- 2.6.2 ガウス分布の場合 ---
-\subsection{ガウス分布の場合}
-\label{subsec:gaussian}
+%%%%%%%
+\begin{rem2}{Distance between Gaussians}\label{rem-dist-gaussians}
+$\al = \Nn(\mean_\al,\cov_\al)$ と $\be = \Nn(\mean_\be,\cov_\be)$ が $\RR^\dim$ における二つのガウシアンであれば，次の写像
+\eql{\label{eq-transport-Bures}T:x\mapsto \mean_\be + A(x-\mean_\al),}
+ここで
+$$A=\cov_\al^{-\tfrac{1}{2}}\Big(\cov_\al^{\tfrac{1}{2}}\cov_\be\cov_\al^{\tfrac{1}{2}}\Big)^{\tfrac{1}{2}}\cov_\al^{-\tfrac{1}{2}}=\transp{A},$$
+が $T_\sharp \rho_\al = \rho_\be$ となることを示せる．実際，単に変数変換公式~\eqref{eq-pfwd-density}が満たされることに気づけばよい．というのも
+$$
+\begin{aligned}\rho_\be(T(x))&=\det(2\pi\cov_\be)^{-\tfrac{1}{2}} \exp(-\dotp{T(x)-\mean_\be}{\cov_\be^{-1}(T(x)-\mean_\be)})\\
+&= \det(2\pi\cov_\be)^{-\tfrac{1}{2}} \exp(-\dotp{ x-\mean_\al}{\transp{A}\cov_\be^{-1}A(x-\mean_\al)}) \\
+&= \det(2\pi\cov_\be)^{-\tfrac{1}{2}} \exp(-\dotp{ x-\mean_\al}{\cov_\al^{-1}(x-\mean_\al)}),
+\end{aligned}$$
+であり，かつ $T$ が線形写像であるから
+$$|\det T'(x)|= \det A = \left(\frac{\det\cov_\be}{\det\cov_\al}\right)^{\tfrac{1}{2}}$$
+であり，こうして $\rho_\al=|\det T'| \rho_\be$ を回復し，$T_\sharp \al = \be$ を意味するからである．さて $T$ が凸関数 $\psi:x\mapsto \tfrac{1}{2}\dotp{x-\mean_\al}{A (x-\mean_\al)} + \dotp{\mean_\be}{x}$ の勾配であることに気づき，\citeauthor{Brenier91} の定理~\citeyearpar{Brenier91}（注意~\ref{rem-exist-mongemap}を参照）を用いて，$T$ が最適であると結論する．その写像 $T$ と対応するポテンシャル $\psi$ はともに図~\ref{fig-gaussians-2d-T}および~\ref{fig-gaussians-2d-psi}に示されている．
 
-多次元ガウス分布間の $\Wass_2$ 距離には閉じた形の公式が存在する．
-まず必要な線形代数の概念を導入する．
+$\rho_\al$ の一次および二次のモーメントを含む追加の計算により，その写像の輸送コストが
+\eql{\label{eq-dist-gauss}
+	\Wass_2^2( \al,\be ) = \norm{ \mean_\al - \mean_\be }^2 + \Bb(\cov_\al,\cov_\be)^2,
+}
+であることが得られる．ここで $\Bb$ は正定値行列の間のいわゆる \citeauthor{bures1969extension} 距離~\citeyearpar{bures1969extension}（\citet{,forrester2016relating} も参照）
+\eql{\label{eq-bure-defn}
+	\Bb(\cov_\al,\cov_\be)^2 \eqdef \tr\pa{
+		\cov_\al + \cov_\be - 2 ( \cov_\al^{1/2} \cov_\be \cov_\al^{1/2} )^{1/2}
+	},
+}
+であり，$\cov^{1/2}$ は行列平方根である．$\Bb$ が共分散行列上の距離であること，および $\Bb^2$ がその両引数に関して凸であることを示せる．\todoK{ref ? proof ? }
+$\cov_\al = \diag(r_i)_i$ かつ $\cov_\be = \diag(s_i)_i$ が対角である場合，Bures 距離は Hellinger 距離
+\eq{
+	\Bb(\cov_\al,\cov_\be) = \norm{ \sqrt{r}-\sqrt{s} }_2.
+}
+である．一次元ガウシアンに対し，$\Wass_2$ はこうしてガウシアンの平均と標準偏差 $(\mean,\sqrt{\cov})$ をプロットした二次元平面上の Euclid 距離であり，図~\ref{fig-1d-gaussian}に示されている．
+%
+ガウス分布の Wasserstein 幾何の詳細な扱いについては~\citet{takatsu2011wasserstein}を参照し，Bures 距離に関する追加の考察については読者は非常に最近の文献~\citep{malago2018wasserstein,bhatia2018bures}を参照できる．また，この距離を単語の確率的埋め込みを計算するのに応用した最近のもの~\citep{NIPS2018_8226}，カルマンフィルタへの頑健な拡張を計算するのにどう用いられるかを見るための~\citep{NIPS2018_8067}，あるいは再生核ヒルベルト空間における共分散関数に適用された~\citep{NIPS2017_7149}も参照できる．
+\end{rem2}
+%%%%%%
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.7\linewidth]{gaussians-2d/gaussians1.pdf}
+\caption{\label{fig-gaussians-2d-T} 二つのガウシアン $\rho_\al$ と $\rho_\be$．それらの密度の等高線図を用いて表され，それぞれ平均および分散行列は $\mean_\al=(-2,0),\cov_\al=\frac{1}{2}\left(1 -\tfrac{1}{2};-\tfrac{1}{2}  1\right)$ および $\mean_\be=(3,1), \cov_\be=\left(2, \tfrac{1}{2}; \tfrac{1}{2}, 1\right)$ である．矢印は平面上にとられた無作為な点 $x$ から始まり，それらの点の対応する写像 $T(x)=\mean_\be + A(x-\mean_\al)$ で終わる．}
+\end{figure}
 
-\begin{definition}{正定値対称行列}{positive-definite}
-  対称行列 $\mathbf{\Sigma} \in \R^{d \times d}$（$\mathbf{\Sigma}^\top = \mathbf{\Sigma}$）が
-  \textbf{正定値}（positive definite）であるとは，
-  すべての $\mathbf{0} \neq \mathbf{v} \in \R^d$ に対して
-  $\mathbf{v}^\top \mathbf{\Sigma} \mathbf{v} > 0$ が成り立つことをいう．
-  正定値対称行列のすべての固有値は正である．
-\end{definition}
 
-\begin{definition}{行列の平方根}{matrix-square-root}
-  正定値対称行列 $\mathbf{\Sigma}$ に対して，
-  その\textbf{平方根} $\mathbf{\Sigma}^{1/2}$ とは，
-  $\mathbf{\Sigma}^{1/2} \mathbf{\Sigma}^{1/2} = \mathbf{\Sigma}$ かつ
-  $\mathbf{\Sigma}^{1/2}$ 自身も正定値対称であるような一意的な行列をいう．
-  固有値分解 $\mathbf{\Sigma} = \mathbf{U} \diag(\lambda_1, \ldots, \lambda_d) \mathbf{U}^\top$
-  を用いると，$\mathbf{\Sigma}^{1/2} = \mathbf{U} \diag(\sqrt{\lambda_1}, \ldots, \sqrt{\lambda_d}) \mathbf{U}^\top$ で与えられる．
-  $\mathbf{\Sigma}^{-1/2}$ は $\mathbf{\Sigma}^{1/2}$ の逆行列を表す．
-\end{definition}
 
-\begin{definition}{多次元ガウス分布}{gaussian}
-  $\R^d$ 上の\textbf{ガウス分布}（Gaussian distribution）
-  $\mathcal{N}(\mathbf{m}, \mathbf{\Sigma})$ は，
-  平均ベクトル $\mathbf{m} \in \R^d$ と
-  正定値対称行列である共分散行列 $\mathbf{\Sigma} \in \R^{d \times d}$ によって定まる確率分布であり，
-  密度関数
-  \[
-    \rho(x) = \frac{1}{(2\pi)^{d/2} \det(\mathbf{\Sigma})^{1/2}}
-    \exp\!\left( -\frac{1}{2} (x - \mathbf{m})^\top \mathbf{\Sigma}^{-1} (x - \mathbf{m}) \right)
-  \]
-  を持つ．
-\end{definition}
+%%%%%%%
+\begin{rem2}{Distance between elliptically contoured distributions}\label{rem-dist-elliptic}
+\citeauthor{gelbrich1990formula} は，注意~\ref{rem-dist-gaussians}で提供したものよりも一般的な結果を提供する．すなわちガウシアンの間の Bures 距離は，より一般に\emph{楕円輪郭分布}へ拡張される~\citeyearpar{gelbrich1990formula}．
+%
+要するに，まず，与えられた平均と共分散行列をもつ二つの測度に対し，これらそれぞれの径数をもつ二つのガウシアンの間の距離が，二つの測度の間の Wasserstein 距離の下界であることを示せる~\citep[Theorem 2.1]{gelbrich1990formula}．加えて，閉形式~\eqref{eq-dist-gauss}は楕円輪郭密度の族へ拡張される．二つの密度 $\rho_\al$ と $\rho_\be$ がそのような族に属するとき，すなわち $\rho_\al$ と $\rho_\be$ が任意の点 $x$ に対し平均と正定値の径数を用いて
 
-\begin{theorem}{ガウス分布間の Wasserstein 距離}{wasserstein-gaussian}
-  $\alpha = \mathcal{N}(\mathbf{m}_\alpha, \mathbf{\Sigma}_\alpha)$，
-  $\beta = \mathcal{N}(\mathbf{m}_\beta, \mathbf{\Sigma}_\beta)$ に対して，
-  \[
-    \Wass_2(\alpha, \beta)^2
-    = \norm{\mathbf{m}_\alpha - \mathbf{m}_\beta}_2^2
-    + \mathcal{B}(\mathbf{\Sigma}_\alpha, \mathbf{\Sigma}_\beta)^2
-  \]
-  が成り立つ．ここで $\mathcal{B}$ は\textbf{Bures 距離}であり，
-  \[
-    \mathcal{B}(\mathbf{\Sigma}_\alpha, \mathbf{\Sigma}_\beta)^2
-    \defeq \tr\!\left(
-    \mathbf{\Sigma}_\alpha + \mathbf{\Sigma}_\beta
-    - 2 \left( \mathbf{\Sigma}_\alpha^{1/2} \mathbf{\Sigma}_\beta \mathbf{\Sigma}_\alpha^{1/2} \right)^{1/2}
-    \right)
-  \]
-  で定義される．また，最適な Monge 写像は線形写像
-  \[
-    T(x) = \mathbf{m}_\beta + \mathbf{A}(x - \mathbf{m}_\alpha), \quad
-    \mathbf{A} = \mathbf{\Sigma}_\alpha^{-1/2}
-    \left( \mathbf{\Sigma}_\alpha^{1/2} \mathbf{\Sigma}_\beta \mathbf{\Sigma}_\alpha^{1/2} \right)^{1/2}
-    \mathbf{\Sigma}_\alpha^{-1/2}
-  \]
-  で与えられる．
-\end{theorem}
+\eq{\begin{aligned}\rho_\al(x) = \frac{1}{\sqrt{\det(\A)}}h(\dotp{x-\mean_\al}{\A^{-1}(x-\mean_\al)})\\ \rho_\be(x)= \frac{1}{\sqrt{\det(\B)}} h(\dotp{x-\mean_\be}{\B^{-1}(x-\mean_\be)}),\end{aligned}}
+と書けるとき，ここで同じ非負値関数 $h$ は積分 $$\int_{\RR^\dim} h(\dotp{x}{x})dx=1,$$ が成り立つようなものとすると，それらの最適輸送写像もまた線形写像 \eqref{eq-transport-Bures} であり，それらの Wasserstein 距離もまた式 $\eqref{eq-dist-gauss}$ で与えられるが，ただし Bures 距離のわずかに異なるスケーリングを伴い，それは生成関数 $h$ のみに依存する．たとえばそのスケーリングはガウシアン（$h(t)=e^{-t/2}$）に対しては $1$ であり，楕円体上の一様分布（$h$ は $[0,1]$ の指示関数）に対しては $1/(\dim+2)$ である．この結果は，楕円分布の共分散行列がその正定値径数の定数倍であるという事実~\citep[Theo. 4(ii)]{gomez2003survey}，および楕円分布の間の Wasserstein 距離がそれらの共分散行列の間の Bures 距離の関数であるという事実~\citep[Cor. 2.5]{gelbrich1990formula}から従う．
+\end{rem2}
+%%%%%%
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.85\linewidth]{gaussians-2d/gaussians2.pdf}
+\caption{\protect\label{fig-gaussians-2d-psi} 図~\ref{fig-gaussians-2d-T}で定義したのと同じガウシアン $\rho_\al$ と $\rho_\be$．今度は曲面として表されている．上の曲面は $T=\nabla \psi$ となるよう加法定数（ここでは +50）を除いて定義された Brenier ポテンシャル $\psi$ である．視覚的な目的のため，両方のガウス密度は 100 倍されている．}
+\end{figure}
 
-\begin{remark}{}{gaussian-remark}
-  ガウス分布間の Wasserstein 距離は，平均の差のユークリッドノルムと
-  共分散行列の差を測る Bures 距離に分解される．
-  1次元（$d = 1$）では $\mathbf{\Sigma}_\alpha = \sigma_\alpha^2$，
-  $\mathbf{\Sigma}_\beta = \sigma_\beta^2$ であるから，
-  \[
-    \Wass_2(\alpha, \beta)^2 = (m_\alpha - m_\beta)^2 + (\sigma_\alpha - \sigma_\beta)^2
-  \]
-  となり，平均-標準偏差平面上のユークリッド距離に一致する．
-\end{remark}
+\begin{figure}[h!]
+\centering
+\begin{tabular}{@{}c@{\hspace{1mm}}c@{}}
+\includegraphics[width=.35\linewidth]{gaussian-1d/interp-density}
+\includegraphics[width=.25\linewidth]{gaussian-1d/gaussian-param}
+\end{tabular}
+\caption{\label{fig-1d-gaussian}
+二つの一次元ガウシアンの間の変位補間の計算．
+%
+ガウス密度を $\Gg_{m,\si}(x) \eqdef \frac{1}{\sqrt{2\pi}s}e^{-\frac{(x-m)^2}{2s^2}}$ と表記すると，こうして補間 $\Gg_{(1-t)m_0+t m_1,(1-t)\si_0+t \si_1}$ を示す．
+}
+\end{figure}
 
-%% ============================================================
-%%  2.7 Brenier の定理
-%% ============================================================
-\section{Brenier の定理}
-\label{sec:brenier}
 
-Monge 問題と Kantorovich 問題の関係について，
-二次コストの場合に両者が同値であるという深い結果を述べる．
 
-\begin{definition}{凸関数}{convex-function}
-  $\R^d$ 上の関数 $\varphi \colon \R^d \to \R \cup \{+\infty\}$ が\textbf{凸}（convex）であるとは，
-  任意の $x, y \in \R^d$ と $t \in [0, 1]$ に対して
-  \[
-    \varphi(tx + (1-t)y) \leq t\varphi(x) + (1-t)\varphi(y)
-  \]
-  が成り立つことをいう．
-\end{definition}
-
-\begin{definition}{凸関数の勾配}{gradient-convex}
-  凸関数 $\varphi \colon \R^d \to \R$ が点 $x$ で微分可能であるとき，
-  その\textbf{勾配}（gradient）$\nabla\varphi(x) \in \R^d$ は
-  \[
-    \varphi(y) \geq \varphi(x) + \inner{\nabla\varphi(x)}{y - x}
-    \qquad (\forall\, y \in \R^d)
-  \]
-  を満たす．凸関数はほとんどいたるところ微分可能である（Rademacher の定理）．
-\end{definition}
-
-\begin{theorem}{Brenier の定理}{brenier}
-  $\alpha, \beta \in \Mm_+^1(\R^d)$ をコスト $c(x, y) = \norm{x - y}_2^2$ に対する
-  最適輸送問題の入力とする．
-  $\alpha$ がルベーグ測度に関して密度を持つ（すなわち $\alpha \ll \d x$）と仮定する．
-  このとき，以下が成り立つ：
-  \begin{enumerate}
-    \item 最適なカップリング $\pi^*$ は\textbf{一意的}であり，
-      Monge 写像によって誘導される：$\pi^* = (\operatorname{Id}, T)\pushforward \alpha$．
-    \item 最適な Monge 写像 $T$ は凸関数 $\varphi \colon \R^d \to \R$ の勾配として表される：
-      $T(x) = \nabla\varphi(x)$（$\alpha$-a.e.）．
-    \item この $\varphi$ は $\alpha$-a.e.\ の意味で一意的であり，
-      $(\nabla\varphi)\pushforward \alpha = \beta$ を満たす．
-  \end{enumerate}
-\end{theorem}
-
-\begin{remark}{}{brenier-significance}
-  Brenier の定理の意義は以下の点にある：
-  \begin{itemize}
-    \item Kantorovich 緩和が\textbf{タイト}である：
-      最適カップリングは Monge 写像のグラフ上に集中しており，
-      質量の分割は起こらない．
-    \item 最適写像が凸関数の勾配で特徴づけられるため，
-      最適輸送と\textbf{凸解析}の間に深い関係が成立する．
-    \item ソース測度 $\alpha$ が密度を持つという条件は本質的である．
-      $\alpha$ が離散測度の場合，最適な Monge 写像が存在するとは限らない
-      （\ref{subsec:monge}~節の例~\ref{ex:monge-nonexistence} を参照）．
-  \end{itemize}
-\end{remark}
-
-\begin{remark}{Monge--Amp\`{e}re 方程式}{monge-ampere}
-  $\alpha, \beta$ がともに密度 $\rho_\alpha, \rho_\beta$ を持つとき，
-  Brenier の定理における凸関数 $\varphi$ は
-  \textbf{Monge--Amp\`{e}re 方程式}
-  \[
-    \det(\partial^2 \varphi(x)) \, \rho_\beta(\nabla\varphi(x)) = \rho_\alpha(x)
-  \]
-  を満たす．ここで $\partial^2 \varphi(x) \in \R^{d \times d}$ は
-  $\varphi$ の二階偏導関数を成分とする行列
-  $(\partial^2 \varphi)_{k,l} = \frac{\partial^2 \varphi}{\partial x_k \partial x_l}$
-  である．
-  これは変位 $\varphi = \frac{\norm{\cdot}^2}{2} + \varepsilon\psi$ が小さいとき
-  $\det(\partial^2\varphi) \approx 1 + \varepsilon\Delta\psi$ と線形化されることから，
-  Monge--Amp\`{e}re 作用素は非線形の退化ラプラシアンとみなせる．
-  一般の測度に対しては古典的な意味の解が存在しないため，
-  Alexandrov 解の枠組みが必要となる．
-\end{remark}
-
+\todoK{Maybe cover the case of translation / scaling of the same input. Explain that $\Wass$ is invariant to isometries. }
