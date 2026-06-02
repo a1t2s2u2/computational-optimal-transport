@@ -515,7 +515,8 @@ function mathJaxScript() {
             Tan: "\\\\mathrm{Tan}",
             Ric: "\\\\operatorname{Ric}",
             CD: "\\\\mathrm{CD}",
-            diverg: "\\\\nabla\\\\!\\\\cdot\\\\!"
+            diverg: "\\\\nabla\\\\!\\\\cdot\\\\!",
+            dHil: "d_{\\\\mathcal{H}}"
           }
         },
         svg: { fontCache: "global" }

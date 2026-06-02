@@ -12,14 +12,13 @@ title: エントロピー正則化
 :::definition
 ### Def: 離散エントロピー
 
-非負行列 \(\mathbf{P} \in \R_{\geq 0}^{n \times m}\) に対して，
-**離散エントロピー**を
+非負行列 \(\mathbf{P} \in \R_{\geq 0}^{n \times m}\) に対して，**離散エントロピー**を
 
 \[
-  \Hb(\mathbf{P})
-  \defeq
-  - \sum_{i=1}^{n} \sum_{j=1}^{m}
-    P_{i,j}\bigl(\log P_{i,j} - 1\bigr)
+ \Hb(\mathbf{P})
+ \defeq
+ - \sum_{i=1}^{n} \sum_{j=1}^{m}
+ P_{i,j}\bigl(\log P_{i,j} - 1\bigr)
 \]
 
 で定める．ただし \(0\log 0 = 0\) と約束する．
@@ -32,17 +31,15 @@ title: エントロピー正則化
 確率行列では \(\sum_{i,j}P_{i,j}=1\) なので，
 
 \[
-  \Hb(\mathbf{P})
-  =
-  -\sum_{i,j} P_{i,j}\log P_{i,j} + 1
+ \Hb(\mathbf{P})
+ =
+ -\sum_{i,j} P_{i,j}\log P_{i,j} + 1
 \]
 
-であり，通常の Shannon エントロピーとは定数 \(1\) だけ異なる．
-この定数は最適化の解には影響しない．この形を使う理由は，
-\(-\Hb\) の微分が
+であり，通常の Shannon エントロピーとは定数 \(1\) だけ異なる．この定数は最適化の解には影響しない．この形を使う理由は，\(-\Hb\) の微分が
 
 \[
-  \frac{\partial(-\Hb)}{\partial P_{i,j}} = \log P_{i,j}
+ \frac{\partial(-\Hb)}{\partial P_{i,j}} = \log P_{i,j}
 \]
 
 と簡単になるからである．
@@ -55,11 +52,11 @@ title: エントロピー正則化
 \(-\Hb\) の被加数 \(\varphi(x) \defeq x\log x - x\) は \([0,\infty)\) 上で連続である．実際，\((0,\infty)\) 上では連続関数の積・和として連続であり，\(x = 0\) では，約束 \(0\log 0 = 0\) により \(\varphi(0) = 0\) と定めると，\(\lim_{x\to0+} x\log x = 0\) から
 
 \[
-  \lim_{x \to 0+} \varphi(x)
-  = \lim_{x \to 0+}\bigl(x\log x - x\bigr) = 0 = \varphi(0)
+ \lim_{x \to 0+} \varphi(x)
+ = \lim_{x \to 0+}\bigl(x\log x - x\bigr) = 0 = \varphi(0)
 \]
 
-となって \(x = 0\) でも（右）連続である．ゆえに \(-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})\) は \(\R_{\geq 0}^{n\times m}\) 上で連続である．
+となって \(x = 0\) でも（右）連続である．ゆえに \(-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})\) は\(\R_{\geq 0}^{n\times m}\) 上で連続である．
 :::
 
 
@@ -69,26 +66,26 @@ title: エントロピー正則化
 \(\mathbf{a} \in \R_{>0}^n\)（\(\sum_{i=1}^n a_i = 1\)），\(\mathbf{b} \in \R_{>0}^m\)（\(\sum_{j=1}^m b_j = 1\)），\(\mathbf{C} \in \R_{\geq 0}^{n \times m}\)，\(\varepsilon > 0\) とし，
 
 \[
-  \CouplingsD(\mathbf{a}, \mathbf{b})
-  \defeq
-  \left\{
-    \mathbf{P} \in \R_{\geq 0}^{n \times m}
-    \;\middle|\;
-    \mathbf{P}\ones_m = \mathbf{a},\;
-    \mathbf{P}^\top\ones_n = \mathbf{b}
-  \right\}
+ \CouplingsD(\mathbf{a}, \mathbf{b})
+ \defeq
+ \left\{
+ \mathbf{P} \in \R_{\geq 0}^{n \times m}
+ \;\middle|\;
+ \mathbf{P}\ones_m = \mathbf{a},\;
+ \mathbf{P}^\top\ones_n = \mathbf{b}
+ \right\}
 \]
 
 とおく．**エントロピー正則化された離散 Kantorovich 問題**を
 
 \[
-  \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
-  \defeq
-  \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-  \left\{
-    \inner{\mathbf{C}}{\mathbf{P}}
-    - \varepsilon \Hb(\mathbf{P})
-  \right\}
+ \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+ \defeq
+ \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \left\{
+ \inner{\mathbf{C}}{\mathbf{P}}
+ - \varepsilon \Hb(\mathbf{P})
+ \right\}
 \]
 
 と定める．
@@ -101,8 +98,8 @@ title: エントロピー正則化
 負エントロピー
 
 \[
-  -\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j}),
-  \qquad \varphi(x) \defeq x\log x - x
+ -\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j}),
+ \qquad \varphi(x) \defeq x\log x - x
 \]
 
 は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
@@ -110,55 +107,52 @@ title: エントロピー正則化
 :::details-embedded 証明
 \(-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})\)（\(\varphi(x) = x\log x - x\)）であるから，**(1)** \(\varphi\) が \([0,\infty)\) 上で狭義凸であること，**(2)** そこから和 \(\sum_{i,j}\varphi(P_{i,j})\) が狭義凸になること，の順に示す．
 
-**(1) \(\varphi\) の狭義凸性．**
-\(\varphi\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]），\((0,\infty)\) 上で微分可能で，\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加である．
-相異なる \(x_1, x_2 \in [0,\infty)\) と \(\lambda \in (0,1)\) をとり，\(x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)\) とおく．目標は
+**(1) \(\varphi\) の狭義凸性．**\(\varphi\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]），\((0,\infty)\) 上で微分可能で，\(\varphi'(x) = \log x\) は \((0,\infty)\) 上で狭義単調増加である．相異なる \(x_1, x_2 \in [0,\infty)\) と \(\lambda \in (0,1)\) をとり，\(x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)\) とおく．目標は
 
 \[
-  \varphi(x^*) < \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2)
+ \varphi(x^*) < \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2)
 \]
 
 を示すことである．
 
-\(\varphi\) は閉区間 \([x_1, x^*]\), \([x^*, x_2]\) 上で連続，その内部で微分可能だから，[ref:Thm: 平均値定理|平均値定理]より
+\(\varphi\) は閉区間 \([x_1, x^*]\), \([x^*, x_2]\) 上で連続，その内部で微分可能だから，平均値定理（[ref:Thm: 平均値定理|平均値定理]）より
 
 \[
-  \varphi(x_1) - \varphi(x^*) = \varphi'(c_1)\,(x_1 - x^*),
-  \qquad
-  \varphi(x_2) - \varphi(x^*) = \varphi'(c_2)\,(x_2 - x^*)
+ \varphi(x_1) - \varphi(x^*) = \varphi'(c_1)\,(x_1 - x^*),
+ \qquad
+ \varphi(x_2) - \varphi(x^*) = \varphi'(c_2)\,(x_2 - x^*)
 \]
 
 をみたす \(c_1\)（\(x_1\) と \(x^*\) の間），\(c_2\)（\(x^*\) と \(x_2\) の間）が存在する．\(x_1 = 0\) のときも \(c_1 \in (0, x^*)\) は内点なので \(\varphi'(c_1) = \log c_1\) は定義される．
 
-\(x^* = \lambda x_1 + (1-\lambda)x_2\) より \(x_1 - x^* = (1-\lambda)(x_1 - x_2)\), \(x_2 - x^* = -\lambda(x_1 - x_2)\) である．これらを上の 2 式に代入し，第 1 式を \(\lambda\) 倍，第 2 式を \((1-\lambda)\) 倍して加えると
+\(x^* = \lambda x_1 + (1-\lambda)x_2\) より\(x_1 - x^* = (1-\lambda)(x_1 - x_2)\),\(x_2 - x^* = -\lambda(x_1 - x_2)\)である．これらを上の 2 式に代入し，第 1 式を \(\lambda\) 倍，第 2 式を \((1-\lambda)\) 倍して加えると
 
 \[\begin{aligned}
-  \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2) - \varphi(x^*)
-  &= \lambda(1-\lambda)(x_1 - x_2)\,\varphi'(c_1)
-     - (1-\lambda)\lambda(x_1 - x_2)\,\varphi'(c_2) \\
-  &= \lambda(1-\lambda)(x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr)
+ \lambda\varphi(x_1) + (1-\lambda)\varphi(x_2) - \varphi(x^*)
+ &= \lambda(1-\lambda)(x_1 - x_2)\,\varphi'(c_1)
+ - (1-\lambda)\lambda(x_1 - x_2)\,\varphi'(c_2) \\
+ &= \lambda(1-\lambda)(x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr)
 \end{aligned}\]
 
 を得る（左辺は \(\lambda + (1-\lambda) = 1\) より \(\varphi(x^*)\) がまとまる）．
 
-最後にこの符号を調べる．\(c_1, c_2\) は \(x^*\) をはさんで反対側にあるから \(c_1 - c_2\) は \(x_1 - x_2\) と同符号であり，\(\varphi'\) が狭義単調増加だから \(\varphi'(c_1) - \varphi'(c_2)\) も \(c_1 - c_2\)（ひいては \(x_1 - x_2\)）と同符号である．ゆえに \((x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr) > 0\) となり，\(\lambda(1-\lambda) > 0\) と合わせて右辺は正．したがって目標の不等式が成り立ち，\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
+最後にこの符号を調べる．\(c_1, c_2\) は \(x^*\) をはさんで反対側にあるから\(c_1 - c_2\) は \(x_1 - x_2\) と同符号であり，\(\varphi'\) が狭義単調増加だから\(\varphi'(c_1) - \varphi'(c_2)\) も \(c_1 - c_2\)（ひいては \(x_1 - x_2\)）と同符号である．ゆえに \((x_1 - x_2)\bigl(\varphi'(c_1) - \varphi'(c_2)\bigr) > 0\) となり，\(\lambda(1-\lambda) > 0\) と合わせて右辺は正．したがって目標の不等式が成り立ち，\(\varphi\) は \([0,\infty)\) 上で狭義凸である．
 
-**(2) \(-\Hb\) の狭義凸性．**
-相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとり，凸結合 \((1-t)\mathbf{P} + t\mathbf{Q}\) における \(-\Hb\) を評価する．\(-\Hb(\mathbf{R}) = \sum_{i,j}\varphi(R_{i,j})\) であり，行列 \((1-t)\mathbf{P} + t\mathbf{Q}\) の \((i,j)\) 成分は \((1-t)P_{i,j} + tQ_{i,j}\) だから，
+**(2) \(-\Hb\) の狭義凸性．**相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) をとり，凸結合 \((1-t)\mathbf{P} + t\mathbf{Q}\) における \(-\Hb\) を評価する．\(-\Hb(\mathbf{R}) = \sum_{i,j}\varphi(R_{i,j})\) であり，行列 \((1-t)\mathbf{P} + t\mathbf{Q}\) の \((i,j)\) 成分は \((1-t)P_{i,j} + tQ_{i,j}\) だから，
 
 \[\begin{aligned}
-  -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
-  &= \sum_{i,j}\varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr) \\
-  &\leq \sum_{i,j}\bigl[(1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\bigr] \\
-  &= (1-t)\sum_{i,j}\varphi(P_{i,j}) + t\sum_{i,j}\varphi(Q_{i,j}) \\
-  &= (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
+ -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
+ &= \sum_{i,j}\varphi\bigl((1-t)P_{i,j} + tQ_{i,j}\bigr) \\
+ &\leq \sum_{i,j}\bigl[(1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\bigr] \\
+ &= (1-t)\sum_{i,j}\varphi(P_{i,j}) + t\sum_{i,j}\varphi(Q_{i,j}) \\
+ &= (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr)
 \end{aligned}\]
 
-となる．等号の各行は \(-\Hb = \sum_{i,j}\varphi\) の定義と和の線形性（スカラーのくくり出し）による．第 2 行の不等号は，各成分に (1) の狭義凸性 \(\varphi\bigl((1-t)P_{i,j}+tQ_{i,j}\bigr) \leq (1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\) を適用したもので，\(P_{i,j} \neq Q_{i,j}\) の成分では狭義（\(<\)），\(P_{i,j} = Q_{i,j}\) の成分では等号である．\(\mathbf{P} \neq \mathbf{Q}\) より狭義となる成分が少なくとも 1 つあるので，上の不等号は全体として狭義であり，
+となる．等号の各行は \(-\Hb = \sum_{i,j}\varphi\) の定義と和の線形性（スカラーのくくり出し）による．第 2 行の不等号は，各成分に (1) の狭義凸性\(\varphi\bigl((1-t)P_{i,j}+tQ_{i,j}\bigr) \leq (1-t)\varphi(P_{i,j}) + t\varphi(Q_{i,j})\)を適用したもので，\(P_{i,j} \neq Q_{i,j}\) の成分では狭義（\(<\)），\(P_{i,j} = Q_{i,j}\) の成分では等号である．\(\mathbf{P} \neq \mathbf{Q}\) より狭義となる成分が少なくとも 1 つあるので，上の不等号は全体として狭義であり，
 
 \[
-  -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
-  < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr).
+ -\Hb\bigl((1-t)\mathbf{P} + t\mathbf{Q}\bigr)
+ < (1-t)\bigl(-\Hb(\mathbf{P})\bigr) + t\bigl(-\Hb(\mathbf{Q})\bigr).
 \]
 
 よって \(-\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．
@@ -166,66 +160,55 @@ title: エントロピー正則化
 :::
 
 
-:::proposition
+:::theorem
 ### Prop: 正則化解の存在と一意性
 
-任意の \(\varepsilon > 0\) に対して，
-\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) は一意な最適解
-\(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
+任意の \(\varepsilon > 0\) に対して，\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) は一意な最適解\(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) を持つ．
 
 :::details-embedded 証明
-**存在．**
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である
-（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．
-\(\varphi(x) = x\log x - x\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]）だから，
-目的関数
+**存在．**\(\CouplingsD(\mathbf{a}, \mathbf{b})\) は空でないコンパクト集合である（[ref:Clm: 離散 Kantorovich 問題の解の存在|離散 Kantorovich 問題の解の存在] の証明）．\(\varphi(x) = x\log x - x\) は \([0,\infty)\) 上で連続（[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]）だから，目的関数
 
 \[
-  F(\mathbf{P})
-  \defeq
-  \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
-  =
-  \inner{\mathbf{C}}{\mathbf{P}}
-  + \varepsilon \sum_{i,j} \varphi(P_{i,j})
+ F(\mathbf{P})
+ \defeq
+ \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+ =
+ \inner{\mathbf{C}}{\mathbf{P}}
+ + \varepsilon \sum_{i,j} \varphi(P_{i,j})
 \]
 
-も連続である．
-コンパクト集合上の連続関数は最小値を達成するから，
-最適解が存在する．
+も連続である．コンパクト集合上の連続関数は最小値を達成するから，最適解が存在する．
 
-**一意性．**
-正則化項がコストの線形性を破り，目的関数 \(F\) を狭義凸化する点が鍵である．
-\(\mathbf{P}^\star, \mathbf{Q}^\star \in \CouplingsD(\mathbf{a}, \mathbf{b})\) をともに最適解とし，最適値を \(m \defeq \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}) = F(\mathbf{P}^\star) = F(\mathbf{Q}^\star)\) とおく．\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) と仮定する．
-中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性（[ref:Clm: 離散カップリング集合は凸|離散カップリング集合は凸]）よりこれに属する．[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）を中点 \(\mathbf{R} = \tfrac{1}{2}\mathbf{P}^\star + \tfrac{1}{2}\mathbf{Q}^\star\) に適用すると，\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より狭義不等号
+**一意性．**正則化項がコストの線形性を破り，目的関数 \(F\) を狭義凸化する点が鍵である．\(\mathbf{P}^\star, \mathbf{Q}^\star \in \CouplingsD(\mathbf{a}, \mathbf{b})\) をともに最適解とし，最適値を \(m \defeq \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}) = F(\mathbf{P}^\star) = F(\mathbf{Q}^\star)\) とおく．\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) と仮定する．中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性（[ref:Clm: 離散カップリング集合は凸|離散カップリング集合は凸]）よりこれに属する．[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）を中点 \(\mathbf{R} = \tfrac{1}{2}\mathbf{P}^\star + \tfrac{1}{2}\mathbf{Q}^\star\) に適用すると，\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より狭義不等号
 
 \[
-  -\Hb(\mathbf{R})
-  < \tfrac{1}{2}\bigl(-\Hb(\mathbf{P}^\star)\bigr) + \tfrac{1}{2}\bigl(-\Hb(\mathbf{Q}^\star)\bigr)
+ -\Hb(\mathbf{R})
+ < \tfrac{1}{2}\bigl(-\Hb(\mathbf{P}^\star)\bigr) + \tfrac{1}{2}\bigl(-\Hb(\mathbf{Q}^\star)\bigr)
 \]
 
 が成り立つ．また \(\inner{\mathbf{C}}{\cdot}\) は線形だから
 
 \[
-  \inner{\mathbf{C}}{\mathbf{R}}
-  = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
+ \inner{\mathbf{C}}{\mathbf{R}}
+ = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
 \]
 
 が等号で成り立つ．これらより（\(\varepsilon > 0\) は不等号の向きを保つ）
 
 \[\begin{aligned}
-  F(\mathbf{R})
-  &= \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R}) \\
-  &= \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
-     - \varepsilon\Hb(\mathbf{R}) \\
-  &< \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
-     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
-     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
-  &= \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{P}^\star} - \varepsilon\Hb(\mathbf{P}^\star)\bigr)
-     + \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{Q}^\star} - \varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
-  &= \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
+ F(\mathbf{R})
+ &= \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R}) \\
+ &= \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
+ - \varepsilon\Hb(\mathbf{R}) \\
+ &< \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
+ + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
+ + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
+ &= \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{P}^\star} - \varepsilon\Hb(\mathbf{P}^\star)\bigr)
+ + \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{Q}^\star} - \varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
+ &= \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
 \end{aligned}\]
 
-を得る．ここで第 2 行で線形性の等式を \(\inner{\mathbf{C}}{\mathbf{R}}\) に代入し，第 3 行で \(-\varepsilon\Hb(\mathbf{R})\) を狭義凸性（の \(\varepsilon\) 倍）で上から押さえた．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
+を得る．ここで第 2 行で線形性の等式を \(\inner{\mathbf{C}}{\mathbf{R}}\) に代入し，第 3 行で \(-\varepsilon\Hb(\mathbf{R})\) を狭義凸性（の \(\varepsilon\) 倍）で上から押さえた．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから\(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
 :::
 :::
 
@@ -236,50 +219,45 @@ title: エントロピー正則化
 :::definition
 ### Def: 離散 KL ダイバージェンス
 
-非負行列 \(\mathbf{P}, \mathbf{K} \in \R_{\geq 0}^{n \times m}\) に対して，
-**KL ダイバージェンス**を
+非負行列 \(\mathbf{P}, \mathbf{K} \in \R_{\geq 0}^{n \times m}\) に対して，**KL ダイバージェンス**を
 
 \[
-  \KLD(\mathbf{P} \| \mathbf{K})
-  \defeq
-  \sum_{i,j}
-  \left(
-    P_{i,j}\log\frac{P_{i,j}}{K_{i,j}}
-    - P_{i,j} + K_{i,j}
-  \right)
+ \KLD(\mathbf{P} \| \mathbf{K})
+ \defeq
+ \sum_{i,j}
+ \left(
+ P_{i,j}\log\frac{P_{i,j}}{K_{i,j}}
+ - P_{i,j} + K_{i,j}
+ \right)
 \]
 
-で定める．ただし \(0\log 0 = 0\) と約束し，
-\(P_{i,j} > 0\) かつ \(K_{i,j}=0\) となる成分がある場合は
-\(\KLD(\mathbf{P}\|\mathbf{K}) = +\infty\) とする．
+で定める．ただし \(0\log 0 = 0\) と約束し，\(P_{i,j} > 0\) かつ \(K_{i,j}=0\) となる成分がある場合は\(\KLD(\mathbf{P}\|\mathbf{K}) = +\infty\) とする．
 :::
 
 
 :::definition
 ### Def: Gibbs カーネル
 
-コスト行列 \(\mathbf{C}\) と \(\varepsilon > 0\) に対して，
-**Gibbs カーネル** \(\mathbf{K} \in \R_{>0}^{n \times m}\) を
+コスト行列 \(\mathbf{C}\) と \(\varepsilon > 0\) に対して，**Gibbs カーネル** \(\mathbf{K} \in \R_{>0}^{n \times m}\) を
 
 \[
-  K_{i,j} \defeq \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
+ K_{i,j} \defeq \exp\!\left(-\frac{C_{i,j}}{\varepsilon}\right)
 \]
 
 で定める．
 :::
 
 
-:::proposition
+:::theorem
 ### Prop: 正則化 OT は KL 射影である
 
-\(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) とすると，
-\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の最適解は
+\(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) とすると，\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の最適解は
 
 \[
-  \mathbf{P}_\varepsilon
-  =
-  \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
-  \KLD(\mathbf{P}\|\mathbf{K})
+ \mathbf{P}_\varepsilon
+ =
+ \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+ \KLD(\mathbf{P}\|\mathbf{K})
 \]
 
 と書ける．
@@ -288,26 +266,25 @@ title: エントロピー正則化
 \(\log K_{i,j} = -C_{i,j}/\varepsilon\) より
 
 \[\begin{aligned}
-  \varepsilon \KLD(\mathbf{P}\|\mathbf{K})
-  &=
-  \varepsilon\sum_{i,j}
-  \left(
-    P_{i,j}\log P_{i,j}
-    - P_{i,j}\log K_{i,j}
-    - P_{i,j}
-    + K_{i,j}
-  \right) \\
-  &=
-  \sum_{i,j} C_{i,j}P_{i,j}
-  + \varepsilon\sum_{i,j} P_{i,j}(\log P_{i,j}-1)
-  + \varepsilon\sum_{i,j} K_{i,j} \\
-  &=
-  \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
-  + \varepsilon\sum_{i,j} K_{i,j}.
+ \varepsilon \KLD(\mathbf{P}\|\mathbf{K})
+ &=
+ \varepsilon\sum_{i,j}
+ \left(
+ P_{i,j}\log P_{i,j}
+ - P_{i,j}\log K_{i,j}
+ - P_{i,j}
+ + K_{i,j}
+ \right) \\
+ &=
+ \sum_{i,j} C_{i,j}P_{i,j}
+ + \varepsilon\sum_{i,j} P_{i,j}(\log P_{i,j}-1)
+ + \varepsilon\sum_{i,j} K_{i,j} \\
+ &=
+ \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})
+ + \varepsilon\sum_{i,j} K_{i,j}.
 \end{aligned}\]
 
-最後の項は \(\mathbf{P}\) に依存しない定数なので，
-両者の最小化問題は同じ最適解を持つ．
+最後の項は \(\mathbf{P}\) に依存しない定数なので，両者の最小化問題は同じ最適解を持つ．
 :::
 :::
 
@@ -315,96 +292,51 @@ title: エントロピー正則化
 ## 正則化パラメータの極限
 
 
-非正則化 Kantorovich 問題が複数の最適解を持つとき，
-エントロピー正則化はそのうちの一つ——
-エントロピーが最大のもの——を自然に選び出す．
-
+非正則化 Kantorovich 問題が複数の最適解を持つとき，エントロピー正則化はそのうちの一つ——エントロピーが最大のもの——を自然に選び出す．
 
 :::theorem
 ### Thm: \(\varepsilon \to 0\) による非正則化 OT への収束
 
-各 \(\varepsilon > 0\) に対し，\(\mathbf{P}_\varepsilon\) を
-\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解とする．
-\(\varepsilon \to 0\) のとき，以下が成り立つ．
+各 \(\varepsilon > 0\) に対し，\(\mathbf{P}_\varepsilon\) を\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解とする．\(\varepsilon \to 0\) のとき，以下が成り立つ．
 
-**(i)**
-最適値は収束する：
-\(\displaystyle
-  \lim_{\varepsilon \to 0}
-  \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b})
-  =
-  \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}).
-\)
 
-**(ii)**
-\(\mathbf{P}_\varepsilon\) の \(\varepsilon \to 0\) における任意の極限点は
-非正則化問題の最適解である．
-
-**(iii)**
-\(\{\mathbf{P}_\varepsilon\}_{\varepsilon > 0}\) 全体が，
-非正則化最適解の中でエントロピー \(\Hb\) を最大化する
-一意な解に収束する：
+\textrm{(i)} 最適値は収束する：\(\displaystyle \lim_{\varepsilon \to 0} \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a},\mathbf{b}) = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}). \)
+\textrm{(ii)} \(\mathbf{P}_\varepsilon\) の \(\varepsilon \to 0\) における任意の極限点は非正則化問題の最適解である．
+\textrm{(iii)} \(\{\mathbf{P}_\varepsilon\}_{\varepsilon > 0}\) 全体が，非正則化最適解の中でエントロピー \(\Hb\) を最大化する一意な解に収束する：
 
 \[
-  \mathbf{P}_\varepsilon
-  \;\xrightarrow{\varepsilon \to 0}\;
-  \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
+ \mathbf{P}_\varepsilon
+ \;\xrightarrow{\varepsilon \to 0}\;
+ \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
 \]
 
 :::details-embedded 証明
 非正則化問題の任意の最適解を \(\mathbf{P}^*\) とする．
 
-**(i), (ii).**
-\(\mathbf{P}_\varepsilon\) の最適性より
+**(i), (ii).**\(\mathbf{P}_\varepsilon\) の最適性より
 
 \[
-  \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-  - \varepsilon\Hb(\mathbf{P}_\varepsilon)
-  \leq
-  \inner{\mathbf{C}}{\mathbf{P}^*}
-  - \varepsilon\Hb(\mathbf{P}^*).
+ \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+ - \varepsilon\Hb(\mathbf{P}_\varepsilon)
+ \leq
+ \inner{\mathbf{C}}{\mathbf{P}^*}
+ - \varepsilon\Hb(\mathbf{P}^*).
 \]
 
-一方，\(\mathbf{P}^*\) は非正則化問題の最適解なので
-\(\inner{\mathbf{C}}{\mathbf{P}^*}
-\leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}\) であり，
+一方，\(\mathbf{P}^*\) は非正則化問題の最適解なので\(\inner{\mathbf{C}}{\mathbf{P}^*} \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}\) であり，
 
 \[
-  0
-  \leq
-  \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-  - \inner{\mathbf{C}}{\mathbf{P}^*}
-  \leq
-  \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr).
+ 0
+ \leq
+ \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
+ - \inner{\mathbf{C}}{\mathbf{P}^*}
+ \leq
+ \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr).
 \]
 
-\(\CouplingsD(\mathbf{a}, \mathbf{b})\) はコンパクトであり，\(\Hb\) はその上で有界なので，
-右辺は \(\varepsilon \to 0\) で \(0\) に収束する．
-したがって
-\(\inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-\to \inner{\mathbf{C}}{\mathbf{P}^*}
-= \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) であり，
-\(\varepsilon\Hb(\mathbf{P}_\varepsilon) \to 0\) なので
-\(\MKD_{\mathbf{C}}^\varepsilon \to \MKD_{\mathbf{C}}\) を得る．
-コンパクト集合 \(\CouplingsD(\mathbf{a},\mathbf{b})\) 内の
-任意の極限点は非正則化問題の最適値を達成するから，
-最適解である．
+\(\CouplingsD(\mathbf{a}, \mathbf{b})\) はコンパクトであり，\(\Hb\) はその上で有界なので，右辺は \(\varepsilon \to 0\) で \(0\) に収束する．したがって\(\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \inner{\mathbf{C}}{\mathbf{P}^*} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) であり，\(\varepsilon\Hb(\mathbf{P}_\varepsilon) \to 0\) なので\(\MKD_{\mathbf{C}}^\varepsilon \to \MKD_{\mathbf{C}}\) を得る．コンパクト集合 \(\CouplingsD(\mathbf{a},\mathbf{b})\) 内の任意の極限点は非正則化問題の最適値を達成するから，最適解である．
 
-**(iii).**
-上の不等式から
-\(\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)\)
-が任意の非正則化最適解 \(\mathbf{P}^*\) について成り立つ．
-\(\Hb\) は連続であるから，任意の極限点 \(\mathbf{P}^0\) は
-非正則化最適解の中で \(\Hb\) を最大化する．
-最適解集合 \(S^*\) は凸であり（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]），
-[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]より \(-\Hb\) は
-（凸部分集合 \(S^*\) 上でも）狭義凸であるから，
-[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]より
-\(\Hb\) を最大化する \(S^*\) の元は一意である．
-したがって \(\{\mathbf{P}_\varepsilon\}\) の任意の収束部分列は
-同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは
-全体として収束するから，
-\(\mathbf{P}_\varepsilon\) は最大エントロピー最適解に収束する．
+**(iii).**上の不等式から\(\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)\)が任意の非正則化最適解 \(\mathbf{P}^*\) について成り立つ．\(\Hb\) は連続であるから，任意の極限点 \(\mathbf{P}^0\) は非正則化最適解の中で \(\Hb\) を最大化する．最適解集合 \(S^*\) は凸であり（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]），[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性] より \(-\Hb\) は（凸部分集合 \(S^*\) 上でも）狭義凸であるから，[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性] より\(\Hb\) を最大化する \(S^*\) の元は一意である．したがって \(\{\mathbf{P}_\varepsilon\}\) の任意の収束部分列は同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは全体として収束するから，\(\mathbf{P}_\varepsilon\) は最大エントロピー最適解に収束する．
 :::
 :::
 
@@ -412,13 +344,5 @@ title: エントロピー正則化
 :::fact
 ### Rem: \(\varepsilon \to +\infty\) による独立カップリングへの収束
 
-\(\varepsilon \to +\infty\) のとき
-\(\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top\) が成り立つ．
-\(\varepsilon\) で目的関数を割ると
-\(\varepsilon^{-1}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P})\)
-の最小化であり，\(\varepsilon \to +\infty\) では
-エントロピー最大化
-\(\max_{\mathbf{P} \in \CouplingsD} \Hb(\mathbf{P})\)
-に帰着する．周辺分布を固定したエントロピー最大化の解は
-独立カップリング \(\mathbf{a}\mathbf{b}^\top\) である．
+\(\varepsilon \to +\infty\) のとき\(\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top\) が成り立つ．\(\varepsilon\) で目的関数を割ると\(\varepsilon^{-1}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P})\)の最小化であり，\(\varepsilon \to +\infty\) ではエントロピー最大化\(\max_{\mathbf{P} \in \CouplingsD} \Hb(\mathbf{P})\)に帰着する．周辺分布を固定したエントロピー最大化の解は独立カップリング \(\mathbf{a}\mathbf{b}^\top\) である．
 :::

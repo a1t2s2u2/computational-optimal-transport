@@ -13,12 +13,53 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", 
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
 CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
-# 変換対象の章。ch01–ch03 は既存 md として別管理（上書きしない）、
-# ch04–ch07 は未反映、ch05 は vae-geodesic.html で独立レンダリング。
-# ここでは幾何アーク ch08–ch10 のみを生成対象とする。
-# 参照（\ref）解決は build_label_map() が全 ch*.tex を走査するため、
-# 変換対象外の章のラベルも本文中でタイトル表示される。
+# 変換対象の章。ch01–ch10 を本スクリプトで tex から生成する
+# （content/*.md は tex の生成物であり、tex が source of truth）。
+# 参照（\ref）解決は build_label_map()／build_chapter_map() が全 ch*.tex を
+# 走査するため、変換対象外の章のラベルも本文中でタイトル表示される。
 CHAPTERS = [
+    ("ch01_preliminaries.tex", "01-preliminaries.md", {
+        "id": "preliminaries",
+        "nav": "準備",
+        "eyebrow": "1. Foundations",
+        "title": "準備",
+    }),
+    ("ch02_ot_foundations.tex", "02-ot-foundations.md", {
+        "id": "ot-foundations",
+        "nav": "Monge と Kantorovich",
+        "eyebrow": "2. OT Foundations",
+        "title": "Optimal Transport の基礎理論",
+    }),
+    ("ch03_entropic_regularization.tex", "03-entropic.md", {
+        "id": "entropic",
+        "nav": "エントロピー正則化",
+        "eyebrow": "3. Entropic Regularization",
+        "title": "エントロピー正則化",
+    }),
+    ("ch04_sinkhorn.tex", "04-sinkhorn.md", {
+        "id": "sinkhorn",
+        "nav": "Sinkhorn 双対",
+        "eyebrow": "4. Sinkhorn",
+        "title": "正則化問題の双対と Sinkhorn アルゴリズム",
+    }),
+    ("ch05_wasserstein.tex", "05-wasserstein.md", {
+        "id": "wasserstein",
+        "nav": "Wasserstein 距離",
+        "eyebrow": "5. Wasserstein Distance",
+        "title": "Wasserstein 距離",
+    }),
+    ("ch06_dual.tex", "06-dual.md", {
+        "id": "dual",
+        "nav": "古典双対",
+        "eyebrow": "6. Kantorovich Duality",
+        "title": "古典 Kantorovich 双対と c-変換",
+    }),
+    ("ch07_geodesics.tex", "07-geodesics.md", {
+        "id": "geodesics",
+        "nav": "測地線",
+        "eyebrow": "7. Geodesics",
+        "title": "測地線と変位補間",
+    }),
     ("ch08_benamou_brenier.tex", "08-benamou-brenier.md", {
         "id": "benamou-brenier",
         "nav": "動的定式化",
@@ -198,17 +239,32 @@ def build_label_map():
     return label_map
 
 
+def _clean_chapter_title(title: str) -> str:
+    r"""\texorpdfstring{A}{B} -> A など、章タイトル中の表示用整形を除く。"""
+    nested = r"(?:[^{}]|\{[^{}]*\})*"
+    title = re.sub(rf"\\texorpdfstring\{{({nested})\}}\{{{nested}\}}", r"\1", title)
+    return title.strip()
+
+
 def build_chapter_map():
     r"""Scan every TeX chapter file for \chapter{TITLE}\label{ch:...} pairs.
     Returns map 'ch:label' -> TITLE so that cross-chapter \ref は章タイトルで
-    解決でき、他章への参照が一律「本章」になる誤りを避ける。"""
+    解決でき、他章への参照が一律「本章」になる誤りを避ける。
+    TITLE に入れ子の波括弧（\texorpdfstring{$c$}{c} など）があっても、
+    波括弧の対応をとって正しく抽出する。"""
     chapter_map = {}
-    pattern = re.compile(r"\\chapter\{([^}]*)\}\s*\\label\{(ch:[^}]*)\}")
     for tex_path in sorted(glob.glob(os.path.join(SEMINAR_DIR, "ch*.tex"))):
         with open(tex_path, "r", encoding="utf-8") as f:
             content = f.read()
-        for m in pattern.finditer(content):
-            chapter_map[m.group(2)] = m.group(1)
+        for m in re.finditer(r"\\chapter\{", content):
+            res = _extract_brace_arg(content, m.end() - 1)
+            if res is None:
+                continue
+            title, pos = res
+            label_m = re.match(r"\s*\\label\{(ch:[^}]*)\}", content[pos:pos + 200])
+            if not label_m:
+                continue
+            chapter_map[label_m.group(1)] = _clean_chapter_title(title)
     return chapter_map
 
 
@@ -267,6 +323,12 @@ def convert_paragraph(text: str) -> str:
     return re.sub(r"\\paragraph\{([^}]*)\}", r"\n**\1**\n", text)
 
 
+def convert_texorpdfstring(text: str) -> str:
+    r"""\texorpdfstring{A}{B} -> A（見出し・本文中に現れる表示用整形を除く）。"""
+    nested = r"(?:[^{}]|\{[^{}]*\})*"
+    return re.sub(rf"\\texorpdfstring\{{({nested})\}}\{{{nested}\}}", r"\1", text)
+
+
 def apply_inline_conversions(text: str, convert_references: bool = True) -> str:
     """Apply all inline-level conversions to a line of text."""
     text = strip_label(text)
@@ -277,6 +339,7 @@ def apply_inline_conversions(text: str, convert_references: bool = True) -> str:
     text = convert_tilde(text)
     text = convert_text_commands(text)
     text = convert_paragraph(text)
+    text = convert_texorpdfstring(text)
     text = convert_inline_math(text)
     return text
 
@@ -629,7 +692,7 @@ def _render_list_item(output, prefix, item_nodes):
         nonlocal first_text
         if not text_buf:
             return
-        text = " ".join(t for t in text_buf if t)
+        text = "".join(t for t in text_buf if t)
         text = apply_inline_conversions(text)
         if text:
             if first_text:
@@ -658,9 +721,21 @@ def _render_list_item(output, prefix, item_nodes):
 def render_nodes(nodes, indent=0):
     """Render parsed nodes into markdown lines."""
     output = []
+    text_buf = []
+
+    def flush_text():
+        # 段落内で連続するテキスト行を 1 行に連結する。
+        # build.mjs は段落をスペースで連結するため、ここで連結しておかないと
+        # 行折り返し位置に日本語の余計な空白が入る。CJK 想定で空文字連結。
+        if text_buf:
+            output.append("".join(text_buf))
+            text_buf.clear()
 
     for node in nodes:
         kind = node[0]
+
+        if kind != "text":
+            flush_text()
 
         if kind == "blank":
             output.append("")
@@ -778,15 +853,13 @@ def render_nodes(nodes, indent=0):
             continue
 
         if kind == "text":
-            text = node[1]
             # Strip leading TeX indentation (typically 2-space indent inside envs)
-            text = text.strip()
-            if not text:
-                continue
-            text = apply_inline_conversions(text)
-            output.append(text)
+            text = node[1].strip()
+            if text:
+                text_buf.append(apply_inline_conversions(text))
             continue
 
+    flush_text()
     return output
 
 

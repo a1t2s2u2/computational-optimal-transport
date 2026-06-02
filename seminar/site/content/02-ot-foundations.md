@@ -9,14 +9,11 @@ title: Optimal Transport の基礎理論
 :::fact
 ### Rem: 本章の設定
 
-\((\X, d_\X)\), \((\Y, d_\Y)\) は**完備可分な距離空間**（Polish 空間，
-[ref:Def: Polish 空間|Polish 空間]）とする．
-ボレル \(\sigma\)-代数 \(\Bb(\X)\) により \(\X\) を可測空間 \((\X, \Bb(\X))\) として扱う
-（\(\Y\) についても同様）．\(\X\) 上の確率測度全体を \(\Mm_+^1(\X)\) と記す．
+\((\X, d_\X)\), \((\Y, d_\Y)\) は**完備可分な距離空間**（Polish 空間，[ref:Def: Polish 空間|Polish 空間]）とする．ボレル \(\sigma\)-代数 \(\Bb(\X)\) により \(\X\) を可測空間 \((\X, \Bb(\X))\) として扱う（\(\Y\) についても同様）．\(\X\) 上の確率測度全体を \(\Mm_+^1(\X)\) と記す．
 
 Polish 空間の3要素を確認する：
 
-- **距離空間**．距離関数 \(d_\X \colon \X \times \X \to [0, \infty)\) が距離の公理 （[ref:Def: 距離空間|距離空間]）を満たし，\(d_\X\) から以下が順次定まる：
+- **距離空間**．距離関数\(d_\X \colon \X \times \X \to [0, \infty)\) が距離の公理（[ref:Def: 距離空間|距離空間]）を満たし，\(d_\X\) から以下が順次定まる：
 
 \[\begin{aligned}
  B_r(x)
@@ -31,7 +28,7 @@ Polish 空間の3要素を確認する：
  && \text{（ボレル } \sigma\text{-代数，定義）}
 \end{aligned}\]
 
-ここで \(\sigma(\mathcal{O}_{d_\X})\) は，\(\mathcal{O}_{d_\X}\) を含む \(\X\) 上のすべての \(\sigma\)-代数の共通部分
+ここで \(\sigma(\mathcal{O}_{d_\X})\) は，\(\mathcal{O}_{d_\X}\) を含む\(\X\) 上のすべての \(\sigma\)-代数の共通部分
 
 \[
  \sigma(\mathcal{O}_{d_\X})
@@ -44,8 +41,8 @@ Polish 空間の3要素を確認する：
  \bigr\}
 \]
 
-として定まる．これにより可測空間 \((\X, \Bb(\X))\) （[ref:Def: 可測空間|可測空間]）が得られる．
-- **完備性**． 列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは， 任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して \(n, m \geq N \Longrightarrow d_\X(x_n, x_m) < \varepsilon\) が成り立つことをいう． \((\X, d_\X)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が \(\X\) の点に収束する（[ref:Def: 収束列|収束列]）ことをいう． すなわち
+として定まる．これにより可測空間 \((\X, \Bb(\X))\)（[ref:Def: 可測空間|可測空間]）が得られる．
+- **完備性**．列 \((x_n)_{n \geq 1} \subset \X\) が**Cauchy 列**であるとは，任意の \(\varepsilon > 0\) に対してある \(N \in \N\) が存在して\(n, m \geq N \Longrightarrow d_\X(x_n, x_m) < \varepsilon\) が成り立つことをいう．\((\X, d_\X)\) が完備とは，任意の Cauchy 列 \((x_n) \subset \X\) が\(\X\) の点に収束する（[ref:Def: 収束列|収束列]）ことをいう．すなわち
 
 \[
  \forall (x_n) \subset \X \text{ Cauchy 列},\;
@@ -62,7 +59,7 @@ Polish 空間の3要素を確認する：
  n \geq N \Longrightarrow d_\X(x_n, x) < \varepsilon.
 \]
 
-- **可分性**． \(D \subset \X\) が**稠密**であるとは，任意の空でない開集合 \(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう （[ref:Def: 稠密集合|稠密集合]）． 距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し \(\exists q \in D,\; d_\X(x, q) < \varepsilon\)」と同値． \((\X, d_\X)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が 存在することをいう（[ref:Def: 可分性|可分性]）．すなわち
+- **可分性**．\(D \subset \X\) が**稠密**であるとは，任意の空でない開集合\(U \subset \X\) に対し \(D \cap U \neq \emptyset\) となることをいう（[ref:Def: 稠密集合|稠密集合]）．距離空間ではこれは「任意の \(x \in \X\) と任意の \(\varepsilon > 0\) に対し\(\exists q \in D,\; d_\X(x, q) < \varepsilon\)」と同値．\((\X, d_\X)\) が可分とは可算な稠密部分集合 \(D \subset \X\) が存在することをいう（[ref:Def: 可分性|可分性]）．すなわち
 
 \[
  \exists D \subset \X \text{ 可算},\;
@@ -71,16 +68,12 @@ Polish 空間の3要素を確認する：
 \]
 
 
-離散版では確率測度の表示に現れる点集合
-\(S \defeq \{x_1, \ldots, x_n\} \subset \X\) は有限集合となる．
-\(S\) にどの距離 \(d\) を入れた距離空間 \((S, d)\) も
-自動で Polish 空間となる（\(\X\) の可測構造は \(S\) に制限することで継承される）：
+離散版では確率測度の表示に現れる点集合\(S \defeq \{x_1, \ldots, x_n\} \subset \X\) は有限集合となる．\(S\) にどの距離 \(d\) を入れた距離空間 \((S, d)\) も自動で Polish 空間となる（\(\X\) の可測構造は \(S\) に制限することで継承される）：
 
-- **完備性．** \(n = 1\) なら \(S = \{x_1\}\) ゆえ 任意の列は \(y_k = x_1\) (\(\forall k\)) なる定値列であり， \(d(y_k, x_1) = 0\) より \(x_1\) に収束する． 以下 \(n \geq 2\) とする．相異なる 2 点間の距離の最小値を \(\delta \defeq \min_{i \neq j} d(x_i, x_j)\) とおく． これは有限個の正数の最小値なので \(\delta > 0\)． 任意の Cauchy 列 \((y_k)_{k \geq 1} \subset S\) に対し， Cauchy 条件で \(\varepsilon \defeq \delta / 2\) を取ると， ある \(N \in \N\) が存在して \(k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta\)． 一方 \(S\) の相異なる 2 点の距離は \(\delta\) 以上だから， \(d(y_k, y_l) < \delta\) は \(y_k = y_l\) を強制する． ゆえに列 \((y_k)\) は \(N\) 以降すべて同一の点となり，その点に収束する．
-- **可分性．** \(S\) 自身が有限（特に可算）集合であり， 自身の中で稠密だから可分．
+- **完備性．** \(n = 1\) なら \(S = \{x_1\}\) ゆえ任意の列は \(y_k = x_1\) (\(\forall k\)) なる定値列であり，\(d(y_k, x_1) = 0\) より \(x_1\) に収束する．以下 \(n \geq 2\) とする．相異なる 2 点間の距離の最小値を\(\delta \defeq \min_{i \neq j} d(x_i, x_j)\) とおく．これは有限個の正数の最小値なので \(\delta > 0\)．任意の Cauchy 列 \((y_k)_{k \geq 1} \subset S\) に対し，Cauchy 条件で \(\varepsilon \defeq \delta / 2\) を取ると，ある \(N \in \N\) が存在して\(k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta\)．一方 \(S\) の相異なる 2 点の距離は \(\delta\) 以上だから，\(d(y_k, y_l) < \delta\) は \(y_k = y_l\) を強制する．ゆえに列 \((y_k)\) は \(N\) 以降すべて同一の点となり，その点に収束する．
+- **可分性．** \(S\) 自身が有限（特に可算）集合であり，自身の中で稠密だから可分．
 
-したがって本章の Polish 強化は連続側で必要となる一方，
-離散版には追加制約を課さない．
+したがって本章の Polish 強化は連続側で必要となる一方，離散版には追加制約を課さない．
 :::
 
 
@@ -90,8 +83,7 @@ Polish 空間の3要素を確認する：
 :::definition
 ### Def: 最適割当問題
 
-\(n \in \N\)，置換 \(\sigma \in \Perm(n)\)，
-および行列 \(\mathbf{C} \in \R_+^{n \times n}\) に対して，
+\(n \in \N\)，置換 \(\sigma \in \Perm(n)\)，および行列 \(\mathbf{C} \in \R_{\geq 0}^{n \times n}\) に対して，
 
 \[
  \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
@@ -101,9 +93,7 @@ Polish 空間の3要素を確認する：
 :::
 
 
-添字 \(i\) から \(j\) への**輸送コスト**を \(C_{i,j}\) と解釈すれば，
-\(\sigma(i) = j\) は \(i\) を \(j\) に割り当てることを意味し，
-目的関数 \(\frac{1}{n}\sum_i C_{i, \sigma(i)}\) はその割当の平均輸送コストを表す．
+添字 \(i\) から \(j\) への**輸送コスト**を \(C_{i,j}\) と解釈すれば，\(\sigma(i) = j\) は \(i\) を \(j\) に割り当てることを意味し，目的関数 \(\frac{1}{n}\sum_i C_{i, \sigma(i)}\) はその割当の平均輸送コストを表す．
 
 :::fact accent
 ### Ex: 最適割当
@@ -115,22 +105,20 @@ Polish 空間の3要素を確認する：
  \begin{pmatrix}
  1 & 4 \\
  2 & 1
- \end{pmatrix} \in \R_+^{2 \times 2}
+ \end{pmatrix} \in \R_{\geq 0}^{2 \times 2}
 \]
 
 を考える．\(\Perm(2) = \{(1,2),\, (2,1)\}\) の \(2! = 2\) 通りの割当を以下に図示する．
 
 
-各割当のコストをまとめると，
-よって \(\sigma = (1, 2)\) が最小コスト \(1\) を達成し，最適である．
+各割当のコストをまとめると，よって \(\sigma = (1, 2)\) が最小コスト \(1\) を達成し，最適である．
 :::
 
 
 :::theorem
 ### Clm: 最適解の存在
 
-任意の \(n \in \N\) と任意の \(\mathbf{C} \in \R_+^{n \times n}\) に対して，
-最適割当問題の最小値は達成される．
+任意の \(n \in \N\) と任意の \(\mathbf{C} \in \R_{\geq 0}^{n \times n}\) に対して，最適割当問題の最小値は達成される．
 
 :::details-embedded 証明
 \(\Perm(n)\) は \(|\Perm(n)| = n!\) の有限集合なので，集合
@@ -139,9 +127,7 @@ Polish 空間の3要素を確認する：
  \left\{ \frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} \;\middle|\; \sigma \in \Perm(n) \right\}
 \]
 
-は高々 \(n!\) 個の実数からなる空でない有限集合である．
-\(\R\) の空でない有限部分集合は最小元を持つ（[ref:Clm: 有限集合の最小元|有限集合の最小元]）
-ので，それを達成する \(\sigma^* \in \Perm(n)\) が存在する．
+は高々 \(n!\) 個の実数からなる空でない有限集合である．\(\R\) の空でない有限部分集合は最小元を持つ（[ref:Clm: 有限集合の最小元|有限集合の最小元]）ので，それを達成する \(\sigma^* \in \Perm(n)\) が存在する．
 :::
 :::
 
@@ -149,15 +135,10 @@ Polish 空間の3要素を確認する：
 :::theorem
 ### Clm: 最適解が一意でない場合の存在
 
-任意の \(n \geq 2\) に対して，
-異なる \(\sigma_1, \sigma_2 \in \Perm(n)\) がともに最小値を達成するような
-\(\mathbf{C} \in \R_+^{n \times n}\) が存在する．
+任意の \(n \geq 2\) に対して，異なる \(\sigma_1, \sigma_2 \in \Perm(n)\) がともに最小値を達成するような\(\mathbf{C} \in \R_{\geq 0}^{n \times n}\) が存在する．
 
 :::details-embedded 証明
-\(C_{i,j} \defeq 1\)（\(i, j = 1, \ldots, n\)）と定めると，任意の \(\sigma \in \Perm(n)\) に対して
-\(\frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} = 1\)．
-異なる \(\sigma_1, \sigma_2 \in \Perm(n)\) を取れば，
-いずれも最小値 \(1\) を達成する．
+\(C_{i,j} \defeq 1\)（\(i, j = 1, \ldots, n\)）と定めると，任意の \(\sigma \in \Perm(n)\) に対して\(\frac{1}{n}\sum_{i=1}^{n} C_{i, \sigma(i)} = 1\)．異なる \(\sigma_1, \sigma_2 \in \Perm(n)\) を取れば，いずれも最小値 \(1\) を達成する．
 :::
 :::
 
@@ -165,17 +146,12 @@ Polish 空間の3要素を確認する：
 ## Monge 問題
 
 
-最適割当問題（[ref:Def: 最適割当問題|最適割当問題]）は有限の添字集合 \(\range{n}\) と
-均一重み \(1/n\) を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
-\(\X, \Y\) と任意の確率測度に拡張する：
-これに基づく連続版の輸送問題が **Monge 問題**である．
+最適割当問題（[ref:Def: 最適割当問題|最適割当問題]）は有限の添字集合 \(\range{n}\) と均一重み \(1/n\) を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間\(\X, \Y\) と任意の確率測度に拡張する：これに基づく連続版の輸送問題が **Monge 問題**である．
 
 :::definition
 ### Def: Monge 問題
 
-\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
-可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
-**Monge 問題**とは
+\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と可測関数 \(c \colon \X \times \Y \to \R_{\geq 0}\) に対して，**Monge 問題**とは
 
 \[
  \inf_{T}
@@ -191,12 +167,7 @@ Polish 空間の3要素を確認する：
 :::
 
 
-\(c(x, y)\) を \(x\) から \(y\) への**輸送コスト**と解釈すれば，
-写像 \(T \colon \X \to \Y\) は \(x\) にある質量を \(T(x)\) へ送ることを意味し，
-目的関数 \(\int_\X c(x, T(x)) \, \d\alpha(x)\) はその輸送の総コストを表す．
-この問題には次節で示す通り，実行可能集合の **非凸性** と
-**解の非存在**という本質的な困難があり，
-**Kantorovich 緩和**はこれらをカップリングによって解消する．
+\(c(x, y)\) を \(x\) から \(y\) への**輸送コスト**と解釈すれば，写像 \(T \colon \X \to \Y\) は \(x\) にある質量を \(T(x)\) へ送ることを意味し，目的関数 \(\int_\X c(x, T(x)) \, \d\alpha(x)\) はその輸送の総コストを表す．この問題には次節で示す通り，実行可能集合の **非凸性** と**解の非存在**という本質的な困難があり，**Kantorovich 緩和**はこれらをカップリングによって解消する．
 
 
 ### Monge 問題の本質的困難
@@ -205,11 +176,7 @@ Polish 空間の3要素を確認する：
 **困難1：実行可能集合の非凸性**
 
 
-\(\X = \Y = \R\) とする．
-このとき可測写像 \(T \colon \R \to \R\) の全体は，点ごとの和・スカラー倍
-\((tT_1 + (1-t)T_2)(x) \defeq t\, T_1(x) + (1-t)\, T_2(x)\)
-によりベクトル空間をなす．この空間の部分集合としての
-Monge 問題の実行可能集合
+\(\X = \Y = \R\) とする．このとき可測写像 \(T \colon \R \to \R\) の全体は，点ごとの和・スカラー倍\((tT_1 + (1-t)T_2)(x) \defeq t\, T_1(x) + (1-t)\, T_2(x)\)によりベクトル空間をなす．この空間の部分集合としてのMonge 問題の実行可能集合
 
 \[
  \mathcal{T}(\alpha, \beta)
@@ -254,12 +221,7 @@ Monge 問題の実行可能集合
 
 よって \(T_1, T_2 \in \mathcal{T}(\alpha, \beta)\) である．
 
-一方，\(\bar{T} = \tfrac{1}{2}T_1 + \tfrac{1}{2}T_2\) は
-\(\bar{T}(x) = \tfrac{1}{2}x + \tfrac{1}{2}(-x) = 0\)
-すなわち \(0\) を値にとる定値写像であり，
-\(\bar{T}\pushforward\alpha = \delta_0 \neq \beta\)．
-よって \(\bar{T} \notin \mathcal{T}(\alpha, \beta)\) であり，
-\(\mathcal{T}(\alpha, \beta)\) は凸でない．
+一方，\(\bar{T} = \tfrac{1}{2}T_1 + \tfrac{1}{2}T_2\) は\(\bar{T}(x) = \tfrac{1}{2}x + \tfrac{1}{2}(-x) = 0\)すなわち \(0\) を値にとる定値写像であり，\(\bar{T}\pushforward\alpha = \delta_0 \neq \beta\)．よって \(\bar{T} \notin \mathcal{T}(\alpha, \beta)\) であり，\(\mathcal{T}(\alpha, \beta)\) は凸でない．
 :::
 
 
@@ -269,22 +231,13 @@ Monge 問題の実行可能集合
 :::fact accent
 ### Ex: Monge 写像が存在しない場合
 
-\(\alpha = \delta_0\)（質量 \(1\) が 1 点 \(0\) に集中）と
-\(\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1\)（2 点に質量 \(\tfrac{1}{2}\) ずつ分散）
-を考える．任意の可測写像 \(T \colon \R \to \R\) について
-[ref:Prop: Dirac 測度と離散測度の押し出し|Dirac 測度と離散測度の押し出し] (i) より
+\(\alpha = \delta_0\)（質量 \(1\) が 1 点 \(0\) に集中）と\(\beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1\)（2 点に質量 \(\tfrac{1}{2}\) ずつ分散）を考える．任意の可測写像 \(T \colon \R \to \R\) について[ref:Prop: Dirac 測度と離散測度の押し出し|Dirac 測度と離散測度の押し出し] (i) より
 
 \[
  T\pushforward \alpha = T\pushforward \delta_0 = \delta_{T(0)}
 \]
 
-となる．これは点 \(T(0)\) に質量 \(1\) を集中させた測度ゆえ
-\(\delta_{T(0)}(\{T(0)\}) = 1\)．一方 \(\beta\) は任意の単点 \(\{y\}\) に対し
-\(\beta(\{y\}) \in \{0,\, \tfrac{1}{2}\}\)（\(y = \pm 1\) のとき \(\tfrac{1}{2}\)，
-それ以外で \(0\)）しか与えないので，どの \(T(0) \in \R\) をとっても
-\(\delta_{T(0)} \neq \beta\) である．
-したがって \(T\pushforward \alpha = \beta\) をみたす \(T\) は存在せず，
-\(\mathcal{T}(\alpha, \beta) = \emptyset\)（下図）．
+となる．これは点 \(T(0)\) に質量 \(1\) を集中させた測度ゆえ\(\delta_{T(0)}(\{T(0)\}) = 1\)．一方 \(\beta\) は任意の単点 \(\{y\}\) に対し\(\beta(\{y\}) \in \{0,\, \tfrac{1}{2}\}\)（\(y = \pm 1\) のとき \(\tfrac{1}{2}\)，それ以外で \(0\)）しか与えないので，どの \(T(0) \in \R\) をとっても\(\delta_{T(0)} \neq \beta\) である．したがって \(T\pushforward \alpha = \beta\) をみたす \(T\) は存在せず，\(\mathcal{T}(\alpha, \beta) = \emptyset\)（下図）．
 :::
 
 
@@ -300,9 +253,7 @@ Monge 問題の実行可能集合
 :::definition
 ### Def: Kantorovich 問題
 
-\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と
-可測関数 \(c \colon \X \times \Y \to \R_+\) に対して，
-**カップリング集合**
+\(\X, \Y\) 上の確率測度 \(\alpha \in \Mm_+^1(\X)\), \(\beta \in \Mm_+^1(\Y)\) と可測関数 \(c \colon \X \times \Y \to \R_{\geq 0}\) に対して，**カップリング集合**
 
 \[
  \Couplings(\alpha, \beta) \defeq
@@ -329,9 +280,7 @@ Monge 問題の実行可能集合
 :::fact
 ### Rem: 押し出しを用いたコンパクトな表現
 
-カップリング条件は，射影（[ref:Def: 射影|射影]）
-\(P_\X \colon (x,y) \mapsto x\)，\(P_\Y \colon (x,y) \mapsto y\) と
-押し出し（[ref:Def: 押し出し|押し出し]）を用いると
+カップリング条件は，射影（[ref:Def: 射影|射影]）\(P_\X \colon (x,y) \mapsto x\)，\(P_\Y \colon (x,y) \mapsto y\) と押し出し（[ref:Def: 押し出し|押し出し]）を用いると
 
 \[
  (P_\X)\pushforward \pi = \alpha, \qquad (P_\Y)\pushforward \pi = \beta
@@ -346,9 +295,7 @@ Monge 問題の実行可能集合
  = \pi(A \times \Y),
 \]
 
-ゆえに \((P_\X)\pushforward \pi = \alpha\) は
-\(\pi(A \times \Y) = \alpha(A)\)（\(\forall\, A \in \Bb(\X)\)）と同値である．
-\(P_\Y\) についても同様．
+ゆえに \((P_\X)\pushforward \pi = \alpha\) は\(\pi(A \times \Y) = \alpha(A)\)（\(\forall\, A \in \Bb(\X)\)）と同値である．\(P_\Y\) についても同様．
 :::
 
 
@@ -360,22 +307,18 @@ Monge 問題の実行可能集合
 :::theorem
 ### Prop: 連続 Kantorovich 問題の離散化
 
-\(\mathbf{a} \in \R_{++}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{++}^m\)（\(\sum_j b_j = 1\)），
-\(x_1, \ldots, x_n \in \X\)（\(i \neq j \Rightarrow x_i \neq x_j\)），
-\(y_1, \ldots, y_m \in \Y\)（\(i \neq j \Rightarrow y_i \neq y_j\)），
-可測関数 \(c \colon \X \times \Y \to \R_+\) を所与とし，
+\(\mathbf{a} \in \R_{>0}^n\)（\(\sum_i a_i = 1\)），\(\mathbf{b} \in \R_{>0}^m\)（\(\sum_j b_j = 1\)），\(x_1, \ldots, x_n \in \X\)（\(i \neq j \Rightarrow x_i \neq x_j\)），\(y_1, \ldots, y_m \in \Y\)（\(i \neq j \Rightarrow y_i \neq y_j\)），可測関数 \(c \colon \X \times \Y \to \R_{\geq 0}\) を所与とし，
 
 \[
  \alpha \defeq \sum_{i=1}^n a_i\, \delta_{x_i} \in \Mm_+^1(\X), \qquad
  \beta \defeq \sum_{j=1}^m b_j\, \delta_{y_j} \in \Mm_+^1(\Y)
 \]
 
-とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_+^{n \times m}\) および
-**離散カップリング集合**
+とおく．行列 \(\mathbf{C} \defeq \bigl(c(x_i, y_j)\bigr)_{i,j} \in \R_{\geq 0}^{n \times m}\) および**離散カップリング集合**
 
 \[
  \CouplingsD(\mathbf{a}, \mathbf{b}) \defeq
- \left\{ \mathbf{P} \in \R_+^{n \times m} \;\middle|\;
+ \left\{ \mathbf{P} \in \R_{\geq 0}^{n \times m} \;\middle|\;
  \mathbf{P}\ones_m = \mathbf{a},\;
  \mathbf{P}^\top\ones_n = \mathbf{b}
  \right\}
@@ -390,26 +333,21 @@ Monge 問題の実行可能集合
  \inner{\mathbf{C}}{\mathbf{P}}
 \]
 
-が成り立つ．ここで \(\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}\) はフロベニウス内積
-（[ref:Def: フロベニウス内積|フロベニウス内積]）である．
+が成り立つ．ここで \(\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}\) はフロベニウス内積（[ref:Def: フロベニウス内積|フロベニウス内積]）である．
 
 :::details-embedded 証明
 次の 2 点を示す：
 
-(A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\) が存在する（(A-1) \(\varphi\) の構成，(A-2) 値域の確認，(A-3) 全射性，(A-4) 単射性）．
-(B) \(\varphi\) はコストを保存する： \(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
+(A) 全単射 \(\varphi \colon \Couplings(\alpha,\beta) \xrightarrow{\sim} \CouplingsD(\mathbf{a},\mathbf{b})\)が存在する（(A-1) \(\varphi\) の構成，(A-2) 値域の確認，(A-3) 全射性，(A-4) 単射性）．
+(B) \(\varphi\) はコストを保存する：\(\displaystyle\int_{\X\times\Y} c\,\d\pi = \inner{\mathbf{C}}{\varphi(\pi)}\)．
 
-**(A-1) \(\varphi\) の構成．**
-任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．
-周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と
-\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
+**(A-1) \(\varphi\) の構成．**任意の \(\pi \in \Couplings(\alpha, \beta)\) をとる．周辺条件 \(\pi(A \times \Y) = \alpha(A)\)（\(\forall A \in \Bb(\X)\)）と\(\alpha(\X \setminus \{x_1,\ldots,x_n\}) = 0\) から
 
 \[
  \pi\bigl((\X \setminus \{x_1,\ldots,x_n\}) \times \Y\bigr) = 0,
 \]
 
-同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．
-測度の劣加法性から
+同様に \(\pi(\X \times (\Y \setminus \{y_1,\ldots,y_m\})) = 0\)．測度の劣加法性から
 
 \[
  \pi\bigl((\X\times\Y)\setminus(\{x_1,\ldots,x_n\}\times\{y_1,\ldots,y_m\})\bigr)
@@ -426,8 +364,7 @@ Monge 問題の実行可能集合
 
 と定めると \(\pi = \sum_{i,j} P_{i,j}\, \delta_{(x_i, y_j)}\) と書ける．
 
-**(A-2) \(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)（周辺条件 \(\leftrightarrow\) 行・列和条件）．**
-任意の \(k\) に対し，
+**(A-2) \(\varphi(\pi) \in \CouplingsD(\mathbf{a},\mathbf{b})\)（周辺条件 \(\leftrightarrow\) 行・列和条件）．**任意の \(k\) に対し，
 
 \[
  \sum_{j=1}^m P_{k,j}
@@ -437,16 +374,9 @@ Monge 問題の実行可能集合
  = \alpha(\{x_k\}) = a_k.
 \]
 
-第二の等号は \(\{y_j\}\) が互いに素であることによる \(\sigma\)-加法性，
-第三の等号は (A-1) より \(\pi\) の質量が格子上のみに集中することによる．
-ゆえに \(\mathbf{P}\ones_m = \mathbf{a}\)．
-同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．
-ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
+第二の等号は \(\{y_j\}\) が互いに素であることによる \(\sigma\)-加法性，第三の等号は (A-1) より \(\pi\) の質量が格子上のみに集中することによる．ゆえに \(\mathbf{P}\ones_m = \mathbf{a}\)．同様に \(\pi(\X \times \{y_l\}) = \beta(\{y_l\}) = b_l\) から \(\mathbf{P}^\top\ones_n = \mathbf{b}\)．ゆえに \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\)．
 
-**(A-3) 全射性．**
-任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し
-\(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，
-任意の \(A \in \Bb(\X)\) について
+**(A-3) 全射性．**任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対し\(\pi' \defeq \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) とおくと，任意の \(A \in \Bb(\X)\) について
 
 \[
  \pi'(A \times \Y)
@@ -455,9 +385,7 @@ Monge 問題の実行可能集合
  = \alpha(A),
 \]
 
-同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）だから
-\(\pi' \in \Couplings(\alpha,\beta)\)．
-また \(\varphi(\pi')_{i,j} = \pi'(\{x_i\} \times \{y_j\})\) に \(\pi' = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}\) を代入すると，
+同様に \(\pi'(\X \times B) = \beta(B)\)（\(\forall B \in \Bb(\Y)\)）だから\(\pi' \in \Couplings(\alpha,\beta)\)．また \(\varphi(\pi')_{i,j} = \pi'(\{x_i\} \times \{y_j\})\) に \(\pi' = \sum_{k,l} P_{k,l}\,\delta_{(x_k,y_l)}\) を代入すると，
 
 \[
  \pi'(\{x_i\} \times \{y_j\})
@@ -465,12 +393,9 @@ Monge 問題の実行可能集合
  = P_{i,j}.
 \]
 
-最後の等号は，\(x_k\) はすべて互いに異なり \(y_l\) もすべて互いに異なるという仮定より，\(\delta_{(x_k,y_l)}(\{x_i\}\times\{y_j\})=1\) となるのは \((k,l)=(i,j)\) のときに限ることによる．
-ゆえに \(\varphi(\pi') = \mathbf{P}\) であり，任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して \(\varphi(\pi') = \mathbf{P}\) を満たす \(\pi' \in \Couplings(\alpha,\beta)\) が存在するから，\(\varphi\) は全射である．
+最後の等号は，\(x_k\) はすべて互いに異なり \(y_l\) もすべて互いに異なるという仮定より，\(\delta_{(x_k,y_l)}(\{x_i\}\times\{y_j\})=1\) となるのは \((k,l)=(i,j)\) のときに限ることによる．ゆえに \(\varphi(\pi') = \mathbf{P}\) であり，任意の \(\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})\) に対して \(\varphi(\pi') = \mathbf{P}\) を満たす \(\pi' \in \Couplings(\alpha,\beta)\) が存在するから，\(\varphi\) は全射である．
 
-**(A-4) 単射性．**
-任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおくと，
-(A-1) より
+**(A-4) 単射性．**任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおくと，(A-1) より
 
 \[
  \pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}
@@ -478,18 +403,14 @@ Monge 問題の実行可能集合
 
 と一意に表せる．ゆえに \(\varphi(\pi)\) が等しければ \(\pi\) も等しく，\(\varphi\) は単射である．
 
-**(B) \(\varphi\) はコストを保存する．**
-任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおく．
-(A-1) より \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) だから，
-積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）を適用すると
+**(B) \(\varphi\) はコストを保存する．**任意の \(\pi \in \Couplings(\alpha,\beta)\) をとり \(\mathbf{P} \defeq \varphi(\pi)\) とおく．(A-1) より \(\pi = \sum_{i,j} P_{i,j}\,\delta_{(x_i,y_j)}\) だから，積分の線形性（[ref:Prop: 積分の測度に関する線形性|積分の測度に関する線形性]）を適用すると
 
 \[
  \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
  = \sum_{i,j} P_{i,j} \int_{\X \times \Y} c(x, y)\, \d\delta_{(x_i,y_j)}(x,y).
 \]
 
-Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）より
-\(\int c\,\d\delta_{(x_i,y_j)} = c(x_i,y_j) = C_{i,j}\) だから，
+Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 測度に対する積分]）より\(\int c\,\d\delta_{(x_i,y_j)} = c(x_i,y_j) = C_{i,j}\) だから，
 
 \[
  \int_{\X \times \Y} c(x, y)\, \d\pi(x, y)
@@ -498,8 +419,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 \]
 
 
-**結論．**
-(A)(B) より \(\varphi\) はコストを保存する全単射だから，
+**結論．**(A)(B) より \(\varphi\) はコストを保存する全単射だから，
 
 \[
  \MK_c(\alpha, \beta)
@@ -524,23 +444,14 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 :::fact
 ### Rem: 相異性条件の必要性
 
-命題の仮定「\(i \neq j \Rightarrow x_i \neq x_j\)」は全単射 \(\varphi\) の全射性に本質的である．
-もし \(x_i = x_k\)（\(i \neq k\)）であれば，\(\varphi(\pi)_{i,j} = \varphi(\pi)_{k,j} = \pi(\{x_i\} \times \{y_j\})\)
-となり，\(\varphi\) の値域は常に \(P_{i,j} = P_{k,j}\) を満たす行列に限定される．
-一方 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) には \(P_{i,j} \neq P_{k,j}\) な行列が存在するため，
-\(\varphi\) は全射とならず命題の等式が崩れる．
-なお，重複点を統合すれば（\(a_i + a_k\) をまとめた）より小さい次元の多面体との全単射が取れるため，
-離散 Kantorovich 問題の枠組み自体は相異性なしでも成立する．
+命題の仮定「\(i \neq j \Rightarrow x_i \neq x_j\)」は全単射 \(\varphi\) の全射性に本質的である．もし \(x_i = x_k\)（\(i \neq k\)）であれば，\(\varphi(\pi)_{i,j} = \varphi(\pi)_{k,j} = \pi(\{x_i\} \times \{y_j\})\)となり，\(\varphi\) の値域は常に \(P_{i,j} = P_{k,j}\) を満たす行列に限定される．一方 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) には \(P_{i,j} \neq P_{k,j}\) な行列が存在するため，\(\varphi\) は全射とならず命題の等式が崩れる．なお，重複点を統合すれば（\(a_i + a_k\) をまとめた）より小さい次元の多面体との全単射が取れるため，離散 Kantorovich 問題の枠組み自体は相異性なしでも成立する．
 :::
 
 
 :::fact accent
 ### Ex: 工場からスーパーへの輸送
 
-2 つの工場 \(x_1, x_2\) から 2 つのスーパー \(y_1, y_2\) へ商品を輸送する状況を考える．
-各工場の供給割合を \(\mathbf{a} = (2/3,\; 1/3)^\top\)，
-各スーパーの需要割合を \(\mathbf{b} = (1/3,\; 2/3)^\top\) とし，
-輸送コスト行列を
+2 つの工場 \(x_1, x_2\) から 2 つのスーパー \(y_1, y_2\) へ商品を輸送する状況を考える．各工場の供給割合を \(\mathbf{a} = (2/3,\; 1/3)^\top\)，各スーパーの需要割合を \(\mathbf{b} = (1/3,\; 2/3)^\top\) とし，輸送コスト行列を
 
 \[
  \mathbf{C} =
@@ -558,8 +469,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 とする（図）．
 
 
-コストの安い経路 \(x_1 \to y_1\)（コスト \(1\)）と \(x_2 \to y_2\)（コスト \(1\)）を
-最大限利用し，残りを \(x_1 \to y_2\)（コスト \(2\)）で補うのが最適であり，
+コストの安い経路 \(x_1 \to y_1\)（コスト \(1\)）と \(x_2 \to y_2\)（コスト \(1\)）を最大限利用し，残りを \(x_1 \to y_2\)（コスト \(2\)）で補うのが最適であり，
 
 \[
  \mathbf{P}^{\star} =
@@ -603,8 +513,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 :::theorem
 ### Clm: 離散 Kantorovich 問題の解の存在
 
-任意の \(\mathbf{a} \in \R_{++}^n\)，\(\mathbf{b} \in \R_{++}^m\)
-（\(\sum_i a_i = \sum_j b_j = 1\)）と \(\mathbf{C} \in \R_+^{n \times m}\) に対して，
+任意の \(\mathbf{a} \in \R_{>0}^n\)，\(\mathbf{b} \in \R_{>0}^m\)（\(\sum_i a_i = \sum_j b_j = 1\)）と \(\mathbf{C} \in \R_{\geq 0}^{n \times m}\) に対して，
 
 \[
  \MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b}) = \inner{\mathbf{C}}{\mathbf{P}^*}
@@ -613,16 +522,9 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 をみたす \(\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})\) が存在する．
 
 :::details-embedded 証明
-以下の3点を示せばよい：
-(i) \(\CouplingsD(\mathbf{a}, \mathbf{b}) \neq \emptyset\)，
-(ii) \(\CouplingsD(\mathbf{a}, \mathbf{b}) \subset \R^{n \times m}\) はコンパクト，
-(iii) 目的関数 \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は連続．
+以下の3点を示せばよい：(i) \(\CouplingsD(\mathbf{a}, \mathbf{b}) \neq \emptyset\)，(ii) \(\CouplingsD(\mathbf{a}, \mathbf{b}) \subset \R^{n \times m}\) はコンパクト，(iii) 目的関数 \(\mathbf{P} \mapsto \inner{\mathbf{C}}{\mathbf{P}}\) は連続．
 
-**(i) 非空性．**
-\(\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top\) を考える．
-これは各成分が \((P_0)_{i,j} = a_i b_j\) で定まる \(n \times m\) 行列であり，
-\(a_i, b_j > 0\) より \(\mathbf{P}_0 \geq \mathbf{0}\) である．
-行和について，\(\sum_j b_j = 1\) を用いて
+**(i) 非空性．**\(\mathbf{P}_0 \defeq \mathbf{a}\mathbf{b}^\top\) を考える．これは各成分が \((P_0)_{i,j} = a_i b_j\) で定まる \(n \times m\) 行列であり，\(a_i, b_j > 0\) より \(\mathbf{P}_0 \geq \mathbf{0}\) である．行和について，\(\sum_j b_j = 1\) を用いて
 
 \[
  (\mathbf{P}_0 \ones_m)_i
@@ -631,50 +533,21 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  = a_i,
 \]
 
-すなわち \(\mathbf{P}_0 \ones_m = \mathbf{a}\)．
-同様に \(\sum_i a_i = 1\) から \(\mathbf{P}_0^\top \ones_n = \mathbf{b}\)．
-よって \(\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
-（\(\mathbf{P}_0\) は連続版における独立カップリング \(\alpha \otimes \beta\)
-の離散版に相当する．）
+すなわち \(\mathbf{P}_0 \ones_m = \mathbf{a}\)．同様に \(\sum_i a_i = 1\) から \(\mathbf{P}_0^\top \ones_n = \mathbf{b}\)．よって \(\mathbf{P}_0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．（\(\mathbf{P}_0\) は連続版における独立カップリング \(\alpha \otimes \beta\)の離散版に相当する．）
 
-**(ii) コンパクト性．**
-周辺条件を定める関数
-\(f(\mathbf{P}) \defeq (\mathbf{P}\ones_m,\, \mathbf{P}^\top \ones_n)\)
-は \(\R^{n \times m}\) から \(\R^n \times \R^m\) への写像である．
-\(f\) の各成分 \(\sum_j P_{i,j}\)，\(\sum_i P_{i,j}\) は
-\(P_{i,j}\) の一次式であるから \(\R^{n \times m}\) 上の線形関数
-（[ref:Def: 線形関数|線形関数]）であり，
-有限次元ノルム空間上の線形関数は連続であるから
-（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），
-\(f\) は連続である．
-よって \(f^{-1}(\{(\mathbf{a}, \mathbf{b})\})\) は
-一点集合（閉集合）の引き戻しとして閉集合である
-（[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し]）．
-また \(\R_+^{n \times m}\) は \(\R^{n \times m}\) の閉集合であるから，
+**(ii) コンパクト性．**周辺条件を定める関数\(f(\mathbf{P}) \defeq (\mathbf{P}\ones_m,\, \mathbf{P}^\top \ones_n)\)は \(\R^{n \times m}\) から \(\R^n \times \R^m\) への写像である．\(f\) の各成分 \(\sum_j P_{i,j}\)，\(\sum_i P_{i,j}\) は\(P_{i,j}\) の一次式であるから \(\R^{n \times m}\) 上の線形関数（[ref:Def: 線形関数|線形関数]）であり，有限次元ノルム空間上の線形関数は連続であるから（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），\(f\) は連続である．よって \(f^{-1}(\{(\mathbf{a}, \mathbf{b})\})\) は一点集合（閉集合）の引き戻しとして閉集合である（[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し]）．また \(\R_{\geq 0}^{n \times m}\) は \(\R^{n \times m}\) の閉集合であるから，
 
 \[
-  \CouplingsD(\mathbf{a}, \mathbf{b})
-  = f^{-1}\bigl(\{(\mathbf{a}, \mathbf{b})\}\bigr)
-    \cap \R_+^{n \times m}
+ \CouplingsD(\mathbf{a}, \mathbf{b})
+ = f^{-1}\bigl(\{(\mathbf{a}, \mathbf{b})\}\bigr)
+ \cap \R_{\geq 0}^{n \times m}
 \]
 
-は閉集合の共通部分として閉集合である．
-さらに，行和条件 \(\sum_j P_{i,j} = a_i\) と \(P_{i,j} \geq 0\) から
-\(0 \leq P_{i,j} \leq a_i\) が従い，\(\sum_i a_i = 1\) より \(a_i \leq 1\) だから有界．
-\(\R^{n \times m}\) における有界閉集合はコンパクト
-（[ref:Thm: Heine-Borel の定理|Heine-Borel の定理]）．
+は閉集合の共通部分として閉集合である．さらに，行和条件 \(\sum_j P_{i,j} = a_i\) と \(P_{i,j} \geq 0\) から\(0 \leq P_{i,j} \leq a_i\) が従い，\(\sum_i a_i = 1\) より \(a_i \leq 1\) だから有界．\(\R^{n \times m}\) における有界閉集合はコンパクト（[ref:Thm: Heine-Borel の定理|Heine-Borel の定理]）．
 
-**(iii) 連続性．**
-目的関数を \(f(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}\) とおく．
-これは \(\mathbf{P}\) の各成分 \(P_{i,j}\) に関する一次式である．
-したがって \(f\) は \(\R^{n\times m}\) 上の線形関数であり，
-有限次元ノルム空間上の線形関数は連続であるから
-（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），\(f\) は連続である．
+**(iii) 連続性．**目的関数を \(f(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}} = \sum_{i,j} C_{i,j} P_{i,j}\) とおく．これは \(\mathbf{P}\) の各成分 \(P_{i,j}\) に関する一次式である．したがって \(f\) は \(\R^{n \times m}\) 上の線形関数であり，有限次元ノルム空間上の線形関数は連続であるから（[ref:Prop: 有限次元ノルム空間上の線形関数の連続性|有限次元ノルム空間上の線形関数の連続性]），\(f\) は連続である．
 
-以上 (i)--(iii) と Weierstrass の最大値の定理
-（[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より，
-空でないコンパクト集合上の連続関数は最小値を達成する．
-したがって最適解 \(\mathbf{P}^*\) が存在する．
+以上 (i)--(iii) と Weierstrass の最大値の定理（[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]）より，空でないコンパクト集合上の連続関数は最小値を達成する．したがって最適解 \(\mathbf{P}^*\) が存在する．
 :::
 :::
 
@@ -691,27 +564,24 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 :::theorem
 ### Clm: 離散カップリング集合は凸
 
-離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸集合である．
-すなわち \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in [0,1]\) に対して
-\(t\mathbf{P} + (1-t)\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
+離散カップリング集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は凸集合である．すなわち \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と\(t \in [0,1]\) に対して\(t\mathbf{P} + (1-t)\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．
 
 :::details-embedded 証明
-\(\mathbf{R} \defeq t\mathbf{P} + (1-t)\mathbf{Q}\) とおく．
-\(\mathbf{P}, \mathbf{Q} \geq \mathbf{0}\) かつ \(t \in [0,1]\) より \(\mathbf{R} \geq \mathbf{0}\)．
-また周辺条件は線形だから
+\(\mathbf{R} \defeq t\mathbf{P} + (1-t)\mathbf{Q}\) とおく．\(\mathbf{P}, \mathbf{Q} \geq \mathbf{0}\) かつ \(t \in [0,1]\) より \(\mathbf{R} \geq \mathbf{0}\)．また周辺条件は線形だから
 
 \[
-  \mathbf{R}\ones_m
-  = t\mathbf{P}\ones_m + (1-t)\mathbf{Q}\ones_m
-  = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a},
-  \qquad
-  \mathbf{R}^\top\ones_n
-  = t\mathbf{b} + (1-t)\mathbf{b} = \mathbf{b}.
+ \mathbf{R}\ones_m
+ = t\mathbf{P}\ones_m + (1-t)\mathbf{Q}\ones_m
+ = t\mathbf{a} + (1-t)\mathbf{a} = \mathbf{a},
+ \qquad
+ \mathbf{R}^\top\ones_n
+ = t\mathbf{b} + (1-t)\mathbf{b} = \mathbf{b}.
 \]
 
-ゆえに \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．非負制約と線形な周辺制約だけで定まる集合だから凸である．
+ゆえに \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．すなわち非負制約と線形な周辺制約だけで定まる集合だから凸である．
 :::
 :::
+
 
 :::theorem
 ### Clm: 最適解集合は凸かつコンパクト
@@ -730,11 +600,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 は凸かつコンパクトである．
 
 :::details-embedded 証明
-**凸性．**
-\(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，
-\(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) とおく．
-[ref:Clm: 離散カップリング集合は凸|離散カップリング集合は凸]より \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，
-さらに内積の線形性から
+**凸性．**\(\mathbf{P}^*, \mathbf{Q}^* \in S^*\) と \(t \in [0,1]\) に対し，\(\mathbf{R} \defeq t\mathbf{P}^* + (1-t)\mathbf{Q}^*\) とおく．[ref:Clm: 離散カップリング集合は凸|離散カップリング集合は凸]より \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，さらに内積の線形性から
 
 \[
  \inner{\mathbf{C}}{\mathbf{R}}
@@ -744,13 +610,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 
 よって \(\mathbf{R} \in S^*\)．
 
-**コンパクト性．**
-\(g(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}}\) は連続写像であり，
-\(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\) は閉集合だから，
-[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し] より
-\(g^{-1}(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}) = \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\)
-は閉集合である．
-したがって \(S^*\) はコンパクト集合 \(\CouplingsD(\mathbf{a},\mathbf{b})\) とこの閉集合の共通部分であるからコンパクト．
+**コンパクト性．**\(g(\mathbf{P}) \defeq \inner{\mathbf{C}}{\mathbf{P}}\) は連続写像であり，\(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\) は閉集合だから，[ref:Prop: 連続写像による閉集合の引き戻し|連続写像による閉集合の引き戻し] より\(g^{-1}(\{\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}) = \{\mathbf{P} \mid \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\}\)は閉集合である．したがって \(S^*\) はコンパクト集合 \(\CouplingsD(\mathbf{a},\mathbf{b})\) とこの閉集合の共通部分であるからコンパクト．
 :::
 :::
 
@@ -758,8 +618,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 :::fact accent
 ### Ex: 最適解の非一意性
 
-\(n = m = 2\)，\(\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)^\top\) とし，
-コスト行列を
+\(n = m = 2\)，\(\mathbf{a} = \mathbf{b} = (1/2,\; 1/2)^\top\) とし，コスト行列を
 
 \[
  \mathbf{C} = \begin{pmatrix} 1 & 3 \\ 3 & 5 \end{pmatrix}
@@ -767,8 +626,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 
 とする．
 
-**\(\CouplingsD(\mathbf{a},\mathbf{b})\) の構造．**
-\(P_{1,1} = t \in [0, 1/2]\) と置くと，行和・列和の条件から順に
+**\(\CouplingsD(\mathbf{a},\mathbf{b})\) の構造．**\(P_{1,1} = t \in [0, 1/2]\) と置くと，行和・列和の条件から順に
 
 \[\begin{aligned}
  P_{1,2} &= \tfrac{1}{2} - t \quad \text{（1行目の行和）},\\
@@ -783,8 +641,7 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
 \]
 
 
-**全元が最適解である理由．**
-この \(\mathbf{P}\) のコストを \(t\) で計算すると
+**全元が最適解である理由．**この \(\mathbf{P}\) のコストを \(t\) で計算すると
 
 \[
  \inner{\mathbf{C}}{\mathbf{P}}
@@ -792,24 +649,29 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  = (1 - 3 - 3 + 5)t + 3 = 3.
 \]
 
-\(t\) が消えてコストが定数になるため，\(\CouplingsD(\mathbf{a},\mathbf{b})\) の全元が最適解であり
-\(S^* = \CouplingsD(\mathbf{a},\mathbf{b})\)．
-逆に \(C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}\) ならば \(t\) の係数が非ゼロとなり，最適解は一意となる．
+\(t\) が消えてコストが定数になるため，\(\CouplingsD(\mathbf{a},\mathbf{b})\) の全元が最適解であり\(S^* = \CouplingsD(\mathbf{a},\mathbf{b})\)．逆に \(C_{1,1} + C_{2,2} \neq C_{1,2} + C_{2,1}\) ならば \(t\) の係数が非ゼロとなり，最適解は一意となる．
+:::
+
+
+:::fact
+### Rem: 線形計画と一意性
+
+離散 Kantorovich 問題は線形計画であるため，非一意性は目的関数の線形性に本質的に起因する：2つの異なる最適解 \(\mathbf{P}_1, \mathbf{P}_2 \in S^*\) があれば，\(\inner{\mathbf{C}}{t\mathbf{P}_1 + (1-t)\mathbf{P}_2} = t\inner{\mathbf{C}}{\mathbf{P}_1} + (1-t)\inner{\mathbf{C}}{\mathbf{P}_2} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\)より任意の凸結合も最適となる．
+
+Lebesgue 測度に関して「ほとんどすべて」のコスト行列\(\mathbf{C} \in \R^{n \times m}\) に対して最適解は一意であることが知られているが，この一意性は特定の \(\mathbf{C}\) に対して構造的に保証されるものではなく，実用上の検証も困難である．
 :::
 
 
 :::fact
 ### Rem: エントロピー正則化による一意性の回復
 
-離散 Kantorovich 問題の最適解は一般に一意でないが，
-**離散エントロピー**
+離散 Kantorovich 問題の最適解は一般に一意でないが，**離散エントロピー**
 
 \[
  \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)
 \]
 
-（[ref:Def: 離散エントロピー|離散エントロピー]）を用いた正則化パラメータ \(\varepsilon > 0\)
-によるエントロピー正則化
+（[ref:Def: 離散エントロピー|離散エントロピー]）を用いた正則化パラメータ \(\varepsilon > 0\)によるエントロピー正則化
 
 \[
  \min_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
@@ -819,5 +681,5 @@ Dirac 測度に対する積分（[ref:Clm: Dirac 測度に対する積分|Dirac 
  \right\}
 \]
 
-は狭義凸最適化であり，最適解は一意に定まる（本章）．
+は狭義凸最適化であり，最適解は一意に定まる（「エントロピー正則化」の章）．
 :::
