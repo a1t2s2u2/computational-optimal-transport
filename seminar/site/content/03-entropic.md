@@ -195,37 +195,27 @@ title: エントロピー正則化
 
 **一意性．**
 正則化項がコストの線形性を破り，目的関数 \(F\) を狭義凸化する点が鍵である．
-\(\mathbf{P}^\star, \mathbf{Q}^\star \in \CouplingsD(\mathbf{a}, \mathbf{b})\) をともに最適解とし，最適値を \(m \defeq \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}) = F(\mathbf{P}^\star) = F(\mathbf{Q}^\star)\) とおく．\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) と仮定する．
-中点 \(\mathbf{R} \defeq \tfrac{1}{2}(\mathbf{P}^\star + \mathbf{Q}^\star)\) は，\(\CouplingsD(\mathbf{a}, \mathbf{b})\) の凸性よりこれに属する．[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）を中点 \(\mathbf{R} = \tfrac{1}{2}\mathbf{P}^\star + \tfrac{1}{2}\mathbf{Q}^\star\) に適用すると，\(\mathbf{P}^\star \neq \mathbf{Q}^\star\) より狭義不等号
+相異なる \(\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) と \(t \in (0,1)\) に対し，\(\inner{\mathbf{C}}{\cdot}\) の線形性より
 
 \[
-  -\Hb(\mathbf{R})
-  < \tfrac{1}{2}\bigl(-\Hb(\mathbf{P}^\star)\bigr) + \tfrac{1}{2}\bigl(-\Hb(\mathbf{Q}^\star)\bigr)
+  \inner{\mathbf{C}}{t\mathbf{P}+(1-t)\mathbf{Q}}
+  = t\inner{\mathbf{C}}{\mathbf{P}} + (1-t)\inner{\mathbf{C}}{\mathbf{Q}}
 \]
 
-が成り立つ．また \(\inner{\mathbf{C}}{\cdot}\) は線形だから
+が等号で成り立ち，[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]（\(-\Hb\) の狭義凸性）と \(\varepsilon > 0\) より
 
 \[
-  \inner{\mathbf{C}}{\mathbf{R}}
-  = \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}
+  -\varepsilon\Hb\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr)
+  < t\bigl(-\varepsilon\Hb(\mathbf{P})\bigr) + (1-t)\bigl(-\varepsilon\Hb(\mathbf{Q})\bigr)
 \]
 
-が等号で成り立つ．これらより（\(\varepsilon > 0\) は不等号の向きを保つ）
+が狭義不等号で成り立つ（\(\varepsilon > 0\) は向きを保つ）．辺々を加えると
 
-\[\begin{aligned}
-  F(\mathbf{R})
-  &= \inner{\mathbf{C}}{\mathbf{R}} - \varepsilon\Hb(\mathbf{R}) \\
-  &= \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
-     - \varepsilon\Hb(\mathbf{R}) \\
-  &< \Bigl(\tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{P}^\star} + \tfrac{1}{2}\inner{\mathbf{C}}{\mathbf{Q}^\star}\Bigr)
-     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{P}^\star)\bigr)
-     + \tfrac{1}{2}\bigl(-\varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
-  &= \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{P}^\star} - \varepsilon\Hb(\mathbf{P}^\star)\bigr)
-     + \tfrac{1}{2}\bigl(\inner{\mathbf{C}}{\mathbf{Q}^\star} - \varepsilon\Hb(\mathbf{Q}^\star)\bigr) \\
-  &= \tfrac{1}{2}F(\mathbf{P}^\star) + \tfrac{1}{2}F(\mathbf{Q}^\star) = m
-\end{aligned}\]
+\[
+  F\bigl(t\mathbf{P}+(1-t)\mathbf{Q}\bigr) < tF(\mathbf{P}) + (1-t)F(\mathbf{Q}),
+\]
 
-を得る．ここで第 2 行で線形性の等式を \(\inner{\mathbf{C}}{\mathbf{R}}\) に代入し，第 3 行で \(-\varepsilon\Hb(\mathbf{R})\) を狭義凸性（の \(\varepsilon\) 倍）で上から押さえた．しかし \(\mathbf{R} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) かつ \(m\) は \(F\) の最小値だから \(F(\mathbf{R}) \geq m\) でなければならず，矛盾．よって \(\mathbf{P}^\star = \mathbf{Q}^\star\)，すなわち最適解は一意である．
+すなわち \(F\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で狭義凸である．存在パートより \(F\) はコンパクト集合 \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で最小値を達成するから，[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]より最小点は一意である．
 :::
 :::
 
