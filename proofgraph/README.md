@@ -1,8 +1,8 @@
-# proofgraph — 数学ブロック依存グラフ + 空間レイヤ + Lean 足場
+# proofgraph — 数学ブロック依存グラフ + 空間レイヤ
 
 セミナー資料（`seminar/tex/ch*.tex`）の Def / Prop / Thm / Claim / Rem / Ex ブロックの
 **依存関係**を抽出し、**空間ごとに層別**して俯瞰し、証明の **AND/OR 分岐（ルート A / B）** を
-表現し、将来的に **Lean4 + Mathlib** の形式検証へつなぐためのツール群。
+表現するためのツール群。
 
 既存の TeX パーサ（`seminar/site/scripts/tex2md.py`）を再利用して構築している。
 
@@ -11,18 +11,24 @@
 ```
 seminar/tex/ch*.tex  ──(\blockmeta 注釈)──▶  extractor.py  ──▶  out/graph.json
                                                                    │
-                                          ┌────────────────────────┼─────────────┐
-                                          ▼                        ▼             ▼
-                                     validate.py             viewer/(Web)    lean_gen.py
-                                  (循環/空間/ルート)        (可視化・層別)     (Lean 生成)
+                                              ┌────────────────────┴────────────┐
+                                              ▼                                  ▼
+                                         validate.py                       viewer/(Web)
+                                      (循環/空間/ルート)                  (可視化・層別・フォーカス)
 ```
 
 ## 使い方
 
+依存は [uv](https://docs.astral.sh/uv/) で管理する（`proofgraph/pyproject.toml`）。
+すべて単一の `pg.py` から起動する。
+
 ```bash
-python3 proofgraph/extractor.py     # tex → out/graph.json
-python3 proofgraph/validate.py      # graph.json の健全性検証（CI 用に非ゼロ終了）
+cd proofgraph
+uv run pg.py            # 抽出 → 検証 → viewer サーバ起動（既定）
 ```
+
+ブラウザで **http://localhost:8000/viewer/** が開ける。個別実行や CI 向けは
+[USAGE.md](USAGE.md) を参照。抽出不要のデモは `?data=sample.graph.json` で開ける。
 
 ## `\blockmeta` 注釈スキーマ
 
@@ -41,7 +47,6 @@ python3 proofgraph/validate.py      # graph.json の健全性検証（CI 用に�
 | `space`   | このブロックが成り立つ前提空間 | `spaces.yaml` のキー（カンマ区切り可） |
 | `uses`    | statement レベルの依存（前提） | `prefix:label`（カンマ区切り）。省略時は body 内 `\ref` から自動補完 |
 | `route.X` | 証明ルート X が依存するブロック集合（連言 AND） | `prefix:label`（カンマ区切り） |
-| `lean`    | 対応する Lean 宣言名 | 文字列（例 `ot.kantorovichDuality`） |
 
 - **複数の `route.*` は選言（OR）＝同値な別証明**を表す。1 本でも健全（接地可能）なら定理は接地される。
 - `route.*` も `uses` も省略すると、proof 内 / body 内の `\ref` から自動補完される（`_auto` ルート）。
@@ -68,42 +73,13 @@ ch06 の Kantorovich 双対定理は、本文中に「$c$-変換による別証�
 `route.A`（LP 強双対、弱双対性を使う）と `route.B`（$c$-変換）を明示すると、ルート A が定理を
 独立に接地し、OR 解決で循環が解ける。これが本ツールが扱う「ルート A / ルート B」構造の実例。
 
-## Lean4 連携（`lean_gen.py` → `lean/`）
+## viewer の主な操作
 
-`graph.json` から 2 つの Lean ファイルを生成する。
-
-```bash
-python3 proofgraph/lean_gen.py
-```
-
-### 1. `lean/Ot/Generated/Skeleton.lean`（Mathlib 不要・即検証可能）
-
-各ブロックを `opaque … : Prop` として宣言し、その「証明済み性」を同名 `_pf` 項で表す。
-証明付きブロックは採択ルートの依存 `_pf` を `have` で参照し `sorry` で閉じる。
-
-```bash
-cd lean && lean Ot/Generated/Skeleton.lean     # Mathlib 不要、数秒
-# あるいは  lake build Ot
-```
-
-これにより Lean の型検査が次を保証する:
-- **依存先の存在**（dangling なら unknown identifier エラー）
-- **非循環性**（循環なら位相順に並べられず前方参照エラー）
-- **未証明 obligation 数** = `sorry` の数
-
-数学的内容ではなく「証明の骨格」を検証する層。`validate.py` の構造検査を Lean に二重化したもの。
-
-### 2. `lean/Ot/Generated/MathlibCheck.lean`（`import Mathlib`）
-
-`\blockmeta{lean=...}` の対応先（例 `MetricSpace`, `PolishSpace`, `CompleteSpace`）が
-Mathlib に実在するかを `#check @…` で検証する。初回のみ Mathlib キャッシュ取得が必要:
-
-```bash
-cd lean && lake update && lake exe cache get && lake build Ot.Generated.MathlibCheck
-```
-
-`lean/lakefile.toml` が Mathlib を `require` している（実連携）。`lean-toolchain` は
-Mathlib リリースに合わせて `v4.30.0` に固定。
+- **フォーカス**: ノードを選ぶと、その依存先（上流＝青辺）と被依存（下流＝紫辺）だけに絞って
+  再配置する。`直接`（1 ホップ）/ `推移閉包`（全前後）を選べる。依存関係を読む主役機能。
+- **章ごとにグループ化**: ノードを章コンテナにまとめ、どの章の結果かを示す。
+- **ラベル自動**: 俯瞰時は非表示、ズーム / ホバー / 選択 / フォーカス時のみ表示（過密回避）。
+- **空間で層別 / 種類・章・辺フィルタ / 支持集合の強調** も従来どおり。
 
 ## 状態
 
@@ -111,4 +87,4 @@ Mathlib リリースに合わせて `v4.30.0` に固定。
 - [x] Phase 1: 抽出器 `extractor.py` / 検証器 `validate.py` / モデル `model.py`
 - [x] Phase 2: 可視化 viewer（Cytoscape.js）
 - [x] Phase 3: AND/OR ルートの支持集合可視化
-- [x] Phase 4: Lean4 スケルトン生成 `lean_gen.py` + Mathlib マッピング検証
+- [x] Phase 4: フォーカス（依存近傍に絞り込み）・章グループ化・ラベル自動表示

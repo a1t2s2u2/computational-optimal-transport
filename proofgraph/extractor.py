@@ -10,7 +10,7 @@
 ブロックごとに以下を抽出する:
   - env / title / label / 章・節・小節
   - body 内の \\ref（statement 依存）と proof 内の \\ref（証明依存）を分離
-  - \\blockmeta{...}（space=, uses=, route.X=, lean=）
+  - \\blockmeta{...}（space=, uses=, route.X=）
 
 出力 proofgraph/out/graph.json:
   {nodes, edges, routes, spaces(lattice), stats}
@@ -127,9 +127,9 @@ def _extract_blockmeta(body: str) -> tuple:
 
 
 def _parse_meta(arg: str) -> dict:
-    """'space=polish; uses=a,b; route.A=c; lean=x' -> dict。
+    """'space=polish; uses=a,b; route.A=c' -> dict。
 
-    値はカンマ区切りでリスト化（lean は文字列のまま）。route.* は別キーで保持。
+    値はカンマ区切りでリスト化。route.* は別キーで保持。
     """
     meta: dict = {}
     for part in arg.split(";"):
@@ -139,11 +139,8 @@ def _parse_meta(arg: str) -> dict:
         key, _, val = part.partition("=")
         key = key.strip()
         val = val.strip()
-        if key == "lean":
-            meta["lean"] = val
-        else:
-            items = [v.strip() for v in val.split(",") if v.strip()]
-            meta[key] = items
+        items = [v.strip() for v in val.split(",") if v.strip()]
+        meta[key] = items
     return meta
 
 
@@ -252,7 +249,7 @@ def _build_node(env, title, label, chapter, section, subsection,
         id=node_id, env=env, title=title,
         chapter=chapter, section=section, subsection=subsection,
         source_file=source_file, spaces=spaces, uses=uses, routes=routes,
-        lean=meta.get("lean", ""), has_proof=bool(proofs),
+        has_proof=bool(proofs),
     )
 
 
@@ -268,7 +265,7 @@ def build_graph(nodes: list, lattice: SpaceLattice) -> dict:
         node_json.append({
             "id": n.id, "env": n.env, "title": n.title,
             "chapter": n.chapter, "section": n.section, "subsection": n.subsection,
-            "source_file": n.source_file, "spaces": n.spaces, "lean": n.lean,
+            "source_file": n.source_file, "spaces": n.spaces,
             "has_proof": n.has_proof, "is_axiomatic": n.is_axiomatic,
         })
         for u in n.uses:
@@ -286,7 +283,6 @@ def build_graph(nodes: list, lattice: SpaceLattice) -> dict:
             "n_nodes": len(node_json),
             "n_edges": len(edges),
             "n_annotated_space": sum(1 for n in nodes if n.spaces),
-            "n_lean_mapped": sum(1 for n in nodes if n.lean),
         },
     }
 
@@ -320,7 +316,7 @@ def main() -> None:
 
     s = graph["stats"]
     print(f"nodes={s['n_nodes']} edges={s['n_edges']} "
-          f"space-annotated={s['n_annotated_space']} lean-mapped={s['n_lean_mapped']}")
+          f"space-annotated={s['n_annotated_space']}")
     print(f"→ {OUTPUT_PATH}")
 
 

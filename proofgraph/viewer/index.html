@@ -57,22 +57,51 @@
     </section>
 
     <section>
+      <h2>フォーカス</h2>
+      <p class="hint">ノードを選ぶと、その<strong>依存先（上流）と被依存（下流）</strong>だけに絞り込んで再配置します。</p>
+      <select id="focus-scope">
+        <option value="off">オフ（全体表示）</option>
+        <option value="direct">選択時：直接の前後（1 ホップ）</option>
+        <option value="transitive">選択時：推移閉包（全前後）</option>
+      </select>
+    </section>
+
+    <section>
+      <h2>表示</h2>
+      <label><input type="checkbox" id="group-chapter" checked> 章ごとにグループ化</label>
+      <label class="row">ラベル
+        <select id="label-mode" class="inline">
+          <option value="auto">自動（ズーム / hover / 選択）</option>
+          <option value="always">常時表示</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
       <h2>レイアウト</h2>
       <select id="layout-select">
         <option value="dagre">階層（dagre, 依存方向）</option>
         <option value="cose">力学（cose）</option>
         <option value="breadthfirst">幅優先</option>
       </select>
-      <button id="fit-btn">全体表示</button>
+      <button id="fit-btn">全体表示に戻す</button>
     </section>
 
     <section>
       <h2>凡例</h2>
       <div class="legend">
-        <div>━━ uses（前提）</div>
-        <div>┅┅ proof（証明）</div>
-        <div><span class="ring"></span> 二重枠 = Lean 対応あり</div>
+        <div>━━ uses（前提）／ ┅┅ proof（証明）</div>
+        <div><span class="dot" style="background:#2563eb"></span> 青辺 = 依存先（上流・使うもの）</div>
+        <div><span class="dot" style="background:#7c3aed"></span> 紫辺 = 被依存（下流・使われ先）</div>
         <div><span class="dot" style="background:#16a34a"></span> 緑強調 = 支持集合</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>データ</h2>
+      <div class="dataset">
+        <a href="./">セミナー（実データ）</a>
+        <a href="./?data=sample.graph.json">サンプル（デモ）</a>
       </div>
     </section>
   </aside>
@@ -86,7 +115,7 @@
       <h2 id="d-title"></h2>
       <div id="d-loc" class="muted"></div>
       <div id="d-spaces"></div>
-      <div id="d-lean"></div>
+      <div id="d-focus" class="focus-btns"></div>
 
       <div id="d-routes-wrap">
         <h3>証明ルート（AND/OR）</h3>

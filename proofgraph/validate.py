@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""graph.json の構造的健全性を検証する（Lean 以前の軽量整合性チェック）。
+"""graph.json の構造的健全性を検証する（軽量な整合性チェック）。
 
 検査項目:
   1. dangling ref   : 存在しないブロックを指す依存
@@ -39,7 +39,7 @@ def load_graph(path: str) -> DependencyGraph:
             id=n["id"], env=n["env"], title=n["title"],
             chapter=n.get("chapter", ""), section=n.get("section", ""),
             source_file=n.get("source_file", ""),
-            spaces=n.get("spaces", []), lean=n.get("lean", ""),
+            spaces=n.get("spaces", []),
             has_proof=n.get("has_proof", False),
             uses=uses_by_node.get(n["id"], []),
             routes=routes_by_node.get(n["id"], []),

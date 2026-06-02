@@ -1,0 +1,48 @@
+{
+  "_comment": "proofgraph viewer のデモ用サンプル。out/graph.json と同じスキーマの小さな手書き例（微分積分の基礎）。viewer/?data=sample.graph.json で開く。",
+  "nodes": [
+    { "id": "def:open-set", "env": "definition", "title": "開集合", "chapter": "位相と連続", "section": "", "subsection": "", "source_file": "demo", "spaces": ["metric"],"has_proof": false, "is_axiomatic": true },
+    { "id": "def:continuous", "env": "definition", "title": "連続写像", "chapter": "位相と連続", "section": "", "subsection": "", "source_file": "demo", "spaces": ["metric"],"has_proof": false, "is_axiomatic": false },
+    { "id": "def:compact", "env": "definition", "title": "コンパクト性", "chapter": "位相と連続", "section": "", "subsection": "", "source_file": "demo", "spaces": ["metric"],"has_proof": false, "is_axiomatic": false },
+    { "id": "thm:weierstrass", "env": "theorem", "title": "最大値定理（Weierstrass）", "chapter": "位相と連続", "section": "", "subsection": "", "source_file": "demo", "spaces": ["metric"],"has_proof": true, "is_axiomatic": false },
+    { "id": "def:derivative", "env": "definition", "title": "微分係数", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": false, "is_axiomatic": false },
+    { "id": "prop:fermat", "env": "proposition", "title": "Fermat の停留点定理", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": true, "is_axiomatic": false },
+    { "id": "thm:rolle", "env": "theorem", "title": "Rolle の定理", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": true, "is_axiomatic": false },
+    { "id": "thm:mvt", "env": "theorem", "title": "平均値の定理", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": true, "is_axiomatic": false },
+    { "id": "rem:monotonicity", "env": "remark", "title": "注意：導関数の符号と単調性", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": false, "is_axiomatic": false },
+    { "id": "ex:sqrt-bound", "env": "example", "title": "例：$\\sqrt{x}$ の評価", "chapter": "微分", "section": "", "subsection": "", "source_file": "demo", "spaces": ["normed"],"has_proof": false, "is_axiomatic": false }
+  ],
+  "edges": [
+    { "from": "def:continuous", "to": "def:open-set", "kind": "uses" },
+    { "from": "def:compact", "to": "def:open-set", "kind": "uses" },
+    { "from": "thm:weierstrass", "to": "def:continuous", "kind": "uses" },
+    { "from": "thm:weierstrass", "to": "def:compact", "kind": "uses" },
+    { "from": "thm:weierstrass", "to": "def:continuous", "kind": "proof", "route": "_auto" },
+    { "from": "thm:weierstrass", "to": "def:compact", "kind": "proof", "route": "_auto" },
+    { "from": "def:derivative", "to": "def:continuous", "kind": "uses" },
+    { "from": "prop:fermat", "to": "def:derivative", "kind": "uses" },
+    { "from": "prop:fermat", "to": "def:derivative", "kind": "proof", "route": "_auto" },
+    { "from": "thm:rolle", "to": "def:derivative", "kind": "uses" },
+    { "from": "thm:rolle", "to": "thm:weierstrass", "kind": "proof", "route": "_auto" },
+    { "from": "thm:rolle", "to": "prop:fermat", "kind": "proof", "route": "_auto" },
+    { "from": "thm:mvt", "to": "def:derivative", "kind": "uses" },
+    { "from": "thm:mvt", "to": "thm:rolle", "kind": "proof", "route": "A" },
+    { "from": "thm:mvt", "to": "prop:fermat", "kind": "proof", "route": "B" },
+    { "from": "thm:mvt", "to": "thm:weierstrass", "kind": "proof", "route": "B" },
+    { "from": "rem:monotonicity", "to": "thm:mvt", "kind": "uses" },
+    { "from": "ex:sqrt-bound", "to": "thm:mvt", "kind": "uses" }
+  ],
+  "routes": [
+    { "node": "thm:weierstrass", "route": "_auto", "deps": ["def:continuous", "def:compact"] },
+    { "node": "prop:fermat", "route": "_auto", "deps": ["def:derivative"] },
+    { "node": "thm:rolle", "route": "_auto", "deps": ["thm:weierstrass", "prop:fermat"] },
+    { "node": "thm:mvt", "route": "A", "deps": ["thm:rolle"] },
+    { "node": "thm:mvt", "route": "B", "deps": ["prop:fermat", "thm:weierstrass"] }
+  ],
+  "spaces": {
+    "set": { "label": "集合", "refines": [], "closure": ["set"] },
+    "metric": { "label": "距離空間", "refines": ["set"], "closure": ["metric", "set"] },
+    "normed": { "label": "ノルム空間", "refines": ["metric"], "closure": ["normed", "metric", "set"] }
+  },
+  "stats": { "n_nodes": 10, "n_edges": 18, "n_annotated_space": 10 }
+}

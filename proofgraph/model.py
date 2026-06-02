@@ -111,7 +111,6 @@ class Node:
     spaces: list = field(default_factory=list)   # 空間タグ
     uses: list = field(default_factory=list)     # statement 依存（AND）
     routes: list = field(default_factory=list)   # 証明ルート（OR of AND）: list[Route]
-    lean: str = ""               # 対応する Lean 宣言名（任意）
     has_proof: bool = False
 
     @property

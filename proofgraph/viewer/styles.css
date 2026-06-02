@@ -27,10 +27,18 @@ header .stats { margin-left: auto; font-size: 12px; color: #9ca3af; }
   color: var(--muted); margin: 0 0 8px; }
 .hint { font-size: 11px; color: var(--muted); margin: 4px 0 8px; line-height: 1.5; }
 .checks label, #controls label { display: block; font-size: 13px; margin: 3px 0; cursor: pointer; }
+#controls label.row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 select, button { width: 100%; padding: 6px; font-size: 13px; margin-top: 4px;
   border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+select.inline { width: auto; flex: 1; margin-top: 0; }
 button { cursor: pointer; background: #f3f4f6; }
 button:hover { background: #e5e7eb; }
+
+.chap-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+  margin-right: 5px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.12); }
+
+.focus-btns { display: flex; gap: 6px; margin: 10px 0 4px; }
+.focus-btns button { margin-top: 0; font-size: 11px; padding: 5px 6px; }
 
 .badge { display: inline-block; font-size: 11px; font-weight: 700; color: #fff;
   padding: 2px 8px; border-radius: 999px; }
@@ -44,7 +52,6 @@ button:hover { background: #e5e7eb; }
 .muted { color: var(--muted); font-size: 12px; }
 #d-spaces .chip { display: inline-block; background: #eef2ff; color: #3730a3;
   font-size: 11px; padding: 2px 8px; border-radius: 6px; margin: 2px 4px 2px 0; }
-#d-lean .chip { background: #ecfdf5; color: #065f46; }
 #detail ul { margin: 4px 0; padding-left: 18px; }
 #detail li { font-size: 13px; margin: 3px 0; cursor: pointer; color: #1d4ed8; }
 #detail li:hover { text-decoration: underline; }
@@ -56,9 +63,13 @@ button:hover { background: #e5e7eb; }
 .route-head button { width: auto; margin: 0; padding: 2px 8px; font-size: 11px; }
 .route ul { margin: 4px 0 0; }
 
+.dataset { display: flex; flex-direction: column; gap: 4px; }
+.dataset a { font-size: 12px; color: #1d4ed8; text-decoration: none; padding: 4px 8px;
+  border: 1px solid var(--border); border-radius: 6px; }
+.dataset a:hover { background: #eef2ff; }
+.dataset a.active { background: #1d4ed8; color: #fff; border-color: #1d4ed8; cursor: default; }
+
 .legend { font-size: 11px; color: #374151; line-height: 1.9; }
-.legend .ring { display: inline-block; width: 10px; height: 10px; border: 2px double #065f46;
-  border-radius: 50%; vertical-align: middle; }
 .legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%;
   vertical-align: middle; }
 
