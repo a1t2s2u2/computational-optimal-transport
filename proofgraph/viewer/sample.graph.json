@@ -14,7 +14,8 @@
       ],
       "statement": "ものの集まりを\\textbf{集合}といい、要素 $x$ が集合 $A$ に属することを $x\\in A$ と書く。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:subset",
@@ -29,7 +30,8 @@
       ],
       "statement": "$A$ の要素がすべて $B$ に属するとき $A\\subset B$ と書き、$A$ を $B$ の\\textbf{部分集合}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:function",
@@ -44,7 +46,8 @@
       ],
       "statement": "各 $x\\in X$ にただ一つの $f(x)\\in Y$ を対応させる規則 $f:X\\to Y$ を\\textbf{写像}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:injection",
@@ -59,7 +62,8 @@
       ],
       "statement": "$f(x_1)=f(x_2)$ ならば $x_1=x_2$ となる写像を\\textbf{単射}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:surjection",
@@ -74,7 +78,8 @@
       ],
       "statement": "任意の $y\\in Y$ にある $x$ があって $f(x)=y$ となる写像を\\textbf{全射}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:bijection",
@@ -89,7 +94,8 @@
       ],
       "statement": "単射かつ全射である写像を\\textbf{全単射}という。逆写像 $f^{-1}$ を持つ。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:field",
@@ -104,7 +110,8 @@
       ],
       "statement": "四則演算が定義され分配法則をみたす集合を\\textbf{体}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:ordered-field",
@@ -119,7 +126,8 @@
       ],
       "statement": "順序 $\\le$ と整合する体を\\textbf{順序体}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:real",
@@ -134,7 +142,8 @@
       ],
       "statement": "上限性質をみたす順序体を\\textbf{実数体} $\\R$ という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "thm:sup-property",
@@ -149,7 +158,8 @@
       ],
       "statement": "上に有界な $\\R$ の空でない部分集合は\\textbf{上限}（最小上界）$\\sup A$ を持つ。",
       "has_proof": false,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "thm:archimedes",
@@ -164,7 +174,8 @@
       ],
       "statement": "任意の $x\\in\\R$ に対し $n>x$ なる自然数 $n$ が存在する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "基礎（集合・実数）"
     },
     {
       "id": "def:sequence",
@@ -179,7 +190,8 @@
       ],
       "statement": "自然数から $\\R$ への写像 $n\\mapsto a_n$ を\\textbf{数列}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "def:limit",
@@ -194,7 +206,8 @@
       ],
       "statement": "任意の $\\varepsilon>0$ にある $N$ があり $n\\ge N$ で $|a_n-a|<\\varepsilon$ のとき $a_n\\to a$ と書く。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "def:bounded-seq",
@@ -209,7 +222,8 @@
       ],
       "statement": "ある $M$ があって全ての $n$ で $|a_n|\\le M$ となる数列を\\textbf{有界}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "def:monotone-seq",
@@ -224,7 +238,8 @@
       ],
       "statement": "$a_{n+1}\\ge a_n$（または $\\le$）が常に成り立つ数列を\\textbf{単調}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "thm:monotone-convergence",
@@ -239,7 +254,8 @@
       ],
       "statement": "上に有界な単調増加数列は収束し、その極限は上限に一致する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "thm:bolzano-weierstrass",
@@ -254,7 +270,8 @@
       ],
       "statement": "有界な数列は収束する部分列を持つ。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "def:cauchy",
@@ -269,7 +286,8 @@
       ],
       "statement": "任意の $\\varepsilon>0$ にある $N$ があり $m,n\\ge N$ で $|a_m-a_n|<\\varepsilon$ となる数列。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "thm:cauchy-complete",
@@ -284,7 +302,8 @@
       ],
       "statement": "$\\R$ ではコーシー列は必ず収束する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "def:continuity",
@@ -299,7 +318,8 @@
       ],
       "statement": "$x\\to a$ のとき $f(x)\\to f(a)$ となるとき、$f$ は $a$ で\\textbf{連続}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "thm:ivt",
@@ -314,7 +334,8 @@
       ],
       "statement": "$[a,b]$ で連続な $f$ が $f(a)<y<f(b)$ をみたせば、ある $c$ で $f(c)=y$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "thm:evt",
@@ -329,7 +350,8 @@
       ],
       "statement": "有界閉区間 $[a,b]$ 上の連続関数は最大値と最小値を達成する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "def:uniform-continuity",
@@ -344,7 +366,8 @@
       ],
       "statement": "$\\varepsilon$ に対する $\\delta$ が点に依らずに取れる連続性を\\textbf{一様連続}という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "極限と連続"
     },
     {
       "id": "thm:heine-cantor",
@@ -359,7 +382,8 @@
       ],
       "statement": "有界閉区間上で連続な関数は一様連続である。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "極限と連続"
     },
     {
       "id": "def:derivative",
@@ -374,7 +398,8 @@
       ],
       "statement": "$f'(a)=\\lim_{h\\to0}\\dfrac{f(a+h)-f(a)}{h}$ が存在するとき $f$ は $a$ で微分可能。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "微分"
     },
     {
       "id": "thm:diff-continuous",
@@ -389,7 +414,8 @@
       ],
       "statement": "$a$ で微分可能な関数は $a$ で連続である。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "thm:fermat",
@@ -404,7 +430,8 @@
       ],
       "statement": "$f$ が内点 $c$ で極値をとり微分可能なら $f'(c)=0$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "thm:rolle",
@@ -419,7 +446,8 @@
       ],
       "statement": "$[a,b]$ で連続・$(a,b)$ で微分可能・$f(a)=f(b)$ なら、ある $c$ で $f'(c)=0$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "thm:mvt",
@@ -434,7 +462,8 @@
       ],
       "statement": "$[a,b]$ で連続・$(a,b)$ で微分可能なら、ある $c$ で $f'(c)=\\dfrac{f(b)-f(a)}{b-a}$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "thm:monotone-deriv",
@@ -449,7 +478,8 @@
       ],
       "statement": "区間上で $f'>0$ ならば $f$ は狭義単調増加である。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "thm:taylor",
@@ -464,7 +494,8 @@
       ],
       "statement": "$f$ を多項式で近似し、剰余項を高階導関数で表す公式。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "微分"
     },
     {
       "id": "def:riemann-integral",
@@ -479,7 +510,8 @@
       ],
       "statement": "分割の上限・下限和が一致するとき $\\int_a^b f\\,\\d x$ を定める。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "積分"
     },
     {
       "id": "thm:integrable-continuous",
@@ -494,7 +526,8 @@
       ],
       "statement": "有界閉区間上の連続関数はリーマン積分可能である。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "積分"
     },
     {
       "id": "thm:ftc1",
@@ -509,7 +542,8 @@
       ],
       "statement": "連続な $f$ に対し $F(x)=\\int_a^x f$ は微分可能で $F'=f$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "積分"
     },
     {
       "id": "thm:ftc2",
@@ -524,7 +558,8 @@
       ],
       "statement": "$F'=f$ なら $\\int_a^b f=F(b)-F(a)$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "積分"
     },
     {
       "id": "thm:integration-by-parts",
@@ -539,7 +574,8 @@
       ],
       "statement": "$\\int_a^b f g' = [fg]_a^b-\\int_a^b f' g$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "積分"
     },
     {
       "id": "def:series",
@@ -554,7 +590,8 @@
       ],
       "statement": "部分和 $s_n=\\sum_{k=1}^n a_k$ の極限を\\textbf{級数} $\\sum a_k$ という。",
       "has_proof": false,
-      "is_axiomatic": true
+      "is_axiomatic": true,
+      "group": "級数"
     },
     {
       "id": "thm:geometric-series",
@@ -569,7 +606,8 @@
       ],
       "statement": "$|r|<1$ のとき $\\sum_{k=0}^\\infty r^k=\\dfrac{1}{1-r}$。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "級数"
     },
     {
       "id": "thm:comparison-test",
@@ -584,7 +622,8 @@
       ],
       "statement": "$0\\le a_k\\le b_k$ で $\\sum b_k$ が収束すれば $\\sum a_k$ も収束する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "級数"
     },
     {
       "id": "thm:abs-convergence",
@@ -599,7 +638,8 @@
       ],
       "statement": "$\\sum|a_k|$ が収束すれば $\\sum a_k$ も収束する。",
       "has_proof": true,
-      "is_axiomatic": false
+      "is_axiomatic": false,
+      "group": "級数"
     }
   ],
   "edges": [
