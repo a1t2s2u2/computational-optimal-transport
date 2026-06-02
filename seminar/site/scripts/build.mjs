@@ -509,7 +509,13 @@ function mathJaxScript() {
             dist: "d",
             distD: "\\\\mathbf{D}",
             Wass: "\\\\mathcal{W}",
-            WassD: "\\\\mathrm{W}"
+            WassD: "\\\\mathrm{W}",
+            Lcal: "\\\\mathcal{L}",
+            Hm: "\\\\mathrm{H}",
+            Tan: "\\\\mathrm{Tan}",
+            Ric: "\\\\operatorname{Ric}",
+            CD: "\\\\mathrm{CD}",
+            diverg: "\\\\nabla\\\\!\\\\cdot\\\\!"
           }
         },
         svg: { fontCache: "global" }

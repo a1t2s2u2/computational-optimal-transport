@@ -13,26 +13,30 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", 
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
 CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
+# 変換対象の章。ch01–ch03 は既存 md として別管理（上書きしない）、
+# ch04–ch07 は未反映、ch05 は vae-geodesic.html で独立レンダリング。
+# ここでは幾何アーク ch08–ch10 のみを生成対象とする。
+# 参照（\ref）解決は build_label_map() が全 ch*.tex を走査するため、
+# 変換対象外の章のラベルも本文中でタイトル表示される。
 CHAPTERS = [
-    ("ch01_preliminaries.tex", "01-preliminaries.md", {
-        "id": "preliminaries",
-        "nav": "準備",
-        "eyebrow": "1. Foundations",
-        "title": "準備",
+    ("ch08_benamou_brenier.tex", "08-benamou-brenier.md", {
+        "id": "benamou-brenier",
+        "nav": "動的定式化",
+        "eyebrow": "8. Dynamic Formulation",
+        "title": "動的定式化：Benamou–Brenier",
     }),
-    ("ch02_ot_foundations.tex", "02-ot-foundations.md", {
-        "id": "ot-foundations",
-        "nav": "Monge と Kantorovich",
-        "eyebrow": "2. OT Foundations",
-        "title": "Optimal Transport の基礎理論",
+    ("ch09_otto.tex", "09-otto.md", {
+        "id": "otto",
+        "nav": "Otto 計算",
+        "eyebrow": "9. Otto Calculus",
+        "title": "Otto 計算と勾配流",
     }),
-    ("ch04_entropic_regularization.tex", "04-entropic.md", {
-        "id": "entropic",
-        "nav": "エントロピー正則化",
-        "eyebrow": "4. Entropic Regularization",
-        "title": "エントロピー正則化と Sinkhorn アルゴリズム",
+    ("ch10_curvature.tex", "10-curvature.md", {
+        "id": "curvature",
+        "nav": "曲率 CD(K,N)",
+        "eyebrow": "10. Curvature",
+        "title": "曲率：変位凸性と CD(K,N)",
     }),
-    # ch05 は vae-geodesic.html で独立レンダリングするため変換対象外
 ]
 
 # Named block environments and their markdown mappings.
@@ -70,6 +74,7 @@ ENV_TO_PREFIX = {
 }
 
 LABEL_MAP = {}
+CHAPTER_MAP = {}
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -164,10 +169,13 @@ def _extract_brace_arg(text: str, start: int) -> tuple[str, int] | None:
 
 
 def build_label_map():
-    """Scan all TeX chapter files and build a map: 'prefix:label' -> title."""
+    """Scan every TeX chapter file and build a map: 'prefix:label' -> title.
+
+    変換対象 (CHAPTERS) に限らず全 ch*.tex を走査するので、他章のラベルへの
+    \\ref も本文中でタイトルとして解決される（リンク先が未生成の章の場合は
+    アンカーが存在しないが、表示テキストは保たれる）。"""
     label_map = {}
-    for tex_file, _, _ in CHAPTERS:
-        tex_path = os.path.join(SEMINAR_DIR, tex_file)
+    for tex_path in sorted(glob.glob(os.path.join(SEMINAR_DIR, "ch*.tex"))):
         if not os.path.exists(tex_path):
             continue
         with open(tex_path, "r", encoding="utf-8") as f:
@@ -190,9 +198,29 @@ def build_label_map():
     return label_map
 
 
+def build_chapter_map():
+    r"""Scan every TeX chapter file for \chapter{TITLE}\label{ch:...} pairs.
+    Returns map 'ch:label' -> TITLE so that cross-chapter \ref は章タイトルで
+    解決でき、他章への参照が一律「本章」になる誤りを避ける。"""
+    chapter_map = {}
+    pattern = re.compile(r"\\chapter\{([^}]*)\}\s*\\label\{(ch:[^}]*)\}")
+    for tex_path in sorted(glob.glob(os.path.join(SEMINAR_DIR, "ch*.tex"))):
+        with open(tex_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        for m in pattern.finditer(content):
+            chapter_map[m.group(2)] = m.group(1)
+    return chapter_map
+
+
 def convert_refs(text: str) -> str:
     r"""Convert \ref{...} to clickable [ref:display|name] links."""
-    text = re.sub(r"第~?\\ref\{ch:[^}]*\}~?章", "本章", text)
+
+    def _replace_chapter(m):
+        label = m.group(1)
+        title = CHAPTER_MAP.get(label)
+        return f"「{title}」の章" if title else "本章"
+
+    text = re.sub(r"第~?\\ref\{(ch:[^}]*)\}~?章", _replace_chapter, text)
     text = re.sub(r"§~?\\ref\{sec:[^}]*\}", "本節", text)
     text = re.sub(r"Algorithm~?\\ref\{alg:[^}]*\}", "アルゴリズム", text)
 
@@ -387,8 +415,9 @@ class TexParser:
                 nodes.append(("memo", block_nodes))
                 continue
 
-            # Standalone proof (not following a block -- rare but possible)
-            if stripped == "\\begin{proof}":
+            # Standalone proof (not following a block -- rare but possible).
+            # Optional argument \begin{proof}[...] も受け付ける。
+            if re.match(r"\\begin\{proof\}", stripped):
                 self.advance()
                 proof_nodes = []
                 self._parse_body(proof_nodes, stop_env="proof")
@@ -461,7 +490,7 @@ class TexParser:
         # Skip blank lines
         while not self.at_end() and not self.peek().strip():
             self.pos += 1
-        if not self.at_end() and self.peek().strip() == "\\begin{proof}":
+        if not self.at_end() and re.match(r"\\begin\{proof\}", self.peek().strip()):
             self.advance()
             proof_nodes = []
             self._parse_body(proof_nodes, stop_env="proof")
@@ -873,15 +902,21 @@ def process_chapter(tex_filename, md_filename, frontmatter):
 
 
 def main():
-    global LABEL_MAP
+    global LABEL_MAP, CHAPTER_MAP
     LABEL_MAP = build_label_map()
-    print(f"Built label map with {len(LABEL_MAP)} entries")
+    CHAPTER_MAP = build_chapter_map()
+    print(f"Built label map with {len(LABEL_MAP)} entries, "
+          f"chapter map with {len(CHAPTER_MAP)} entries")
 
-    # Clean existing markdown files
-    existing = glob.glob(os.path.join(CONTENT_DIR, "*.md"))
-    for f in existing:
-        os.remove(f)
-    print(f"Cleaned {len(existing)} existing markdown file(s) from {CONTENT_DIR}")
+    # 変換対象 (CHAPTERS) の md のみ再生成する。CHAPTERS 外の既存 md
+    # （ch01–ch03 など別管理の原稿）は削除しない。
+    removed = 0
+    for _, md_file, _ in CHAPTERS:
+        p = os.path.join(CONTENT_DIR, md_file)
+        if os.path.exists(p):
+            os.remove(p)
+            removed += 1
+    print(f"Removed {removed} target markdown file(s) for regeneration")
     print()
 
     total_blocks = 0
