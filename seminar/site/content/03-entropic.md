@@ -309,9 +309,10 @@ title: エントロピー正則化
 ## 正則化パラメータの極限
 
 
-非正則化 Kantorovich 問題が複数の最適解を持つとき，
+非正則化 Kantorovich 問題 \(\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) が複数の最適解を持つとき，
 エントロピー正則化はそのうちの一つ——
 エントロピーが最大のもの——を自然に選び出す．
+以下，\(\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) の最適解集合を \(S^*\)（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]）と書く．
 
 
 :::theorem
@@ -332,11 +333,11 @@ title: エントロピー正則化
 
 **(ii)**
 \(\mathbf{P}_\varepsilon\) の \(\varepsilon \to 0\) における任意の極限点は
-非正則化問題の最適解である．
+\(S^*\) に属する（\(\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) の最適解である）．
 
 **(iii)**
 \(\{\mathbf{P}_\varepsilon\}_{\varepsilon > 0}\) 全体が，
-非正則化最適解の中でエントロピー \(\Hb\) を最大化する
+\(S^*\) の中でエントロピー \(\Hb\) を最大化する
 一意な解に収束する：
 
 \[
@@ -346,7 +347,7 @@ title: エントロピー正則化
 \]
 
 :::details-embedded 証明
-非正則化問題の最適解の一つを \(\mathbf{P}^*\) とする．\(\Hb\) は連続であり \(\CouplingsD(\mathbf{a}, \mathbf{b})\) はコンパクトだから，[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]より \(\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で最大・最小を達成し，特に**有界**である：ある \(M > 0\) が存在して \(|\Hb(\mathbf{P})| \leq M\)（\(\forall\, \mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)）．
+\(S^*\) の元 \(\mathbf{P}^*\) を一つとる．\(\Hb\) は連続であり \(\CouplingsD(\mathbf{a}, \mathbf{b})\) はコンパクトだから，[ref:Thm: Weierstrass の最大値の定理|Weierstrass の最大値の定理]より \(\Hb\) は \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上で最大・最小を達成し，特に**有界**である：ある \(M > 0\) が存在して \(|\Hb(\mathbf{P})| \leq M\)（\(\forall\, \mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\)）．
 
 **(i), (ii).**
 \(\mathbf{P}_\varepsilon\) は正則化問題の最小点で，\(\mathbf{P}^* \in \CouplingsD(\mathbf{a}, \mathbf{b})\) もその実行可能点だから
@@ -357,7 +358,7 @@ title: エントロピー正則化
   \inner{\mathbf{C}}{\mathbf{P}^*} - \varepsilon\Hb(\mathbf{P}^*),
 \]
 
-すなわち \(\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \inner{\mathbf{C}}{\mathbf{P}^*} \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr)\)．一方 \(\mathbf{P}_\varepsilon\) も非正則化問題の実行可能点であり，\(\mathbf{P}^*\) がその最適解だから \(\inner{\mathbf{C}}{\mathbf{P}^*} \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}\)．以上を合わせて
+すなわち \(\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \inner{\mathbf{C}}{\mathbf{P}^*} \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr)\)．一方 \(\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})\) であり，\(\mathbf{P}^*\) が \(\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) の最適解だから \(\inner{\mathbf{C}}{\mathbf{P}^*} \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}\)．以上を合わせて
 
 \[
   0
@@ -378,10 +379,10 @@ title: エントロピー正則化
 
 となり，(i) を得る．
 
-\(\varepsilon \to 0\) における \(\mathbf{P}_\varepsilon\) の任意の極限点 \(\mathbf{P}^0\)（ある \(\varepsilon_k \to 0\) で \(\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^0\)）をとる．\(\inner{\mathbf{C}}{\cdot}\) は連続だから \(\inner{\mathbf{C}}{\mathbf{P}^0} = \lim_{k}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_k}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\)，また \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は閉だから \(\mathbf{P}^0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．ゆえに \(\mathbf{P}^0\) は最適値を達成する実行可能点，すなわち非正則化問題の最適解であり，(ii) を得る．
+\(\varepsilon \to 0\) における \(\mathbf{P}_\varepsilon\) の任意の極限点 \(\mathbf{P}^0\)（ある \(\varepsilon_k \to 0\) で \(\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^0\)）をとる．\(\inner{\mathbf{C}}{\cdot}\) は連続だから \(\inner{\mathbf{C}}{\mathbf{P}^0} = \lim_{k}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_k}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\)，また \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は閉だから \(\mathbf{P}^0 \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．ゆえに \(\mathbf{P}^0\) は最適値 \(\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\) を達成する \(\CouplingsD(\mathbf{a}, \mathbf{b})\) の点，すなわち \(S^*\) の元であり，(ii) を得る．
 
 **(iii).**
-上の不等式の左側 \(0 \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr)\) を \(\varepsilon > 0\) で割ると \(\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)\) が，任意の非正則化最適解 \(\mathbf{P}^* \in S^*\) について成り立つ．極限点 \(\mathbf{P}^0\)（\(\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^0\)）に対し \(\Hb\) の連続性より \(\Hb(\mathbf{P}^0) = \lim_k \Hb(\mathbf{P}_{\varepsilon_k}) \geq \Hb(\mathbf{P}^*)\) が任意の \(\mathbf{P}^* \in S^*\) で成り立ち，かつ (ii) より \(\mathbf{P}^0 \in S^*\) だから，\(\mathbf{P}^0\) は \(S^*\) 上で \(\Hb\) を最大化する．
+上の不等式の左側 \(0 \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon)-\Hb(\mathbf{P}^*)\bigr)\) を \(\varepsilon > 0\) で割ると \(\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)\) が，任意の \(\mathbf{P}^* \in S^*\) について成り立つ．極限点 \(\mathbf{P}^0\)（\(\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^0\)）に対し \(\Hb\) の連続性より \(\Hb(\mathbf{P}^0) = \lim_k \Hb(\mathbf{P}_{\varepsilon_k}) \geq \Hb(\mathbf{P}^*)\) が任意の \(\mathbf{P}^* \in S^*\) で成り立ち，かつ (ii) より \(\mathbf{P}^0 \in S^*\) だから，\(\mathbf{P}^0\) は \(S^*\) 上で \(\Hb\) を最大化する．
 最適解集合 \(S^*\) は凸（[ref:Clm: 最適解集合は凸かつコンパクト|最適解集合は凸かつコンパクト]）であり，\(\Hb\) の最大化は \(-\Hb\) の最小化に等しく，\(-\Hb\) は \(S^*\) 上で狭義凸（[ref:Clm: 負エントロピーの狭義凸性|負エントロピーの狭義凸性]）だから，[ref:Prop: 狭義凸関数の最小点の一意性|狭義凸関数の最小点の一意性]より \(S^*\) 上で \(\Hb\) を最大化する元は一意である．これを \(\widehat{\mathbf{P}}\) とおく．
 すると \(\{\mathbf{P}_\varepsilon\}\) の収束部分列の極限はすべて \(\widehat{\mathbf{P}}\) に一致する．コンパクト集合内の点列で，収束部分列の極限がすべて同一点 \(\widehat{\mathbf{P}}\) であるものは \(\widehat{\mathbf{P}}\) に収束する（収束しないとすると，\(\widehat{\mathbf{P}}\) のある近傍の外に留まる部分列がとれ，コンパクト性よりさらに収束部分列がとれるが，その極限は \(\widehat{\mathbf{P}}\) と異なり矛盾する）．したがって \(\mathbf{P}_\varepsilon \xrightarrow{\varepsilon \to 0} \widehat{\mathbf{P}} = \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})\)．
 :::
