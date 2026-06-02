@@ -8,22 +8,30 @@ const ENV_LABEL = {
   definition: 'Def', proposition: 'Prop', theorem: 'Thm',
   claim: 'Clm', remark: 'Rem', example: 'Ex',
 };
-// 「結果（主要定理）」とみなす種類。概要図はこれらだけを残す。
-const RESULT_ENVS = new Set(['theorem', 'proposition', 'claim']);
-const SNIPPET_LEN = 80;     // カードに出す文面冒頭の文字数
-const SKEL_Z = 0.42;        // これ未満にズームアウトすると概要図（結果のみ）に切替
-const Z_MIN = 0.55;         // 既定表示の最小ズーム（最初から詳細＝密度を保つ）
+const TINT = ['#dbeafe', '#dcfce7', '#fef3c7', '#fae8ff',
+              '#ffedd5', '#cffafe', '#fee2e2', '#ede9fe', '#f1f5f9', '#fce7f3'];
+const SNIPPET_LEN = 80;
+const TO_DETAIL = 1.7;    // 概要のフィットズーム×これ以上にズームインで詳細へ
+const TO_OVERVIEW = 0.55; // 詳細のフィットズーム×これ以下にズームアウトで概要へ
 
 let GRAPH = null;
 let cy = null;
 let NODE_BY_ID = {};
+let CONCEPTS = [];          // 概念名（出現順）
 let UP = {}, DOWN = {};
 let activeRouteByNode = {};
 let focusSet = null;
 let selectedId = null;
+let mode = 'overview';      // 'overview'（概念カード）| 'detail'（全ブロック）
+let ovZoom = 1, dtZoom = 1;
 let lodPending = false;
 
 const DATA_SRC = new URLSearchParams(location.search).get('data') || '../out/graph.json';
+
+function conceptOf(n) { return n.group || n.chapter || 'その他'; }
+function conId(c) { return 'con::' + c; }
+function csId(c) { return 'cs::' + c; }
+function tintOf(c) { const i = CONCEPTS.indexOf(c); return TINT[(i < 0 ? 0 : i) % TINT.length]; }
 
 // ---------------------------------------------------------------------------
 // 読み込み
@@ -47,12 +55,12 @@ async function load() {
   }
   GRAPH = data;
   GRAPH.nodes.forEach(n => { NODE_BY_ID[n.id] = n; });
+  CONCEPTS = [...new Set(GRAPH.nodes.map(conceptOf))];
   buildAdjacency();
   buildControls();
   buildGraph();
   document.getElementById('stats').textContent =
-    `${data.stats.n_nodes} blocks · ${data.stats.n_edges} edges · ` +
-    `${data.stats.n_annotated_space} space-tagged`;
+    `${data.stats.n_nodes} blocks · ${data.stats.n_edges} edges · 概念 ${CONCEPTS.length}`;
 }
 
 function showError(msg) {
@@ -70,23 +78,6 @@ function buildAdjacency() {
   });
 }
 
-function isResult(d) { return d && RESULT_ENVS.has(d.env); }
-
-// 結果 r から上流へたどり、最初に出会う結果（定義・補題は飛ばす）を集める
-function firstResults(rid) {
-  const out = new Set(), seen = new Set(), stack = [...(UP[rid] || [])];
-  while (stack.length) {
-    const x = stack.pop();
-    if (seen.has(x)) continue;
-    seen.add(x);
-    const d = NODE_BY_ID[x];
-    if (!d) continue;
-    if (isResult(d)) out.add(x);
-    else (UP[x] || []).forEach(y => stack.push(y));
-  }
-  return out;
-}
-
 // ---------------------------------------------------------------------------
 // コントロール構築
 // ---------------------------------------------------------------------------
@@ -99,7 +90,6 @@ function buildControls() {
     sf.appendChild(o);
   });
   sf.addEventListener('change', updateView);
-
   document.getElementById('show-uses').addEventListener('change', updateView);
   document.getElementById('show-proof').addEventListener('change', updateView);
   document.getElementById('focus-scope').addEventListener('change', () => {
@@ -126,11 +116,19 @@ function cardLabel(n) {
 
 function buildGraph() {
   const elements = [];
+  const cnt = {};
+  GRAPH.nodes.forEach(n => { const c = conceptOf(n); cnt[c] = (cnt[c] || 0) + 1; });
+
+  CONCEPTS.forEach(c => {
+    elements.push({ data: { id: conId(c), label: c, tint: tintOf(c), con: c }, classes: 'concept' });
+    elements.push({ data: { id: csId(c), label: `${c}\n（${cnt[c]} ブロック）`, tint: tintOf(c), con: c },
+                    classes: 'csum' });
+  });
   GRAPH.nodes.forEach(n => {
     elements.push({ data: {
       id: n.id, label: cardLabel(n), env: n.env, chapter: n.chapter, spaces: n.spaces,
-      result: isResult(n) ? 1 : 0,
-    }, classes: 'leaf' + (isResult(n) ? ' result' : '') });
+      parent: conId(conceptOf(n)),
+    }, classes: 'leaf' });
   });
   GRAPH.edges.forEach((e, i) => {
     if (!NODE_BY_ID[e.to]) return;
@@ -138,15 +136,20 @@ function buildGraph() {
       id: 'e' + i, source: e.from, target: e.to, kind: e.kind, route: e.route || '',
     }});
   });
-  // 概要図用の結果間スケルトン辺（定義・補題を飛ばした結果→結果の依存）
-  const skelSeen = new Set();
-  GRAPH.nodes.forEach(n => {
-    if (!isResult(n)) return;
-    firstResults(n.id).forEach(t => {
-      const id = 'sk::' + n.id + '>>' + t;
-      if (skelSeen.has(id)) return;
-      skelSeen.add(id);
-      elements.push({ data: { id, source: n.id, target: t }, classes: 'skel' });
+  // 概念間の集約依存（概要図の矢印）。区切り文字を使わず入れ子マップで集計する。
+  const cross = {};
+  GRAPH.edges.forEach(e => {
+    const a = NODE_BY_ID[e.from], b = NODE_BY_ID[e.to];
+    if (!a || !b) return;
+    const ca = conceptOf(a), cb = conceptOf(b);
+    if (ca === cb) return;
+    (cross[ca] = cross[ca] || {})[cb] = (cross[ca][cb] || 0) + 1;
+  });
+  CONCEPTS.forEach((a, ai) => {
+    Object.keys(cross[a] || {}).forEach(b => {
+      elements.push({ data: {
+        id: 'ce::' + ai + '>>' + CONCEPTS.indexOf(b), source: csId(a), target: csId(b), weight: cross[a][b],
+      }, classes: 'cedge' });
     });
   });
 
@@ -156,16 +159,30 @@ function buildGraph() {
     wheelSensitivity: 0.2,
     style: [
       { selector: 'node.leaf', style: {
-        'shape': 'round-rectangle',
-        'background-color': '#ffffff', 'background-opacity': 1,
+        'shape': 'round-rectangle', 'background-color': '#ffffff', 'background-opacity': 1,
         'border-width': 2, 'border-color': ele => ENV_COLOR[ele.data('env')] || '#888',
-        'label': 'data(label)', 'text-wrap': 'wrap', 'text-max-width': '170px',
+        'label': 'data(label)', 'text-wrap': 'wrap', 'text-max-width': '180px',
         'text-valign': 'center', 'text-halign': 'center',
-        'font-size': '9px', 'line-height': 1.3, 'color': '#0f172a',
-        'width': 'label', 'height': 'label', 'padding': '7px',
+        'font-size': '11px', 'line-height': 1.3, 'color': '#0f172a',
+        'width': 'label', 'height': 'label', 'padding': '8px',
       }},
-      // 概要図では結果カードをやや強調
-      { selector: 'node.result', style: { 'border-width': 3 }},
+      { selector: 'node.concept', style: {
+        'background-color': 'data(tint)', 'background-opacity': 0.35,
+        'border-width': 1, 'border-color': '#cbd5e1', 'border-style': 'dashed',
+        'shape': 'roundrectangle', 'padding': '26px',
+        'label': 'data(label)', 'text-valign': 'top', 'text-halign': 'center',
+        'font-size': '18px', 'font-weight': 'bold', 'color': '#475569', 'text-margin-y': 2,
+      }},
+      // 概念サマリーカード（概要図の主役。大きい文字）
+      { selector: 'node.csum', style: {
+        'display': 'none', 'shape': 'round-rectangle',
+        'background-color': 'data(tint)', 'background-opacity': 0.95,
+        'border-width': 3, 'border-color': '#475569',
+        'label': 'data(label)', 'text-wrap': 'wrap', 'text-max-width': '240px',
+        'text-valign': 'center', 'text-halign': 'center',
+        'font-size': '26px', 'font-weight': 'bold', 'color': '#1e293b',
+        'width': 'label', 'height': 'label', 'padding': '26px',
+      }},
       { selector: 'node.leaf.dim', style: { 'opacity': 0.12 }},
       { selector: 'node.leaf.sel', style: {
         'border-width': 4, 'border-color': '#0f172a', 'background-color': '#f8fafc' }},
@@ -176,15 +193,14 @@ function buildGraph() {
       { selector: 'edge.faded', style: { 'opacity': 0.025 }},
       { selector: 'edge', style: {
         'width': 1.4, 'line-color': '#c4c4cc', 'target-arrow-color': '#c4c4cc',
-        'target-arrow-shape': 'triangle', 'arrow-scale': 0.9,
-        'curve-style': 'bezier', 'opacity': 0.45,
+        'target-arrow-shape': 'triangle', 'arrow-scale': 0.9, 'curve-style': 'bezier', 'opacity': 0.45,
       }},
       { selector: 'edge[kind = "proof"]', style: { 'line-style': 'dashed' }},
-      // 結果間スケルトン辺（概要図でのみ表示）
-      { selector: 'edge.skel', style: {
-        'display': 'none', 'width': 2.4, 'line-color': '#94a3b8',
-        'target-arrow-color': '#94a3b8', 'target-arrow-shape': 'triangle',
-        'arrow-scale': 1.1, 'opacity': 0.6, 'curve-style': 'bezier',
+      // 概念間の集約依存
+      { selector: 'edge.cedge', style: {
+        'display': 'none', 'width': ele => 3 + Math.min(8, ele.data('weight')),
+        'line-color': '#64748b', 'target-arrow-color': '#64748b', 'target-arrow-shape': 'triangle',
+        'arrow-scale': 1.6, 'opacity': 0.6, 'curve-style': 'bezier',
       }},
       { selector: 'edge.dim', style: { 'opacity': 0.03 }},
       { selector: 'edge.up', style: {
@@ -199,39 +215,60 @@ function buildGraph() {
   });
 
   cy.on('tap', 'node.leaf', evt => selectNode(evt.target.id()));
+  cy.on('tap', 'node.csum', evt => openConcept(evt.target.data('con')));
   cy.on('tap', evt => { if (evt.target === cy) clearSelection(); });
   cy.on('zoom', () => {
     if (focusSet || lodPending) return;
     lodPending = true;
-    requestAnimationFrame(() => { lodPending = false; applyLOD(); });
+    requestAnimationFrame(() => {
+      lodPending = false;
+      if (mode === 'overview' && cy.zoom() >= ovZoom * TO_DETAIL) enterDetail();
+      else if (mode === 'detail' && cy.zoom() <= dtZoom * TO_OVERVIEW) enterOverview();
+    });
   });
 
-  runLayout();
+  layoutDetail();   // メンバーの位置を確定（クリック時のフィット用）
+  enterOverview();  // 既定は概念カードの概要図
 }
 
-function runLayout() {
-  const focusing = !!focusSet;
-  const eles = (focusing ? cy.elements(':visible') : cy.elements())
-    .filter(el => !el.hasClass('skel'));
-  eles.layout({
-    name: 'dagre', animate: false, fit: true, padding: 36,
-    rankDir: 'BT', nodeSep: 24, rankSep: 70,
+function notAux(el) { return !el.hasClass('csum') && !el.hasClass('cedge'); }
+
+function layoutDetail() {
+  cy.nodes('.leaf').style('display', 'element');
+  cy.elements().filter(notAux).layout({
+    name: 'dagre', animate: false, fit: false, rankDir: 'BT', nodeSep: 24, rankSep: 70,
   }).run();
-  if (!focusing) {
-    cy.nodes('.leaf').style('display', 'element');   // 寸法測定のため一旦可視化
-    fitDefault();
-  }
-  updateView();
 }
 
-// 既定は詳細レイアウト全体を枠に収めつつ、引きすぎない（最初から密度を保つ）
-function fitDefault() {
-  cy.fit(cy.nodes('.leaf'), 30);
-  if (cy.zoom() < Z_MIN) { cy.zoom(Z_MIN); cy.center(cy.nodes('.leaf')); }
+function layoutOverview() {
+  cy.collection().union(cy.nodes('.csum')).union(cy.edges('.cedge')).layout({
+    name: 'dagre', animate: false, fit: false, rankDir: 'BT', nodeSep: 160, rankSep: 180,
+  }).run();
+}
+
+function enterOverview() {
+  mode = 'overview';
+  layoutOverview();
+  applyOverview();
+  cy.fit(cy.nodes('.csum'), 50);
+  ovZoom = cy.zoom();
+}
+
+function enterDetail(fitConcept) {
+  mode = 'detail';
+  layoutDetail();
+  applyDetail();
+  if (fitConcept) cy.fit(cy.nodes('.leaf').filter(n => conceptOf(NODE_BY_ID[n.id()]) === fitConcept), 50);
+  else cy.fit(cy.elements().filter(el => el.hasClass('leaf') || el.hasClass('concept')), 36);
+  dtZoom = fitConcept ? cy.zoom() / 1.5 : cy.zoom();   // fitConcept 時は基準を緩める
+}
+
+function openConcept(c) {
+  enterDetail(c);
 }
 
 // ---------------------------------------------------------------------------
-// 表示更新（フィルタ + セマンティックズーム）
+// 表示更新
 // ---------------------------------------------------------------------------
 function filterCtx() {
   const spaceKey = document.getElementById('space-filter').value;
@@ -256,42 +293,46 @@ function dimLeaf(n, provided) {
 
 function updateView() {
   if (!cy) return;
-  if (focusSet) applyExplicit(); else applyLOD();
+  if (focusSet) applyExplicit();
+  else if (mode === 'detail') applyDetail();
+  else applyOverview();
 }
 
-// フォーカス中: フォーカス集合だけを表示
-function applyExplicit() {
+// 概要: 概念カード＋概念間依存のみ
+function applyOverview() {
+  const { provided } = filterCtx();
+  cy.batch(() => {
+    cy.nodes('.concept').style('display', 'none');
+    cy.nodes('.csum').style('display', 'element');
+    cy.nodes('.leaf').style('display', 'none');
+    cy.edges().filter(e => !e.hasClass('cedge')).style('display', 'none');
+    cy.edges('.cedge').forEach(e => {
+      const ends = e.source().style('display') === 'element' && e.target().style('display') === 'element';
+      e.style('display', ends ? 'element' : 'none');
+    });
+    void provided;
+  });
+}
+
+// 詳細: 全ブロック（概念コンテナでグループ）
+function applyDetail() {
   const { showUses, showProof, provided } = filterCtx();
   cy.batch(() => {
-    cy.edges('.skel').style('display', 'none');
+    cy.nodes('.csum').style('display', 'none');
+    cy.edges('.cedge').style('display', 'none');
     cy.nodes('.leaf').forEach(n => {
       const visible = !(focusSet && !focusSet.has(n.id()));
       n.style('display', visible ? 'element' : 'none');
       dimLeaf(n, provided);
     });
-    cy.edges().filter(e => !e.hasClass('skel')).forEach(e => setEdgeVis(e, showUses, showProof));
+    cy.edges().filter(e => !e.hasClass('cedge')).forEach(e => setEdgeVis(e, showUses, showProof));
+    cy.nodes('.concept').forEach(p =>
+      p.style('display', p.children().some(c => c.style('display') === 'element') ? 'element' : 'none'));
   });
 }
 
-// 俯瞰: 近い（詳細）= 全ブロック、引く（概要）= 結果のみ + 結果間スケルトン
-function applyLOD() {
-  const { showUses, showProof, provided } = filterCtx();
-  const detail = cy.zoom() >= SKEL_Z;
-  cy.batch(() => {
-    cy.nodes('.leaf').forEach(n => {
-      const show = detail || n.hasClass('result');
-      n.style('display', show ? 'element' : 'none');
-      dimLeaf(n, provided);
-    });
-    cy.edges().filter(e => !e.hasClass('skel')).forEach(e => {
-      if (detail) setEdgeVis(e, showUses, showProof); else e.style('display', 'none');
-    });
-    cy.edges('.skel').forEach(e => {
-      const ends = e.source().style('display') === 'element' && e.target().style('display') === 'element';
-      e.style('display', (!detail && ends) ? 'element' : 'none');
-    });
-  });
-}
+// フォーカス中（詳細の一種）
+function applyExplicit() { applyDetail(); }
 
 // ---------------------------------------------------------------------------
 // フォーカス
@@ -309,13 +350,15 @@ function closure(id, adj, transitive) {
 }
 
 function applyFocus(id) {
-  const scope = document.getElementById('focus-scope').value;  // off | direct | transitive
+  const scope = document.getElementById('focus-scope').value;
   if (scope === 'off') { clearFocus(); return; }
   const trans = scope === 'transitive';
   const up = closure(id, UP, trans);
   const down = closure(id, DOWN, trans);
   focusSet = new Set([id, ...up, ...down]);
-  updateView();
+  mode = 'detail';
+  cy.nodes('.leaf').style('display', 'element');
+  applyDetail();
   cy.batch(() => {
     cy.edges().removeClass('up down');
     cy.edges(':visible').forEach(e => {
@@ -326,7 +369,9 @@ function applyFocus(id) {
       }
     });
   });
-  runLayout();
+  cy.elements(':visible').filter(notAux).layout({
+    name: 'dagre', animate: false, fit: true, padding: 36, rankDir: 'BT', nodeSep: 24, rankSep: 70,
+  }).run();
   const n = NODE_BY_ID[id];
   document.getElementById('stats').textContent =
     `フォーカス: ${ENV_LABEL[n.env]}. ${stripMath(n.title)} — 依存 ${up.size} / 被依存 ${down.size}` +
@@ -335,22 +380,15 @@ function applyFocus(id) {
 
 function clearFocus() {
   if (!cy) return;
-  if (focusSet) {
-    focusSet = null;
-    cy.edges().removeClass('up down');
-    runLayout();
-  } else {
-    cy.nodes('.leaf').style('display', 'element');
-    fitDefault();
-    applyLOD();
-  }
+  focusSet = null;
+  cy.edges().removeClass('up down');
+  enterOverview();
   document.getElementById('stats').textContent =
-    `${GRAPH.stats.n_nodes} blocks · ${GRAPH.stats.n_edges} edges · ` +
-    `${GRAPH.stats.n_annotated_space} space-tagged`;
+    `${GRAPH.stats.n_nodes} blocks · ${GRAPH.stats.n_edges} edges · 概念 ${CONCEPTS.length}`;
 }
 
 // ---------------------------------------------------------------------------
-// 選択 & 詳細
+// 選択 & 詳細パネル
 // ---------------------------------------------------------------------------
 function selectNode(id) {
   clearSelection(false);
@@ -393,7 +431,7 @@ function renderDetail(d) {
   envEl.textContent = ENV_LABEL[d.env];
 
   document.getElementById('d-title').innerHTML = d.title;
-  const loc = [d.chapter, d.section, d.subsection].filter(Boolean).map(stripMath).join(' › ');
+  const loc = [d.group || d.chapter, d.section, d.subsection].filter(Boolean).map(stripMath).join(' › ');
   document.getElementById('d-loc').textContent = loc + '  ·  ' + d.id;
 
   document.getElementById('d-statement').innerHTML = texToHtml(d.statement);
@@ -463,8 +501,8 @@ function depLi(id) {
 }
 window.__goto = id => {
   if (!cy.getElementById(id).nonempty()) return;
-  if (focusSet && !focusSet.has(id)) clearFocus();
-  cy.animate({ center: { eles: cy.getElementById(id) }, zoom: 1.3 }, { duration: 300 });
+  if (mode === 'overview') enterDetail();
+  cy.animate({ center: { eles: cy.getElementById(id) }, zoom: Math.max(dtZoom * 1.4, 1) }, { duration: 300 });
   selectNode(id);
 };
 
@@ -512,6 +550,7 @@ function computeSupport(id, route) {
 }
 
 function highlightSupport(id, route) {
+  if (mode === 'overview') enterDetail();
   const support = computeSupport(id, route);
   const inSet = nid => nid === id || support.has(nid);
   cy.batch(() => {
@@ -521,7 +560,7 @@ function highlightSupport(id, route) {
       n.toggleClass('faded', !s);
     });
     cy.edges().removeClass('route-on');
-    cy.edges().forEach(e => {
+    cy.edges().filter(e => !e.hasClass('cedge')).forEach(e => {
       e.toggleClass('faded', !(inSet(e.source().id()) && inSet(e.target().id())));
     });
   });
@@ -531,7 +570,7 @@ function highlightSupport(id, route) {
 }
 
 // ---------------------------------------------------------------------------
-// TeX → 表示テキスト変換
+// TeX → 表示テキスト
 // ---------------------------------------------------------------------------
 const SYM = {
   alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε',
