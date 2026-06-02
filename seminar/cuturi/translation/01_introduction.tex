@@ -1,264 +1,58 @@
+% 原文: chapters/Intro.tex（Peyré–Cuturi, Computational Optimal Transport）
+
 \chapter{はじめに}
-\label{ch:introduction}
+\label{c-intro}
 
-%% ============================================================
-%%  1.1 最適輸送とは何か
-%% ============================================================
-\section{最適輸送とは何か}
-\label{sec:what-is-ot}
+最短経路の原理は，人生においても科学においても，ほとんどの意思決定を導いている．すなわち，ある商品・人・1 ビットの情報がある地点にあり，それを目標地点へ送る必要があるとき，可能な限り少ない労力を費やす方を選ぶべきである．これは典型的には，平面上であれば直線に沿って，より込み入った距離空間であれば測地線に沿って品物を動かすことで達成される．最適輸送の理論は，この直感を，一度に1つの品物だけを動かすのではなく，\emph{複数の}品物（あるいはその連続的な分布）を1つの配置から別の配置へ同時に動かす問題を扱う場合へと一般化する．学校の教師なら証言してくれるだろうが，集団を構成する個々人を輸送する計画を，到着時に所定の目標配置に達するという制約のもとで立てることは，1人の個人についてそれを実行することよりもはるかに込み入っている．実際，集団あるいは分布の観点で考えることは，より高度な数学的形式論を要求する．その萌芽は \citet{Monge1781} の先駆的研究において初めて示された．しかし，その形式論が一見どれほど複雑に見えようとも，この問題は我々の日常生活と深く具体的な結びつきをもつ．人・商品・情報のいずれの輸送であれ，ただ1つの品物だけを動かすということは極めてまれである．ロジスティクス・生産計画・ネットワーク経路選択といった主要な経済問題はすべて分布の移動を伴っており，その筋立ては最適輸送のあらゆる古典的文献に現れている．実際，\citet{tolstoi1930methods}，\citet{Hitchcock41}，\citet{Kantorovich42} はいずれも実際的な関心に導かれていた．数学者たちがこの理論が研究の肥沃な土壌を提供すること---凸性・偏微分方程式・統計学との深い結びつき---を，\citet{Brenier91} らの研究のおかげで発見したのは，ほんの数年後，おもに 1980 年代以降のことである．千年紀の変わり目には，計算機科学・画像科学，より一般にデータ科学の研究者たちが，最適輸送の理論が，分布を異なるより抽象的な文脈---すなわち bag-of-features や記述子の形で手元にある分布を比較するという文脈---で研究するための非常に強力な道具を提供することを理解した．
+%
 
-科学や日常生活における多くの意思決定は，\textbf{最短経路の原理}に導かれている．
-ある地点にある品物を別の地点に届けたいとき，最も少ない労力で済む方法を選ぶのは自然な発想であり，
-平面上であれば直線に沿って，より一般の距離空間であれば測地線に沿って移動させることがこれに当たる．
+最適輸送についてはいくつもの参考書が書かれており，最近のものとしては \citeauthor{Villani03} の2冊のモノグラフ（\citeyear{Villani03,Villani09}），\citeauthor{rachev1998mass} のもの（\citeyear{rachev1998mass,rachev1998mass2}），さらに最近の \citet{SantambrogioBook} のものがある．これらの書物に例示されるように，この理論におけるより形式的で抽象的な概念は，それ自体で数百ページを要する．いまや最適輸送が応用的な道具として（たとえば経済学において，\citet{galichon2016optimal} が最近提唱したように）次第に確立されてきたことを受けて，本稿ではこの豊かな文献に対し，データ科学---とりわけ画像科学と機械学習---への応用を中心とした計算的観点で釣り合いを取ろうと試みた．その意味で本稿は \citet{kolouri2017optimal} の最近のレビューの動機を踏襲しつつ，より広い範囲を扱おうとするものである．
+%
+究極的には，本稿の目標は，OT の実用的有効性を支える主要な理論的洞察を概観し，それらの洞察を高速な計算手法へと変換する方法の説明により多くの紙幅を割くことにある．
+%
+第 \ref{c-continuous} 章，\ref{c-algo-basics} 章，\ref{c-entropic} 章，\ref{c-variational} 章，\ref{c-extensions} 章の主要部は，もっぱら確率ベクトルあるいは離散ヒストグラムの空間上で最適輸送が誘導する幾何の研究に充てられる．
+%
+より上級の読者を対象として，同じ章のなかに，薄い灰色のボックスで，離散測度に向けた最適輸送のより一般的な数学的解説も与える．離散測度はその確率重みによって定義されるが，それと同時に，それらの重みが定義される位置によっても定義される．これらの位置は通常，連続な距離空間内にとられ，ランダムな現象をモデル化するうえで第2の重要な自由度を与える．
+%
+最後に，第3の，最も技巧的な解説の層は濃い灰色のボックスで示され，離散とは限らない任意の測度---とくに基準測度に対する密度をもちうる測度---を扱う．これは伝統的に OT 理論のほとんどの古典的教科書における既定の設定であるが，実用上は一般にあまり重要でない役割しか果たさない．
+%
+第 \ref{c-algo-semidiscr} 章から \ref{c-statistical} 章は，連続測度と離散測度の相互作用を扱っており，それゆえより数学志向の読者を対象とする．
 
-\textbf{最適輸送}（optimal transport; OT）の理論は，この直感を大きく一般化する．
-すなわち，1つの品物だけを運ぶのではなく，\textbf{複数の品物}（あるいはその連続的な分布）を
-ある配置からべつの配置へと同時に移動させる問題を扱う．
-1人の個人を目的地に送ることは単純であるが，集団全体を別の配置へ移動させ，
-しかも到着時に所定の分布が実現されるようにすることは，はるかに複雑な問題となる．
-この問題を数学的に定式化するには，測度論・凸最適化・線形計画法などの道具が必要となる．
+計算最適輸送の分野は，本稿執筆時点でなお極めて活発である．したがって，本サーベイで触れなかった主題は多岐にわたる．順不同で挙げれば，分布的にロバストな最適化 \citep{NIPS2015_5745,esfahani2018data,NIPS2018_7534,NIPS2018_8015}（入力データから一定の Wasserstein 距離内にある任意のデータ測度の，起こりうる最悪の経験リスクを最小化することでパラメータ推定を行う），Wasserstein 幾何における Langevin モンテカルロサンプリングアルゴリズムの収束 \citep{dalalyan2017user,pmlr-v65-dalalyan17a,pmlr-v75-bernton18a}，Monge--Amp\`ere 方程式を用いて低次元設定で2乗ユークリッドコストの OT を解くその他の数値手法 \citep{froese2011convergent,benamou2014numerical,sulman2011efficient}（注意 \ref{rem:MA} で簡単に言及するにとどめる）などがある．
 
-以下に，最適輸送の概念を直感的に把握するための2つの具体例を挙げる．
 
-\begin{example}{砂山の移動 --- Monge の原問題}{sand-pile}
-  地面のある場所に砂山（土砂の山）があり，これを掘り返して別の場所に所定の形状で盛り上げたいとする．
-  砂の総量は保存されるものとする（掘り出した砂の総量 $=$ 盛り上げた砂の総量）．
-
-  このとき，「どの砂粒をどこに運ぶか」という輸送計画を立て，
-  輸送にかかる\textbf{総コスト}（$=$（各砂粒の質量）$\times$（移動距離）の総和）を
-  最小化する問題が，1781年に Monge が提唱した最適輸送の原問題である．
-
-  ここで重要な点は，各砂粒は\textbf{1つの行き先}にしか運べないという制約である．
-  すなわち，砂粒を分割して複数の場所に送ることは許されない．
-\end{example}
-
-\begin{example}{工場と倉庫の輸送計画 --- Hitchcock--Kantorovich 問題}{factory-warehouse}
-  $n$ 箇所の倉庫がそれぞれ供給量 $a_1, \ldots, a_n$ の商品を保有し，
-  $m$ 箇所の工場がそれぞれ需要量 $b_1, \ldots, b_m$ の商品を必要としているとする．
-  供給量の合計と需要量の合計は等しいと仮定する：$\sum_{i=1}^n a_i = \sum_{j=1}^m b_j$．
-
-  倉庫 $i$ から工場 $j$ へ1単位の商品を輸送するコストが $C_{i,j} \geq 0$ で与えられているとき，
-  輸送計画 $P_{i,j} \geq 0$（倉庫 $i$ から工場 $j$ へ送る量）を求めて，
-  \textbf{総輸送コスト}
-  \[
-    \sum_{i=1}^n \sum_{j=1}^m C_{i,j} P_{i,j}
-  \]
-  を最小化したい．ただし，供給制約 $\sum_{j=1}^m P_{i,j} = a_i$ と
-  需要制約 $\sum_{i=1}^n P_{i,j} = b_j$ を満たす必要がある．
-
-  この定式化では，Monge の問題と異なり，1つの倉庫の商品を\textbf{複数の工場に分割して}
-  送ることが許される．これは Kantorovich による緩和の考え方に対応しており，
-  問題が線形計画問題となるため，効率的に解くことが可能となる．
-\end{example}
-
-以上の例が示すように，最適輸送は，「品物の分布」どうしを比較し，
-一方の分布を他方の分布に変換するための最小コストを求めるという枠組みである．
-この最小コストは，確率分布の空間に自然な\textbf{距離}（Wasserstein 距離）を定め，
-機械学習・画像処理・統計学・経済学など多くの分野で強力なツールとなっている．
-
-%% ============================================================
-%%  1.2 歴史的背景
-%% ============================================================
-\section{歴史的背景}
-\label{sec:history}
-
-最適輸送の理論は約240年にわたる歴史を持つ．以下に主要な発展を概観する．
-
-\subsection*{Monge (1781)}
-
-最適輸送の起源は，フランスの数学者 Gaspard Monge が1781年に発表した
-``M\'{e}moire sur la th\'{e}orie des d\'{e}blais et des remblais''
-（土砂の切り盛りに関する覚書）に遡る．
-Monge は，ある場所から掘り出した土砂を別の場所に運んで盛り上げるとき，
-総輸送コストを最小にする方法を求める問題を定式化した．
-この定式化では，各々の土砂の微小部分は\textbf{決定論的に}1つの行き先に送られる．
-すなわち，輸送は写像 $T\colon \X \to \Y$ によって記述される（\ref{sec:monge-overview}~節で詳述）．
-
-しかしながら，Monge の定式化には数学的な困難がある．
-実行可能な写像の集合は一般に凸でなく，
-また実行可能な写像が存在しない場合すらある（\ref{sec:monge-overview}~節の例 \ref{ex:monge-nonexistence} を参照）．
-このため，Monge の問題は長い間未解決のまま残された．
-
-\subsection*{Tolstoi (1930) と Hitchcock (1941)}
-
-20世紀に入り，最適輸送は実用的な文脈で再発見された．
-Tolstoi (1930) はソビエト連邦における輸送ネットワークの最適化を研究し，
-Hitchcock (1941) は独立に工場・倉庫間の輸送問題を線形計画として定式化した．
-これらの研究は，最適輸送が純粋数学のみならず，
-物流・生産計画・ネットワーク設計といった応用上の重要な問題であることを示した．
-
-\subsection*{Kantorovich (1942)}
-
-ソビエトの数学者・経済学者 Leonid Kantorovich（1975年ノーベル経済学賞受賞）は，
-1942年に最適輸送問題の革命的な再定式化を提案した．
-Monge の定式化では輸送が決定論的な写像 $T$ で記述されるのに対し，
-Kantorovich は輸送を\textbf{カップリング測度} $\pi$（結合確率測度）で記述する\textbf{緩和}を導入した
-（\ref{sec:kantorovich-overview}~節で詳述）．
-
-この緩和の核心的な意義は以下の点にある：
-\begin{itemize}
-  \item カップリング測度の集合は\textbf{凸集合}であり，目的関数はそれに関して線形である．
-  \item したがって，Kantorovich の定式化は\textbf{線形計画問題}であり，常に解が存在する．
-  \item さらに，線形計画の双対理論から\textbf{双対問題}が得られ，これは最適輸送の幾何学的理解に重要な役割を果たす．
-\end{itemize}
-
-\subsection*{Brenier (1991) と現代の発展}
-
-1991年に Yann Brenier は，$\R^d$ 上の二次コスト $c(x,y) = \norm{x-y}_2^2$ に対して，
-最適輸送写像が存在し，凸関数の勾配として一意的に表されることを証明した（Brenier の定理）．
-この結果は，最適輸送を\textbf{凸解析}，\textbf{偏微分方程式}（Monge--Amp\`{e}re 方程式），
-\textbf{流体力学}と深く結びつけ，最適輸送の理論を飛躍的に発展させた．
-
-21世紀に入ると，計算手法の進展（特に Sinkhorn アルゴリズムによるエントロピー正則化）により，
-最適輸送は大規模な実データにも適用可能となった．
-現在では，画像処理（テクスチャ合成，色転写），機械学習（生成モデル，ドメイン適応），
-自然言語処理，計算生物学，経済学など幅広い分野で活用されている．
-
-%% ============================================================
-%%  記法
-%% ============================================================
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{記法}
-\label{sec:notation}
 
 \begin{itemize}
-  \item $\range{n}$：整数の集合 $\{1, \ldots, n\}$．
-
-  \item $\ones_{n,m}$：すべての成分が $1$ である $\R^{n \times m}$ 上の行列．
-    $\ones_n$：すべての成分が $1$ の $n$ 次元ベクトル．
-
-  \item $\Identity_n$：$n \times n$ 単位行列．
-
-  \item $\diag(\mathbf{u})$：ベクトル $\mathbf{u} \in \R^n$ に対し，
-    対角成分が $u_1, \ldots, u_n$ で非対角成分が $0$ の $n \times n$ 行列．
-
-  \item $\simplex_n$：$n$ 次元確率単体．
-    すなわち $\R_{\geq 0}^n$ における確率ベクトルの集合
-    $\left\{ \mathbf{a} \in \R_{\geq 0}^n \mid \sum_i a_i = 1 \right\}$．
-
-  \item $(\mathbf{a}, \mathbf{b})$：
-    確率単体 $\simplex_n \times \simplex_m$ に属するヒストグラム．
-
-  \item $(\alpha, \beta)$：空間 $(\X, \Y)$ 上の測度．
-
-  \item $\frac{\d\alpha}{\d\beta}$：
-    測度 $\alpha$ の $\beta$ に関する相対密度（ラドン--ニコディム導関数）．
-
-  \item $\rho_\alpha = \frac{\d\alpha}{\d x}$：
-    ルベーグ測度に関する測度 $\alpha$ の密度．
-
-  \item $\left(\alpha = \sum_i a_i \delta_{x_i},\;
-    \beta = \sum_j b_j \delta_{y_j}\right)$：
-    台 $x_1, \ldots, x_n \in \X$ および $y_1, \ldots, y_m \in \Y$ 上の離散測度．
-
-  \item $c(x, y)$：基底コスト関数．
-    対応するペアワイズコスト行列 $C_{i,j} = c(x_i, y_j)$．
-
-  \item $\pi$：$\alpha$ と $\beta$ のカップリング測度．
-    離散測度に対しては $\pi = \sum_{i,j} P_{i,j} \delta_{(x_i, y_j)}$
-    であり，輸送行列 $\mathbf{P}$ として記述される．
-
-  \item $\Couplings(\alpha, \beta)$：カップリング測度の集合．
-    離散版は $\CouplingsD(\mathbf{a}, \mathbf{b})$．
-
-  \item $T \colon \X \to \Y$：Monge 写像．
-    $T\pushforward \alpha = \beta$ を満たす．
-
-  \item $(\mathbf{f}, \mathbf{g})$：
-    双対変数（双対ポテンシャル）．
-
-  \item $\MKD_{\mathbf{C}}(\mathbf{a}, \mathbf{b})$
-    および $\MK_c(\alpha, \beta)$：
-    コスト $\mathbf{C}$（ヒストグラム）および $c$（任意の測度）に対する
-    最適輸送問題の最適値．
-
-  \item $\WassD_p(\mathbf{a}, \mathbf{b})$
-    および $\Wass_p(\alpha, \beta)$：
-    距離行列 $\mathbf{D}$（ヒストグラム）および距離 $d$（任意の測度）に対する
-    $p$-Wasserstein 距離．
-
-  \item $\inner{\cdot}{\cdot}$：
-    ベクトルに対してはユークリッド内積．
-    同じサイズの行列 $A, B$ に対しては
-    $\inner{A}{B} \defeq \tr(A^\top B)$（フロベニウス内積）．
-
-  \item $f \oplus g(x, y) \defeq f(x) + g(y)$：
-    関数 $f \colon \X \to \R$，$g \colon \Y \to \R$ に対する直和．
-    離散版では $\mathbf{f} \oplus \mathbf{g}
-    \defeq \mathbf{f} \ones_m^\top + \ones_n \mathbf{g}^\top \in \R^{n \times m}$．
-
-  \item $\alpha \otimes \beta$：
-    $\X \times \Y$ 上の積測度．すなわち
-    $\int_{\X \times \Y} h(x,y) \, \d(\alpha \otimes \beta)(x,y)
-    = \int_\X \int_\Y h(x,y) \, \d\beta(y) \, \d\alpha(x)$．
-
-  \item $\mathbf{a} \otimes \mathbf{b}
-    \defeq \mathbf{a} \mathbf{b}^\top \in \R^{n \times m}$：
-    ベクトルの外積．
-
-  \item $\mathbf{u} \odot \mathbf{v}
-    = (u_i v_i)_{i} \in \R^n$：
-    ベクトルのアダマール積（成分ごとの積）．
+	\item $\range{n}$：整数の集合 $\{1,\dots,n\}$．
+	\item $\ones_{n,m}$：すべての成分が $1$ に等しい $\RR^{n\times m}$ の行列．$\ones_{n}$：すべての成分が $1$ のベクトル．
+	\item $\Identity_n$：サイズ $n\times n$ の単位行列．
+	\item $u\in\RR^n$ に対し，$\diag(u)$ は対角成分が $u$，それ以外が $0$ の $n\times n$ 行列．
+	\item $\simplex_n$：$n$ 個のビンをもつ確率単体，すなわち $\RR^n_+$ における確率ベクトルの集合．
+	\item $(\a,\b)$：単体 $\simplex_n \times \simplex_m$ におけるヒストグラム．
+	\item $(\al,\be)$：空間 $(\X,\Y)$ 上で定義される測度．
+	\item $\frac{\d\al}{\d\be}$：測度 $\al$ の $\be$ に関する相対密度．
+	\item $\density{\al} = \frac{\d\al}{\d x}$：測度 $\al$ のルベーグ測度に関する密度．
+	\item $(\al=\sum_i \a_i \delta_{x_i},\be=\sum_j \b_j \delta_{y_j})$：$x_1,\dots,x_n\in\X$ および $y_1,\dots,y_m\in\Y$ を台とする離散測度．
+	\item $\c(x,y)$：基底コスト．$\al,\be$ の台上で評価された対応するペアワイズコスト行列 $\C_{i,j}=(\c(x_i,y_j))_{i,j}$ を伴う．
+	\item $\pi$：$\al$ と $\be$ のカップリング測度，すなわち任意の $A\subset\X$ に対して $\pi(A\times \Y)= \al(A)$ を，任意の部分集合 $B\subset \Y$ に対して $\pi(\X\times B)= \be(B)$ を満たすもの．離散測度に対しては $\pi = \sum_{i,j} \P_{i,j}\delta_{(x_i,y_j)}$．
+	\item $\Couplings(\al,\be)$：カップリング測度の集合，離散測度に対しては $\CouplingsD(\a,\b)$．
+	\item $\Potentials(\c)$：許容される双対ポテンシャルの集合，離散測度に対しては $\PotentialsD(\C)$．
+	\item $\T : \X \rightarrow \Y$：Monge 写像，典型的には $\T_\sharp \al = \be$ を満たすもの．
+	\item $(\al_t)_{t=0}^1$：動的測度，$\al_{t=0}=\al_0$ かつ $\al_{t=1}=\al_1$．
+	\item $\speed$：Benamou--Brenier 定式化における速度，$\Moment=\al \speed$：運動量．
+	\item $(\f,\g)$：双対ポテンシャル，離散測度に対しては $(\fD,\gD)$ が双対変数．
+	\item $(\uD,\vD) \eqdef (e^{\fD/\varepsilon},e^{\gD/\varepsilon})$：Sinkhorn スケーリング．
+	\item $\K \eqdef e^{-\C/\varepsilon}$：Sinkhorn 用の Gibbs カーネル．
+	\item $\flow$：$\Wass_1$ 型問題（ダイバージェンス制約下の最適化）におけるフロー．
+	\item $\MKD_\C(\a,\b)$ および $\MK_\c(\al,\be)$：コスト $\C$（ヒストグラム）および $\c$（任意の測度）に付随する OT 最適化問題の値．
+	\item $\WassD_p(\a,\b)$ および $\Wass_p(\al,\be)$：基底距離行列 $\distD$（ヒストグラム）および距離 $\dist$（任意の測度）に付随する $p$-Wasserstein 距離．
+	\item $\lambda\in\simplex_S$：$S$ 個の測度の重心を計算するために用いる重みベクトル．
+	\item $\dotp{\cdot}{\cdot}$：ベクトルどうしの通常のユークリッド内積．同じサイズの2つの行列 $A,B$ に対しては $\dotp{A}{B} \eqdef \trace(A^\top B)$ がフロベニウス内積．
+	\item $\f\oplus \g(x,y) \eqdef f(x)+g(y)$：2つの関数 $\f : \X \rightarrow \RR, \g : \Y \rightarrow \RR$ に対して $\f \oplus \g : \X\times \Y \rightarrow \RR$ を定める．
+	\item $\fD \oplus \gD \eqdef \fD \ones_m^\top + \ones_n \gD^\top \in \RR^{n\times m}$：2つのベクトル $\fD\in\RR^n$，$\gD\in\RR^m$ に対して．
+	\item $\al \otimes \be$：$\X \times \Y$ 上の積測度，すなわち $\int_{\X \times \Y} g(x,y) \d(\al\otimes\be)(x,y) \eqdef \int_{\X \times \Y} g(x,y) \d\al(x) \d\be(y)$．
+	\item $\a \otimes \b \eqdef \a \b^\top \in \RR^{n \times m}$．
+	\item $\uD \odot \vD = (\uD_i \vD_i) \in \RR^n$：$(\uD, \vD) \in (\RR^n)^2$ に対して．
 \end{itemize}
-
-
-%% ============================================================
-%%  1.8 本書の構成
-%% ============================================================
-\section{本書の構成}
-\label{sec:book-structure}
-
-本書の以降の章は次のように構成されている．
-
-\begin{description}
-  \item[第2章：理論的基礎]
-    距離空間・測度・確率測度などの基本概念を定義した上で，
-    Monge 問題，Kantorovich 緩和，Wasserstein 距離を定式化する．
-
-  \item[第3章：基本アルゴリズム]
-    離散最適輸送を解くための古典的アルゴリズムを扱う．
-    ネットワーク単体法，ハンガリアン法，オークションアルゴリズムなど，
-    線形計画に基づく手法を解説する．
-
-  \item[第4章：エントロピー正則化]
-    大規模な最適輸送問題を効率的に近似解法する鍵となるエントロピー正則化を導入する．
-    Sinkhorn アルゴリズムの導出・収束性・実装を詳述する．
-
-  \item[第5章：半離散最適輸送]
-    離散測度と連続測度の間の最適輸送を扱う．
-    ラゲール図（Laguerre diagram）との関係を論じる．
-
-  \item[第6章：$\Wass_1$ 最適輸送]
-    基底コストが距離そのものである場合の特別な構造を利用する手法を扱う．
-    Beckmann 定式化，双対表現（リプシッツ制約），最小コストフローとの関連を論じる．
-
-  \item[第7章：動的定式化]
-    Benamou--Brenier の流体力学的定式化を導入する．
-    変位補間（displacement interpolation）と勾配流（gradient flow）を扱う．
-
-  \item[第8章：統計的側面]
-    Wasserstein 距離の統計的推定に関する問題を扱う．
-    サンプル複雑度，ミニマックスレートなどを論じる．
-
-  \item[第9章：変分問題]
-    Wasserstein 空間上の変分問題を扱う．
-    Wasserstein 重心（barycenter），勾配流の変分定式化を論じる．
-
-  \item[第10章：拡張と応用]
-    非平衡最適輸送（unbalanced OT），Gromov--Wasserstein 距離，
-    部分最適輸送（partial OT）など，基本理論の拡張と具体的応用を扱う．
-\end{description}
-
-\begin{remark}{解説の3つの層}{three-layers}
-  本書では，以下の3つの枠組みを段階的に扱う：
-  \begin{enumerate}
-    \item \textbf{ヒストグラム}（確率ベクトル $\mathbf{a} \in \simplex_n$）：
-      最も基本的かつ計算に直結する設定であり，
-      アルゴリズムの実装に必要な内容はこの枠組みで完結する．
-    \item \textbf{離散測度}（$\alpha = \sum_i a_i \delta_{x_i}$）：
-      重みに加えて位置の自由度を持つ設定であり，
-      連続空間上の問題をより忠実にモデル化する．
-    \item \textbf{一般測度}（密度 $\rho_\alpha = \d\alpha / \d x$ を持つ測度など）：
-      最も一般的な設定であり，
-      最適輸送理論の古典的な教科書で標準的に用いられる枠組みである．
-  \end{enumerate}
-\end{remark}
