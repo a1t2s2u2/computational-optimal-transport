@@ -127,9 +127,9 @@ def _extract_blockmeta(body: str) -> tuple:
 
 
 def _parse_meta(arg: str) -> dict:
-    """'space=polish; uses=a,b; route.A=c' -> dict。
+    """'space=polish; uses=a,b; route.A=c; group=微分の理論' -> dict。
 
-    値はカンマ区切りでリスト化。route.* は別キーで保持。
+    値はカンマ区切りでリスト化。route.* は別キーで保持。group は文字列のまま。
     """
     meta: dict = {}
     for part in arg.split(";"):
@@ -139,8 +139,11 @@ def _parse_meta(arg: str) -> dict:
         key, _, val = part.partition("=")
         key = key.strip()
         val = val.strip()
-        items = [v.strip() for v in val.split(",") if v.strip()]
-        meta[key] = items
+        if key == "group":
+            meta["group"] = val
+        else:
+            items = [v.strip() for v in val.split(",") if v.strip()]
+            meta[key] = items
     return meta
 
 
@@ -162,6 +165,31 @@ def _refs_in(text: str) -> list:
 # ---------------------------------------------------------------------------
 # ブロック抽出
 # ---------------------------------------------------------------------------
+
+# 章 → 概念（少数の大きな「まとまり」）への対応。group= 明示があればそちらを優先。
+_CONCEPT_RULES = [
+    ("準備", "数学的準備"),
+    ("基礎理論", "輸送問題と双対性"),
+    ("Kantorovich", "輸送問題と双対性"),
+    ("エントロピー", "エントロピー正則化"),
+    ("Sinkhorn", "エントロピー正則化"),
+    ("Wasserstein", "Wasserstein 幾何"),
+    ("測地線", "Wasserstein 幾何"),
+    ("動的", "Wasserstein 幾何"),
+    ("Benamou", "Wasserstein 幾何"),
+    ("Otto", "勾配流と曲率"),
+    ("勾配流", "勾配流と曲率"),
+    ("曲率", "勾配流と曲率"),
+    ("CD", "勾配流と曲率"),
+]
+
+
+def _concept_of(chapter: str) -> str:
+    for kw, concept in _CONCEPT_RULES:
+        if kw in chapter:
+            return concept
+    return chapter or "その他"
+
 
 def _clean_statement(body: str) -> str:
     r"""ブロック本文を statement テキストとして整える。
@@ -284,7 +312,9 @@ def _build_node(env, title, label, chapter, section, subsection,
         id=node_id, env=env, title=title,
         chapter=chapter, section=section, subsection=subsection,
         source_file=source_file, spaces=spaces, uses=uses, routes=routes,
-        statement=_clean_statement(body), has_proof=bool(proofs),
+        statement=_clean_statement(body),
+        group=(meta.get("group") or _concept_of(chapter)),
+        has_proof=bool(proofs),
     )
 
 
@@ -301,7 +331,7 @@ def build_graph(nodes: list, lattice: SpaceLattice) -> dict:
             "id": n.id, "env": n.env, "title": n.title,
             "chapter": n.chapter, "section": n.section, "subsection": n.subsection,
             "source_file": n.source_file, "spaces": n.spaces,
-            "statement": n.statement,
+            "statement": n.statement, "group": n.group,
             "has_proof": n.has_proof, "is_axiomatic": n.is_axiomatic,
         })
         for u in n.uses:

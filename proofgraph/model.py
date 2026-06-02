@@ -112,6 +112,7 @@ class Node:
     uses: list = field(default_factory=list)     # statement 依存（AND）
     routes: list = field(default_factory=list)   # 証明ルート（OR of AND）: list[Route]
     statement: str = ""          # ブロック本文（statement テキスト、TeX のまま）
+    group: str = ""              # 概要グループ（手動の「まとまり」。未指定なら章で代用）
     has_proof: bool = False
 
     @property
