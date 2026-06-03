@@ -72,9 +72,10 @@ $\mathbf{a} \in \R_{>0}^n$，$\mathbf{b} \in \R_{>0}^m$ は
   よって全成分が正である．
 \end{proof}
 
-最適解の構造を取り出す鍵は，目的関数
-$F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})$
-の勾配と，周辺制約が定める\textbf{アフィン部分空間}の幾何である．
+最適解の構造を取り出す鍵は，正則化問題を Gibbs カーネル $\mathbf{K}$ の
+KL 射影（命題~\ref{prop:sem-entropic-kl-projection}）とみなし，
+KL ダイバージェンスの勾配と，周辺制約が定める\textbf{アフィン部分空間}の幾何を
+組み合わせることである．
 
 \begin{definition}{周辺制約の方向空間}{sem-marginal-tangent}
   周辺分布を変えない摂動全体
@@ -171,12 +172,20 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ の「動ける方向」を表す．
 \end{proposition}
 
 \begin{proof}
-  $\mathbf{P}_\varepsilon$ は，アフィン集合
+  命題~\ref{prop:sem-entropic-kl-projection} より，$\mathbf{P}_\varepsilon$ は
+  Gibbs カーネル $\mathbf{K}$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ への KL 射影
+  \[
+    \mathbf{P}_\varepsilon
+    = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+      \KLD(\mathbf{P} \| \mathbf{K})
+  \]
+  である．実行可能集合はアフィン集合
   $\mathcal{A} \defeq \{\mathbf{P} : \mathbf{P}\ones_m = \mathbf{a},\,
-  \mathbf{P}^\top \ones_n = \mathbf{b}\}$
-  上で $F$ を最小化する点である．
-  しかも $\mathbf{P}_\varepsilon$ は\textbf{内点}，すなわち全成分が正である
-  （命題~\ref{prop:sem-entropic-positive-solution}）．
+  \mathbf{P}^\top \ones_n = \mathbf{b}\}$ と非負象限の共通部分だが，
+  $\mathbf{P}_\varepsilon$ は\textbf{内点}，すなわち全成分が正である
+  （命題~\ref{prop:sem-entropic-positive-solution}）から，
+  非負制約は不活性であり，$\mathbf{P}_\varepsilon$ は $\mathcal{A}$ 上で
+  $\KLD(\cdot \| \mathbf{K})$ を最小化する点とみなせる．
 
   \textbf{一次の最適性条件．}
   任意の $\mathbf{Q} \in \mathcal{T}$ をとる．
@@ -184,35 +193,41 @@ $\CouplingsD(\mathbf{a}, \mathbf{b})$ の「動ける方向」を表す．
   十分小さい $|t|$ に対して
   $\mathbf{P}_\varepsilon + t\mathbf{Q} \in \mathcal{A}$ かつ全成分が正であり，
   実行可能である．
-  $t \mapsto F(\mathbf{P}_\varepsilon + t\mathbf{Q})$ は $t = 0$ で
-  最小値をとるから，
+  $t \mapsto \KLD(\mathbf{P}_\varepsilon + t\mathbf{Q} \| \mathbf{K})$ は
+  $t = 0$ で最小値をとるから，
   \[
     0 = \left.\frac{\d}{\d t}\right|_{t=0}
-      F(\mathbf{P}_\varepsilon + t\mathbf{Q})
-    = \inner{\nabla F(\mathbf{P}_\varepsilon)}{\mathbf{Q}}.
+      \KLD(\mathbf{P}_\varepsilon + t\mathbf{Q} \| \mathbf{K})
+    = \inner{\nabla \KLD(\mathbf{P}_\varepsilon \| \mathbf{K})}{\mathbf{Q}}.
   \]
   これが任意の $\mathbf{Q} \in \mathcal{T}$ で成り立つので
-  $\nabla F(\mathbf{P}_\varepsilon) \in \mathcal{T}^\perp$．
+  $\nabla \KLD(\mathbf{P}_\varepsilon \| \mathbf{K}) \in \mathcal{T}^\perp$．
 
   \textbf{勾配の計算とスケーリング形式．}
-  $-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})$
-  （$\varphi(x) = x\log x - x$，$\varphi'(x) = \log x$）であったから
-  （備考~\ref{rem:sem-entropy-convention}），
+  $\KLD(\mathbf{P} \| \mathbf{K})
+  = \sum_{i,j}\bigl(P_{i,j}\log\tfrac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}\bigr)$
+  （定義~\ref{def:sem-kl-divergence}）の各成分を $P_{i,j}$ で微分すると，
+  $\frac{\partial}{\partial P_{i,j}}
+  \bigl(P_{i,j}\log\tfrac{P_{i,j}}{K_{i,j}} - P_{i,j}\bigr)
+  = \log\tfrac{P_{i,j}}{K_{i,j}} + 1 - 1$ より
   \[
-    \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
-    = C_{i,j} + \varepsilon \log (P_\varepsilon)_{i,j}.
+    \frac{\partial \KLD(\cdot \| \mathbf{K})}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
+    = \log\frac{(P_\varepsilon)_{i,j}}{K_{i,j}}.
   \]
   命題~\ref{prop:sem-tangent-orthogonal} より，
   この勾配が $\mathcal{T}^\perp$ に属することは，
   ある $\mathbf{f} \in \R^n$, $\mathbf{g} \in \R^m$ が存在して
   \[
-    C_{i,j} + \varepsilon \log (P_\varepsilon)_{i,j} = f_i + g_j
+    \log\frac{(P_\varepsilon)_{i,j}}{K_{i,j}} = \frac{f_i + g_j}{\varepsilon}
     \qquad(\forall\, i, j)
   \]
-  となることと同値である．これを $(P_\varepsilon)_{i,j}$ について解くと
+  となることと同値である（ランク 1 の和の各因子を $\varepsilon$ 倍して
+  $\mathbf{f}, \mathbf{g}$ と命名した；これが双対変数となることは
+  備考~\ref{rem:sem-dual-scaling-correspondence} で述べる）．
+  両辺を $(P_\varepsilon)_{i,j}$ について解くと，$K_{i,j} = e^{-C_{i,j}/\varepsilon}$ より
   \[
     (P_\varepsilon)_{i,j}
-    = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
+    = K_{i,j}\, e^{(f_i + g_j)/\varepsilon}
     = \underbrace{e^{f_i/\varepsilon}}_{u_i}
       \underbrace{e^{-C_{i,j}/\varepsilon}}_{K_{i,j}}
       \underbrace{e^{g_j/\varepsilon}}_{v_j}.
