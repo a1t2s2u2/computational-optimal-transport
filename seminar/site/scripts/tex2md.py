@@ -13,7 +13,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", 
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
 CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
-# 変換対象の章。ch01–ch10 を本スクリプトで tex から生成する
+# 変換対象の章。ch01–ch04 を本スクリプトで tex から生成する
 # （content/*.md は tex の生成物であり、tex が source of truth）。
 # 参照（\ref）解決は build_label_map()／build_chapter_map() が全 ch*.tex を
 # 走査するため、変換対象外の章のラベルも本文中でタイトル表示される。
@@ -38,45 +38,9 @@ CHAPTERS = [
     }),
     ("ch04_sinkhorn.tex", "04-sinkhorn.md", {
         "id": "sinkhorn",
-        "nav": "Sinkhorn 双対",
+        "nav": "Sinkhorn と収束",
         "eyebrow": "4. Sinkhorn",
-        "title": "正則化問題の双対と Sinkhorn アルゴリズム",
-    }),
-    ("ch05_wasserstein.tex", "05-wasserstein.md", {
-        "id": "wasserstein",
-        "nav": "Wasserstein 距離",
-        "eyebrow": "5. Wasserstein Distance",
-        "title": "Wasserstein 距離",
-    }),
-    ("ch06_dual.tex", "06-dual.md", {
-        "id": "dual",
-        "nav": "古典双対",
-        "eyebrow": "6. Kantorovich Duality",
-        "title": "古典 Kantorovich 双対と c-変換",
-    }),
-    ("ch07_geodesics.tex", "07-geodesics.md", {
-        "id": "geodesics",
-        "nav": "測地線",
-        "eyebrow": "7. Geodesics",
-        "title": "測地線と変位補間",
-    }),
-    ("ch08_benamou_brenier.tex", "08-benamou-brenier.md", {
-        "id": "benamou-brenier",
-        "nav": "動的定式化",
-        "eyebrow": "8. Dynamic Formulation",
-        "title": "動的定式化：Benamou–Brenier",
-    }),
-    ("ch09_otto.tex", "09-otto.md", {
-        "id": "otto",
-        "nav": "Otto 計算",
-        "eyebrow": "9. Otto Calculus",
-        "title": "Otto 計算と勾配流",
-    }),
-    ("ch10_curvature.tex", "10-curvature.md", {
-        "id": "curvature",
-        "nav": "曲率 CD(K,N)",
-        "eyebrow": "10. Curvature",
-        "title": "曲率：変位凸性と CD(K,N)",
+        "title": "Sinkhorn アルゴリズムと収束",
     }),
 ]
 
@@ -89,6 +53,7 @@ BLOCK_ENVS = {
     "proposition":("theorem",    "Prop"),
     "remark":     ("fact",       "Rem"),
     "example":    ("fact accent","Ex"),
+    "algorithm":  ("definition", ""),
 }
 
 LABEL_PREFIX_MAP = {
@@ -331,6 +296,9 @@ def convert_texorpdfstring(text: str) -> str:
 
 def apply_inline_conversions(text: str, convert_references: bool = True) -> str:
     """Apply all inline-level conversions to a line of text."""
+    # \blockmeta{...} is proofgraph metadata: invisible in the PDF, and likewise
+    # must not leak into the site markdown.
+    text = re.sub(r"\\blockmeta\{[^}]*\}", "", text)
     text = strip_label(text)
     if convert_references and LABEL_MAP:
         text = convert_refs(text)
@@ -451,9 +419,28 @@ class TexParser:
                 self._skip_environment("center")
                 continue
 
-            # Skip algorithm environments
-            if re.match(r"\\begin\{algorithm\}", stripped):
-                self._skip_environment("algorithm")
+            # Algorithm environments -> rendered as a block.
+            # \begin{algorithm}{label} ... \end{algorithm}（引数はラベル）。
+            m_alg = re.match(r"\\begin\{algorithm\}\{(.+?)\}", stripped)
+            if m_alg:
+                self.advance()
+                raw = []
+                while not self.at_end() and self.peek().strip() != "\\end{algorithm}":
+                    raw.append(self.advance())
+                if not self.at_end():
+                    self.advance()  # consume \end{algorithm}
+                # 行末の '\\'（改行）を空行＝段落区切りに変換し、各ステップを
+                # 別行で描画する（生の <br> は build.mjs に escape されるため使えない）。
+                processed = []
+                for ln in raw:
+                    s = ln.rstrip()
+                    if s.endswith("\\\\"):
+                        processed.append(s[:-2].rstrip())
+                        processed.append("")
+                    else:
+                        processed.append(ln)
+                block_nodes = TexParser(processed).parse()
+                nodes.append(("block", "algorithm", "アルゴリズム", block_nodes, None))
                 continue
 
             # Named block environments: definition, claim, theorem, etc.

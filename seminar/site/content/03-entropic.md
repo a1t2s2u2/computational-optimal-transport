@@ -289,6 +289,99 @@ title: エントロピー正則化
 :::
 
 
+この KL 射影としての表現を用いると，最適解の具体的な形が定まる．
+
+:::theorem
+### Prop: 正則化解のスケーリング形
+
+[ref:Def: エントロピー正則化された離散最適輸送|エントロピー正則化された離散最適輸送] の仮定（\(\mathbf{a} \in \R_{>0}^n\), \(\mathbf{b} \in \R_{>0}^m\)）の下で，\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の最適解\(\mathbf{P}_\varepsilon\) は，ある \(\mathbf{u} \in \R_{>0}^n\), \(\mathbf{v} \in \R_{>0}^m\)を用いて
+
+\[
+ (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
+ \qquad\text{すなわち}\qquad
+ \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+\]
+
+と書ける．ここで \(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) は Gibbs カーネル（[ref:Def: Gibbs カーネル|Gibbs カーネル]）である．\(\mathbf{P}_\varepsilon\) は一意であり，スケーリングベクトル \((\mathbf{u}, \mathbf{v})\) は，任意の \(\lambda > 0\) による置き換え \((\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})\)の自由度を除いて一意に定まる．
+
+:::details-embedded 証明
+証明の要点は，最適解が領域の内部（全成分が正）にあることを示し，そのうえで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用することである．
+
+**Step 1（最適解の正値性）．**\(\mathbf{P}_\varepsilon\) の全成分が正であること，すなわち\((\mathbf{P}_\varepsilon)_{i,j} > 0\)（\(\forall i, j\)）を示す．\(n = 1\) または \(m = 1\) のときは \(\CouplingsD(\mathbf{a}, \mathbf{b})\) は一点 \(\mathbf{P} = \mathbf{a}\mathbf{b}^\top\)（成分 \(a_i b_j > 0\)）のみからなり，主張は明らか．以下 \(n, m \geq 2\) とする．
+
+背理法で，\((\mathbf{P}_\varepsilon)_{i_0, j_0} = 0\) となる成分があると仮定する（以下 \(\mathbf{P} \defeq \mathbf{P}_\varepsilon\) と略記）．\(a_{i_0} = \sum_j P_{i_0, j} > 0\) より \(P_{i_0, j_1} > 0\) となる \(j_1\) が存在し，\(P_{i_0, j_0} = 0\) だから \(j_1 \neq j_0\)．同様に \(b_{j_0} = \sum_i P_{i, j_0} > 0\) より \(P_{i_1, j_0} > 0\) となる \(i_1 \neq i_0\) が存在する．\(t \geq 0\) に対し，\((i_0, j_0), (i_1, j_1)\) 成分に \(+t\)，\((i_0, j_1), (i_1, j_0)\) 成分に \(-t\)を加えた行列 \(\mathbf{P}^t\) を考える（他の成分は不変）．各行・各列での増減が打ち消し合うので \(\mathbf{P}^t\) の周辺は不変であり，\(t_0 \defeq \min(P_{i_0, j_1}, P_{i_1, j_0}) > 0\) として\(t \in [0, t_0]\) では \(\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})\) である．
+
+目的関数を \(F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})\)（\(\varphi(x) = x\log x - x\)，[ref:Rem: \(\varphi(x)=x\log x-x\) の連続性|\(\varphi(x)=x\log x-x\) の連続性]）とおくと，\(g(t) \defeq F(\mathbf{P}^t)\) は \(t\) に依存する 4 成分のみを通じて
+
+\[
+ g(t) = \text{(定数)}
+ + t\,(C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
+ + \varepsilon\bigl[\varphi(t) + \varphi(P_{i_1 j_1} + t)
+ + \varphi(P_{i_0 j_1} - t) + \varphi(P_{i_1 j_0} - t)\bigr]
+\]
+
+と書ける．\(\varphi'(x) = \log x\) だから，\((0, t_0)\) 上で
+
+\[
+ g'(t) = (C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
+ + \varepsilon\bigl[\log t + \log(P_{i_1 j_1} + t)
+ - \log(P_{i_0 j_1} - t) - \log(P_{i_1 j_0} - t)\bigr].
+\]
+
+右辺で \(\log(P_{i_0 j_1} - t)\), \(\log(P_{i_1 j_0} - t)\) は \(t \to 0+\) で有限値に収束し，\(\log(P_{i_1 j_1} + t)\) は有限値または \(-\infty\) に発散する一方，\(\log t \to -\infty\) である．ゆえに \(\lim_{t \to 0+} g'(t) = -\infty\) となり，十分小さい \(t > 0\) で\(g(t) < g(0) = F(\mathbf{P}_\varepsilon)\)．これは \(\mathbf{P}_\varepsilon\) の最適性に反する．したがって \(\mathbf{P}_\varepsilon\) の全成分は正である．
+
+**Step 2（1 階条件）．**Step 1 より \(\mathbf{P}_\varepsilon\) は領域 \(\R_{>0}^{n \times m}\) の内点にあるので，非負制約 \(\mathbf{P} \geq 0\) は活性化せず，制約は等式 \(\mathbf{P}\ones_m = \mathbf{a}\),\(\mathbf{P}^\top\ones_n = \mathbf{b}\) のみと見なせる．[ref:Prop: 正則化 OT は KL 射影である|正則化 OT は KL 射影である] より \(\mathbf{P}_\varepsilon\) は\(\KLD(\cdot \| \mathbf{K})\) の \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 上での最小元であり，\(\KLD(\cdot \| \mathbf{K})\) は \(\R_{>0}^{n \times m}\) 上で微分可能で
+
+\[
+ \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K})
+ = \log\frac{P_{i,j}}{K_{i,j}}
+\]
+
+をみたす（[ref:Def: 離散 KL ダイバージェンス|離散 KL ダイバージェンス] より直接計算）．制約はすべてアフィンだから制約想定はみたされ，内点の最小元では Lagrange の1 階条件が必要条件となる：ある乗数 \(\boldsymbol{\alpha} \in \R^n\), \(\boldsymbol{\beta} \in \R^m\)が存在して，行和制約の勾配が成分 \(i\) の行に \(1\)，列和制約の勾配が成分 \(j\) の列に \(1\) を与えることから
+
+\[
+ \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j
+ \qquad (\forall i, j)
+\]
+
+が成り立つ．両辺の指数をとり \(u_i \defeq e^{\alpha_i} > 0\), \(v_j \defeq e^{\beta_j} > 0\) とおけば\((\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j\)，すなわち\(\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\) を得る．
+
+**Step 3（一意性）．**\(\mathbf{P}_\varepsilon\) 自体の一意性は[ref:Prop: 正則化解の存在と一意性|正則化解の存在と一意性] による．スケーリングベクトルについては，任意の \(\lambda > 0\) に対し\((\lambda u_i)(\lambda^{-1} v_j) = u_i v_j\) より \((\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})\) も同じ \(\mathbf{P}_\varepsilon\) を与える．逆にこの自由度を除けば一意である：全成分が正なので各 \(i, j\) で \(u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0\) が定まり，\(i, i'\) について比 \(u_i / u_{i'} = \bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) \big/ \bigl((\mathbf{P}_\varepsilon)_{i',j}/K_{i',j}\bigr)\) が（\(j\) に依らず）決まるから，\(\mathbf{u}\) は正の定数倍を除いて一意であり，対応して \(\mathbf{v}\) も定まる．
+:::
+:::
+
+
+:::fact
+### Rem: 双対ポテンシャルとの関係
+
+Step 2 の乗数を \(\alpha_i = f_i / \varepsilon\), \(\beta_j = g_j / \varepsilon\) と書けば\(u_i = e^{f_i / \varepsilon}\), \(v_j = e^{g_j / \varepsilon}\) であり，\(\mathbf{f} \in \R^n\), \(\mathbf{g} \in \R^m\) は元の正則化問題\(\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})\) の周辺制約に対する**双対ポテンシャル**に他ならない．実際，元の目的関数 \(F\) に対して直接 1 階条件を書くと，\(\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}\)（[ref:Rem: 通常の Shannon エントロピーとの違い|通常の Shannon エントロピーとの違い]）より
+
+\[
+ C_{i,j} + \varepsilon\log(\mathbf{P}_\varepsilon)_{i,j} = f_i + g_j,
+ \qquad\text{すなわち}\qquad
+ (\mathbf{P}_\varepsilon)_{i,j} = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
+ = e^{f_i / \varepsilon} K_{i,j}\, e^{g_j / \varepsilon}
+\]
+
+となり，同じ式が得られる（これが Step 2 を元の問題から導く「経路 A」にあたる）．与えられた \(\mathbf{a}, \mathbf{b}\) から \(\mathbf{u}, \mathbf{v}\) を周辺条件
+
+\[
+ \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\,\ones_m = \mathbf{a},
+ \qquad
+ \diag(\mathbf{v})\,\mathbf{K}^\top\diag(\mathbf{u})\,\ones_n = \mathbf{b}
+\]
+
+によって決定する問題は，行列スケーリング問題として知られる．
+:::
+
+
+:::fact
+### Rem: 連続版：Schr\"odinger 問題
+
+連続版（\(\X, \Y\) を Polish 空間とする）でも対応する主張が成り立ち，最適カップリング \(\pi\) は基準測度に対する密度が \(u(x)\, e^{-c(x,y)/\varepsilon}\, v(y)\) という積の形をとる．この問題は **Schr\"odinger 問題**（1931）と呼ばれ，離散の 1 階条件\(\log\bigl((\mathbf{P}_\varepsilon)_{i,j} / K_{i,j}\bigr) = \alpha_i + \beta_j\) に対応する停留条件は，変分法（オイラー–ラグランジュ方程式）によって与えられる．本セミナーでは離散版に限って扱う．
+:::
+
+
 ## 正則化パラメータの極限
 
 

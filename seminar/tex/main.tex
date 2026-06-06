@@ -61,22 +61,16 @@
   $\MKD_{\mathbf{C}}^\varepsilon$ & エントロピー正則化された最適輸送の最適値 \\
 \end{tabular}
 
-\subsection*{双対と Sinkhorn}
+\subsection*{正則化解のスケーリング形}
 \begin{tabular}{ll}
   $\mathbf{u} \in \R_{>0}^n,\; \mathbf{v} \in \R_{>0}^m$
-    & スケーリングベクトル（$\mathbf{P} = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$） \\
-  $\mathbf{f} \in \R^n,\; \mathbf{g} \in \R^m$
-    & 双対変数（$u_i = e^{f_i/\varepsilon}$, $v_j = e^{g_j/\varepsilon}$） \\
+    & 正のスケーリングベクトル（$\mathbf{P}_\varepsilon = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$） \\
   $\diag(\mathbf{u})$ & $\mathbf{u}$ を対角に並べた対角行列 \\
+  $\mathbf{f} \in \R^n,\; \mathbf{g} \in \R^m$
+    & 双対ポテンシャル（$u_i = e^{f_i/\varepsilon}$, $v_j = e^{g_j/\varepsilon}$） \\
   $\dHil(\cdot,\cdot)$ & Hilbert 射影計量 \\
-  $\lambda(\mathbf{K})$ & Birkhoff 縮小率（$\in [0,1)$） \\
-\end{tabular}
-
-\subsection*{Wasserstein 距離}
-\begin{tabular}{ll}
-  $\simplex_n$ & 確率単体 $\{\mathbf{a} \in \R_{\geq 0}^n : \sum_i a_i = 1\}$ \\
-  $\distD$ & 地の距離行列 \\
-  $\WassD_p$ & 離散 $p$-Wasserstein 距離 $\MKD_{\distD^p}(\mathbf{a},\mathbf{b})^{1/p}$ \\
+  $\eta(\mathbf{K}),\; \lambda(\mathbf{K})$
+    & 成分比の最大歪み・Birkhoff 縮小率（$\lambda = \tfrac{\sqrt{\eta}-1}{\sqrt{\eta}+1} \in [0,1)$） \\
 \end{tabular}
 
 \vspace{1em}
@@ -86,11 +80,5 @@
 \input{ch02_ot_foundations}
 \input{ch03_entropic_regularization}
 \input{ch04_sinkhorn}
-\input{ch05_wasserstein}
-\input{ch06_dual}
-\input{ch07_geodesics}
-\input{ch08_benamou_brenier}
-\input{ch09_otto}
-\input{ch10_curvature}
 
 \end{document}

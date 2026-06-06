@@ -1,590 +1,531 @@
-\chapter{正則化問題の双対と Sinkhorn アルゴリズム}
+\chapter{Sinkhorn アルゴリズムと収束}
 \label{ch:seminar-04-sinkhorn}
 
 前章で，エントロピー正則化された離散 Kantorovich 問題
-$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ が
-一意な最適解 $\mathbf{P}_\varepsilon$ を持つことを見た．
-本章ではまず，その解が\textbf{全成分正}（＝輸送多面体の内点）であることを示し，
-この\textbf{狭義凸性}と\textbf{内点性}を活用して，
-最適解が $n+m$ 個の変数で表せること——
-すなわち $nm$ 変数の問題が本質的に双対的であること——を示す．
-この構造から，行列ベクトル積のみで最適解を反復計算する
-\textbf{Sinkhorn アルゴリズム}が自然に導かれる．
-これは計算最適輸送の中核をなすアルゴリズムである．
+$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ が，
+Gibbs カーネル $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ を正の対角スケーリングで挟んだ
+\[
+  \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+\]
+という形をもつことを見た（命題~\ref{prop:sem-entropic-scaling-form}）．
+これにより未知数は $nm$ 個の行列成分から $n+m$ 個のスケーリング変数 $\mathbf{u}, \mathbf{v}$ に縮約された．
+本章では，この $\mathbf{u}, \mathbf{v}$ を周辺条件から定める \textbf{Sinkhorn アルゴリズム}を導出し，
+それが\textbf{線形収束}することを，収束率まで込めて証明する．
+鍵となるのは，正行列が \textbf{Hilbert 射影計量}を縮小するという
+\textbf{Birkhoff の縮小定理}である．
 
-本章を通じて，
-$\mathbf{a} \in \R_{>0}^n$，$\mathbf{b} \in \R_{>0}^m$ は
-すべての成分が正なヒストグラム
-（$\sum_i a_i = \sum_j b_j = 1$）とする．
-
-%% ============================================================
-%% 4.1 正則化問題の双対とスケーリング形式
-%% ============================================================
-\section{正則化問題の双対とスケーリング形式}
-\label{sec:sem-scaling-form}
-
-まず，最適解が輸送多面体の内点（全成分が正）であることを確認する．
-これは以降の一次条件・スケーリング形式の前提となる．
-
-\begin{proposition}{正則化解の正値性}{sem-entropic-positive-solution}
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ は
-  \[
-    (P_\varepsilon)_{i,j} > 0
-    \qquad(\forall\, i \in \range{n},\, j \in \range{m})
-  \]
-  を満たす．
-\end{proposition}
-
-\begin{proof}
-  背理法で示す．ある $(i,j)$ で
-  $(P_\varepsilon)_{i,j}=0$ とする．
-  $a_i>0$ なので同じ行に $(P_\varepsilon)_{i,j_1}>0$ となる
-  $j_1$ が存在する．また $b_j>0$ なので同じ列に
-  $(P_\varepsilon)_{i_1,j}>0$ となる $i_1$ が存在する．
-  小さい $\theta>0$ に対し，4成分だけを
-  \[
-    P_{i,j} \leftarrow P_{i,j}+\theta,\quad
-    P_{i,j_1} \leftarrow P_{i,j_1}-\theta,\quad
-    P_{i_1,j} \leftarrow P_{i_1,j}-\theta,\quad
-    P_{i_1,j_1} \leftarrow P_{i_1,j_1}+\theta
-  \]
-  と変化させる．$\theta$ を
-  $(P_\varepsilon)_{i,j_1}$ と $(P_\varepsilon)_{i_1,j}$ より小さく取れば，
-  非負性と周辺条件は保たれる．
-
-  この変化による目的関数の変化を評価する．
-  線形コストの変化は $\theta$ に比例する．
-  $(i,j_1)$ 成分と $(i_1,j)$ 成分は正であるから，
-  これらの負エントロピー $\varphi(x) = x\log x - x$ の変化は
-  $\varphi'(x) = \log x$ が有限であることから $O(\theta)$ である．
-  $(i_1,j_1)$ 成分は，正ならば同様に $O(\theta)$ であり，
-  ゼロならば $\varphi(\theta)-\varphi(0) = \theta\log\theta - \theta$
-  が加わるが，これは目的関数をさらに減少させる方向に働く．
-  一方，$(i,j)$ 成分（もともとゼロ）の変化は
-  \[
-    \varphi(\theta) - \varphi(0) = \theta\log\theta - \theta
-  \]
-  であり，$\theta$ で割ると $\log\theta-1 \to -\infty$
-  （$\theta \to 0^+$）となる．
-  したがって十分小さい $\theta>0$ では
-  この項が支配的となり，目的関数全体が減少する．
-  これは $\mathbf{P}_\varepsilon$ の最適性に矛盾する．
-  よって全成分が正である．
-\end{proof}
-
-最適解の構造を取り出す鍵は，目的関数
-$F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon \Hb(\mathbf{P})$
-の勾配と，周辺制約が定める\textbf{アフィン部分空間}の幾何である．
-
-\begin{definition}{周辺制約の方向空間}{sem-marginal-tangent}
-  周辺分布を変えない摂動全体
-  \[
-    \mathcal{T}
-    \defeq
-    \left\{
-      \mathbf{Q} \in \R^{n \times m}
-      \;\middle|\;
-      \mathbf{Q}\ones_m = \mathbf{0},\;
-      \mathbf{Q}^\top \ones_n = \mathbf{0}
-    \right\}
-  \]
-  を\textbf{方向空間}とよぶ．すなわち $\mathbf{Q} \in \mathcal{T}$ は
-  すべての行和・列和が $0$ の行列である．
-\end{definition}
-
-$\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ
-$\mathbf{Q} \in \mathcal{T}$ ならば $\mathbf{P} + t\mathbf{Q}$ も
-（非負性が保たれる限り）周辺制約を満たす．
-したがって $\mathcal{T}$ は実行可能集合
-$\CouplingsD(\mathbf{a}, \mathbf{b})$ の「動ける方向」を表す．
-
-\begin{proposition}{方向空間の直交補空間}{sem-tangent-orthogonal}
-  フロベニウス内積に関する $\mathcal{T}$ の直交補空間は，
-  \textbf{ランク 1 の和}の形をした行列全体に一致する：
-  \[
-    \mathcal{T}^\perp
-    =
-    \left\{
-      \mathbf{M} \in \R^{n \times m}
-      \;\middle|\;
-      \exists\, \mathbf{f} \in \R^n,\, \mathbf{g} \in \R^m
-      \text{ s.t. } M_{i,j} = f_i + g_j
-    \right\}.
-  \]
-\end{proposition}
-
-\begin{proof}
-  $\mathcal{S} \defeq \{\mathbf{M} : M_{i,j} = f_i + g_j\}$ とおく．
-
-  \textbf{$\mathcal{S} \subseteq \mathcal{T}^\perp$．}
-  $M_{i,j} = f_i + g_j$ かつ $\mathbf{Q} \in \mathcal{T}$ ならば
-  \[
-    \inner{\mathbf{M}}{\mathbf{Q}}
-    = \sum_{i,j}(f_i + g_j) Q_{i,j}
-    = \sum_i f_i \underbrace{\sum_j Q_{i,j}}_{=0}
-      + \sum_j g_j \underbrace{\sum_i Q_{i,j}}_{=0}
-    = 0.
-  \]
-
-  \textbf{$\mathcal{T}^\perp \subseteq \mathcal{S}$．}
-  $\mathbf{M} \in \mathcal{T}^\perp$ とする．
-  任意の添字 $i, i_1, j, j_1$ に対して，
-  4 成分のみを変化させる行列
-  \[
-    \mathbf{Q}
-    = \mathbf{E}_{i,j} - \mathbf{E}_{i,j_1}
-      - \mathbf{E}_{i_1,j} + \mathbf{E}_{i_1,j_1}
-  \]
-  （$\mathbf{E}_{k,\ell}$ は $(k,\ell)$ 成分のみ $1$ の行列）は
-  行和・列和がすべて $0$ なので $\mathbf{Q} \in \mathcal{T}$ である．
-  よって $\inner{\mathbf{M}}{\mathbf{Q}} = 0$，すなわち
-  \[
-    M_{i,j} - M_{i,j_1} - M_{i_1,j} + M_{i_1,j_1} = 0
-    \tag{$\ast$}
-  \]
-  が任意の $i, i_1, j, j_1$ で成り立つ．
-  そこで基準の添字 $i_1 = 1$, $j_1 = 1$ を固定し，
-  \[
-    f_i \defeq M_{i,1} - M_{1,1}, \qquad
-    g_j \defeq M_{1,j}
-  \]
-  とおくと，$(\ast)$ より
-  $M_{i,j} = M_{i,1} + M_{1,j} - M_{1,1} = f_i + g_j$ を得る．
-  したがって $\mathbf{M} \in \mathcal{S}$．
-\end{proof}
-
-\begin{proposition}{スケーリング形式}{sem-scaling-form}
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解 $\mathbf{P}_\varepsilon$ は，
-  ある正ベクトル
-  $\mathbf{u} \in \R_{>0}^n$，$\mathbf{v} \in \R_{>0}^m$ を用いて
-  \[
-    (P_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j
-    \qquad (\forall\, i, j)
-  \]
-  と表される．ただし $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は
-  Gibbs カーネル（定義~\ref{def:sem-gibbs-kernel}）である．
-  行列形式では
-  \[
-    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\, \mathbf{K}\, \diag(\mathbf{v})
-  \]
-  と書ける．
-\end{proposition}
-
-\begin{proof}
-  $\mathbf{P}_\varepsilon$ は，アフィン集合
-  $\mathcal{A} \defeq \{\mathbf{P} : \mathbf{P}\ones_m = \mathbf{a},\,
-  \mathbf{P}^\top \ones_n = \mathbf{b}\}$
-  上で $F$ を最小化する点である．
-  しかも $\mathbf{P}_\varepsilon$ は\textbf{内点}，すなわち全成分が正である
-  （命題~\ref{prop:sem-entropic-positive-solution}）．
-
-  \textbf{一次の最適性条件．}
-  任意の $\mathbf{Q} \in \mathcal{T}$ をとる．
-  $\mathbf{P}_\varepsilon$ の成分はすべて正なので，
-  十分小さい $|t|$ に対して
-  $\mathbf{P}_\varepsilon + t\mathbf{Q} \in \mathcal{A}$ かつ全成分が正であり，
-  実行可能である．
-  $t \mapsto F(\mathbf{P}_\varepsilon + t\mathbf{Q})$ は $t = 0$ で
-  最小値をとるから，
-  \[
-    0 = \left.\frac{\d}{\d t}\right|_{t=0}
-      F(\mathbf{P}_\varepsilon + t\mathbf{Q})
-    = \inner{\nabla F(\mathbf{P}_\varepsilon)}{\mathbf{Q}}.
-  \]
-  これが任意の $\mathbf{Q} \in \mathcal{T}$ で成り立つので
-  $\nabla F(\mathbf{P}_\varepsilon) \in \mathcal{T}^\perp$．
-
-  \textbf{勾配の計算とスケーリング形式．}
-  $-\Hb(\mathbf{P}) = \sum_{i,j}\varphi(P_{i,j})$
-  （$\varphi(x) = x\log x - x$，$\varphi'(x) = \log x$）であったから
-  （備考~\ref{rem:sem-entropy-convention}），
-  \[
-    \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
-    = C_{i,j} + \varepsilon \log (P_\varepsilon)_{i,j}.
-  \]
-  命題~\ref{prop:sem-tangent-orthogonal} より，
-  この勾配が $\mathcal{T}^\perp$ に属することは，
-  ある $\mathbf{f} \in \R^n$, $\mathbf{g} \in \R^m$ が存在して
-  \[
-    C_{i,j} + \varepsilon \log (P_\varepsilon)_{i,j} = f_i + g_j
-    \qquad(\forall\, i, j)
-  \]
-  となることと同値である．これを $(P_\varepsilon)_{i,j}$ について解くと
-  \[
-    (P_\varepsilon)_{i,j}
-    = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
-    = \underbrace{e^{f_i/\varepsilon}}_{u_i}
-      \underbrace{e^{-C_{i,j}/\varepsilon}}_{K_{i,j}}
-      \underbrace{e^{g_j/\varepsilon}}_{v_j}.
-  \]
-  $u_i, v_j > 0$ であり，所望の形を得る．
-\end{proof}
-
-\begin{remark}{双対変数とスケーリング変数}{sem-dual-scaling-correspondence}
-  上の証明に現れた $\mathbf{f}, \mathbf{g}$ は，
-  周辺制約に対する Lagrange 乗数（\textbf{双対変数}）であり，
-  スケーリング変数とは
-  \[
-    u_i = e^{f_i/\varepsilon}, \qquad v_j = e^{g_j/\varepsilon}
-  \]
-  で対応する．$nm$ 個の変数 $\mathbf{P}$ を持つ問題が，
-  $n + m$ 個の双対変数 $(\mathbf{f}, \mathbf{g})$ に「縮約」される点が要諦である．
-  この双対変数による定式化は \S\ref{sec:sem-smooth-dual} で詳しく扱う．
-\end{remark}
+本章を通じて，前章と同じく $\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$ は
+全成分が正なヒストグラム（$\sum_i a_i = \sum_j b_j = 1$），$\varepsilon > 0$ とし，
+$\mathbf{K} = \exp(-\mathbf{C}/\varepsilon) \in \R_{>0}^{n\times m}$ は全成分が正な Gibbs カーネルとする．
 
 %% ============================================================
-%% 4.2 行列スケーリングと Sinkhorn の反復
+%% 4.1 Sinkhorn 反復
 %% ============================================================
-\section{行列スケーリングと Sinkhorn の反復}
+\section{Sinkhorn 反復}
 \label{sec:sem-sinkhorn-iteration}
 
-スケーリング形式 $\mathbf{P}_\varepsilon = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ を
-周辺制約に代入すると，未知ベクトル $(\mathbf{u}, \mathbf{v})$ に対する
-非線形方程式系が得られる．
+スケーリング形 $\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ を周辺制約
+$\mathbf{P}_\varepsilon\ones_m = \mathbf{a}$, $\mathbf{P}_\varepsilon^\top\ones_n = \mathbf{b}$ に代入すると，
+$\mathbf{u}, \mathbf{v}$ が満たすべき方程式が得られる．
 
 \begin{proposition}{行列スケーリング方程式}{sem-matrix-scaling}
-  $\mathbf{P} = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ が
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属することは，
+  $\mathbf{u} \in \R_{>0}^n$, $\mathbf{v} \in \R_{>0}^m$ に対し，
+  $\mathbf{P} = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ が
+  $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ となるための必要十分条件は
   \[
-    \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a}
-    \qquad\text{かつ}\qquad
-    \mathbf{v} \odot (\mathbf{K}^\top \mathbf{u}) = \mathbf{b}
+    \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
+    \qquad
+    \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}
   \]
-  と同値である．ただし $\odot$ は成分ごとの積（アダマール積）である．
+  が成り立つことである（$\odot$ は成分ごとの積）．
+  とくに正則化解 $\mathbf{P}_\varepsilon$ はこの形をもつから，これを満たす
+  $(\mathbf{u}, \mathbf{v})$ が存在する．
 \end{proposition}
 
 \begin{proof}
-  $\mathbf{P} = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ の
-  $(i,j)$ 成分は $u_i K_{i,j} v_j$ である．
-  行和は
+  $\mathbf{P} = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ の成分は
+  $P_{i,j} = u_i K_{i,j} v_j$ である．行和は
   \[
     (\mathbf{P}\ones_m)_i
     = \sum_j u_i K_{i,j} v_j
     = u_i \sum_j K_{i,j} v_j
     = u_i (\mathbf{K}\mathbf{v})_i
-    = \bigl(\mathbf{u} \odot (\mathbf{K}\mathbf{v})\bigr)_i.
   \]
-  これが $a_i$ に等しいことが第一の制約 $\mathbf{P}\ones_m = \mathbf{a}$ である．
-  列和についても同様に
-  $(\mathbf{P}^\top \ones_n)_j
-  = v_j (\mathbf{K}^\top \mathbf{u})_j
-  = (\mathbf{v} \odot (\mathbf{K}^\top \mathbf{u}))_j = b_j$
-  を得る．
+  だから $\mathbf{P}\ones_m = \mathbf{a}$ は $\mathbf{u}\odot(\mathbf{K}\mathbf{v}) = \mathbf{a}$ と同値．
+  同様に列和は $(\mathbf{P}^\top\ones_n)_j = v_j(\mathbf{K}^\top\mathbf{u})_j$ だから
+  $\mathbf{P}^\top\ones_n = \mathbf{b}$ は $\mathbf{v}\odot(\mathbf{K}^\top\mathbf{u}) = \mathbf{b}$ と同値である．
+  なお $\mathbf{u}, \mathbf{v} > 0$ かつ $\mathbf{K} > 0$ より $P_{i,j} > 0$ であり，非負条件は自動的に満たされる．
 \end{proof}
 
-この方程式系を直接解くのは難しいが，
-\textbf{交互に}片方ずつ満たすよう更新すれば反復解法が得られる．
-$\mathbf{v}$ を固定して第一式を $\mathbf{u}$ について解けば
-$\mathbf{u} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v})$，
-$\mathbf{u}$ を固定して第二式を $\mathbf{v}$ について解けば
-$\mathbf{v} = \mathbf{b} \oslash (\mathbf{K}^\top \mathbf{u})$
-となる（$\oslash$ は成分ごとの除算）．
-これを交互に繰り返すのが Sinkhorn アルゴリズムである．
+スケーリング方程式は $\mathbf{u}, \mathbf{v}$ について連立した非線形方程式であり，
+一般に閉じた式では解けない．しかし各式は，一方を固定すれば他方が成分ごとの除算で陽に解ける形をしている：
+\[
+  \mathbf{u} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v}),
+  \qquad
+  \mathbf{v} = \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u})
+\]
+（$\oslash$ は成分ごとの除算）．この二式を交互に適用するのが Sinkhorn の反復である．
 
 \begin{algorithm}{alg:sem-sinkhorn}
-  \textbf{入力:} $\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$,
-  Gibbs カーネル $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$, 反復回数 $L$ \\
-  \textbf{出力:} スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ と
-  輸送計画 $\mathbf{P} = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ \\[4pt]
-  1.\quad $\mathbf{v} \leftarrow \ones_m$ \\
-  2.\quad \textbf{for} $\ell = 1, 2, \ldots, L$ \textbf{do} \\
-  3.\quad\quad $\mathbf{u} \leftarrow \mathbf{a} \oslash (\mathbf{K}\mathbf{v})$
-    \qquad（行和を $\mathbf{a}$ に合わせる）\\
-  4.\quad\quad $\mathbf{v} \leftarrow \mathbf{b} \oslash (\mathbf{K}^\top \mathbf{u})$
-    \qquad（列和を $\mathbf{b}$ に合わせる）\\
-  5.\quad \textbf{end for}
+  \textbf{Sinkhorn 反復}．\\
+  入力：$\mathbf{K} \in \R_{>0}^{n\times m}$, $\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$．\\
+  初期化：$\mathbf{v}^{(0)} = \ones_m$．\\
+  $\ell = 0, 1, 2, \ldots$ に対し，
+  \[
+    \mathbf{u}^{(\ell+1)} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v}^{(\ell)}),
+    \qquad
+    \mathbf{v}^{(\ell+1)} = \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}^{(\ell+1)}).
+  \]
+  出力：$\mathbf{P}^{(\ell)} = \diag(\mathbf{u}^{(\ell)})\,\mathbf{K}\,\diag(\mathbf{v}^{(\ell)})$．
 \end{algorithm}
 
-\begin{proposition}{反復の整合性と計算量}{sem-sinkhorn-welldefined}
-  $\mathbf{K} \in \R_{>0}^{n \times m}$，$\mathbf{a}, \mathbf{b} \in \R_{>0}$ のとき，
-  アルゴリズム~\ref{alg:sem-sinkhorn} の各更新は
-  \textbf{0 除算なく定義され}，常に正ベクトルを生成する．
-  各反復の計算量は，行列ベクトル積 $\mathbf{K}\mathbf{v}$,
-  $\mathbf{K}^\top \mathbf{u}$ が支配的で $O(nm)$ である．
+\begin{proposition}{反復の整合性}{sem-sinkhorn-welldefined}
+  Sinkhorn 反復（アルゴリズム~\ref{alg:sem-sinkhorn}）の生成する列は各ステップで
+  well-defined であり，$\mathbf{u}^{(\ell)} \in \R_{>0}^n$, $\mathbf{v}^{(\ell)} \in \R_{>0}^m$ が成り立つ．
+  各反復の主たる計算は行列ベクトル積 $\mathbf{K}\mathbf{v}$, $\mathbf{K}^\top\mathbf{u}$ であり，計算量は $O(nm)$ である．
 \end{proposition}
 
 \begin{proof}
-  $\mathbf{v} > \mathbf{0}$ かつ $\mathbf{K} > \mathbf{0}$ ならば
-  $\mathbf{K}\mathbf{v} > \mathbf{0}$（各成分が正の和）であり，
-  $\mathbf{a} > \mathbf{0}$ との成分ごとの除算
-  $\mathbf{a} \oslash (\mathbf{K}\mathbf{v})$ は well-defined かつ正である．
-  $\mathbf{v}$ の更新も同様．初期値 $\mathbf{v} = \ones_m > \mathbf{0}$ から
-  帰納的に正値性が保たれる．
-  計算量は $\mathbf{K}\mathbf{v}$ が $O(nm)$，
-  成分ごとの演算が $O(n) + O(m)$ なので，反復あたり $O(nm)$．
+  $\mathbf{v}^{(0)} = \ones_m > 0$．$\mathbf{v}^{(\ell)} > 0$ を仮定すると，$\mathbf{K} > 0$ より
+  $\mathbf{K}\mathbf{v}^{(\ell)} > 0$ だから $\mathbf{u}^{(\ell+1)} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^{(\ell)})$ は
+  零除算なく定まり，$\mathbf{a} > 0$ より $\mathbf{u}^{(\ell+1)} > 0$．
+  同様に $\mathbf{K}^\top\mathbf{u}^{(\ell+1)} > 0$ から $\mathbf{v}^{(\ell+1)} > 0$．
+  帰納法により全ステップで正値性が保たれる．計算量は明らか．
 \end{proof}
+
+\begin{remark}{交互 KL 射影としての解釈}{sem-sinkhorn-kl-projection}
+  Sinkhorn の半ステップは，前章の KL 射影（命題~\ref{prop:sem-entropic-kl-projection}）の
+  反復と見なせる．実際，$\bar{\mathbf{P}} = \diag(\bar{\mathbf{u}})\,\mathbf{K}\,\diag(\mathbf{v})$ を
+  与えられた正行列とするとき，行周辺集合
+  $\mathcal{C}_a \defeq \{\mathbf{P} : \mathbf{P}\ones_m = \mathbf{a}\}$ への KL 射影
+  $\argmin_{\mathbf{P}\in\mathcal{C}_a}\KLD(\mathbf{P}\|\bar{\mathbf{P}})$ は，各行を
+  $a_i / (\bar{\mathbf{P}}\ones_m)_i$ 倍する行スケーリングで与えられ，これはちょうど
+  $\mathbf{u}$ の更新 $u_i \leftarrow a_i / (\mathbf{K}\mathbf{v})_i$ に一致する
+  （$\bar{u}_i$ は新たな $u_i$ に吸収される）．列についても同様である．
+  すなわち Sinkhorn は，行周辺集合 $\mathcal{C}_a$ と列周辺集合
+  $\mathcal{C}_b \defeq \{\mathbf{P} : \mathbf{P}^\top\ones_n = \mathbf{b}\}$ への
+  \textbf{交互 KL 射影}であり，両者の交わり $\CouplingsD(\mathbf{a}, \mathbf{b})$ 内の
+  $\mathbf{K}$ への KL 射影 $\mathbf{P}_\varepsilon$ に向かう（Bregman の交互射影法）．
+\end{remark}
 
 \begin{remark}{スケーリング変数の定数倍の自由度}{sem-scaling-ambiguity}
-  方程式系~\ref{prop:sem-matrix-scaling} は，$\lambda > 0$ に対して
-  $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$
-  という変換で不変である
-  （$u_i K_{i,j} v_j = (\lambda u_i) K_{i,j} (\lambda^{-1} v_j)$）．
-  したがって $(\mathbf{u}, \mathbf{v})$ は定数倍の自由度を除いてのみ定まる．
-  一方，積 $\mathbf{P} = \diag(\mathbf{u})\mathbf{K}\diag(\mathbf{v})$ は一意である
-  （命題~\ref{prop:sem-entropic-existence-unique}）．
-  この自由度は，\S\ref{sec:sem-sinkhorn-convergence} で収束を
-  \textbf{射影空間}上で論じる動機となる．
+  命題~\ref{prop:sem-entropic-scaling-form} の通り，$(\mathbf{u}, \mathbf{v})$ は
+  $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$（$\lambda > 0$）の置き換えで不変であり，
+  この定数倍の自由度を除いてのみ一意である．したがって収束は，この自由度を同一視した
+  \textbf{射影空間}上で論じるのが自然である．次節の Hilbert 射影計量はまさにこの同一視に適合した距離を与える．
 \end{remark}
 
 %% ============================================================
-%% 4.3 平滑化された無制約双対
+%% 4.2 Hilbert 射影計量
 %% ============================================================
-\section{平滑化された無制約双対}
-\label{sec:sem-smooth-dual}
+\section{Hilbert 射影計量}
+\label{sec:sem-hilbert-metric}
 
-備考~\ref{rem:sem-dual-scaling-correspondence} で触れた双対変数
-$(\mathbf{f}, \mathbf{g})$ は，実は\textbf{無制約な凹最大化問題}の
-変数として特徴づけられる．これが Sinkhorn の別の——
-そしてより最適化に即した——解釈を与える．
-
-\begin{proposition}{エントロピー正則化の双対問題}{sem-entropic-dual}
-  エントロピー正則化問題は，次の無制約な凹最大化問題と
-  同じ最適値を持つ：
-  \[
-    \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
-    = \max_{\mathbf{f} \in \R^n,\, \mathbf{g} \in \R^m}
-      E(\mathbf{f}, \mathbf{g}),
-    \qquad
-    E(\mathbf{f}, \mathbf{g})
-    \defeq
-    \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-    - \varepsilon \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}.
-  \]
-  最大化は，スケーリング形式の双対変数
-  $f_i^* = \varepsilon \log u_i$, $g_j^* = \varepsilon \log v_j$
-  で達成される．
-\end{proposition}
-
-\begin{proof}
-  正則化問題の Lagrange 関数を，周辺制約のみ緩和して
-  \[
-    \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    = \inner{\mathbf{C}}{\mathbf{P}}
-      + \varepsilon \sum_{i,j}\varphi(P_{i,j})
-      - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
-      - \inner{\mathbf{g}}{\mathbf{P}^\top \ones_n - \mathbf{b}}
-  \]
-  とおく（$\varphi(x) = x\log x - x$）．整理すると
-  \[
-    \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-      + \sum_{i,j}\Bigl[
-        (C_{i,j} - f_i - g_j) P_{i,j} + \varepsilon\varphi(P_{i,j})
-      \Bigr].
-  \]
-
-  \textbf{双対関数の計算．}
-  双対関数 $E(\mathbf{f}, \mathbf{g})
-  \defeq \min_{\mathbf{P} \geq \mathbf{0}}
-  \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})$ を求める．
-  和は各成分について独立なので，各 $(i,j)$ で
-  $h(p) \defeq (C_{i,j} - f_i - g_j) p + \varepsilon(p\log p - p)$
-  を $p \geq 0$ 上で最小化すればよい．
-  $h''(p) = \varepsilon/p > 0$ より $h$ は狭義凸で，
-  $h'(p) = (C_{i,j} - f_i - g_j) + \varepsilon\log p = 0$ から
-  最小点 $p^* = e^{(f_i + g_j - C_{i,j})/\varepsilon}$ を得る．
-  このとき $\varepsilon\log p^* = f_i + g_j - C_{i,j}$ を使うと
-  \[
-    h(p^*)
-    = (C_{i,j} - f_i - g_j)p^* + p^*(f_i + g_j - C_{i,j}) - \varepsilon p^*
-    = -\varepsilon p^*.
-  \]
-  したがって
-  \[
-    E(\mathbf{f}, \mathbf{g})
-    = \inner{\mathbf{f}}{\mathbf{a}} + \inner{\mathbf{g}}{\mathbf{b}}
-      - \varepsilon \sum_{i,j} e^{(f_i + g_j - C_{i,j})/\varepsilon}
-  \]
-  となり，主張の目的関数を得る．
-
-  \textbf{弱双対性．}
-  $\mathbf{P}_\varepsilon$ は周辺制約を満たすので，
-  任意の $(\mathbf{f}, \mathbf{g})$ に対して
-  $\mathcal{L}(\mathbf{P}_\varepsilon, \mathbf{f}, \mathbf{g})
-  = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon$
-  （乗数項が消える）．ゆえに
-  \[
-    E(\mathbf{f}, \mathbf{g})
-    = \min_{\mathbf{P} \geq \mathbf{0}}
-      \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})
-    \leq \mathcal{L}(\mathbf{P}_\varepsilon, \mathbf{f}, \mathbf{g})
-    = \MKD_{\mathbf{C}}^\varepsilon.
-  \]
-
-  \textbf{強双対性（最適性の達成）．}
-  命題~\ref{prop:sem-scaling-form} の双対変数
-  $f_i^* = \varepsilon\log u_i$, $g_j^* = \varepsilon\log v_j$ をとると，
-  $e^{(f_i^* + g_j^* - C_{i,j})/\varepsilon} = u_i K_{i,j} v_j
-  = (P_\varepsilon)_{i,j}$ であり，
-  $\sum_{i,j}(P_\varepsilon)_{i,j} = 1$ なので第 3 項は
-  $-\varepsilon\sum_{i,j}(P_\varepsilon)_{i,j} = -\varepsilon$．
-  さらに周辺制約より
-  \[
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    = \sum_{i,j}(f_i^* + g_j^*)(P_\varepsilon)_{i,j}
-    = \sum_{i,j}(P_\varepsilon)_{i,j}
-      \bigl(C_{i,j} + \varepsilon\log(P_\varepsilon)_{i,j}\bigr).
-  \]
-  ここで $\sum (P_\varepsilon)\log(P_\varepsilon)
-  = 1 - \Hb(\mathbf{P}_\varepsilon)$
-  （$\Hb(\mathbf{P}) = -\sum P\log P + 1$，備考~\ref{rem:sem-entropy-convention}）を用いると
-  \[
-    \inner{\mathbf{f}^*}{\mathbf{a}} + \inner{\mathbf{g}^*}{\mathbf{b}}
-    = \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}
-      + \varepsilon\bigl(1 - \Hb(\mathbf{P}_\varepsilon)\bigr)
-    = \MKD_{\mathbf{C}}^\varepsilon + \varepsilon.
-  \]
-  ゆえに
-  $E(\mathbf{f}^*, \mathbf{g}^*)
-  = (\MKD_{\mathbf{C}}^\varepsilon + \varepsilon) - \varepsilon
-  = \MKD_{\mathbf{C}}^\varepsilon$．
-  弱双対性の上界が達成されたので，これが最大値である．
-\end{proof}
-
-\begin{remark}{ハード制約のソフト化}{sem-soft-constraint}
-  双対関数 $E$ の各項
-  $-\varepsilon\, e^{(f_i + g_j - C_{i,j})/\varepsilon}$ は，
-  $f_i + g_j > C_{i,j}$ を強く罰する\textbf{指数ペナルティ}である．
-  $\varepsilon \to 0$ ではこのペナルティが
-  「ハード制約」$f_i + g_j \leq C_{i,j}$ に漸近し，
-  非正則化 Kantorovich 問題の双対（後の章で扱う）へと連続的に移行する．
-  正則化は，この制約を\textbf{ソフト化}するものと見なせる．
-\end{remark}
-
-双対が無制約かつ滑らかであることは，Sinkhorn 反復に
-明快な最適化的意味を与える．
-
-\begin{proposition}{Sinkhorn はブロック座標上昇である}{sem-block-coordinate-ascent}
-  双対目的関数 $E$ は凹であり，$\mathbf{g}$ を固定して
-  $\mathbf{f}$ について $E$ を最大化すると
-  $u_i = e^{f_i/\varepsilon} = a_i / (\mathbf{K}\mathbf{v})_i$，
-  $\mathbf{f}$ を固定して $\mathbf{g}$ について最大化すると
-  $v_j = e^{g_j/\varepsilon} = b_j / (\mathbf{K}^\top \mathbf{u})_j$
-  となる．すなわち Sinkhorn 反復は，双対問題に対する
-  \textbf{厳密なブロック座標上昇}（block coordinate ascent）である．
-\end{proposition}
-
-\begin{proof}
-  $E$ の各項は $(\mathbf{f}, \mathbf{g})$ について線形項と
-  $-\varepsilon\,e^{(\cdot)/\varepsilon}$（凹関数）の和なので，$E$ は凹である．
-  $\mathbf{g}$ を固定すると，$E$ は $f_i$ について分離し，
-  $f_i$ に依存する部分は
-  $a_i f_i - \varepsilon\, e^{f_i/\varepsilon}(\mathbf{K}\mathbf{v})_i$
-  である（$(\mathbf{K}\mathbf{v})_i = \sum_j e^{(g_j - C_{i,j})/\varepsilon}$）．
-  $f_i$ で偏微分して $0$ とおくと
-  \[
-    a_i - e^{f_i/\varepsilon}(\mathbf{K}\mathbf{v})_i = 0
-    \;\Longleftrightarrow\;
-    u_i = e^{f_i/\varepsilon} = \frac{a_i}{(\mathbf{K}\mathbf{v})_i},
-  \]
-  これは凹関数の唯一の最大点である．
-  まとめて $\mathbf{u} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v})$，
-  すなわちアルゴリズム~\ref{alg:sem-sinkhorn} の第 3 行に一致する．
-  $\mathbf{g}$ についても同様に第 4 行を得る．
-\end{proof}
-
-\begin{remark}{勾配と周辺制約違反}{sem-gradient-marginal}
-  $\partial E / \partial f_i
-  = a_i - e^{f_i/\varepsilon}(\mathbf{K}\mathbf{v})_i
-  = a_i - (\mathbf{P}\ones_m)_i$ であり，
-  双対勾配は\textbf{周辺制約の違反量}そのものである．
-  Sinkhorn の 1 ステップはこの勾配を（ブロックごとに）厳密にゼロにする操作であり，
-  停止判定に $\norm{\mathbf{P}\ones_m - \mathbf{a}}_1$ を用いる根拠でもある．
-\end{remark}
-
-%% ============================================================
-%% 4.4 収束性（主張）
-%% ============================================================
-\section{収束性}
-\label{sec:sem-sinkhorn-convergence}
-
-Sinkhorn 反復が（スケーリングの定数倍を除いて）一意の解に
-\textbf{線形収束}することを，本節では主張のみ述べる
-（証明は射影幾何を要するため割愛する）．
-鍵は，正行列が\textbf{Hilbert 射影計量}を縮小するという
-Birkhoff の縮小定理である．
+Sinkhorn 反復は定数倍の自由度をもつため，収束は射影空間
+$\R_{>0}^n / {\sim}$（$\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\mathbf{x},\ \exists\lambda>0$）
+の上で測るのが自然である．この空間上の距離を導入する．
 
 \begin{definition}{Hilbert 射影計量}{sem-hilbert-metric}
-  正ベクトル $\mathbf{u}, \mathbf{u}' \in \R_{>0}^n$ に対して，
-  \textbf{Hilbert 射影計量}を
+  正ベクトル $\mathbf{x}, \mathbf{x}' \in \R_{>0}^n$ に対して，\textbf{Hilbert 射影計量}を
   \[
-    \dHil(\mathbf{u}, \mathbf{u}')
+    \dHil(\mathbf{x}, \mathbf{x}')
     \defeq
-    \log \max_{i, k}
-    \frac{u_i\, u'_k}{u_k\, u'_i}
+    \log \max_{i, k} \frac{x_i\, x'_k}{x_k\, x'_i}
+    = \log \frac{\displaystyle\max_i (x_i / x'_i)}{\displaystyle\min_k (x_k / x'_k)}
   \]
-  で定める．これは $\dHil(\mathbf{u},\mathbf{u}') \geq 0$ を満たし，
-  等号は $\mathbf{u}' = \lambda\mathbf{u}$（ある $\lambda>0$）と同値で，
-  定数倍を同一視した射影空間 $\R_{>0}^n / {\sim}$ 上の距離となる．
+  で定める．
 \end{definition}
 
-\begin{theorem}{Birkhoff の縮小定理}{sem-birkhoff}
-  正行列 $\mathbf{K} \in \R_{>0}^{n \times m}$ は Hilbert 射影計量を縮小する：
-  ある縮小率 $\lambda(\mathbf{K}) \in [0,1)$ が存在して，
-  任意の $\mathbf{v}, \mathbf{v}' \in \R_{>0}^m$ で
+\begin{claim}{射影計量の基本性質}{sem-hilbert-metric-properties}
+  $\dHil$ は次を満たす：
+  \begin{enumerate}
+    \item $\dHil(\mathbf{x}, \mathbf{x}') \geq 0$，かつ等号成立は $\mathbf{x}' = \lambda\mathbf{x}$（ある $\lambda>0$）と同値．
+    \item $\dHil(\lambda\mathbf{x}, \mu\mathbf{x}') = \dHil(\mathbf{x}, \mathbf{x}')$（$\lambda, \mu > 0$）．
+    \item 対称性 $\dHil(\mathbf{x}, \mathbf{x}') = \dHil(\mathbf{x}', \mathbf{x})$．
+    \item 三角不等式 $\dHil(\mathbf{x}, \mathbf{z}) \leq \dHil(\mathbf{x}, \mathbf{y}) + \dHil(\mathbf{y}, \mathbf{z})$．
+  \end{enumerate}
+  ゆえに $\dHil$ は射影空間 $\R_{>0}^n / {\sim}$ 上の距離である．
+  さらに正規化スライス $\simplex_n^\circ \defeq \{\mathbf{x} \in \R_{>0}^n : \sum_i x_i = 1\}$ を
+  各同値類の代表とすれば，$(\simplex_n^\circ, \dHil)$ は\textbf{完備}距離空間となる．
+\end{claim}
+
+\begin{proof}
+  $\mathrm{M}(\mathbf{x}/\mathbf{x}') \defeq \max_i (x_i/x'_i)$,
+  $\mathrm{m}(\mathbf{x}/\mathbf{x}') \defeq \min_i (x_i/x'_i)$ とおくと
+  $\dHil(\mathbf{x}, \mathbf{x}') = \log\bigl(\mathrm{M}(\mathbf{x}/\mathbf{x}') / \mathrm{m}(\mathbf{x}/\mathbf{x}')\bigr)$．
+
+  \textbf{(1)} 常に $\mathrm{M} \geq \mathrm{m}$ だから $\dHil \geq 0$．等号は $\mathrm{M} = \mathrm{m}$，
+  すなわち全 $i$ で $x_i/x'_i$ が一定値 $\lambda$ をとること，つまり $\mathbf{x} = \lambda\mathbf{x}'$ と同値．
+
+  \textbf{(2)} $x_i/(\mu x'_i)$ や $(\lambda x_i)/x'_i$ では比が定数倍されるだけで
+  $\mathrm{M}/\mathrm{m}$ は不変．
+
+  \textbf{(3)} $\max_{i,k}\frac{x_i x'_k}{x_k x'_i}$ は $(i,k)$ の入れ替えで
+  $\max_{i,k}\frac{x'_i x_k}{x'_k x_i}$ に等しい（添字を付け替えるだけ）から対称．
+
+  \textbf{(4)} 任意の $i$ で $\frac{x_i}{z_i} = \frac{x_i}{y_i}\cdot\frac{y_i}{z_i}
+  \leq \mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})$ だから
+  $\mathrm{M}(\mathbf{x}/\mathbf{z}) \leq \mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})$．
+  同様に $\mathrm{m}(\mathbf{x}/\mathbf{z}) \geq \mathrm{m}(\mathbf{x}/\mathbf{y})\,\mathrm{m}(\mathbf{y}/\mathbf{z})$．
+  よって
   \[
-    \dHil(\mathbf{K}\mathbf{v}, \mathbf{K}\mathbf{v}')
-    \leq \lambda(\mathbf{K})\, \dHil(\mathbf{v}, \mathbf{v}'),
+    \dHil(\mathbf{x}, \mathbf{z})
+    = \log\frac{\mathrm{M}(\mathbf{x}/\mathbf{z})}{\mathrm{m}(\mathbf{x}/\mathbf{z})}
+    \leq \log\frac{\mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})}
+                  {\mathrm{m}(\mathbf{x}/\mathbf{y})\,\mathrm{m}(\mathbf{y}/\mathbf{z})}
+    = \dHil(\mathbf{x}, \mathbf{y}) + \dHil(\mathbf{y}, \mathbf{z}).
+  \]
+
+  \textbf{完備性．}$(\mathbf{x}^{(\ell)})$ を $\simplex_n^\circ$ 上の $\dHil$-Cauchy 列とする．
+  $\dHil$ が小さいことは比 $x_i/x'_i$ が $1$ の近くに揃うことを意味するので，ある $N$ 以降
+  $\dHil(\mathbf{x}^{(\ell)}, \mathbf{x}^{(N)}) \leq 1$，すなわち全 $i, \ell\geq N$ で
+  $x_i^{(\ell)} / x_i^{(N)} \in [c, C]$（$C/c \leq e$）が成り立つ．
+  ゆえに列は $\simplex_n^\circ$ のコンパクト部分集合
+  $\{\mathbf{x} : c\,x_i^{(N)} \leq x_i \leq C\,x_i^{(N)},\ \sum_i x_i = 1\}$ に入り，
+  収束部分列をもち，その極限 $\mathbf{x}^\star$ は全成分正である．
+  $\dHil$ は $\R_{>0}^n$ 上で連続だから，Cauchy 性と合わせて
+  $\dHil(\mathbf{x}^{(\ell)}, \mathbf{x}^\star) \to 0$．よって完備である．
+\end{proof}
+
+%% ============================================================
+%% 4.3 Birkhoff の縮小定理
+%% ============================================================
+\section{Birkhoff の縮小定理}
+\label{sec:sem-birkhoff}
+
+本節の目標は，正行列 $\mathbf{K}$ が線形写像 $\mathbf{x} \mapsto \mathbf{K}\mathbf{x}$ として
+Hilbert 射影計量を\textbf{狭義に縮小}し，その縮小率が成分の歪みだけで定まる
+明示的な定数 $\lambda(\mathbf{K}) < 1$ で与えられることを示すことである．
+
+まず，正行列による像の成分比が，入力の成分比の\textbf{重み付き平均}になるという基本観察から始める．
+
+\begin{claim}{像の成分比は重み付き平均}{sem-weighted-average}
+  $\mathbf{x}, \mathbf{y} \in \R_{>0}^m$ とし $t_k \defeq x_k / y_k$ とおく．
+  $\mathbf{K} \in \R_{>0}^{n\times m}$ に対し，重み
+  $w_{i,k} \defeq \dfrac{K_{i,k} y_k}{(\mathbf{K}\mathbf{y})_i}$ は
+  $w_{i,k} > 0$, $\sum_k w_{i,k} = 1$ を満たし，
+  \[
+    \frac{(\mathbf{K}\mathbf{x})_i}{(\mathbf{K}\mathbf{y})_i}
+    = \sum_{k} w_{i,k}\, t_k
+  \]
+  が成り立つ．
+\end{claim}
+
+\begin{proof}
+  $w_{i,k} > 0$ と $\sum_k w_{i,k} = \sum_k K_{i,k}y_k / (\mathbf{K}\mathbf{y})_i = 1$ は定義から明らか．
+  $x_k = t_k y_k$ より
+  $(\mathbf{K}\mathbf{x})_i = \sum_k K_{i,k} t_k y_k$ だから，
+  $(\mathbf{K}\mathbf{x})_i / (\mathbf{K}\mathbf{y})_i = \sum_k \frac{K_{i,k}y_k}{(\mathbf{K}\mathbf{y})_i} t_k
+  = \sum_k w_{i,k} t_k$．
+\end{proof}
+
+次に，像 $\mathbf{K}\mathbf{x}$ の取りうる範囲の「射影的な広がり」（射影直径）が
+成分比の最大歪みで定まることを示す．
+
+\begin{claim}{射影直径}{sem-projective-diameter}
+  $\mathbf{K} \in \R_{>0}^{n\times m}$ の\textbf{射影直径}を
+  $\Delta(\mathbf{K}) \defeq \sup_{\mathbf{x}, \mathbf{y} \in \R_{>0}^m} \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})$
+  とおくと，
+  \[
+    \Delta(\mathbf{K}) = \log \eta(\mathbf{K}),
+    \qquad
+    \eta(\mathbf{K}) \defeq \max_{i,j,k,\ell} \frac{K_{i,k}\, K_{j,\ell}}{K_{j,k}\, K_{i,\ell}}.
+  \]
+\end{claim}
+
+\begin{proof}
+  \textbf{上界．}正数 $a_k, b_k > 0$ に対する中間値不等式
+  $\frac{\sum_k a_k}{\sum_k b_k} \leq \max_k \frac{a_k}{b_k}$（分母を払えば明らか）を用いる．
+  任意の $\mathbf{x} > 0$ と行 $i, j$ に対し
+  \[
+    \frac{(\mathbf{K}\mathbf{x})_i}{(\mathbf{K}\mathbf{x})_j}
+    = \frac{\sum_k K_{i,k} x_k}{\sum_k K_{j,k} x_k}
+    \leq \max_k \frac{K_{i,k}}{K_{j,k}}.
+  \]
+  ゆえに $\mathbf{x}, \mathbf{y} > 0$ に対し
+  \[
+    \frac{(\mathbf{K}\mathbf{x})_i\,(\mathbf{K}\mathbf{y})_j}{(\mathbf{K}\mathbf{x})_j\,(\mathbf{K}\mathbf{y})_i}
+    \leq \max_k \frac{K_{i,k}}{K_{j,k}} \cdot \max_\ell \frac{K_{j,\ell}}{K_{i,\ell}}
+    = \max_{k,\ell} \frac{K_{i,k}\,K_{j,\ell}}{K_{j,k}\,K_{i,\ell}}
+    \leq \eta(\mathbf{K}).
+  \]
+  $i, j$ の最大をとって $\dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y}) \leq \log\eta(\mathbf{K})$，
+  よって $\Delta(\mathbf{K}) \leq \log\eta(\mathbf{K})$．
+
+  \textbf{下界．}$\eta(\mathbf{K})$ を達成する添字を $(i^*, j^*, k^*, \ell^*)$ とする．
+  $\mathbf{x} = \mathbf{e}_{k^*} + \delta\ones_m$, $\mathbf{y} = \mathbf{e}_{\ell^*} + \delta\ones_m$（$\delta > 0$）とおくと
+  $\mathbf{x}, \mathbf{y} > 0$ で，$\delta \to 0+$ のとき
+  $\mathbf{K}\mathbf{x} \to \mathbf{K}_{\cdot,k^*}$（第 $k^*$ 列），$\mathbf{K}\mathbf{y} \to \mathbf{K}_{\cdot,\ell^*}$ となり
+  \[
+    \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+    \to \log\max_{i,j}\frac{K_{i,k^*}K_{j,\ell^*}}{K_{j,k^*}K_{i,\ell^*}}
+    = \log\eta(\mathbf{K}).
+  \]
+  ゆえに $\Delta(\mathbf{K}) \geq \log\eta(\mathbf{K})$．以上より等号が成り立つ．
+\end{proof}
+
+\begin{theorem}{Birkhoff の縮小定理}{sem-birkhoff}
+  $\mathbf{K} \in \R_{>0}^{n\times m}$ は Hilbert 射影計量を縮小する：すべての
+  $\mathbf{x}, \mathbf{y} \in \R_{>0}^m$ に対し
+  \[
+    \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+    \leq \lambda(\mathbf{K})\, \dHil(\mathbf{x}, \mathbf{y}),
     \qquad
     \lambda(\mathbf{K})
-    = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1}
+    \defeq \tanh\!\left(\frac{\Delta(\mathbf{K})}{4}\right)
+    = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1} \in [0, 1).
   \]
-  が成り立つ．ここで
-  $\eta(\mathbf{K}) = \max_{i,j,k,\ell}
-  \frac{K_{i,k}\, K_{j,\ell}}{K_{j,k}\, K_{i,\ell}}$
-  は成分比の最大歪みである．
-  Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ では
-  $\eta(\mathbf{K}) \leq e^{2\norm{\mathbf{C}}_\infty/\varepsilon}$
-  となり（$\mathbf{C} \geq \mathbf{0}$ による），
-  $\varepsilon$ が小さいほど $\lambda(\mathbf{K}) \to 1$ で収束は遅くなる．
+  $\eta(\mathbf{K}) < \infty$ ゆえ $\lambda(\mathbf{K}) < 1$（狭義縮小）である．
 \end{theorem}
+
+\begin{proof}
+  $\eta \defeq \eta(\mathbf{K})$, $s \defeq e^{\dHil(\mathbf{x}, \mathbf{y})} \geq 1$ とおく．
+  $s$ は成分比 $t_k = x_k/y_k$ の最大歪み $M/m$ に等しい（$M = \max_k t_k$, $m = \min_k t_k$）．
+  $s = 1$ なら $\mathbf{x} \sim \mathbf{y}$ で両辺 $0$ ゆえ自明．以下 $s > 1$ とする．
+
+  \textbf{Step 1（二行・二値への縮約）．}
+  主張~\ref{clm:sem-weighted-average} より $\phi_i \defeq (\mathbf{K}\mathbf{x})_i/(\mathbf{K}\mathbf{y})_i
+  = \sum_k w_{i,k} t_k$ であり，
+  $\dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y}) = \log\bigl(\max_i \phi_i / \min_i \phi_i\bigr)$．
+  最大・最小を達成する行を $i^*, j^*$ とすれば，評価すべきは $\phi_{i^*}/\phi_{j^*}$ である．
+  $\phi_{i^*}/\phi_{j^*} = \bigl(\sum_k w_{i^*,k} t_k\bigr)/\bigl(\sum_k w_{j^*,k} t_k\bigr)$ を
+  各 $t_k$ の関数と見ると，$t_k$ について一次分数関数（Möbius 型）であり，
+  分母は正だから $t_k$ に関して単調で，端点 $t_k \in \{m, M\}$ で最大化される．
+  よって最悪値の評価では各 $t_k$ は $m$ か $M$ のいずれかとしてよい．
+
+  列を $H \defeq \{k : t_k = M\}$, $L \defeq \{k : t_k = m\}$ に分け，
+  $p \defeq \sum_{k\in H} w_{i^*,k}$, $q \defeq \sum_{k\in H} w_{j^*,k}$ とおく（$p, q \in [0,1]$）と
+  \[
+    \frac{\phi_{i^*}}{\phi_{j^*}} = \frac{pM + (1-p)m}{qM + (1-q)m}.
+  \]
+  これを最大化するので $p$ を大きく $q$ を小さくとる向きに考える．
+
+  \textbf{Step 2（重みの歪み制約）．}
+  重みの定義より任意の行 $i, j$ と列 $k, \ell$ で
+  \[
+    \frac{w_{i,k}\, w_{j,\ell}}{w_{i,\ell}\, w_{j,k}}
+    = \frac{K_{i,k} y_k \cdot K_{j,\ell} y_\ell}{K_{i,\ell} y_\ell \cdot K_{j,k} y_k}
+    = \frac{K_{i,k}\, K_{j,\ell}}{K_{i,\ell}\, K_{j,k}}
+    \leq \eta
+  \]
+  （$y$ は約分される）．$k \in H$, $\ell \in L$ にわたって和をとると
+  \[
+    \Bigl(\sum_{k\in H} w_{i^*,k}\Bigr)\Bigl(\sum_{\ell\in L} w_{j^*,\ell}\Bigr)
+    \leq \eta \Bigl(\sum_{\ell\in L} w_{i^*,\ell}\Bigr)\Bigl(\sum_{k\in H} w_{j^*,k}\Bigr),
+    \quad\text{すなわち}\quad
+    p(1-q) \leq \eta\,(1-p)\,q.
+  \]
+  オッズ $\displaystyle u \defeq \frac{p}{1-p}$, $\displaystyle v \defeq \frac{q}{1-q}$ で書けば $u \leq \eta v$．
+
+  \textbf{Step 3（一変数最適化）．}
+  $p M + (1-p)m = (1-p)(uM + m)$, $\frac{1-p}{1-q} = \frac{1+v}{1+u}$ を使うと，
+  比の最大化は $u = \eta v$（制約の境界）で達成され，$v > 0$ を動かして
+  \[
+    \frac{\phi_{i^*}}{\phi_{j^*}}
+    \leq f(v) \defeq \frac{(1+v)(\eta s v + 1)}{(1+\eta v)(s v + 1)}
+  \]
+  を最大化すればよい（両辺を $m$ で割り $s = M/m$ を用いた）．
+  $f(v) \to 1$（$v \to 0+$ および $v \to \infty$）である．停留点を求めるため対数微分すると
+  \[
+    \frac{f'(v)}{f(v)}
+    = \frac{1}{1+v} + \frac{\eta s}{\eta s v + 1}
+      - \frac{\eta}{1+\eta v} - \frac{s}{s v + 1}.
+  \]
+  右辺の第 1・第 4 項，第 2・第 3 項をそれぞれ通分すると
+  \[
+    \frac{1}{1+v} - \frac{s}{s v + 1}
+    = \frac{1-s}{(1+v)(s v + 1)},
+    \qquad
+    \frac{\eta s}{\eta s v + 1} - \frac{\eta}{1+\eta v}
+    = \frac{\eta(s-1)}{(\eta s v + 1)(1+\eta v)}
+  \]
+  だから
+  \[
+    \frac{f'(v)}{f(v)}
+    = (s-1)\left[
+        \frac{\eta}{(\eta s v + 1)(1+\eta v)}
+        - \frac{1}{(1+v)(s v + 1)}
+      \right].
+  \]
+  $s > 1$ ゆえ $f'(v) = 0$ は角括弧内が $0$ となること，すなわち
+  $\eta\,(1+v)(s v + 1) = (\eta s v + 1)(1+\eta v)$ と同値である．両辺を展開すると
+  \[
+    \eta s\,v^2 + \eta(s+1)\,v + \eta
+    = \eta^2 s\,v^2 + \eta(s+1)\,v + 1
+  \]
+  となり，一次の項 $\eta(s+1)v$ が相殺して $\eta s\,v^2 (1-\eta) = 1 - \eta$，
+  $\eta > 1$ より $\eta s\,v^2 = 1$．したがって $(0,\infty)$ における唯一の停留点は
+  $v^* = 1/\sqrt{\eta s}$ である．$f(v) \to 1$（両端点）かつ
+  $f(v^*) > 1$（後述）だから，$v^*$ が最大値を与える．これを代入すると
+  \[
+    1 + v^* = \frac{\sqrt{\eta s}+1}{\sqrt{\eta s}},\quad
+    \eta s\,v^* + 1 = \sqrt{\eta s}+1,\quad
+    1 + \eta v^* = \frac{\sqrt{\eta}+\sqrt{s}}{\sqrt{s}},\quad
+    s\,v^* + 1 = \frac{\sqrt{\eta}+\sqrt{s}}{\sqrt{\eta}}
+  \]
+  （$\sqrt{\eta}\sqrt{s} = \sqrt{\eta s}$ を用いた）であり，
+  \[
+    \max_{v>0} f(v) = f(v^*)
+    = \frac{(1+v^*)(\eta s\,v^* + 1)}{(1+\eta v^*)(s\,v^* + 1)}
+    = \left(\frac{\sqrt{\eta s} + 1}{\sqrt{\eta} + \sqrt{s}}\right)^{\!2}.
+  \]
+  ここで $\sqrt{\eta s} + 1 > \sqrt{\eta} + \sqrt{s}$
+  （$\iff (\sqrt{\eta}-1)(\sqrt{s}-1) > 0$，$\eta, s > 1$ より成立）から
+  $f(v^*) > 1$ である．
+  ゆえに
+  \[
+    \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+    = \log\frac{\phi_{i^*}}{\phi_{j^*}}
+    \leq 2\log\frac{\sqrt{\eta s} + 1}{\sqrt{\eta} + \sqrt{s}}.
+  \]
+
+  \textbf{Step 4（率の評価）．}
+  $\theta \defeq \tfrac12\log s \geq 0$, $\beta \defeq \tfrac12\log\eta \geq 0$ とおくと
+  $\sqrt{s} = e^\theta$, $\sqrt{\eta} = e^\beta$ で，
+  $\dHil(\mathbf{x}, \mathbf{y}) = \log s = 2\theta$,
+  $\lambda(\mathbf{K}) = \tanh(\tfrac14\log\eta) = \tanh(\beta/2)$ である．
+  示すべき不等式は
+  \[
+    \psi(\theta) \defeq
+    \log\bigl(e^{\beta+\theta} + 1\bigr) - \log\bigl(e^\beta + e^\theta\bigr)
+    - \tanh(\beta/2)\,\theta \leq 0
+    \qquad (\theta \geq 0)
+  \]
+  に帰着する（左辺の最初の二項が
+  $\log\frac{\sqrt{\eta s}+1}{\sqrt\eta+\sqrt s}$，全体を $2$ 倍すると上の評価）．
+  $\psi(0) = 0$ である．また
+  \[
+    \psi'(\theta)
+    = \frac{e^{\beta+\theta}}{e^{\beta+\theta}+1}
+    - \frac{e^\theta}{e^\beta + e^\theta}
+    - \tanh(\beta/2)
+  \]
+  で，$\psi'(0) = \frac{e^\beta - 1}{e^\beta + 1} - \tanh(\beta/2) = 0$
+  （$\frac{e^\beta-1}{e^\beta+1} = \tanh(\beta/2)$）．さらに
+  \[
+    \psi''(\theta)
+    = \frac{e^{\beta+\theta}}{(e^{\beta+\theta}+1)^2}
+    - \frac{e^{\beta+\theta}}{(e^\beta + e^\theta)^2}
+    = e^{\beta+\theta}\left[\frac{1}{(e^{\beta+\theta}+1)^2} - \frac{1}{(e^\beta+e^\theta)^2}\right].
+  \]
+  ここで
+  $(e^{\beta+\theta} + 1) - (e^\beta + e^\theta) = (e^\beta - 1)(e^\theta - 1) \geq 0$
+  ($\beta, \theta \geq 0$) より $(e^{\beta+\theta}+1)^2 \geq (e^\beta + e^\theta)^2$，ゆえに $\psi'' \leq 0$．
+  したがって $\psi$ は $\theta \geq 0$ で凹で，$\psi(0) = \psi'(0) = 0$ だから $\psi(\theta) \leq 0$．
+  これは
+  \[
+    \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+    \leq 2\log\frac{\sqrt{\eta s}+1}{\sqrt\eta+\sqrt s}
+    \leq \tanh(\beta/2)\cdot 2\theta
+    = \lambda(\mathbf{K})\,\dHil(\mathbf{x}, \mathbf{y})
+  \]
+  を意味する．最後に $\eta = e^{2\beta} < \infty$ より $\lambda(\mathbf{K}) = \tanh(\beta/2) < 1$．
+\end{proof}
+
+\begin{remark}{率は $s\to1$ で達成される}{sem-birkhoff-tightness}
+  Step 4 で $\psi$ が凹で $\psi(0)=\psi'(0)=0$ だったことは，比
+  $\dHil(\mathbf{K}\mathbf{x},\mathbf{K}\mathbf{y})/\dHil(\mathbf{x},\mathbf{y})$ の上限 $\lambda(\mathbf{K})$ が
+  $s \to 1+$（入力がほぼ比例）で漸近的に達成されることを示す．一方 $s \to \infty$ では
+  $\dHil(\mathbf{K}\mathbf{x},\mathbf{K}\mathbf{y}) \to \Delta(\mathbf{K}) = \log\eta$ で頭打ちになる
+  （像の射影直径は有界）．Gibbs カーネル $K_{i,j} = e^{-C_{i,j}/\varepsilon}$ では
+  $\eta(\mathbf{K}) = \exp\bigl(\tfrac{1}{\varepsilon}\max_{i,j,k,\ell}(C_{j,k}+C_{i,\ell}-C_{i,k}-C_{j,\ell})\bigr)
+  \leq e^{2\norm{\mathbf{C}}_\infty/\varepsilon}$ となり，$\varepsilon$ が小さいほど
+  $\eta \to \infty$, $\lambda(\mathbf{K}) \to 1$ で縮小は弱くなる．
+\end{remark}
+
+%% ============================================================
+%% 4.4 Sinkhorn の線形収束
+%% ============================================================
+\section{Sinkhorn の線形収束}
+\label{sec:sem-sinkhorn-convergence}
+
+Sinkhorn の一反復を $\mathbf{v}$ の写像とみて，これが Birkhoff の縮小を二重に含むことを示す．
+まず，反復に現れる成分ごとの除算が射影計量を変えないことを確認する．
+
+\begin{claim}{除算は等長・転置は同率}{sem-division-isometry}
+  \begin{enumerate}
+    \item 任意の $\mathbf{c} \in \R_{>0}^n$ に対し，写像 $\mathbf{w} \mapsto \mathbf{c}\oslash\mathbf{w}$ は
+      $\dHil$ に関して等長である：$\dHil(\mathbf{c}\oslash\mathbf{w}, \mathbf{c}\oslash\mathbf{w}')
+      = \dHil(\mathbf{w}, \mathbf{w}')$．
+    \item $\lambda(\mathbf{K}^\top) = \lambda(\mathbf{K})$．
+  \end{enumerate}
+\end{claim}
+
+\begin{proof}
+  \textbf{(1)} $(\mathbf{c}\oslash\mathbf{w})_i = c_i / w_i$ より
+  \[
+    \frac{(\mathbf{c}\oslash\mathbf{w})_i\,(\mathbf{c}\oslash\mathbf{w}')_k}
+         {(\mathbf{c}\oslash\mathbf{w})_k\,(\mathbf{c}\oslash\mathbf{w}')_i}
+    = \frac{(c_i/w_i)(c_k/w'_k)}{(c_k/w_k)(c_i/w'_i)}
+    = \frac{w_k\, w'_i}{w_i\, w'_k}
+    = \frac{w'_i\, w_k}{w'_k\, w_i}.
+  \]
+  $(i,k)$ にわたる最大は $\dHil(\mathbf{w}, \mathbf{w}')$ の定義式（の $\mathbf{w}\leftrightarrow\mathbf{w}'$ 版，
+  対称性より同値）に一致するので等長．
+
+  \textbf{(2)} $\eta(\mathbf{K}^\top) = \max_{i,j,k,\ell}\frac{(K^\top)_{i,k}(K^\top)_{j,\ell}}{(K^\top)_{j,k}(K^\top)_{i,\ell}}
+  = \max\frac{K_{k,i}K_{\ell,j}}{K_{k,j}K_{\ell,i}} = \eta(\mathbf{K})$（添字の付け替え）．
+  $\lambda$ は $\eta$ のみで定まるから $\lambda(\mathbf{K}^\top) = \lambda(\mathbf{K})$．
+\end{proof}
 
 \begin{theorem}{Sinkhorn の線形収束}{sem-sinkhorn-linear-convergence}
   Sinkhorn 写像
-  $\mathcal{S}(\mathbf{v})
-  \defeq \mathbf{b} \oslash \bigl(\mathbf{K}^\top
-  (\mathbf{a} \oslash (\mathbf{K}\mathbf{v}))\bigr)$
-  は，射影計量 $\dHil$ に関して縮小率 $\lambda(\mathbf{K})^2$ の縮小写像である：
+  \[
+    \mathcal{S}(\mathbf{v}) \defeq
+    \mathbf{b} \oslash \bigl(\mathbf{K}^\top(\mathbf{a}\oslash(\mathbf{K}\mathbf{v}))\bigr)
+  \]
+  は射影計量 $\dHil$ に関して縮小率 $\lambda(\mathbf{K})^2$ の縮小写像である：
   \[
     \dHil(\mathcal{S}(\mathbf{v}), \mathcal{S}(\mathbf{v}'))
     \leq \lambda(\mathbf{K})^2\, \dHil(\mathbf{v}, \mathbf{v}').
   \]
-  ゆえに射影空間上に一意の不動点 $[\mathbf{v}^*]$ が存在し，
-  反復列は
+  ゆえに射影空間 $\R_{>0}^m/{\sim}$ 上に一意の不動点 $[\mathbf{v}^\star]$ が存在し，
+  反復列 $\mathbf{v}^{(\ell)}$ は
   \[
-    \dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^*)
-    \leq \lambda(\mathbf{K})^{2\ell}\,
-         \dHil(\mathbf{v}^{(0)}, \mathbf{v}^*)
+    \dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^\star)
+    \leq \lambda(\mathbf{K})^{2\ell}\, \dHil(\mathbf{v}^{(0)}, \mathbf{v}^\star)
   \]
-  で線形収束する．対応する輸送計画 $\mathbf{P}^{(\ell)}$ は
+  で線形（幾何）収束する．対応する $\mathbf{u}^{(\ell)} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^{(\ell)})$,
+  $\mathbf{P}^{(\ell)} = \diag(\mathbf{u}^{(\ell)})\,\mathbf{K}\,\diag(\mathbf{v}^{(\ell)})$ は，
   正則化問題の一意解 $\mathbf{P}_\varepsilon$ に収束する．
 \end{theorem}
 
+\begin{proof}
+  \textbf{縮小性．}$\mathcal{S}$ を四つの写像の合成
+  $\mathbf{v} \xmapsto{\ \mathbf{K}\ } \mathbf{K}\mathbf{v}
+  \xmapsto{\ \mathbf{a}\oslash\cdot\ } \mathbf{a}\oslash(\mathbf{K}\mathbf{v})
+  \xmapsto{\ \mathbf{K}^\top\ } \cdots
+  \xmapsto{\ \mathbf{b}\oslash\cdot\ } \mathcal{S}(\mathbf{v})$
+  と分解する．除算は $\dHil$-等長（主張~\ref{clm:sem-division-isometry} (1)），
+  $\mathbf{K}, \mathbf{K}^\top$ は各々 $\lambda(\mathbf{K})$-縮小（定理~\ref{thm:sem-birkhoff}，
+  および $\lambda(\mathbf{K}^\top)=\lambda(\mathbf{K})$）であるから，合成は
+  $\lambda(\mathbf{K})\cdot\lambda(\mathbf{K}) = \lambda(\mathbf{K})^2$-縮小である．
+
+  \textbf{不動点と収束．}$\lambda(\mathbf{K})^2 < 1$ かつ $(\simplex_m^\circ, \dHil)$ は完備
+  （主張~\ref{clm:sem-hilbert-metric-properties}）だから，Banach の不動点定理より
+  射影空間上に一意の不動点 $[\mathbf{v}^\star]$ が存在し，
+  $\dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^\star) \leq \lambda(\mathbf{K})^{2\ell}\dHil(\mathbf{v}^{(0)}, \mathbf{v}^\star)$．
+
+  \textbf{解への収束．}不動点 $\mathbf{v}^\star$ に対し
+  $\mathbf{u}^\star = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^\star)$ とおくと，$\mathcal{S}(\mathbf{v}^\star) \sim \mathbf{v}^\star$
+  は行列スケーリング方程式（命題~\ref{prop:sem-matrix-scaling}）の成立を意味し
+  （定数倍は $\mathbf{u}^\star, \mathbf{v}^\star$ に吸収できる），
+  $\mathbf{P}^\star = \diag(\mathbf{u}^\star)\,\mathbf{K}\,\diag(\mathbf{v}^\star) \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+  これはスケーリング形（命題~\ref{prop:sem-entropic-scaling-form}）を満たす唯一の元
+  $\mathbf{P}_\varepsilon$（命題~\ref{prop:sem-entropic-existence-unique} による一意性）に他ならない．
+  $\dHil$ 収束は射影空間上の収束を与え，$\mathbf{P}^{(\ell)}$ は周辺が常に
+  $\mathbf{a}$（または交互に $\mathbf{b}$）に正規化されるため定数倍の自由度が固定され，
+  $\mathbf{P}^{(\ell)} \to \mathbf{P}_\varepsilon$ が成り立つ．
+\end{proof}
+
 \begin{remark}{収束率の意味と停止判定}{sem-convergence-meaning}
-  縮小率が $\lambda(\mathbf{K})$ ではなく $\lambda(\mathbf{K})^2$ になるのは，
-  1 反復が $\mathbf{K}$ と $\mathbf{K}^\top$ による 2 度の縮小を含むためである
-  （除算 $\oslash$ は射影計量を変えない）．
-  実装では各反復で周辺制約の違反量
-  $\norm{\mathbf{P}^{(\ell)}\ones_m - \mathbf{a}}_1$ を監視して停止する．
-  これは備考~\ref{rem:sem-gradient-marginal} の通り双対勾配のノルムである．
-\end{remark}
-
-%% ============================================================
-%% 本章のまとめ
-%% ============================================================
-\begin{remark}{本章のまとめと展望}{sem-ch4-summary}
-  エントロピー正則化の狭義凸性は，最適解を $n+m$ 個のスケーリング変数へ
-  縮約し（命題~\ref{prop:sem-scaling-form}），
-  無制約で滑らかな双対（命題~\ref{prop:sem-entropic-dual}）を生む．
-  Sinkhorn 反復はその双対に対するブロック座標上昇であり
-  （命題~\ref{prop:sem-block-coordinate-ascent}），
-  Hilbert 計量の意味で線形収束する
-  （定理~\ref{thm:sem-sinkhorn-linear-convergence}）．
-
-  双対の指数ペナルティ（備考~\ref{rem:sem-soft-constraint}）を
-  $\varepsilon \to 0$ で硬化させると，非正則化 Kantorovich 問題の
-  \textbf{双対}と\textbf{$c$-変換}が現れる．
-  この古典双対・$c$-変換と，小さい $\varepsilon$ における対数領域での
-  数値安定化（ソフト最小値による $c$-変換のソフト化）は次章以降で扱い，
-  そこから Brenier 定理・測地線・Wasserstein 幾何へと進む．
+  縮小率が $\lambda(\mathbf{K})$ ではなく $\lambda(\mathbf{K})^2$ なのは，一反復が $\mathbf{K}$ と
+  $\mathbf{K}^\top$ による二度の Birkhoff 縮小を含むためである（除算は計量を変えない）．
+  反復回数 $\ell$ に対し誤差は $\lambda(\mathbf{K})^{2\ell}$ で減衰するから，
+  目標精度 $\delta$ に達するには $\ell = O\bigl(\log(1/\delta) / \log(1/\lambda(\mathbf{K})^2)\bigr)$ 反復で足りる．
+  注意~\ref{rem:sem-birkhoff-tightness} の通り $\varepsilon \to 0$ で $\lambda(\mathbf{K}) \to 1$ となり
+  反復数は増大する——正則化を弱める（$\varepsilon$ を小さくして真の最適輸送に近づける）ことと
+  計算の速さはトレードオフの関係にある．
+  実装では各反復で周辺制約の違反量 $\norm{\mathbf{P}^{(\ell)}\ones_m - \mathbf{a}}_1$
+  （直前に列を合わせた場合）を監視して停止判定とするのが一般的である．
 \end{remark}

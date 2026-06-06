@@ -36,9 +36,14 @@ llm/logs/train.pid
 # uv
 .venv/
 uv.lock
+# proofgraph はツールなので再現性のため lock を追跡する
+!proofgraph/uv.lock
 
 # editor / linter caches
 .ruff_cache/
 .DS_Store
 __pycache__/
 *.pyc
+
+# proofgraph viewer smoke artifacts
+proofgraph/viewer/_smoke.png
