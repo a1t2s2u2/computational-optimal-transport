@@ -1,0 +1,471 @@
+---
+id: sinkhorn
+nav: Sinkhorn と収束
+eyebrow: 4. Sinkhorn
+title: Sinkhorn アルゴリズムと収束
+---
+
+
+前章で，エントロピー正則化された離散 Kantorovich 問題\(\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})\) の一意解 \(\mathbf{P}_\varepsilon\) が，Gibbs カーネル \(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)\) を正の対角スケーリングで挟んだ
+
+\[
+ \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+\]
+
+という形をもつことを見た（[ref:Prop: 正則化解のスケーリング形|正則化解のスケーリング形]）．これにより未知数は \(nm\) 個の行列成分から \(n+m\) 個のスケーリング変数 \(\mathbf{u}, \mathbf{v}\) に縮約された．本章では，この \(\mathbf{u}, \mathbf{v}\) を周辺条件から定める **Sinkhorn アルゴリズム**を導出し，それが**線形収束**することを，収束率まで込めて証明する．鍵となるのは，正行列が **Hilbert 射影計量**を縮小するという**Birkhoff の縮小定理**である．
+
+本章を通じて，前章と同じく \(\mathbf{a} \in \R_{>0}^n\), \(\mathbf{b} \in \R_{>0}^m\) は全成分が正なヒストグラム（\(\sum_i a_i = \sum_j b_j = 1\)），\(\varepsilon > 0\) とし，\(\mathbf{K} = \exp(-\mathbf{C}/\varepsilon) \in \R_{>0}^{n\times m}\) は全成分が正な Gibbs カーネルとする．
+
+## Sinkhorn 反復
+
+
+スケーリング形 \(\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\) を周辺制約\(\mathbf{P}_\varepsilon\ones_m = \mathbf{a}\), \(\mathbf{P}_\varepsilon^\top\ones_n = \mathbf{b}\) に代入すると，\(\mathbf{u}, \mathbf{v}\) が満たすべき方程式が得られる．
+
+:::theorem
+### Prop: 行列スケーリング方程式
+
+\(\mathbf{u} \in \R_{>0}^n\), \(\mathbf{v} \in \R_{>0}^m\) に対し，\(\mathbf{P} = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\) が\(\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})\) となるための必要十分条件は
+
+\[
+ \mathbf{u} \odot (\mathbf{K}\mathbf{v}) = \mathbf{a},
+ \qquad
+ \mathbf{v} \odot (\mathbf{K}^\top\mathbf{u}) = \mathbf{b}
+\]
+
+が成り立つことである（\(\odot\) は成分ごとの積）．とくに正則化解 \(\mathbf{P}_\varepsilon\) はこの形をもつから，これを満たす\((\mathbf{u}, \mathbf{v})\) が存在する．
+
+:::details-embedded 証明
+\(\mathbf{P} = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\) の成分は\(P_{i,j} = u_i K_{i,j} v_j\) である．行和は
+
+\[
+ (\mathbf{P}\ones_m)_i
+ = \sum_j u_i K_{i,j} v_j
+ = u_i \sum_j K_{i,j} v_j
+ = u_i (\mathbf{K}\mathbf{v})_i
+\]
+
+だから \(\mathbf{P}\ones_m = \mathbf{a}\) は \(\mathbf{u}\odot(\mathbf{K}\mathbf{v}) = \mathbf{a}\) と同値．同様に列和は \((\mathbf{P}^\top\ones_n)_j = v_j(\mathbf{K}^\top\mathbf{u})_j\) だから\(\mathbf{P}^\top\ones_n = \mathbf{b}\) は \(\mathbf{v}\odot(\mathbf{K}^\top\mathbf{u}) = \mathbf{b}\) と同値である．なお \(\mathbf{u}, \mathbf{v} > 0\) かつ \(\mathbf{K} > 0\) より \(P_{i,j} > 0\) であり，非負条件は自動的に満たされる．
+:::
+:::
+
+
+スケーリング方程式は \(\mathbf{u}, \mathbf{v}\) について連立した非線形方程式であり，一般に閉じた式では解けない．しかし各式は，一方を固定すれば他方が成分ごとの除算で陽に解ける形をしている：
+
+\[
+ \mathbf{u} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v}),
+ \qquad
+ \mathbf{v} = \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u})
+\]
+
+（\(\oslash\) は成分ごとの除算）．この二式を交互に適用するのが Sinkhorn の反復である．
+
+:::definition
+### アルゴリズム
+
+**Sinkhorn 反復**．
+
+入力：\(\mathbf{K} \in \R_{>0}^{n\times m}\), \(\mathbf{a} \in \R_{>0}^n\), \(\mathbf{b} \in \R_{>0}^m\)．
+
+初期化：\(\mathbf{v}^{(0)} = \ones_m\)．
+
+\(\ell = 0, 1, 2, \ldots\) に対し，
+
+\[
+ \mathbf{u}^{(\ell+1)} = \mathbf{a} \oslash (\mathbf{K}\mathbf{v}^{(\ell)}),
+ \qquad
+ \mathbf{v}^{(\ell+1)} = \mathbf{b} \oslash (\mathbf{K}^\top\mathbf{u}^{(\ell+1)}).
+\]
+
+出力：\(\mathbf{P}^{(\ell)} = \diag(\mathbf{u}^{(\ell)})\,\mathbf{K}\,\diag(\mathbf{v}^{(\ell)})\)．
+:::
+
+
+:::theorem
+### Prop: 反復の整合性
+
+Sinkhorn 反復（アルゴリズム）の生成する列は各ステップでwell-defined であり，\(\mathbf{u}^{(\ell)} \in \R_{>0}^n\), \(\mathbf{v}^{(\ell)} \in \R_{>0}^m\) が成り立つ．各反復の主たる計算は行列ベクトル積 \(\mathbf{K}\mathbf{v}\), \(\mathbf{K}^\top\mathbf{u}\) であり，計算量は \(O(nm)\) である．
+
+:::details-embedded 証明
+\(\mathbf{v}^{(0)} = \ones_m > 0\)．\(\mathbf{v}^{(\ell)} > 0\) を仮定すると，\(\mathbf{K} > 0\) より\(\mathbf{K}\mathbf{v}^{(\ell)} > 0\) だから \(\mathbf{u}^{(\ell+1)} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^{(\ell)})\) は零除算なく定まり，\(\mathbf{a} > 0\) より \(\mathbf{u}^{(\ell+1)} > 0\)．同様に \(\mathbf{K}^\top\mathbf{u}^{(\ell+1)} > 0\) から \(\mathbf{v}^{(\ell+1)} > 0\)．帰納法により全ステップで正値性が保たれる．計算量は明らか．
+:::
+:::
+
+
+:::fact
+### Rem: 交互 KL 射影としての解釈
+
+Sinkhorn の半ステップは，前章の KL 射影（[ref:Prop: 正則化 OT は KL 射影である|正則化 OT は KL 射影である]）の反復と見なせる．実際，\(\bar{\mathbf{P}} = \diag(\bar{\mathbf{u}})\,\mathbf{K}\,\diag(\mathbf{v})\) を与えられた正行列とするとき，行周辺集合\(\mathcal{C}_a \defeq \{\mathbf{P} : \mathbf{P}\ones_m = \mathbf{a}\}\) への KL 射影\(\argmin_{\mathbf{P}\in\mathcal{C}_a}\KLD(\mathbf{P}\|\bar{\mathbf{P}})\) は，各行を\(a_i / (\bar{\mathbf{P}}\ones_m)_i\) 倍する行スケーリングで与えられ，これはちょうど\(\mathbf{u}\) の更新 \(u_i \leftarrow a_i / (\mathbf{K}\mathbf{v})_i\) に一致する（\(\bar{u}_i\) は新たな \(u_i\) に吸収される）．列についても同様である．すなわち Sinkhorn は，行周辺集合 \(\mathcal{C}_a\) と列周辺集合\(\mathcal{C}_b \defeq \{\mathbf{P} : \mathbf{P}^\top\ones_n = \mathbf{b}\}\) への**交互 KL 射影**であり，両者の交わり \(\CouplingsD(\mathbf{a}, \mathbf{b})\) 内の\(\mathbf{K}\) への KL 射影 \(\mathbf{P}_\varepsilon\) に向かう（Bregman の交互射影法）．
+:::
+
+
+:::fact
+### Rem: スケーリング変数の定数倍の自由度
+
+[ref:Prop: 正則化解のスケーリング形|正則化解のスケーリング形] の通り，\((\mathbf{u}, \mathbf{v})\) は\((\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})\)（\(\lambda > 0\)）の置き換えで不変であり，この定数倍の自由度を除いてのみ一意である．したがって収束は，この自由度を同一視した**射影空間**上で論じるのが自然である．次節の Hilbert 射影計量はまさにこの同一視に適合した距離を与える．
+:::
+
+
+## Hilbert 射影計量
+
+
+Sinkhorn 反復は定数倍の自由度をもつため，収束は射影空間\(\R_{>0}^n / {\sim}\)（\(\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\mathbf{x},\ \exists\lambda>0\)）の上で測るのが自然である．この空間上の距離を導入する．
+
+:::definition
+### Def: Hilbert 射影計量
+
+正ベクトル \(\mathbf{x}, \mathbf{x}' \in \R_{>0}^n\) に対して，**Hilbert 射影計量**を
+
+\[
+ \dHil(\mathbf{x}, \mathbf{x}')
+ \defeq
+ \log \max_{i, k} \frac{x_i\, x'_k}{x_k\, x'_i}
+ = \log \frac{\displaystyle\max_i (x_i / x'_i)}{\displaystyle\min_k (x_k / x'_k)}
+\]
+
+で定める．
+:::
+
+
+:::theorem
+### Clm: 射影計量の基本性質
+
+\(\dHil\) は次を満たす：
+
+1. \(\dHil(\mathbf{x}, \mathbf{x}') \geq 0\)，かつ等号成立は \(\mathbf{x}' = \lambda\mathbf{x}\)（ある \(\lambda>0\)）と同値．
+2. \(\dHil(\lambda\mathbf{x}, \mu\mathbf{x}') = \dHil(\mathbf{x}, \mathbf{x}')\)（\(\lambda, \mu > 0\)）．
+3. 対称性 \(\dHil(\mathbf{x}, \mathbf{x}') = \dHil(\mathbf{x}', \mathbf{x})\)．
+4. 三角不等式 \(\dHil(\mathbf{x}, \mathbf{z}) \leq \dHil(\mathbf{x}, \mathbf{y}) + \dHil(\mathbf{y}, \mathbf{z})\)．
+
+ゆえに \(\dHil\) は射影空間 \(\R_{>0}^n / {\sim}\) 上の距離である．さらに正規化スライス \(\simplex_n^\circ \defeq \{\mathbf{x} \in \R_{>0}^n : \sum_i x_i = 1\}\) を各同値類の代表とすれば，\((\simplex_n^\circ, \dHil)\) は**完備**距離空間となる．
+
+:::details-embedded 証明
+\(\mathrm{M}(\mathbf{x}/\mathbf{x}') \defeq \max_i (x_i/x'_i)\),\(\mathrm{m}(\mathbf{x}/\mathbf{x}') \defeq \min_i (x_i/x'_i)\) とおくと\(\dHil(\mathbf{x}, \mathbf{x}') = \log\bigl(\mathrm{M}(\mathbf{x}/\mathbf{x}') / \mathrm{m}(\mathbf{x}/\mathbf{x}')\bigr)\)．
+
+**(1)** 常に \(\mathrm{M} \geq \mathrm{m}\) だから \(\dHil \geq 0\)．等号は \(\mathrm{M} = \mathrm{m}\)，すなわち全 \(i\) で \(x_i/x'_i\) が一定値 \(\lambda\) をとること，つまり \(\mathbf{x} = \lambda\mathbf{x}'\) と同値．
+
+**(2)** \(x_i/(\mu x'_i)\) や \((\lambda x_i)/x'_i\) では比が定数倍されるだけで\(\mathrm{M}/\mathrm{m}\) は不変．
+
+**(3)** \(\max_{i,k}\frac{x_i x'_k}{x_k x'_i}\) は \((i,k)\) の入れ替えで\(\max_{i,k}\frac{x'_i x_k}{x'_k x_i}\) に等しい（添字を付け替えるだけ）から対称．
+
+**(4)** 任意の \(i\) で \(\frac{x_i}{z_i} = \frac{x_i}{y_i}\cdot\frac{y_i}{z_i} \leq \mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})\) だから\(\mathrm{M}(\mathbf{x}/\mathbf{z}) \leq \mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})\)．同様に \(\mathrm{m}(\mathbf{x}/\mathbf{z}) \geq \mathrm{m}(\mathbf{x}/\mathbf{y})\,\mathrm{m}(\mathbf{y}/\mathbf{z})\)．よって
+
+\[
+ \dHil(\mathbf{x}, \mathbf{z})
+ = \log\frac{\mathrm{M}(\mathbf{x}/\mathbf{z})}{\mathrm{m}(\mathbf{x}/\mathbf{z})}
+ \leq \log\frac{\mathrm{M}(\mathbf{x}/\mathbf{y})\,\mathrm{M}(\mathbf{y}/\mathbf{z})}
+ {\mathrm{m}(\mathbf{x}/\mathbf{y})\,\mathrm{m}(\mathbf{y}/\mathbf{z})}
+ = \dHil(\mathbf{x}, \mathbf{y}) + \dHil(\mathbf{y}, \mathbf{z}).
+\]
+
+
+**完備性．**\((\mathbf{x}^{(\ell)})\) を \(\simplex_n^\circ\) 上の \(\dHil\)-Cauchy 列とする．\(\dHil\) が小さいことは比 \(x_i/x'_i\) が \(1\) の近くに揃うことを意味するので，ある \(N\) 以降\(\dHil(\mathbf{x}^{(\ell)}, \mathbf{x}^{(N)}) \leq 1\)，すなわち全 \(i, \ell\geq N\) で\(x_i^{(\ell)} / x_i^{(N)} \in [c, C]\)（\(C/c \leq e\)）が成り立つ．ゆえに列は \(\simplex_n^\circ\) のコンパクト部分集合\(\{\mathbf{x} : c\,x_i^{(N)} \leq x_i \leq C\,x_i^{(N)},\ \sum_i x_i = 1\}\) に入り，収束部分列をもち，その極限 \(\mathbf{x}^\star\) は全成分正である．\(\dHil\) は \(\R_{>0}^n\) 上で連続だから，Cauchy 性と合わせて\(\dHil(\mathbf{x}^{(\ell)}, \mathbf{x}^\star) \to 0\)．よって完備である．
+:::
+:::
+
+
+## Birkhoff の縮小定理
+
+
+本節の目標は，正行列 \(\mathbf{K}\) が線形写像 \(\mathbf{x} \mapsto \mathbf{K}\mathbf{x}\) としてHilbert 射影計量を**狭義に縮小**し，その縮小率が成分の歪みだけで定まる明示的な定数 \(\lambda(\mathbf{K}) < 1\) で与えられることを示すことである．
+
+まず，正行列による像の成分比が，入力の成分比の**重み付き平均**になるという基本観察から始める．
+
+:::theorem
+### Clm: 像の成分比は重み付き平均
+
+\(\mathbf{x}, \mathbf{y} \in \R_{>0}^m\) とし \(t_k \defeq x_k / y_k\) とおく．\(\mathbf{K} \in \R_{>0}^{n\times m}\) に対し，重み\(w_{i,k} \defeq \dfrac{K_{i,k} y_k}{(\mathbf{K}\mathbf{y})_i}\) は\(w_{i,k} > 0\), \(\sum_k w_{i,k} = 1\) を満たし，
+
+\[
+ \frac{(\mathbf{K}\mathbf{x})_i}{(\mathbf{K}\mathbf{y})_i}
+ = \sum_{k} w_{i,k}\, t_k
+\]
+
+が成り立つ．
+
+:::details-embedded 証明
+\(w_{i,k} > 0\) と \(\sum_k w_{i,k} = \sum_k K_{i,k}y_k / (\mathbf{K}\mathbf{y})_i = 1\) は定義から明らか．\(x_k = t_k y_k\) より\((\mathbf{K}\mathbf{x})_i = \sum_k K_{i,k} t_k y_k\) だから，\((\mathbf{K}\mathbf{x})_i / (\mathbf{K}\mathbf{y})_i = \sum_k \frac{K_{i,k}y_k}{(\mathbf{K}\mathbf{y})_i} t_k = \sum_k w_{i,k} t_k\)．
+:::
+:::
+
+
+次に，像 \(\mathbf{K}\mathbf{x}\) の取りうる範囲の「射影的な広がり」（射影直径）が成分比の最大歪みで定まることを示す．
+
+:::theorem
+### Clm: 射影直径
+
+\(\mathbf{K} \in \R_{>0}^{n\times m}\) の**射影直径**を\(\Delta(\mathbf{K}) \defeq \sup_{\mathbf{x}, \mathbf{y} \in \R_{>0}^m} \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})\)とおくと，
+
+\[
+ \Delta(\mathbf{K}) = \log \eta(\mathbf{K}),
+ \qquad
+ \eta(\mathbf{K}) \defeq \max_{i,j,k,\ell} \frac{K_{i,k}\, K_{j,\ell}}{K_{j,k}\, K_{i,\ell}}.
+\]
+
+:::details-embedded 証明
+**上界．**正数 \(a_k, b_k > 0\) に対する中間値不等式\(\frac{\sum_k a_k}{\sum_k b_k} \leq \max_k \frac{a_k}{b_k}\)（分母を払えば明らか）を用いる．任意の \(\mathbf{x} > 0\) と行 \(i, j\) に対し
+
+\[
+ \frac{(\mathbf{K}\mathbf{x})_i}{(\mathbf{K}\mathbf{x})_j}
+ = \frac{\sum_k K_{i,k} x_k}{\sum_k K_{j,k} x_k}
+ \leq \max_k \frac{K_{i,k}}{K_{j,k}}.
+\]
+
+ゆえに \(\mathbf{x}, \mathbf{y} > 0\) に対し
+
+\[
+ \frac{(\mathbf{K}\mathbf{x})_i\,(\mathbf{K}\mathbf{y})_j}{(\mathbf{K}\mathbf{x})_j\,(\mathbf{K}\mathbf{y})_i}
+ \leq \max_k \frac{K_{i,k}}{K_{j,k}} \cdot \max_\ell \frac{K_{j,\ell}}{K_{i,\ell}}
+ = \max_{k,\ell} \frac{K_{i,k}\,K_{j,\ell}}{K_{j,k}\,K_{i,\ell}}
+ \leq \eta(\mathbf{K}).
+\]
+
+\(i, j\) の最大をとって \(\dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y}) \leq \log\eta(\mathbf{K})\)，よって \(\Delta(\mathbf{K}) \leq \log\eta(\mathbf{K})\)．
+
+**下界．**\(\eta(\mathbf{K})\) を達成する添字を \((i^*, j^*, k^*, \ell^*)\) とする．\(\mathbf{x} = \mathbf{e}_{k^*} + \delta\ones_m\), \(\mathbf{y} = \mathbf{e}_{\ell^*} + \delta\ones_m\)（\(\delta > 0\)）とおくと\(\mathbf{x}, \mathbf{y} > 0\) で，\(\delta \to 0+\) のとき\(\mathbf{K}\mathbf{x} \to \mathbf{K}_{\cdot,k^*}\)（第 \(k^*\) 列），\(\mathbf{K}\mathbf{y} \to \mathbf{K}_{\cdot,\ell^*}\) となり
+
+\[
+ \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+ \to \log\max_{i,j}\frac{K_{i,k^*}K_{j,\ell^*}}{K_{j,k^*}K_{i,\ell^*}}
+ = \log\eta(\mathbf{K}).
+\]
+
+ゆえに \(\Delta(\mathbf{K}) \geq \log\eta(\mathbf{K})\)．以上より等号が成り立つ．
+:::
+:::
+
+
+:::theorem
+### Thm: Birkhoff の縮小定理
+
+\(\mathbf{K} \in \R_{>0}^{n\times m}\) は Hilbert 射影計量を縮小する：すべての\(\mathbf{x}, \mathbf{y} \in \R_{>0}^m\) に対し
+
+\[
+ \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+ \leq \lambda(\mathbf{K})\, \dHil(\mathbf{x}, \mathbf{y}),
+ \qquad
+ \lambda(\mathbf{K})
+ \defeq \tanh\!\left(\frac{\Delta(\mathbf{K})}{4}\right)
+ = \frac{\sqrt{\eta(\mathbf{K})} - 1}{\sqrt{\eta(\mathbf{K})} + 1} \in [0, 1).
+\]
+
+\(\eta(\mathbf{K}) < \infty\) ゆえ \(\lambda(\mathbf{K}) < 1\)（狭義縮小）である．
+
+:::details-embedded 証明
+\(\eta \defeq \eta(\mathbf{K})\), \(s \defeq e^{\dHil(\mathbf{x}, \mathbf{y})} \geq 1\) とおく．\(s\) は成分比 \(t_k = x_k/y_k\) の最大歪み \(M/m\) に等しい（\(M = \max_k t_k\), \(m = \min_k t_k\)）．\(s = 1\) なら \(\mathbf{x} \sim \mathbf{y}\) で両辺 \(0\) ゆえ自明．以下 \(s > 1\) とする．
+
+**Step 1（二行・二値への縮約）．**[ref:Clm: 像の成分比は重み付き平均|像の成分比は重み付き平均] より \(\phi_i \defeq (\mathbf{K}\mathbf{x})_i/(\mathbf{K}\mathbf{y})_i = \sum_k w_{i,k} t_k\) であり，\(\dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y}) = \log\bigl(\max_i \phi_i / \min_i \phi_i\bigr)\)．最大・最小を達成する行を \(i^*, j^*\) とすれば，評価すべきは \(\phi_{i^*}/\phi_{j^*}\) である．\(\phi_{i^*}/\phi_{j^*} = \bigl(\sum_k w_{i^*,k} t_k\bigr)/\bigl(\sum_k w_{j^*,k} t_k\bigr)\) を各 \(t_k\) の関数と見ると，\(t_k\) について一次分数関数（Möbius 型）であり，分母は正だから \(t_k\) に関して単調で，端点 \(t_k \in \{m, M\}\) で最大化される．よって最悪値の評価では各 \(t_k\) は \(m\) か \(M\) のいずれかとしてよい．
+
+列を \(H \defeq \{k : t_k = M\}\), \(L \defeq \{k : t_k = m\}\) に分け，\(p \defeq \sum_{k\in H} w_{i^*,k}\), \(q \defeq \sum_{k\in H} w_{j^*,k}\) とおく（\(p, q \in [0,1]\)）と
+
+\[
+ \frac{\phi_{i^*}}{\phi_{j^*}} = \frac{pM + (1-p)m}{qM + (1-q)m}.
+\]
+
+これを最大化するので \(p\) を大きく \(q\) を小さくとる向きに考える．
+
+**Step 2（重みの歪み制約）．**重みの定義より任意の行 \(i, j\) と列 \(k, \ell\) で
+
+\[
+ \frac{w_{i,k}\, w_{j,\ell}}{w_{i,\ell}\, w_{j,k}}
+ = \frac{K_{i,k} y_k \cdot K_{j,\ell} y_\ell}{K_{i,\ell} y_\ell \cdot K_{j,k} y_k}
+ = \frac{K_{i,k}\, K_{j,\ell}}{K_{i,\ell}\, K_{j,k}}
+ \leq \eta
+\]
+
+（\(y\) は約分される）．\(k \in H\), \(\ell \in L\) にわたって和をとると
+
+\[
+ \Bigl(\sum_{k\in H} w_{i^*,k}\Bigr)\Bigl(\sum_{\ell\in L} w_{j^*,\ell}\Bigr)
+ \leq \eta \Bigl(\sum_{\ell\in L} w_{i^*,\ell}\Bigr)\Bigl(\sum_{k\in H} w_{j^*,k}\Bigr),
+ \quad\text{すなわち}\quad
+ p(1-q) \leq \eta\,(1-p)\,q.
+\]
+
+オッズ \(\displaystyle u \defeq \frac{p}{1-p}\), \(\displaystyle v \defeq \frac{q}{1-q}\) で書けば \(u \leq \eta v\)．
+
+**Step 3（一変数最適化）．**\(p M + (1-p)m = (1-p)(uM + m)\), \(\frac{1-p}{1-q} = \frac{1+v}{1+u}\) を使うと，比の最大化は \(u = \eta v\)（制約の境界）で達成され，\(v > 0\) を動かして
+
+\[
+ \frac{\phi_{i^*}}{\phi_{j^*}}
+ \leq f(v) \defeq \frac{(1+v)(\eta s v + 1)}{(1+\eta v)(s v + 1)}
+\]
+
+を最大化すればよい（両辺を \(m\) で割り \(s = M/m\) を用いた）．\(f(v) \to 1\)（\(v \to 0+\) および \(v \to \infty\)）である．停留点を求めるため対数微分すると
+
+\[
+ \frac{f'(v)}{f(v)}
+ = \frac{1}{1+v} + \frac{\eta s}{\eta s v + 1}
+ - \frac{\eta}{1+\eta v} - \frac{s}{s v + 1}.
+\]
+
+右辺の第 1・第 4 項，第 2・第 3 項をそれぞれ通分すると
+
+\[
+ \frac{1}{1+v} - \frac{s}{s v + 1}
+ = \frac{1-s}{(1+v)(s v + 1)},
+ \qquad
+ \frac{\eta s}{\eta s v + 1} - \frac{\eta}{1+\eta v}
+ = \frac{\eta(s-1)}{(\eta s v + 1)(1+\eta v)}
+\]
+
+だから
+
+\[
+ \frac{f'(v)}{f(v)}
+ = (s-1)\left[
+ \frac{\eta}{(\eta s v + 1)(1+\eta v)}
+ - \frac{1}{(1+v)(s v + 1)}
+ \right].
+\]
+
+\(s > 1\) ゆえ \(f'(v) = 0\) は角括弧内が \(0\) となること，すなわち\(\eta\,(1+v)(s v + 1) = (\eta s v + 1)(1+\eta v)\) と同値である．両辺を展開すると
+
+\[
+ \eta s\,v^2 + \eta(s+1)\,v + \eta
+ = \eta^2 s\,v^2 + \eta(s+1)\,v + 1
+\]
+
+となり，一次の項 \(\eta(s+1)v\) が相殺して \(\eta s\,v^2 (1-\eta) = 1 - \eta\)，\(\eta > 1\) より \(\eta s\,v^2 = 1\)．したがって \((0,\infty)\) における唯一の停留点は\(v^* = 1/\sqrt{\eta s}\) である．\(f(v) \to 1\)（両端点）かつ\(f(v^*) > 1\)（後述）だから，\(v^*\) が最大値を与える．これを代入すると
+
+\[
+ 1 + v^* = \frac{\sqrt{\eta s}+1}{\sqrt{\eta s}},\quad
+ \eta s\,v^* + 1 = \sqrt{\eta s}+1,\quad
+ 1 + \eta v^* = \frac{\sqrt{\eta}+\sqrt{s}}{\sqrt{s}},\quad
+ s\,v^* + 1 = \frac{\sqrt{\eta}+\sqrt{s}}{\sqrt{\eta}}
+\]
+
+（\(\sqrt{\eta}\sqrt{s} = \sqrt{\eta s}\) を用いた）であり，
+
+\[
+ \max_{v>0} f(v) = f(v^*)
+ = \frac{(1+v^*)(\eta s\,v^* + 1)}{(1+\eta v^*)(s\,v^* + 1)}
+ = \left(\frac{\sqrt{\eta s} + 1}{\sqrt{\eta} + \sqrt{s}}\right)^{\!2}.
+\]
+
+ここで \(\sqrt{\eta s} + 1 > \sqrt{\eta} + \sqrt{s}\)（\(\iff (\sqrt{\eta}-1)(\sqrt{s}-1) > 0\)，\(\eta, s > 1\) より成立）から\(f(v^*) > 1\) である．ゆえに
+
+\[
+ \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+ = \log\frac{\phi_{i^*}}{\phi_{j^*}}
+ \leq 2\log\frac{\sqrt{\eta s} + 1}{\sqrt{\eta} + \sqrt{s}}.
+\]
+
+
+**Step 4（率の評価）．**\(\theta \defeq \tfrac12\log s \geq 0\), \(\beta \defeq \tfrac12\log\eta \geq 0\) とおくと\(\sqrt{s} = e^\theta\), \(\sqrt{\eta} = e^\beta\) で，\(\dHil(\mathbf{x}, \mathbf{y}) = \log s = 2\theta\),\(\lambda(\mathbf{K}) = \tanh(\tfrac14\log\eta) = \tanh(\beta/2)\) である．示すべき不等式は
+
+\[
+ \psi(\theta) \defeq
+ \log\bigl(e^{\beta+\theta} + 1\bigr) - \log\bigl(e^\beta + e^\theta\bigr)
+ - \tanh(\beta/2)\,\theta \leq 0
+ \qquad (\theta \geq 0)
+\]
+
+に帰着する（左辺の最初の二項が\(\log\frac{\sqrt{\eta s}+1}{\sqrt\eta+\sqrt s}\)，全体を \(2\) 倍すると上の評価）．\(\psi(0) = 0\) である．また
+
+\[
+ \psi'(\theta)
+ = \frac{e^{\beta+\theta}}{e^{\beta+\theta}+1}
+ - \frac{e^\theta}{e^\beta + e^\theta}
+ - \tanh(\beta/2)
+\]
+
+で，\(\psi'(0) = \frac{e^\beta - 1}{e^\beta + 1} - \tanh(\beta/2) = 0\)（\(\frac{e^\beta-1}{e^\beta+1} = \tanh(\beta/2)\)）．さらに
+
+\[
+ \psi''(\theta)
+ = \frac{e^{\beta+\theta}}{(e^{\beta+\theta}+1)^2}
+ - \frac{e^{\beta+\theta}}{(e^\beta + e^\theta)^2}
+ = e^{\beta+\theta}\left[\frac{1}{(e^{\beta+\theta}+1)^2} - \frac{1}{(e^\beta+e^\theta)^2}\right].
+\]
+
+ここで\((e^{\beta+\theta} + 1) - (e^\beta + e^\theta) = (e^\beta - 1)(e^\theta - 1) \geq 0\)(\(\beta, \theta \geq 0\)) より \((e^{\beta+\theta}+1)^2 \geq (e^\beta + e^\theta)^2\)，ゆえに \(\psi'' \leq 0\)．したがって \(\psi\) は \(\theta \geq 0\) で凹で，\(\psi(0) = \psi'(0) = 0\) だから \(\psi(\theta) \leq 0\)．これは
+
+\[
+ \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
+ \leq 2\log\frac{\sqrt{\eta s}+1}{\sqrt\eta+\sqrt s}
+ \leq \tanh(\beta/2)\cdot 2\theta
+ = \lambda(\mathbf{K})\,\dHil(\mathbf{x}, \mathbf{y})
+\]
+
+を意味する．最後に \(\eta = e^{2\beta} < \infty\) より \(\lambda(\mathbf{K}) = \tanh(\beta/2) < 1\)．
+:::
+:::
+
+
+:::fact
+### Rem: 率は \(s\to1\) で達成される
+
+Step 4 で \(\psi\) が凹で \(\psi(0)=\psi'(0)=0\) だったことは，比\(\dHil(\mathbf{K}\mathbf{x},\mathbf{K}\mathbf{y})/\dHil(\mathbf{x},\mathbf{y})\) の上限 \(\lambda(\mathbf{K})\) が\(s \to 1+\)（入力がほぼ比例）で漸近的に達成されることを示す．一方 \(s \to \infty\) では\(\dHil(\mathbf{K}\mathbf{x},\mathbf{K}\mathbf{y}) \to \Delta(\mathbf{K}) = \log\eta\) で頭打ちになる（像の射影直径は有界）．Gibbs カーネル \(K_{i,j} = e^{-C_{i,j}/\varepsilon}\) では\(\eta(\mathbf{K}) = \exp\bigl(\tfrac{1}{\varepsilon}\max_{i,j,k,\ell}(C_{j,k}+C_{i,\ell}-C_{i,k}-C_{j,\ell})\bigr) \leq e^{2\norm{\mathbf{C}}_\infty/\varepsilon}\) となり，\(\varepsilon\) が小さいほど\(\eta \to \infty\), \(\lambda(\mathbf{K}) \to 1\) で縮小は弱くなる．
+:::
+
+
+## Sinkhorn の線形収束
+
+
+Sinkhorn の一反復を \(\mathbf{v}\) の写像とみて，これが Birkhoff の縮小を二重に含むことを示す．まず，反復に現れる成分ごとの除算が射影計量を変えないことを確認する．
+
+:::theorem
+### Clm: 除算は等長・転置は同率
+
+1. 任意の \(\mathbf{c} \in \R_{>0}^n\) に対し，写像 \(\mathbf{w} \mapsto \mathbf{c}\oslash\mathbf{w}\) は\(\dHil\) に関して等長である：\(\dHil(\mathbf{c}\oslash\mathbf{w}, \mathbf{c}\oslash\mathbf{w}') = \dHil(\mathbf{w}, \mathbf{w}')\)．
+2. \(\lambda(\mathbf{K}^\top) = \lambda(\mathbf{K})\)．
+
+:::details-embedded 証明
+**(1)** \((\mathbf{c}\oslash\mathbf{w})_i = c_i / w_i\) より
+
+\[
+ \frac{(\mathbf{c}\oslash\mathbf{w})_i\,(\mathbf{c}\oslash\mathbf{w}')_k}
+ {(\mathbf{c}\oslash\mathbf{w})_k\,(\mathbf{c}\oslash\mathbf{w}')_i}
+ = \frac{(c_i/w_i)(c_k/w'_k)}{(c_k/w_k)(c_i/w'_i)}
+ = \frac{w_k\, w'_i}{w_i\, w'_k}
+ = \frac{w'_i\, w_k}{w'_k\, w_i}.
+\]
+
+\((i,k)\) にわたる最大は \(\dHil(\mathbf{w}, \mathbf{w}')\) の定義式（の \(\mathbf{w}\leftrightarrow\mathbf{w}'\) 版，対称性より同値）に一致するので等長．
+
+**(2)** \(\eta(\mathbf{K}^\top) = \max_{i,j,k,\ell}\frac{(K^\top)_{i,k}(K^\top)_{j,\ell}}{(K^\top)_{j,k}(K^\top)_{i,\ell}} = \max\frac{K_{k,i}K_{\ell,j}}{K_{k,j}K_{\ell,i}} = \eta(\mathbf{K})\)（添字の付け替え）．\(\lambda\) は \(\eta\) のみで定まるから \(\lambda(\mathbf{K}^\top) = \lambda(\mathbf{K})\)．
+:::
+:::
+
+
+:::theorem
+### Thm: Sinkhorn の線形収束
+
+Sinkhorn 写像
+
+\[
+ \mathcal{S}(\mathbf{v}) \defeq
+ \mathbf{b} \oslash \bigl(\mathbf{K}^\top(\mathbf{a}\oslash(\mathbf{K}\mathbf{v}))\bigr)
+\]
+
+は射影計量 \(\dHil\) に関して縮小率 \(\lambda(\mathbf{K})^2\) の縮小写像である：
+
+\[
+ \dHil(\mathcal{S}(\mathbf{v}), \mathcal{S}(\mathbf{v}'))
+ \leq \lambda(\mathbf{K})^2\, \dHil(\mathbf{v}, \mathbf{v}').
+\]
+
+ゆえに射影空間 \(\R_{>0}^m/{\sim}\) 上に一意の不動点 \([\mathbf{v}^\star]\) が存在し，反復列 \(\mathbf{v}^{(\ell)}\) は
+
+\[
+ \dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^\star)
+ \leq \lambda(\mathbf{K})^{2\ell}\, \dHil(\mathbf{v}^{(0)}, \mathbf{v}^\star)
+\]
+
+で線形（幾何）収束する．対応する \(\mathbf{u}^{(\ell)} = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^{(\ell)})\),\(\mathbf{P}^{(\ell)} = \diag(\mathbf{u}^{(\ell)})\,\mathbf{K}\,\diag(\mathbf{v}^{(\ell)})\) は，正則化問題の一意解 \(\mathbf{P}_\varepsilon\) に収束する．
+
+:::details-embedded 証明
+**縮小性．**\(\mathcal{S}\) を四つの写像の合成\(\mathbf{v} \xmapsto{\ \mathbf{K}\ } \mathbf{K}\mathbf{v} \xmapsto{\ \mathbf{a}\oslash\cdot\ } \mathbf{a}\oslash(\mathbf{K}\mathbf{v}) \xmapsto{\ \mathbf{K}^\top\ } \cdots \xmapsto{\ \mathbf{b}\oslash\cdot\ } \mathcal{S}(\mathbf{v})\)と分解する．除算は \(\dHil\)-等長（[ref:Clm: 除算は等長・転置は同率|除算は等長・転置は同率] (1)），\(\mathbf{K}, \mathbf{K}^\top\) は各々 \(\lambda(\mathbf{K})\)-縮小（[ref:Thm: Birkhoff の縮小定理|Birkhoff の縮小定理]，および \(\lambda(\mathbf{K}^\top)=\lambda(\mathbf{K})\)）であるから，合成は\(\lambda(\mathbf{K})\cdot\lambda(\mathbf{K}) = \lambda(\mathbf{K})^2\)-縮小である．
+
+**不動点と収束．**\(\lambda(\mathbf{K})^2 < 1\) かつ \((\simplex_m^\circ, \dHil)\) は完備（[ref:Clm: 射影計量の基本性質|射影計量の基本性質]）だから，Banach の不動点定理より射影空間上に一意の不動点 \([\mathbf{v}^\star]\) が存在し，\(\dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^\star) \leq \lambda(\mathbf{K})^{2\ell}\dHil(\mathbf{v}^{(0)}, \mathbf{v}^\star)\)．
+
+**解への収束．**不動点 \(\mathbf{v}^\star\) に対し\(\mathbf{u}^\star = \mathbf{a}\oslash(\mathbf{K}\mathbf{v}^\star)\) とおくと，\(\mathcal{S}(\mathbf{v}^\star) \sim \mathbf{v}^\star\)は行列スケーリング方程式（[ref:Prop: 行列スケーリング方程式|行列スケーリング方程式]）の成立を意味し（定数倍は \(\mathbf{u}^\star, \mathbf{v}^\star\) に吸収できる），\(\mathbf{P}^\star = \diag(\mathbf{u}^\star)\,\mathbf{K}\,\diag(\mathbf{v}^\star) \in \CouplingsD(\mathbf{a}, \mathbf{b})\)．これはスケーリング形（[ref:Prop: 正則化解のスケーリング形|正則化解のスケーリング形]）を満たす唯一の元\(\mathbf{P}_\varepsilon\)（[ref:Prop: 正則化解の存在と一意性|正則化解の存在と一意性] による一意性）に他ならない．\(\dHil\) 収束は射影空間上の収束を与え，\(\mathbf{P}^{(\ell)}\) は周辺が常に\(\mathbf{a}\)（または交互に \(\mathbf{b}\)）に正規化されるため定数倍の自由度が固定され，\(\mathbf{P}^{(\ell)} \to \mathbf{P}_\varepsilon\) が成り立つ．
+:::
+:::
+
+
+:::fact
+### Rem: 収束率の意味と停止判定
+
+縮小率が \(\lambda(\mathbf{K})\) ではなく \(\lambda(\mathbf{K})^2\) なのは，一反復が \(\mathbf{K}\) と\(\mathbf{K}^\top\) による二度の Birkhoff 縮小を含むためである（除算は計量を変えない）．反復回数 \(\ell\) に対し誤差は \(\lambda(\mathbf{K})^{2\ell}\) で減衰するから，目標精度 \(\delta\) に達するには \(\ell = O\bigl(\log(1/\delta) / \log(1/\lambda(\mathbf{K})^2)\bigr)\) 反復で足りる．[ref:Rem: 率は \(s\to1\) で達成される|率は \(s\to1\) で達成される] の通り \(\varepsilon \to 0\) で \(\lambda(\mathbf{K}) \to 1\) となり反復数は増大する——正則化を弱める（\(\varepsilon\) を小さくして真の最適輸送に近づける）ことと計算の速さはトレードオフの関係にある．実装では各反復で周辺制約の違反量 \(\norm{\mathbf{P}^{(\ell)}\ones_m - \mathbf{a}}_1\)（直前に列を合わせた場合）を監視して停止判定とするのが一般的である．
+:::

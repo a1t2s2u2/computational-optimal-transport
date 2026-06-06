@@ -13,7 +13,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", 
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
 CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
-# 変換対象の章。ch01–ch03 を本スクリプトで tex から生成する
+# 変換対象の章。ch01–ch04 を本スクリプトで tex から生成する
 # （content/*.md は tex の生成物であり、tex が source of truth）。
 # 参照（\ref）解決は build_label_map()／build_chapter_map() が全 ch*.tex を
 # 走査するため、変換対象外の章のラベルも本文中でタイトル表示される。
@@ -36,6 +36,12 @@ CHAPTERS = [
         "eyebrow": "3. Entropic Regularization",
         "title": "エントロピー正則化",
     }),
+    ("ch04_sinkhorn.tex", "04-sinkhorn.md", {
+        "id": "sinkhorn",
+        "nav": "Sinkhorn と収束",
+        "eyebrow": "4. Sinkhorn",
+        "title": "Sinkhorn アルゴリズムと収束",
+    }),
 ]
 
 # Named block environments and their markdown mappings.
@@ -47,6 +53,7 @@ BLOCK_ENVS = {
     "proposition":("theorem",    "Prop"),
     "remark":     ("fact",       "Rem"),
     "example":    ("fact accent","Ex"),
+    "algorithm":  ("definition", ""),
 }
 
 LABEL_PREFIX_MAP = {
@@ -412,9 +419,28 @@ class TexParser:
                 self._skip_environment("center")
                 continue
 
-            # Skip algorithm environments
-            if re.match(r"\\begin\{algorithm\}", stripped):
-                self._skip_environment("algorithm")
+            # Algorithm environments -> rendered as a block.
+            # \begin{algorithm}{label} ... \end{algorithm}（引数はラベル）。
+            m_alg = re.match(r"\\begin\{algorithm\}\{(.+?)\}", stripped)
+            if m_alg:
+                self.advance()
+                raw = []
+                while not self.at_end() and self.peek().strip() != "\\end{algorithm}":
+                    raw.append(self.advance())
+                if not self.at_end():
+                    self.advance()  # consume \end{algorithm}
+                # 行末の '\\'（改行）を空行＝段落区切りに変換し、各ステップを
+                # 別行で描画する（生の <br> は build.mjs に escape されるため使えない）。
+                processed = []
+                for ln in raw:
+                    s = ln.rstrip()
+                    if s.endswith("\\\\"):
+                        processed.append(s[:-2].rstrip())
+                        processed.append("")
+                    else:
+                        processed.append(ln)
+                block_nodes = TexParser(processed).parse()
+                nodes.append(("block", "algorithm", "アルゴリズム", block_nodes, None))
                 continue
 
             # Named block environments: definition, claim, theorem, etc.
