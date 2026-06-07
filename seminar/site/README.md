@@ -1,31 +1,50 @@
 # 計算最適輸送セミナー Web 版
 
-Markdown を原稿の唯一の source of truth とし、`index.html` を生成する静的サイトである。
+このサイトは **生成物** である。唯一の source of truth は `seminar/tex/*.tex`（LaTeX 原稿）であり、
+本文を直すときは tex を編集する。サイトはそこから自動生成して読むためのビューにすぎない。
+
+```
+seminar/tex/ch0X.tex      ← ★ ここだけを編集する
+      │  scripts/tex2md.py      （tex → markdown）
+      ▼
+seminar/site/content/*.md ← 生成物（gitignore 済み・手で触らない）
+      │  scripts/build.mjs      （markdown → html）
+      ▼
+seminar/site/*.html       ← 生成物（gitignore 済み・手で触らない）
+```
+
+`content/*.md` と `*.html` は git で管理しない（`.gitignore` 済み）。コミットに乗るのは tex だけ。
 
 外部 CDN から MathJax と Mermaid を読み込む。ネットワークがない環境では、数式と概念地図のソース文字列は表示されるが、レンダリングは行われない。
 
 ## 構成
 
-- `content/*.md`: 原稿本体
-- `scripts/build.mjs`: Markdown から `index.html` を生成するスクリプト
-- `index.html`: 生成物。直接編集しない
+- `scripts/tex2md.py`: tex を markdown 中間表現に変換する
+- `scripts/build.mjs`: markdown から HTML を生成する
+- `content/*.md`: tex2md.py の生成物（中間表現・gitignore）
+- `*.html`: build.mjs の生成物（gitignore）
 - `styles.css`: レイアウトと数理ブロックの見た目
 - `app.js`: 用語パネル、章ナビ、Sinkhorn デモ
+- `content/.gitkeep`: fresh clone で content/ を存在させるための空ファイル
 
-## 生成
+## ローカルで読む
 
-```sh
-node site/scripts/build.mjs
-```
-
-または:
+リポジトリ直下で:
 
 ```sh
-cd site
-npm run build
+make site
 ```
 
-生成後、`site/index.html` をブラウザで開く。
+`tex → md → html` を一括生成し、`seminar/site/index.html` をブラウザで開く。
+（`make` を使わない場合は `seminar/site` で `npm run build:all`。）
+
+## 公開（GitHub Pages）
+
+`main` に push すると `.github/workflows/pages.yml` が tex からサイトを生成し
+GitHub Pages へ自動デプロイする。手元での生成・コミットは不要。
+
+初回のみ、リポジトリの **Settings → Pages → Build and deployment → Source** を
+**「GitHub Actions」** に設定する必要がある。
 
 ## 方針
 

@@ -1,1 +1,7 @@
 tex-out/
+
+# 生成物（source of truth は seminar/tex/*.tex）。
+# content/*.md は tex2md.py が、*.html は build.mjs が生成する中間/最終成果物。
+# 手で編集せず、git でも管理しない。再生成は `make site`（リポジトリ直下）。
+content/*.md
+*.html
