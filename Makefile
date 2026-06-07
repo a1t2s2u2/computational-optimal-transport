@@ -11,7 +11,7 @@
 site:
 	python3 seminar/site/scripts/tex2md.py
 	node seminar/site/scripts/build.mjs
-	@echo "→ seminar/site/index.html をブラウザで開いてください"
+	@echo "→ seminar/site/dist/index.html をブラウザで開いてください"
 
 pdf:
 	cd seminar/tex && latexmk

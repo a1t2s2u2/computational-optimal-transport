@@ -45,7 +45,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: seminar/site
+          path: seminar/site/dist
 
   deploy:
     needs: build
