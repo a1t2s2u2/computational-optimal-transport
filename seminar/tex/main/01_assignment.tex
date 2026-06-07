@@ -7,95 +7,15 @@
   ボレル $\sigma$-代数 $\Bb(\X)$ により $\X$ を可測空間 $(\X, \Bb(\X))$ として扱う
   （$\Y$ についても同様）．$\X$ 上の確率測度全体を $\Mm_+^1(\X)$ と記す．
 
-  Polish 空間の3要素を確認する：
-  \begin{itemize}
-    \item \textbf{距離空間}．距離関数
-      $d_\X \colon \X \times \X \to [0, \infty)$ が距離の公理
-      （定義~\ref{def:sem-metric-space}）を満たし，$d_\X$ から以下が順次定まる：
-      \begin{align*}
-        B_r(x)
-          &\defeq \{y \in \X \mid d_\X(x, y) < r\}
-          && \text{（開球，定義~\ref{def:sem-open-ball}）} \\
-        \mathcal{O}_{d_\X}
-          &\defeq \{U \subset \X \mid \forall x \in U,\,
-            \exists r > 0,\, B_r(x) \subset U\}
-          && \text{（開集合の全体）} \\
-        \Bb(\X)
-          &\defeq \sigma(\mathcal{O}_{d_\X})
-          && \text{（ボレル } \sigma\text{-代数，定義~\ref{def:sem-borel}）}
-      \end{align*}
-      ここで $\sigma(\mathcal{O}_{d_\X})$ は，$\mathcal{O}_{d_\X}$ を含む
-      $\X$ 上のすべての $\sigma$-代数の共通部分
-      \[
-        \sigma(\mathcal{O}_{d_\X})
-        \defeq \bigcap
-        \bigl\{
-          \mathcal{F} \subset 2^{\X}
-          \;\big|\;
-          \mathcal{F} \text{ は } \sigma\text{-代数, }
-          \mathcal{O}_{d_\X} \subset \mathcal{F}
-        \bigr\}
-      \]
-      として定まる．これにより可測空間 $(\X, \Bb(\X))$
-      （定義~\ref{def:sem-measurable-space}）が得られる．
-    \item \textbf{完備性}．
-      列 $(x_n)_{n \geq 1} \subset \X$ が\textbf{Cauchy 列}であるとは，
-      任意の $\varepsilon > 0$ に対してある $N \in \N$ が存在して
-      $n, m \geq N \Longrightarrow d_\X(x_n, x_m) < \varepsilon$ が成り立つことをいう．
-      $(\X, d_\X)$ が完備とは，任意の Cauchy 列 $(x_n) \subset \X$ が
-      $\X$ の点に収束する（定義~\ref{def:sem-convergence}）ことをいう．
-      すなわち
-      \[
-        \forall (x_n) \subset \X \text{ Cauchy 列},\;
-        \exists x \in \X,\; x_n \to x.
-      \]
-      収束の定義に展開すれば
-      \[
-        \forall (x_n) \subset \X \text{ Cauchy 列},\;
-        \exists x \in \X,\;
-        \forall \varepsilon > 0,\;
-        \exists N \in \N,\;
-        n \geq N \Longrightarrow d_\X(x_n, x) < \varepsilon.
-      \]
-    \item \textbf{可分性}．
-      $D \subset \X$ が\textbf{稠密}であるとは，任意の空でない開集合
-      $U \subset \X$ に対し $D \cap U \neq \emptyset$ となることをいう
-      （定義~\ref{def:sem-dense}）．
-      距離空間ではこれは「任意の $x \in \X$ と任意の $\varepsilon > 0$ に対し
-      $\exists q \in D,\; d_\X(x, q) < \varepsilon$」と同値．
-      $(\X, d_\X)$ が可分とは可算な稠密部分集合 $D \subset \X$ が
-      存在することをいう（定義~\ref{def:sem-separable}）．すなわち
-      \[
-        \exists D \subset \X \text{ 可算},\;
-        \forall U \subset \X \text{ 空でない開集合},\;
-        D \cap U \neq \emptyset.
-      \]
-  \end{itemize}
-
-  離散版では確率測度の表示に現れる点集合
-  $S \defeq \{x_1, \ldots, x_n\} \subset \X$ は有限集合となる．
-  $S$ にどの距離 $d$ を入れた距離空間 $(S, d)$ も
-  自動で Polish 空間となる（$\X$ の可測構造は $S$ に制限することで継承される）：
-  \begin{itemize}
-    \item[] \textbf{完備性．} $n = 1$ なら $S = \{x_1\}$ ゆえ
-      任意の列は $y_k = x_1$ ($\forall k$) なる定値列であり，
-      $d(y_k, x_1) = 0$ より $x_1$ に収束する．
-      以下 $n \geq 2$ とする．相異なる 2 点間の距離の最小値を
-      $\delta \defeq \min_{i \neq j} d(x_i, x_j)$ とおく．
-      これは有限個の正数の最小値なので $\delta > 0$．
-      任意の Cauchy 列 $(y_k)_{k \geq 1} \subset S$ に対し，
-      Cauchy 条件で $\varepsilon \defeq \delta / 2$ を取ると，
-      ある $N \in \N$ が存在して
-      $k, l \geq N \Longrightarrow d(y_k, y_l) < \delta / 2 < \delta$．
-      一方 $S$ の相異なる 2 点の距離は $\delta$ 以上だから，
-      $d(y_k, y_l) < \delta$ は $y_k = y_l$ を強制する．
-      ゆえに列 $(y_k)$ は $N$ 以降すべて同一の点となり，その点に収束する．
-    \item[] \textbf{可分性．} $S$ 自身が有限（特に可算）集合であり，
-      自身の中で稠密だから可分．
-  \end{itemize}
-  したがって本章の Polish 強化は連続側で必要となる一方，
-  離散版には追加制約を課さない．
+  Polish 空間とその構成要素（距離・開球・開集合・ボレル $\sigma$-代数・完備性・
+  可分性）は付録（前提知識）にまとめてある．離散版で扱う有限点集合 $S = \{x_1, \ldots, x_n\} \subset \X$ は，
+  どの距離を入れても自動的に Polish 空間となる（注意~\ref{rem:sem-finite-auto-polish}）．
+  したがって本章の Polish 仮定は連続側でのみ効き，離散版には追加制約を課さない．
 \end{remark}
+
+整数の集合 $\range{n} = \{1, \ldots, n\}$ 上の\textbf{置換}
+（全単射 $\sigma \colon \range{n} \to \range{n}$，定義~\ref{def:sem-permutation}）の
+全体を $\Perm(n)$ と書く．$\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合である．
 
 \begin{definition}{最適割当問題}{sem-assignment}
   $n \in \N$，置換 $\sigma \in \Perm(n)$，
