@@ -355,7 +355,11 @@ def build_graph(nodes: list, lattice: SpaceLattice) -> dict:
 
 def collect_nodes() -> list:
     nodes = []
-    for path in sorted(glob.glob(os.path.join(SEMINAR_TEX, "ch*.tex"))):
+    # 本編(main/) と 付録:前提知識(foundations/) の全 tex を走査する。
+    tex_paths = []
+    for sub in ("main", "foundations"):
+        tex_paths.extend(glob.glob(os.path.join(SEMINAR_TEX, sub, "*.tex")))
+    for path in sorted(tex_paths):
         nodes.extend(extract_file(path))
     return nodes
 

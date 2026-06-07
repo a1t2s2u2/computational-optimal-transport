@@ -13,34 +13,72 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", 
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "tex")
 CONTENT_DIR = os.path.join(REPO_ROOT, "seminar", "site", "content")
 
-# 変換対象の章。ch01–ch04 を本スクリプトで tex から生成する
+
+def _all_chapter_tex():
+    """本編(main/) と 付録(foundations/) の全 tex を出現順に返す。
+    ラベル写像・章写像の走査対象（preamble.tex / main.tex は含めない）。"""
+    paths = []
+    for sub in ("main", "foundations"):
+        paths.extend(glob.glob(os.path.join(SEMINAR_DIR, sub, "*.tex")))
+    return sorted(paths)
+
+# 変換対象の章。本編(main/) と 付録:前提知識(foundations/) を tex から生成する
 # （content/*.md は tex の生成物であり、tex が source of truth）。
-# 参照（\ref）解決は build_label_map()／build_chapter_map() が全 ch*.tex を
-# 走査するため、変換対象外の章のラベルも本文中でタイトル表示される。
+# group=main は本編、group=appendix は付録ナビに振り分けられる（build.mjs）。
+# 参照（\ref）解決は build_label_map()／build_chapter_map() が main/ と foundations/ の
+# 全 tex を走査するため、付録のラベルも本編からタイトル表示・参照できる。
 CHAPTERS = [
-    ("ch01_preliminaries.tex", "01-preliminaries.md", {
-        "id": "preliminaries",
-        "nav": "準備",
-        "eyebrow": "1. Foundations",
-        "title": "準備",
+    # ---- 本編（OT）：発表2の流れ ----
+    ("main/01_assignment.tex", "01-assignment.md", {
+        "id": "assignment", "group": "main",
+        "nav": "最適割当", "eyebrow": "1. Assignment",
+        "title": "最適割当問題",
     }),
-    ("ch02_ot_foundations.tex", "02-ot-foundations.md", {
-        "id": "ot-foundations",
-        "nav": "Monge と Kantorovich",
-        "eyebrow": "2. OT Foundations",
-        "title": "Optimal Transport の基礎理論",
+    ("main/02_monge.tex", "02-monge.md", {
+        "id": "monge", "group": "main",
+        "nav": "Monge", "eyebrow": "2. Monge",
+        "title": "Monge 問題",
     }),
-    ("ch03_entropic_regularization.tex", "03-entropic.md", {
-        "id": "entropic",
-        "nav": "エントロピー正則化",
-        "eyebrow": "3. Entropic Regularization",
+    ("main/03_kantorovich.tex", "03-kantorovich.md", {
+        "id": "kantorovich", "group": "main",
+        "nav": "Kantorovich", "eyebrow": "3. Kantorovich",
+        "title": "Kantorovich 問題",
+    }),
+    ("main/04_entropic.tex", "04-entropic.md", {
+        "id": "entropic", "group": "main",
+        "nav": "エントロピー", "eyebrow": "4. Entropic Regularization",
         "title": "エントロピー正則化",
     }),
-    ("ch04_sinkhorn.tex", "04-sinkhorn.md", {
-        "id": "sinkhorn",
-        "nav": "Sinkhorn と収束",
-        "eyebrow": "4. Sinkhorn",
+    ("main/05_sinkhorn.tex", "05-sinkhorn.md", {
+        "id": "sinkhorn", "group": "main",
+        "nav": "Sinkhorn", "eyebrow": "5. Sinkhorn",
         "title": "Sinkhorn アルゴリズムと収束",
+    }),
+    # ---- 付録：前提知識（OT非依存・網羅版） ----
+    ("foundations/00_set_topology.tex", "A0-set-topology.md", {
+        "id": "found-set-topology", "group": "appendix",
+        "nav": "集合と位相", "eyebrow": "付録 A. Set & Topology",
+        "title": "集合と位相",
+    }),
+    ("foundations/01_metric_compact.tex", "A1-metric.md", {
+        "id": "found-metric", "group": "appendix",
+        "nav": "距離・コンパクト", "eyebrow": "付録 B. Metric & Compactness",
+        "title": "距離空間・連続・コンパクト性",
+    }),
+    ("foundations/02_measure.tex", "A2-measure.md", {
+        "id": "found-measure", "group": "appendix",
+        "nav": "測度論", "eyebrow": "付録 C. Measure Theory",
+        "title": "測度論",
+    }),
+    ("foundations/03_convex_linalg.tex", "A3-convex.md", {
+        "id": "found-convex", "group": "appendix",
+        "nav": "凸・線形代数", "eyebrow": "付録 D. Convexity & Linear Algebra",
+        "title": "凸性と線形代数",
+    }),
+    ("foundations/04_nonneg_matrix.tex", "A4-nonneg-matrix.md", {
+        "id": "found-nonneg-matrix", "group": "appendix",
+        "nav": "非負行列", "eyebrow": "付録 E. Nonnegative Matrices",
+        "title": "非負行列と Hilbert 射影計量",
     }),
 ]
 
@@ -181,7 +219,7 @@ def build_label_map():
     \\ref も本文中でタイトルとして解決される（リンク先が未生成の章の場合は
     アンカーが存在しないが、表示テキストは保たれる）。"""
     label_map = {}
-    for tex_path in sorted(glob.glob(os.path.join(SEMINAR_DIR, "ch*.tex"))):
+    for tex_path in _all_chapter_tex():
         if not os.path.exists(tex_path):
             continue
         with open(tex_path, "r", encoding="utf-8") as f:
@@ -218,7 +256,7 @@ def build_chapter_map():
     TITLE に入れ子の波括弧（\texorpdfstring{$c$}{c} など）があっても、
     波括弧の対応をとって正しく抽出する。"""
     chapter_map = {}
-    for tex_path in sorted(glob.glob(os.path.join(SEMINAR_DIR, "ch*.tex"))):
+    for tex_path in _all_chapter_tex():
         with open(tex_path, "r", encoding="utf-8") as f:
             content = f.read()
         for m in re.finditer(r"\\chapter\{", content):
@@ -945,6 +983,7 @@ def process_chapter(tex_filename, md_filename, frontmatter):
     # Build frontmatter
     fm = "---\n"
     fm += f"id: {frontmatter['id']}\n"
+    fm += f"group: {frontmatter.get('group', 'main')}\n"
     fm += f"nav: {frontmatter['nav']}\n"
     fm += f"eyebrow: {frontmatter['eyebrow']}\n"
     fm += f"title: {frontmatter['title']}\n"
@@ -968,15 +1007,12 @@ def main():
     print(f"Built label map with {len(LABEL_MAP)} entries, "
           f"chapter map with {len(CHAPTER_MAP)} entries")
 
-    # 変換対象 (CHAPTERS) の md のみ再生成する。CHAPTERS 外の既存 md
-    # （ch01–ch03 など別管理の原稿）は削除しない。
+    # content/*.md は全て生成物。再生成前に一掃し、旧構成の stale な md を残さない。
     removed = 0
-    for _, md_file, _ in CHAPTERS:
-        p = os.path.join(CONTENT_DIR, md_file)
-        if os.path.exists(p):
-            os.remove(p)
-            removed += 1
-    print(f"Removed {removed} target markdown file(s) for regeneration")
+    for p in glob.glob(os.path.join(CONTENT_DIR, "*.md")):
+        os.remove(p)
+        removed += 1
+    print(f"Removed {removed} stale markdown file(s) for regeneration")
     print()
 
     total_blocks = 0

@@ -1,10 +1,23 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, "..");
 const contentDir = path.join(siteRoot, "content");
+const distDir = path.join(siteRoot, "dist");
+
+// 各ページの dist 相対出力パス（本編→ main/、付録→ appendix/）。
+function outPathOf(section) {
+  const sub = section.data.group === "appendix" ? "appendix" : "main";
+  return `${sub}/${section.data.id}.html`;
+}
+
+// from ページ（dist 相対）から to リソース（dist 相対）への相対 URL を返す。
+function relUrl(fromOutPath, toOutPath) {
+  const rel = path.posix.relative(path.posix.dirname(fromOutPath), toOutPath);
+  return rel || ".";
+}
 
 function escapeHtml(value) {
   return value
@@ -524,28 +537,46 @@ function mathJaxScript() {
     </script>`;
 }
 
-function siteHeader(sections, currentId) {
-  const links = sections
-    .map((s, i) => {
-      const cls = s.data.id === currentId ? " is-current" : "";
-      return `          <a href="${escapeHtml(s.data.id)}.html" class="site-header__link${cls}"><span class="site-header__num">${i + 1}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
-    })
+function siteHeader(sections, currentSection) {
+  const curOut = outPathOf(currentSection);
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+
+  const renderLink = (s, label) => {
+    const cls = s.data.id === currentSection.data.id ? " is-current" : "";
+    const href = relUrl(curOut, outPathOf(s));
+    return `          <a href="${escapeHtml(href)}" class="site-header__link${cls}"><span class="site-header__num">${label}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
+  };
+
+  const mainLinks = mainSecs.map((s, i) => renderLink(s, i + 1)).join("\n");
+  const appendixLinks = appendixSecs
+    .map((s, i) => renderLink(s, String.fromCharCode(65 + i)))
     .join("\n");
+
+  const appendixNav = appendixSecs.length
+    ? `\n          <span class="site-header__group-label">付録</span>\n${appendixLinks}`
+    : "";
 
   return `<header class="site-header">
       <div class="site-header__inner">
-        <a href="index.html" class="site-header__home">
+        <a href="${escapeHtml(relUrl(curOut, "index.html"))}" class="site-header__home">
           <span class="site-header__logo">OT</span>
           <span class="site-header__name">計算最適輸送</span>
         </a>
         <nav class="site-header__nav">
-${links}
+${mainLinks}${appendixNav}
         </nav>
       </div>
     </header>`;
 }
 
-function chapterTemplate(section, sections, index, chapterFilesMap) {
+function chapterTemplate(section, sections, index) {
+  const curOut = outPathOf(section);
+  // 参照ジャンプ用に「現在ページからの相対 URL」で章ファイル表を作る（app.js が使用）。
+  const chapterFilesMap = {};
+  sections.forEach((s) => {
+    chapterFilesMap[s.data.id] = relUrl(curOut, outPathOf(s));
+  });
   const chapterNum = String(index + 1).padStart(2, "0");
   const eyebrow = section.data.eyebrow
     ? `<p class="chapter-hero__eyebrow">${escapeHtml(section.data.eyebrow)}</p>`
@@ -555,14 +586,14 @@ function chapterTemplate(section, sections, index, chapterFilesMap) {
   let pagerNext = "<span></span>";
   if (index > 0) {
     const p = sections[index - 1];
-    pagerPrev = `<a class="chapter-pager__link chapter-pager__prev" href="${escapeHtml(p.data.id)}.html">
+    pagerPrev = `<a class="chapter-pager__link chapter-pager__prev" href="${escapeHtml(relUrl(curOut, outPathOf(p)))}">
           <span class="chapter-pager__dir">&larr; 前の章</span>
           <strong>${escapeHtml(p.data.title)}</strong>
         </a>`;
   }
   if (index < sections.length - 1) {
     const n = sections[index + 1];
-    pagerNext = `<a class="chapter-pager__link chapter-pager__next" href="${escapeHtml(n.data.id)}.html">
+    pagerNext = `<a class="chapter-pager__link chapter-pager__next" href="${escapeHtml(relUrl(curOut, outPathOf(n)))}">
           <span class="chapter-pager__dir">次の章 &rarr;</span>
           <strong>${escapeHtml(n.data.title)}</strong>
         </a>`;
@@ -581,7 +612,7 @@ function chapterTemplate(section, sections, index, chapterFilesMap) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="${relUrl(curOut, "styles.css")}" />
     ${mathJaxScript()}
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
@@ -590,14 +621,14 @@ function chapterTemplate(section, sections, index, chapterFilesMap) {
       window.__chapterFiles = ${filesJson};
       window.__currentChapter = "${escapeHtml(section.data.id)}";
     </script>
-    <script defer src="./app.js"></script>
+    <script defer src="${relUrl(curOut, "app.js")}"></script>
   </head>
   <body>
     <div class="reading-progress" aria-hidden="true">
       <div class="reading-progress__fill"></div>
     </div>
 
-    ${siteHeader(sections, section.data.id)}
+    ${siteHeader(sections, section)}
 
     <div class="page-layout">
       <nav class="chapter-toc" aria-label="目次"></nav>
@@ -641,18 +672,36 @@ function chapterTemplate(section, sections, index, chapterFilesMap) {
 }
 
 function landingTemplate(sections) {
-  const cards = sections
-    .map((s, i) => {
-      const num = String(i + 1).padStart(2, "0");
-      const eyebrow = s.data.eyebrow
-        ? `\n          <span class="toc-card__eyebrow">${escapeHtml(s.data.eyebrow)}</span>`
-        : "";
-      return `        <a href="${escapeHtml(s.data.id)}.html" class="toc-card">
+  const renderCards = (secs) =>
+    secs
+      .map((s, i) => {
+        const num =
+          s.data.group === "appendix"
+            ? String.fromCharCode(65 + i)
+            : String(i + 1).padStart(2, "0");
+        const eyebrow = s.data.eyebrow
+          ? `\n          <span class="toc-card__eyebrow">${escapeHtml(s.data.eyebrow)}</span>`
+          : "";
+        return `        <a href="${escapeHtml(outPathOf(s))}" class="toc-card">
           <span class="toc-card__num">${num}</span>${eyebrow}
           <h2 class="toc-card__title">${escapeHtml(s.data.title)}</h2>
         </a>`;
-    })
-    .join("\n");
+      })
+      .join("\n");
+
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+
+  const appendixBlock = appendixSecs.length
+    ? `
+      <div class="landing__group">
+        <h2 class="landing__group-title">付録：前提知識</h2>
+        <p class="landing__group-sub">発表では省略した数学的前提を網羅した完全版．本編から参照される．</p>
+      </div>
+      <nav class="landing__toc">
+${renderCards(appendixSecs)}
+      </nav>`
+    : "";
 
   return `<!doctype html>
 <html lang="ja">
@@ -675,8 +724,8 @@ function landingTemplate(sections) {
         <p class="landing__sub">Computational Optimal Transport</p>
       </div>
       <nav class="landing__toc">
-${cards}
-      </nav>
+${renderCards(mainSecs)}
+      </nav>${appendixBlock}
       <footer class="landing__footer">
         <p>Based on <em>Computational Optimal Transport</em> by G. Peyr&eacute; &amp; M. Cuturi</p>
       </footer>
@@ -713,15 +762,20 @@ for (const section of sections) {
   }
 }
 
-const chapterFiles = {};
-sections.forEach((s) => {
-  chapterFiles[s.data.id] = `${s.data.id}.html`;
-});
+mkdirSync(path.join(distDir, "main"), { recursive: true });
+mkdirSync(path.join(distDir, "appendix"), { recursive: true });
 
-writeFileSync(path.join(siteRoot, "index.html"), landingTemplate(sections), "utf8");
+writeFileSync(path.join(distDir, "index.html"), landingTemplate(sections), "utf8");
 sections.forEach((section, i) => {
-  const filename = `${section.data.id}.html`;
-  writeFileSync(path.join(siteRoot, filename), chapterTemplate(section, sections, i, chapterFiles), "utf8");
+  writeFileSync(path.join(distDir, outPathOf(section)), chapterTemplate(section, sections, i), "utf8");
 });
 
-console.log(`Built ${sections.length + 1} HTML files (landing + ${sections.length} chapters).`);
+// html から相対参照される静的アセットを dist へコピーする。
+for (const asset of ["styles.css", "app.js"]) {
+  copyFileSync(path.join(siteRoot, asset), path.join(distDir, asset));
+}
+
+const nMain = sections.filter((s) => s.data.group !== "appendix").length;
+console.log(
+  `Built dist/ : index.html + main/(${nMain}) + appendix/(${sections.length - nMain}).`
+);

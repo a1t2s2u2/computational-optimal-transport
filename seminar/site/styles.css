@@ -205,6 +205,44 @@ input {
   opacity: 0.4;
 }
 
+.site-header__group-label {
+  display: flex;
+  align-items: center;
+  padding: 5px 4px 5px 12px;
+  margin-left: 6px;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0.7;
+}
+
+/* Landing: 本編 / 付録 のグループ見出し */
+.landing__group {
+  max-width: var(--prose-w);
+  margin: 52px auto 0;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.landing__group-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.landing__group-sub {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
 /* ==========================================================================
    Page Layout: 3-Column (TOC | Prose | Ref Sidebar)
    ========================================================================== */
