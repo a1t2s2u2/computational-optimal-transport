@@ -1,5 +1,7 @@
 {
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "tex2md": "python3 scripts/tex2md.py",
+    "build": "node scripts/build.mjs",
+    "build:all": "python3 scripts/tex2md.py && node scripts/build.mjs"
   }
 }

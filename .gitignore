@@ -23,16 +23,6 @@ seminar/tex/out/
 # generated site artifacts
 seminar/site/tex-out/
 
-# LLM fine-tuning artifacts
-llm/models/
-llm/adapters/
-llm/data/raw/
-llm/data/train.jsonl
-llm/data/valid.jsonl
-llm/logs/*/
-llm/logs/latest
-llm/logs/train.pid
-
 # uv
 .venv/
 uv.lock

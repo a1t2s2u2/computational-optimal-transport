@@ -1,0 +1,58 @@
+name: Deploy site to GitHub Pages
+
+# seminar/tex/*.tex を唯一の source とし、push のたびに
+# tex → content/*.md → *.html を生成して GitHub Pages へ公開する。
+# 生成物（md/html）はリポジトリに commit せず、ここで都度ビルドする。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "seminar/tex/**"
+      - "seminar/site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時デプロイを直列化（古いランは取り消す）
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate markdown from TeX (tex2md.py)
+        run: python3 seminar/site/scripts/tex2md.py
+
+      - name: Build HTML (build.mjs)
+        run: node seminar/site/scripts/build.mjs
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: seminar/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
