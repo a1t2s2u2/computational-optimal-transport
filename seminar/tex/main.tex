@@ -76,9 +76,23 @@
 \vspace{1em}
 \hrule
 
-\input{ch01_preliminaries}
-\input{ch02_ot_foundations}
-\input{ch03_entropic_regularization}
-\input{ch04_sinkhorn}
+%% ============================================================
+%%  本編（OT）— 発表2の流れ
+%% ============================================================
+\input{main/01_assignment}
+\input{main/02_monge}
+\input{main/03_kantorovich}
+\input{main/04_entropic}
+\input{main/05_sinkhorn}
+
+%% ============================================================
+%%  付録：前提知識（OT非依存・網羅版）
+%% ============================================================
+\appendix
+\input{foundations/00_set_topology}
+\input{foundations/01_metric_compact}
+\input{foundations/02_measure}
+\input{foundations/03_convex_linalg}
+\input{foundations/04_nonneg_matrix}
 
 \end{document}

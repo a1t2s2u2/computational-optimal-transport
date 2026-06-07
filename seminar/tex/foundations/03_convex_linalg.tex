@@ -1,0 +1,125 @@
+\chapter{凸性と線形代数}
+\label{ch:found-convex}
+
+\begin{definition}{有限集合と濃度}{sem-finite}
+  集合 $S$ が\textbf{有限集合}であるとは，ある $n \in \N$ と
+  全単射 $f \colon \range{n} \to S$ が存在することをいう
+  （ここで $\range{n} \defeq \{1, 2, \ldots, n\}$）．
+  この $n$ を $S$ の\textbf{濃度}といい $|S|$ で表す．
+\end{definition}
+
+\begin{claim}{有限集合の最小元}{sem-finite-min}
+  $\R$ の空でない有限部分集合 $S$（定義~\ref{def:sem-finite}）には
+  最小元が存在する：
+  \[
+    \exists\, s^* \in S \;\;\text{s.t.}\;\; \forall\, s \in S,\; s^* \leq s.
+  \]
+\end{claim}
+
+\begin{proof}
+  $|S|$ に関する帰納法で示す．
+
+  \textbf{$|S| = 1$ の時．} $S$ の唯一の元がそのまま最小元．
+
+  \textbf{$|S| \geq 2$ の時．}
+  $\R$ の任意の空でない有限部分集合 $T$ について $|T| < |S|$ ならば最小元を持つと仮定する．
+  $a \in S$ を任意に取り $S' \defeq S \setminus \{a\}$ とおくと $|S'| = |S| - 1$ なので，
+  仮定が $S'$ に対して適用でき最小元 $b \in S'$ を持つ．
+  $a, b \in \R$ より $b \leq a$ か $a < b$ のいずれかが成り立つので，
+  \[
+    s^* \defeq
+    \begin{cases}
+      b & (b \leq a), \\
+      a & (a < b)
+    \end{cases}
+  \]
+  とおけば $s^* \in S$ かつ任意の $s \in S$ について $s^* \leq s$．
+\end{proof}
+
+\begin{definition}{置換}{sem-permutation}
+  $n \in \N$ について，全単射
+  $\sigma \colon \range{n} \to \range{n}$ を $\range{n}$ 上の\textbf{置換}という．
+  置換全体の集合を
+  \[
+    \Perm(n) \defeq \{\sigma \colon \range{n} \to \range{n} \mid \sigma \text{ は全単射}\}
+  \]
+  で表す．$\Perm(n)$ は $|\Perm(n)| = n!$ の有限集合
+  （定義~\ref{def:sem-finite}）である．
+\end{definition}
+
+\begin{definition}{線形関数}{sem-linear-function}
+  ベクトル空間 $V$ から $\R$ への関数 $f \colon V \to \R$ が
+  \textbf{線形関数}であるとは，
+  任意の $v_1, v_2 \in V$ と $\lambda \in \R$ に対して
+  \begin{enumerate}
+    \item[(i)] 加法性：$f(v_1 + v_2) = f(v_1) + f(v_2)$，
+    \item[(ii)] 斉次性：$f(\lambda v_1) = \lambda f(v_1)$
+  \end{enumerate}
+  が成り立つことをいう．
+\end{definition}
+
+\begin{definition}{全成分 $1$ のベクトル}{sem-ones-vector}
+  $n \in \N$ に対し，$\R^n$ の全成分が $1$ のベクトルを
+  \[
+    \ones_n \defeq (1, 1, \ldots, 1)^\top \in \R^n
+  \]
+  で表す．
+\end{definition}
+
+\begin{definition}{フロベニウス内積}{sem-frobenius-inner}
+  同じサイズの2つの行列 $\mathbf{A}, \mathbf{B} \in \R^{n \times m}$ に対し，
+  \textbf{フロベニウス内積}を
+  \[
+    \inner{\mathbf{A}}{\mathbf{B}}
+    \defeq \tr(\mathbf{A}^\top \mathbf{B})
+    = \sum_{i=1}^{n} \sum_{j=1}^{m} A_{i,j} B_{i,j}
+  \]
+  で定める．
+\end{definition}
+
+\begin{definition}{凸集合}{sem-convex}
+  ベクトル空間 $V$ の部分集合 $S \subset V$ が\textbf{凸}であるとは，
+  任意の $v_1, v_2 \in S$ と任意の $t \in [0,1]$ に対して
+  \[
+    t v_1 + (1-t) v_2 \in S
+  \]
+  が成り立つことをいう．
+\end{definition}
+
+\begin{definition}{凸関数と狭義凸関数}{sem-convex-function}
+  凸集合 $S \subset V$ 上の関数 $f \colon S \to \R$ が
+  \textbf{凸関数}であるとは，任意の $v_1, v_2 \in S$ と
+  任意の $t \in [0,1]$ に対して
+  \[
+    f\bigl(t v_1 + (1-t)v_2\bigr)
+    \leq
+    t f(v_1) + (1-t) f(v_2)
+  \]
+  が成り立つことをいう．さらに，任意の相異なる
+  $v_1 \neq v_2$ と任意の $t \in (0,1)$ に対して
+  \[
+    f\bigl(t v_1 + (1-t)v_2\bigr)
+    <
+    t f(v_1) + (1-t) f(v_2)
+  \]
+  が成り立つとき，$f$ は\textbf{狭義凸関数}であるという．
+\end{definition}
+
+\begin{proposition}{狭義凸関数の最小点の一意性}{sem-strict-convex-unique-min}
+  凸集合 $S$ 上の狭義凸関数 $f$ が
+  $S$ 上で最小値を達成するならば，その最小点は一意である．
+\end{proposition}
+
+\begin{proof}
+  $\mathbf{x}, \mathbf{y} \in S$ がともに $f$ の最小点とし，
+  $\mathbf{x} \neq \mathbf{y}$ と仮定する．
+  $S$ の凸性から
+  $\tfrac{1}{2}(\mathbf{x}+\mathbf{y}) \in S$ であり，
+  狭義凸性から
+  \[
+    f\!\left(\tfrac{\mathbf{x}+\mathbf{y}}{2}\right)
+    < \tfrac{1}{2}f(\mathbf{x}) + \tfrac{1}{2}f(\mathbf{y})
+    = f(\mathbf{x})
+  \]
+  となり，$\mathbf{x}$ の最小性に矛盾する．
+\end{proof}

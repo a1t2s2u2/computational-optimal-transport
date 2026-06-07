@@ -525,12 +525,22 @@ function mathJaxScript() {
 }
 
 function siteHeader(sections, currentId) {
-  const links = sections
-    .map((s, i) => {
-      const cls = s.data.id === currentId ? " is-current" : "";
-      return `          <a href="${escapeHtml(s.data.id)}.html" class="site-header__link${cls}"><span class="site-header__num">${i + 1}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
-    })
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+
+  const renderLink = (s, label) => {
+    const cls = s.data.id === currentId ? " is-current" : "";
+    return `          <a href="${escapeHtml(s.data.id)}.html" class="site-header__link${cls}"><span class="site-header__num">${label}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
+  };
+
+  const mainLinks = mainSecs.map((s, i) => renderLink(s, i + 1)).join("\n");
+  const appendixLinks = appendixSecs
+    .map((s, i) => renderLink(s, String.fromCharCode(65 + i)))
     .join("\n");
+
+  const appendixNav = appendixSecs.length
+    ? `\n          <span class="site-header__group-label">付録</span>\n${appendixLinks}`
+    : "";
 
   return `<header class="site-header">
       <div class="site-header__inner">
@@ -539,7 +549,7 @@ function siteHeader(sections, currentId) {
           <span class="site-header__name">計算最適輸送</span>
         </a>
         <nav class="site-header__nav">
-${links}
+${mainLinks}${appendixNav}
         </nav>
       </div>
     </header>`;
@@ -641,18 +651,36 @@ function chapterTemplate(section, sections, index, chapterFilesMap) {
 }
 
 function landingTemplate(sections) {
-  const cards = sections
-    .map((s, i) => {
-      const num = String(i + 1).padStart(2, "0");
-      const eyebrow = s.data.eyebrow
-        ? `\n          <span class="toc-card__eyebrow">${escapeHtml(s.data.eyebrow)}</span>`
-        : "";
-      return `        <a href="${escapeHtml(s.data.id)}.html" class="toc-card">
+  const renderCards = (secs) =>
+    secs
+      .map((s, i) => {
+        const num =
+          s.data.group === "appendix"
+            ? String.fromCharCode(65 + i)
+            : String(i + 1).padStart(2, "0");
+        const eyebrow = s.data.eyebrow
+          ? `\n          <span class="toc-card__eyebrow">${escapeHtml(s.data.eyebrow)}</span>`
+          : "";
+        return `        <a href="${escapeHtml(s.data.id)}.html" class="toc-card">
           <span class="toc-card__num">${num}</span>${eyebrow}
           <h2 class="toc-card__title">${escapeHtml(s.data.title)}</h2>
         </a>`;
-    })
-    .join("\n");
+      })
+      .join("\n");
+
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+
+  const appendixBlock = appendixSecs.length
+    ? `
+      <div class="landing__group">
+        <h2 class="landing__group-title">付録：前提知識</h2>
+        <p class="landing__group-sub">発表では省略した数学的前提を網羅した完全版．本編から参照される．</p>
+      </div>
+      <nav class="landing__toc">
+${renderCards(appendixSecs)}
+      </nav>`
+    : "";
 
   return `<!doctype html>
 <html lang="ja">
@@ -675,8 +703,8 @@ function landingTemplate(sections) {
         <p class="landing__sub">Computational Optimal Transport</p>
       </div>
       <nav class="landing__toc">
-${cards}
-      </nav>
+${renderCards(mainSecs)}
+      </nav>${appendixBlock}
       <footer class="landing__footer">
         <p>Based on <em>Computational Optimal Transport</em> by G. Peyr&eacute; &amp; M. Cuturi</p>
       </footer>
