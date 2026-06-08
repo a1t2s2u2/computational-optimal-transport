@@ -9,7 +9,7 @@
 .PHONY: site pdf
 
 site:
-	python3 seminar/site/scripts/tex2md.py
+	node seminar/site/scripts/tex2md.mjs
 	node seminar/site/scripts/build.mjs
 	@echo "→ seminar/site/dist/index.html をブラウザで開いてください"
 
