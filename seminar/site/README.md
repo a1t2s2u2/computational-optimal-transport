@@ -5,7 +5,7 @@
 
 ```
 seminar/tex/{main,foundations}/*.tex  ← ★ ここだけを編集する（本編＋付録:前提知識）
-      │  scripts/tex2md.py      （tex → markdown 中間表現）
+      │  scripts/tex2md.mjs     （tex → markdown 中間表現）
       ▼
 seminar/site/content/*.md  ← 生成物（gitignore 済み・手で触らない）
       │  scripts/build.mjs      （markdown → html、dist/ へ出力）
@@ -20,9 +20,9 @@ seminar/site/dist/         ← 生成物（gitignore 済み）。デプロイ用
 
 ## 構成
 
-- `scripts/tex2md.py`: tex を markdown 中間表現に変換する
+- `scripts/tex2md.mjs`: tex を markdown 中間表現に変換する
 - `scripts/build.mjs`: markdown から HTML を生成する
-- `content/*.md`: tex2md.py の生成物（中間表現・gitignore）
+- `content/*.md`: tex2md.mjs の生成物（中間表現・gitignore）
 - `dist/`: build.mjs の生成物（gitignore）。`index.html` + `main/` + `appendix/` + コピーした css/js
 - `styles.css`: レイアウトと数理ブロックの見た目
 - `app.js`: 用語パネル、章ナビ、Sinkhorn デモ

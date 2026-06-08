@@ -4,7 +4,7 @@
 **依存関係**を抽出し、**空間ごとに層別**して俯瞰し、証明の **AND/OR 分岐（ルート A / B）** を
 表現するためのツール群。
 
-既存の TeX パーサ（`seminar/site/scripts/tex2md.py`）を再利用して構築している。
+TeX パーサ・ヘルパは proofgraph 同梱の `texparse.py`（self-contained）で構築している。
 
 ## パイプライン
 

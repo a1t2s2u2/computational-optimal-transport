@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """tex の数学ブロックを走査して依存グラフ (graph.json) を生成する。
 
-既存の tex2md パーサ基盤（seminar/site/scripts/tex2md.py）を再利用する:
+TeX パーサ・ヘルパ（proofgraph/texparse.py）を利用する:
   - BLOCK_ENVS / ENV_TO_PREFIX : ブロック環境とラベル接頭辞
   - strip_comments             : 行コメント除去（コメントアウトされた \\ref を数えない）
   - _extract_brace_arg         : 入れ子の波括弧に対応した引数抽出
@@ -22,20 +22,18 @@ import glob
 import json
 import os
 import re
-import sys
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, os.path.join(REPO_ROOT, "seminar", "site", "scripts"))
-
-import tex2md  # noqa: E402
-from tex2md import (  # noqa: E402
+import texparse
+from texparse import (
     BLOCK_ENVS,
     ENV_TO_PREFIX,
     _extract_brace_arg,
     strip_comments,
 )
 
-from model import Node, Route, SpaceLattice  # noqa: E402
+from model import Node, Route, SpaceLattice
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 SEMINAR_TEX = os.path.join(REPO_ROOT, "seminar", "tex")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "out", "graph.json")
@@ -107,7 +105,7 @@ def _chapter_title(content: str) -> str:
     if not m:
         return ""
     res = _extract_brace_arg(content, m.end() - 1)
-    return tex2md._clean_chapter_title(res[0]) if res else ""
+    return texparse._clean_chapter_title(res[0]) if res else ""
 
 
 def _extract_blockmeta(body: str) -> tuple:
@@ -365,9 +363,9 @@ def collect_nodes() -> list:
 
 
 def main() -> None:
-    # tex2md の \ref 解決用ラベル辞書（タイトル表示に使う場合に備えて）
-    tex2md.LABEL_MAP = tex2md.build_label_map()
-    tex2md.CHAPTER_MAP = tex2md.build_chapter_map()
+    # \ref 解決用ラベル辞書（タイトル表示に使う場合に備えて）
+    texparse.LABEL_MAP = texparse.build_label_map()
+    texparse.CHAPTER_MAP = texparse.build_chapter_map()
 
     lattice = SpaceLattice.load()
     nodes = collect_nodes()

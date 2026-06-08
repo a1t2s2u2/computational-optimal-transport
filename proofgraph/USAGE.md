@@ -76,7 +76,7 @@ viewer は `?data=` で読み込むグラフを差し替えられる。セミナ
 
 - **viewer が真っ白／データを読み込めない**: `file://` で開いていないか確認。`uv run pg.py` の
   サーバ経由で開く。実データを見るには先に `uv run pg.py extract` を実行しておく。
-- **`ModuleNotFoundError: tex2md`**: `extractor.py` が `seminar/site/scripts` を `sys.path` に
-  追加する。`pg.py` 経由なら問題ない。
+- **`ModuleNotFoundError: texparse`**: `extractor.py` は同ディレクトリの `texparse.py` を import する。
+  `pg.py` 経由なら問題ない。
 - **validate がエラー**: 循環は `\blockmeta{route.X=...}` で別証明ルートを明示して解消する
   （[README.md](README.md) の「AND/OR による循環解消」を参照）。
