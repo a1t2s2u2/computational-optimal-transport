@@ -313,81 +313,95 @@
 \end{proposition}
 
 \begin{proof}
-  証明の要点は，最適解が領域の内部（全成分が正）にあることを示し，
-  そのうえで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用することである．
+  証明は 3 段からなる：最適解が領域の内部（全成分が正）にあることを示し（Step 1），
+  そこで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用してスケーリング形を導き（Step 2），
+  最後に一意性を確かめる（Step 3）．
+  目的関数を
+  \[
+    F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+    = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j}),
+    \qquad \varphi(x) = x\log x - x,\quad \varphi'(x) = \log x
+  \]
+  とおく（$\varphi$ は注意~\ref{rem:sem-phi-continuous}）．
 
   \textbf{Step 1（最適解の正値性）．}
-  $\mathbf{P}_\varepsilon$ の全成分が正であること，すなわち
-  $(\mathbf{P}_\varepsilon)_{i,j} > 0$（$\forall i, j$）を示す．
-  $n = 1$ または $m = 1$ のときは $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  一点 $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$（成分 $a_i b_j > 0$）のみからなり，主張は明らか．
-  以下 $n, m \geq 2$ とする．
+  鍵は，全成分が正である実行可能点を 1 つ手に持っておくことである．
+  独立カップリング $\mathbf{P}^\circ \defeq \mathbf{a}\mathbf{b}^\top$ は
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ に属し，$P^\circ_{i,j} = a_i b_j > 0$ をみたす．
 
-  背理法で，$(\mathbf{P}_\varepsilon)_{i_0, j_0} = 0$ となる成分があると仮定する
-  （以下 $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ と略記）．
-  $a_{i_0} = \sum_j P_{i_0, j} > 0$ より $P_{i_0, j_1} > 0$ となる $j_1$ が存在し，
-  $P_{i_0, j_0} = 0$ だから $j_1 \neq j_0$．
-  同様に $b_{j_0} = \sum_i P_{i, j_0} > 0$ より $P_{i_1, j_0} > 0$ となる $i_1 \neq i_0$ が存在する．
-  $t \geq 0$ に対し，$(i_0, j_0), (i_1, j_1)$ 成分に $+t$，$(i_0, j_1), (i_1, j_0)$ 成分に $-t$
-  を加えた行列 $\mathbf{P}^t$ を考える（他の成分は不変）．
-  各行・各列での増減が打ち消し合うので $\mathbf{P}^t$ の周辺は不変であり，
-  $t_0 \defeq \min(P_{i_0, j_1}, P_{i_1, j_0}) > 0$ として
-  $t \in [0, t_0]$ では $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ である．
-
-  目的関数を $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
-  = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$
-  （$\varphi(x) = x\log x - x$，注意~\ref{rem:sem-phi-continuous}）とおくと，
-  $g(t) \defeq F(\mathbf{P}^t)$ は $t$ に依存する 4 成分のみを通じて
+  背理法で $\mathbf{P}_\varepsilon$ が零成分をもつと仮定し，その零集合
   \[
-    g(t) = \text{(定数)}
-    + t\,(C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
-    + \varepsilon\bigl[\varphi(t) + \varphi(P_{i_1 j_1} + t)
-      + \varphi(P_{i_0 j_1} - t) + \varphi(P_{i_1 j_0} - t)\bigr]
+    Z \defeq \{(i, j) : (\mathbf{P}_\varepsilon)_{i,j} = 0\} \neq \emptyset
   \]
-  と書ける．$\varphi'(x) = \log x$ だから，$(0, t_0)$ 上で
+  を考える（以下 $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ と略記）．
+  $\mathbf{P}$ から $\mathbf{P}^\circ$ へ向かう線分
   \[
-    g'(t) = (C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
-    + \varepsilon\bigl[\log t + \log(P_{i_1 j_1} + t)
-      - \log(P_{i_0 j_1} - t) - \log(P_{i_1 j_0} - t)\bigr].
+    \mathbf{P}_\theta \defeq (1 - \theta)\,\mathbf{P} + \theta\,\mathbf{P}^\circ
+    \in \CouplingsD(\mathbf{a}, \mathbf{b})
+    \qquad (\theta \in [0, 1])
   \]
-  右辺で $\log(P_{i_0 j_1} - t)$, $\log(P_{i_1 j_0} - t)$ は $t \to 0+$ で有限値に収束し，
-  $\log(P_{i_1 j_1} + t)$ は有限値または $-\infty$ に発散する一方，$\log t \to -\infty$ である．
-  ゆえに $\lim_{t \to 0+} g'(t) = -\infty$ となり，十分小さい $t > 0$ で
-  $g(t) < g(0) = F(\mathbf{P}_\varepsilon)$．これは $\mathbf{P}_\varepsilon$ の最適性に反する．
-  したがって $\mathbf{P}_\varepsilon$ の全成分は正である．
+  に沿って $g(\theta) \defeq F(\mathbf{P}_\theta)$ の挙動を調べる
+  （凸集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ の 2 点を結ぶ線分なので全体が実行可能）．
+  $\theta \in (0, 1]$ では $\mathbf{P}_\theta$ は全成分正だから $g$ は $(0, 1)$ 上で微分可能で，
+  $\tfrac{d}{d\theta}(\mathbf{P}_\theta)_{i,j} = P^\circ_{i,j} - P_{i,j}$ より
+  \[
+    g'(\theta) = \inner{\mathbf{C}}{\mathbf{P}^\circ - \mathbf{P}}
+    + \varepsilon\sum_{i,j} \log\!\bigl((\mathbf{P}_\theta)_{i,j}\bigr)\,
+      \bigl(P^\circ_{i,j} - P_{i,j}\bigr).
+  \]
+  $\theta \to 0+$ での各項の挙動は次のとおり：
+  \begin{itemize}
+    \item $(i, j) \notin Z$：$(\mathbf{P}_\theta)_{i,j} \to P_{i,j} > 0$ なので項は有限値に収束する．
+      線形項 $\inner{\mathbf{C}}{\mathbf{P}^\circ - \mathbf{P}}$ も $\theta$ によらない有限値．
+    \item $(i, j) \in Z$：$(\mathbf{P}_\theta)_{i,j} = \theta\, a_i b_j$ かつ
+      $P^\circ_{i,j} - P_{i,j} = a_i b_j > 0$ なので，項は
+      $a_i b_j \log(\theta\, a_i b_j) \to -\infty$．
+  \end{itemize}
+  $Z \neq \emptyset$ より $\lim_{\theta \to 0+} g'(\theta) = -\infty$．
+  したがって十分小さい $\theta > 0$ で $g$ は狭義減少し，
+  $F(\mathbf{P}_\theta) < F(\mathbf{P}_\varepsilon)$ となって最適性に反する．
+  ゆえに $\mathbf{P}_\varepsilon$ の全成分は正である．
 
   \textbf{Step 2（1 階条件）．}
   Step 1 より $\mathbf{P}_\varepsilon$ は領域 $\R_{>0}^{n \times m}$ の内点にあるので，
-  非負制約 $\mathbf{P} \geq 0$ は活性化せず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$,
-  $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみと見なせる．
+  非負制約 $\mathbf{P} \geq 0$ は活性化せず，制約は等式
+  $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
   命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は
-  $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上での最小元であり，
-  $\KLD(\cdot \| \mathbf{K})$ は $\R_{>0}^{n \times m}$ 上で微分可能で
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で $\KLD(\cdot \| \mathbf{K})$ を最小化し，
+  この関数は $\R_{>0}^{n \times m}$ 上で微分可能で
   \[
     \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K})
     = \log\frac{P_{i,j}}{K_{i,j}}
   \]
   をみたす（定義~\ref{def:sem-kl-divergence} より直接計算）．
-  制約はすべてアフィンだから制約想定はみたされ，内点の最小元では Lagrange の
-  1 階条件が必要条件となる：ある乗数 $\boldsymbol{\alpha} \in \R^n$, $\boldsymbol{\beta} \in \R^m$
-  が存在して，行和制約の勾配が成分 $i$ の行に $1$，列和制約の勾配が成分 $j$ の列に $1$ を与えることから
+  制約はすべてアフィンなので制約想定がみたされ，内点の最小元では Lagrange の 1 階条件が必要条件となる．
+  行和・列和制約の乗数を $\boldsymbol{\alpha} \in \R^n$, $\boldsymbol{\beta} \in \R^m$ とすれば
   \[
     \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j
     \qquad (\forall i, j)
   \]
   が成り立つ．両辺の指数をとり $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
-  $(\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j$，すなわち
-  $\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ を得る．
+  \[
+    (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
+    \qquad\text{すなわち}\qquad
+    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+  \]
+  を得る．
 
   \textbf{Step 3（一意性）．}
   $\mathbf{P}_\varepsilon$ 自体の一意性は命題~\ref{prop:sem-entropic-existence-unique} による．
   スケーリングベクトルについては，任意の $\lambda > 0$ に対し
-  $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ より $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も
-  同じ $\mathbf{P}_\varepsilon$ を与える．逆にこの自由度を除けば一意である：
-  全成分が正なので各 $i, j$ で $u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ が定まり，
-  $i, i'$ について比 $u_i / u_{i'} = \bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr)
-  \big/ \bigl((\mathbf{P}_\varepsilon)_{i',j}/K_{i',j}\bigr)$ が（$j$ に依らず）決まるから，
-  $\mathbf{u}$ は正の定数倍を除いて一意であり，対応して $\mathbf{v}$ も定まる．
+  $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ より，
+  $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
+  逆にこの定数倍の自由度を除けば一意である．
+  実際，全成分が正なので各 $(i, j)$ で $u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ が定まり，
+  任意の $j$ について
+  \[
+    \frac{u_i}{u_{i'}}
+    = \frac{(\mathbf{P}_\varepsilon)_{i,j} / K_{i,j}}
+           {(\mathbf{P}_\varepsilon)_{i',j} / K_{i',j}}
+  \]
+  が（$j$ に依らず）決まる．よって $\mathbf{u}$ は正の定数倍を除いて一意であり，対応して $\mathbf{v}$ も定まる．
 \end{proof}
 
 \begin{remark}{双対ポテンシャルとの関係}{sem-entropic-dual-potential}
