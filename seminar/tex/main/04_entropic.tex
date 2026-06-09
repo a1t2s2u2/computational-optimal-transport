@@ -293,41 +293,18 @@
   両者の最小化問題は同じ最適解を持つ．
 \end{proof}
 
-この KL 射影としての表現を用いると，最適解の具体的な形が定まる．
+最適解の具体的な形を導く準備として，まず最適解が領域の内部にある（全成分が正である）ことを示す．これにより非負制約が不活性となり，等式制約のみの 1 階条件（Lagrange の未定乗数法）が適用できる．
 
-\begin{proposition}{正則化解のスケーリング形}{sem-entropic-scaling-form}
-  定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$）
-  の下で，$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解
-  $\mathbf{P}_\varepsilon$ は，ある $\mathbf{u} \in \R_{>0}^n$, $\mathbf{v} \in \R_{>0}^m$
-  を用いて
+\begin{lemma}{正則化解の正値性}{sem-entropic-positivity}
+  定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$）の下で，
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解 $\mathbf{P}_\varepsilon$ は全成分が正である：
   \[
-    (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
-    \qquad\text{すなわち}\qquad
-    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+    (\mathbf{P}_\varepsilon)_{i,j} > 0 \qquad (\forall i, j).
   \]
-  と書ける．ここで $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は Gibbs カーネル
-  （定義~\ref{def:sem-gibbs-kernel}）である．
-  $\mathbf{P}_\varepsilon$ は一意であり，スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，
-  任意の $\lambda > 0$ による置き換え $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$
-  の自由度を除いて一意に定まる．
-\end{proposition}
+  とくに $\mathbf{P}_\varepsilon$ は非負制約 $\mathbf{P} \geq 0$ を活性化しない内点である．
+\end{lemma}
 
 \begin{proof}
-  \textbf{方針．}
-  証明は大きく三段からなる．まず最適解が領域の内部（全成分が正）にあること
-  を示し（Step 1），これにより非負制約が不活性となるので，等式制約のみの 1 階条件
-  （Lagrange の未定乗数法）を適用してスケーリング形を導く（Step 2）．
-  最後にスケーリングベクトルの一意性を確認する（Step 3）．
-  Step 1 の核となる記号を予告しておく：$0$ 成分 $(i_0, j_0)$ を仮定し，
-  それを補完して $2\times2$ のサイクルを閉じる添字 $i_1, j_1$ を取り出し，
-  このサイクル上で実行可能性を保つ摂動 $\mathbf{P}^t$（上限 $t_0$）を加えて，
-  目的関数を 1 変数関数 $g(t)$ に還元する，という流れをとる．
-
-  \medskip
-  \textbf{Step 1（最適解の正値性）．}
-  目標は $\mathbf{P}_\varepsilon$ の全成分が正であること，すなわち
-  $(\mathbf{P}_\varepsilon)_{i,j} > 0$（$\forall i, j$）を示すことである．
-
   \emph{自明ケース．}
   $n = 1$ または $m = 1$ のときは摂動を作る相異なる 2 行・2 列が確保できないが，
   このとき $\CouplingsD(\mathbf{a}, \mathbf{b})$ は一点
@@ -430,10 +407,36 @@
   よって背理法の仮定は否定され，$\mathbf{P}_\varepsilon$ の全成分は正である．
   （直観的には，$0$ 成分はエントロピーの勾配が境界で $-\infty$ となるため，
   微小に開くと必ず目的関数を下げられるのである．）
+\end{proof}
+
+これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
+
+\begin{proposition}{正則化解のスケーリング形}{sem-entropic-scaling-form}
+  定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$）
+  の下で，$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解
+  $\mathbf{P}_\varepsilon$ は，ある $\mathbf{u} \in \R_{>0}^n$, $\mathbf{v} \in \R_{>0}^m$
+  を用いて
+  \[
+    (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
+    \qquad\text{すなわち}\qquad
+    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+  \]
+  と書ける．ここで $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は Gibbs カーネル
+  （定義~\ref{def:sem-gibbs-kernel}）である．
+  $\mathbf{P}_\varepsilon$ は一意であり，スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，
+  任意の $\lambda > 0$ による置き換え $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$
+  の自由度を除いて一意に定まる．
+\end{proposition}
+
+\begin{proof}
+  \textbf{方針．}
+  補題~\ref{lem:sem-entropic-positivity} より最適解 $\mathbf{P}_\varepsilon$ は領域の内点にあり，非負制約は不活性である．
+  そこで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用してスケーリング形を導き（Step 1），
+  最後にスケーリングベクトルの一意性を確認する（Step 2）．
 
   \medskip
-  \textbf{Step 2（1 階条件）．}
-  Step 1 より $\mathbf{P}_\varepsilon$ は領域 $\R_{>0}^{n \times m}$ の内点にあるので，
+  \textbf{Step 1（1 階条件）．}
+  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は領域 $\R_{>0}^{n \times m}$ の内点にあるので，
   非負制約 $\mathbf{P} \geq 0$ は活性化せず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$,
   $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみと見なせる．この内点性こそが，
   以下で等式制約のみの Lagrange 条件へ移る論理的な橋渡しである．
@@ -476,7 +479,7 @@
   を得る．これが命題本文のスケーリング形である．
 
   \medskip
-  \textbf{Step 3（一意性）．}
+  \textbf{Step 2（一意性）．}
   $\mathbf{P}_\varepsilon$ 自体の一意性は命題~\ref{prop:sem-entropic-existence-unique}
   （正則化解の存在と一意性）による（ここでは再証明しない）．
   スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ については，次のとおり $\lambda$ 自由度を除いて一意である．
@@ -499,7 +502,7 @@
 \end{proof}
 
 \begin{remark}{双対ポテンシャルとの関係}{sem-entropic-dual-potential}
-  Step 2 の乗数を $\alpha_i = f_i / \varepsilon$, $\beta_j = g_j / \varepsilon$ と書けば
+  Step 1 の乗数を $\alpha_i = f_i / \varepsilon$, $\beta_j = g_j / \varepsilon$ と書けば
   $u_i = e^{f_i / \varepsilon}$, $v_j = e^{g_j / \varepsilon}$ であり，
   $\mathbf{f} \in \R^n$, $\mathbf{g} \in \R^m$ は元の正則化問題
   $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の周辺制約に対する
@@ -511,7 +514,7 @@
     (\mathbf{P}_\varepsilon)_{i,j} = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
     = e^{f_i / \varepsilon} K_{i,j}\, e^{g_j / \varepsilon}
   \]
-  となり，同じ式が得られる（これが Step 2 を元の問題から導く「経路 A」にあたる）．
+  となり，同じ式が得られる（これが Step 1 を元の問題から導く「経路 A」にあたる）．
   与えられた $\mathbf{a}, \mathbf{b}$ から $\mathbf{u}, \mathbf{v}$ を周辺条件
   \[
     \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\,\ones_m = \mathbf{a},
