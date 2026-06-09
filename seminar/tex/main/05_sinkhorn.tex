@@ -14,9 +14,9 @@ Gibbs カーネル $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ を正の対角�
 鍵となるのは，正行列が \textbf{Hilbert 射影計量}を縮小するという
 \textbf{Birkhoff の縮小定理}である．
 
-本章を通じて，前章と同じく $\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$ は
+本章を通じて，前章と同じく $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$ は
 全成分が正なヒストグラム（$\sum_i a_i = \sum_j b_j = 1$），$\varepsilon > 0$ とし，
-$\mathbf{K} = \exp(-\mathbf{C}/\varepsilon) \in \R_{>0}^{n\times m}$ は全成分が正な Gibbs カーネルとする．
+$\mathbf{K} = \exp(-\mathbf{C}/\varepsilon) \in \Rpos^{n\times m}$ は全成分が正な Gibbs カーネルとする．
 
 %% ============================================================
 %% 4.1 Sinkhorn 反復
@@ -29,7 +29,7 @@ $\mathbf{P}_\varepsilon\ones_m = \mathbf{a}$, $\mathbf{P}_\varepsilon^\top\ones_
 $\mathbf{u}, \mathbf{v}$ が満たすべき方程式が得られる．
 
 \begin{proposition}{行列スケーリング方程式}{sem-matrix-scaling}
-  $\mathbf{u} \in \R_{>0}^n$, $\mathbf{v} \in \R_{>0}^m$ に対し，
+  $\mathbf{u} \in \Rpos^n$, $\mathbf{v} \in \Rpos^m$ に対し，
   $\mathbf{P} = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ が
   $\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ となるための必要十分条件は
   \[
@@ -68,7 +68,7 @@ $\mathbf{u}, \mathbf{v}$ が満たすべき方程式が得られる．
 
 \begin{algorithm}{alg:sem-sinkhorn}
   \textbf{Sinkhorn 反復}．\\
-  入力：$\mathbf{K} \in \R_{>0}^{n\times m}$, $\mathbf{a} \in \R_{>0}^n$, $\mathbf{b} \in \R_{>0}^m$．\\
+  入力：$\mathbf{K} \in \Rpos^{n\times m}$, $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$．\\
   初期化：$\mathbf{v}^{(0)} = \ones_m$．\\
   $\ell = 0, 1, 2, \ldots$ に対し，
   \[
@@ -81,7 +81,7 @@ $\mathbf{u}, \mathbf{v}$ が満たすべき方程式が得られる．
 
 \begin{proposition}{反復の整合性}{sem-sinkhorn-welldefined}
   Sinkhorn 反復（アルゴリズム~\ref{alg:sem-sinkhorn}）の生成する列は各ステップで
-  well-defined であり，$\mathbf{u}^{(\ell)} \in \R_{>0}^n$, $\mathbf{v}^{(\ell)} \in \R_{>0}^m$ が成り立つ．
+  well-defined であり，$\mathbf{u}^{(\ell)} \in \Rpos^n$, $\mathbf{v}^{(\ell)} \in \Rpos^m$ が成り立つ．
   各反復の主たる計算は行列ベクトル積 $\mathbf{K}\mathbf{v}$, $\mathbf{K}^\top\mathbf{u}$ であり，計算量は $O(nm)$ である．
 \end{proposition}
 
@@ -127,7 +127,7 @@ Sinkhorn の一反復を $\mathbf{v}$ の写像とみて，これが Birkhoff �
 
 \begin{claim}{除算は等長・転置は同率}{sem-division-isometry}
   \begin{enumerate}
-    \item 任意の $\mathbf{c} \in \R_{>0}^n$ に対し，写像 $\mathbf{w} \mapsto \mathbf{c}\oslash\mathbf{w}$ は
+    \item 任意の $\mathbf{c} \in \Rpos^n$ に対し，写像 $\mathbf{w} \mapsto \mathbf{c}\oslash\mathbf{w}$ は
       $\dHil$ に関して等長である：$\dHil(\mathbf{c}\oslash\mathbf{w}, \mathbf{c}\oslash\mathbf{w}')
       = \dHil(\mathbf{w}, \mathbf{w}')$．
     \item $\lambda(\mathbf{K}^\top) = \lambda(\mathbf{K})$．
@@ -162,7 +162,7 @@ Sinkhorn の一反復を $\mathbf{v}$ の写像とみて，これが Birkhoff �
     \dHil(\mathcal{S}(\mathbf{v}), \mathcal{S}(\mathbf{v}'))
     \leq \lambda(\mathbf{K})^2\, \dHil(\mathbf{v}, \mathbf{v}').
   \]
-  ゆえに射影空間 $\R_{>0}^m/{\sim}$ 上に一意の不動点 $[\mathbf{v}^\star]$ が存在し，
+  ゆえに射影空間 $\Rpos^m/{\sim}$ 上に一意の不動点 $[\mathbf{v}^\star]$ が存在し，
   反復列 $\mathbf{v}^{(\ell)}$ は
   \[
     \dHil(\mathbf{v}^{(\ell)}, \mathbf{v}^\star)

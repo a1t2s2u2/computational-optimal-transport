@@ -482,6 +482,8 @@ function mathJaxScript() {
           displayMath: [["\\\\[", "\\\\]"]],
           macros: {
             R: "\\\\mathbb{R}",
+            Rnn: "\\\\mathbb{R}_{\\\\geq 0}",
+            Rpos: "\\\\mathbb{R}_{>0}",
             N: "\\\\mathbb{N}",
             E: "\\\\mathbb{E}",
             Z: "\\\\mathbb{Z}",

@@ -5,11 +5,11 @@
 \label{sec:sem-hilbert-metric}
 
 Sinkhorn 反復は定数倍の自由度をもつため，収束は射影空間
-$\R_{>0}^n / {\sim}$（$\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\mathbf{x},\ \exists\lambda>0$）
+$\Rpos^n / {\sim}$（$\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\mathbf{x},\ \exists\lambda>0$）
 の上で測るのが自然である．この空間上の距離を導入する．
 
 \begin{definition}{Hilbert 射影計量}{sem-hilbert-metric}
-  正ベクトル $\mathbf{x}, \mathbf{x}' \in \R_{>0}^n$ に対して，\textbf{Hilbert 射影計量}を
+  正ベクトル $\mathbf{x}, \mathbf{x}' \in \Rpos^n$ に対して，\textbf{Hilbert 射影計量}を
   \[
     \dHil(\mathbf{x}, \mathbf{x}')
     \defeq
@@ -27,8 +27,8 @@ $\R_{>0}^n / {\sim}$（$\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\m
     \item 対称性 $\dHil(\mathbf{x}, \mathbf{x}') = \dHil(\mathbf{x}', \mathbf{x})$．
     \item 三角不等式 $\dHil(\mathbf{x}, \mathbf{z}) \leq \dHil(\mathbf{x}, \mathbf{y}) + \dHil(\mathbf{y}, \mathbf{z})$．
   \end{enumerate}
-  ゆえに $\dHil$ は射影空間 $\R_{>0}^n / {\sim}$ 上の距離である．
-  さらに正規化スライス $\simplex_n^\circ \defeq \{\mathbf{x} \in \R_{>0}^n : \sum_i x_i = 1\}$ を
+  ゆえに $\dHil$ は射影空間 $\Rpos^n / {\sim}$ 上の距離である．
+  さらに正規化スライス $\simplex_n^\circ \defeq \{\mathbf{x} \in \Rpos^n : \sum_i x_i = 1\}$ を
   各同値類の代表とすれば，$(\simplex_n^\circ, \dHil)$ は\textbf{完備}距離空間となる．
 \end{claim}
 
@@ -66,7 +66,7 @@ $\R_{>0}^n / {\sim}$（$\mathbf{x} \sim \mathbf{x}' \iff \mathbf{x}' = \lambda\m
   ゆえに列は $\simplex_n^\circ$ のコンパクト部分集合
   $\{\mathbf{x} : c\,x_i^{(N)} \leq x_i \leq C\,x_i^{(N)},\ \sum_i x_i = 1\}$ に入り，
   収束部分列をもち，その極限 $\mathbf{x}^\star$ は全成分正である．
-  $\dHil$ は $\R_{>0}^n$ 上で連続だから，Cauchy 性と合わせて
+  $\dHil$ は $\Rpos^n$ 上で連続だから，Cauchy 性と合わせて
   $\dHil(\mathbf{x}^{(\ell)}, \mathbf{x}^\star) \to 0$．よって完備である．
 \end{proof}
 
@@ -83,8 +83,8 @@ Hilbert 射影計量を\textbf{狭義に縮小}し，その縮小率が成分の
 まず，正行列による像の成分比が，入力の成分比の\textbf{重み付き平均}になるという基本観察から始める．
 
 \begin{claim}{像の成分比は重み付き平均}{sem-weighted-average}
-  $\mathbf{x}, \mathbf{y} \in \R_{>0}^m$ とし $t_k \defeq x_k / y_k$ とおく．
-  $\mathbf{K} \in \R_{>0}^{n\times m}$ に対し，重み
+  $\mathbf{x}, \mathbf{y} \in \Rpos^m$ とし $t_k \defeq x_k / y_k$ とおく．
+  $\mathbf{K} \in \Rpos^{n\times m}$ に対し，重み
   $w_{i,k} \defeq \dfrac{K_{i,k} y_k}{(\mathbf{K}\mathbf{y})_i}$ は
   $w_{i,k} > 0$, $\sum_k w_{i,k} = 1$ を満たし，
   \[
@@ -106,8 +106,8 @@ Hilbert 射影計量を\textbf{狭義に縮小}し，その縮小率が成分の
 成分比の最大歪みで定まることを示す．
 
 \begin{claim}{射影直径}{sem-projective-diameter}
-  $\mathbf{K} \in \R_{>0}^{n\times m}$ の\textbf{射影直径}を
-  $\Delta(\mathbf{K}) \defeq \sup_{\mathbf{x}, \mathbf{y} \in \R_{>0}^m} \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})$
+  $\mathbf{K} \in \Rpos^{n\times m}$ の\textbf{射影直径}を
+  $\Delta(\mathbf{K}) \defeq \sup_{\mathbf{x}, \mathbf{y} \in \Rpos^m} \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})$
   とおくと，
   \[
     \Delta(\mathbf{K}) = \log \eta(\mathbf{K}),
@@ -148,8 +148,8 @@ Hilbert 射影計量を\textbf{狭義に縮小}し，その縮小率が成分の
 \end{proof}
 
 \begin{theorem}{Birkhoff の縮小定理}{sem-birkhoff}
-  $\mathbf{K} \in \R_{>0}^{n\times m}$ は Hilbert 射影計量を縮小する：すべての
-  $\mathbf{x}, \mathbf{y} \in \R_{>0}^m$ に対し
+  $\mathbf{K} \in \Rpos^{n\times m}$ は Hilbert 射影計量を縮小する：すべての
+  $\mathbf{x}, \mathbf{y} \in \Rpos^m$ に対し
   \[
     \dHil(\mathbf{K}\mathbf{x}, \mathbf{K}\mathbf{y})
     \leq \lambda(\mathbf{K})\, \dHil(\mathbf{x}, \mathbf{y}),

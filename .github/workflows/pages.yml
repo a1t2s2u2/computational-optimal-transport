@@ -34,7 +34,7 @@ jobs:
           node-version: "22"
 
       - name: Generate markdown from TeX (tex2md.mjs)
-        run: node seminar/site/scripts/tex2md.mjs
+        run: node seminar/site/scripts/tex2md.mjs --strict
 
       - name: Build HTML (build.mjs)
         run: node seminar/site/scripts/build.mjs
