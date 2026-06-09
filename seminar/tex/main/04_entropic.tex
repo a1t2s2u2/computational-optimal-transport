@@ -313,81 +313,189 @@
 \end{proposition}
 
 \begin{proof}
-  証明の要点は，最適解が領域の内部（全成分が正）にあることを示し，
-  そのうえで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用することである．
+  \textbf{方針．}
+  証明は大きく三段からなる．まず最適解が領域の内部（全成分が正）にあること
+  を示し（Step 1），これにより非負制約が不活性となるので，等式制約のみの 1 階条件
+  （Lagrange の未定乗数法）を適用してスケーリング形を導く（Step 2）．
+  最後にスケーリングベクトルの一意性を確認する（Step 3）．
+  Step 1 の核となる記号を予告しておく：$0$ 成分 $(i_0, j_0)$ を仮定し，
+  それを補完して $2\times2$ のサイクルを閉じる添字 $i_1, j_1$ を取り出し，
+  このサイクル上で実行可能性を保つ摂動 $\mathbf{P}^t$（上限 $t_0$）を加えて，
+  目的関数を 1 変数関数 $g(t)$ に還元する，という流れをとる．
 
+  \medskip
   \textbf{Step 1（最適解の正値性）．}
-  $\mathbf{P}_\varepsilon$ の全成分が正であること，すなわち
-  $(\mathbf{P}_\varepsilon)_{i,j} > 0$（$\forall i, j$）を示す．
-  $n = 1$ または $m = 1$ のときは $\CouplingsD(\mathbf{a}, \mathbf{b})$ は
-  一点 $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$（成分 $a_i b_j > 0$）のみからなり，主張は明らか．
+  目標は $\mathbf{P}_\varepsilon$ の全成分が正であること，すなわち
+  $(\mathbf{P}_\varepsilon)_{i,j} > 0$（$\forall i, j$）を示すことである．
+
+  \emph{自明ケース．}
+  $n = 1$ または $m = 1$ のときは摂動を作る相異なる 2 行・2 列が確保できないが，
+  このとき $\CouplingsD(\mathbf{a}, \mathbf{b})$ は一点
+  $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$（成分 $a_i b_j > 0$）のみからなり，主張は明らか．
   以下 $n, m \geq 2$ とする．
 
+  \emph{(1a) 正成分の取り出し．}
   背理法で，$(\mathbf{P}_\varepsilon)_{i_0, j_0} = 0$ となる成分があると仮定する
   （以下 $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ と略記）．
-  $a_{i_0} = \sum_j P_{i_0, j} > 0$ より $P_{i_0, j_1} > 0$ となる $j_1$ が存在し，
-  $P_{i_0, j_0} = 0$ だから $j_1 \neq j_0$．
-  同様に $b_{j_0} = \sum_i P_{i, j_0} > 0$ より $P_{i_1, j_0} > 0$ となる $i_1 \neq i_0$ が存在する．
-  $t \geq 0$ に対し，$(i_0, j_0), (i_1, j_1)$ 成分に $+t$，$(i_0, j_1), (i_1, j_0)$ 成分に $-t$
-  を加えた行列 $\mathbf{P}^t$ を考える（他の成分は不変）．
-  各行・各列での増減が打ち消し合うので $\mathbf{P}^t$ の周辺は不変であり，
-  $t_0 \defeq \min(P_{i_0, j_1}, P_{i_1, j_0}) > 0$ として
-  $t \in [0, t_0]$ では $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ である．
+  周辺が正であることから，行 $i_0$ と列 $j_0$ に沿って正の成分を拾える．
+  \begin{itemize}
+    \item 行 $i_0$ から：$a_{i_0} = \sum_j P_{i_0, j} > 0$ より $P_{i_0, j_1} > 0$ なる $j_1$ が存在する．
+      $P_{i_0, j_0} = 0$ ゆえ $j_1 \neq j_0$．
+    \item 列 $j_0$ から：$b_{j_0} = \sum_i P_{i, j_0} > 0$ より $P_{i_1, j_0} > 0$ なる $i_1$ が存在する．
+      $P_{i_0, j_0} = 0$ ゆえ $i_1 \neq i_0$．
+  \end{itemize}
+  こうして $2\times2$ の四隅のうち
+  $(i_0, j_0) = 0$, $(i_0, j_1) > 0$, $(i_1, j_0) > 0$ が出そろう
+  （残る $(i_1, j_1)$ は $P_{i_1, j_1} \geq 0$）．
+  ここで得た 4 添字の相異性 $i_0 \neq i_1$, $j_0 \neq j_1$ は，
+  次の摂動が縮退しないために本質的である．
 
-  目的関数を $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
-  = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$
-  （$\varphi(x) = x\log x - x$，注意~\ref{rem:sem-phi-continuous}）とおくと，
-  $g(t) \defeq F(\mathbf{P}^t)$ は $t$ に依存する 4 成分のみを通じて
+  \emph{(1b) 摂動行列の構成．}
+  $t \geq 0$ に対し，この対角サイクルに沿って，$(i_0, j_0), (i_1, j_1)$ 成分に $+t$，
+  $(i_0, j_1), (i_1, j_0)$ 成分に $-t$ を加えた行列 $\mathbf{P}^t$ を考える（他の成分は不変）．
+  $i_0, i_1$（$2$ 行）と $j_0, j_1$（$2$ 列）の部分行列で見ると，
+  摂動前の $\mathbf{P}$ の符号配置と，加える $\pm t$ の配置はそれぞれ
+  \[
+    \begin{array}{c|cc}
+       & j_0 & j_1 \\ \hline
+      i_0 & 0 & P_{i_0 j_1} > 0 \\
+      i_1 & P_{i_1 j_0} > 0 & P_{i_1 j_1} \geq 0
+    \end{array}
+    \qquad\qquad
+    \begin{array}{c|cc}
+       & j_0 & j_1 \\ \hline
+      i_0 & +t & -t \\
+      i_1 & -t & +t
+    \end{array}
+  \]
+  となる．すなわち $0$ の成分 $(i_0, j_0)$ を $+t$ で立ち上げ，
+  正の成分 $(i_0, j_1), (i_1, j_0)$ から $-t$ で借りる，
+  というチェッカーボード型の摂動である．
+
+  \emph{(1c) 周辺不変と実行可能区間．}
+  次の二点により，$t \in [0, t_0]$ で $\mathbf{P}^t$ は実行可能である．
+  \begin{itemize}
+    \item （周辺不変）行 $i_0$ では $+t$ と $-t$，行 $i_1$ でも $+t$ と $-t$ が相殺し，
+      列 $j_0$, 列 $j_1$ でも同様に相殺する．ゆえに
+      $\mathbf{P}^t\ones_m = \mathbf{a}$, $(\mathbf{P}^t)^\top\ones_n = \mathbf{b}$ は $t$ に依らず保たれる．
+    \item （実行可能区間）非負性 $\mathbf{P}^t \geq 0$ を決めるのは $-t$ を受ける成分のみであり，
+      $P_{i_0 j_1} - t \geq 0$ かつ $P_{i_1 j_0} - t \geq 0$，
+      すなわち $0 \leq t \leq t_0 \defeq \min(P_{i_0, j_1}, P_{i_1, j_0})$
+      でちょうど成立する（$+t$ を受ける成分は単調増加なので非負性を破らず，上限に関与しない）．
+      (1a) で $P_{i_0, j_1} > 0$ かつ $P_{i_1, j_0} > 0$ を確保したので $t_0 > 0$ である．
+  \end{itemize}
+  ゆえに $t \in [0, t_0]$ で $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
+
+  \emph{(1d) 微分の発散と矛盾．}
+  目的関数を
+  \[
+    F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+    = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})
+  \]
+  （$\varphi(x) = x\log x - x$，注意~\ref{rem:sem-phi-continuous}）とおき，
+  $g(t) \defeq F(\mathbf{P}^t)$ を考える．
+  $t$ に依存するのは摂動を受ける 4 成分のみだから，
   \[
     g(t) = \text{(定数)}
     + t\,(C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
     + \varepsilon\bigl[\varphi(t) + \varphi(P_{i_1 j_1} + t)
       + \varphi(P_{i_0 j_1} - t) + \varphi(P_{i_1 j_0} - t)\bigr]
   \]
-  と書ける．$\varphi'(x) = \log x$ だから，$(0, t_0)$ 上で
-  \[
-    g'(t) = (C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
-    + \varepsilon\bigl[\log t + \log(P_{i_1 j_1} + t)
-      - \log(P_{i_0 j_1} - t) - \log(P_{i_1 j_0} - t)\bigr].
-  \]
-  右辺で $\log(P_{i_0 j_1} - t)$, $\log(P_{i_1 j_0} - t)$ は $t \to 0+$ で有限値に収束し，
-  $\log(P_{i_1 j_1} + t)$ は有限値または $-\infty$ に発散する一方，$\log t \to -\infty$ である．
-  ゆえに $\lim_{t \to 0+} g'(t) = -\infty$ となり，十分小さい $t > 0$ で
-  $g(t) < g(0) = F(\mathbf{P}_\varepsilon)$．これは $\mathbf{P}_\varepsilon$ の最適性に反する．
-  したがって $\mathbf{P}_\varepsilon$ の全成分は正である．
+  と書ける．ここで $\varphi(t)$ は $0 + t$ に立ち上がる $(i_0, j_0)$ 成分，
+  $\varphi(P_{i_1 j_1} + t)$ は $+t$ を受ける $(i_1, j_1)$ 成分，残る 2 項は
+  $-t$ を受ける $(i_0, j_1), (i_1, j_0)$ 成分に対応する．
+  $\varphi'(x) = \log x$ だから，連鎖律により $(0, t_0)$ 上で
+  \begin{align*}
+    g'(t) = {}& (C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0}) \\
+    {}+{}& \varepsilon\,\log t \\
+    {}+{}& \varepsilon\bigl[\log(P_{i_1 j_1} + t)
+      - \log(P_{i_0 j_1} - t) - \log(P_{i_1 j_0} - t)\bigr]
+  \end{align*}
+  となる（各 $\log$ の符号は $\pm t$ の摂動方向に対応し，$-t$ 成分からは $-\log$ が出る）．
+  $t \to 0+$ における各項の振る舞いは次のとおりである．
+  \begin{itemize}
+    \item $\log(P_{i_0 j_1} - t) \to \log P_{i_0 j_1}$（有限），
+      $\log(P_{i_1 j_0} - t) \to \log P_{i_1 j_0}$（有限）
+      （被対数は $t_0 > 0$ より正に留まる）；
+    \item $\log(P_{i_1 j_1} + t) \to \log P_{i_1 j_1} \in [-\infty, \infty)$
+      （$P_{i_1 j_1} = 0$ なら $-\infty$ に発散しうるが，いずれにせよ上に有界）；
+    \item $\log t \to -\infty$．
+  \end{itemize}
+  $+\infty$ に発散する項は一つもなく，$\log t \to -\infty$ が支配的だから
+  $\lim_{t \to 0+} g'(t) = -\infty$ である．
+  したがってある $t_1 \in (0, t_0)$ が存在して $(0, t_1)$ 上で $g'(t) < 0$ となり，
+  $g$ は右側で減少するから，十分小さい $t > 0$ で
+  $g(t) < g(0) = F(\mathbf{P}_\varepsilon)$ となる．
+  しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ ゆえ，これは $\mathbf{P}_\varepsilon$ の最適性に反する．
+  よって背理法の仮定は否定され，$\mathbf{P}_\varepsilon$ の全成分は正である．
+  （直観的には，$0$ 成分はエントロピーの勾配が境界で $-\infty$ となるため，
+  微小に開くと必ず目的関数を下げられるのである．）
 
+  \medskip
   \textbf{Step 2（1 階条件）．}
   Step 1 より $\mathbf{P}_\varepsilon$ は領域 $\R_{>0}^{n \times m}$ の内点にあるので，
   非負制約 $\mathbf{P} \geq 0$ は活性化せず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$,
-  $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみと見なせる．
+  $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみと見なせる．この内点性こそが，
+  以下で等式制約のみの Lagrange 条件へ移る論理的な橋渡しである．
+
+  \emph{勾配の計算．}
   命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は
-  $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上での最小元であり，
-  $\KLD(\cdot \| \mathbf{K})$ は $\R_{>0}^{n \times m}$ 上で微分可能で
+  $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上での最小元である．
+  $\KLD(\cdot \| \mathbf{K})$ は $\R_{>0}^{n \times m}$ 上で微分可能で，
+  定義~\ref{def:sem-kl-divergence} からの直接計算により
   \[
     \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K})
     = \log\frac{P_{i,j}}{K_{i,j}}
   \]
-  をみたす（定義~\ref{def:sem-kl-divergence} より直接計算）．
-  制約はすべてアフィンだから制約想定はみたされ，内点の最小元では Lagrange の
-  1 階条件が必要条件となる：ある乗数 $\boldsymbol{\alpha} \in \R^n$, $\boldsymbol{\beta} \in \R^m$
-  が存在して，行和制約の勾配が成分 $i$ の行に $1$，列和制約の勾配が成分 $j$ の列に $1$ を与えることから
+  をみたす．
+
+  \emph{Lagrange 1 階条件．}
+  制約はすべてアフィン（一次）だから制約想定（constraint qualification）がみたされ，
+  内点の最小元では Lagrange の 1 階条件が必要条件となる．
+  ここで，行和制約 $(\mathbf{P}\ones_m)_i = a_i$ の $P_{k,l}$ に関する偏微分は $[k = i]$，
+  列和制約 $(\mathbf{P}^\top\ones_n)_j = b_j$ の偏微分は $[l = j]$ である
+  （$[\,\cdot\,]$ は指示関数）．
+  すなわち行制約は $i$ 行にのみ $1$ を，列制約は $j$ 列にのみ $1$ を立てる．
+  ゆえに乗数 $\alpha \in \R^n$, $\beta \in \R^m$（符号制約はない）が存在して，
+  停留条件は
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j
+    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}}
+    = \alpha_i \cdot 1 + \beta_j \cdot 1 = \alpha_i + \beta_j
     \qquad (\forall i, j)
   \]
-  が成り立つ．両辺の指数をとり $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
-  $(\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j$，すなわち
-  $\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$ を得る．
+  という行成分 $\alpha_i$ と列成分 $\beta_j$ の和の形をとる．
 
+  \emph{指数化．}
+  両辺の指数をとり $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
+  （正値性は指数関数から自動的に従う），
+  \[
+    (\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j,
+    \qquad\text{すなわち}\qquad
+    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+  \]
+  を得る．これが命題本文のスケーリング形である．
+
+  \medskip
   \textbf{Step 3（一意性）．}
-  $\mathbf{P}_\varepsilon$ 自体の一意性は命題~\ref{prop:sem-entropic-existence-unique} による．
-  スケーリングベクトルについては，任意の $\lambda > 0$ に対し
+  $\mathbf{P}_\varepsilon$ 自体の一意性は命題~\ref{prop:sem-entropic-existence-unique}
+  （正則化解の存在と一意性）による（ここでは再証明しない）．
+  スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ については，次のとおり $\lambda$ 自由度を除いて一意である．
+
+  まず十分性（自由度の存在）として，任意の $\lambda > 0$ に対し
   $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ より $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も
-  同じ $\mathbf{P}_\varepsilon$ を与える．逆にこの自由度を除けば一意である：
-  全成分が正なので各 $i, j$ で $u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ が定まり，
-  $i, i'$ について比 $u_i / u_{i'} = \bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr)
-  \big/ \bigl((\mathbf{P}_\varepsilon)_{i',j}/K_{i',j}\bigr)$ が（$j$ に依らず）決まるから，
-  $\mathbf{u}$ は正の定数倍を除いて一意であり，対応して $\mathbf{v}$ も定まる．
+  同じ $\mathbf{P}_\varepsilon$ を与える．
+  逆にこの自由度を除けば一意であることを，補助記号
+  $w_{i,j} \defeq u_i v_j$ を用いて 3 段で示す．
+  \begin{itemize}
+    \item[(i)] 全成分が正なので，各 $(i,j)$ で積
+      $w_{i,j} = u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ が一意に定まる
+      （個々の $u_i, v_j$ は不定だが，積 $w_{i,j}$ は確定する）．
+    \item[(ii)] 比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らない
+      （分子分母で $v_j$ が約分されて消える；
+      これは $\log w_{i,j} = \alpha_i + \beta_j$ で $\alpha_i$ が $j$ に依らないことに対応する）．
+    \item[(iii)] ゆえに $\mathbf{u}$ は正の定数倍を除いて一意であり，
+      対応して $v_j = w_{i,j} / u_i$ も定まる．
+  \end{itemize}
 \end{proof}
 
 \begin{remark}{双対ポテンシャルとの関係}{sem-entropic-dual-potential}
