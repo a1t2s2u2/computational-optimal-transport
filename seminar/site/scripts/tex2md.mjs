@@ -171,12 +171,13 @@ function convertInlineMath(text) {
   return parts.join("");
 }
 
-// Convert \textbf{X} -> **X**, \textit{X} -> *X*.
+// Convert \textbf{X} -> **X**, \textit{X}/\emph{X} -> *X*.
 // Handles one level of nested braces (e.g. \textbf{...\mathbf{P}...}).
 function convertTextCommands(text) {
   const nested = "(?:[^{}]|\\{[^{}]*\\})*";
   text = text.replace(new RegExp(`\\\\textbf\\{(${nested})\\}`, "g"), "**$1**");
   text = text.replace(new RegExp(`\\\\textit\\{(${nested})\\}`, "g"), "*$1*");
+  text = text.replace(new RegExp(`\\\\emph\\{(${nested})\\}`, "g"), "*$1*");
   return text;
 }
 
