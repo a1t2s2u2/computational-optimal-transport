@@ -19,7 +19,7 @@
 
 \begin{definition}{最適割当問題}{sem-assignment}
   $n \in \N$，置換 $\sigma \in \Perm(n)$，
-  および行列 $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ に対して，
+  および行列 $\mathbf{C} \in \Rnn^{n \times n}$ に対して，
   \[
     \min_{\sigma \in \Perm(n)} \frac{1}{n} \sum_{i=1}^{n} C_{i, \sigma(i)}
   \]
@@ -37,7 +37,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
     \begin{pmatrix}
       1 & 4 \\
       2 & 1
-    \end{pmatrix} \in \R_{\geq 0}^{2 \times 2}
+    \end{pmatrix} \in \Rnn^{2 \times 2}
   \]
   を考える．$\Perm(2) = \{(1,2),\, (2,1)\}$ の $2! = 2$ 通りの割当を以下に図示する．
 
@@ -78,7 +78,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \end{example}
 
 \begin{claim}{最適解の存在}{sem-assignment-existence}
-  任意の $n \in \N$ と任意の $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ に対して，
+  任意の $n \in \N$ と任意の $\mathbf{C} \in \Rnn^{n \times n}$ に対して，
   最適割当問題の最小値は達成される．
 \end{claim}
 
@@ -95,7 +95,7 @@ $\sigma(i) = j$ は $i$ を $j$ に割り当てることを意味し，
 \begin{claim}{最適解が一意でない場合の存在}{sem-uniqueness}
   任意の $n \geq 2$ に対して，
   異なる $\sigma_1, \sigma_2 \in \Perm(n)$ がともに最小値を達成するような
-  $\mathbf{C} \in \R_{\geq 0}^{n \times n}$ が存在する．
+  $\mathbf{C} \in \Rnn^{n \times n}$ が存在する．
 \end{claim}
 
 \begin{proof}
