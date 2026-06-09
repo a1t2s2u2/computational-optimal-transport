@@ -134,6 +134,18 @@ let LABEL_MAP = {};
 let CHAPTER_MAP = {};
 
 // ---------------------------------------------------------------------------
+// Lint: 未変換マクロ・未解決参照を表面化させる（無警告の素通りを防ぐ）
+// ---------------------------------------------------------------------------
+const WARNINGS = [];
+let CURRENT_FILE = null;
+// 「数式の外に出ても安全」と確認できたマクロだけここに足す。空のままにすること
+// （埋めると \emph 級の素通りバグを再び隠してしまう）。
+const MACRO_WHITELIST = new Set([]);
+function pushWarning(w) {
+  WARNINGS.push({ file: CURRENT_FILE, ...w });
+}
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -174,13 +186,14 @@ function convertInlineMath(text) {
   return parts.join("");
 }
 
-// Convert \textbf{X} -> **X**, \textit{X}/\emph{X} -> *X*.
+// Convert \textbf{X} -> **X**, \textit{X}/\emph{X} -> *X*, \textrm{X} -> X.
 // Handles one level of nested braces (e.g. \textbf{...\mathbf{P}...}).
 function convertTextCommands(text) {
   const nested = "(?:[^{}]|\\{[^{}]*\\})*";
   text = text.replace(new RegExp(`\\\\textbf\\{(${nested})\\}`, "g"), "**$1**");
   text = text.replace(new RegExp(`\\\\textit\\{(${nested})\\}`, "g"), "*$1*");
   text = text.replace(new RegExp(`\\\\emph\\{(${nested})\\}`, "g"), "*$1*");
+  text = text.replace(new RegExp(`\\\\textrm\\{(${nested})\\}`, "g"), "$1");
   return text;
 }
 
@@ -273,14 +286,28 @@ function convertRefs(text) {
     return title ? `「${title}」の章` : "本章";
   });
   text = text.replace(/§~?\\ref\{sec:[^}]*\}/g, "本節");
-  text = text.replace(/Algorithm~?\\ref\{alg:[^}]*\}/g, "アルゴリズム");
+  text = text.replace(/(?:Algorithm|アルゴリズム)~?\\ref\{alg:[^}]*\}/g, "アルゴリズム");
+  // 図は tikz のためサイトでは省略される。図参照は語「図」に落として壊さない。
+  text = text.replace(/図~?\\ref\{fig:[^}]*\}/g, "図");
 
   text = text.replace(
     /(定義|主張|命題|定理|例|注意|補題|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
     (_, g1, label) => {
       const title = LABEL_MAP[label];
-      if (!title) return "";
+      if (!title) {
+        pushWarning({ kind: "unresolved-ref", detail: `${g1}~\\ref{${label}}` });
+        return "";
+      }
       const prefix = label.includes(":") ? label.split(":")[0] : "";
+      // 参照語（命題/補題/…）とラベル接頭辞（prop/lem/…）の食い違いを検出
+      const expected = JP_TO_ABBREV[g1];
+      const actual = LABEL_PREFIX_MAP[prefix];
+      if (expected && actual && expected !== actual) {
+        pushWarning({
+          kind: "ref-type-mismatch",
+          detail: `${g1}~\\ref{${label}}: 参照語「${g1}」(${expected}) がラベル接頭辞「${prefix}」(${actual}) と不一致`,
+        });
+      }
       const abbrev = LABEL_PREFIX_MAP[prefix] || (JP_TO_ABBREV[g1] ?? g1);
       return `[ref:${abbrev}: ${title}|${title}]`;
     },
@@ -288,7 +315,10 @@ function convertRefs(text) {
 
   text = text.replace(/~?\\ref\{([^}]+)\}/g, (_, label) => {
     const title = LABEL_MAP[label];
-    if (!title) return "";
+    if (!title) {
+      pushWarning({ kind: "unresolved-ref", detail: `\\ref{${label}}` });
+      return "";
+    }
     const prefix = label.includes(":") ? label.split(":")[0] : "";
     const typeName = LABEL_PREFIX_MAP[prefix] || "";
     const display = typeName ? `${typeName}: ${title}` : title;
@@ -990,8 +1020,42 @@ function joinMultilineInlineMath(lines) {
   return result;
 }
 
+// Lint: 数式の外に残った未変換マクロ（\emph 等）を検出する。
+// 数式は build.mjs と同じく \(...\)（インライン）と \[ ... \]（表示ブロック）の
+// 2 形態で、その中の \command は MathJax が描画する正当なものなのでシールドする。
+// 注意: 表示数式 \[ は現状つねに行頭・単独行で現れる前提（renderNodes）。
+//       将来それが崩れた場合に備え、単一行 \[...\] も保険でシールドしている。
+function lintLeftoverMacros(body, mdFilename) {
+  const lines = body.split("\n");
+  let inDisplay = false;
+  for (let i = 0; i < lines.length; i++) {
+    const trimmed = lines[i].trim();
+    if (inDisplay) {
+      if (trimmed.includes("\\]")) inDisplay = false;
+      continue; // 表示数式ブロックの中身は生 TeX が正当
+    }
+    if (trimmed.startsWith("\\[")) {
+      if (!trimmed.slice(2).includes("\\]")) inDisplay = true;
+      continue;
+    }
+    const shielded = lines[i]
+      .replace(/\\\([^]*?\\\)/g, " ") // インライン数式（build.mjs:86 と同形）
+      .replace(/\\\[[^]*?\\\]/g, " "); // 保険: 単一行の表示数式
+    for (const m of shielded.matchAll(/\\[a-zA-Z]+/g)) {
+      if (MACRO_WHITELIST.has(m[0])) continue;
+      pushWarning({
+        kind: "leftover-macro",
+        file: mdFilename,
+        line: i + 1,
+        detail: `${m[0]}  | ${trimmed.slice(0, 80)}`,
+      });
+    }
+  }
+}
+
 // Process one chapter: read TeX, parse, render, write markdown.
 function processChapter(texFilename, mdFilename, frontmatter) {
+  CURRENT_FILE = mdFilename;
   const texPath = path.join(SEMINAR_DIR, texFilename);
   const mdPath = path.join(CONTENT_DIR, mdFilename);
 
@@ -1020,6 +1084,9 @@ function processChapter(texFilename, mdFilename, frontmatter) {
   // Render
   const mdLines = renderNodes(nodes);
   const body = mdLines.join("\n");
+
+  // Lint: 未変換マクロを検出（未解決 ref は convertRefs 内で検出済み）
+  lintLeftoverMacros(body, mdFilename);
 
   // Build frontmatter
   let fm = "---\n";
@@ -1061,10 +1128,12 @@ function main() {
   let totalBlocks = 0;
   for (const [texFile, mdFile, fm] of CHAPTERS) {
     console.log(`Converting ${texFile} -> ${mdFile}`);
+    const before = WARNINGS.length;
     const count = processChapter(texFile, mdFile, fm);
     if (count !== null) {
       totalBlocks += count;
-      console.log(`  ${count} block(s) written`);
+      const w = WARNINGS.length - before;
+      console.log(`  ${count} block(s) written` + (w ? `  ⚠ ${w} warning(s)` : "  ✓ clean"));
     }
     console.log();
   }
@@ -1075,6 +1144,23 @@ function main() {
     .sort();
   for (const f of generated) {
     console.log(`  ${f}`);
+  }
+
+  // ---- Lint summary ----
+  if (WARNINGS.length) {
+    console.warn(`\n${WARNINGS.length} lint warning(s):`);
+    for (const w of WARNINGS) {
+      const loc = w.line ? `${w.file}:${w.line}` : w.file;
+      console.warn(`  [${w.kind}] ${loc}  ${w.detail ?? ""}`.trimEnd());
+    }
+    const strict =
+      process.argv.includes("--strict") || process.env.TEX2MD_STRICT === "1";
+    if (strict) {
+      console.error(`\nFAILED: ${WARNINGS.length} lint warning(s) under --strict.`);
+      process.exit(1);
+    }
+  } else {
+    console.log("\nLint: no warnings.");
   }
 }
 
