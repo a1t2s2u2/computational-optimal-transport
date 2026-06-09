@@ -99,7 +99,7 @@ function renderInline(source) {
       /\[ref:([^|\]]+?)(?:\|([^\]]+))?\]/g,
       (_match, first, second) => {
         const refName = second || first;
-        const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex):\s*(.+)$/.exec(first);
+        const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex|Lem):\s*(.+)$/.exec(first);
         const display = typeMatch ? typeMatch[1] : first;
         return `<button type="button" class="ref" data-ref="${refName}" title="${escapeHtml(first)}">${escapeHtml(display)}</button>`;
       }
@@ -419,7 +419,7 @@ function renderMarkdown(markdown) {
       const level = heading[1].length;
       if (currentBlock && level === 3 && !currentBlock.name) {
         const rawTitle = heading[2];
-        const nameMatch = /^(?:Def|Clm|Thm|Prop|Rem|Ex):\s*(.+)$/.exec(rawTitle);
+        const nameMatch = /^(?:Def|Clm|Thm|Prop|Rem|Ex|Lem):\s*(.+)$/.exec(rawTitle);
         const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
         const id = makeBlockId(currentBlock.type, name);
         currentBlock.name = name;

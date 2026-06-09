@@ -97,6 +97,7 @@ const CHAPTERS = [
 const BLOCK_ENVS = {
   definition: ["definition", "Def"],
   claim: ["theorem", "Clm"],
+  lemma: ["theorem", "Lem"],
   theorem: ["theorem", "Thm"],
   proposition: ["theorem", "Prop"],
   remark: ["fact", "Rem"],
@@ -107,6 +108,7 @@ const BLOCK_ENVS = {
 const LABEL_PREFIX_MAP = {
   def: "Def",
   clm: "Clm",
+  lem: "Lem",
   thm: "Thm",
   prop: "Prop",
   rem: "Rem",
@@ -115,12 +117,13 @@ const LABEL_PREFIX_MAP = {
 
 const JP_TO_ABBREV = {
   "定義": "Def", "主張": "Clm", "命題": "Prop",
-  "定理": "Thm", "例": "Ex", "注意": "Rem", "Claim": "Clm",
+  "定理": "Thm", "例": "Ex", "注意": "Rem", "補題": "Lem", "Claim": "Clm",
 };
 
 const ENV_TO_PREFIX = {
   definition: "def",
   claim: "clm",
+  lemma: "lem",
   theorem: "thm",
   proposition: "prop",
   remark: "rem",
@@ -273,7 +276,7 @@ function convertRefs(text) {
   text = text.replace(/Algorithm~?\\ref\{alg:[^}]*\}/g, "アルゴリズム");
 
   text = text.replace(
-    /(定義|主張|命題|定理|例|注意|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
+    /(定義|主張|命題|定理|例|注意|補題|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
     (_, g1, label) => {
       const title = LABEL_MAP[label];
       if (!title) return "";
