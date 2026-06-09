@@ -685,6 +685,13 @@ strong {
   border-left: 1px solid var(--line);
 }
 
+/* リストはマーカー(list-style: outside)が padding 内に出るため、
+   段落の 20px に加えてマーカー分のインデントを確保し、左の枠線から出ないようにする */
+.proof > ul,
+.proof > ol {
+  padding-left: 40px;
+}
+
 .proof p,
 .proof .math-block {
   font-size: 15px;
