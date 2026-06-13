@@ -351,20 +351,20 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  目的関数を線分上に制限した $1$ 変数関数 $g(t) \defeq F(\mathbf{P}^t)$ を考える（線分に沿った $F$ の増減を $1$ 変数 $t$ の微分で追うためである）．$F$ の各項を成分 $P_{i,j}$ で偏微分すると
+  $F$ の各項を成分 $P_{i,j}$ で偏微分すると
   \[
     \frac{\partial}{\partial P_{i,j}}\!\left( C_{i,j} P_{i,j} + \varepsilon\bigl(P_{i,j}\log P_{i,j} - P_{i,j}\bigr) \right)
     = C_{i,j} + \varepsilon\log P_{i,j}
   \]
   であり，また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
-  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，連鎖律により
+  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，線分上の値 $F(\mathbf{P}^t)$ は $t$ について微分可能で，連鎖律により
   \[
-    g'(t)
+    \frac{d}{dt} F(\mathbf{P}^t)
     = \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
   \]
 
   \emph{微分の発散と矛盾．}
-  $g'(t)$ の和を $(\mathbf{P}_\varepsilon)_{i,j}$ の正負で二つに分け，$t \to 0+$ での挙動をみる（$C_{i,j}$ は定数）．
+  この微分の和を $(\mathbf{P}_\varepsilon)_{i,j}$ の正負で二つに分け，$t \to 0+$ での挙動をみる（$C_{i,j}$ は定数）．
   \begin{itemize}
     \item $(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項：$P^t_{i,j} \to (\mathbf{P}_\varepsilon)_{i,j} > 0$ なので
       $C_{i,j} + \varepsilon\log P^t_{i,j}$ は有限値に収束し，係数も有限．ゆえにこれらの項の和は有界である．
@@ -373,14 +373,14 @@
       仮定よりこのような項は少なくとも一つある．
   \end{itemize}
   前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
-  $\lim_{t \to 0+} g'(t) = -\infty$ である．
-  とくに十分小さい $t > 0$ では $g'(t) < 0$ だから，$g$ は $0$ の右側で減少し，そのような $t$ では
-  （厳密には，$\lim_{t\to0+} g'(t) = -\infty$ より，ある $\delta \in (0,1)$ が存在して $0 < t < \delta$ で $g'(t) < 0$ となり，
-  連続性と合わせて $g$ は $[0,\delta]$ 上で狭義減少する．以下この $t$ は $0 < t < \delta$ にとる）
+  $t \to 0+$ でこの微分は $-\infty$ に発散する．
+  とくに十分小さい $t > 0$ ではこの微分が負だから，$F(\mathbf{P}^t)$ は $0$ の右側で（$t$ について）減少し，そのような $t$ では
+  （厳密には，$t\to0+$ でこの微分が $-\infty$ に発散することから，ある $\delta \in (0,1)$ が存在して $0 < t < \delta$ で微分が負となり，
+  連続性と合わせて $F(\mathbf{P}^t)$ は $[0,\delta]$ 上で $t$ について狭義減少する．以下この $t$ は $0 < t < \delta$ にとる）
   \[
-    g(t) < g(0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
   \]
-  となる．しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は実行可能で $g(t) = F(\mathbf{P}^t)$ だから，
+  となる．しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は実行可能だから，
   これは「実行可能点 $\mathbf{P}^t$ が最小値より小さい目的関数値をとる」ことになり，
   $\mathbf{P}_\varepsilon$ が $F$ を最小にすることに反する．
   ゆえにゼロ成分は存在せず，$\mathbf{P}_\varepsilon$ の全成分は正である．
