@@ -361,11 +361,11 @@
   \]
   と定める（$K_{i,j} > 0$ は定数）．これにより $\KLD$ と $h$ は被加数の和
   \[
-    \KLD(\mathbf{P}\|\mathbf{K}) = \sum_{k,l} f_{k,l}(P_{k,l}),
+    \KLD(\mathbf{P}\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P_{i,j}),
     \qquad
-    h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K}) = \sum_{k,l} f_{k,l}(P^t_{k,l})
+    h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P^t_{i,j})
   \]
-  と書ける．また線分 $P^t_{k,l} = (1-t)(\mathbf{P}_\varepsilon)_{k,l} + t\,Q_{k,l}$ より $\dfrac{d}{dt} P^t_{k,l} = Q_{k,l} - (\mathbf{P}_\varepsilon)_{k,l}$．
+  と書ける．また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
   よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，和の微分と連鎖律により
   \[
     h'(t)
