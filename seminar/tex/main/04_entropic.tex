@@ -353,18 +353,18 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおく．連鎖律の材料は次の二つである．
+  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおく．$\KLD(\mathbf{P}\|\mathbf{K})$ を行列 $\mathbf{P}$ の成分 $P_{i,j}$ の関数とみると，連鎖律の材料は次の二つである．
   \[
-    \frac{\partial}{\partial P^t_{i,j}}\!\left( P^t_{i,j}\log\frac{P^t_{i,j}}{K_{i,j}} - P^t_{i,j} + K_{i,j} \right)
-    = \log\frac{P^t_{i,j}}{K_{i,j}},
+    \frac{\partial \KLD}{\partial P_{i,j}}\!\left( \mathbf{P} \right)
+    = \log\frac{P_{i,j}}{K_{i,j}},
     \qquad
     \frac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}.
   \]
-  左は $\KLD$ の各項を成分で微分したもの，右は線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ の $t$ 微分である．
-  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，連鎖律により
+  左は $\KLD = \sum_{i,j}\bigl(P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}\bigr)$ を成分 $P_{i,j}$ で偏微分したもの，右は線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ の $t$ 微分である．
+  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，連鎖律により（左の偏微分は $\mathbf{P} = \mathbf{P}^t$ で評価する）
   \[
     h'(t)
-    = \sum_{i,j} \frac{\partial \KLD}{\partial P^t_{i,j}} \cdot \frac{d P^t_{i,j}}{dt}
+    = \sum_{i,j} \frac{\partial \KLD}{\partial P_{i,j}}\bigg|_{\mathbf{P} = \mathbf{P}^t} \cdot \frac{d P^t_{i,j}}{dt}
     = \sum_{i,j} \log\frac{P^t_{i,j}}{K_{i,j}} \,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
   \]
 
