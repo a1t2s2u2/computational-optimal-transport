@@ -36,7 +36,7 @@
 \end{remark}
 
 \begin{remark}{$\varphi(x)=x\log x-x$ の連続性}{sem-phi-continuous}
-  $-\Hb$ の被加数 $\varphi(x) \defeq x\log x - x$ は $[0,\infty)$ 上で連続である．
+  $-\Hb$ の各項 $\varphi(x) \defeq x\log x - x$ は $[0,\infty)$ 上で連続である．
   実際，$(0,\infty)$ 上では連続関数の積・和として連続であり，
   $x = 0$ では，約束 $0\log 0 = 0$ により $\varphi(0) = 0$ と定めると，
   $\lim_{x\to0+} x\log x = 0$ から
@@ -357,7 +357,7 @@
     = C_{i,j} + \varepsilon\log P_{i,j}
   \]
   であり，また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
-  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，線分上の値 $F(\mathbf{P}^t)$ は $t$ について微分可能で，連鎖律により
+  $t \in (0,1)$ では全成分が $P^t_{i,j} > 0$ に留まり，各 $P^t_{i,j}$ は $t$ の $1$ 次式，$F$ の各項 $C_{i,j}\,p + \varepsilon(p\log p - p)$ は $p > 0$ で微分可能（$p = 0$ では $\log$ が発散して微分不可）だから，線分上の値 $F(\mathbf{P}^t)$ は $t$ について微分可能である．連鎖律により
   \[
     \frac{d}{dt} F(\mathbf{P}^t)
     = \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
