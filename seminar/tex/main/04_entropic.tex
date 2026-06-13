@@ -374,19 +374,13 @@
   \end{itemize}
   前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
   $\lim_{t \to 0+} g'(t) = -\infty$ である．
-  発散が $-\infty$ 向きであることは，$g'(t)$ が $0$ の右近傍で負になることを意味する：
-  すなわち，その近傍の幅となる $\delta \in (0,1)$ が存在して
+  とくに十分小さい $t > 0$ では $g'(t) < 0$ だから，$g$ は $0$ の右側で減少し，そのような $t$ では
   \[
-    0 < t < \delta \;\Longrightarrow\; g'(t) < 0 .
+    g(t) < g(0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
   \]
-  この $\delta$ に対し，$g$ は $[0, \delta]$ で連続かつ $(0, \delta)$ で $g'(t) < 0$ だから，$[0, \delta]$ 上で狭義減少する．
-  したがって $0 < t < \delta$ では
-  \[
-    g(t) < g(0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b}).
-  \]
-  ところが $\mathbf{P}_\varepsilon$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で $F$ を最小にする点であり，
-  一方 $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $g(t) = F(\mathbf{P}^t)$ である．
-  すなわち上の不等式は「実行可能点 $\mathbf{P}^t$ が最小値より小さい目的関数値をとる」ことを意味し，矛盾する．
+  となる．しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は実行可能で $g(t) = F(\mathbf{P}^t)$ だから，
+  これは「実行可能点 $\mathbf{P}^t$ が最小値より小さい目的関数値をとる」ことになり，
+  $\mathbf{P}_\varepsilon$ が $F$ を最小にすることに反する．
   ゆえにゼロ成分は存在せず，$\mathbf{P}_\varepsilon$ の全成分は正である．
   （直観的には，ある成分を $0$ からわずかに正へ開くと，勾配 $C_{i,j} + \varepsilon\log P_{i,j}$ が
   $P_{i,j} \to 0$ で $-\infty$ に落ちる（負エントロピーの勾配 $\varepsilon\log P_{i,j}$ が支配的）ため目的関数が一気に下がる．
