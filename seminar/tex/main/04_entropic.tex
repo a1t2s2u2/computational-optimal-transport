@@ -325,7 +325,7 @@
 \end{lemma}
 
 \begin{proof}
-  命題~\ref{prop:sem-entropic-kl-projection} より，$\mathbf{P} \defeq \mathbf{P}_\varepsilon$ は
+  命題~\ref{prop:sem-entropic-kl-projection} より，$\mathbf{P}_\varepsilon$ は
   Gibbs カーネル $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ への KL ダイバージェンスを
   結合集合上で最小にする点
   \[
@@ -334,7 +334,7 @@
     \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \KLD(\mathbf{P}\|\mathbf{K})
   \]
   である．用いるのは $\mathbf{K}$ の全成分が正であること（定義~\ref{def:sem-gibbs-kernel}）だけである．
-  以下，$\mathbf{P}$ にゼロ成分があると仮定して矛盾を導く．
+  以下，$\mathbf{P}_\varepsilon$ にゼロ成分があると仮定して矛盾を導く．
 
   \emph{正値な比較対象．}
   積結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ は，$\sum_i a_i = \sum_j b_j = 1$ より
@@ -344,36 +344,36 @@
   ゆえに $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は正値な実行可能点である．
 
   \emph{背理法と線分．}
-  ある成分が $P_{i_0, j_0} = 0$ であると仮定する．
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性（主張~\ref{clm:sem-coupling-convex}）より，$\mathbf{P}$ から $\mathbf{Q}$ への線分
+  ある成分が $(\mathbf{P}_\varepsilon)_{i_0, j_0} = 0$ であると仮定する．
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性（主張~\ref{clm:sem-coupling-convex}）より，$\mathbf{P}_\varepsilon$ から $\mathbf{Q}$ への線分
   \[
-    \mathbf{P}^t \defeq (1-t)\mathbf{P} + t\mathbf{Q}
+    \mathbf{P}^t \defeq (1-t)\mathbf{P}_\varepsilon + t\mathbf{Q}
     \in \CouplingsD(\mathbf{a}, \mathbf{b})
     \qquad (t \in [0,1]),
     \qquad
-    P^t_{i,j} = (1-t)P_{i,j} + t\,Q_{i,j}
+    P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
-  はすべて実行可能である．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
+  はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
   $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおくと，KL の被加数の偏微分は
   \[
     \frac{\partial}{\partial P_{i,j}}
     \!\left( P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j} \right)
     = \log\frac{P_{i,j}}{K_{i,j}}
   \]
-  だから，$t \in (0,1)$ 上で連鎖律により
+  だから，$t \in (0,1)$ 上で連鎖律により（$dP^t_{i,j}/dt = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$）
   \[
     h'(t)
-    = \sum_{i,j} (Q_{i,j} - P_{i,j}) \log\frac{P^t_{i,j}}{K_{i,j}}.
+    = \sum_{i,j} \bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr) \log\frac{P^t_{i,j}}{K_{i,j}}.
   \]
 
   \emph{微分の発散と矛盾．}
-  各項の $t \to 0+$ での挙動を $P_{i,j}$ の値で分ける（$K_{i,j} > 0$ は固定の正定数）．
+  各項の $t \to 0+$ での挙動を $(\mathbf{P}_\varepsilon)_{i,j}$ の値で分ける（$K_{i,j} > 0$ は固定の正定数）．
   \begin{itemize}
-    \item $P_{i,j} > 0$ の項：$\log(P^t_{i,j}/K_{i,j}) \to \log(P_{i,j}/K_{i,j})$（有限）．
-    \item $P_{i,j} = 0$ の項（$(i_0, j_0)$ を含む）：係数 $Q_{i,j} - P_{i,j} = a_i b_j > 0$，
+    \item $(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項：$\log(P^t_{i,j}/K_{i,j}) \to \log((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j})$（有限）．
+    \item $(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項（$(i_0, j_0)$ を含む）：係数 $Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j} = a_i b_j > 0$，
       かつ $\log(P^t_{i,j}/K_{i,j}) = \log(t\,a_i b_j / K_{i,j}) \to -\infty$ だから，項は $-\infty$ に発散する．
   \end{itemize}
-  $+\infty$ に発散する項は一つもなく，$P_{i_0, j_0} = 0$ の項が $-\infty$ に発散するから
+  $+\infty$ に発散する項は一つもなく，$(\mathbf{P}_\varepsilon)_{i_0, j_0} = 0$ の項が $-\infty$ に発散するから
   $\lim_{t \to 0+} h'(t) = -\infty$ である．
   ゆえにある $t_1 \in (0,1)$ が存在して $(0, t_1)$ 上で $h'(t) < 0$ となり，
   $h$ は $[0, t_1]$ 上で（連続かつ）狭義減少するから，
