@@ -353,7 +353,7 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおくと，KL の被加数の偏微分は
+  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおく．$\KLD = \sum_{i,j}(\,\cdots)$ の和の各項（成分 $(i,j)$ ごとの項）を $P_{i,j}$ で偏微分すると
   \[
     \frac{\partial}{\partial P_{i,j}}
     \!\left( P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j} \right)
