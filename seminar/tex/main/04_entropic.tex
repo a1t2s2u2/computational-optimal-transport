@@ -353,17 +353,25 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおく．$\KLD = \sum_{i,j}(\,\cdots)$ の和の各項（成分 $(i,j)$ ごとの項）を $P_{i,j}$ で偏微分すると
+  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P^t_{i,j})$ とおく．
+  ここで成分 $(i,j)$ ごとの項を $f_{i,j}$ と書くと，これは 1 変数 $p$ の関数として
   \[
-    \frac{\partial}{\partial P_{i,j}}
-    \!\left( P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j} \right)
-    = \log\frac{P_{i,j}}{K_{i,j}}
+    f_{i,j}(p) \defeq p\log\frac{p}{K_{i,j}} - p + K_{i,j},
+    \qquad
+    f_{i,j}'(p) = \bigl(\log p - \log K_{i,j} + 1\bigr) - 1 = \log\frac{p}{K_{i,j}}
   \]
-  だから，$t \in (0,1)$ 上で連鎖律により（$dP^t_{i,j}/dt = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$）
+  である（$K_{i,j} > 0$ は定数）．また線分の定義 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ から，$t$ について
   \[
+    \frac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}.
+  \]
+  $t \in (0,1)$ では $P^t_{i,j} > 0$（既述）なので各 $f_{i,j}(P^t_{i,j})$ は微分可能であり，
+  和の微分と連鎖律により
+  \begin{align*}
     h'(t)
-    = \sum_{i,j} \bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr) \log\frac{P^t_{i,j}}{K_{i,j}}.
-  \]
+    &= \sum_{i,j} \frac{d}{dt}\, f_{i,j}(P^t_{i,j})
+    = \sum_{i,j} f_{i,j}'(P^t_{i,j}) \cdot \frac{d}{dt} P^t_{i,j} \\
+    &= \sum_{i,j} \log\frac{P^t_{i,j}}{K_{i,j}} \cdot \bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
+  \end{align*}
 
   \emph{微分の発散と矛盾．}
   各項の $t \to 0+$ での挙動を $(\mathbf{P}_\varepsilon)_{i,j}$ の値で分ける（$K_{i,j} > 0$ は固定の正定数）．
