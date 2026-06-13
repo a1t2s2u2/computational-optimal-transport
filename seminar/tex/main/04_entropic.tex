@@ -353,14 +353,17 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P^t_{i,j})$ とおく．
-  ここで成分 $(i,j)$ ごとの項を $f_{i,j}$ と書くと，これは 1 変数 $p$ の関数として
+  まず $\KLD$ の成分 $(i,j)$ ごとの項を，1 変数 $p$ の関数として
   \[
     f_{i,j}(p) \defeq p\log\frac{p}{K_{i,j}} - p + K_{i,j},
     \qquad
     f_{i,j}'(p) = \bigl(\log p - \log K_{i,j} + 1\bigr) - 1 = \log\frac{p}{K_{i,j}}
   \]
-  である（$K_{i,j} > 0$ は定数）．また線分の定義 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ から，$t$ について
+  と定める（$K_{i,j} > 0$ は定数）．これを用いると $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ は
+  \[
+    h(t) = \sum_{i,j} f_{i,j}(P^t_{i,j})
+  \]
+  と書ける．また線分の定義 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ から，$t$ について
   \[
     \frac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}.
   \]
