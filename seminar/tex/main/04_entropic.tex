@@ -411,7 +411,7 @@
 
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
 
-\begin{proposition}{正則化解のスケーリング形}{sem-entropic-scaling-form}
+\begin{proposition}{正則化解の形（スケーリング形）}{sem-entropic-scaling-form}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）
   の下で，$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解
   $\mathbf{P}_\varepsilon$ は，ある $\mathbf{u} \in \Rpos^n$, $\mathbf{v} \in \Rpos^m$
@@ -501,27 +501,21 @@
   \end{itemize}
 \end{proof}
 
-\begin{remark}{双対ポテンシャルとの関係}{sem-entropic-dual-potential}
-  Step 1 の乗数を $\alpha_i = f_i / \varepsilon$, $\beta_j = g_j / \varepsilon$ と書けば
-  $u_i = e^{f_i / \varepsilon}$, $v_j = e^{g_j / \varepsilon}$ であり，
-  $\mathbf{f} \in \R^n$, $\mathbf{g} \in \R^m$ は元の正則化問題
-  $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の周辺制約に対する
-  \textbf{双対ポテンシャル}に他ならない．実際，元の目的関数 $F$ に対して直接 1 階条件を書くと，
-  $\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$（注意~\ref{rem:sem-entropy-convention}）より
+\begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
+  Step 1 の停留条件は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
+  スケールし直すと，元のコスト $\mathbf{C}$ を用いた指数表示
   \[
-    C_{i,j} + \varepsilon\log(\mathbf{P}_\varepsilon)_{i,j} = f_i + g_j,
-    \qquad\text{すなわち}\qquad
-    (\mathbf{P}_\varepsilon)_{i,j} = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
-    = e^{f_i / \varepsilon} K_{i,j}\, e^{g_j / \varepsilon}
+    (\mathbf{P}_\varepsilon)_{i,j}
+    = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
+    = e^{f_i / \varepsilon}\, K_{i,j}\, e^{g_j / \varepsilon}
   \]
-  となり，同じ式が得られる（これが Step 1 を元の問題から導く「経路 A」にあたる）．
-  与えられた $\mathbf{a}, \mathbf{b}$ から $\mathbf{u}, \mathbf{v}$ を周辺条件
-  \[
-    \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\,\ones_m = \mathbf{a},
-    \qquad
-    \diag(\mathbf{v})\,\mathbf{K}^\top\diag(\mathbf{u})\,\ones_n = \mathbf{b}
-  \]
-  によって決定する問題は，行列スケーリング問題として知られる．
+  に書き換えられる（$u_i = e^{f_i / \varepsilon}$, $v_j = e^{g_j / \varepsilon}$）．
+  すなわち「コストとポテンシャルの差 $f_i + g_j - C_{i,j}$ を $\varepsilon$ で割って指数化する」形である．
+  この式は，KL 射影（命題~\ref{prop:sem-entropic-kl-projection}）を経由せず，
+  元の目的関数 $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ に
+  直接 1 階条件（$\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$，注意~\ref{rem:sem-entropy-convention}）
+  を当てても同じく得られ，スケーリング形が定式化の選び方に依らないことを示す．
+  なお $\mathbf{f}, \mathbf{g}$ は周辺制約に付随する双対変数の役割をもつが，双対理論は後の章で扱う．
 \end{remark}
 
 \begin{remark}{連続版：Schr\"odinger 問題}{sem-entropic-schrodinger}
