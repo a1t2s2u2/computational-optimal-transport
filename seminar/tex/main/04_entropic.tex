@@ -325,108 +325,57 @@
 \end{lemma}
 
 \begin{proof}
-  \emph{自明ケース．}
-  $n = 1$ または $m = 1$ のときは摂動を作る相異なる 2 行・2 列が確保できないが，
-  このとき $\CouplingsD(\mathbf{a}, \mathbf{b})$ は一点
-  $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$（成分 $a_i b_j > 0$）のみからなり，主張は明らか．
-  以下 $n, m \geq 2$ とする．
+  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ は
+  KL 射影 $\argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \KLD(\mathbf{P}\|\mathbf{K})$ であり，
+  基準核 $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は全成分が正である（定義~\ref{def:sem-gibbs-kernel}）．
+  「正の基準核への射影はゼロ成分を許さない」ことを示せばよい．
 
-  \emph{(1a) 正成分の取り出し．}
-  背理法で，$(\mathbf{P}_\varepsilon)_{i_0, j_0} = 0$ となる成分があると仮定する
-  （以下 $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ と略記）．
-  周辺が正であることから，行和 $a_{i_0} = \sum_j P_{i_0, j}$ と
-  列和 $b_{j_0} = \sum_i P_{i, j_0}$ はともに正である．
-  これと $(i_0, j_0)$ 成分が $0$ であることを合わせると，次の正成分が拾える．
-  \begin{itemize}
-    \item 行 $i_0$ からは，$j_0$ と異なる列 $j_1$ で $P_{i_0, j_1} > 0$ となるものが存在する．
-    \item 列 $j_0$ からは，$i_0$ と異なる行 $i_1$ で $P_{i_1, j_0} > 0$ となるものが存在する．
-  \end{itemize}
-  こうして $2\times2$ の四隅のうち
-  $(i_0, j_0) = 0$, $(i_0, j_1) > 0$, $(i_1, j_0) > 0$ が出そろう
-  （残る $(i_1, j_1)$ は $P_{i_1, j_1} \geq 0$）．
-  ここで得た 4 添字の相異性 $i_0 \neq i_1$, $j_0 \neq j_1$ は，
-  次の摂動が縮退しないために本質的である．
+  \emph{正値な比較対象．}
+  積結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ は，$\sum_i a_i = \sum_j b_j = 1$ より
+  $\mathbf{Q}\ones_m = \mathbf{a}\,(\mathbf{b}^\top\ones_m) = \mathbf{a}$,
+  $\mathbf{Q}^\top\ones_n = \mathbf{b}\,(\mathbf{a}^\top\ones_n) = \mathbf{b}$ をみたし，
+  成分 $Q_{i,j} = a_i b_j > 0$ はすべて正である．
+  ゆえに $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は正値な実行可能点である．
 
-  \emph{(1b) 摂動行列の構成．}
-  $t \geq 0$ に対し，この対角サイクルに沿って，$(i_0, j_0), (i_1, j_1)$ 成分に $+t$，
-  $(i_0, j_1), (i_1, j_0)$ 成分に $-t$ を加えた行列 $\mathbf{P}^t$ を考える（他の成分は不変）．
-  $i_0, i_1$（$2$ 行）と $j_0, j_1$（$2$ 列）の部分行列で見ると，
-  摂動前の $\mathbf{P}$ の符号配置と，加える $\pm t$ の配置はそれぞれ
+  \emph{背理法と線分．}
+  ある成分が $P_{i_0, j_0} = 0$ であると仮定する．
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性（主張~\ref{clm:sem-coupling-convex}）より，$\mathbf{P}$ から $\mathbf{Q}$ への線分
   \[
-    \begin{array}{c|cc}
-       & j_0 & j_1 \\ \hline
-      i_0 & 0 & P_{i_0 j_1} > 0 \\
-      i_1 & P_{i_1 j_0} > 0 & P_{i_1 j_1} \geq 0
-    \end{array}
-    \qquad\qquad
-    \begin{array}{c|cc}
-       & j_0 & j_1 \\ \hline
-      i_0 & +t & -t \\
-      i_1 & -t & +t
-    \end{array}
+    \mathbf{P}^t \defeq (1-t)\mathbf{P} + t\mathbf{Q}
+    \in \CouplingsD(\mathbf{a}, \mathbf{b})
+    \qquad (t \in [0,1]),
+    \qquad
+    P^t_{i,j} = (1-t)P_{i,j} + t\,Q_{i,j}
   \]
-  となる．すなわち $0$ の成分 $(i_0, j_0)$ を $+t$ で立ち上げ，
-  正の成分 $(i_0, j_1), (i_1, j_0)$ から $-t$ で借りる，
-  というチェッカーボード型の摂動である．
-
-  \emph{(1c) 周辺不変と実行可能区間．}
-  次の二点により，$t \in [0, t_0]$ で $\mathbf{P}^t$ は実行可能である．
-  \begin{itemize}
-    \item （周辺不変）行 $i_0$ では $+t$ と $-t$，行 $i_1$ でも $+t$ と $-t$ が相殺し，
-      列 $j_0$, 列 $j_1$ でも同様に相殺する．ゆえに
-      $\mathbf{P}^t\ones_m = \mathbf{a}$, $(\mathbf{P}^t)^\top\ones_n = \mathbf{b}$ は $t$ に依らず保たれる．
-    \item （実行可能区間）非負性 $\mathbf{P}^t \geq 0$ を決めるのは $-t$ を受ける成分のみであり，
-      $P_{i_0 j_1} - t \geq 0$ かつ $P_{i_1 j_0} - t \geq 0$，
-      すなわち $0 \leq t \leq t_0 \defeq \min(P_{i_0, j_1}, P_{i_1, j_0})$
-      でちょうど成立する（$+t$ を受ける成分は単調増加なので非負性を破らず，上限に関与しない）．
-      (1a) で $P_{i_0, j_1} > 0$ かつ $P_{i_1, j_0} > 0$ を確保したので $t_0 > 0$ である．
-  \end{itemize}
-  ゆえに $t \in [0, t_0]$ で $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
-
-  \emph{(1d) 微分の発散と矛盾．}
-  目的関数を
+  はすべて実行可能である．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
+  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおくと，KL の被加数の偏微分は
   \[
-    F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
-    = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})
+    \frac{\partial}{\partial P_{i,j}}
+    \!\left( P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j} \right)
+    = \log\frac{P_{i,j}}{K_{i,j}}
   \]
-  （$\varphi(x) = x\log x - x$，注意~\ref{rem:sem-phi-continuous}）とおき，
-  $g(t) \defeq F(\mathbf{P}^t)$ を考える．
-  $t$ に依存するのは摂動を受ける 4 成分のみだから，
+  だから，$t \in (0,1)$ 上で連鎖律により
   \[
-    g(t) = \text{(定数)}
-    + t\,(C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0})
-    + \varepsilon\bigl[\varphi(t) + \varphi(P_{i_1 j_1} + t)
-      + \varphi(P_{i_0 j_1} - t) + \varphi(P_{i_1 j_0} - t)\bigr]
+    h'(t)
+    = \sum_{i,j} (Q_{i,j} - P_{i,j}) \log\frac{P^t_{i,j}}{K_{i,j}}.
   \]
-  と書ける．ここで $\varphi(t)$ は $0 + t$ に立ち上がる $(i_0, j_0)$ 成分，
-  $\varphi(P_{i_1 j_1} + t)$ は $+t$ を受ける $(i_1, j_1)$ 成分，残る 2 項は
-  $-t$ を受ける $(i_0, j_1), (i_1, j_0)$ 成分に対応する．
-  $\varphi'(x) = \log x$ だから，連鎖律により $(0, t_0)$ 上で
-  \begin{align*}
-    g'(t) = {}& (C_{i_0 j_0} + C_{i_1 j_1} - C_{i_0 j_1} - C_{i_1 j_0}) \\
-    {}+{}& \varepsilon\,\log t \\
-    {}+{}& \varepsilon\bigl[\log(P_{i_1 j_1} + t)
-      - \log(P_{i_0 j_1} - t) - \log(P_{i_1 j_0} - t)\bigr]
-  \end{align*}
-  となる（各 $\log$ の符号は $\pm t$ の摂動方向に対応し，$-t$ 成分からは $-\log$ が出る）．
-  $t \to 0+$ における各項の振る舞いは次のとおりである．
+
+  \emph{微分の発散と矛盾．}
+  各項の $t \to 0+$ での挙動を $P_{i,j}$ の値で分ける（$K_{i,j} > 0$ は固定の正定数）．
   \begin{itemize}
-    \item $\log(P_{i_0 j_1} - t) \to \log P_{i_0 j_1}$（有限），
-      $\log(P_{i_1 j_0} - t) \to \log P_{i_1 j_0}$（有限）
-      （被対数は $t_0 > 0$ より正に留まる）；
-    \item $\log(P_{i_1 j_1} + t) \to \log P_{i_1 j_1} \in [-\infty, \infty)$
-      （$P_{i_1 j_1} = 0$ なら $-\infty$ に発散しうるが，いずれにせよ上に有界）；
-    \item $\log t$ は $-\infty$ に発散する．
+    \item $P_{i,j} > 0$ の項：$\log(P^t_{i,j}/K_{i,j}) \to \log(P_{i,j}/K_{i,j})$（有限）．
+    \item $P_{i,j} = 0$ の項（$(i_0, j_0)$ を含む）：係数 $Q_{i,j} - P_{i,j} = a_i b_j > 0$，
+      かつ $\log(P^t_{i,j}/K_{i,j}) = \log(t\,a_i b_j / K_{i,j}) \to -\infty$ だから，項は $-\infty$ に発散する．
   \end{itemize}
-  $+\infty$ に発散する項は一つもなく，$\log t \to -\infty$ が支配的だから
-  $\lim_{t \to 0+} g'(t) = -\infty$ である．
-  したがってある $t_1 \in (0, t_0)$ が存在して $(0, t_1)$ 上で $g'(t) < 0$ となり，
-  $g$ は右側で減少するから，十分小さい $t > 0$ で
-  $g(t) < g(0) = F(\mathbf{P}_\varepsilon)$ となる．
-  しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ ゆえ，これは $\mathbf{P}_\varepsilon$ の最適性に反する．
-  よって背理法の仮定は否定され，$\mathbf{P}_\varepsilon$ の全成分は正である．
-  （直観的には，$0$ 成分はエントロピーの勾配が境界で $-\infty$ となるため，
-  微小に開くと必ず目的関数を下げられるのである．）
+  $+\infty$ に発散する項は一つもなく，$P_{i_0, j_0} = 0$ の項が $-\infty$ に発散するから
+  $\lim_{t \to 0+} h'(t) = -\infty$ である．
+  ゆえにある $t_1 \in (0,1)$ が存在して $(0, t_1)$ 上で $h'(t) < 0$ となり，
+  $h$ は $[0, t_1]$ 上で（連続かつ）狭義減少するから，
+  十分小さい $t > 0$ で $h(t) < h(0) = \KLD(\mathbf{P}_\varepsilon\|\mathbf{K})$ となる．
+  これは $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と $\mathbf{P}_\varepsilon$ が KL 射影であることに反する．
+  よって全成分は正である．
+  （直観的には，正の基準核 $\mathbf{K}$ への KL 射影は，勾配 $\log(P_{i,j}/K_{i,j})$ が
+  $P_{i,j} \to 0$ で $-\infty$ となるため，$0$ 成分を決して許さないのである．）
 \end{proof}
 
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
