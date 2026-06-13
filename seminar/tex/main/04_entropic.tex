@@ -166,7 +166,17 @@
 \begin{proposition}{正則化解の存在と一意性}{sem-entropic-existence-unique}
   任意の $\varepsilon > 0$ に対して，
   $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ は一意な最適解
-  $\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a}, \mathbf{b})$ を持つ．
+  \[
+    \mathbf{P}_\varepsilon
+    \defeq
+    \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \left\{
+      \inner{\mathbf{C}}{\mathbf{P}}
+      - \varepsilon \Hb(\mathbf{P})
+    \right\}
+    \;\in\; \CouplingsD(\mathbf{a}, \mathbf{b})
+  \]
+  を持つ．
 \end{proposition}
 
 \begin{proof}
@@ -297,7 +307,17 @@
 
 \begin{lemma}{正則化解の正値性}{sem-entropic-positivity}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）の下で，
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解 $\mathbf{P}_\varepsilon$ は全成分が正である：
+  命題~\ref{prop:sem-entropic-existence-unique} の一意解
+  \[
+    \mathbf{P}_\varepsilon
+    =
+    \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
+    \left\{
+      \inner{\mathbf{C}}{\mathbf{P}}
+      - \varepsilon \Hb(\mathbf{P})
+    \right\}
+  \]
+  は全成分が正である：
   \[
     (\mathbf{P}_\varepsilon)_{i,j} > 0 \qquad (\forall i, j).
   \]
@@ -536,11 +556,67 @@
 非正則化 Kantorovich 問題が複数の最適解を持つとき，
 エントロピー正則化はそのうちの一つ——
 エントロピーが最大のもの——を自然に選び出す．
+正則化パラメータ $\varepsilon$ の二つの極限はそれぞれ異なる解を選ぶ：
+$\varepsilon \to 0$ では非正則化最適解の中で最大エントロピーをもつものに，
+$\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリングに収束する．
 
-\begin{theorem}{$\varepsilon \to 0$ による非正則化 OT への収束}{sem-entropic-convergence-eps-zero}
+\begin{claim}{独立カップリングはエントロピー最大解}{sem-max-entropy-independent}
+  独立カップリング $\mathbf{a}\mathbf{b}^\top = (a_i b_j)_{i,j}$ は
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ に属し，その上で離散エントロピー $\Hb$ を
+  最大化する唯一の元である：
+  \[
+    \mathbf{a}\mathbf{b}^\top
+    = \argmax_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \Hb(\mathbf{P}).
+  \]
+\end{claim}
+
+\begin{proof}
+  \textbf{$\mathbf{a}\mathbf{b}^\top \in \CouplingsD(\mathbf{a},\mathbf{b})$ であること．}
+  $\sum_i a_i = \sum_j b_j = 1$ より
+  $(\mathbf{a}\mathbf{b}^\top)\ones_m = \mathbf{a}(\mathbf{b}^\top\ones_m) = \mathbf{a}$，
+  $(\mathbf{a}\mathbf{b}^\top)^\top\ones_n = \mathbf{b}(\mathbf{a}^\top\ones_n) = \mathbf{b}$．
+  また $\mathbf{a}, \mathbf{b} \in \Rpos$ より $a_i b_j > 0$．
+
+  \textbf{KL ダイバージェンスによる表示．}
+  $\mathbf{K} \defeq \mathbf{a}\mathbf{b}^\top \in \Rpos^{n \times m}$ とおく．
+  任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し，
+  周辺条件 $\sum_j P_{i,j} = a_i$, $\sum_i P_{i,j} = b_j$ と
+  $\sum_{i,j} P_{i,j} = \sum_{i,j} a_i b_j = 1$ を用いると
+  \begin{align*}
+    \KLD(\mathbf{P}\|\mathbf{K})
+    &= \sum_{i,j}
+       \left( P_{i,j}\log\frac{P_{i,j}}{a_i b_j} - P_{i,j} + a_i b_j \right) \\
+    &= \sum_{i,j} P_{i,j}\log P_{i,j}
+       - \sum_i a_i \log a_i - \sum_j b_j \log b_j \\
+    &= \bigl(1 - \Hb(\mathbf{P})\bigr)
+       - \sum_i a_i \log a_i - \sum_j b_j \log b_j
+  \end{align*}
+  となる．第 2 等号は
+  $-\sum_{i,j}P_{i,j} + \sum_{i,j}a_i b_j = -1 + 1 = 0$ と，周辺条件による
+  $\sum_{i,j} P_{i,j}\log(a_i b_j) = \sum_i a_i\log a_i + \sum_j b_j\log b_j$ から従う．
+  第 3 等号は
+  $\Hb(\mathbf{P}) = -\sum_{i,j}P_{i,j}(\log P_{i,j}-1) = 1 - \sum_{i,j}P_{i,j}\log P_{i,j}$
+  （$\sum_{i,j}P_{i,j}=1$）による．したがって
+  \[
+    \Hb(\mathbf{P})
+    = \underbrace{\,1 - \sum_i a_i \log a_i - \sum_j b_j \log b_j\,}
+        _{\mathbf{P} \text{ に依らない定数}}
+      - \KLD(\mathbf{P}\|\mathbf{K}).
+  \]
+
+  \textbf{非負性と一意性．}
+  各成分について $g(p) \defeq p\log(p/k) - p + k$（$k > 0$）は
+  $g'(p) = \log(p/k)$ より $p = k$ で最小値 $g(k) = 0$ をとり，
+  $g \geq 0$ である（$g(0) = k > 0$）．
+  ゆえに $\KLD(\mathbf{P}\|\mathbf{K}) \geq 0$ であり，
+  等号は全成分で $P_{i,j} = a_i b_j$，すなわち $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ のときに限る．
+  上の表示より $\Hb$ は $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ で唯一の最大値をとる．
+\end{proof}
+
+\begin{theorem}{正則化パラメータ $\varepsilon$ の極限による収束}{sem-entropic-convergence-eps-zero}
   各 $\varepsilon > 0$ に対し，$\mathbf{P}_\varepsilon$ を
   $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解とする．
-  $\varepsilon \to 0$ のとき，以下が成り立つ．
+  このとき，以下が成り立つ．
 
   \begin{enumerate}
     \item[(i)]
@@ -562,6 +638,14 @@
         \mathbf{P}_\varepsilon
         \;\xrightarrow{\varepsilon \to 0}\;
         \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
+      \]
+    \item[(iv)]
+      $\varepsilon \to +\infty$ のとき，$\mathbf{P}_\varepsilon$ は
+      独立カップリングに収束する：
+      \[
+        \mathbf{P}_\varepsilon
+        \;\xrightarrow{\varepsilon \to +\infty}\;
+        \mathbf{a}\mathbf{b}^\top = (a_i b_j)_{i,j}.
       \]
   \end{enumerate}
 \end{theorem}
@@ -616,16 +700,30 @@
   同一の極限を持ち，コンパクト集合内の点列でこの性質を持つものは
   全体として収束するから，
   $\mathbf{P}_\varepsilon$ は最大エントロピー最適解に収束する．
-\end{proof}
 
-\begin{remark}{$\varepsilon \to +\infty$ による独立カップリングへの収束}{sem-entropic-convergence-eps-infty}
-  $\varepsilon \to +\infty$ のとき
-  $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$ が成り立つ．
-  $\varepsilon$ で目的関数を割ると
-  $\varepsilon^{-1}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P})$
-  の最小化であり，$\varepsilon \to +\infty$ では
-  エントロピー最大化
-  $\max_{\mathbf{P} \in \CouplingsD} \Hb(\mathbf{P})$
-  に帰着する．周辺分布を固定したエントロピー最大化の解は
-  独立カップリング $\mathbf{a}\mathbf{b}^\top$ である．
-\end{remark}
+  \textbf{(iv).}
+  $\varepsilon > 0$ で目的関数を割れば，$\mathbf{P}_\varepsilon$ は
+  \[
+    \mathbf{P}_\varepsilon
+    = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
+      \left( \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P}) \right)
+  \]
+  の最小元でもある．$\varepsilon_\ell \to +\infty$ なる任意の列をとり，
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ のコンパクト性より収束部分列
+  $\mathbf{P}_{\varepsilon_\ell} \to \mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ を抽出する．
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について最小性から
+  \[
+    \tfrac{1}{\varepsilon_\ell}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_\ell}} - \Hb(\mathbf{P}_{\varepsilon_\ell})
+    \leq
+    \tfrac{1}{\varepsilon_\ell}\inner{\mathbf{C}}{\mathbf{Q}} - \Hb(\mathbf{Q})
+  \]
+  が成り立つ．$\inner{\mathbf{C}}{\cdot}$ はコンパクト集合上で有界だから
+  $\varepsilon_\ell^{-1}\inner{\mathbf{C}}{\cdot} \to 0$ であり，$\Hb$ は連続なので，
+  $\ell \to \infty$ の極限で $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ が
+  すべての $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について成り立つ．
+  ゆえに $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化し，
+  主張~\ref{clm:sem-max-entropy-independent} より $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
+  極限は部分列のとり方によらず一意だから，(iii) と同様に
+  コンパクト集合内での全体収束により
+  $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
+\end{proof}
