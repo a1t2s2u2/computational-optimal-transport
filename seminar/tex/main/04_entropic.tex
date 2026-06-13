@@ -391,6 +391,37 @@
   ゆえに $0$ 成分は最適たり得ない．）
 \end{proof}
 
+\begin{remark}{KL 射影を経由しない直接証明}{sem-entropic-positivity-direct}
+  補題~\ref{lem:sem-entropic-positivity} は，KL 射影に書き換えず，正則化目的関数
+  \[
+    F(\mathbf{P})
+    = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+    = \sum_{i,j}\Bigl( C_{i,j} P_{i,j} + \varepsilon\bigl(P_{i,j}\log P_{i,j} - P_{i,j}\bigr) \Bigr)
+  \]
+  を直接使っても示せる．比較対象 $\mathbf{Q} = \mathbf{a}\mathbf{b}^\top$ と線分 $\mathbf{P}^t = (1-t)\mathbf{P}_\varepsilon + t\mathbf{Q}$ は同じにとる．
+  $g(t) \defeq F(\mathbf{P}^t)$ とおくと，$F$ の各項を成分 $P_{i,j}$ で偏微分すると $C_{i,j} + \varepsilon\log P_{i,j}$ だから，連鎖律により
+  \[
+    g'(t)
+    = \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\bigl( Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j} \bigr).
+  \]
+  $t \to 0+$ では，$(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項は有界，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項は係数 $a_i b_j > 0$ と
+  $C_{i,j} + \varepsilon\log(t\,a_i b_j) \to -\infty$ により $-\infty$ に発散する．ゆえに $g'(0+) = -\infty$ となり，
+  $\mathbf{P}_\varepsilon$ が $F$ を最小化することに反する（以降は本証明と同じ）．
+
+  \textbf{KL 版との違い．}
+  二つの証明は本質的に同じ論法で，勾配が
+  \[
+    \frac{\partial F}{\partial P_{i,j}}
+    = C_{i,j} + \varepsilon\log P_{i,j}
+    = \varepsilon\bigl( \log P_{i,j} - \log K_{i,j} \bigr)
+    = \varepsilon\,\frac{\partial \KLD}{\partial P_{i,j}}
+  \]
+  と，$\varepsilon$ 倍を除いて一致する（$\log K_{i,j} = -C_{i,j}/\varepsilon$ を用いた）．
+  直接版ではコスト $C_{i,j}$ が勾配に明示的に残る（ただし有界なので発散には効かない）のに対し，
+  KL 版は $C$ を基準核 $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ に畳み込み，勾配を単一の $\log(P_{i,j}/K_{i,j})$ にまとめている，という記述上の違いだけである．
+  発散を引き起こすのはどちらも $\log P_{i,j} \to -\infty$ の項である．
+\end{remark}
+
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
 
 \begin{proposition}{正則化解の形（スケーリング形）}{sem-entropic-scaling-form}
