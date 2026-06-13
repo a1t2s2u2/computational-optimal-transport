@@ -377,11 +377,15 @@
   \end{itemize}
   前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
   $\lim_{t \to 0+} h'(t) = -\infty$ である．
-  ゆえにある $t_1 \in (0,1)$ が存在して $(0, t_1)$ 上で $h'(t) < 0$ となり，
-  $h$ は $[0, t_1]$ 上で（連続かつ）狭義減少するから，
-  十分小さい $t > 0$ で $h(t) < h(0) = \KLD(\mathbf{P}_\varepsilon\|\mathbf{K})$ となる．
-  これは $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と $\mathbf{P}_\varepsilon$ が KL 射影であることに反する．
-  よって全成分は正である．
+  $\lim_{t \to 0+} h'(t) = -\infty$ だから，特にある $t_1 \in (0,1)$ があって $(0, t_1)$ 上では $h'(t) < 0$ である．
+  $h$ は $[0, t_1]$ で連続，$(0, t_1)$ で $h'(t) < 0$ だから $[0, t_1]$ 上で狭義減少し，$0 < t < t_1$ では
+  \[
+    h(t) < h(0) = \KLD(\mathbf{P}_\varepsilon\|\mathbf{K}).
+  \]
+  ところが $\mathbf{P}_\varepsilon$ は $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で $\KLD(\cdot\|\mathbf{K})$ を最小にする点（KL 射影）であり，
+  一方 $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ $h(t) = \KLD(\mathbf{P}^t\|\mathbf{K})$ である．
+  すなわち上の不等式は「実行可能点 $\mathbf{P}^t$ が最小値より小さい KL 値をとる」ことを意味し，矛盾する．
+  ゆえにゼロ成分は存在せず，$\mathbf{P}_\varepsilon$ の全成分は正である．
   （直観的には，ある成分を $0$ からわずかに正へ開くと，勾配 $\log(P_{i,j}/K_{i,j})$ が
   $P_{i,j} \to 0$ で $-\infty$ に落ちるため目的関数が一気に下がる．
   ゆえに $0$ 成分は最適たり得ない．）
