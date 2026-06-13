@@ -353,23 +353,16 @@
     P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
   \]
   はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $\KLD$ の成分 $(i,j)$ ごとの被加数を，1 変数 $p$ の関数
+  $h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K})$ とおく．
+  $\KLD = \sum_{i,j}\bigl(P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j}\bigr)$ の各項を成分 $P_{i,j}$ で偏微分すると
   \[
-    f_{i,j}(p) \defeq p\log\frac{p}{K_{i,j}} - p + K_{i,j},
-    \qquad
-    f_{i,j}'(p) = \log\frac{p}{K_{i,j}}
+    \frac{\partial}{\partial P_{i,j}}\!\left( P_{i,j}\log\frac{P_{i,j}}{K_{i,j}} - P_{i,j} + K_{i,j} \right)
+    = \log\frac{P_{i,j}}{K_{i,j}}
   \]
-  と定める（$K_{i,j} > 0$ は定数）．これにより $\KLD$ と $h$ は被加数の和
-  \[
-    \KLD(\mathbf{P}\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P_{i,j}),
-    \qquad
-    h(t) \defeq \KLD(\mathbf{P}^t\|\mathbf{K}) = \sum_{i,j} f_{i,j}(P^t_{i,j})
-  \]
-  と書ける．また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
-  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，和の微分と連鎖律により
+  であり，また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
+  よって $t \in (0,1)$（このとき $P^t_{i,j} > 0$）では，連鎖律により
   \[
     h'(t)
-    = \sum_{i,j} f_{i,j}'(P^t_{i,j}) \cdot \frac{d P^t_{i,j}}{dt}
     = \sum_{i,j} \log\frac{P^t_{i,j}}{K_{i,j}} \,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
   \]
 
