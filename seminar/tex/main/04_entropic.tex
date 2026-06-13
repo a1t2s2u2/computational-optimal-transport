@@ -303,7 +303,7 @@
   両者の最小化問題は同じ最適解を持つ．
 \end{proof}
 
-最適解の具体的な形を導く準備として，まず最適解が領域の内部にある（全成分が正である）ことを示す．これにより非負制約が不活性となり，等式制約のみの 1 階条件（Lagrange の未定乗数法）が適用できる．
+最適解の具体的な形を導く準備として，まず最適解が領域の内部にある（全成分が正である）ことを示す．成分が $0$ にならないとわかれば，不等式制約 $\mathbf{P} \geq 0$ はどこも等号で効かないので無視でき，残る等式制約（周辺条件）だけに対して Lagrange の未定乗数法が使える．
 
 \begin{lemma}{正則化解の正値性}{sem-entropic-positivity}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）の下で，
@@ -321,14 +321,20 @@
   \[
     (\mathbf{P}_\varepsilon)_{i,j} > 0 \qquad (\forall i, j).
   \]
-  とくに $\mathbf{P}_\varepsilon$ は非負制約 $\mathbf{P} \geq 0$ を活性化しない内点である．
+  すなわちどの成分も $0$ に張り付かず，不等式制約 $\mathbf{P} \geq 0$ が等号で成り立つ成分は一つもない．
 \end{lemma}
 
 \begin{proof}
-  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P} \defeq \mathbf{P}_\varepsilon$ は
-  KL 射影 $\argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \KLD(\mathbf{P}\|\mathbf{K})$ であり，
-  基準核 $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は全成分が正である（定義~\ref{def:sem-gibbs-kernel}）．
-  「正の基準核への射影はゼロ成分を許さない」ことを示せばよい．
+  命題~\ref{prop:sem-entropic-kl-projection} より，$\mathbf{P} \defeq \mathbf{P}_\varepsilon$ は
+  Gibbs カーネル $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ への KL ダイバージェンスを
+  結合集合上で最小にする点
+  \[
+    \mathbf{P}_\varepsilon
+    =
+    \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})} \KLD(\mathbf{P}\|\mathbf{K})
+  \]
+  である．用いるのは $\mathbf{K}$ の全成分が正であること（定義~\ref{def:sem-gibbs-kernel}）だけである．
+  以下，$\mathbf{P}$ にゼロ成分があると仮定して矛盾を導く．
 
   \emph{正値な比較対象．}
   積結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ は，$\sum_i a_i = \sum_j b_j = 1$ より
@@ -374,8 +380,9 @@
   十分小さい $t > 0$ で $h(t) < h(0) = \KLD(\mathbf{P}_\varepsilon\|\mathbf{K})$ となる．
   これは $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と $\mathbf{P}_\varepsilon$ が KL 射影であることに反する．
   よって全成分は正である．
-  （直観的には，正の基準核 $\mathbf{K}$ への KL 射影は，勾配 $\log(P_{i,j}/K_{i,j})$ が
-  $P_{i,j} \to 0$ で $-\infty$ となるため，$0$ 成分を決して許さないのである．）
+  （直観的には，ある成分を $0$ からわずかに正へ開くと，勾配 $\log(P_{i,j}/K_{i,j})$ が
+  $P_{i,j} \to 0$ で $-\infty$ に落ちるため目的関数が一気に下がる．
+  ゆえに $0$ 成分は最適たり得ない．）
 \end{proof}
 
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
