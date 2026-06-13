@@ -375,6 +375,8 @@
   前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
   $\lim_{t \to 0+} g'(t) = -\infty$ である．
   とくに十分小さい $t > 0$ では $g'(t) < 0$ だから，$g$ は $0$ の右側で減少し，そのような $t$ では
+  （厳密には，$\lim_{t\to0+} g'(t) = -\infty$ より，ある $\delta \in (0,1)$ が存在して $0 < t < \delta$ で $g'(t) < 0$ となり，
+  連続性と合わせて $g$ は $[0,\delta]$ 上で狭義減少する．以下この $t$ は $0 < t < \delta$ にとる）
   \[
     g(t) < g(0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
   \]
