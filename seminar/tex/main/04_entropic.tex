@@ -377,8 +377,13 @@
   \end{itemize}
   前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
   $\lim_{t \to 0+} h'(t) = -\infty$ である．
-  よって十分小さい閾値 $\delta \in (0,1)$ をとれば $(0, \delta)$ 上では $h'(t) < 0$ となる．
-  $h$ は $[0, \delta]$ で連続，$(0, \delta)$ で $h'(t) < 0$ だから $[0, \delta]$ 上で狭義減少し，$0 < t < \delta$ では
+  発散が $-\infty$ 向きであることは，$h'(t)$ が $0$ の右近傍で負になることを意味する：
+  すなわち，その近傍の幅となる $\delta \in (0,1)$ が存在して
+  \[
+    0 < t < \delta \;\Longrightarrow\; h'(t) < 0 .
+  \]
+  この $\delta$ に対し，$h$ は $[0, \delta]$ で連続かつ $(0, \delta)$ で $h'(t) < 0$ だから，$[0, \delta]$ 上で狭義減少する．
+  したがって $0 < t < \delta$ では
   \[
     h(t) < h(0) = \KLD(\mathbf{P}_\varepsilon\|\mathbf{K}).
   \]
