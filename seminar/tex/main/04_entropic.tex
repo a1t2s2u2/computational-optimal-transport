@@ -326,27 +326,24 @@
 
 \begin{proof}
   $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$，$\varphi(x) = x\log x - x$（定義~\ref{def:sem-entropic-ot}）とおく．
-  $\mathbf{P}_\varepsilon$ は $F$ の最小点だから，実行可能点でこれより $F$ が小さいものが一つでも見つかれば矛盾する．これを目指す．
   背理法として，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ なる成分が少なくとも一つあると仮定する．
 
-  そのような「より小さい点」を，$\mathbf{P}_\varepsilon$ を全成分が正の実行可能点の方へ少し動かして作る．
-  動かす先として独立結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ をとると，$\sum_i a_i = \sum_j b_j = 1$ と $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$ より
+  $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ とおくと，$\sum_i a_i = \sum_j b_j = 1$ より
   \[
     \mathbf{Q}\ones_m = \mathbf{a}, \qquad
     \mathbf{Q}^\top\ones_n = \mathbf{b}, \qquad
-    Q_{i,j} = a_i b_j > 0 \quad (\forall i,j)
+    Q_{i,j} = a_i b_j > 0
   \]
-  をみたし，$\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ かつ全成分が正である．凸性（主張~\ref{clm:sem-coupling-convex}）より線分
+  ゆえ $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．凸性（主張~\ref{clm:sem-coupling-convex}）より，$t \in [0,1]$ で
   \[
     \mathbf{P}^t \defeq (1-t)\mathbf{P}_\varepsilon + t\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b}),
     \qquad
-    P^t_{i,j} = (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
-    \qquad (t \in [0,1])
+    P^t_{i,j} = (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr) .
   \]
-  はすべて実行可能である．目標は，小さい $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$（動かすと $F$ が下がること）を示すことである．
 
-  \medskip
-  そこで，動き出しにおける $F$ の傾きを調べる．$t \in (0,1]$ では全成分 $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能で，連鎖律より
+  \emph{方針．}小さな $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$ を示す．$\mathbf{P}_\varepsilon$ は最小値だから，これは矛盾を与える．
+
+  $t \in (0,1]$ では $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能で，連鎖律より
   \begin{align*}
     \frac{d}{dt} F(\mathbf{P}^t)
     &= \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt} \\
@@ -355,32 +352,16 @@
        \cdot \frac{d}{dt}\Bigl( (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr) \Bigr) \\
     &= \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\bigl( a_i b_j - (\mathbf{P}_\varepsilon)_{i,j} \bigr)
   \end{align*}
-  となる（$\partial F/\partial P_{i,j}$ の計算で $\varphi'(x) = \log x$，注意~\ref{rem:sem-entropy-convention} を用いた）．
-  $t \to 0+$ で各項を見ると，$(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項は $\log P^t_{i,j} \to \log (\mathbf{P}_\varepsilon)_{i,j}$ ゆえ有限にとどまり，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項は $P^t_{i,j} = t\,a_i b_j$ より
-  \[
-    \bigl(C_{i,j} + \varepsilon\log(t\,a_i b_j)\bigr)\,a_i b_j \xrightarrow{\ t \to 0+\ } -\infty
-  \]
-  （係数 $a_i b_j > 0$，$\log(t\,a_i b_j) \to -\infty$）と発散する．仮定よりこの型の項が少なくとも一つあり，$+\infty$ に飛ぶ項はないので
+  （$\varphi'(x) = \log x$，注意~\ref{rem:sem-entropy-convention}）．$t \to 0+$ で，$(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項は $\log P^t_{i,j} \to \log (\mathbf{P}_\varepsilon)_{i,j}$ ゆえ有限，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項は $P^t_{i,j} = t\,a_i b_j$ より $\bigl(C_{i,j} + \varepsilon\log(t\,a_i b_j)\bigr)a_i b_j \to -\infty$（$a_i b_j > 0$）．仮定よりこの型の項が少なくとも一つあるから
   \[
     \frac{d}{dt} F(\mathbf{P}^t) \xrightarrow{\ t \to 0+\ } -\infty .
   \]
-  すなわち動き出しで $F$ の傾きは $-\infty$ である（負エントロピーの傾き $\log$ が境界 $0$ で $-\infty$ に落ちることが効く）．
-  ゆえにある $\delta \in (0,1)$ が存在して $\dfrac{d}{dt} F(\mathbf{P}^t) < 0$（$0 < t < \delta$）．
-  $t \mapsto F(\mathbf{P}^t)$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能である．
-
-  \medskip
-  そこで $0 < t < \delta$ を固定し，区間 $[0,t]$ に平均値定理（定理~\ref{thm:sem-mvt}）を適用する．
-  $\dfrac{d}{dt}F(\mathbf{P}^t) = \sum_{i,j}\bigl(C_{i,j} + \varepsilon\log P^t_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)$ だったから，ある $c \in (0,t)$ が存在して
+  ゆえにある $\delta \in (0,1)$ で $\dfrac{d}{dt} F(\mathbf{P}^t) < 0$（$0 < t < \delta$）．$t \mapsto F(\mathbf{P}^t)$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能だから，$0 < t < \delta$ を固定して $[0,t]$ に平均値定理（定理~\ref{thm:sem-mvt}）を適用すると，ある $c \in (0,t)$ で
   \[
     F(\mathbf{P}^t) - F(\mathbf{P}^0)
-    = t \sum_{i,j}\bigl(C_{i,j} + \varepsilon\log P^c_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
+    = t \sum_{i,j}\bigl(C_{i,j} + \varepsilon\log P^c_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr) < 0
   \]
-  となる（右辺は $\dfrac{d}{dt}F(\mathbf{P}^t)$ の $t = c$ での値の $t$ 倍）．
-  $c \in (0,\delta)$ ゆえこの和は負，かつ $t > 0$ だから
-  \[
-    F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon) \qquad (0 < t < \delta).
-  \]
-  実行可能点 $\mathbf{P}^t$ が最小値を下回り，$\mathbf{P}_\varepsilon$ の最小性に矛盾する．ゆえに $\mathbf{P}_\varepsilon$ の全成分は正である．
+  （$c \in (0,\delta)$ より和は負，$t > 0$）．よって $F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon)$．これは $\mathbf{P}_\varepsilon$ の最小性に反する．ゆえに $\mathbf{P}_\varepsilon$ の全成分は正である．
 \end{proof}
 
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
@@ -403,80 +384,31 @@
 \end{proposition}
 
 \begin{proof}
-  \textbf{方針．}
-  補題~\ref{lem:sem-entropic-positivity} より最適解 $\mathbf{P}_\varepsilon$ は領域の内点にあり，非負制約は不活性である．
-  そこで等式制約のみの 1 階条件（Lagrange の未定乗数法）を適用してスケーリング形を導き（Step 1），
-  最後にスケーリングベクトルの一意性を確認する（Step 2）．
-
-  \medskip
-  \textbf{Step 1（1 階条件）．}
-  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は領域 $\Rpos^{n \times m}$ の内点にあるので，
-  非負制約 $\mathbf{P} \geq 0$ は活性化せず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$,
-  $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみと見なせる．この内点性こそが，
-  以下で等式制約のみの Lagrange 条件へ移る論理的な橋渡しである．
-
-  \emph{勾配の計算．}
-  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は
-  $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上での最小元である．
-  $\KLD(\cdot \| \mathbf{K})$ は $\Rpos^{n \times m}$ 上で微分可能で，
-  定義~\ref{def:sem-kl-divergence} からの直接計算により
+  \textbf{スケーリング形．}
+  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は $\Rpos^{n \times m}$ の内点にあり，非負制約 $\mathbf{P} \geq 0$ は不活性で，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
+  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元であり，定義~\ref{def:sem-kl-divergence} より
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K})
-    = \log\frac{P_{i,j}}{K_{i,j}}
+    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K}) = \log\frac{P_{i,j}}{K_{i,j}} .
   \]
-  をみたす．
-
-  \emph{Lagrange 1 階条件．}
-  制約はすべてアフィン（一次）だから制約想定（constraint qualification）がみたされ，
-  内点の最小元では Lagrange の 1 階条件が必要条件となる．
-  ここで，行和制約 $(\mathbf{P}\ones_m)_i = a_i$ の $P_{k,l}$ に関する偏微分は $[k = i]$，
-  列和制約 $(\mathbf{P}^\top\ones_n)_j = b_j$ の偏微分は $[l = j]$ である
-  （$[\,\cdot\,]$ は指示関数）．
-  すなわち行制約は $i$ 行にのみ $1$ を，列制約は $j$ 列にのみ $1$ を立てる．
-  ゆえに乗数 $\alpha \in \R^n$, $\beta \in \R^m$（符号制約はない）が存在して，
-  停留条件は
+  制約はアフィンだから，内点の最小元で Lagrange の 1 階条件が成り立つ．行和・列和制約に対応する乗数 $\alpha \in \R^n$, $\beta \in \R^m$ により
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}}
-    = \alpha_i \cdot 1 + \beta_j \cdot 1 = \alpha_i + \beta_j
-    \qquad (\forall i, j)
+    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j),
   \]
-  という行成分 $\alpha_i$ と列成分 $\beta_j$ の和の形をとる．
-
-  \emph{指数化．}
-  両辺の指数をとり $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
-  （正値性は指数関数から自動的に従う），
+  両辺を指数化し $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
   \[
     (\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j,
     \qquad\text{すなわち}\qquad
-    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
+    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v}) .
   \]
-  を得る．これが命題本文のスケーリング形である．
 
-  \medskip
-  \textbf{Step 2（一意性）．}
-  $\mathbf{P}_\varepsilon$ 自体の一意性は命題~\ref{prop:sem-entropic-existence-unique}
-  （正則化解の存在と一意性）による（ここでは再証明しない）．
-  スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ については，次のとおり $\lambda$ 自由度を除いて一意である．
-
-  まず十分性（自由度の存在）として，任意の $\lambda > 0$ に対し
-  $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ より $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も
-  同じ $\mathbf{P}_\varepsilon$ を与える．
-  逆にこの自由度を除けば一意であることを，補助記号
-  $w_{i,j} \defeq u_i v_j$ を用いて 3 段で示す．
-  \begin{itemize}
-    \item[(i)] 全成分が正なので，各 $(i,j)$ で積
-      $w_{i,j} = u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ が一意に定まる
-      （個々の $u_i, v_j$ は不定だが，積 $w_{i,j}$ は確定する）．
-    \item[(ii)] 比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らない
-      （分子分母で $v_j$ が約分されて消える；
-      これは $\log w_{i,j} = \alpha_i + \beta_j$ で $\alpha_i$ が $j$ に依らないことに対応する）．
-    \item[(iii)] ゆえに $\mathbf{u}$ は正の定数倍を除いて一意であり，
-      対応して $v_j = w_{i,j} / u_i$ も定まる．
-  \end{itemize}
+  \textbf{一意性．}
+  $\mathbf{P}_\varepsilon$ の一意性は命題~\ref{prop:sem-entropic-existence-unique} による．
+  $(\mathbf{u}, \mathbf{v})$ については，任意の $\lambda > 0$ に対し $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ ゆえ $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
+  逆に，$w_{i,j} \defeq u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ は確定し，比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らないから，$\mathbf{u}$ は正の定数倍を除いて一意で，$v_j = w_{i,j} / u_i$ も定まる．よって自由度は $\lambda$ のみである．
 \end{proof}
 
 \begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
-  Step 1 の停留条件は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
+  上の停留条件 $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$ は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
   スケールし直すと，元のコスト $\mathbf{C}$ を用いた指数表示
   \[
     (\mathbf{P}_\varepsilon)_{i,j}
