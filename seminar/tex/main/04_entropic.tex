@@ -365,7 +365,18 @@
     \frac{d}{dt} F(\mathbf{P}^t) \xrightarrow{\ t \to 0+\ } -\infty .
   \]
   すなわち動き出しで $F$ の傾きは $-\infty$ である（負エントロピーの傾き $\log$ が境界 $0$ で $-\infty$ に落ちることが効く）．
-  ゆえにある $\delta \in (0,1)$ が存在して $\dfrac{d}{dt} F(\mathbf{P}^t) < 0$（$0 < t < \delta$）．$t \mapsto F(\mathbf{P}^t)$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能だから，平均値定理（定理~\ref{thm:sem-mvt}）より $[0,\delta]$ で狭義減少し，
+  ゆえにある $\delta \in (0,1)$ が存在して $\dfrac{d}{dt} F(\mathbf{P}^t) < 0$（$0 < t < \delta$）．
+  $t \mapsto F(\mathbf{P}^t)$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能である．
+
+  \medskip
+  そこで $0 < t < \delta$ を固定し，区間 $[0,t]$ に平均値定理（定理~\ref{thm:sem-mvt}）を適用する．
+  $\dfrac{d}{dt}F(\mathbf{P}^t) = \sum_{i,j}\bigl(C_{i,j} + \varepsilon\log P^t_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)$ だったから，ある $c \in (0,t)$ が存在して
+  \[
+    F(\mathbf{P}^t) - F(\mathbf{P}^0)
+    = t \sum_{i,j}\bigl(C_{i,j} + \varepsilon\log P^c_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
+  \]
+  となる（右辺は $\dfrac{d}{dt}F(\mathbf{P}^t)$ の $t = c$ での値の $t$ 倍）．
+  $c \in (0,\delta)$ ゆえこの和は負，かつ $t > 0$ だから
   \[
     F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon) \qquad (0 < t < \delta).
   \]
