@@ -351,7 +351,7 @@
     \frac{d}{dt} F(\mathbf{P}^t)
     &= \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt} \\
     &= \sum_{i,j}
-       \frac{\partial}{\partial P_{i,j}}\Bigl( \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\!\sum_{k,l}\varphi(P_{k,l}) \Bigr)\bigg|_{\mathbf{P} = \mathbf{P}^t}
+       \frac{\partial}{\partial P^t_{i,j}}\Bigl( \inner{\mathbf{C}}{\mathbf{P}^t} + \varepsilon\!\sum_{k,l}\varphi(P^t_{k,l}) \Bigr)
        \cdot \frac{d}{dt}\Bigl( (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr) \Bigr) \\
     &= \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\bigl( a_i b_j - (\mathbf{P}_\varepsilon)_{i,j} \bigr)
   \end{align*}
