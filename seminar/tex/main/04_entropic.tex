@@ -346,9 +346,9 @@
   はすべて実行可能である．目標は，小さい $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$（動かすと $F$ が下がること）を示すことである．
 
   \medskip
-  そこで，動き出しにおける $F$ の傾きを調べる．$g(t) \defeq F(\mathbf{P}^t)$ とおくと，$t \in (0,1]$ では全成分 $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $g$ は微分可能で，連鎖律より
+  そこで，動き出しにおける $F$ の傾きを調べる．$t \in (0,1]$ では全成分 $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能で，連鎖律より
   \[
-    g'(t)
+    \frac{d}{dt} F(\mathbf{P}^t)
     = \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt}
     = \sum_{i,j} \bigl(C_{i,j} + \varepsilon\log P^t_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
   \]
@@ -359,12 +359,12 @@
   \]
   （係数 $a_i b_j > 0$，$\log(t\,a_i b_j) \to -\infty$）と発散する．仮定よりこの型の項が少なくとも一つあり，$+\infty$ に飛ぶ項はないので
   \[
-    g'(t) \xrightarrow{\ t \to 0+\ } -\infty .
+    \frac{d}{dt} F(\mathbf{P}^t) \xrightarrow{\ t \to 0+\ } -\infty .
   \]
   すなわち動き出しで $F$ の傾きは $-\infty$ である（負エントロピーの傾き $\log$ が境界 $0$ で $-\infty$ に落ちることが効く）．
-  ゆえにある $\delta \in (0,1)$ が存在して $g'(t) < 0$（$0 < t < \delta$）．$g$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能だから，平均値定理（定理~\ref{thm:sem-mvt}）より $g$ は $[0,\delta]$ で狭義減少し，
+  ゆえにある $\delta \in (0,1)$ が存在して $\dfrac{d}{dt} F(\mathbf{P}^t) < 0$（$0 < t < \delta$）．$t \mapsto F(\mathbf{P}^t)$ は $[0,\delta]$ で連続（$\varphi$ の連続性，注意~\ref{rem:sem-phi-continuous}）・$(0,\delta)$ で微分可能だから，平均値定理（定理~\ref{thm:sem-mvt}）より $[0,\delta]$ で狭義減少し，
   \[
-    F(\mathbf{P}^t) = g(t) < g(0) = F(\mathbf{P}_\varepsilon) \qquad (0 < t < \delta).
+    F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon) \qquad (0 < t < \delta).
   \]
   実行可能点 $\mathbf{P}^t$ が最小値を下回り，$\mathbf{P}_\varepsilon$ の最小性に矛盾する．ゆえに $\mathbf{P}_\varepsilon$ の全成分は正である．
 \end{proof}
