@@ -321,72 +321,111 @@
   \[
     (\mathbf{P}_\varepsilon)_{i,j} > 0 \qquad (\forall i, j).
   \]
-  すなわちどの成分も $0$ に張り付かず，不等式制約 $\mathbf{P} \geq 0$ が等号で成り立つ成分は一つもない．
+  すなわちどの成分も $0$ をとらず，不等式制約 $\mathbf{P} \geq 0$ が等号で活性化する成分は一つもない．
 \end{lemma}
 
 \begin{proof}
-  $\mathbf{P}_\varepsilon$ は正則化目的関数
+  $F$ を命題~\ref{prop:sem-entropic-existence-unique} の証明と同じ目的関数
   \[
     F(\mathbf{P})
-    \defeq \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
-    = \sum_{i,j}\Bigl( C_{i,j} P_{i,j} + \varepsilon\bigl(P_{i,j}\log P_{i,j} - P_{i,j}\bigr) \Bigr)
+    = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+    = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j}),
+    \qquad \varphi(x) = x\log x - x
   \]
-  を $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で最小にする点である（定義~\ref{def:sem-entropic-ot}）．
-  以下，$\mathbf{P}_\varepsilon$ にゼロ成分があると仮定して矛盾を導く．
+  とし（定義~\ref{def:sem-entropic-ot}），$\mathbf{P}_\varepsilon$ がこれを
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上で最小にすることを用いる．
+  背理法により，$\mathbf{P}_\varepsilon$ にゼロ成分があると仮定する．
 
-  \emph{正値な比較対象．}
-  積結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ は，$\sum_i a_i = \sum_j b_j = 1$ より
+  \emph{方針．}
+  全成分が正の実行可能点 $\mathbf{Q}$ へ向かう線分 $\mathbf{P}^t = (1-t)\mathbf{P}_\varepsilon + t\mathbf{Q}$ をとり，
+  差分商 $\bigl(F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)\bigr)/t$ を直接評価する．
+  ゼロ成分に対応する項が $\varphi(t\,a_ib_j) = t\,a_ib_j(\log(t\,a_ib_j) - 1)$ を $t$ で割った形で現れ，
+  $\log(t\,a_ib_j) \to -\infty$ により差分商は $t \to 0+$ で $-\infty$ に発散する（他の項は有限極限をもつ）．
+  ゆえに十分小さい $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$ となり，最小性に反する．
+
+  \emph{全成分が正の比較対象．}
+  独立結合（$\mathbf{a}, \mathbf{b}$ の積測度に対応する結合）
+  $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ をとる
+  （本証明に限り $\mathbf{Q}$ をこの結合の意味で用いる）．
+  $\sum_i a_i = \sum_j b_j = 1$ より
   $\mathbf{Q}\ones_m = \mathbf{a}\,(\mathbf{b}^\top\ones_m) = \mathbf{a}$,
-  $\mathbf{Q}^\top\ones_n = \mathbf{b}\,(\mathbf{a}^\top\ones_n) = \mathbf{b}$ をみたし，
-  成分 $Q_{i,j} = a_i b_j > 0$ はすべて正である．
-  ゆえに $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は正値な実行可能点である．
+  $\mathbf{Q}^\top\ones_n = \mathbf{b}\,(\mathbf{a}^\top\ones_n) = \mathbf{b}$ をみたすので
+  $\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ であり，
+  $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$ より成分 $Q_{i,j} = a_i b_j > 0$ はすべて正である．
+  すなわち $\mathbf{Q}$ は全成分が正の実行可能点である．
 
-  \emph{線分による比較．}
-  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性（主張~\ref{clm:sem-coupling-convex}）より，$\mathbf{P}_\varepsilon$ から $\mathbf{Q}$ への線分
+  \emph{線分とその成分表示．}
+  $\CouplingsD(\mathbf{a}, \mathbf{b})$ の凸性（主張~\ref{clm:sem-coupling-convex}）より，
+  $\mathbf{P}_\varepsilon$ から $\mathbf{Q}$ への線分
   \[
     \mathbf{P}^t \defeq (1-t)\mathbf{P}_\varepsilon + t\mathbf{Q}
     \in \CouplingsD(\mathbf{a}, \mathbf{b})
-    \qquad (t \in [0,1]),
+    \qquad (t \in [0,1])
+  \]
+  は実行可能であり，始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$，成分は
+  $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ である．
+  添字集合を，$\mathbf{P}_\varepsilon$ の正負に応じて
+  \[
+    S_+ \defeq \{(i,j) : (\mathbf{P}_\varepsilon)_{i,j} > 0\},
     \qquad
-    P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}
+    S_0 \defeq \{(i,j) : (\mathbf{P}_\varepsilon)_{i,j} = 0\}
   \]
-  はすべて実行可能である（始点は $\mathbf{P}^0 = \mathbf{P}_\varepsilon$）．$t \in (0,1)$ では $P^t_{i,j} \geq t\,Q_{i,j} > 0$ が全成分で正である．
-  $F$ の各項を成分 $P_{i,j}$ で偏微分すると
-  \[
-    \frac{\partial}{\partial P_{i,j}}\!\left( C_{i,j} P_{i,j} + \varepsilon\bigl(P_{i,j}\log P_{i,j} - P_{i,j}\bigr) \right)
-    = C_{i,j} + \varepsilon\log P_{i,j}
-  \]
-  であり，また線分 $P^t_{i,j} = (1-t)(\mathbf{P}_\varepsilon)_{i,j} + t\,Q_{i,j}$ より $\dfrac{d}{dt} P^t_{i,j} = Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}$．
-  $t \in (0,1)$ では全成分が $P^t_{i,j} > 0$ に留まり，各 $P^t_{i,j}$ は $t$ の $1$ 次式，$F$ の各項 $C_{i,j}\,p + \varepsilon(p\log p - p)$ は $p > 0$ で微分可能（$p = 0$ では $\log$ が発散して微分不可）だから，線分上の値 $F(\mathbf{P}^t)$ は $t$ について微分可能である．連鎖律により
-  \[
-    \frac{d}{dt} F(\mathbf{P}^t)
-    = \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr).
-  \]
+  に分ける．背理法の仮定より $S_0 \neq \emptyset$ である．
 
-  \emph{微分の発散と矛盾．}
-  この微分の和を $(\mathbf{P}_\varepsilon)_{i,j}$ の正負で二つに分け，$t \to 0+$ での挙動をみる（$C_{i,j}$ は定数）．
-  \begin{itemize}
-    \item $(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項：$P^t_{i,j} \to (\mathbf{P}_\varepsilon)_{i,j} > 0$ なので
-      $C_{i,j} + \varepsilon\log P^t_{i,j}$ は有限値に収束し，係数も有限．ゆえにこれらの項の和は有界である．
-    \item $(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項：係数 $Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j} = a_i b_j > 0$，
-      かつ $C_{i,j} + \varepsilon\log P^t_{i,j} = C_{i,j} + \varepsilon\log(t\,a_i b_j) \to -\infty$ だから，各項は $-\infty$ に発散する．
-      仮定よりこのような項は少なくとも一つある．
-  \end{itemize}
-  前者の和は有界，後者は $-\infty$ に発散する（$+\infty$ に飛ぶ項はないので相殺は起きない）から，
-  $t \to 0+$ でこの微分は $-\infty$ に発散する．
-  とくに十分小さい $t > 0$ ではこの微分が負だから，$F(\mathbf{P}^t)$ は $0$ の右側で（$t$ について）減少し，そのような $t$ では
-  （厳密には，$t\to0+$ でこの微分が $-\infty$ に発散することから，ある $\delta \in (0,1)$ が存在して $0 < t < \delta$ で微分が負となり，
-  連続性と合わせて $F(\mathbf{P}^t)$ は $[0,\delta]$ 上で $t$ について狭義減少する．以下この $t$ は $0 < t < \delta$ にとる）
+  \emph{差分商の評価．}
+  $\inner{\mathbf{C}}{\cdot}$ の線形性と $-\Hb(\mathbf{P}^t) = \sum_{i,j}\varphi(P^t_{i,j})$ より
   \[
-    F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    \frac{F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)}{t}
+    = \inner{\mathbf{C}}{\mathbf{Q} - \mathbf{P}_\varepsilon}
+    + \varepsilon\sum_{i,j}\frac{\varphi(P^t_{i,j}) - \varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr)}{t}
+    \qquad (0 < t < 1)
   \]
-  となる．しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は実行可能だから，
-  これは「実行可能点 $\mathbf{P}^t$ が最小値より小さい目的関数値をとる」ことになり，
+  であり（第 1 項は $\inner{\mathbf{C}}{\mathbf{P}^t - \mathbf{P}_\varepsilon} = t\inner{\mathbf{C}}{\mathbf{Q} - \mathbf{P}_\varepsilon}$ を $t$ で割ったもの），
+  以下この和の $t \to 0+$ での挙動を $S_+$, $S_0$ 別に調べる．
+
+  $(i,j) \in S_+$ のとき．$p_0 \defeq (\mathbf{P}_\varepsilon)_{i,j} > 0$ とおくと，
+  $P^t_{i,j} = p_0 + t\,(Q_{i,j} - p_0)$ である．
+  $\varphi$ は $p_0 > 0$ で微分可能で $\varphi'(p_0) = \log p_0$（注意~\ref{rem:sem-entropy-convention}）だから，
+  この差分商は，直線 $t \mapsto p_0 + t\,(Q_{i,j} - p_0)$ に沿って読んだ $p_0$ での微分係数の定義そのものであり，
+  \[
+    \frac{\varphi(P^t_{i,j}) - \varphi(p_0)}{t}
+    = \frac{\varphi\bigl(p_0 + t\,(Q_{i,j} - p_0)\bigr) - \varphi(p_0)}{t}
+    \xrightarrow{\ t \to 0+\ } \varphi'(p_0)\,\bigl(Q_{i,j} - p_0\bigr)
+    = (\log p_0)\,\bigl(Q_{i,j} - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
+  \]
+  と有限極限に収束する．$S_+$ は有限集合だから，$S_+$ にわたる和も有限極限に収束し，
+  とくに $0$ の近傍で有界である．
+
+  $(i,j) \in S_0$ のとき．$\varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr) = \varphi(0) = 0$（注意~\ref{rem:sem-phi-continuous}）であり，
+  $P^t_{i,j} = t\,Q_{i,j} = t\,a_i b_j$ だから
+  \[
+    \frac{\varphi(P^t_{i,j}) - \varphi(0)}{t}
+    = \frac{\varphi(t\,a_i b_j)}{t}
+    = \frac{t\,a_i b_j\bigl(\log(t\,a_i b_j) - 1\bigr)}{t}
+    = a_i b_j\bigl(\log(t\,a_i b_j) - 1\bigr).
+  \]
+  $a_i b_j > 0$ かつ $\log(t\,a_i b_j) \to -\infty$（$t \to 0+$）なので，
+  この項は $-\infty$ に発散する．$S_0 \neq \emptyset$ より，こうした項は少なくとも一つ存在する．
+
+  \emph{矛盾．}
+  以上より，$t \to 0+$ のとき差分商の右辺第 1 項 $\inner{\mathbf{C}}{\mathbf{Q} - \mathbf{P}_\varepsilon}$ は定数，
+  $S_+$ にわたる和は有限極限をもち（$0$ の近傍で有界），
+  $S_0$ にわたる和は $-\infty$ に発散する．$+\infty$ に発散する項はないので相殺は起こらず，
+  \[
+    \frac{F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)}{t}
+    \xrightarrow{\ t \to 0+\ } -\infty.
+  \]
+  したがって，ある $\delta \in (0,1)$ が存在して，$0 < t < \delta$ なるすべての $t$ で
+  $\bigl(F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)\bigr)/t < 0$，
+  すなわち $t > 0$ と合わせて
+  \[
+    F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon) = \MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})
+    \qquad (0 < t < \delta)
+  \]
+  が成り立つ．しかし $\mathbf{P}^t \in \CouplingsD(\mathbf{a}, \mathbf{b})$ は実行可能だから，
+  これは実行可能点 $\mathbf{P}^t$ が最小値より小さい目的関数値をとることを意味し，
   $\mathbf{P}_\varepsilon$ が $F$ を最小にすることに反する．
-  ゆえにゼロ成分は存在せず，$\mathbf{P}_\varepsilon$ の全成分は正である．
-  （直観的には，ある成分を $0$ からわずかに正へ開くと，勾配 $C_{i,j} + \varepsilon\log P_{i,j}$ が
-  $P_{i,j} \to 0$ で $-\infty$ に落ちる（負エントロピーの勾配 $\varepsilon\log P_{i,j}$ が支配的）ため目的関数が一気に下がる．
-  ゆえに $0$ 成分は最適たり得ない．）
+  ゆえに $S_0 = \emptyset$，すなわち $\mathbf{P}_\varepsilon$ の全成分は正である．
 \end{proof}
 
 これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
