@@ -347,12 +347,15 @@
 
   \medskip
   そこで，動き出しにおける $F$ の傾きを調べる．$t \in (0,1]$ では全成分 $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能で，連鎖律より
-  \[
+  \begin{align*}
     \frac{d}{dt} F(\mathbf{P}^t)
-    = \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt}
-    = \sum_{i,j} \bigl(C_{i,j} + \varepsilon\log P^t_{i,j}\bigr)\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
-  \]
-  となる．ここで $\dfrac{\partial F}{\partial P_{i,j}} = C_{i,j} + \varepsilon\log P_{i,j}$（注意~\ref{rem:sem-entropy-convention}），$\dfrac{dP^t_{i,j}}{dt} = a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}$ を用いた．
+    &= \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt} \\
+    &= \sum_{i,j}
+       \frac{\partial}{\partial P_{i,j}}\Bigl( \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\!\sum_{k,l}\varphi(P_{k,l}) \Bigr)\bigg|_{\mathbf{P} = \mathbf{P}^t}
+       \cdot \frac{d}{dt}\Bigl( (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr) \Bigr) \\
+    &= \sum_{i,j} \bigl( C_{i,j} + \varepsilon\log P^t_{i,j} \bigr)\bigl( a_i b_j - (\mathbf{P}_\varepsilon)_{i,j} \bigr)
+  \end{align*}
+  となる（$\partial F/\partial P_{i,j}$ の計算で $\varphi'(x) = \log x$，注意~\ref{rem:sem-entropy-convention} を用いた）．
   $t \to 0+$ で各項を見ると，$(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項は $\log P^t_{i,j} \to \log (\mathbf{P}_\varepsilon)_{i,j}$ ゆえ有限にとどまり，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項は $P^t_{i,j} = t\,a_i b_j$ より
   \[
     \bigl(C_{i,j} + \varepsilon\log(t\,a_i b_j)\bigr)\,a_i b_j \xrightarrow{\ t \to 0+\ } -\infty
