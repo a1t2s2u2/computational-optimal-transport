@@ -326,8 +326,11 @@
 
 \begin{proof}
   $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} + \varepsilon\sum_{i,j}\varphi(P_{i,j})$，$\varphi(x) = x\log x - x$（定義~\ref{def:sem-entropic-ot}）とおく．
-  背理法により，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ なる成分が少なくとも一つあると仮定する．
-  独立結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ は，$\sum_i a_i = \sum_j b_j = 1$ と $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$ より
+  $\mathbf{P}_\varepsilon$ は $F$ の最小点だから，実行可能点でこれより $F$ が小さいものが一つでも見つかれば矛盾する．これを目指す．
+  背理法として，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ なる成分が少なくとも一つあると仮定する．
+
+  そのような「より小さい点」を，$\mathbf{P}_\varepsilon$ を全成分が正の実行可能点の方へ少し動かして作る．
+  動かす先として独立結合 $\mathbf{Q} \defeq \mathbf{a}\mathbf{b}^\top$ をとると，$\sum_i a_i = \sum_j b_j = 1$ と $\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$ より
   \[
     \mathbf{Q}\ones_m = \mathbf{a}, \qquad
     \mathbf{Q}^\top\ones_n = \mathbf{b}, \qquad
@@ -340,11 +343,18 @@
     P^t_{i,j} = (\mathbf{P}_\varepsilon)_{i,j} + t\bigl(a_i b_j - (\mathbf{P}_\varepsilon)_{i,j}\bigr)
     \qquad (t \in [0,1])
   \]
-  も実行可能である．$t > 0$ ならば次の量の符号は $F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)$ の符号に等しいので，これを $t \to 0+$ で評価する：
-  \begin{align*}
+  はすべて実行可能である．目標は，小さい $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$ を示すこと（動かすと $F$ が下がること）である．
+
+  \medskip
+  これを差 $F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)$ の符号で直接見ようとすると，$t \to 0+$ で $\mathbf{P}^t \to \mathbf{P}_\varepsilon$ ゆえ差が $0$ に潰れて符号が読めない．
+  そこで「動かした量 $t$ あたりの変化」を見る：$t > 0$ ゆえこれは差と同符号で，かつ $0$ に潰れず $t \to 0+$ で確定した極限をもつ．$\inner{\mathbf{C}}{\cdot}$ の線形性より
+  \[
     \frac{F(\mathbf{P}^t) - F(\mathbf{P}_\varepsilon)}{t}
-      &= \inner{\mathbf{C}}{\mathbf{Q} - \mathbf{P}_\varepsilon}
-       + \varepsilon\sum_{i,j} \frac{\varphi(P^t_{i,j}) - \varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr)}{t}, \\
+    = \inner{\mathbf{C}}{\mathbf{Q} - \mathbf{P}_\varepsilon}
+    + \varepsilon\sum_{i,j} \frac{\varphi(P^t_{i,j}) - \varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr)}{t} .
+  \]
+  和の各項の $t \to 0+$ での挙動は，その成分で $\varphi$ が滑らかか，境界 $0$ にいるかで分かれる：
+  \begin{align*}
     (\mathbf{P}_\varepsilon)_{i,j} > 0 \colon\quad
       \frac{\varphi(P^t_{i,j}) - \varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr)}{t}
       &\xrightarrow{\ t \to 0+\ }
@@ -354,8 +364,8 @@
       \frac{\varphi(P^t_{i,j}) - \varphi\bigl((\mathbf{P}_\varepsilon)_{i,j}\bigr)}{t}
       &= a_i b_j\bigl(\log(t\,a_i b_j) - 1\bigr) \xrightarrow{\ t \to 0+\ } -\infty .
   \end{align*}
-  第 2 行は $\varphi$ が $(\mathbf{P}_\varepsilon)_{i,j} > 0$ で微分可能（$\varphi'(x) = \log x$，注意~\ref{rem:sem-entropy-convention}）なこと，
-  第 3 行は $\varphi(0) = 0$（注意~\ref{rem:sem-phi-continuous}）と $P^t_{i,j} = t\,a_i b_j$ による．
+  正の成分では $\varphi$ が微分可能（$\varphi'(x) = \log x$，注意~\ref{rem:sem-entropy-convention}），ゼロ成分では $\varphi(0) = 0$（注意~\ref{rem:sem-phi-continuous}）と $P^t_{i,j} = t\,a_i b_j$ を用いた．
+  ゼロ成分の項が発散するのは，負エントロピーの傾き $\log$ が境界 $0$ で $-\infty$ に落ちるからであり，これが証明の要である．
   右辺第 1 項は定数，$(\mathbf{P}_\varepsilon)_{i,j} > 0$ の項の和は有限値に収束し，$(\mathbf{P}_\varepsilon)_{i,j} = 0$ の項の和は（仮定よりこれに少なくとも一項あり）$-\infty$ に発散する．
   $+\infty$ に発散する項はないので，
   \[
