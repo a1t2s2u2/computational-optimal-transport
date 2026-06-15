@@ -377,8 +377,7 @@
     \qquad\text{すなわち}\qquad
     \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
   \]
-  と書ける（対角行列 $\diag(\cdot)$ は定義~\ref{def:sem-diag}）．スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，$\lambda > 0$ による
-  置き換え $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ を除いて一意である．
+  と書ける（対角行列 $\diag(\cdot)$ は定義~\ref{def:sem-diag}）．
 \end{proposition}
 
 \begin{proof}
@@ -398,10 +397,20 @@
     \qquad\text{すなわち}\qquad
     \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v}) .
   \]
-
-  自由度については，任意の $\lambda > 0$ で $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ ゆえ $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
-  逆に，$w_{i,j} \defeq u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ は $\mathbf{P}_\varepsilon$ から確定し，比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らないから $\mathbf{u}$ は正の定数倍を除いて一意，$v_j = w_{i,j} / u_i$ も定まる．よって自由度は $\lambda > 0$ のみである．
 \end{proof}
+
+\begin{remark}{スケーリングベクトルの一意性（定数倍の自由度）}{sem-entropic-uv-freedom}
+  最適解 $\mathbf{P}_\varepsilon$ 自体は一意だが，その分解を与えるスケーリングベクトル
+  $(\mathbf{u}, \mathbf{v})$ は一意でない．任意の $\lambda > 0$ に対し
+  \[
+    (\lambda u_i)\, K_{i,j}\, (\lambda^{-1} v_j) = u_i\, K_{i,j}\, v_j = (\mathbf{P}_\varepsilon)_{i,j}
+  \]
+  ゆえ $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
+  逆にこれが唯一の自由度である：$w_{i,j} \defeq u_i v_j = (\mathbf{P}_\varepsilon)_{i,j}/K_{i,j} > 0$ は
+  $\mathbf{P}_\varepsilon$ から確定し，比 $u_i/u_{i'} = w_{i,j}/w_{i',j}$ が $j$ に依らないことから
+  $\mathbf{u}$ は正の定数倍を除いて一意で，$v_j = w_{i,j}/u_i$ も定まる．
+  この 1 パラメータの自由度は，次章で Sinkhorn の収束を射影空間上で論じる際の鍵となる．
+\end{remark}
 
 \begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
   上の停留条件 $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$ は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
