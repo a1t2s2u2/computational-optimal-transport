@@ -116,7 +116,7 @@
     \varphi(x_2) - \varphi(x^*) = \varphi'(c_2)\,(x_2 - x^*)
   \]
   をみたす $c_1$（$x_1$ と $x^*$ の間），$c_2$（$x^*$ と $x_2$ の間）が存在する．
-  $x_1 = 0$ のときも $c_1 \in (0, x^*)$ は内点なので $\varphi'(c_1) = \log c_1$ は定義される．
+  $x_1 = 0$ のときも $c_1 \in (0, x^*)$ は $0$ より大きいので $\varphi'(c_1) = \log c_1$ は定義される．
 
   $x^* = \lambda x_1 + (1-\lambda)x_2$ より
   $x_1 - x^* = (1-\lambda)(x_1 - x_2)$,
@@ -321,7 +321,7 @@
   \[
     (\mathbf{P}_\varepsilon)_{i,j} > 0 \qquad (\forall i, j).
   \]
-  すなわちどの成分も $0$ をとらず，不等式制約 $\mathbf{P} \geq 0$ が等号で活性化する成分は一つもない．
+  すなわちどの成分も $0$ をとらず，不等式制約 $\mathbf{P} \geq 0$ が等号で効く成分は一つもない．
 \end{lemma}
 
 \begin{proof}
@@ -378,21 +378,20 @@
   \]
   と書ける．ここで $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は Gibbs カーネル
   （定義~\ref{def:sem-gibbs-kernel}）である．
-  $\mathbf{P}_\varepsilon$ は一意であり，スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，
-  任意の $\lambda > 0$ による置き換え $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$
+  スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，置き換え
+  $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$（$\lambda > 0$）
   の自由度を除いて一意に定まる．
 \end{proposition}
 
 \begin{proof}
-  \textbf{スケーリング形．}
-  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は $\Rpos^{n \times m}$ の内点にあり，非負制約 $\mathbf{P} \geq 0$ は不活性で，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
+  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
   命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元であり，定義~\ref{def:sem-kl-divergence} より
   \[
     \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K}) = \log\frac{P_{i,j}}{K_{i,j}} .
   \]
-  制約はアフィンだから，内点の最小元で Lagrange の 1 階条件が成り立つ．行和・列和制約に対応する乗数 $\alpha \in \R^n$, $\beta \in \R^m$ により
+  これらの等式制約は $\mathbf{P}$ の成分について 1 次式だから，全成分が正の最小元 $\mathbf{P}_\varepsilon$ で Lagrange の 1 階条件が成り立つ．行和・列和の制約に対応する乗数 $\alpha \in \R^n$, $\beta \in \R^m$ により
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j),
+    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j).
   \]
   両辺を指数化し $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
   \[
@@ -401,10 +400,8 @@
     \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v}) .
   \]
 
-  \textbf{一意性．}
-  $\mathbf{P}_\varepsilon$ の一意性は命題~\ref{prop:sem-entropic-existence-unique} による．
-  $(\mathbf{u}, \mathbf{v})$ については，任意の $\lambda > 0$ に対し $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ ゆえ $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
-  逆に，$w_{i,j} \defeq u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ は確定し，比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らないから，$\mathbf{u}$ は正の定数倍を除いて一意で，$v_j = w_{i,j} / u_i$ も定まる．よって自由度は $\lambda$ のみである．
+  自由度については，任意の $\lambda > 0$ で $(\lambda u_i)(\lambda^{-1} v_j) = u_i v_j$ ゆえ $(\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ も同じ $\mathbf{P}_\varepsilon$ を与える．
+  逆に，$w_{i,j} \defeq u_i v_j = (\mathbf{P}_\varepsilon)_{i,j} / K_{i,j} > 0$ は $\mathbf{P}_\varepsilon$ から確定し，比 $u_i / u_{i'} = w_{i,j} / w_{i',j}$ は $j$ に依らないから $\mathbf{u}$ は正の定数倍を除いて一意，$v_j = w_{i,j} / u_i$ も定まる．よって自由度は $\lambda > 0$ のみである．
 \end{proof}
 
 \begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
