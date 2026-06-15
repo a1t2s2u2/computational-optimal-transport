@@ -383,8 +383,12 @@
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正である．
   Lagrange の定理（定理~\ref{thm:sem-lagrange-foc}）は $\R^N$ 上の関数に対する主張なので，
-  ここでは $N=nm$ とし，$\R^{nm}$ の点を
-  $\mathbf{P}=(P_{i,j})_{1\leq i\leq n,\ 1\leq j\leq m}$ と行列風に添字づけて扱う．
+  ここでは $N=nm$ とする．厳密には $x \in \R^{nm}$ の第 $(i-1)m+j$ 成分を
+  \[
+    x_{(i-1)m+j} = P_{i,j} \qquad (1\leq i\leq n,\ 1\leq j\leq m)
+  \]
+  と書く．以後はこの $x$ を，二重添字をもつ
+  $\mathbf{P}=(P_{i,j})_{i,j}$ と表す．
   したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約 $\mathbf{P} \geq 0$ は自動的に満たされるので，
   $\mathbf{P}_\varepsilon$ は開集合
   \[
