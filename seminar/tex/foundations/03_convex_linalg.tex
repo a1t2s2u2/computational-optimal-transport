@@ -150,34 +150,34 @@
 \end{proof}
 
 \begin{theorem}{等式制約付き最小化の 1 階必要条件（Lagrange の未定乗数法）}{sem-lagrange-foc}
-  $U \subseteq \R^N$ を開集合，$f \colon U \to \R$ を微分可能な関数とし，
-  $\mathbf{A} \in \R^{r \times N}$, $\mathbf{c} \in \R^r$ による等式制約の集合
+  $U \subseteq \R^N$ を開集合，$f \colon U \to \R$ を微分可能な関数とする．
+  ベクトル $\mathbf{a}_1, \dots, \mathbf{a}_r \in \R^N$ と実数 $c_1, \dots, c_r$ による
+  $r$ 個の 1 次式の等式制約
   \[
-    S \defeq \{\, \mathbf{x} \in U \mid \mathbf{A}\mathbf{x} = \mathbf{c} \,\}
+    \mathbf{a}_k^\top \mathbf{x} = c_k \qquad (k = 1, \dots, r)
   \]
-  を考える（各制約 $\mathbf{a}_k^\top \mathbf{x} = c_k$ は $\mathbf{x}$ について 1 次式．
-  $\mathbf{a}_k^\top$ は $\mathbf{A}$ の第 $k$ 行）．
-  $f$ が点 $\mathbf{x}^* \in S$ で $S$ 上の局所最小値をとるならば，
-  ある乗数 $\mu \in \R^r$ が存在して
+  の下で，$f$ が点 $\mathbf{x}^* \in U$ で局所最小値をとるとする．
+  このとき，ある実数 $\mu_1, \dots, \mu_r$ が存在して
   \[
-    \nabla f(\mathbf{x}^*) = \mathbf{A}^\top \mu = \sum_{k=1}^{r} \mu_k\, \mathbf{a}_k
+    \nabla f(\mathbf{x}^*) = \sum_{k=1}^{r} \mu_k\, \mathbf{a}_k
   \]
-  が成り立つ．乗数 $\mu$ は，行 $\mathbf{a}_1, \dots, \mathbf{a}_r$ が
-  1 次独立でなくても存在する（ただしその場合は一意とは限らない）．
+  が成り立つ．ここで $\nabla f \defeq \bigl(\tfrac{\partial f}{\partial x_1}, \dots, \tfrac{\partial f}{\partial x_N}\bigr)^\top$
+  は $f$ の\textbf{勾配}，すなわち各変数による偏微分を並べたベクトルである．
+  制約ベクトル $\mathbf{a}_k$ が 1 次独立でなくても乗数は存在する（ただし一意とは限らない）．
 \end{theorem}
 
 \begin{proof}
-  制約を保つ方向，すなわち $\mathbf{A}\mathbf{d} = \mathbf{0}$ をみたす任意の $\mathbf{d} \in \R^N$ をとる．
-  $U$ は開集合で $\mathbf{x}^* \in U$ だから，十分小さい $|t|$ では $\mathbf{x}^* + t\mathbf{d} \in U$ であり，
-  $\mathbf{A}(\mathbf{x}^* + t\mathbf{d}) = \mathbf{A}\mathbf{x}^* + t\,\mathbf{A}\mathbf{d} = \mathbf{c}$ ゆえ
-  $\mathbf{x}^* + t\mathbf{d} \in S$ にとどまる．
+  すべての制約を保つ方向，すなわち各 $k$ で $\mathbf{a}_k^\top \mathbf{d} = 0$ をみたす任意の
+  $\mathbf{d} \in \R^N$ をとる．$U$ は開集合で $\mathbf{x}^* \in U$ だから，十分小さい $|t|$ では
+  $\mathbf{x}^* + t\mathbf{d} \in U$ であり，
+  $\mathbf{a}_k^\top(\mathbf{x}^* + t\mathbf{d}) = c_k + t\,\mathbf{a}_k^\top\mathbf{d} = c_k$ ゆえ
+  各制約をみたしたままである．
   1 変数関数 $g(t) \defeq f(\mathbf{x}^* + t\mathbf{d})$ は $t = 0$ で局所最小値をとり，
-  $f$ の微分可能性と連鎖律より $t = 0$ で微分可能で
-  $g'(0) = \nabla f(\mathbf{x}^*)^\top \mathbf{d}$ だから，$g'(0) = 0$，すなわち
-  $\nabla f(\mathbf{x}^*)^\top \mathbf{d} = 0$ を得る．
-  $\mathbf{d}$ は $\mathbf{A}\mathbf{d} = \mathbf{0}$ をみたす任意のベクトルだったから，
-  $\nabla f(\mathbf{x}^*)$ は部分空間 $\{\mathbf{d} \in \R^N : \mathbf{A}\mathbf{d} = \mathbf{0}\}$ の
-  すべての元と直交する．その直交補空間は $\mathbf{A}$ の行が張る空間（$\mathbf{A}^\top$ の像）に
-  等しい（線形代数の基本事実；行の 1 次独立性は不要）から，
-  ある $\mu \in \R^r$ により $\nabla f(\mathbf{x}^*) = \mathbf{A}^\top \mu$ と書ける．
+  $f$ の微分可能性と連鎖律より $g'(0) = \nabla f(\mathbf{x}^*)^\top \mathbf{d}$ だから，$g'(0) = 0$，
+  すなわち $\nabla f(\mathbf{x}^*)^\top \mathbf{d} = 0$ を得る．
+  つまり $\nabla f(\mathbf{x}^*)$ は，$\mathbf{a}_1, \dots, \mathbf{a}_r$ のすべてと直交するベクトル
+  $\mathbf{d}$ とことごとく直交する．これは $\nabla f(\mathbf{x}^*)$ が
+  $\mathbf{a}_1, \dots, \mathbf{a}_r$ の張る空間に属することと同値（線形代数の基本事実；
+  $\mathbf{a}_k$ の 1 次独立性は不要）だから，ある実数 $\mu_1, \dots, \mu_r$ により
+  $\nabla f(\mathbf{x}^*) = \sum_{k=1}^{r} \mu_k \mathbf{a}_k$ と書ける．
 \end{proof}
