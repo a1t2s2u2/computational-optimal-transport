@@ -382,7 +382,8 @@
 
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正である．
-  したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約は自動的に満たされるので，残る制約は周辺条件だけである．
+  したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約は自動的に満たされるので，
+  局所的には周辺条件だけを等式制約として扱えばよい．
   命題~\ref{prop:sem-entropic-kl-projection} より，目的関数は
   \[
     G(\mathbf{P})
@@ -402,8 +403,10 @@
     U \defeq \{\mathbf{P}\in\R^{n\times m}\mid P_{i,j}>0\ (\forall i,j)\}
   \]
   上で微分可能である．
+  条件 $P_{i,j}>0$ は，この開集合 $U$ の中で考えるための条件であり，
+  Lagrange 条件に渡す等式制約ではない．
 
-  残る制約は，行和制約と列和制約
+  Lagrange 条件に渡す等式制約は，行和制約と列和制約
   \[
     \sum_{\ell=1}^{m} P_{i,\ell} = a_i
     \qquad (i=1,\dots,n),
