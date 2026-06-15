@@ -415,9 +415,16 @@
     \qquad (j=1,\dots,m)
   \]
   である．よって定理~\ref{thm:sem-lagrange-foc-matrix} をこの $n+m$ 個の 1 次等式制約に 1 回適用すると，
-  行制約に対応する実数 $\alpha_1,\dots,\alpha_n$ と
-  列制約に対応する実数 $\beta_1,\dots,\beta_m$ が存在する．
-  その条件を $(i,j)$ 成分で書くと
+  定理の乗数 $\mu_1,\dots,\mu_{n+m}$ が存在する．
+  制約を上の順に並べているので，最初の $n$ 個は行制約に対応し，
+  残りの $m$ 個は列制約に対応する．そこで
+  \[
+    \alpha_i \defeq \mu_i \quad (i=1,\dots,n),
+    \qquad
+    \beta_j \defeq \mu_{n+j} \quad (j=1,\dots,m)
+  \]
+  と名前を付ける．定理の条件を $(i,j)$ 成分で読むと，各制約左辺の
+  $P_{i,j}$ による係数が現れるので，
   \begin{align*}
     \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
     &=
