@@ -368,19 +368,17 @@
 
 \begin{proposition}{正則化解の形（スケーリング形）}{sem-entropic-scaling-form}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）
-  の下で，$\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解
-  $\mathbf{P}_\varepsilon$ は，ある $\mathbf{u} \in \Rpos^n$, $\mathbf{v} \in \Rpos^m$
-  を用いて
+  の下で，Gibbs カーネルを $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$
+  （定義~\ref{def:sem-gibbs-kernel}）とおく．このとき
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の最適解 $\mathbf{P}_\varepsilon$ は，
+  ある $\mathbf{u} \in \Rpos^n$, $\mathbf{v} \in \Rpos^m$ を用いて
   \[
     (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
     \qquad\text{すなわち}\qquad
     \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})
   \]
-  と書ける．ここで $\mathbf{K} = \exp(-\mathbf{C}/\varepsilon)$ は Gibbs カーネル
-  （定義~\ref{def:sem-gibbs-kernel}）である．
-  スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，置き換え
-  $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$（$\lambda > 0$）
-  の自由度を除いて一意に定まる．
+  と書ける．スケーリングベクトル $(\mathbf{u}, \mathbf{v})$ は，$\lambda > 0$ による
+  置き換え $(\mathbf{u}, \mathbf{v}) \mapsto (\lambda\mathbf{u}, \lambda^{-1}\mathbf{v})$ を除いて一意である．
 \end{proposition}
 
 \begin{proof}
