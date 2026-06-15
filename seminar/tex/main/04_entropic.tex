@@ -382,20 +382,15 @@
 
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
-  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元であり，定義~\ref{def:sem-kl-divergence} より
+  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元である．
+  等式制約（$\mathbf{P}$ の成分について 1 次式）つきのこの最小化に，全成分が正の最小元 $\mathbf{P}_\varepsilon$ で Lagrange の 1 階必要条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．行和制約に乗数 $\alpha \in \R^n$，列和制約に乗数 $\beta \in \R^m$ を対応させると，1 階条件は
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K}) = \log\frac{P_{i,j}}{K_{i,j}} .
+    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K}) = \alpha_i + \beta_j \qquad (\forall i, j)
   \]
-  この最小化に Lagrange の 1 階条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．$\mathbf{P}$ の $nm$ 個の成分を変数とみると，全成分が正の点は開集合に属し，制約 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ は各成分について 1 次式だから，定理の仮定をみたす．定理より，最小元 $\mathbf{P}_\varepsilon$ では\emph{目的関数の勾配が各制約の勾配の線形結合（係数が乗数）に等しい}．いま
-  \begin{itemize}
-    \item 目的関数 $\KLD(\cdot\|\mathbf{K})$ の勾配は，成分 $(i,j)$ が $\log\bigl(P_{i,j}/K_{i,j}\bigr)$（上式）；
-    \item 行和制約 $\sum_j P_{i,j} = a_i$ の勾配は第 $i$ 行のみが $1$，列和制約 $\sum_i P_{i,j} = b_j$ の勾配は第 $j$ 列のみが $1$．
-  \end{itemize}
-  行和制約の乗数を $\alpha \in \R^n$，列和制約の乗数を $\beta \in \R^m$ とおくと，成分 $(i,j)$ に $1$ をもつ制約は第 $i$ 行和と第 $j$ 列和の二つだけだから，1 階条件の $(i,j)$ 成分は
+  である（成分 $P_{i,j}$ は第 $i$ 行和・第 $j$ 列和の二つの制約だけに現れ，その乗数 $\alpha_i, \beta_j$ を受け取る）．定義~\ref{def:sem-kl-divergence} より左辺は $\log(P_{i,j}/K_{i,j})$ だから
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j)
+    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j) .
   \]
-  となる．
   両辺を指数化し $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
   \[
     (\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j,
