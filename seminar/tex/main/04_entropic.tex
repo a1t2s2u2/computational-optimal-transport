@@ -403,44 +403,34 @@
   \]
   上で微分可能である．
 
-  行和制約と列和制約の係数行列を
+  残る制約は，行和制約と列和制約
   \[
-    (\mathbf{A}_i)_{p,\ell} \defeq
-    \begin{cases}
-      1 & (p=i),\\
-      0 & (p\neq i),
-    \end{cases}
+    \sum_{\ell=1}^{m} P_{i,\ell} = a_i
+    \qquad (i=1,\dots,n),
     \qquad
-    (\mathbf{B}_j)_{p,\ell} \defeq
-    \begin{cases}
-      1 & (\ell=j),\\
-      0 & (\ell\neq j)
-    \end{cases}
+    \sum_{p=1}^{n} P_{p,j} = b_j
+    \qquad (j=1,\dots,m)
   \]
-  と定める．周辺条件は
-  \[
-    \inner{\mathbf{A}_i}{\mathbf{P}} = a_i,
-    \qquad
-    \inner{\mathbf{B}_j}{\mathbf{P}} = b_j
-  \]
-  と書ける．よって定理~\ref{thm:sem-lagrange-foc-matrix} をこの $n+m$ 個の制約に 1 回適用すると，
-  ある実数 $\alpha_1,\dots,\alpha_n$ と $\beta_1,\dots,\beta_m$ が存在して
-  \[
-    \nabla G(\mathbf{P}_\varepsilon)
-    =
-    \sum_{i'=1}^{n}\alpha_{i'}\,\mathbf{A}_{i'}
-    +
-    \sum_{j'=1}^{m}\beta_{j'}\,\mathbf{B}_{j'}
-  \]
-  が成り立つ．この $(i,j)$ 成分を読むと
-  $\mathbf{A}_{i'}$ は $i'=i$ のときだけ，
-  $\mathbf{B}_{j'}$ は $j'=j$ のときだけ $(i,j)$ 成分が $1$ なので，
-  \[
+  である．よって定理~\ref{thm:sem-lagrange-foc-matrix} をこの $n+m$ 個の 1 次等式制約に 1 回適用すると，
+  行制約に対応する実数 $\alpha_1,\dots,\alpha_n$ と
+  列制約に対応する実数 $\beta_1,\dots,\beta_m$ が存在する．
+  その条件を $(i,j)$ 成分で書くと
+  \begin{align*}
     \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
-    =
+    &=
+    \sum_{i'=1}^{n}\alpha_{i'}\,
+    \frac{\partial}{\partial P_{i,j}}
+    \left(\sum_{\ell=1}^{m}P_{i',\ell}\right)
+    +
+    \sum_{j'=1}^{m}\beta_{j'}\,
+    \frac{\partial}{\partial P_{i,j}}
+    \left(\sum_{p=1}^{n}P_{p,j'}\right) \\
+    &=
     \alpha_i+\beta_j
     \qquad (\forall i,j).
-  \]
+  \end{align*}
+  最後の等号では，行和の左辺は $i'=i$ のときだけ $P_{i,j}$ を含み，
+  列和の左辺は $j'=j$ のときだけ $P_{i,j}$ を含むことを用いた．
   一方，$G$ の定義から
   \[
     \frac{\partial G}{\partial P_{i,j}}(\mathbf{P})
