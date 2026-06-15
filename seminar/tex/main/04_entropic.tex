@@ -433,9 +433,18 @@
     &&(c_{n+j}=b_j,\ j=1,\dots,m).
   \end{aligned}
   \]
-  ここで $\mathbf{A}_k$ は定理中の係数行列を表す記号であり，
-  $\inner{\cdot}{\cdot}$ はフロベニウス内積，すなわち成分ごとの積の和である．
-  たとえば行制約では，定理中の $\mathbf{A}_i$ は第 $i$ 行だけが $1$ の係数行列なので，
+  ここで $\mathbf{A}_k$ は定理中の係数行列を表す記号である．
+  行制約に対応する定理中の $\mathbf{A}_i$ は
+  第 $i$ 行だけが $1$ の行列，すなわち
+  \[
+    (\mathbf{A}_i)_{p,\ell}
+    =
+    \begin{cases}
+      1 & (p=i),\\
+      0 & (p\neq i)
+    \end{cases}
+  \]
+  と選んでいる．したがって
   \[
     \inner{\mathbf{A}_i}{\mathbf{P}}
     =
@@ -443,7 +452,18 @@
     =
     \sum_{\ell=1}^{m}P_{i,\ell}
   \]
-  となる．列制約も同様である．
+  となる．同様に，列制約に対応する定理中の $\mathbf{A}_{n+j}$ は
+  第 $j$ 列だけが $1$ の行列，すなわち
+  \[
+    (\mathbf{A}_{n+j})_{p,\ell}
+    =
+    \begin{cases}
+      1 & (\ell=j),\\
+      0 & (\ell\neq j)
+    \end{cases}
+  \]
+  と選ぶので，
+  $\inner{\mathbf{A}_{n+j}}{\mathbf{P}}=\sum_{p=1}^{n}P_{p,j}$ となる．
   以下の計算では制約左辺を直接偏微分する．
   よって定理~\ref{thm:sem-lagrange-foc-matrix} をこの $n+m$ 個の 1 次等式制約に 1 回適用すると，
   定理の乗数 $\mu_1,\dots,\mu_{n+m}$ が存在する．
