@@ -181,3 +181,40 @@
   $\mathbf{a}_k$ の 1 次独立性は不要）だから，ある実数 $\mu_1, \dots, \mu_r$ により
   $\nabla f(\mathbf{x}^*) = \sum_{k=1}^{r} \mu_k \mathbf{a}_k$ と書ける．
 \end{proof}
+
+\begin{theorem}{行列変数版：等式制約付き最小化の 1 階必要条件}{sem-lagrange-foc-matrix}
+  $U \subseteq \R^{n\times m}$ を開集合，$F \colon U \to \R$ を微分可能な関数とする．
+  行列 $\mathbf{A}_1,\dots,\mathbf{A}_r \in \R^{n\times m}$ と実数 $c_1,\dots,c_r$ による
+  $r$ 個の 1 次式の等式制約
+  \[
+    \inner{\mathbf{A}_k}{\mathbf{P}} = c_k
+    \qquad (k=1,\dots,r)
+  \]
+  の下で，$F$ が点 $\mathbf{P}^* \in U$ で局所最小値をとるとする．
+  このとき，ある実数 $\mu_1,\dots,\mu_r$ が存在して
+  \[
+    \nabla F(\mathbf{P}^*) = \sum_{k=1}^{r}\mu_k\,\mathbf{A}_k
+  \]
+  が成り立つ．ここで
+  \[
+    \nabla F(\mathbf{P}^*)
+    \defeq
+    \left(\frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^*)\right)_{i,j}
+  \]
+  は行列成分で偏微分を並べた行列である．
+  制約行列 $\mathbf{A}_k$ が 1 次独立でなくても乗数は存在する（ただし一意とは限らない）．
+\end{theorem}
+
+\begin{proof}
+  行列の成分を行ごとに並べることで，$\R^{n\times m}$ を $\R^{nm}$ と同一視する．
+  この同一視の下で，制約
+  $\inner{\mathbf{A}_k}{\mathbf{P}}=c_k$ は
+  $\operatorname{vec}(\mathbf{A}_k)^\top\operatorname{vec}(\mathbf{P})=c_k$ と書ける．
+  よって定理~\ref{thm:sem-lagrange-foc} を適用すると，
+  ある $\mu_1,\dots,\mu_r$ が存在する．
+  ベクトルとしての勾配を行列の形に戻すと，
+  \[
+    \nabla F(\mathbf{P}^*) = \sum_{k=1}^{r}\mu_k\,\mathbf{A}_k
+  \]
+  が成り立つ．
+\end{proof}
