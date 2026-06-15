@@ -383,11 +383,23 @@
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
   命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元である．
-  等式制約（$\mathbf{P}$ の成分について 1 次式）つきのこの最小化に，全成分が正の最小元 $\mathbf{P}_\varepsilon$ で Lagrange の 1 階必要条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．行和制約に乗数 $\alpha \in \R^n$，列和制約に乗数 $\beta \in \R^m$ を対応させると，1 階条件は
+  この等式制約を成分で書くと
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K}) = \alpha_i + \beta_j \qquad (\forall i, j)
+    \sum_{l} P_{i,l} = a_i \quad (i = 1, \dots, n),
+    \qquad
+    \sum_{k} P_{k,j} = b_j \quad (j = 1, \dots, m)
   \]
-  である（成分 $P_{i,j}$ は第 $i$ 行和・第 $j$ 列和の二つの制約だけに現れ，その乗数 $\alpha_i, \beta_j$ を受け取る）．定義~\ref{def:sem-kl-divergence} より左辺は $\log(P_{i,j}/K_{i,j})$ だから
+  であり，いずれも $\mathbf{P}$ の成分について 1 次式である．全成分が正の最小元 $\mathbf{P}_\varepsilon$ にこの等式制約つき最小化の 1 階必要条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．定理より，最小元では $\KLD$ の勾配が各制約の勾配を乗数倍して足したものに等しい．制約 $\sum_l P_{i,l} = a_i$ の乗数を $\alpha_i$，制約 $\sum_k P_{k,j} = b_j$ の乗数を $\beta_j$ とおくと，成分 $(i,j)$ では
+  \[
+    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K})
+    = \sum_{i'} \alpha_{i'} \frac{\partial}{\partial P_{i,j}}\sum_{l} P_{i',l}
+    + \sum_{j'} \beta_{j'} \frac{\partial}{\partial P_{i,j}}\sum_{k} P_{k,j'}
+  \]
+  となる．右辺で $\sum_l P_{i',l}$ を $P_{i,j}$ で偏微分すると $i'=i$ のとき $1$・他は $0$，$\sum_k P_{k,j'}$ では $j'=j$ のとき $1$・他は $0$ だから，和に残るのは $\alpha_i$ と $\beta_j$ のみであり
+  \[
+    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K}) = \alpha_i + \beta_j \qquad (\forall i, j) .
+  \]
+  定義~\ref{def:sem-kl-divergence} より左辺は $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr)$ だから
   \[
     \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j) .
   \]
