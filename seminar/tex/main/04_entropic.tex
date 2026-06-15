@@ -381,34 +381,113 @@
 \end{proposition}
 
 \begin{proof}
-  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
-  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元である．
-  この等式制約を成分で書くと
+  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正である．
+  以下では行列 $\mathbf{P}$ を，その $nm$ 個の成分を並べた $\R^{nm}$ の点と同一視する．
+  したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約 $\mathbf{P} \geq 0$ は自動的に満たされるので，
+  $\mathbf{P}_\varepsilon$ は開集合
   \[
-    \sum_{l} P_{i,l} = a_i \quad (i = 1, \dots, n),
+    U \defeq \{\mathbf{P} \in \R^{n\times m} \mid P_{i,j} > 0\ (\forall i,j)\}
+  \]
+  の中で，周辺条件だけを制約とする局所最小点とみなせる．
+  命題~\ref{prop:sem-entropic-kl-projection} より，ここで最小化する関数は
+  \[
+    G(\mathbf{P}) \defeq \KLD(\mathbf{P}\|\mathbf{K})
+    =
+    \sum_{i,j}
+    \left(
+      P_{i,j}\log\frac{P_{i,j}}{K_{i,j}}
+      - P_{i,j}
+      + K_{i,j}
+    \right)
+  \]
+  としてよい．この $G$ は $U$ 上で微分可能である．
+
+  周辺条件を，制約関数
+  \[
+    r_i(\mathbf{P}) \defeq \sum_{l=1}^{m} P_{i,l} - a_i \quad (i=1,\dots,n),
     \qquad
-    \sum_{k} P_{k,j} = b_j \quad (j = 1, \dots, m)
+    c_j(\mathbf{P}) \defeq \sum_{k=1}^{n} P_{k,j} - b_j \quad (j=1,\dots,m)
   \]
-  であり，いずれも $\mathbf{P}$ の成分について 1 次式である．全成分が正の最小元 $\mathbf{P}_\varepsilon$ にこの等式制約つき最小化の 1 階必要条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．定理より，最小元では $\KLD$ の勾配が各制約の勾配を乗数倍して足したものに等しい．制約 $\sum_l P_{i,l} = a_i$ の乗数を $\alpha_i$，制約 $\sum_k P_{k,j} = b_j$ の乗数を $\beta_j$ とおくと，成分 $(i,j)$ では
+  によって
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K})
-    = \sum_{i'} \alpha_{i'} \frac{\partial}{\partial P_{i,j}}\sum_{l} P_{i',l}
-    + \sum_{j'} \beta_{j'} \frac{\partial}{\partial P_{i,j}}\sum_{k} P_{k,j'}
+    r_i(\mathbf{P}) = 0,\qquad c_j(\mathbf{P}) = 0
   \]
-  となる．右辺で $\sum_l P_{i',l}$ を $P_{i,j}$ で偏微分すると $i'=i$ のとき $1$・他は $0$，$\sum_k P_{k,j'}$ では $j'=j$ のとき $1$・他は $0$ だから，和に残るのは $\alpha_i$ と $\beta_j$ のみであり
+  と書く．これらはすべて $\mathbf{P}$ の成分に関する 1 次式である．
+  行和制約と列和制約の間には 1 本の依存関係があるが，定理~\ref{thm:sem-lagrange-foc} は
+  制約ベクトルの 1 次独立性を仮定していないので，このまま適用してよい．
+
+  定理~\ref{thm:sem-lagrange-foc} より，ある実数
+  $\alpha_1,\dots,\alpha_n$ と $\beta_1,\dots,\beta_m$ が存在して
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P}_\varepsilon \| \mathbf{K}) = \alpha_i + \beta_j \qquad (\forall i, j) .
+    \nabla G(\mathbf{P}_\varepsilon)
+    =
+    \sum_{i'=1}^{n}\alpha_{i'}\,\nabla r_{i'}(\mathbf{P}_\varepsilon)
+    +
+    \sum_{j'=1}^{m}\beta_{j'}\,\nabla c_{j'}(\mathbf{P}_\varepsilon)
   \]
-  定義~\ref{def:sem-kl-divergence} より左辺は $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr)$ だから
+  が成り立つ．定理が直接与えるのはこの勾配等式である．
+  Lagrangian の記法を使うなら，これは
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j) .
+    \mathcal{L}(\mathbf{P},\alpha,\beta)
+    \defeq
+    G(\mathbf{P})
+    -
+    \sum_{i'=1}^{n}\alpha_{i'} r_{i'}(\mathbf{P})
+    -
+    \sum_{j'=1}^{m}\beta_{j'} c_{j'}(\mathbf{P})
   \]
-  両辺を指数化し $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
+  を $\mathbf{P}$ の各成分で偏微分すると，$\mathbf{P}=\mathbf{P}_\varepsilon$ で
+  すべて $0$ になる，という同値な書き換えである（上の勾配等式を左辺に移しただけ）．
+
+  この 1 階条件を成分 $(i,j)$ で見る．まず
   \[
-    (\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j,
-    \qquad\text{すなわち}\qquad
-    \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v}) .
+    \frac{\partial r_{i'}}{\partial P_{i,j}}(\mathbf{P})
+    =
+    \begin{cases}
+      1 & (i'=i),\\
+      0 & (i'\neq i),
+    \end{cases}
+    \qquad
+    \frac{\partial c_{j'}}{\partial P_{i,j}}(\mathbf{P})
+    =
+    \begin{cases}
+      1 & (j'=j),\\
+      0 & (j'\neq j).
+    \end{cases}
   \]
+  つまり $(i,j)$ 成分に効く制約は，$i$ 行目の行和制約と $j$ 列目の列和制約だけである．
+  よって
+  \[
+    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
+    =
+    \alpha_i+\beta_j
+    \qquad (\forall i,j).
+  \]
+  一方，$G$ の定義から
+  \[
+    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P})
+    =
+    \log\frac{P_{i,j}}{K_{i,j}}
+    \qquad (\mathbf{P}\in U)
+  \]
+  である．したがって
+  \[
+    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}}
+    =
+    \alpha_i+\beta_j
+    \qquad (\forall i,j).
+  \]
+  両辺を指数化し，$u_i \defeq e^{\alpha_i} > 0$，$v_j \defeq e^{\beta_j} > 0$ とおけば
+  \[
+    (\mathbf{P}_\varepsilon)_{i,j}
+    =
+    e^{\alpha_i} K_{i,j} e^{\beta_j}
+    =
+    u_i K_{i,j} v_j .
+  \]
+  これは行列表示で
+  $\mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})$
+  である．
 \end{proof}
 
 \begin{remark}{スケーリングベクトルの一意性（定数倍の自由度）}{sem-entropic-uv-freedom}
@@ -425,7 +504,7 @@
 \end{remark}
 
 \begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
-  上の停留条件 $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$ は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
+  上の 1 階条件 $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$ は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
   スケールし直すと，元のコスト $\mathbf{C}$ を用いた指数表示
   \[
     (\mathbf{P}_\varepsilon)_{i,j}
@@ -445,7 +524,7 @@
   連続版（$\X, \Y$ を Polish 空間とする）でも対応する主張が成り立ち，最適カップリング $\pi$ は
   基準測度に対する密度が $u(x)\, e^{-c(x,y)/\varepsilon}\, v(y)$ という積の形をとる．
   この問題は \textbf{Schr\"odinger 問題}（1931）と呼ばれ，離散の 1 階条件
-  $\log\bigl((\mathbf{P}_\varepsilon)_{i,j} / K_{i,j}\bigr) = \alpha_i + \beta_j$ に対応する停留条件は，
+  $\log\bigl((\mathbf{P}_\varepsilon)_{i,j} / K_{i,j}\bigr) = \alpha_i + \beta_j$ に対応する 1 階条件は，
   変分法（オイラー–ラグランジュ方程式）によって与えられる．
   本セミナーでは離散版に限って扱う．
 \end{remark}
