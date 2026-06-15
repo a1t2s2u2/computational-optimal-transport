@@ -77,6 +77,31 @@
   で定める．
 \end{definition}
 
+\begin{definition}{対角行列 $\diag(\mathbf{u})$}{sem-diag}
+  ベクトル $\mathbf{u} = (u_1, \ldots, u_n)^\top \in \R^n$ に対し，
+  その成分を対角に並べ，他の成分を $0$ とした $n \times n$ 行列を
+  \[
+    \diag(\mathbf{u}) \defeq
+    \begin{pmatrix}
+      u_1 &        & \\
+          & \ddots & \\
+          &        & u_n
+    \end{pmatrix},
+    \qquad\text{すなわち}\qquad
+    \diag(\mathbf{u})_{i,j} =
+    \begin{cases}
+      u_i & (i = j), \\
+      0   & (i \neq j)
+    \end{cases}
+  \]
+  で表す．対角行列を左右から掛けることは行・列のスケーリングにあたり，
+  $\mathbf{u} \in \R^n$, $\mathbf{v} \in \R^m$, $\mathbf{K} \in \R^{n \times m}$ に対して
+  \[
+    \bigl(\diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v})\bigr)_{i,j} = u_i\, K_{i,j}\, v_j
+  \]
+  が成り立つ（左から掛けると第 $i$ 行が $u_i$ 倍，右から掛けると第 $j$ 列が $v_j$ 倍される）．
+\end{definition}
+
 \begin{definition}{凸集合}{sem-convex}
   ベクトル空間 $V$ の部分集合 $S \subset V$ が\textbf{凸}であるとは，
   任意の $v_1, v_2 \in S$ と任意の $t \in [0,1]$ に対して
@@ -122,4 +147,37 @@
     = f(\mathbf{x})
   \]
   となり，$\mathbf{x}$ の最小性に矛盾する．
+\end{proof}
+
+\begin{theorem}{等式制約付き最小化の 1 階必要条件（Lagrange の未定乗数法）}{sem-lagrange-foc}
+  $U \subseteq \R^N$ を開集合，$f \colon U \to \R$ を微分可能な関数とし，
+  $\mathbf{A} \in \R^{r \times N}$, $\mathbf{c} \in \R^r$ による等式制約の集合
+  \[
+    S \defeq \{\, \mathbf{x} \in U \mid \mathbf{A}\mathbf{x} = \mathbf{c} \,\}
+  \]
+  を考える（各制約 $\mathbf{a}_k^\top \mathbf{x} = c_k$ は $\mathbf{x}$ について 1 次式．
+  $\mathbf{a}_k^\top$ は $\mathbf{A}$ の第 $k$ 行）．
+  $f$ が点 $\mathbf{x}^* \in S$ で $S$ 上の局所最小値をとるならば，
+  ある乗数 $\mu \in \R^r$ が存在して
+  \[
+    \nabla f(\mathbf{x}^*) = \mathbf{A}^\top \mu = \sum_{k=1}^{r} \mu_k\, \mathbf{a}_k
+  \]
+  が成り立つ．乗数 $\mu$ は，行 $\mathbf{a}_1, \dots, \mathbf{a}_r$ が
+  1 次独立でなくても存在する（ただしその場合は一意とは限らない）．
+\end{theorem}
+
+\begin{proof}
+  制約を保つ方向，すなわち $\mathbf{A}\mathbf{d} = \mathbf{0}$ をみたす任意の $\mathbf{d} \in \R^N$ をとる．
+  $U$ は開集合で $\mathbf{x}^* \in U$ だから，十分小さい $|t|$ では $\mathbf{x}^* + t\mathbf{d} \in U$ であり，
+  $\mathbf{A}(\mathbf{x}^* + t\mathbf{d}) = \mathbf{A}\mathbf{x}^* + t\,\mathbf{A}\mathbf{d} = \mathbf{c}$ ゆえ
+  $\mathbf{x}^* + t\mathbf{d} \in S$ にとどまる．
+  1 変数関数 $g(t) \defeq f(\mathbf{x}^* + t\mathbf{d})$ は $t = 0$ で局所最小値をとり，
+  $f$ の微分可能性と連鎖律より $t = 0$ で微分可能で
+  $g'(0) = \nabla f(\mathbf{x}^*)^\top \mathbf{d}$ だから，$g'(0) = 0$，すなわち
+  $\nabla f(\mathbf{x}^*)^\top \mathbf{d} = 0$ を得る．
+  $\mathbf{d}$ は $\mathbf{A}\mathbf{d} = \mathbf{0}$ をみたす任意のベクトルだったから，
+  $\nabla f(\mathbf{x}^*)$ は部分空間 $\{\mathbf{d} \in \R^N : \mathbf{A}\mathbf{d} = \mathbf{0}\}$ の
+  すべての元と直交する．その直交補空間は $\mathbf{A}$ の行が張る空間（$\mathbf{A}^\top$ の像）に
+  等しい（線形代数の基本事実；行の 1 次独立性は不要）から，
+  ある $\mu \in \R^r$ により $\nabla f(\mathbf{x}^*) = \mathbf{A}^\top \mu$ と書ける．
 \end{proof}
