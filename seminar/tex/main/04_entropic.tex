@@ -303,7 +303,7 @@
   両者の最小化問題は同じ最適解を持つ．
 \end{proof}
 
-最適解の具体的な形を導く準備として，まず最適解の全成分が正であることを示す．成分が $0$ にならないとわかれば，不等式制約 $\mathbf{P} \geq 0$ はどこも等号で効かないので無視でき，残る等式制約（周辺条件）だけに対して Lagrange の未定乗数法（定理~\ref{thm:sem-lagrange-foc}）が使える．
+最適解の具体的な形を導く準備として，まず最適解の全成分が正であることを示す．成分が $0$ にならないとわかれば，不等式制約 $\mathbf{P} \geq 0$ はどこも等号で効かないので無視でき，残る等式制約（周辺条件）だけに対して Lagrange の未定乗数法（定理~\ref{thm:sem-lagrange-foc-matrix}）が使える．
 
 \begin{lemma}{正則化解の正値性}{sem-entropic-positivity}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）の下で，
@@ -382,80 +382,73 @@
 
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正である．
-
-  Lagrange の定理（定理~\ref{thm:sem-lagrange-foc}）は $\R^N$ 上のベクトル変数に対する主張なので，
-  行列変数を明示的にベクトル変数へ直す．
-  以下，$q(i,j)\defeq (i-1)m+j$ とおき，行列変数 $\mathbf{P}$ を行ごとに並べたベクトルを
-  \[
-    \bigl(\operatorname{vec}(\mathbf{P})\bigr)_{q(i,j)} \defeq P_{i,j}
-    \qquad (i=1,\dots,n,\ j=1,\dots,m)
-  \]
-  で定める．また
-  \[
-    \mathbf{x}_\varepsilon \defeq \operatorname{vec}(\mathbf{P}_\varepsilon),
-    \qquad
-    U_x \defeq
-    \{\mathbf{x}\in\R^{nm}\mid x_{q(i,j)}>0\ (\forall i,j)\}
-  \]
-  とおく．正値性より $\mathbf{x}_\varepsilon\in U_x$ であり，その十分近くでは非負制約は自動的に満たされる．
-
+  したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約は自動的に満たされるので，残る制約は周辺条件だけである．
   命題~\ref{prop:sem-entropic-kl-projection} より，目的関数は
   \[
-    g(\mathbf{x})
+    G(\mathbf{P})
     \defeq
+    \KLD(\mathbf{P}\|\mathbf{K})
+    =
     \sum_{i,j}
     \left(
-      x_{q(i,j)}\log\frac{x_{q(i,j)}}{K_{i,j}}
-      - x_{q(i,j)}
+      P_{i,j}\log\frac{P_{i,j}}{K_{i,j}}
+      - P_{i,j}
       + K_{i,j}
     \right)
-    \qquad (\mathbf{x}\in U_x)
+    \qquad (P_{i,j}>0)
   \]
-  と書ける．すなわち $g(\operatorname{vec}(\mathbf{P}))=\KLD(\mathbf{P}\|\mathbf{K})$ であり，
-  $g$ は $U_x$ 上で微分可能である．
-  周辺条件は $\mathbf{x}$ では
+  としてよい．これは開集合
   \[
-    \sum_{l=1}^{m} x_{q(i,l)} = a_i
-    \qquad (i=1,\dots,n),
-    \qquad
-    \sum_{k=1}^{n} x_{q(k,j)} = b_j
-    \qquad (j=1,\dots,m)
+    U \defeq \{\mathbf{P}\in\R^{n\times m}\mid P_{i,j}>0\ (\forall i,j)\}
   \]
-  と書ける．したがって $\mathbf{x}_\varepsilon$ は，$U_x$ の中でこれら $n+m$ 個の 1 次等式制約の下で
-  $g$ の局所最小点である．
+  上で微分可能である．
 
-  定理~\ref{thm:sem-lagrange-foc} を，$N=nm$，$f=g$，$\mathbf{x}^*=\mathbf{x}_\varepsilon$，
-  上の $n+m$ 個の制約に対して 1 回適用する．
-  定理の $\mathbf{a}_k$ は上の各制約左辺の係数ベクトルであり，ヒストグラム $\mathbf{a}$ ではない．
-  定理の右辺 $c_k$ は，行制約では $a_i$，列制約では $b_j$ である．
-  制約ベクトルの 1 次独立性は仮定されていないので，行和制約と列和制約の間の依存関係は問題にならない．
-  上の $i$ 行目の制約と $j$ 列目の制約の係数ベクトルを，それぞれ
-  $\mathbf{e}^{\mathrm{row}}_i$，$\mathbf{e}^{\mathrm{col}}_j$ と書くと，
+  行和制約と列和制約の係数行列を
+  \[
+    (\mathbf{E}^{\mathrm{row}}_i)_{p,\ell} \defeq
+    \begin{cases}
+      1 & (p=i),\\
+      0 & (p\neq i),
+    \end{cases}
+    \qquad
+    (\mathbf{E}^{\mathrm{col}}_j)_{p,\ell} \defeq
+    \begin{cases}
+      1 & (\ell=j),\\
+      0 & (\ell\neq j)
+    \end{cases}
+  \]
+  と定める．周辺条件は
+  \[
+    \inner{\mathbf{E}^{\mathrm{row}}_i}{\mathbf{P}} = a_i,
+    \qquad
+    \inner{\mathbf{E}^{\mathrm{col}}_j}{\mathbf{P}} = b_j
+  \]
+  と書ける．よって定理~\ref{thm:sem-lagrange-foc-matrix} をこの $n+m$ 個の制約に 1 回適用すると，
   ある実数 $\alpha_1,\dots,\alpha_n$ と $\beta_1,\dots,\beta_m$ が存在して
   \[
-    \nabla g(\mathbf{x}_\varepsilon)
+    \nabla G(\mathbf{P}_\varepsilon)
     =
-    \sum_{i'=1}^{n}\alpha_{i'}\,\mathbf{e}^{\mathrm{row}}_{i'}
+    \sum_{i'=1}^{n}\alpha_{i'}\,\mathbf{E}^{\mathrm{row}}_{i'}
     +
-    \sum_{j'=1}^{m}\beta_{j'}\,\mathbf{e}^{\mathrm{col}}_{j'}
+    \sum_{j'=1}^{m}\beta_{j'}\,\mathbf{E}^{\mathrm{col}}_{j'}
   \]
-  が成り立つ．この勾配等式の $q(i,j)$ 番目の成分を見ると，その座標に係数 $1$ をもつ制約は
-  $i$ 行目と $j$ 列目だけなので，
+  が成り立つ．この $(i,j)$ 成分を読むと
+  $\mathbf{E}^{\mathrm{row}}_{i'}$ は $i'=i$ のときだけ，
+  $\mathbf{E}^{\mathrm{col}}_{j'}$ は $j'=j$ のときだけ $(i,j)$ 成分が $1$ なので，
   \[
-    \frac{\partial g}{\partial x_{q(i,j)}}(\mathbf{x}_\varepsilon)
+    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
     =
     \alpha_i+\beta_j
     \qquad (\forall i,j).
   \]
-  一方，$g$ の定義から
+  一方，$G$ の定義から
   \[
-    \frac{\partial g}{\partial x_{q(i,j)}}(\mathbf{x})
+    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P})
     =
-    \log\frac{x_{q(i,j)}}{K_{i,j}}
-    \qquad (\mathbf{x}\in U_x)
+    \log\frac{P_{i,j}}{K_{i,j}}
+    \qquad (\mathbf{P}\in U)
   \]
-  である．これを $\mathbf{x}=\mathbf{x}_\varepsilon$ に適用し，
-  $(\mathbf{x}_\varepsilon)_{q(i,j)}=(\mathbf{P}_\varepsilon)_{i,j}$ を用いると
+  である．したがって
   \[
     \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}}
     =
