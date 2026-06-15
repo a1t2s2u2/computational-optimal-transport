@@ -364,7 +364,7 @@
   （$c \in (0,\delta)$ より和は負，$t > 0$）．よって $F(\mathbf{P}^t) < F(\mathbf{P}^0) = F(\mathbf{P}_\varepsilon)$．これは $\mathbf{P}_\varepsilon$ の最小性に反する．ゆえに $\mathbf{P}_\varepsilon$ の全成分は正である．
 \end{proof}
 
-これと KL 射影としての表現（命題~\ref{prop:sem-entropic-kl-projection}）を用いると，最適解の具体的な形が定まる．
+これにより，最適解は等式制約のみの最小化問題の解とみなせ，その具体的な形が次のように定まる．
 
 \begin{proposition}{正則化解の形（スケーリング形）}{sem-entropic-scaling-form}
   定義~\ref{def:sem-entropic-ot} の仮定（$\mathbf{a} \in \Rpos^n$, $\mathbf{b} \in \Rpos^m$）
@@ -381,19 +381,32 @@
 \end{proposition}
 
 \begin{proof}
-  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ のみとみなせる．
-  命題~\ref{prop:sem-entropic-kl-projection} より $\mathbf{P}_\varepsilon$ は $\KLD(\cdot \| \mathbf{K})$ の $\CouplingsD(\mathbf{a}, \mathbf{b})$ 上の最小元であり，定義~\ref{def:sem-kl-divergence} より
+  補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正だから，非負制約 $\mathbf{P} \geq 0$ はどの成分でも等号で効かず，制約は周辺条件の等式 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$（$\mathbf{P}$ の成分について 1 次式）のみとみなせる．
+  二つの周辺制約に対する乗数（双対変数）$\mathbf{f} \in \R^n$, $\mathbf{g} \in \R^m$ を導入し，目的関数の Lagrangian を
   \[
-    \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K}) = \log\frac{P_{i,j}}{K_{i,j}} .
+    \mathcal{L}(\mathbf{P}, \mathbf{f}, \mathbf{g})
+    \defeq
+    \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})
+      - \inner{\mathbf{f}}{\mathbf{P}\ones_m - \mathbf{a}}
+      - \inner{\mathbf{g}}{\mathbf{P}^\top\ones_n - \mathbf{b}}
   \]
-  これらの等式制約は $\mathbf{P}$ の成分について 1 次式だから，全成分が正の最小元 $\mathbf{P}_\varepsilon$ で Lagrange の 1 階条件（定理~\ref{thm:sem-lagrange-foc}）が成り立つ．各成分 $P_{i,j}$ は第 $i$ 行の行和制約と第 $j$ 列の列和制約にのみ現れるので，これらに対応する乗数を $\alpha \in \R^n$, $\beta \in \R^m$ とすると，上の偏微分に対する 1 階条件は
+  とおく．全成分が正の最小元 $\mathbf{P}_\varepsilon$ では Lagrange の 1 階条件（定理~\ref{thm:sem-lagrange-foc}）が成り立つ．
+  $\inner{\mathbf{f}}{\mathbf{P}\ones_m} = \sum_{i,j} f_i P_{i,j}$, $\inner{\mathbf{g}}{\mathbf{P}^\top\ones_n} = \sum_{i,j} g_j P_{i,j}$ と
+  $\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$（注意~\ref{rem:sem-entropy-convention}）より，停留条件は
   \[
-    \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j)
+    \frac{\partial \mathcal{L}}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
+    = C_{i,j} + \varepsilon\log (\mathbf{P}_\varepsilon)_{i,j} - f_i - g_j = 0
+    \qquad (\forall i, j)
   \]
-  となる．
-  両辺を指数化し $u_i \defeq e^{\alpha_i} > 0$, $v_j \defeq e^{\beta_j} > 0$ とおけば
+  となる．これを $(\mathbf{P}_\varepsilon)_{i,j}$ について解くと，$K_{i,j} = e^{-C_{i,j}/\varepsilon}$ を用いて
   \[
-    (\mathbf{P}_\varepsilon)_{i,j} = u_i K_{i,j} v_j,
+    (\mathbf{P}_\varepsilon)_{i,j}
+    = e^{f_i/\varepsilon}\, e^{-C_{i,j}/\varepsilon}\, e^{g_j/\varepsilon}
+    = e^{f_i/\varepsilon}\, K_{i,j}\, e^{g_j/\varepsilon}
+  \]
+  となり，$u_i \defeq e^{f_i/\varepsilon} > 0$, $v_j \defeq e^{g_j/\varepsilon} > 0$ とおけば
+  \[
+    (\mathbf{P}_\varepsilon)_{i,j} = u_i\, K_{i,j}\, v_j,
     \qquad\text{すなわち}\qquad
     \mathbf{P}_\varepsilon = \diag(\mathbf{u})\,\mathbf{K}\,\diag(\mathbf{v}) .
   \]
@@ -412,20 +425,18 @@
   この 1 パラメータの自由度は，次章で Sinkhorn の収束を射影空間上で論じる際の鍵となる．
 \end{remark}
 
-\begin{remark}{正則化解の指数表示}{sem-entropic-exp-form}
-  上の停留条件 $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$ は，乗数を $f_i \defeq \varepsilon\alpha_i$, $g_j \defeq \varepsilon\beta_j$ と
-  スケールし直すと，元のコスト $\mathbf{C}$ を用いた指数表示
+\begin{remark}{正則化解の指数表示と定式化非依存性}{sem-entropic-exp-form}
+  停留条件 $C_{i,j} + \varepsilon\log(\mathbf{P}_\varepsilon)_{i,j} = f_i + g_j$ は，最適解を
   \[
     (\mathbf{P}_\varepsilon)_{i,j}
     = \exp\!\left(\frac{f_i + g_j - C_{i,j}}{\varepsilon}\right)
-    = e^{f_i / \varepsilon}\, K_{i,j}\, e^{g_j / \varepsilon}
   \]
-  に書き換えられる（$u_i = e^{f_i / \varepsilon}$, $v_j = e^{g_j / \varepsilon}$）．
-  すなわち「コストとポテンシャルの差 $f_i + g_j - C_{i,j}$ を $\varepsilon$ で割って指数化する」形である．
-  この式は，KL 射影（命題~\ref{prop:sem-entropic-kl-projection}）を経由せず，
-  元の目的関数 $F(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ に
-  直接 1 階条件（$\partial(-\Hb)/\partial P_{i,j} = \log P_{i,j}$，注意~\ref{rem:sem-entropy-convention}）
-  を当てても同じく得られ，スケーリング形が定式化の選び方に依らないことを示す．
+  と表す．すなわち「コストとポテンシャルの差 $f_i + g_j - C_{i,j}$ を $\varepsilon$ で割って指数化する」形である．
+  同じスケーリング形は KL 射影（命題~\ref{prop:sem-entropic-kl-projection}）からも得られる：
+  $\KLD(\cdot \| \mathbf{K})$ の最小化に 1 階条件を当てると，
+  $\partial\KLD/\partial P_{i,j} = \log(P_{i,j}/K_{i,j})$（定義~\ref{def:sem-kl-divergence}）より
+  $\log\bigl((\mathbf{P}_\varepsilon)_{i,j}/K_{i,j}\bigr) = \alpha_i + \beta_j$（$\alpha_i = f_i/\varepsilon$, $\beta_j = g_j/\varepsilon$）となり，同じ $\mathbf{P}_\varepsilon$ を与える．
+  ゆえにスケーリング形は定式化の選び方に依らない．
   なお $\mathbf{f}, \mathbf{g}$ は周辺制約に付随する双対変数の役割をもつが，双対理論は後の章で扱う．
 \end{remark}
 
