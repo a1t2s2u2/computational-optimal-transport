@@ -386,7 +386,12 @@
   \[
     \frac{\partial}{\partial P_{i,j}} \KLD(\mathbf{P} \| \mathbf{K}) = \log\frac{P_{i,j}}{K_{i,j}} .
   \]
-  これらの等式制約は $\mathbf{P}$ の成分について 1 次式だから，全成分が正の最小元 $\mathbf{P}_\varepsilon$ で Lagrange の 1 階条件（定理~\ref{thm:sem-lagrange-foc}）が成り立つ．各成分 $P_{i,j}$ は第 $i$ 行の行和制約と第 $j$ 列の列和制約にのみ現れるので，これらに対応する乗数を $\alpha \in \R^n$, $\beta \in \R^m$ とすると，上の偏微分に対する 1 階条件は
+  この最小化に Lagrange の 1 階条件（定理~\ref{thm:sem-lagrange-foc}）を適用する．$\mathbf{P}$ の $nm$ 個の成分を変数とみると，全成分が正の点は開集合に属し，制約 $\mathbf{P}\ones_m = \mathbf{a}$, $\mathbf{P}^\top\ones_n = \mathbf{b}$ は各成分について 1 次式だから，定理の仮定をみたす．定理より，最小元 $\mathbf{P}_\varepsilon$ では\emph{目的関数の勾配が各制約の勾配の線形結合（係数が乗数）に等しい}．いま
+  \begin{itemize}
+    \item 目的関数 $\KLD(\cdot\|\mathbf{K})$ の勾配は，成分 $(i,j)$ が $\log\bigl(P_{i,j}/K_{i,j}\bigr)$（上式）；
+    \item 行和制約 $\sum_j P_{i,j} = a_i$ の勾配は第 $i$ 行のみが $1$，列和制約 $\sum_i P_{i,j} = b_j$ の勾配は第 $j$ 列のみが $1$．
+  \end{itemize}
+  行和制約の乗数を $\alpha \in \R^n$，列和制約の乗数を $\beta \in \R^m$ とおくと，成分 $(i,j)$ に $1$ をもつ制約は第 $i$ 行和と第 $j$ 列和の二つだけだから，1 階条件の $(i,j)$ 成分は
   \[
     \log\frac{(\mathbf{P}_\varepsilon)_{i,j}}{K_{i,j}} = \alpha_i + \beta_j \qquad (\forall i, j)
   \]
