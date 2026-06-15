@@ -539,9 +539,14 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
 
   \textbf{KL ダイバージェンスによる表示．}
   $\mathbf{K} \defeq \mathbf{a}\mathbf{b}^\top \in \Rpos^{n \times m}$ とおく．
+  方針は，$\Hb(\mathbf{P})$ を「$\mathbf{P}$ に依らない定数から
+  $\KLD(\mathbf{P}\|\mathbf{K})$ を引いたもの」と書くことである．
+  そうすれば，$\Hb$ の最大化は $\KLD(\mathbf{P}\|\mathbf{K})$ の最小化に帰着する．
   任意の $\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対し，
   周辺条件 $\sum_j P_{i,j} = a_i$, $\sum_i P_{i,j} = b_j$ と
-  $\sum_{i,j} P_{i,j} = \sum_{i,j} a_i b_j = 1$ を用いると
+  $\sum_{i,j} P_{i,j} = \sum_{i,j} a_i b_j = 1$ を用いると，
+  定義~\ref{def:sem-kl-divergence} と同じく $P_{i,j}=0$ の成分では
+  $0\log0=0$ と読むことで，
   \begin{align*}
     \KLD(\mathbf{P}\|\mathbf{K})
     &= \sum_{i,j}
@@ -565,12 +570,24 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   \]
 
   \textbf{非負性と一意性．}
-  各成分について $g(p) \defeq p\log(p/k) - p + k$（$k > 0$）は
-  $g'(p) = \log(p/k)$ より $p = k$ で最小値 $g(k) = 0$ をとり，
-  $g \geq 0$ である（$g(0) = k > 0$）．
-  ゆえに $\KLD(\mathbf{P}\|\mathbf{K}) \geq 0$ であり，
-  等号は全成分で $P_{i,j} = a_i b_j$，すなわち $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ のときに限る．
-  上の表示より $\Hb$ は $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ で唯一の最大値をとる．
+  $k > 0$ を固定し，
+  \[
+    g_k(p) \defeq p\log(p/k) - p + k \qquad (p \geq 0)
+  \]
+  とおく．ここでも $p=0$ では $0\log0=0$ と読むので $g_k(0)=k$ である．
+  $p>0$ では $g_k'(p)=\log(p/k)$ だから，$g_k$ は $(0,k)$ で減少し，
+  $(k,\infty)$ で増加する．よって最小値は $p=k$ でのみ達成され，
+  $g_k(k)=0$ である．したがって $g_k(p)\geq0$ であり，等号は $p=k$ のときに限る．
+
+  これを各成分で $k=a_i b_j$ として用いると，
+  \[
+    \KLD(\mathbf{P}\|\mathbf{K}) \geq 0
+  \]
+  であり，等号は全成分で $P_{i,j}=a_i b_j$，
+  すなわち $\mathbf{P}=\mathbf{a}\mathbf{b}^\top$ のときに限る．
+  先ほどの表示では $\Hb(\mathbf{P})$ は
+  定数から $\KLD(\mathbf{P}\|\mathbf{K})$ を引いたものだったので，
+  $\Hb$ は $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ で唯一の最大値をとる．
 \end{proof}
 
 \begin{theorem}{正則化パラメータ $\varepsilon$ の極限による収束}{sem-entropic-convergence-eps-zero}
