@@ -382,15 +382,30 @@
 
 \begin{proof}
   補題~\ref{lem:sem-entropic-positivity} より $\mathbf{P}_\varepsilon$ は全成分が正である．
-  Lagrange の定理（定理~\ref{thm:sem-lagrange-foc}）は $\R^N$ 上の関数に対する主張なので，
-  行列全体の空間 $\R^{n\times m}$ を，成分数 $nm$ の有限次元空間として $\R^{nm}$ と同一視して適用する．
-  ただし本文では，座標を一列に並べた番号ではなく，行列成分として自然な二重添字 $P_{i,j}$ で表す．
-  したがって $\mathbf{P}_\varepsilon$ の十分近くでは非負制約 $\mathbf{P} \geq 0$ は自動的に満たされるので，
-  $\mathbf{P}_\varepsilon$ は開集合
+
+  Lagrange の定理（定理~\ref{thm:sem-lagrange-foc}）は $\R^N$ 上のベクトル変数に対する主張なので，
+  ここで行列変数を明示的にベクトル変数へ直す．
+  行列 $\mathbf{P}\in\R^{n\times m}$ を行ごとに並べたベクトルを
+  $\operatorname{vec}(\mathbf{P})\in\R^{nm}$ とし，
   \[
-    U \defeq \{\mathbf{P} \in \R^{n\times m} \mid P_{i,j} > 0\ (\forall i,j)\}
+    \bigl(\operatorname{vec}(\mathbf{P})\bigr)_{(i-1)m+j} \defeq P_{i,j}
+    \qquad (i=1,\dots,n,\ j=1,\dots,m)
   \]
-  の中で，周辺条件だけを制約とする局所最小点とみなせる．
+  と定める．逆に，$\mathbf{x}\in\R^{nm}$ から作る行列を $\mathbf{P}(\mathbf{x})$ と書き，
+  \[
+    \mathbf{P}(\mathbf{x})_{i,j} \defeq x_{(i-1)m+j}
+  \]
+  とする．また
+  \[
+    \mathbf{x}_\varepsilon \defeq \operatorname{vec}(\mathbf{P}_\varepsilon),
+    \qquad
+    U_x \defeq
+    \{\mathbf{x}\in\R^{nm}\mid x_{(i-1)m+j}>0\ (\forall i,j)\}
+  \]
+  とおく．$\mathbf{P}_\varepsilon$ は全成分が正なので，$\mathbf{x}_\varepsilon\in U_x$ であり，
+  $\mathbf{x}_\varepsilon$ の十分近くでは非負制約は自動的に満たされる．
+  したがって，残る制約は周辺条件だけである．
+
   命題~\ref{prop:sem-entropic-kl-projection} より，ここで最小化する関数は
   \[
     G(\mathbf{P}) \defeq \KLD(\mathbf{P}\|\mathbf{K})
@@ -402,100 +417,90 @@
       + K_{i,j}
     \right)
   \]
-  としてよい．この $G$ は $U$ 上で微分可能である．
+  としてよい．定理に入れるベクトル変数の関数を
+  \[
+    g(\mathbf{x}) \defeq G(\mathbf{P}(\mathbf{x}))
+    \qquad (\mathbf{x}\in U_x)
+  \]
+  と定める．この $g$ は $U_x$ 上で微分可能である．
 
-  周辺条件を，制約関数
+  次に，周辺条件を $\mathbf{x}$ の 1 次式として書く．
+  行和制約用の係数ベクトル $\mathbf{e}^{\mathrm{row}}_i\in\R^{nm}$ と
+  列和制約用の係数ベクトル $\mathbf{e}^{\mathrm{col}}_j\in\R^{nm}$ を
   \[
-    r_i(\mathbf{P}) \defeq \sum_{l=1}^{m} P_{i,l} - a_i \quad (i=1,\dots,n),
+    \left(\mathbf{e}^{\mathrm{row}}_i\right)_{(p-1)m+\ell}
+    \defeq
+    \begin{cases}
+      1 & (p=i),\\
+      0 & (p\neq i),
+    \end{cases}
     \qquad
-    c_j(\mathbf{P}) \defeq \sum_{k=1}^{n} P_{k,j} - b_j \quad (j=1,\dots,m)
+    \left(\mathbf{e}^{\mathrm{col}}_j\right)_{(p-1)m+\ell}
+    \defeq
+    \begin{cases}
+      1 & (\ell=j),\\
+      0 & (\ell\neq j)
+    \end{cases}
   \]
-  によって
+  と定める．すると周辺条件は
   \[
-    r_i(\mathbf{P}) = 0,\qquad c_j(\mathbf{P}) = 0
+    \left(\mathbf{e}^{\mathrm{row}}_i\right)^\top\mathbf{x} = a_i
+    \qquad (i=1,\dots,n),
+    \qquad
+    \left(\mathbf{e}^{\mathrm{col}}_j\right)^\top\mathbf{x} = b_j
+    \qquad (j=1,\dots,m)
   \]
-  と書く．これらはすべて $\mathbf{P}$ の成分に関する 1 次式である．
-  定理~\ref{thm:sem-lagrange-foc} の記号との対応を明示しておく．
-  まず全体としては
+  である．つまり，$\mathbf{x}_\varepsilon$ は $U_x$ の中で，これら $n+m$ 個の 1 次等式制約の下で
+  $g$ の局所最小点である．
+
+  以上を定理~\ref{thm:sem-lagrange-foc} の記号へそのまま代入すると，対応は次の通りである：
   \[
     \begin{array}{ccl}
-      N & \leftrightarrow & nm,\\
-      \mathbf{x} & \leftrightarrow & \mathbf{P},\\
-      f & \leftrightarrow & G,\\
-      \mathbf{x}^* & \leftrightarrow & \mathbf{P}_\varepsilon.
+      N & = & nm,\\
+      U & = & U_x,\\
+      f & = & g,\\
+      \mathbf{x}^* & = & \mathbf{x}_\varepsilon,\\
+      r & = & n+m,\\
+      \mathbf{a}_i & = & \mathbf{e}^{\mathrm{row}}_i,\quad c_i = a_i,\quad \mu_i = \alpha_i
+        \qquad (i=1,\dots,n),\\
+      \mathbf{a}_{n+j} & = & \mathbf{e}^{\mathrm{col}}_j,\quad c_{n+j} = b_j,\quad \mu_{n+j} = \beta_j
+        \qquad (j=1,\dots,m).
     \end{array}
   \]
-  定理の制約数 $r$ はここでは $n+m$ であり，制約関数 $r_i$ の文字 $r$ とは別である．
-  制約の番号付けは，行制約を $k=i$（$i=1,\dots,n$），列制約を
-  $k=n+j$（$j=1,\dots,m$）と見ればよい．
-  行制約については
-  \[
-    \mathbf{a}_i^\top\mathbf{x} = c_i
-    \quad \leftrightarrow \quad
-    \sum_{l=1}^{m} P_{i,l} = a_i,
-    \qquad
-    \mathbf{a}_i = \nabla r_i,\quad
-    c_i = a_i,\quad
-    \mu_i = \alpha_i .
-  \]
-  列制約については
-  \[
-    \mathbf{a}_{n+j}^\top\mathbf{x} = c_{n+j}
-    \quad \leftrightarrow \quad
-    \sum_{k=1}^{n} P_{k,j} = b_j,
-    \qquad
-    \mathbf{a}_{n+j} = \nabla c_j,\quad
-    c_{n+j} = b_j,\quad
-    \mu_{n+j} = \beta_j .
-  \]
-  ここで左辺側の $\mathbf{a}_k, c_k, \mu_k$ は定理~\ref{thm:sem-lagrange-foc} の記号であり，
-  ヒストグラム $\mathbf{a}$ や制約関数 $c_j$ とは別物である．
-  1 次制約では，制約関数の勾配がその係数ベクトルそのものになる．
-  ここでは，この $n+m$ 個の等式制約をひとまとめの制約系として扱い，
-  定理~\ref{thm:sem-lagrange-foc} を 1 回だけ適用する．
-  行和制約と列和制約の間には 1 本の依存関係があるが，定理~\ref{thm:sem-lagrange-foc} は
+  この表の $\mathbf{a}_k,c_k,\mu_k$ は定理~\ref{thm:sem-lagrange-foc} 側の記号である．
+  特に，定理の $\mathbf{a}_k$ は制約式左辺の係数ベクトルであり，ヒストグラム $\mathbf{a}$ ではない．
+  また，定理の $c_k$ は制約式右辺の実数であり，ここでは行制約なら $a_i$，列制約なら $b_j$ である．
+  ここでは $n+m$ 個の等式制約をまとめて 1 回だけ扱う．
+  係数ベクトルの間には 1 本の依存関係があるが，定理~\ref{thm:sem-lagrange-foc} は
   制約ベクトルの 1 次独立性を仮定していないので，このまま適用してよい．
 
   定理~\ref{thm:sem-lagrange-foc} より，ある実数
   $\alpha_1,\dots,\alpha_n$ と $\beta_1,\dots,\beta_m$ が存在して
   \[
-    \nabla G(\mathbf{P}_\varepsilon)
+    \nabla g(\mathbf{x}_\varepsilon)
     =
-    \sum_{i'=1}^{n}\alpha_{i'}\,\nabla r_{i'}(\mathbf{P}_\varepsilon)
+    \sum_{i'=1}^{n}\alpha_{i'}\,\mathbf{e}^{\mathrm{row}}_{i'}
     +
-    \sum_{j'=1}^{m}\beta_{j'}\,\nabla c_{j'}(\mathbf{P}_\varepsilon)
+    \sum_{j'=1}^{m}\beta_{j'}\,\mathbf{e}^{\mathrm{col}}_{j'}
   \]
-  が成り立つ．定理が直接与えるのはこの勾配等式であり，以下ではこの式を成分ごとに読む．
-  そのために，まず制約関数の勾配の $(i,j)$ 成分を計算する：
+  が成り立つ．定理が直接与えるのはこの $\R^{nm}$ 上の勾配等式である．
+  この式の $(i-1)m+j$ 番目の成分を読むと，
   \[
-    \frac{\partial r_{i'}}{\partial P_{i,j}}(\mathbf{P})
-    =
-    \begin{cases}
-      1 & (i'=i),\\
-      0 & (i'\neq i),
-    \end{cases}
-    \qquad
-    \frac{\partial c_{j'}}{\partial P_{i,j}}(\mathbf{P})
-    =
-    \begin{cases}
-      1 & (j'=j),\\
-      0 & (j'\neq j).
-    \end{cases}
-  \]
-  つまり $(i,j)$ 成分に効く制約は，$i$ 行目の行和制約と $j$ 列目の列和制約だけである．
-  よって
-  \[
-    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}_\varepsilon)
+    \frac{\partial g}{\partial x_{(i-1)m+j}}(\mathbf{x}_\varepsilon)
     =
     \alpha_i+\beta_j
     \qquad (\forall i,j).
   \]
-  一方，$G$ の定義から
+  これは，その座標に現れる係数ベクトルが
+  $\mathbf{e}^{\mathrm{row}}_i$ と $\mathbf{e}^{\mathrm{col}}_j$ だけだからである．
+  一方，$g(\mathbf{x})=G(\mathbf{P}(\mathbf{x}))$ の定義から
   \[
-    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P})
+    \frac{\partial g}{\partial x_{(i-1)m+j}}(\mathbf{x})
     =
-    \log\frac{P_{i,j}}{K_{i,j}}
-    \qquad (\mathbf{P}\in U)
+    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}(\mathbf{x}))
+    =
+    \log\frac{\mathbf{P}(\mathbf{x})_{i,j}}{K_{i,j}}
+    \qquad (\mathbf{x}\in U_x)
   \]
   である．したがって
   \[
