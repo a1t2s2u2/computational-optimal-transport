@@ -385,17 +385,20 @@
 
   Lagrange の定理（定理~\ref{thm:sem-lagrange-foc}）は $\R^N$ 上のベクトル変数に対する主張なので，
   ここで行列変数を明示的にベクトル変数へ直す．
-  行列 $\mathbf{P}\in\R^{n\times m}$ を行ごとに並べたベクトルを
+  ここでの $\mathbf{P}$ は固定された行列ではなく，最適化で動かす任意の行列変数を表す．
+  行列変数 $\mathbf{P}\in\R^{n\times m}$ を行ごとに並べたベクトルを
   $\operatorname{vec}(\mathbf{P})\in\R^{nm}$ とし，
   \[
     \bigl(\operatorname{vec}(\mathbf{P})\bigr)_{(i-1)m+j} \defeq P_{i,j}
     \qquad (i=1,\dots,n,\ j=1,\dots,m)
   \]
-  と定める．逆に，$\mathbf{x}\in\R^{nm}$ から作る行列を $\mathbf{P}(\mathbf{x})$ と書き，
+  と定める．逆向きに，ベクトル $\mathbf{x}\in\R^{nm}$ を同じ成分をもつ $n\times m$ 行列表示へ戻す記号を
+  $\operatorname{mat}(\mathbf{x})$ とし，
   \[
-    \mathbf{P}(\mathbf{x})_{i,j} \defeq x_{(i-1)m+j}
+    \operatorname{mat}(\mathbf{x})_{i,j} \defeq x_{(i-1)m+j}
   \]
-  とする．また
+  と定める．これは新しい行列を仮定しているのではなく，$\mathbf{x}$ の座標を行列の形で書き直すための記号である．
+  また
   \[
     \mathbf{x}_\varepsilon \defeq \operatorname{vec}(\mathbf{P}_\varepsilon),
     \qquad
@@ -419,7 +422,7 @@
   \]
   としてよい．定理に入れるベクトル変数の関数を
   \[
-    g(\mathbf{x}) \defeq G(\mathbf{P}(\mathbf{x}))
+    g(\mathbf{x}) \defeq G(\operatorname{mat}(\mathbf{x}))
     \qquad (\mathbf{x}\in U_x)
   \]
   と定める．この $g$ は $U_x$ 上で微分可能である．
@@ -493,13 +496,13 @@
   \]
   これは，その座標に現れる係数ベクトルが
   $\mathbf{e}^{\mathrm{row}}_i$ と $\mathbf{e}^{\mathrm{col}}_j$ だけだからである．
-  一方，$g(\mathbf{x})=G(\mathbf{P}(\mathbf{x}))$ の定義から
+  一方，$g(\mathbf{x})=G(\operatorname{mat}(\mathbf{x}))$ の定義から
   \[
     \frac{\partial g}{\partial x_{(i-1)m+j}}(\mathbf{x})
     =
-    \frac{\partial G}{\partial P_{i,j}}(\mathbf{P}(\mathbf{x}))
+    \frac{\partial G}{\partial P_{i,j}}(\operatorname{mat}(\mathbf{x}))
     =
-    \log\frac{\mathbf{P}(\mathbf{x})_{i,j}}{K_{i,j}}
+    \log\frac{\operatorname{mat}(\mathbf{x})_{i,j}}{K_{i,j}}
     \qquad (\mathbf{x}\in U_x)
   \]
   である．したがって
