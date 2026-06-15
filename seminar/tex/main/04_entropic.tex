@@ -415,6 +415,42 @@
     r_i(\mathbf{P}) = 0,\qquad c_j(\mathbf{P}) = 0
   \]
   と書く．これらはすべて $\mathbf{P}$ の成分に関する 1 次式である．
+  定理~\ref{thm:sem-lagrange-foc} の記号との対応を明示しておく．
+  まず全体としては
+  \[
+    \begin{array}{ccl}
+      N & \leftrightarrow & nm,\\
+      \mathbf{x} & \leftrightarrow & \mathbf{P},\\
+      f & \leftrightarrow & G,\\
+      \mathbf{x}^* & \leftrightarrow & \mathbf{P}_\varepsilon.
+    \end{array}
+  \]
+  定理の制約数 $r$ はここでは $n+m$ であり，制約関数 $r_i$ の文字 $r$ とは別である．
+  制約の番号付けは，行制約を $k=i$（$i=1,\dots,n$），列制約を
+  $k=n+j$（$j=1,\dots,m$）と見ればよい．
+  行制約については
+  \[
+    \mathbf{a}_i^\top\mathbf{x} = c_i
+    \quad \leftrightarrow \quad
+    \sum_{l=1}^{m} P_{i,l} = a_i,
+    \qquad
+    \mathbf{a}_i = \nabla r_i,\quad
+    c_i = a_i,\quad
+    \mu_i = \alpha_i .
+  \]
+  列制約については
+  \[
+    \mathbf{a}_{n+j}^\top\mathbf{x} = c_{n+j}
+    \quad \leftrightarrow \quad
+    \sum_{k=1}^{n} P_{k,j} = b_j,
+    \qquad
+    \mathbf{a}_{n+j} = \nabla c_j,\quad
+    c_{n+j} = b_j,\quad
+    \mu_{n+j} = \beta_j .
+  \]
+  ここで左辺側の $\mathbf{a}_k, c_k, \mu_k$ は定理~\ref{thm:sem-lagrange-foc} の記号であり，
+  ヒストグラム $\mathbf{a}$ や制約関数 $c_j$ とは別物である．
+  1 次制約では，制約関数の勾配がその係数ベクトルそのものになる．
   ここでは，この $n+m$ 個の等式制約をひとまとめの制約系として扱い，
   定理~\ref{thm:sem-lagrange-foc} を 1 回だけ適用する．
   行和制約と列和制約の間には 1 本の依存関係があるが，定理~\ref{thm:sem-lagrange-foc} は
