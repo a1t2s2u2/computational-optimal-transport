@@ -98,7 +98,7 @@
   平均値定理のみで示す．こちらは $\varphi$ が $C^1$ 級で導関数が狭義単調増加でありさえ
   すれば（$\varphi''$ の存在＝$C^2$ 級を要さず）成り立つため，仮定が弱く一般性が高い．
   $\varphi$ は $[0,\infty)$ 上で連続（注意~\ref{rem:sem-phi-continuous}），
-  $(0,\infty)$ 上で微分可能で，
+  $(0,\infty)$ 上で微分可能（定義~\ref{def:sem-differentiable}）で，
   $\varphi'(x) = \log x$ は $(0,\infty)$ 上で狭義単調増加である．
   相異なる $x_1, x_2 \in [0,\infty)$ と $\lambda \in (0,1)$ をとり，
   $x^* \defeq \lambda x_1 + (1-\lambda)x_2 \in (0,\infty)$ とおく．
@@ -343,7 +343,7 @@
 
   \emph{方針．}小さな $t > 0$ で $F(\mathbf{P}^t) < F(\mathbf{P}_\varepsilon)$ を示す．$\mathbf{P}_\varepsilon$ は最小値だから，これは矛盾を与える．
 
-  $t \in (0,1]$ では $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能で，連鎖律より
+  $t \in (0,1]$ では $P^t_{i,j} \ge t\,a_i b_j > 0$ ゆえ $t \mapsto F(\mathbf{P}^t)$ は微分可能（定義~\ref{def:sem-differentiable}）で，連鎖律より
   \begin{align*}
     \frac{d}{dt} F(\mathbf{P}^t)
     &= \sum_{i,j} \frac{\partial F}{\partial P_{i,j}}(\mathbf{P}^t)\,\frac{dP^t_{i,j}}{dt} \\
@@ -630,11 +630,24 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   $(k,\infty)$ で増加する．よって最小値は $p=k$ でのみ達成され，
   $g_k(k)=0$ である．したがって $g_k(p)\geq0$ であり，等号は $p=k$ のときに限る．
 
-  これを各成分で $k=a_i b_j$ として用いると，
+  これを各成分で $k=a_i b_j$，$p=P_{i,j}$ として用いると，
   \[
-    \KLD(\mathbf{P}\|\mathbf{K}) \geq 0
+  \begin{aligned}
+    \KLD(\mathbf{P}\|\mathbf{K})
+    &=
+    \sum_{i,j}
+    \left(
+      P_{i,j}\log\frac{P_{i,j}}{a_i b_j}
+      - P_{i,j}
+      + a_i b_j
+    \right) \\
+    &=
+    \sum_{i,j} g_{a_i b_j}(P_{i,j})
+    \geq 0
+  \end{aligned}
   \]
-  であり，等号は全成分で $P_{i,j}=a_i b_j$，
+  であり，最後の不等号は各項 $g_{a_i b_j}(P_{i,j})$ が非負であることによる．
+  また等号は各項がすべて $0$，すなわち全成分で $P_{i,j}=a_i b_j$，
   すなわち $\mathbf{P}=\mathbf{a}\mathbf{b}^\top$ のときに限る．
   先ほどの表示では $\Hb(\mathbf{P})$ は
   定数から $\KLD(\mathbf{P}\|\mathbf{K})$ を引いたものだったので，
