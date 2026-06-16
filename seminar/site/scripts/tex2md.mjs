@@ -930,6 +930,10 @@ function renderNodes(nodes) {
       for (const [label, itemNodes] of items) {
         const prefix = label ? `${label} ` : `${idx}. `;
         renderListItem(output, prefix, itemNodes);
+        // 各項目を空行で区切る。\item[(ii)] のようなラベル付き項目は
+        // markdown のリスト記号にならず段落として描画されるため、区切らないと
+        // 隣接する項目が 1 段落に連結され (ii) などが消えて見える。
+        output.push("");
         idx += 1;
       }
       output.push("");
@@ -942,6 +946,7 @@ function renderNodes(nodes) {
       for (const [label, itemNodes] of items) {
         const prefix = label ? `${label} ` : "- ";
         renderListItem(output, prefix, itemNodes);
+        output.push("");
       }
       output.push("");
       continue;
