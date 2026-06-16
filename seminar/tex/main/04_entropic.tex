@@ -796,13 +796,25 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
     \leq
     \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}} - \Hb(\mathbf{Q})
   \]
-  が成り立つ．$\inner{\mathbf{C}}{\cdot}$ は有界ゆえ
-  $\varepsilon_{k_j}^{-1}\inner{\mathbf{C}}{\cdot} \to 0$，$\Hb$ は連続だから，
-  $j \to \infty$ の極限で
-  $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ が
-  すべての $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について成り立つ．
+  が成り立つ．ここで $j \to \infty$ とする．コスト $\inner{\mathbf{C}}{\cdot}$ は
+  コンパクト集合上で有界だから，$\varepsilon_{k_j} \to +\infty$ より両辺のコスト項
+  $\tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}$,
+  $\tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}}$ はともに $0$ に収束する．
+  また $\Hb$ の連続性と $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$ より
+  $\Hb(\mathbf{P}_{\varepsilon_{k_j}}) \to \Hb(\mathbf{P}^\infty)$．
+  よって不等式は極限で
+  \[
+    -\Hb(\mathbf{P}^\infty) \leq -\Hb(\mathbf{Q}),
+    \qquad\text{すなわち}\qquad
+    \Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})
+  \]
+  となり，これがすべての $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について成り立つ．
   ゆえに $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化し，
   主張~\ref{clm:sem-max-entropy-independent} より $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
-  よって主張~\ref{clm:sem-subseq-limit-unique} から $\mathbf{P}_{\varepsilon_k} \to \mathbf{a}\mathbf{b}^\top$ であり，
-  列 $(\varepsilon_k)$ は任意だったから $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
+
+  以上で $(\mathbf{P}_{\varepsilon_k})$ の収束する部分列の極限がすべて
+  $\mathbf{a}\mathbf{b}^\top$ に等しいとわかった．よって主張~\ref{clm:sem-subseq-limit-unique} より
+  列全体が $\mathbf{P}_{\varepsilon_k} \to \mathbf{a}\mathbf{b}^\top$ と収束する．
+  この列 $(\varepsilon_k)$ は $+\infty$ に発散する任意の列だったから，
+  $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
 \end{proof}
