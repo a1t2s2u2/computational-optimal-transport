@@ -704,15 +704,32 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   特に両者はコンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で有界である．
 
   \textbf{(i).}
-  任意の最適解 $\mathbf{P}^* \in S^*$ をとる．$\mathbf{P}_\varepsilon$ の最適性より
+  任意の最適解 $\mathbf{P}^* \in S^*$ をとり，挟み撃ちで
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ を示す．
+
+  \emph{上からの評価．}$\mathbf{P}_\varepsilon$ の最適性より
   \[
     \inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \varepsilon\Hb(\mathbf{P}_\varepsilon)
     \leq
-    \inner{\mathbf{C}}{\mathbf{P}^*} - \varepsilon\Hb(\mathbf{P}^*),
+    \inner{\mathbf{C}}{\mathbf{P}^*} - \varepsilon\Hb(\mathbf{P}^*).
   \]
-  また $\inner{\mathbf{C}}{\mathbf{P}^*} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
-  \leq \inner{\mathbf{C}}{\mathbf{P}_\varepsilon}$
-  （$\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a},\mathbf{b})$）だから，両者を合わせて
+  コストの項を左辺に，エントロピーの項を右辺に移し，
+  $\inner{\mathbf{C}}{\mathbf{P}^*} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ を代入すると
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
+    \leq
+    \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon) - \Hb(\mathbf{P}^*)\bigr).
+  \]
+
+  \emph{下からの評価．}$\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ はコスト $\inner{\mathbf{C}}{\cdot}$ の最小値であり，
+  $\mathbf{P}_\varepsilon \in \CouplingsD(\mathbf{a},\mathbf{b})$ も実行可能だから
+  \[
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}) \geq 0 .
+  \]
+
+  二つを合わせると，同じ量
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
+  が上下から挟まれて
   \[
     0
     \leq
@@ -729,7 +746,9 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
     \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
   \]
   となり (i) を得る．
-  なお上の不等式の右側と $\varepsilon > 0$ から，後で用いる
+  なお上の挟み撃ちの両端から
+  $0 \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon) - \Hb(\mathbf{P}^*)\bigr)$
+  となり，$\varepsilon > 0$ で割れば，後で用いる
   \[
     \Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)
     \qquad (\forall \mathbf{P}^* \in S^*,\ \forall \varepsilon > 0)
