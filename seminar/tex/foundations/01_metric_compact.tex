@@ -341,6 +341,26 @@ $\R$ はその「完備化」として機能する．}
   ゆえに $K$ はコンパクト．
 \end{proof}
 
+\begin{claim}{部分列の極限がすべて等しいとき点列は収束する}{sem-subseq-limit-unique}
+  コンパクト集合 $K \subset \R^n$ 内の点列 $(x_k)_{k \geq 1}$ と点 $x^\star \in K$ について，
+  $(x_k)$ の収束する部分列がすべて $x^\star$ を極限に持つならば，
+  $(x_k)$ 自身が $x^\star$ に収束する．
+\end{claim}
+
+\begin{proof}
+  背理法による．$(x_k)$ が $x^\star$ に収束しないと仮定する．
+  収束の定義の否定より，ある $\delta > 0$ と添字 $k_1 < k_2 < \cdots$ が存在して
+  \[
+    \|x_{k_j} - x^\star\| \geq \delta \qquad (\forall j)
+  \]
+  が成り立つ．$K$ はコンパクト（定義~\ref{def:sem-compact}）だから，
+  この部分列 $(x_{k_j})_{j \geq 1}$ はさらに収束する部分列 $(x_{k_{j_\ell}})_{\ell \geq 1}$ を持ち，
+  その極限を $y \in K$ とする．これは $(x_k)$ の収束部分列でもあるから，
+  仮定よりその極限は $x^\star$ に等しく，$y = x^\star$．
+  一方 $\|x_{k_{j_\ell}} - x^\star\| \geq \delta$ で $\ell \to \infty$ とすると
+  $\|y - x^\star\| \geq \delta > 0$，すなわち $y \neq x^\star$ となり矛盾する．
+\end{proof}
+
 \begin{theorem}{Weierstrass の最大値の定理}{sem-weierstrass}
   $K \subset \R^n$ を空でないコンパクト集合，
   $f \colon K \to \R$ を連続関数（定義~\ref{def:sem-continuous}）とする．
@@ -372,8 +392,23 @@ $\R$ はその「完備化」として機能する．}
   有限次元ノルム空間 $V$ 上の任意の線形関数 $f \colon V \to \R$ は連続である．
 \end{proposition}
 
+\begin{definition}{微分可能性と導関数}{sem-differentiable}
+  開区間 $(a, b) \subset \R$ 上の関数 $f \colon (a, b) \to \R$ が
+  点 $t \in (a, b)$ で\textbf{微分可能}であるとは，極限
+  \[
+    f'(t) \defeq \lim_{h \to 0} \frac{f(t + h) - f(t)}{h}
+  \]
+  が（有限な実数として）存在することをいい，この値 $f'(t)$ を
+  $f$ の点 $t$ における\textbf{微分係数}という．
+  $f$ が $(a, b)$ のすべての点で微分可能であるとき，
+  $f$ は $(a, b)$ 上で\textbf{微分可能}であるといい，
+  各点 $t$ に $f'(t)$ を対応させる関数 $f' \colon (a, b) \to \R$ を
+  $f$ の\textbf{導関数}という．
+\end{definition}
+
 \begin{theorem}{平均値定理}{sem-mvt}
-  $f \colon [a, b] \to \R$ が連続で $(a, b)$ 上で微分可能であるとき，
+  $f \colon [a, b] \to \R$ が連続で $(a, b)$ 上で微分可能
+  （定義~\ref{def:sem-differentiable}）であるとき，
   \[
     f(b) - f(a) = f'(c)(b - a)
   \]
