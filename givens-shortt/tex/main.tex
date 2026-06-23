@@ -10,46 +10,7 @@
 \maketitle
 \tableofcontents
 
-%% ============================================================
-%%  記号表（原論文の記号を現代的に読み替える）
-%% ============================================================
-\chapter*{記号表}
-\addcontentsline{toc}{chapter}{記号表}
-
-\begin{remark}{原論文からの主な読み替え}{gs-notation}
-  原論文の probability law $P$ を確率測度 $\mu$，
-  結合の集合 $D(P_1,P_2)$ を $\Couplings(\mu,\nu)$，
-  $p$ 次モーメント有限な測度の集合 $\mathfrak{M}_p$ を
-  $\Pp{p}(X)$ と書く．Gaussian 測度の共分散行列には，
-  原論文と同じく $M_i$ を用いる．
-\end{remark}
-
-\subsection*{確率測度と結合}
-\begin{tabular}{ll}
-  $(X,d)$ & 完備可分距離空間（Polish 空間）\\
-  $\Prob(X)$ & $X$ 上の Borel 確率測度全体 \\
-  $\Pp{p}(X)$ & 有限 $p$ 次モーメントをもつ確率測度全体 \\
-  $\Couplings(\mu,\nu)$ & $\mu,\nu$ を周辺分布にもつ結合全体 \\
-  $\mu_n \rightharpoonup \mu$ & 確率測度の弱収束 \\
-\end{tabular}
-
-\subsection*{距離と行列}
-\begin{tabular}{ll}
-  $\Wass_p(\mu, \nu)$ & $p$-Wasserstein 距離 \\
-  $\Wass_\infty(\mu,\nu)$ & 最大輸送距離を最小化する Wasserstein 距離 \\
-  $\mathcal{N}(m,M)$ & 平均 $m$，共分散行列 $M$ の Gaussian 測度 \\
-  $\tr(A)$ & 行列 $A$ のトレース \\
-  $A^{1/2}$ & 半正定値行列 $A$ の一意な半正定値平方根 \\
-\end{tabular}
-
-\vspace{1em}
-\hrule
-
-%% ============================================================
-%%  本編
-%% ============================================================
 \input{main/00_introduction}
 \input{main/01_wasserstein_metrics}
-\input{main/02_gaussian_measures}
 
 \end{document}

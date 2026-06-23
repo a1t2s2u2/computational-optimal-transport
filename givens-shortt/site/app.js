@@ -12,10 +12,6 @@ const glossary = {
   coupling: {
     title: "結合",
     body: "二つの確率測度を周辺分布にもつ積空間上の確率測度。輸送計画とも呼ぶ。"
-  },
-  bures: {
-    title: "Bures–Wasserstein 距離",
-    body: "半正定値行列の間の距離で、Gaussian 測度間の \\(W_2\\) の共分散部分として現れる。"
   }
 };
 

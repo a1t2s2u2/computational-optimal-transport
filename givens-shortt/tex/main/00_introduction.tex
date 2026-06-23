@@ -3,29 +3,15 @@
 
 Givens–Shortt の論文
 \emph{A class of Wasserstein metrics for probability distributions}
-（Michigan Math.\ J.\ \textbf{31} (1984), 231–240）は，
-確率分布の空間上に Wasserstein 距離 $\Wass_p$ を導入し，
-その一般的な性質を整理したうえで，多変量 Gaussian 測度間の
-$2$-Wasserstein 距離を明示的に計算する．
+（Michigan Math.\ J.\ \textbf{31} (1984), 231–240）の
+Proposition 2 を目標とする：
+\[
+  1\leq p\leq\infty
+  \quad\Longrightarrow\quad
+  \Wass_p\text{ は }\Pp{p}(X)\text{ 上の距離である．}
+\]
 
-確率測度の距離には，全変動距離，Prokhorov 距離，
-有界 Lipschitz 関数が定める双対距離などがある．
-Wasserstein 距離は，二つの分布を周辺分布にもつ確率変数
-$(X,Y)$ をすべて動かし，$d(X,Y)$ の $L^p$ ノルムを最小化する距離である．
-したがって，確率変数の値がどれだけ移動すれば一方の分布を他方へ変えられるか，
-という輸送問題の意味をもつ．
-
-本論文の主結果は次の二点である．
-\begin{enumerate}
-  \item $1\leq p\leq\infty$ に対する Wasserstein 距離の
-    最適結合の存在，距離性，距離間の比較，完備性を示す．
-  \item $\R^n$ 上の任意の Gaussian 測度について，
-    $\Wass_2$ を平均ベクトルと共分散行列だけで表す．
-\end{enumerate}
-
-\begin{remark}{本資料の方針}{gs-scope}
-  原論文の結果と論証の流れを保ちつつ，記号は現在標準的な
-  $\Prob(X),\Pp{p}(X),\Couplings(\mu,\nu)$ に統一する．
-  Gaussian の計算では，原論文の Lagrange 未定乗数法を，
-  Schur 補行列と特異値を用いる同値で簡潔な議論に読み替える．
-\end{remark}
+原論文と同じく $(X,d)$ は Polish 空間，
+$\Prob(X)$ はその Borel 確率測度全体とする．
+Polish 空間上の Borel 確率測度は自動的に Radon 測度なので，
+Radon 性を別に仮定・準備する必要はない．

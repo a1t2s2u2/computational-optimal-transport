@@ -45,13 +45,8 @@ const CHAPTERS = [
   }],
   ["main/01_wasserstein_metrics.tex", "01-wasserstein-metrics.md", {
     id: "wasserstein-metrics", group: "main",
-    nav: "Wasserstein 距離", eyebrow: "1. Wasserstein Metrics",
+    nav: "Proposition 2", eyebrow: "1. Proposition 2",
     title: "Wasserstein 距離 Wₚ",
-  }],
-  ["main/02_gaussian_measures.tex", "02-gaussian-measures.md", {
-    id: "gaussian-measures", group: "main",
-    nav: "Gaussian 測度", eyebrow: "2. Gaussian Measures",
-    title: "Gaussian 測度の W₂",
   }],
 ];
 
