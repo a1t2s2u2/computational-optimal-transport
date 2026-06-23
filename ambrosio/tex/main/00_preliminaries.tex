@@ -1,0 +1,83 @@
+\chapter{準備：測度論の基礎}
+\label{ch:preliminaries}
+
+本章では，最適輸送の定式化に必要な測度論の概念を導入する．
+
+\section{$\sigma$-代数}
+\label{sec:sigma-algebra}
+
+\begin{definition}{$\sigma$-代数}{amb-sigma-algebra}
+  集合 $X$ の部分集合族 $\mathcal{F} \subset 2^X$ が
+  \textbf{$\sigma$-代数}であるとは，次の3条件を満たすことをいう：
+  \begin{enumerate}
+    \item $X \in \mathcal{F}$．
+    \item $A \in \mathcal{F}$ ならば $X \setminus A \in \mathcal{F}$（補集合で閉じる）．
+    \item $A_1, A_2, \ldots \in \mathcal{F}$ ならば
+      $\bigcup_{i=1}^\infty A_i \in \mathcal{F}$（可算合併で閉じる）．
+  \end{enumerate}
+\end{definition}
+
+\section{Borel集合とBorel測度}
+\label{sec:borel}
+
+\begin{definition}{Borel $\sigma$-代数}{amb-borel-sigma}
+  $X \subset \R^n$ とする．$X$ の開集合全体を含む最小の $\sigma$-代数を
+  $X$ の\textbf{Borel $\sigma$-代数}といい，$\Borel(X)$ と書く．
+  $\Borel(X)$ の元を\textbf{Borel集合}という．
+\end{definition}
+
+\begin{definition}{Borel測度}{amb-borel-measure}
+  $X \subset \R^n$ 上の\textbf{Borel測度}とは，
+  $\Borel(X)$ 上で定義された測度
+  $\mu \colon \Borel(X) \to [0, \infty]$ のことをいう．
+\end{definition}
+
+\section{Lebesgue測度}
+\label{sec:lebesgue}
+
+\begin{definition}{Lebesgue測度}{amb-lebesgue}
+  $\R^n$ 上の\textbf{Lebesgue測度} $\Leb^n$ とは，
+  区間の直積 $\prod_{i=1}^n [a_i, b_i]$ に対し
+  \[
+    \Leb^n\!\left(\prod_{i=1}^n [a_i, b_i]\right) = \prod_{i=1}^n (b_i - a_i)
+  \]
+  を満たす $\Borel(\R^n)$ 上の測度である．
+\end{definition}
+
+Lebesgue測度はBorel測度だが，$\Leb^n(\R^n) = \infty$ であり，
+有限測度ではない．
+
+\section{Radon測度}
+\label{sec:radon}
+
+\begin{definition}{Radon測度}{amb-radon}
+  $X \subset \R^n$ 上のBorel測度 $\mu$ が\textbf{Radon測度}であるとは，
+  次の2条件を満たすことをいう：
+  \begin{enumerate}
+    \item \textbf{局所有限性}：任意のコンパクト集合 $K \subset X$ に対し $\mu(K) < \infty$．
+    \item \textbf{内部正則性}：任意のBorel集合 $B \in \Borel(X)$ に対し
+      \[
+        \mu(B) = \sup\,\{\,\mu(K) \mid K \subset B,\; K \text{ はコンパクト}\,\}.
+      \]
+  \end{enumerate}
+\end{definition}
+
+Radon測度の重要性は，$C(X)$ の双対としての特徴づけ
+（Riesz の表現定理）にある．これにより $\Meas(X)$ 上に
+$w^*$-位相が自然に定まり，存在定理（定理~\ref{thm:amb-existence}）の
+証明で用いるコンパクト性が得られる．
+
+\begin{example}{Lebesgue測度はRadon測度}{amb-lebesgue-radon}
+  $\Leb^n$ はRadon測度である．
+  任意のコンパクト集合 $K \subset \R^n$ は有界だから $\Leb^n(K) < \infty$（局所有限性）．
+  内部正則性も成り立つ．
+\end{example}
+
+\section{確率測度}
+\label{sec:probability}
+
+\begin{definition}{確率測度}{amb-probability}
+  $X \subset \R^n$ 上のRadon測度 $\mu$ が\textbf{確率測度}であるとは，
+  $\mu(X) = 1$ を満たすことをいう．
+  $X$ 上の確率測度の全体を $\Prob(X)$ と書く．
+\end{definition}

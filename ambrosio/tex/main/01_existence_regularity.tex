@@ -11,26 +11,6 @@
 
 $X$ を $\R^n$ のコンパクト凸部分集合とし，$\mu, \nu \in \Prob(X)$ とする．
 
-\section{準備：ラドン測度}
-\label{sec:radon}
-
-\begin{definition}{ラドン測度}{amb-radon}
-  $X \subset \R^n$ 上のボレル測度 $\mu$ が\textbf{ラドン測度}であるとは，
-  次の2条件を満たすことをいう：
-  \begin{enumerate}
-    \item \textbf{局所有限性}：任意のコンパクト集合 $K \subset X$ に対し $\mu(K) < \infty$．
-    \item \textbf{内部正則性}：任意のボレル集合 $B \in \Borel(X)$ に対し
-      \[
-        \mu(B) = \sup\,\{\,\mu(K) \mid K \subset B,\; K \text{ はコンパクト}\,\}.
-      \]
-  \end{enumerate}
-\end{definition}
-
-ラドン測度の重要性は，$C(X)$ の双対としての特徴づけ
-（Riesz の表現定理）にある．これにより $\Meas(X)$ 上に
-$w^*$-位相が自然に定まり，存在定理（定理~\ref{thm:amb-existence}）の
-証明で用いるコンパクト性が得られる．
-
 \section{Kantorovich 問題}
 \label{sec:kantorovich}
 
@@ -45,7 +25,7 @@ $w^*$-位相が自然に定まり，存在定理（定理~\ref{thm:amb-existence
       \end{aligned}
     \,\right\}
   \]
-  とおく．ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
+  とおく．Borelコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
   \[
     \Fcost_c(\mu, \nu) :=
     \min_{\gamma \in \Gamma(\mu,\nu)}
@@ -78,7 +58,7 @@ $\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ であ�
 
 \begin{proposition}{輸送計画と輸送写像}{amb-plan-vs-map}
   \blockmeta{uses=def:amb-mk}
-  任意のボレル輸送写像 $\psi \colon X \to X$ は，
+  任意のBorel輸送写像 $\psi \colon X \to X$ は，
   \[
     \gamma_\psi := (\Id \times \psi)\pushforward \mu
   \]
@@ -135,7 +115,7 @@ $I$ の下半連続性から従う．
   コンパクト集合上の下半連続関数は最小値を達成する．
 
   後半は次のように示される．
-  任意の $\gamma \in \Gamma(\mu,\nu)$ に対し，$\psi\pushforward \mu = \nu$ を満たすボレル写像 $\psi_h$
+  任意の $\gamma \in \Gamma(\mu,\nu)$ に対し，$\psi\pushforward \mu = \nu$ を満たすBorel写像 $\psi_h$
   の列で $\delta_{\psi_h(x)} \otimes \mu$ が $\gamma$ に $w^*$-収束するものが構成できる
   （$\mu$ がアトムをもたないことを本質的に使う）．
   $c$ の連続性により

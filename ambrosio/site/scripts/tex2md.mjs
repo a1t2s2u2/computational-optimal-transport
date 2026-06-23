@@ -38,6 +38,11 @@ function allChapterTex() {
 // 参照（\ref）解決は buildLabelMap()／buildChapterMap() が main/ と foundations/ の
 // 全 tex を走査するため、付録のラベルも本編からタイトル表示・参照できる。
 const CHAPTERS = [
+  ["main/00_preliminaries.tex", "00-preliminaries.md", {
+    id: "preliminaries", group: "main",
+    nav: "準備", eyebrow: "0. Preliminaries",
+    title: "準備：測度論の基礎",
+  }],
   ["main/01_existence_regularity.tex", "01-existence-regularity.md", {
     id: "existence-regularity", group: "main",
     nav: "存在と正則性", eyebrow: "1. Existence & Regularity",
