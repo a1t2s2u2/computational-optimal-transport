@@ -55,7 +55,7 @@ $\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ であ�
 \section{最適計画の存在}
 \label{sec:existence}
 
-最適計画の存在は，$\Gamma(\mu,\nu)$ の $w^*$-コンパクト性と
+最適計画の存在は，$\Gamma(\mu,\nu)$ の弱収束に関するコンパクト性と
 $I$ の下半連続性から従う．
 
 \begin{theorem}{最適計画の存在}{amb-existence}
@@ -65,12 +65,15 @@ $I$ の下半連続性から従う．
 \end{theorem}
 
 \begin{proof}
-  $\Gamma(\mu,\nu)$ は $w^*$-位相で閉かつ有界であり，$X \times X$ がコンパクトだから $w^*$-コンパクトである．
+  $\Prob(X \times X)$ は弱収束に関してコンパクトである（定理~\ref{thm:amb-prob-compact}）．
+  $\Gamma(\mu,\nu)$ は周辺条件で定まる閉部分集合だから，
+  $\Gamma(\mu,\nu)$ もコンパクトである．
 
   $c$ が下半連続のとき，連続関数の増大列 $c_h \uparrow c$ で
   下から近似でき，$c_h$ の誘導する汎関数 $I_h$ は
-  $w^*$-連続かつ $I_h \uparrow I$ だから，$I$ は下半連続である．
-  コンパクト集合上の下半連続関数は最小値を達成する．
+  弱収束に関して連続かつ $I_h \uparrow I$ だから，$I$ は下半連続である．
+  コンパクト集合上の下半連続関数は最小値を達成する
+  （定理~\ref{thm:amb-lsc-minimum}）．
 \end{proof}
 
 \section{最適計画の正則性と cyclical monotonicity}
@@ -81,7 +84,7 @@ $I$ の下半連続性から従う．
 
 \begin{definition}{$c$-cyclical monotonicity}{amb-cyclic-monotonicity}
   $\Gamma \subset X \times X$ が \textbf{$c$-cyclically monotone} であるとは，
-  任意の $n \geq 2$ と任意の $(x_i, y_i) \in \Gamma$（$1 \leq i \leq n$）に対し
+  $\forall\, n \geq 2$ と $\forall\, (x_i, y_i) \in \Gamma$（$1 \leq i \leq n$）に対し
   \[
     \sum_{i=1}^{n} c(x_{i+1}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i)
   \]
@@ -90,7 +93,7 @@ $I$ の下半連続性から従う．
 
 \begin{remark}{cyclical monotonicity の置換表示}{amb-cyclic-perm}
   cyclical monotonicity は次の同値な形で述べられる：
-  任意の置換 $\sigma \colon \{1,\ldots,n\} \to \{1,\ldots,n\}$ に対し
+  $\forall$ 置換 $\sigma \colon \{1,\ldots,n\} \to \{1,\ldots,n\}$ に対し
   \[
     \sum_{i=1}^{n} c(x_{\sigma(i)}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i).
   \]
@@ -101,7 +104,7 @@ $I$ の下半連続性から従う．
 \begin{theorem}{最適計画の正則性}{amb-regularity}
   \blockmeta{uses=def:amb-mk; def:amb-cyclic-monotonicity}
   $c$ が連続かつ実数値であると仮定する．
-  任意の最適 $\gamma$ に対し $\spt\,\gamma$ は $c$-cyclically monotone である．
+  $\forall$ 最適 $\gamma$ に対し $\spt\,\gamma$ は $c$-cyclically monotone である．
 
   さらに，全ての最適計画の $\spt$ の和集合の閉包も $c$-cyclically monotone である．
 \end{theorem}
@@ -132,7 +135,7 @@ $I$ の下半連続性から従う．
   \]
   となり $\gamma$ の最適性に矛盾する．
 
-  後半は，最適計画の集合が $w^*$-コンパクトであることと，
+  後半は，最適計画の集合がコンパクトであることと，
   稠密な列 $(\gamma_h)$ の $\spt$ の合併
   $\bigcup_{h=1}^N \spt\,\gamma_h = \spt\bigl(\sum_{h=1}^N \frac{1}{N}\gamma_h\bigr)$
   が（凸結合も最適だから）$c$-cyclically monotone であることから，
