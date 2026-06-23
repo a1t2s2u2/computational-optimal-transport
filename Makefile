@@ -3,7 +3,7 @@
 # source of truth は各 tex/*.tex のみ。
 # Web 版（site/）の md/html は生成物であり、編集も git 管理もしない。
 
-.PHONY: site pdf ambrosio-site ambrosio-pdf
+.PHONY: site pdf givens-shortt-site givens-shortt-pdf
 
 # --- Cuturi (seminar/) ---
 site:
@@ -14,11 +14,11 @@ site:
 pdf:
 	cd seminar/tex && latexmk
 
-# --- Givens--Shortt（旧ディレクトリ名 ambrosio/）---
-ambrosio-site:
-	node ambrosio/site/scripts/tex2md.mjs
-	node ambrosio/site/scripts/build.mjs
-	@echo "→ ambrosio/site/dist/index.html をブラウザで開いてください"
+# --- Givens--Shortt ---
+givens-shortt-site:
+	node givens-shortt/site/scripts/tex2md.mjs
+	node givens-shortt/site/scripts/build.mjs
+	@echo "→ givens-shortt/site/dist/index.html をブラウザで開いてください"
 
-ambrosio-pdf:
-	cd ambrosio/tex && latexmk
+givens-shortt-pdf:
+	cd givens-shortt/tex && latexmk
