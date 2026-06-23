@@ -41,7 +41,7 @@ const CHAPTERS = [
   ["main/00_preliminaries.tex", "00-preliminaries.md", {
     id: "preliminaries", group: "main",
     nav: "準備", eyebrow: "0. Preliminaries",
-    title: "準備：測度論の基礎",
+    title: "準備",
   }],
   ["main/01_existence_regularity.tex", "01-existence-regularity.md", {
     id: "existence-regularity", group: "main",

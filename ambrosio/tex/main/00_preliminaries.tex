@@ -1,7 +1,7 @@
-\chapter{準備：測度論の基礎}
+\chapter{準備}
 \label{ch:preliminaries}
 
-本章では，最適輸送の定式化に必要な測度論の概念を導入する．
+本章では，最適輸送の定式化に必要な概念を導入する．
 
 \section{$\sigma$-代数}
 \label{sec:sigma-algebra}
@@ -77,7 +77,34 @@ $w^*$-位相が自然に定まり，存在定理（定理~\ref{thm:amb-existence
 \label{sec:probability}
 
 \begin{definition}{確率測度}{amb-probability}
-  $X \subset \R^n$ 上の Radon 測度 $\mu$ が\textbf{確率測度}であるとは，
-  $\mu(X) = 1$ を満たすことをいう．
+  $X \subset \R^n$ 上の Borel 測度 $\mu$ が\textbf{確率測度}であるとは，
+  $\mu \geq 0$ かつ $\mu(X) = 1$ を満たすことをいう．
   $X$ 上の確率測度の全体を $\Prob(X)$ と書く．
 \end{definition}
+
+\section{下半連続性}
+\label{sec:lsc}
+
+\begin{definition}{下半連続関数}{amb-lsc}
+  位相空間 $X$ 上の関数 $f \colon X \to (-\infty, \infty]$ が
+  \textbf{下半連続}（lower semicontinuous）であるとは，
+  任意の $\alpha \in \R$ に対しレベル集合
+  $\{\, x \in X \mid f(x) \leq \alpha \,\}$ が閉集合であることをいう．
+\end{definition}
+
+連続関数は下半連続である．
+逆は一般に成り立たないが，下半連続関数は連続関数の上限として表せる．
+
+\begin{theorem}{下半連続関数の最小値}{amb-lsc-minimum}
+  $X$ がコンパクト位相空間で，$f \colon X \to (-\infty, \infty]$ が
+  下半連続ならば，$f$ は $X$ 上で最小値を達成する．
+\end{theorem}
+
+\begin{proof}
+  $m := \inf_{x \in X} f(x)$ とおく．
+  $m = \infty$ なら $X = \emptyset$ だが $X$ はコンパクトなのでこれはない．
+  各 $\alpha > m$ に対し $F_\alpha := \{x \in X \mid f(x) \leq \alpha\}$ は
+  下半連続性より閉かつ非空であり，$\{F_\alpha\}$ は有限交叉性をもつ．
+  $X$ のコンパクト性より $\bigcap_{\alpha > m} F_\alpha \neq \emptyset$ であり，
+  この交叉に属する点で $f$ は値 $m$ を達成する．
+\end{proof}

@@ -462,6 +462,7 @@ function mathJaxScript() {
             spt: "\\\\operatorname{spt}",
             Id: "\\\\mathrm{Id}",
             Fcost: "\\\\mathcal{F}",
+            Wass: "W",
             pushforward: "{_\\\\#}",
             d: "\\\\mathrm{d}",
             abs: ["\\\\lvert #1\\\\rvert", 1],

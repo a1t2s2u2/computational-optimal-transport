@@ -6,6 +6,7 @@
   \begin{itemize}
     \item 確率測度を $f_0, f_1$ でなく $\mu, \nu$ と書く．
     \item 原文の ``Kantorovich–Wasserstein distance'' は単に Wasserstein 距離と呼ぶ．
+    \item Wasserstein 距離の記号を $\Fcost_p$ でなく $\Wass_p$ と書く．
   \end{itemize}
 \end{remark}
 
@@ -42,7 +43,7 @@ $\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ であ�
   $p \geq 1$ とし，$\mu, \nu \in \Prob(X)$ とする．
   $\mu$ と $\nu$ の間の \textbf{$p$-Wasserstein 距離}を
   \[
-    \Fcost_p(\mu, \nu)
+    \Wass_p(\mu, \nu)
     := \left(
       \min_{\gamma \in \Gamma(\mu,\nu)}
       \int_{X \times X} \abs{x - y}^p \,\d\gamma
@@ -50,42 +51,6 @@ $\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ であ�
   \]
   で定める．
 \end{definition}
-
-\section{輸送計画と輸送写像}
-\label{sec:plans-vs-maps}
-
-輸送写像と輸送計画の関係は次の命題で明確になる．
-
-\begin{proposition}{輸送計画と輸送写像}{amb-plan-vs-map}
-  \blockmeta{uses=def:amb-mk}
-  任意の Borel 輸送写像 $\psi \colon X \to X$ は，
-  \[
-    \gamma_\psi := (\Id \times \psi)\pushforward \mu
-  \]
-  により輸送計画を誘導する．
-
-  逆に，輸送計画 $\gamma$ が $\gamma$-可測なグラフ $\Gamma$ 上に集中しているならば，
-  $\gamma$ はある輸送写像から誘導される．
-\end{proposition}
-
-\begin{proof}
-  射影 $\pi_0(x,y) := x$，$\pi_1(x,y) := y$ を用いる．
-  $\pi_0 \circ (\Id \times \psi) = \Id$ かつ
-  $\pi_1 \circ (\Id \times \psi) = \psi$ だから，
-  \[
-    \pi_{0\#}\gamma_\psi = \mu, \qquad
-    \pi_{1\#}\gamma_\psi = \psi\pushforward \mu = \nu
-  \]
-  であり，$\gamma_\psi \in \Gamma(\mu,\nu)$ である．
-
-  逆に，$\gamma$ が $\gamma$-可測なグラフ
-  $\Gamma = \{(x, \phi(x)) : x \in \pi_0(\Gamma)\}$ 上に集中するとする．
-  コンパクト集合の増大列 $(K_h)$ で $\gamma(\Gamma \setminus K_h) \to 0$ となるものをとれば，
-  $\pi_0(\Gamma) \supset \bigcup_h \pi_0(K_h)$ は $\mu$-可測で $\mu$-全測度をもつ．
-  $\gamma$ の分解 $\gamma = \gamma_x \otimes \mu$ により，$\mu$-a.e.\ $x$ で
-  $\gamma_x$ が $\phi(x)$ の Dirac 測度であることが従い，
-  $\psi(x) := \int_X y\,\d\gamma_x(y)$ とおけば $\gamma = \gamma_\psi$ を得る．
-\end{proof}
 
 \section{最適計画の存在}
 \label{sec:existence}
@@ -96,14 +61,7 @@ $I$ の下半連続性から従う．
 \begin{theorem}{最適計画の存在}{amb-existence}
   \blockmeta{uses=def:amb-mk}
   $c$ が $X \times X$ 上で下半連続であると仮定する．
-  このとき (MK) を達成する $\gamma \in \Prob(X \times X)$ が存在する．
-
-  さらに $c$ が連続かつ実数値ならば，
-  \[
-    \min\,(\mathrm{MK})
-    = \inf_{\psi\pushforward \mu = \nu} \int_X c(x, \psi(x))\,\d \mu(x)
-  \]
-  が成り立つ．ただし $\mu$ がアトムをもたないことを仮定する．
+  このとき (MK) を達成する $\gamma \in \Gamma(\mu,\nu)$ が存在する．
 \end{theorem}
 
 \begin{proof}
@@ -113,24 +71,16 @@ $I$ の下半連続性から従う．
   下から近似でき，$c_h$ の誘導する汎関数 $I_h$ は
   $w^*$-連続かつ $I_h \uparrow I$ だから，$I$ は下半連続である．
   コンパクト集合上の下半連続関数は最小値を達成する．
-
-  後半は次のように示される．
-  任意の $\gamma \in \Gamma(\mu,\nu)$ に対し，$\psi\pushforward \mu = \nu$ を満たす Borel 写像 $\psi_h$
-  の列で $\delta_{\psi_h(x)} \otimes \mu$ が $\gamma$ に $w^*$-収束するものが構成できる
-  （$\mu$ がアトムをもたないことを本質的に使う）．
-  $c$ の連続性により
-  $\int_X c(x, \psi_h(x))\,\d \mu \to I(\gamma)$ が従い，
-  Monge 問題の下限は (MK) の最小値に一致する．
 \end{proof}
 
-\section{最適計画の正則性と巡回的単調性}
+\section{最適計画の正則性と cyclical monotonicity}
 \label{sec:regularity}
 
 最適計画の台（サポート）には強い構造が備わる．
-それを記述するために，$c$-巡回的単調性を導入する．
+それを記述するために，$c$-cyclical monotonicity を導入する．
 
-\begin{definition}{$c$-巡回的単調性}{amb-cyclic-monotonicity}
-  $\Gamma \subset X \times X$ が $c$-\textbf{巡回的単調}であるとは，
+\begin{definition}{$c$-cyclical monotonicity}{amb-cyclic-monotonicity}
+  $\Gamma \subset X \times X$ が \textbf{$c$-cyclically monotone} であるとは，
   任意の $n \geq 2$ と任意の $(x_i, y_i) \in \Gamma$（$1 \leq i \leq n$）に対し
   \[
     \sum_{i=1}^{n} c(x_{i+1}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i)
@@ -138,8 +88,8 @@ $I$ の下半連続性から従う．
   が成り立つことをいう．ただし $x_{n+1} = x_1$ とする．
 \end{definition}
 
-\begin{remark}{巡回的単調性の置換表示}{amb-cyclic-perm}
-  巡回的単調性は次の同値な形で述べられる：
+\begin{remark}{cyclical monotonicity の置換表示}{amb-cyclic-perm}
+  cyclical monotonicity は次の同値な形で述べられる：
   任意の置換 $\sigma \colon \{1,\ldots,n\} \to \{1,\ldots,n\}$ に対し
   \[
     \sum_{i=1}^{n} c(x_{\sigma(i)}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i).
@@ -151,13 +101,13 @@ $I$ の下半連続性から従う．
 \begin{theorem}{最適計画の正則性}{amb-regularity}
   \blockmeta{uses=def:amb-mk; def:amb-cyclic-monotonicity}
   $c$ が連続かつ実数値であると仮定する．
-  任意の最適 $\gamma$ に対し $\spt\,\gamma$ は $c$-巡回的単調である．
+  任意の最適 $\gamma$ に対し $\spt\,\gamma$ は $c$-cyclically monotone である．
 
-  さらに，全ての最適計画の $\spt$ の和集合の閉包も $c$-巡回的単調である．
+  さらに，全ての最適計画の $\spt$ の和集合の閉包も $c$-cyclically monotone である．
 \end{theorem}
 
 \begin{proof}
-  最適な $\gamma$ の台が $c$-巡回的単調でないと仮定し，矛盾を導く．
+  最適な $\gamma$ の台が $c$-cyclically monotone でないと仮定し，矛盾を導く．
   $(x_i, y_i) \in \spt\,\gamma$（$i = 1, \ldots, n$）で
   \[
     f\bigl((x_i), (y_i)\bigr) := \sum_{i=1}^n c(x_{i+1}, y_i) - c(x_i, y_i) < 0
@@ -185,6 +135,6 @@ $I$ の下半連続性から従う．
   後半は，最適計画の集合が $w^*$-コンパクトであることと，
   稠密な列 $(\gamma_h)$ の $\spt$ の合併
   $\bigcup_{h=1}^N \spt\,\gamma_h = \spt\bigl(\sum_{h=1}^N \frac{1}{N}\gamma_h\bigr)$
-  が（凸結合も最適だから）$c$-巡回的単調であることから，
+  が（凸結合も最適だから）$c$-cyclically monotone であることから，
   極限操作で閉包まで拡張される．
 \end{proof}
