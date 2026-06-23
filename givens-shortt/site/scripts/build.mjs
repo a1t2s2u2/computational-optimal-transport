@@ -467,7 +467,6 @@ function mathJaxScript() {
             Pp: ["\\\\mathcal{P}_{#1}", 1],
             Couplings: "\\\\Pi",
             Lip: "\\\\mathrm{Lip}",
-            spt: "\\\\operatorname{spt}",
             esssup: "\\\\operatorname*{ess\\\\,sup}",
             tr: "\\\\operatorname{tr}",
             diag: "\\\\operatorname{diag}",

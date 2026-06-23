@@ -1,12 +1,27 @@
 \chapter{Wasserstein 距離 \texorpdfstring{$W_p$}{Wp}}
 \label{ch:wasserstein-metrics}
 
-本章を通して $(X,d)$ を Polish 空間とし，基準点 $x_0\in X$ を一つ固定する．
-
-\section{定義}
+\section{設定と定義}
 \label{sec:wp-definition}
 
-\begin{definition}{有限モーメントをもつ確率測度}{gs-p-space}
+\begin{definition}{確率測度の空間}{gs-probability-space}
+  $(X,d)$ を完備かつ可分な距離空間とする．このような空間を
+  \textbf{Polish 空間}という．
+  $X$ の開集合から生成される $\sigma$-代数を $\Borel(X)$ と書き，
+  \[
+    \Prob(X)
+    :=
+    \left\{
+      \mu\mid \mu\text{ は }\Borel(X)\text{ 上の測度で }\mu(X)=1
+    \right\}
+  \]
+  と定める．すなわち $\Prob(X)$ は $X$ 上の Borel 確率測度全体である．
+\end{definition}
+
+有限 $p$ 次モーメントを定義するため，任意の点 $o\in X$ を一つ選ぶ．
+この点に特別な性質はない．
+
+\begin{definition}{$W_p$ の定義域}{gs-p-space}
   $1\leq p<\infty$ に対し
   \[
     \Pp{p}(X)
@@ -14,17 +29,21 @@
     \left\{
       \mu\in\Prob(X)
       \;\middle|\;
-      \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+      \int_X d(x,o)^p\,\d\mu(x)<\infty
     \right\}
   \]
   と定める．また
   \[
     \Pp{\infty}(X)
     :=
-    \left\{\mu\in\Prob(X)\mid \spt\mu\text{ は有界}\right\}
+    \left\{
+      \mu\in\Prob(X)
+      \;\middle|\;
+      \exists\text{ 有界 Borel 集合 }B\subset X,\ \mu(B)=1
+    \right\}
   \]
-  とおく．三角不等式より $\Pp{p}(X)$ は基準点 $x_0$ の選び方によらない．
-  これは $\Wass_p$ を有限値の距離として扱うための定義域である．
+  とおく．$d(x,o')\leq d(x,o)+d(o,o')$ より，
+  $\Pp{p}(X)$ は点 $o$ の選び方によらない．
 \end{definition}
 
 \begin{definition}{結合と Wasserstein 距離}{gs-wasserstein}
@@ -35,8 +54,10 @@
     \left\{
       \pi\in\Prob(X\times X)
       \;\middle|\;
-      (\mathrm{pr}_1)\pushforward\pi=\mu,\ 
-      (\mathrm{pr}_2)\pushforward\pi=\nu
+      \begin{aligned}
+        \pi(A\times X)&=\mu(A) &&(\forall A\in\Borel(X)),\\
+        \pi(X\times B)&=\nu(B) &&(\forall B\in\Borel(X))
+      \end{aligned}
     \right\}
   \]
   とする．$1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し
@@ -55,19 +76,33 @@
     \inf_{\pi\in\Couplings(\mu,\nu)}
     \esssup_{(x,y)\sim\pi}d(x,y)
   \]
-  と定める．
+  と定める．ここで本質的上限は，
+  $\pi(\{(x,y)\mid d(x,y)\leq R\})=1$ となる最小の $R$ である．
 \end{definition}
+
+$\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要である．
+実際，点 $o$ に質量 $1$ を置く確率測度を $\delta_o$ と書けば
+\[
+  \Wass_p(\mu,\delta_o)^p
+  =
+  \int_X d(x,o)^p\,\d\mu(x)
+\]
+となる．
 
 $p<\infty$ のとき，直積結合 $\mu\otimes\nu$ と
 \[
   d(x,y)^p
   \leq
-  2^{p-1}\bigl(d(x,x_0)^p+d(y,x_0)^p\bigr)
+  2^{p-1}\bigl(d(x,o)^p+d(y,o)^p\bigr)
 \]
 を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
 
 \section{最適結合の存在}
 \label{sec:optimal-coupling}
+
+確率測度の\textbf{弱収束} $\pi_n\rightharpoonup\pi$ とは，
+すべての有界連続関数 $f$ に対して
+$\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 
 \begin{lemma}{輸送コストの下半連続性}{gs-cost-lsc}
   $\pi_n\rightharpoonup\pi$ ならば，$1\leq p<\infty$ に対し
