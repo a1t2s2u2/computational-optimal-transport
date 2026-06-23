@@ -20,19 +20,20 @@ Monge の元来の定式化は輸送写像 $\psi \colon X \to X$（$\psi\pushfor
 Kantorovich は，積空間 $X \times X$ 上の確率測度 $\gamma$（輸送計画）で問題を緩和した．
 
 \begin{definition}{Kantorovich 問題 (MK)}{amb-mk}
-  $\pi_0(x,y) = x$，$\pi_1(x,y) = y$ を射影とする．
-  周辺条件
+  $\pi_0(x,y) := x$，$\pi_1(x,y) := y$ を射影とし，
   \[
-    \pi_{0\#}\gamma = \mu, \qquad \pi_{1\#}\gamma = \nu
+    \Gamma(\mu,\nu) := \bigl\{\,
+      \gamma \in \Prob(X \times X)
+      \bigm| \pi_{0\#}\gamma = \mu,\; \pi_{1\#}\gamma = \nu
+    \,\bigr\}
   \]
-  を満たす $\gamma \in \Prob(X \times X)$ の全体を $\Gamma(\mu,\nu)$ と書く．
-
-  ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
-  輸送コスト汎関数を
+  とおく．ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
   \[
-    I(\gamma) := \int_{X \times X} c(x,y)\,\d\gamma(x,y)
+    \Fcost_c(\mu, \nu) :=
+    \min_{\gamma \in \Gamma(\mu,\nu)}
+    \int_{X \times X} c(x,y)\,\d\gamma(x,y)
   \]
-  と定め，$\Gamma(\mu,\nu)$ にわたる下限を $\Fcost_c(\mu, \nu)$ と書く．
+  を \textbf{Kantorovich 問題} (MK) と呼ぶ．
 \end{definition}
 
 Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \otimes \nu$ が常に
