@@ -46,17 +46,12 @@ const CHAPTERS = [
   ["main/01_wasserstein_metrics.tex", "01-wasserstein-metrics.md", {
     id: "wasserstein-metrics", group: "main",
     nav: "Wasserstein 距離", eyebrow: "1. Wasserstein Metrics",
-    title: "Lp Wasserstein 距離",
+    title: "Wasserstein 距離 Wₚ",
   }],
   ["main/02_gaussian_measures.tex", "02-gaussian-measures.md", {
     id: "gaussian-measures", group: "main",
     nav: "Gaussian 測度", eyebrow: "2. Gaussian Measures",
-    title: "Gaussian 測度の W2",
-  }],
-  ["main/03_questions.tex", "03-questions.md", {
-    id: "questions", group: "main",
-    nav: "問いと見通し", eyebrow: "3. Questions",
-    title: "論文末の問いと見通し",
+    title: "Gaussian 測度の W₂",
   }],
 ];
 

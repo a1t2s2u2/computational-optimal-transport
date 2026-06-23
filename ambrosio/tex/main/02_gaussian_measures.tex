@@ -11,7 +11,6 @@ $\Sigma_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
 
 \begin{theorem}{Gaussian 測度間の $W_2$ 公式}{gs-gaussian-formula}
   \[
-    \boxed{
     \Wass_2(\mu_0,\mu_1)^2
     =
     \norm{m_0-m_1}^2
@@ -20,12 +19,12 @@ $\Sigma_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
       \left(
         \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
       \right)^{1/2}
-    \right]}
+    \right]
   \]
   が成り立つ．
 \end{theorem}
 
-\begin{remark}{Bures--Wasserstein 距離}{gs-bures}
+\begin{remark}{Bures–Wasserstein 距離}{gs-bures}
   共分散行列に依存する項
   \[
     d_{\mathrm{BW}}(\Sigma_0,\Sigma_1)^2
@@ -37,7 +36,7 @@ $\Sigma_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
       \right)^{1/2}
     \right]
   \]
-  は，現在では Bures--Wasserstein 距離と呼ばれる．
+  は，現在では Bures–Wasserstein 距離と呼ばれる．
   したがって主公式は
   $\Wass_2^2=\norm{m_0-m_1}^2+d_{\mathrm{BW}}^2$ と分解できる．
 \end{remark}
