@@ -59,11 +59,6 @@ const CHAPTERS = [
     nav: "エントロピー", eyebrow: "4. Entropic Regularization",
     title: "エントロピー正則化",
   }],
-  ["main/05_sinkhorn.tex", "05-sinkhorn.md", {
-    id: "sinkhorn", group: "main",
-    nav: "Sinkhorn", eyebrow: "5. Sinkhorn",
-    title: "Sinkhorn アルゴリズムと収束",
-  }],
   // ---- 付録：前提知識（OT非依存・網羅版） ----
   ["foundations/00_set_topology.tex", "A0-set-topology.md", {
     id: "found-set-topology", group: "appendix",
@@ -84,11 +79,6 @@ const CHAPTERS = [
     id: "found-convex", group: "appendix",
     nav: "凸・線形代数", eyebrow: "付録 D. Convexity & Linear Algebra",
     title: "凸性と線形代数",
-  }],
-  ["foundations/04_nonneg_matrix.tex", "A4-nonneg-matrix.md", {
-    id: "found-nonneg-matrix", group: "appendix",
-    nav: "非負行列", eyebrow: "付録 E. Nonnegative Matrices",
-    title: "非負行列と Hilbert 射影計量",
   }],
 ];
 

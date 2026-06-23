@@ -23,11 +23,7 @@ const glossary = {
   },
   gibbs: {
     title: "Gibbs カーネル",
-    body: "コスト行列から作る正行列。\\(K_{ij}=\\exp(-C_{ij}/\\varepsilon)\\)。Sinkhorn はこの行列を周辺制約に合わせてスケーリングする。"
-  },
-  sinkhorn: {
-    title: "Sinkhorn 反復",
-    body: "Gibbs カーネルを行方向と列方向に交互にスケールし、指定された周辺分布に合わせる反復。KL 交互射影、双対の交互最大化としても解釈できる。"
+    body: "コスト行列から作る正行列。\\(K_{ij}=\\exp(-C_{ij}/\\varepsilon)\\)。正則化解は \\(P_\\varepsilon = \\mathrm{diag}(u) K \\mathrm{diag}(v)\\) の形をとる。"
   }
 };
 
@@ -291,67 +287,6 @@ document.addEventListener("keydown", (e) => {
     refSheet?.close();
   }
 });
-
-/* ---------- Sinkhorn Demo ---------- */
-
-const cost = [
-  [0.08, 0.46, 0.92, 1.28],
-  [0.38, 0.12, 0.36, 0.84],
-  [0.86, 0.42, 0.18, 0.44],
-  [1.24, 0.74, 0.40, 0.10]
-];
-
-const a = [0.28, 0.22, 0.31, 0.19];
-const b = [0.20, 0.30, 0.27, 0.23];
-
-function sinkhorn(epsilon) {
-  const n = cost.length;
-  const m = cost[0].length;
-  const kernel = cost.map((row) => row.map((v) => Math.exp(-v / epsilon)));
-  let u = Array(n).fill(1);
-  let v = Array(m).fill(1);
-  for (let step = 0; step < 70; step++) {
-    u = u.map((_, i) => a[i] / kernel[i].reduce((s, k, j) => s + k * v[j], 0));
-    v = v.map((_, j) => b[j] / kernel.reduce((s, row, i) => s + row[j] * u[i], 0));
-  }
-  return kernel.map((row, i) => row.map((k, j) => u[i] * k * v[j]));
-}
-
-function renderMatrix(target, values, mode) {
-  const el = document.querySelector(target);
-  if (!el) return;
-  const flat = values.flat();
-  const min = Math.min(...flat);
-  const max = Math.max(...flat);
-  el.innerHTML = "";
-  flat.forEach((value) => {
-    const t = max === min ? 0 : (value - min) / (max - min);
-    const hue = mode === "cost" ? 32 - t * 18 : 176 - t * 142;
-    const lightness = mode === "cost" ? 94 - t * 30 : 94 - t * 42;
-    const cell = document.createElement("span");
-    cell.className = "cell";
-    cell.style.background = `hsl(${hue} 72% ${lightness}%)`;
-    cell.textContent = value.toFixed(2);
-    el.appendChild(cell);
-  });
-}
-
-function updateDemo() {
-  const slider = document.querySelector("#epsilon-slider");
-  const output = document.querySelector("#epsilon-value");
-  if (!slider || !output) return;
-  const epsilon = Number(slider.value);
-  output.value = epsilon.toFixed(2);
-  output.textContent = epsilon.toFixed(2);
-  renderMatrix("#cost-matrix", cost, "cost");
-  renderMatrix("#plan-matrix", sinkhorn(epsilon), "plan");
-}
-
-const slider = document.querySelector("#epsilon-slider");
-if (slider) {
-  slider.addEventListener("input", updateDemo);
-  updateDemo();
-}
 
 /* ---------- Mermaid ---------- */
 

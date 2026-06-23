@@ -193,30 +193,6 @@ function transportOptimalDiagram() {
 </figure>`;
 }
 
-function sinkhornDemo() {
-  return `
-<div class="demo" aria-label="Sinkhorn デモ">
-  <div class="demo-head">
-    <h3>\\(\\varepsilon\\) と輸送計画</h3>
-    <label>
-      <span>\\(\\varepsilon\\)</span>
-      <input id="epsilon-slider" type="range" min="0.08" max="2.4" step="0.02" value="0.48" />
-      <output id="epsilon-value">0.48</output>
-    </label>
-  </div>
-  <div class="matrix-layout">
-    <div>
-      <h4>Cost \\(\\mathbf{C}\\)</h4>
-      <div id="cost-matrix" class="matrix-grid"></div>
-    </div>
-    <div>
-      <h4>Plan \\(\\mathbf{P}_{\\varepsilon}\\)</h4>
-      <div id="plan-matrix" class="matrix-grid"></div>
-    </div>
-  </div>
-</div>`;
-}
-
 function renderMarkdown(markdown) {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
   const html = [];
@@ -333,12 +309,6 @@ function renderMarkdown(markdown) {
       const title = spec.slice("details ".length);
       html.push(`<details class="fold"><summary>${renderInline(title)}</summary>`);
       stack.push("</details>");
-      return;
-    }
-    if (spec === "demo sinkhorn") {
-      html.push('<div class="demo-breakout">');
-      html.push(sinkhornDemo());
-      html.push('</div>');
       return;
     }
     if (spec === "demo transport-cost") {
@@ -531,7 +501,6 @@ function mathJaxScript() {
             Ric: "\\\\operatorname{Ric}",
             CD: "\\\\mathrm{CD}",
             diverg: "\\\\nabla\\\\!\\\\cdot\\\\!",
-            dHil: "d_{\\\\mathcal{H}}"
           }
         },
         svg: { fontCache: "global" }

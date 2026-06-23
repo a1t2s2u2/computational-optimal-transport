@@ -1,5 +1,6 @@
-## 参考とする論文
-[Computational Optimal Transport, Gabriel Peyré, Marco Cuturi](https://arxiv.org/abs/1803.00567)
+## リポジトリ概要
+最適輸送のセミナー資料（tex / site）と関連ツールを管理するリポジトリ。
+これまで Cuturi の *Computational Optimal Transport* を参考に本編4章+付録4章を整備した。
 
 ## セミナー方針
 - 連続側の理論的土台として $\X, \Y$ は Polish 空間を仮定
@@ -7,7 +8,6 @@
 - 数学書の記述スタイルを参考に統一する
 
 ## tex コーディング規約
-- Cuturi の論文構成と記法に従うこと
 - コミット時 / PR時 には co-authored-by や ClaudeCode は記載しない
 
 ## ブランチ戦略

@@ -6,5 +6,5 @@ $makeindex      = 'upmendex %O -o %D %S';
 $dvipdf         = 'dvipdfmx %O -o %D %S';
 $pdf_mode       = 3;            # latex -> dvi -> pdf 経路
 $out_dir        = 'out';
-@default_files  = ('main.tex', 'main_0519.tex');
+@default_files  = ('main.tex');
 $max_repeat     = 5;
