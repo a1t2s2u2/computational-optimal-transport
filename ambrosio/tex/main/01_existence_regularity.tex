@@ -6,8 +6,6 @@
   \begin{itemize}
     \item 確率測度を $f_0, f_1$ でなく $\mu, \nu$ と書く．
     \item 原文の ``Kantorovich–Wasserstein distance'' は単に Wasserstein 距離と呼ぶ．
-    \item 原文の ``admissible'' は許容的と訳す．
-      許容的な $\gamma$ の全体を $\mathrm{Adm}(\mu,\nu)$ とも書く．
     \item 押し出し（push forward）の記号は原文と同じく $f\pushforward \mu$ を用いる．
   \end{itemize}
 \end{remark}
@@ -18,27 +16,27 @@ $X$ を $\R^n$ のコンパクト凸部分集合とし，$\mu, \nu \in \Prob(X)$
 \label{sec:kantorovich}
 
 Monge の元来の定式化は輸送写像 $\psi \colon X \to X$（$\psi\pushforward \mu = \nu$）の
-最適化だが，$\mu$ がアトムをもつときなど許容写像が存在しない場合がある．
+最適化だが，$\mu$ がアトムをもつときなど $\psi\pushforward \mu = \nu$ を満たす写像が存在しない場合がある．
 Kantorovich は，積空間 $X \times X$ 上の確率測度 $\gamma$（輸送計画）で問題を緩和した．
 
 \begin{definition}{Kantorovich 問題 (MK)}{amb-mk}
-  $\gamma \in \Prob(X \times X)$ が \textbf{許容的}（admissible）であるとは，
-  その周辺が $\mu$ と $\nu$ に一致すること，すなわち
+  $\pi_0(x,y) = x$，$\pi_1(x,y) = y$ を射影とする．
+  周辺条件
   \[
     \pi_{0\#}\gamma = \mu, \qquad \pi_{1\#}\gamma = \nu
   \]
-  をいう．ここで $\pi_0(x,y) = x$，$\pi_1(x,y) = y$ は射影である．
+  を満たす $\gamma \in \Prob(X \times X)$ の全体を $\Gamma(\mu,\nu)$ と書く．
 
   ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
   輸送コスト汎関数を
   \[
     I(\gamma) := \int_{X \times X} c(x,y)\,\d\gamma(x,y)
   \]
-  と定め，許容的な $\gamma$ の全体にわたる下限を $\Fcost_c(\mu, \nu)$ と書く．
+  と定め，$\Gamma(\mu,\nu)$ にわたる下限を $\Fcost_c(\mu, \nu)$ と書く．
 \end{definition}
 
-Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \times \nu$ が常に
-許容的であるから，許容計画は必ず存在する．
+Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \otimes \nu$ が常に
+$\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ である．
 これにより次のような距離の族が定まる．
 
 \begin{definition}{Wasserstein 距離}{amb-wasserstein}
@@ -47,7 +45,7 @@ Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \times \
   \[
     \Fcost_p(\mu, \nu)
     := \left(
-      \min_{\gamma \in \mathrm{Adm}(\mu,\nu)}
+      \min_{\gamma \in \Gamma(\mu,\nu)}
       \int_{X \times X} \abs{x - y}^p \,\d\gamma
     \right)^{1/p}
   \]
@@ -79,7 +77,7 @@ Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \times \
     \pi_{0\#}\gamma_\psi = \mu, \qquad
     \pi_{1\#}\gamma_\psi = \psi\pushforward \mu = \nu
   \]
-  であり，$\gamma_\psi$ は許容的である．
+  であり，$\gamma_\psi \in \Gamma(\mu,\nu)$ である．
 
   逆に，$\gamma$ が $\gamma$-可測なグラフ
   $\Gamma = \{(x, \phi(x)) : x \in \pi_0(\Gamma)\}$ 上に集中するとする．
@@ -93,7 +91,7 @@ Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \times \
 \section{最適計画の存在}
 \label{sec:existence}
 
-最適計画の存在は，許容計画のなす集合の $w^*$-コンパクト性と
+最適計画の存在は，$\Gamma(\mu,\nu)$ の $w^*$-コンパクト性と
 $I$ の下半連続性から従う．
 
 \begin{theorem}{最適計画の存在}{amb-existence}
@@ -110,8 +108,7 @@ $I$ の下半連続性から従う．
 \end{theorem}
 
 \begin{proof}
-  許容計画の集合 $\Gamma := \{\gamma \in \Prob(X \times X) : \pi_{0\#}\gamma = \mu,\; \pi_{1\#}\gamma = \nu\}$
-  は $w^*$-位相で閉かつ有界であり，$X \times X$ がコンパクトだから $w^*$-コンパクトである．
+  $\Gamma(\mu,\nu)$ は $w^*$-位相で閉かつ有界であり，$X \times X$ がコンパクトだから $w^*$-コンパクトである．
 
   $c$ が下半連続のとき，連続関数の増大列 $c_h \uparrow c$ で
   下から近似でき，$c_h$ の誘導する汎関数 $I_h$ は
@@ -119,7 +116,7 @@ $I$ の下半連続性から従う．
   コンパクト集合上の下半連続関数は最小値を達成する．
 
   後半は次のように示される．
-  任意の許容計画 $\gamma$ に対し，$\psi\pushforward \mu = \nu$ を満たすボレル写像 $\psi_h$
+  任意の $\gamma \in \Gamma(\mu,\nu)$ に対し，$\psi\pushforward \mu = \nu$ を満たすボレル写像 $\psi_h$
   の列で $\delta_{\psi_h(x)} \otimes \mu$ が $\gamma$ に $w^*$-収束するものが構成できる
   （$\mu$ がアトムをもたないことを本質的に使う）．
   $c$ の連続性により
