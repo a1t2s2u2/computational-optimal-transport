@@ -4,20 +4,20 @@
 \section{主結果}
 \label{sec:gaussian-main-result}
 
-$\mu_i=\mathcal{N}(m_i,\Sigma_i)$（$i=0,1$）を
+$\mu_i=\mathcal{N}(m_i,M_i)$（$i=0,1$）を
 $\R^n$ 上の Gaussian 測度とする．ここで
 $m_i\in\R^n$ は平均ベクトル，
-$\Sigma_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
+$M_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
 
 \begin{theorem}{Gaussian 測度間の $W_2$ 公式}{gs-gaussian-formula}
   \[
     \Wass_2(\mu_0,\mu_1)^2
     =
     \norm{m_0-m_1}^2
-    +\tr(\Sigma_0)+\tr(\Sigma_1)
+    +\tr(M_0)+\tr(M_1)
     -2\tr\!\left[
       \left(
-        \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
+        M_0^{1/2}M_1M_0^{1/2}
       \right)^{1/2}
     \right]
   \]
@@ -27,12 +27,12 @@ $\Sigma_i\in\R^{n\times n}$ は対称半正定値な共分散行列である．
 \begin{remark}{Bures–Wasserstein 距離}{gs-bures}
   共分散行列に依存する項
   \[
-    d_{\mathrm{BW}}(\Sigma_0,\Sigma_1)^2
+    d_{\mathrm{BW}}(M_0,M_1)^2
     :=
-    \tr(\Sigma_0)+\tr(\Sigma_1)
+    \tr(M_0)+\tr(M_1)
     -2\tr\!\left[
       \left(
-        \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
+        M_0^{1/2}M_1M_0^{1/2}
       \right)^{1/2}
     \right]
   \]
@@ -87,8 +87,8 @@ $m_0=m_1=0$ と仮定する．
 \begin{lemma}{最適結合は Gaussian に選べる}{gs-gaussian-coupling}
   \blockmeta{uses=prop:gs-optimal-coupling}
   中心 Gaussian 測度
-  $\mu_0=\mathcal{N}(0,\Sigma_0)$ と
-  $\mu_1=\mathcal{N}(0,\Sigma_1)$ の間には，
+  $\mu_0=\mathcal{N}(0,M_0)$ と
+  $\mu_1=\mathcal{N}(0,M_1)$ の間には，
   Gaussian である最適結合が存在する．
 \end{lemma}
 
@@ -99,8 +99,8 @@ $m_0=m_1=0$ と仮定する．
     \Gamma
     =
     \begin{pmatrix}
-      \Sigma_0 & K\\
-      K^\top & \Sigma_1
+      M_0 & K\\
+      K^\top & M_1
     \end{pmatrix},
     \qquad
     K:=\mathbb{E}[XY^\top]
@@ -111,7 +111,7 @@ $m_0=m_1=0$ と仮定する．
   \[
     \mathbb{E}\norm{X_{\mathrm{G}}-Y_{\mathrm{G}}}^2
     =
-    \tr(\Sigma_0)+\tr(\Sigma_1)-2\tr(K)
+    \tr(M_0)+\tr(M_1)-2\tr(K)
     =
     \mathbb{E}\norm{X-Y}^2.
   \]
@@ -126,24 +126,24 @@ $m_0=m_1=0$ と仮定する．
 \[
   \Wass_2(\mu_0,\mu_1)^2
   =
-  \tr(\Sigma_0)+\tr(\Sigma_1)
+  \tr(M_0)+\tr(M_1)
   -2\sup_K\tr(K),
 \]
 ただし
 \[
   \begin{pmatrix}
-    \Sigma_0 & K\\
-    K^\top & \Sigma_1
+    M_0 & K\\
+    K^\top & M_1
   \end{pmatrix}
   \succeq0
 \]
 を満たす $K$ の上で上限を取る．
 
 \begin{lemma}{実行可能な交差共分散}{gs-cross-covariance}
-  $\Sigma_0,\Sigma_1$ が正定値なら，
+  $M_0,M_1$ が正定値なら，
   ブロック行列が半正定値であることと
   \[
-    K=\Sigma_0^{1/2}C\Sigma_1^{1/2},
+    K=M_0^{1/2}CM_1^{1/2},
     \qquad
     \norm{C}_{\mathrm{op}}\leq1
   \]
@@ -154,8 +154,8 @@ $m_0=m_1=0$ と仮定する．
   合同変換により
   \[
     \begin{pmatrix}
-      \Sigma_0 & K\\
-      K^\top & \Sigma_1
+      M_0 & K\\
+      K^\top & M_1
     \end{pmatrix}
     \succeq0
     \quad\Longleftrightarrow\quad
@@ -165,7 +165,7 @@ $m_0=m_1=0$ と仮定する．
     \end{pmatrix}
     \succeq0,
     \qquad
-    C:=\Sigma_0^{-1/2}K\Sigma_1^{-1/2}.
+    C:=M_0^{-1/2}KM_1^{-1/2}.
   \]
   右辺に Schur 補行列を適用すると
   $I-C^\top C\succeq0$，すなわち
@@ -193,27 +193,27 @@ $m_0=m_1=0$ と仮定する．
 \end{proof}
 
 \begin{proof}[定理~\ref{thm:gs-gaussian-formula}の証明]
-  まず $\Sigma_0,\Sigma_1$ が正定値で，平均が $0$ とする．
+  まず $M_0,M_1$ が正定値で，平均が $0$ とする．
   補題~\ref{lem:gs-cross-covariance}とトレースの巡回性から
   \[
     \begin{aligned}
       \sup_K\tr(K)
       &=
       \sup_{\norm{C}_{\mathrm{op}}\leq1}
-      \tr(\Sigma_0^{1/2}C\Sigma_1^{1/2}) \\
+      \tr(M_0^{1/2}CM_1^{1/2}) \\
       &=
       \sup_{\norm{C}_{\mathrm{op}}\leq1}
-      \tr(C\Sigma_1^{1/2}\Sigma_0^{1/2}).
+      \tr(CM_1^{1/2}M_0^{1/2}).
     \end{aligned}
   \]
   補題~\ref{lem:gs-trace-max}を
-  $A=\Sigma_1^{1/2}\Sigma_0^{1/2}$ に適用すると
+  $A=M_1^{1/2}M_0^{1/2}$ に適用すると
   \[
     \sup_K\tr(K)
     =
     \tr\!\left[
       \left(
-        \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
+        M_0^{1/2}M_1M_0^{1/2}
       \right)^{1/2}
     \right].
   \]
@@ -221,12 +221,12 @@ $m_0=m_1=0$ と仮定する．
   平均が非零の場合は補題~\ref{lem:gs-mean-split}を使う．
 
   共分散行列が特異な場合は
-  $\Sigma_i+\varepsilon I$ に対する公式を用いる．
+  $M_i+\varepsilon I$ に対する公式を用いる．
   独立な $Z\sim\mathcal{N}(0,I)$ を加える結合から
   \[
     \Wass_2\!\left(
-      \mathcal{N}(m_i,\Sigma_i+\varepsilon I),
-      \mathcal{N}(m_i,\Sigma_i)
+      \mathcal{N}(m_i,M_i+\varepsilon I),
+      \mathcal{N}(m_i,M_i)
     \right)
     \leq\sqrt{n\varepsilon}
   \]
@@ -237,7 +237,7 @@ $m_0=m_1=0$ と仮定する．
 \label{sec:gaussian-map}
 
 \begin{proposition}{Gaussian 間の最適輸送写像}{gs-gaussian-map}
-  $\Sigma_0$ が正定値なら
+  $M_0$ が正定値なら
   \[
     T(x)
     :=
@@ -245,11 +245,11 @@ $m_0=m_1=0$ と仮定する．
     \qquad
     A
     :=
-    \Sigma_0^{-1/2}
+    M_0^{-1/2}
     \left(
-      \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
+      M_0^{1/2}M_1M_0^{1/2}
     \right)^{1/2}
-    \Sigma_0^{-1/2}
+    M_0^{-1/2}
   \]
   は $T\pushforward\mu_0=\mu_1$ を満たし，
   $(\Id,T)\pushforward\mu_0$ は $\Wass_2$ の最適結合である．
@@ -258,10 +258,10 @@ $m_0=m_1=0$ と仮定する．
 \begin{proof}
   $A$ は対称半正定値であり
   \[
-    A\Sigma_0A^\top=\Sigma_1
+    AM_0A^\top=M_1
   \]
-  を満たす．したがって $X\sim\mathcal{N}(m_0,\Sigma_0)$ なら
-  $T(X)\sim\mathcal{N}(m_1,\Sigma_1)$ である．
+  を満たす．したがって $X\sim\mathcal{N}(m_0,M_0)$ なら
+  $T(X)\sim\mathcal{N}(m_1,M_1)$ である．
   この結合のコストを展開すると
   定理~\ref{thm:gs-gaussian-formula}の右辺に一致するので最適である．
 \end{proof}
@@ -270,13 +270,13 @@ $m_0=m_1=0$ と仮定する．
 \label{sec:gaussian-special-cases}
 
 \begin{proposition}{可換な共分散行列}{gs-commuting-covariances}
-  $\Sigma_0\Sigma_1=\Sigma_1\Sigma_0$ なら
+  $M_0M_1=M_1M_0$ なら
   \[
     \Wass_2(\mu_0,\mu_1)^2
     =
     \norm{m_0-m_1}^2
     +
-    \norm{\Sigma_0^{1/2}-\Sigma_1^{1/2}}_{\mathrm{F}}^2,
+    \norm{M_0^{1/2}-M_1^{1/2}}_{\mathrm{F}}^2,
   \]
   ここで $\norm{\cdot}_{\mathrm{F}}$ は Frobenius ノルムである．
 \end{proposition}
@@ -285,10 +285,10 @@ $m_0=m_1=0$ と仮定する．
   可換な対称行列は同時対角化できるので
   \[
     \left(
-      \Sigma_0^{1/2}\Sigma_1\Sigma_0^{1/2}
+      M_0^{1/2}M_1M_0^{1/2}
     \right)^{1/2}
     =
-    \Sigma_0^{1/2}\Sigma_1^{1/2}.
+    M_0^{1/2}M_1^{1/2}.
   \]
   主公式へ代入すればよい．
 \end{proof}
@@ -303,16 +303,16 @@ $m_0=m_1=0$ と仮定する．
 \end{example}
 
 \begin{example}{二次元の中心 Gaussian}{gs-two-dimensional-gaussian}
-  $m_0=m_1=0$ かつ $\Sigma_0,\Sigma_1\in\R^{2\times2}$ とする．
+  $m_0=m_1=0$ かつ $M_0,M_1\in\R^{2\times2}$ とする．
   $2\times2$ 半正定値行列 $B$ に対する恒等式
   $\tr(B^{1/2})^2=\tr(B)+2\sqrt{\det(B)}$ を用いると
   \[
     \Wass_2(\mu_0,\mu_1)^2
     =
-    \tr(\Sigma_0)+\tr(\Sigma_1)
+    \tr(M_0)+\tr(M_1)
     -2\sqrt{
-      \tr(\Sigma_0\Sigma_1)
-      +2\sqrt{\det(\Sigma_0\Sigma_1)}
+      \tr(M_0M_1)
+      +2\sqrt{\det(M_0M_1)}
     }.
   \]
 \end{example}
