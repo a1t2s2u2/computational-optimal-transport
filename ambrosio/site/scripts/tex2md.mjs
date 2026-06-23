@@ -14,8 +14,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // ---------------------------------------------------------------------------
 
 const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
-const SEMINAR_DIR = path.join(REPO_ROOT, "seminar", "tex");
-const CONTENT_DIR = path.join(REPO_ROOT, "seminar", "site", "content");
+const SEMINAR_DIR = path.join(REPO_ROOT, "ambrosio", "tex");
+const CONTENT_DIR = path.join(REPO_ROOT, "ambrosio", "site", "content");
 
 // 本編(main/) と 付録(foundations/) の全 tex を出現順に返す。
 // ラベル写像・章写像の走査対象（preamble.tex / main.tex は含めない）。
@@ -38,47 +38,15 @@ function allChapterTex() {
 // 参照（\ref）解決は buildLabelMap()／buildChapterMap() が main/ と foundations/ の
 // 全 tex を走査するため、付録のラベルも本編からタイトル表示・参照できる。
 const CHAPTERS = [
-  // ---- 本編（OT）：発表2の流れ ----
-  ["main/01_assignment.tex", "01-assignment.md", {
-    id: "assignment", group: "main",
-    nav: "最適割当", eyebrow: "1. Assignment",
-    title: "最適割当問題",
+  ["main/00_preliminaries.tex", "00-preliminaries.md", {
+    id: "preliminaries", group: "main",
+    nav: "準備", eyebrow: "0. Preliminaries",
+    title: "準備",
   }],
-  ["main/02_monge.tex", "02-monge.md", {
-    id: "monge", group: "main",
-    nav: "Monge", eyebrow: "2. Monge",
-    title: "Monge 問題",
-  }],
-  ["main/03_kantorovich.tex", "03-kantorovich.md", {
-    id: "kantorovich", group: "main",
-    nav: "Kantorovich", eyebrow: "3. Kantorovich",
-    title: "Kantorovich 問題",
-  }],
-  ["main/04_entropic.tex", "04-entropic.md", {
-    id: "entropic", group: "main",
-    nav: "エントロピー", eyebrow: "4. Entropic Regularization",
-    title: "エントロピー正則化",
-  }],
-  // ---- 付録：前提知識（OT非依存・網羅版） ----
-  ["foundations/00_set_topology.tex", "A0-set-topology.md", {
-    id: "found-set-topology", group: "appendix",
-    nav: "集合と位相", eyebrow: "付録 A. Set & Topology",
-    title: "集合と位相",
-  }],
-  ["foundations/01_metric_compact.tex", "A1-metric.md", {
-    id: "found-metric", group: "appendix",
-    nav: "距離・コンパクト", eyebrow: "付録 B. Metric & Compactness",
-    title: "距離空間・連続・コンパクト性",
-  }],
-  ["foundations/02_measure.tex", "A2-measure.md", {
-    id: "found-measure", group: "appendix",
-    nav: "測度論", eyebrow: "付録 C. Measure Theory",
-    title: "測度論",
-  }],
-  ["foundations/03_convex_linalg.tex", "A3-convex.md", {
-    id: "found-convex", group: "appendix",
-    nav: "凸・線形代数", eyebrow: "付録 D. Convexity & Linear Algebra",
-    title: "凸性と線形代数",
+  ["main/01_existence_regularity.tex", "01-existence-regularity.md", {
+    id: "existence-regularity", group: "main",
+    nav: "存在と正則性", eyebrow: "1. Existence & Regularity",
+    title: "最適輸送計画：存在と正則性",
   }],
 ];
 

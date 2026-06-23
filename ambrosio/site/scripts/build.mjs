@@ -452,55 +452,24 @@ function mathJaxScript() {
           displayMath: [["\\\\[", "\\\\]"]],
           macros: {
             R: "\\\\mathbb{R}",
-            Rnn: "\\\\mathbb{R}_{\\\\geq 0}",
-            Rpos: "\\\\mathbb{R}_{>0}",
             N: "\\\\mathbb{N}",
-            E: "\\\\mathbb{E}",
-            Z: "\\\\mathbb{Z}",
-            Q: "\\\\mathbb{Q}",
-            X: "\\\\mathcal{X}",
-            Y: "\\\\mathcal{Y}",
-            Mm: "\\\\mathcal{M}",
-            Bb: "\\\\mathcal{B}",
-            Cc: "\\\\mathcal{C}",
-            Pp: "\\\\mathcal{P}",
-            Couplings: "\\\\mathcal{U}",
-            CouplingsD: "\\\\Pi",
-            MK: "\\\\mathcal{L}",
-            MKD: "\\\\mathrm{L}",
-            Potentials: "\\\\mathcal{R}",
-            PotentialsD: "\\\\mathbf{R}",
-            Hb: "\\\\mathrm{H}",
-            KLD: "\\\\mathrm{KL}",
-            ones: "\\\\mathbf{1}",
-            Identity: "\\\\mathbf{I}",
-            simplex: "\\\\Sigma",
-            diag: "\\\\operatorname{diag}",
-            tr: "\\\\operatorname{tr}",
-            Perm: "\\\\operatorname{Perm}",
-            rank: "\\\\operatorname{rank}",
-            supp: "\\\\operatorname{supp}",
-            smin: "\\\\operatorname{smin}",
-            Id: "\\\\operatorname{Id}",
-            argmin: "\\\\operatorname*{arg\\\\,min}",
-            argmax: "\\\\operatorname*{arg\\\\,max}",
-            pushforward: "{_\\\\sharp}",
+            Leb: "\\\\mathcal{L}",
+            Haus: "\\\\mathcal{H}",
+            Borel: "\\\\mathcal{B}",
+            Meas: "\\\\mathcal{M}",
+            Prob: "\\\\mathcal{M}_1",
+            Lip: "\\\\mathrm{Lip}",
+            spt: "\\\\operatorname{spt}",
+            Id: "\\\\mathrm{Id}",
+            Fcost: "\\\\mathcal{F}",
+            Wass: "W",
+            pushforward: "{_\\\\#}",
             d: "\\\\mathrm{d}",
             abs: ["\\\\lvert #1\\\\rvert", 1],
             norm: ["\\\\lVert #1\\\\rVert", 1],
             inner: ["\\\\langle #1,\\\\,#2\\\\rangle", 2],
-            defeq: "\\\\overset{\\\\mathrm{def}}{=}",
-            range: ["{\\\\lbrack\\\\!\\\\lbrack}#1{\\\\rbrack\\\\!\\\\rbrack}", 1],
-            dist: "d",
-            distD: "\\\\mathbf{D}",
-            Wass: "\\\\mathcal{W}",
-            WassD: "\\\\mathrm{W}",
-            Lcal: "\\\\mathcal{L}",
-            Hm: "\\\\mathrm{H}",
-            Tan: "\\\\mathrm{Tan}",
-            Ric: "\\\\operatorname{Ric}",
-            CD: "\\\\mathrm{CD}",
-            diverg: "\\\\nabla\\\\!\\\\cdot\\\\!",
+            argmin: "\\\\operatorname*{arg\\\\,min}",
+            argmax: "\\\\operatorname*{arg\\\\,max}",
           }
         },
         svg: { fontCache: "global" }
@@ -532,7 +501,7 @@ function siteHeader(sections, currentSection) {
       <div class="site-header__inner">
         <a href="${escapeHtml(relUrl(curOut, "index.html"))}" class="site-header__home">
           <span class="site-header__logo">OT</span>
-          <span class="site-header__name">計算最適輸送</span>
+          <span class="site-header__name">最適輸送問題</span>
         </a>
         <nav class="site-header__nav">
 ${mainLinks}${appendixNav}
@@ -579,7 +548,7 @@ function chapterTemplate(section, sections, index) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${escapeHtml(section.data.title)} — 計算最適輸送</title>
+    <title>${escapeHtml(section.data.title)} — 最適輸送問題</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -679,7 +648,7 @@ ${renderCards(appendixSecs)}
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>計算最適輸送セミナー</title>
+    <title>最適輸送問題セミナー — Ambrosio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -689,16 +658,16 @@ ${renderCards(appendixSecs)}
     <main class="landing">
       <div class="landing__hero">
         <h1 class="landing__title">
-          計算最適輸送
+          最適輸送問題
           <span>セミナー資料</span>
         </h1>
-        <p class="landing__sub">Computational Optimal Transport</p>
+        <p class="landing__sub">Lecture Notes on Optimal Transport Problems — L. Ambrosio</p>
       </div>
       <nav class="landing__toc">
 ${renderCards(mainSecs)}
       </nav>${appendixBlock}
       <footer class="landing__footer">
-        <p>Based on <em>Computational Optimal Transport</em> by G. Peyr&eacute; &amp; M. Cuturi</p>
+        <p>Based on <em>Lecture Notes on Optimal Transport Problems</em> by L. Ambrosio</p>
       </footer>
     </main>
   </body>

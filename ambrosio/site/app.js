@@ -1,29 +1,21 @@
 /* ==========================================================================
-   Computational Optimal Transport — Interactions
+   Optimal Transport Problems (Ambrosio) — Interactions
    ========================================================================== */
 
 /* ---------- Glossary ---------- */
 
 const glossary = {
-  polish: {
-    title: "Polish 空間",
-    body: "完備かつ可分な距離空間。確率測度の弱収束やカップリングの存在を扱いやすい。"
+  radon: {
+    title: "ラドン測度",
+    body: "局所コンパクト空間上のボレル測度で、コンパクト集合上有限かつ内部正則なもの。"
   },
-  coupling: {
-    title: "カップリング",
-    body: "二つの周辺分布を固定した積空間上の確率測度。Kantorovich 緩和の未知量。"
+  wstar: {
+    title: "弱* 収束",
+    body: "測度の列が弱* 収束するとは、全ての連続関数 \\(f\\) に対し \\(\\int f\\,d\\mu_n \\to \\int f\\,d\\mu\\) となること。"
   },
-  entropy: {
-    title: "離散エントロピー / エントロピー正則化",
-    body: "離散エントロピーは \\(H(P)=-\\sum_{ij}P_{ij}(\\log P_{ij}-1)\\)。正則化では線形コストに \\(-\\varepsilon H(P)\\) を加える。"
-  },
-  kl: {
-    title: "KL ダイバージェンス",
-    body: "非負行列 \\(P,K\\) の差を測る量。\\(\\sum_{ij}P_{ij}\\log(P_{ij}/K_{ij})-P_{ij}+K_{ij}\\) で定義する。"
-  },
-  gibbs: {
-    title: "Gibbs カーネル",
-    body: "コスト行列から作る正行列。\\(K_{ij}=\\exp(-C_{ij}/\\varepsilon)\\)。正則化解は \\(P_\\varepsilon = \\mathrm{diag}(u) K \\mathrm{diag}(v)\\) の形をとる。"
+  cyclical: {
+    title: "巡回的単調性",
+    body: "集合 \\(\\Gamma \\subset X \\times X\\) が \\(c\\)-巡回的単調であるとは、任意の巡回置換でコストが悪化しないこと。最適計画の台がもつ基本的性質。"
   }
 };
 
