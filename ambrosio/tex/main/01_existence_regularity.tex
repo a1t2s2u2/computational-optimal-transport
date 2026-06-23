@@ -6,18 +6,33 @@
   \begin{itemize}
     \item 確率測度を $f_0, f_1$ でなく $\mu, \nu$ と書く．
     \item 原文の ``Kantorovich–Wasserstein distance'' は単に Wasserstein 距離と呼ぶ．
-    \item 押し出し（push forward）の記号は原文と同じく $f\pushforward \mu$ を用いる．
   \end{itemize}
 \end{remark}
 
 $X$ を $\R^n$ のコンパクト凸部分集合とし，$\mu, \nu \in \Prob(X)$ とする．
 
+\section{準備：ラドン測度}
+\label{sec:radon}
+
+\begin{definition}{ラドン測度}{amb-radon}
+  $X \subset \R^n$ 上のボレル測度 $\mu$ が\textbf{ラドン測度}であるとは，
+  次の2条件を満たすことをいう：
+  \begin{enumerate}
+    \item \textbf{局所有限性}：任意のコンパクト集合 $K \subset X$ に対し $\mu(K) < \infty$．
+    \item \textbf{内部正則性}：任意のボレル集合 $B \in \Borel(X)$ に対し
+      \[
+        \mu(B) = \sup\,\{\,\mu(K) \mid K \subset B,\; K \text{ はコンパクト}\,\}.
+      \]
+  \end{enumerate}
+\end{definition}
+
+ラドン測度の重要性は，$C(X)$ の双対としての特徴づけ
+（Riesz の表現定理）にある．これにより $\Meas(X)$ 上に
+$w^*$-位相が自然に定まり，存在定理（定理~\ref{thm:amb-existence}）の
+証明で用いるコンパクト性が得られる．
+
 \section{Kantorovich 問題}
 \label{sec:kantorovich}
-
-Monge の元来の定式化は輸送写像 $\psi \colon X \to X$（$\psi\pushforward \mu = \nu$）の
-最適化だが，$\mu$ がアトムをもつときなど $\psi\pushforward \mu = \nu$ を満たす写像が存在しない場合がある．
-Kantorovich は，積空間 $X \times X$ 上の確率測度 $\gamma$（輸送計画）で問題を緩和した．
 
 \begin{definition}{Kantorovich 問題 (MK)}{amb-mk}
   \[
