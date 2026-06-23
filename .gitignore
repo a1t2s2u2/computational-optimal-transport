@@ -3,6 +3,7 @@ out/
 seminar/cuturi/translation/out/
 seminar/cuturi/original/out/
 seminar/tex/out/
+ambrosio/tex/out/
 
 # LaTeX intermediate files
 *.aux
@@ -22,6 +23,9 @@ seminar/tex/out/
 
 # generated site artifacts
 seminar/site/tex-out/
+
+# reference PDFs (original papers)
+/Lecture Notes on Optimal Transport Problems.pdf
 
 # uv
 .venv/

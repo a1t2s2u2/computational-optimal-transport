@@ -1,0 +1,194 @@
+\chapter{最適輸送計画：存在と正則性}
+\label{ch:existence-regularity}
+
+\begin{remark}{記法と用語の読み替え}{amb-notation-conv}
+  本ノートは Ambrosio の講義ノートに沿うが，以下の読み替えを行う．
+  \begin{itemize}
+    \item 確率測度を $f_0, f_1$ でなく $\mu, \nu$ と書く．
+    \item 原文の ``Kantorovich–Wasserstein distance'' は単に Wasserstein 距離と呼ぶ．
+    \item 原文の ``admissible'' は許容的と訳す．
+      許容的な $\gamma$ の全体を $\mathrm{Adm}(\mu,\nu)$ とも書く．
+    \item 押し出し（push forward）の記号は原文と同じく $f\pushforward \mu$ を用いる．
+  \end{itemize}
+\end{remark}
+
+$X$ を $\R^n$ のコンパクト凸部分集合とし，$\mu, \nu \in \Prob(X)$ とする．
+
+\section{Kantorovich 問題}
+\label{sec:kantorovich}
+
+Monge の元来の定式化は輸送写像 $\psi \colon X \to X$（$\psi\pushforward \mu = \nu$）の
+最適化だが，$\mu$ がアトムをもつときなど許容写像が存在しない場合がある．
+Kantorovich は，積空間 $X \times X$ 上の確率測度 $\gamma$（輸送計画）で問題を緩和した．
+
+\begin{definition}{Kantorovich 問題 (MK)}{amb-mk}
+  $\gamma \in \Prob(X \times X)$ が \textbf{許容的}（admissible）であるとは，
+  その周辺が $\mu$ と $\nu$ に一致すること，すなわち
+  \[
+    \pi_{0\#}\gamma = \mu, \qquad \pi_{1\#}\gamma = \nu
+  \]
+  をいう．ここで $\pi_0(x,y) = x$，$\pi_1(x,y) = y$ は射影である．
+
+  ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
+  輸送コスト汎関数を
+  \[
+    I(\gamma) := \int_{X \times X} c(x,y)\,\d\gamma(x,y)
+  \]
+  と定め，許容的な $\gamma$ の全体にわたる下限を $\Fcost_c(\mu, \nu)$ と書く．
+\end{definition}
+
+Kantorovich の設定では $\mu, \nu$ に制約はなく，直積 $\mu \times \nu$ が常に
+許容的であるから，許容計画は必ず存在する．
+これにより次のような距離の族が定まる．
+
+\begin{definition}{Wasserstein 距離}{amb-wasserstein}
+  $p \geq 1$ とし，$\mu, \nu \in \Prob(X)$ とする．
+  $\mu$ と $\nu$ の間の \textbf{$p$-Wasserstein 距離}を
+  \[
+    \Fcost_p(\mu, \nu)
+    := \left(
+      \min_{\gamma \in \mathrm{Adm}(\mu,\nu)}
+      \int_{X \times X} \abs{x - y}^p \,\d\gamma
+    \right)^{1/p}
+  \]
+  で定める．
+\end{definition}
+
+\section{輸送計画と輸送写像}
+\label{sec:plans-vs-maps}
+
+輸送写像と輸送計画の関係は次の命題で明確になる．
+
+\begin{proposition}{輸送計画と輸送写像}{amb-plan-vs-map}
+  \blockmeta{uses=def:amb-mk}
+  任意のボレル輸送写像 $\psi \colon X \to X$ は，
+  \[
+    \gamma_\psi := (\Id \times \psi)\pushforward \mu
+  \]
+  により輸送計画を誘導する．
+
+  逆に，輸送計画 $\gamma$ が $\gamma$-可測なグラフ $\Gamma$ 上に集中しているならば，
+  $\gamma$ はある輸送写像から誘導される．
+\end{proposition}
+
+\begin{proof}
+  $\psi$ を輸送写像とする．
+  $\pi_0 \circ (\Id \times \psi) = \Id$ かつ
+  $\pi_1 \circ (\Id \times \psi) = \psi$ だから，
+  \[
+    \pi_{0\#}\gamma_\psi = \mu, \qquad
+    \pi_{1\#}\gamma_\psi = \psi\pushforward \mu = \nu
+  \]
+  であり，$\gamma_\psi$ は許容的である．
+
+  逆に，$\gamma$ が $\gamma$-可測なグラフ
+  $\Gamma = \{(x, \phi(x)) : x \in \pi_0(\Gamma)\}$ 上に集中するとする．
+  コンパクト集合の増大列 $(K_h)$ で $\gamma(\Gamma \setminus K_h) \to 0$ となるものをとれば，
+  $\pi_0(\Gamma) \supset \bigcup_h \pi_0(K_h)$ は $\mu$-可測で $\mu$-全測度をもつ．
+  $\gamma$ の分解 $\gamma = \gamma_x \otimes \mu$ により，$\mu$-a.e.\ $x$ で
+  $\gamma_x$ が $\phi(x)$ の Dirac 測度であることが従い，
+  $\psi(x) := \int_X y\,\d\gamma_x(y)$ とおけば $\gamma = \gamma_\psi$ を得る．
+\end{proof}
+
+\section{最適計画の存在}
+\label{sec:existence}
+
+最適計画の存在は，許容計画のなす集合の $w^*$-コンパクト性と
+$I$ の下半連続性から従う．
+
+\begin{theorem}{最適計画の存在}{amb-existence}
+  \blockmeta{uses=def:amb-mk}
+  $c$ が $X \times X$ 上で下半連続であると仮定する．
+  このとき (MK) を達成する $\gamma \in \Prob(X \times X)$ が存在する．
+
+  さらに $c$ が連続かつ実数値ならば，
+  \[
+    \min\,(\mathrm{MK})
+    = \inf_{\psi\pushforward \mu = \nu} \int_X c(x, \psi(x))\,\d \mu(x)
+  \]
+  が成り立つ．ただし $\mu$ がアトムをもたないことを仮定する．
+\end{theorem}
+
+\begin{proof}
+  許容計画の集合 $\Gamma := \{\gamma \in \Prob(X \times X) : \pi_{0\#}\gamma = \mu,\; \pi_{1\#}\gamma = \nu\}$
+  は $w^*$-位相で閉かつ有界であり，$X \times X$ がコンパクトだから $w^*$-コンパクトである．
+
+  $c$ が下半連続のとき，連続関数の増大列 $c_h \uparrow c$ で
+  下から近似でき，$c_h$ の誘導する汎関数 $I_h$ は
+  $w^*$-連続かつ $I_h \uparrow I$ だから，$I$ は下半連続である．
+  コンパクト集合上の下半連続関数は最小値を達成する．
+
+  後半は次のように示される．
+  任意の許容計画 $\gamma$ に対し，$\psi\pushforward \mu = \nu$ を満たすボレル写像 $\psi_h$
+  の列で $\delta_{\psi_h(x)} \otimes \mu$ が $\gamma$ に $w^*$-収束するものが構成できる
+  （$\mu$ がアトムをもたないことを本質的に使う）．
+  $c$ の連続性により
+  $\int_X c(x, \psi_h(x))\,\d \mu \to I(\gamma)$ が従い，
+  Monge 問題の下限は (MK) の最小値に一致する．
+\end{proof}
+
+\section{最適計画の正則性と巡回的単調性}
+\label{sec:regularity}
+
+最適計画の台（サポート）には強い構造が備わる．
+それを記述するために，$c$-巡回的単調性を導入する．
+
+\begin{definition}{$c$-巡回的単調性}{amb-cyclic-monotonicity}
+  $\Gamma \subset X \times X$ が $c$-\textbf{巡回的単調}であるとは，
+  任意の $n \geq 2$ と任意の $(x_i, y_i) \in \Gamma$（$1 \leq i \leq n$）に対し
+  \[
+    \sum_{i=1}^{n} c(x_{i+1}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i)
+  \]
+  が成り立つことをいう．ただし $x_{n+1} = x_1$ とする．
+\end{definition}
+
+\begin{remark}{巡回的単調性の置換表示}{amb-cyclic-perm}
+  巡回的単調性は次の同値な形で述べられる：
+  任意の置換 $\sigma \colon \{1,\ldots,n\} \to \{1,\ldots,n\}$ に対し
+  \[
+    \sum_{i=1}^{n} c(x_{\sigma(i)}, y_i) \geq \sum_{i=1}^{n} c(x_i, y_i).
+  \]
+  これは，添え字の巡回置換だけでなく一般の置換でもコストが悪化しない
+  ことを意味する．
+\end{remark}
+
+\begin{theorem}{最適計画の正則性}{amb-regularity}
+  \blockmeta{uses=def:amb-mk; def:amb-cyclic-monotonicity}
+  $c$ が連続かつ実数値であると仮定する．
+  任意の最適 $\gamma$ に対し $\spt\,\gamma$ は $c$-巡回的単調である．
+
+  さらに，全ての最適計画の $\spt$ の和集合の閉包も $c$-巡回的単調である．
+\end{theorem}
+
+\begin{proof}
+  最適な $\gamma$ の台が $c$-巡回的単調でないと仮定し，矛盾を導く．
+  $(x_i, y_i) \in \spt\,\gamma$（$i = 1, \ldots, n$）で
+  \[
+    f\bigl((x_i), (y_i)\bigr) := \sum_{i=1}^n c(x_{i+1}, y_i) - c(x_i, y_i) < 0
+  \]
+  を満たすものが存在するとする．$c$ の連続性から，各 $(x_i, y_i)$ の
+  近傍 $U_i \times V_i$ 上でも $f < 0$ が保たれ，
+  $\gamma(U_i \times V_i) > 0$ である．
+
+  $\lambda = \min_i \gamma(U_i \times V_i)$ とし，
+  $\gamma_i \in \Prob(U_i \times V_i)$ を $\gamma$ の $U_i \times V_i$ への
+  正規化された制限とする．
+  コンパクト空間 $Y$ と確率測度 $\sigma$ を使い，
+  各 $\gamma_i = \eta_{i\#}\sigma$（$\eta_i = u_i \times v_i$）と表して
+  \[
+    \gamma' := \gamma + \frac{\lambda}{n} \sum_{i=1}^n
+    \bigl[(u_{i+1} \times v_i)\pushforward \sigma - (u_i \times v_i)\pushforward \sigma\bigr]
+  \]
+  とおけば $\gamma' \in \Meas_+(X \times X)$ かつ周辺条件は保たれ，
+  \[
+    I(\gamma') - I(\gamma) = \frac{\lambda}{n}
+    \int_Y \sum_{i=1}^n \bigl[c(u_{i+1}, v_i) - c(u_i, v_i)\bigr]\,\d\sigma < 0
+  \]
+  となり $\gamma$ の最適性に矛盾する．
+
+  後半は，最適計画の集合が $w^*$-コンパクトであることと，
+  稠密な列 $(\gamma_h)$ の $\spt$ の合併
+  $\bigcup_{h=1}^N \spt\,\gamma_h = \spt\bigl(\sum_{h=1}^N \frac{1}{N}\gamma_h\bigr)$
+  が（凸結合も最適だから）$c$-巡回的単調であることから，
+  極限操作で閉包まで拡張される．
+\end{proof}
