@@ -14,7 +14,7 @@ site:
 pdf:
 	cd seminar/tex && latexmk
 
-# --- Ambrosio (ambrosio/) ---
+# --- Givens--Shortt（旧ディレクトリ名 ambrosio/）---
 ambrosio-site:
 	node ambrosio/site/scripts/tex2md.mjs
 	node ambrosio/site/scripts/build.mjs

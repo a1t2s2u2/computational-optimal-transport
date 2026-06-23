@@ -3,12 +3,12 @@
 最適輸送のセミナー資料（tex / site）と関連ツールを管理するリポジトリ。
 
 - `seminar/` — Cuturi _Computational Optimal Transport_ に基づく資料（本編4章+付録3章）
-- `ambrosio/` — Ambrosio _Lecture Notes on Optimal Transport Problems_ に基づく資料
+- `ambrosio/` — Givens–Shortt _A class of Wasserstein metrics for probability distributions_ に基づく資料（ディレクトリ名は旧資料から継承）
 
 ## 参考文献
 
 - [Computational Optimal Transport, G. Peyré & M. Cuturi](https://arxiv.org/abs/1803.00567) → `seminar/`
-- Lecture Notes on Optimal Transport Problems, L. Ambrosio → `ambrosio/`
+- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt](https://doi.org/10.1307/mmj/1029003026) → `ambrosio/`
 
 ## セミナー方針
 

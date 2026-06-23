@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -329,6 +329,15 @@ function renderMarkdown(markdown) {
 
     if (trimmed === "") {
       flushParagraph();
+      let nextIndex = i + 1;
+      while (nextIndex < lines.length && lines[nextIndex].trim() === "") {
+        nextIndex += 1;
+      }
+      const next = nextIndex < lines.length ? lines[nextIndex].trim() : "";
+      const continuesList =
+        (listType === "ol" && /^\d+\.\s+/.test(next)) ||
+        (listType === "ul" && /^[-*]\s+/.test(next));
+      if (continuesList) continue;
       closeList();
       continue;
     }
@@ -453,15 +462,19 @@ function mathJaxScript() {
           macros: {
             R: "\\\\mathbb{R}",
             N: "\\\\mathbb{N}",
-            Leb: "\\\\mathcal{L}",
-            Haus: "\\\\mathcal{H}",
             Borel: "\\\\mathcal{B}",
-            Meas: "\\\\mathcal{M}",
-            Prob: "\\\\mathcal{M}_1",
+            Prob: "\\\\mathcal{P}",
+            Pp: ["\\\\mathcal{P}_{#1}", 1],
+            Couplings: "\\\\Pi",
             Lip: "\\\\mathrm{Lip}",
             spt: "\\\\operatorname{spt}",
+            esssup: "\\\\operatorname*{ess\\\\,sup}",
+            tr: "\\\\operatorname{tr}",
+            diag: "\\\\operatorname{diag}",
+            rank: "\\\\operatorname{rank}",
+            Cov: "\\\\operatorname{Cov}",
+            Law: "\\\\mathcal{L}",
             Id: "\\\\mathrm{Id}",
-            Fcost: "\\\\mathcal{F}",
             Wass: "W",
             pushforward: "{_\\\\#}",
             d: "\\\\mathrm{d}",
@@ -648,7 +661,7 @@ ${renderCards(appendixSecs)}
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>最適輸送問題セミナー — Ambrosio</title>
+    <title>Wasserstein 距離セミナー — Givens--Shortt</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -661,13 +674,13 @@ ${renderCards(appendixSecs)}
           最適輸送問題
           <span>セミナー資料</span>
         </h1>
-        <p class="landing__sub">Lecture Notes on Optimal Transport Problems — L. Ambrosio</p>
+        <p class="landing__sub">A Class of Wasserstein Metrics for Probability Distributions — C. R. Givens &amp; R. M. Shortt</p>
       </div>
       <nav class="landing__toc">
 ${renderCards(mainSecs)}
       </nav>${appendixBlock}
       <footer class="landing__footer">
-        <p>Based on <em>Lecture Notes on Optimal Transport Problems</em> by L. Ambrosio</p>
+        <p>Based on <em>A Class of Wasserstein Metrics for Probability Distributions</em> by C. R. Givens and R. M. Shortt</p>
       </footer>
     </main>
   </body>
@@ -702,6 +715,7 @@ for (const section of sections) {
   }
 }
 
+rmSync(distDir, { recursive: true, force: true });
 mkdirSync(path.join(distDir, "main"), { recursive: true });
 mkdirSync(path.join(distDir, "appendix"), { recursive: true });
 

@@ -38,15 +38,25 @@ function allChapterTex() {
 // 参照（\ref）解決は buildLabelMap()／buildChapterMap() が main/ と foundations/ の
 // 全 tex を走査するため、付録のラベルも本編からタイトル表示・参照できる。
 const CHAPTERS = [
-  ["main/00_preliminaries.tex", "00-preliminaries.md", {
-    id: "preliminaries", group: "main",
-    nav: "準備", eyebrow: "0. Preliminaries",
-    title: "準備",
+  ["main/00_introduction.tex", "00-introduction.md", {
+    id: "introduction", group: "main",
+    nav: "導入", eyebrow: "0. Introduction",
+    title: "導入",
   }],
-  ["main/01_existence_regularity.tex", "01-existence-regularity.md", {
-    id: "existence-regularity", group: "main",
-    nav: "存在と正則性", eyebrow: "1. Existence & Regularity",
-    title: "最適輸送計画：存在と正則性",
+  ["main/01_wasserstein_metrics.tex", "01-wasserstein-metrics.md", {
+    id: "wasserstein-metrics", group: "main",
+    nav: "Wasserstein 距離", eyebrow: "1. Wasserstein Metrics",
+    title: "Lp Wasserstein 距離",
+  }],
+  ["main/02_gaussian_measures.tex", "02-gaussian-measures.md", {
+    id: "gaussian-measures", group: "main",
+    nav: "Gaussian 測度", eyebrow: "2. Gaussian Measures",
+    title: "Gaussian 測度の W2",
+  }],
+  ["main/03_questions.tex", "03-questions.md", {
+    id: "questions", group: "main",
+    nav: "問いと見通し", eyebrow: "3. Questions",
+    title: "論文末の問いと見通し",
   }],
 ];
 

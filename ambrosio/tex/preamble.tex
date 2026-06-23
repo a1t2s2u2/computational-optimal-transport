@@ -1,6 +1,6 @@
 % ============================================================
-%  preamble.tex — Ambrosio ノート用 共通設定
-%  記法は Ambrosio "Lecture Notes on Optimal Transport Problems" に準拠
+%  preamble.tex — Givens--Shortt 論文セミナー用 共通設定
+%  原論文の記号を現代的な最適輸送の記法に読み替える
 % ============================================================
 
 % --- 基本パッケージ ---
@@ -76,18 +76,22 @@
 \newcommand{\norm}[1]{\lVert #1 \rVert}
 \newcommand{\inner}[2]{\langle #1,\, #2 \rangle}
 
-% --- Ambrosio 記法 ---
-\newcommand{\Leb}{\mathcal{L}}              % ルベーグ測度 L^n
-\newcommand{\Haus}{\mathcal{H}}             % ハウスドルフ測度 H^k
-\newcommand{\Borel}{\mathcal{B}}            % ボレル σ-代数
-\newcommand{\Meas}{\mathcal{M}}             % 符号付き Radon 測度
-\newcommand{\Prob}{\mathcal{M}_1}           % 確率測度
-\DeclareMathOperator{\Lip}{Lip}             % リプシッツ関数
-\DeclareMathOperator{\spt}{spt}             % 台（support）
-\newcommand{\Id}{\mathrm{Id}}               % 恒等写像
-\newcommand{\pushforward}{_\#}              % 押し出し f_# μ
-\newcommand{\Fcost}{\mathcal{F}}            % 最適輸送コスト
-\newcommand{\Wass}{W}                       % Wasserstein 距離
+% --- 現代的な最適輸送の記法 ---
+\newcommand{\Borel}{\mathcal{B}}
+\newcommand{\Prob}{\mathcal{P}}
+\newcommand{\Pp}[1]{\mathcal{P}_{#1}}
+\newcommand{\Couplings}{\Pi}
+\newcommand{\Wass}{W}
+\newcommand{\Law}{\mathcal{L}}
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\pushforward}{_\#}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\spt}{spt}
+\DeclareMathOperator{\esssup}{ess\,sup}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Cov}{Cov}
 \renewcommand{\d}{\mathrm{d}}               % 積分の d
 
 % --- サイト用デモブロック指示（PDF では無効，tex2md が :::demo に変換する）---

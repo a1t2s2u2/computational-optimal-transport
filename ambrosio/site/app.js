@@ -1,21 +1,21 @@
 /* ==========================================================================
-   Optimal Transport Problems (Ambrosio) — Interactions
+   Wasserstein Metrics (Givens--Shortt) — Interactions
    ========================================================================== */
 
 /* ---------- Glossary ---------- */
 
 const glossary = {
-  radon: {
-    title: "ラドン測度",
-    body: "局所コンパクト空間上のボレル測度で、コンパクト集合上有限かつ内部正則なもの。"
+  polish: {
+    title: "Polish 空間",
+    body: "完備かつ可分な距離空間。確率測度の tightness や正則条件付き確率を扱う標準的な設定。"
   },
-  wstar: {
-    title: "弱* 収束",
-    body: "測度の列が弱* 収束するとは、全ての連続関数 \\(f\\) に対し \\(\\int f\\,d\\mu_n \\to \\int f\\,d\\mu\\) となること。"
+  coupling: {
+    title: "結合",
+    body: "二つの確率測度を周辺分布にもつ積空間上の確率測度。輸送計画とも呼ぶ。"
   },
-  cyclical: {
-    title: "巡回的単調性",
-    body: "集合 \\(\\Gamma \\subset X \\times X\\) が \\(c\\)-巡回的単調であるとは、任意の巡回置換でコストが悪化しないこと。最適計画の台がもつ基本的性質。"
+  bures: {
+    title: "Bures--Wasserstein 距離",
+    body: "半正定値行列の間の距離で、Gaussian 測度間の \\(W_2\\) の共分散部分として現れる。"
   }
 };
 

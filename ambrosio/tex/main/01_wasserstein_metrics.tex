@@ -1,0 +1,389 @@
+\chapter{\texorpdfstring{$L^p$}{Lp} Wasserstein 距離}
+\label{ch:wasserstein-metrics}
+
+本章を通して $(X,d)$ を Polish 空間とし，基準点 $x_0\in X$ を一つ固定する．
+
+\section{定義}
+\label{sec:wp-definition}
+
+\begin{definition}{有限モーメントをもつ確率測度}{gs-p-space}
+  $1\leq p<\infty$ に対し
+  \[
+    \Pp{p}(X)
+    :=
+    \left\{
+      \mu\in\Prob(X)
+      \;\middle|\;
+      \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+    \right\}
+  \]
+  と定める．三角不等式より，この集合は基準点 $x_0$ の選び方によらない．
+  また
+  \[
+    \Pp{\infty}(X)
+    :=
+    \left\{\mu\in\Prob(X)\mid \spt\mu\text{ は有界}\right\}
+  \]
+  とおく．
+\end{definition}
+
+\begin{definition}{結合}{gs-coupling}
+  $\mu,\nu\in\Prob(X)$ に対し，その\textbf{結合}の集合を
+  \[
+    \Couplings(\mu,\nu)
+    :=
+    \left\{
+      \pi\in\Prob(X\times X)
+      \;\middle|\;
+      (\mathrm{pr}_1)\pushforward\pi=\mu,\ 
+      (\mathrm{pr}_2)\pushforward\pi=\nu
+    \right\}
+  \]
+  と定める．直積測度 $\mu\otimes\nu$ が属するので，
+  $\Couplings(\mu,\nu)$ は常に空でない．
+\end{definition}
+
+\begin{definition}{$p$-Wasserstein 距離}{gs-wasserstein}
+  $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し
+  \[
+    \Wass_p(\mu,\nu)
+    :=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \left(
+      \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+    \right)^{1/p}
+  \]
+  と定める．また $\mu,\nu\in\Pp{\infty}(X)$ に対し
+  \[
+    \Wass_\infty(\mu,\nu)
+    :=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \esssup_{(x,y)\sim\pi}d(x,y)
+  \]
+  と定める．
+\end{definition}
+
+\section{最適結合の存在}
+\label{sec:optimal-coupling}
+
+\begin{lemma}{輸送コストの下半連続性}{gs-cost-lsc}
+  \blockmeta{uses=def:gs-wasserstein}
+  $\pi_n,\pi\in\Prob(X\times X)$ が $\pi_n\rightharpoonup\pi$ を満たすならば，
+  $1\leq p<\infty$ に対し
+  \[
+    \int d(x,y)^p\,\d\pi(x,y)
+    \leq
+    \liminf_{n\to\infty}
+    \int d(x,y)^p\,\d\pi_n(x,y).
+  \]
+\end{lemma}
+
+\begin{proof}
+  関数 $(x,y)\mapsto d(x,y)^p$ は非負かつ連続である．
+  Portmanteau の定理を適用すれば結論を得る．
+  原論文では層ケーキ表示
+  \[
+    \int d^p\,\d\pi_n
+    =
+    \int_0^\infty
+    \pi_n\!\left(\{(x,y):d(x,y)^p>r\}\right)\,\d r
+  \]
+  と Fatou の補題から同じ不等式を導いている．
+\end{proof}
+
+\begin{proposition}{最適結合の存在}{gs-optimal-coupling}
+  \blockmeta{uses=def:gs-coupling; def:gs-wasserstein; lem:gs-cost-lsc}
+  $1\leq p\leq\infty$ とする．
+  $\mu,\nu$ が $\Wass_p$ の定義域に属するならば，
+  定義中の下限を達成する
+  $\pi^\star\in\Couplings(\mu,\nu)$ が存在する．
+\end{proposition}
+
+\begin{proof}
+  まず $p<\infty$ とする．最小化列
+  $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
+  周辺分布 $\mu,\nu$ はともに tight なので，結合の族
+  $\Couplings(\mu,\nu)$ も tight である．Prokhorov の定理により，
+  部分列を取れば $\pi_{n_k}\rightharpoonup\pi^\star$ とできる．
+  周辺分布を取る写像は弱収束に関して連続だから
+  $\pi^\star\in\Couplings(\mu,\nu)$ である．
+  補題~\ref{lem:gs-cost-lsc}より
+  \[
+    \int d^p\,\d\pi^\star
+    \leq
+    \liminf_{k\to\infty}\int d^p\,\d\pi_{n_k}
+    =
+    \Wass_p(\mu,\nu)^p.
+  \]
+  逆向きは下限の定義から従うので，$\pi^\star$ は最適である．
+
+  $p=\infty$ では，$\varepsilon_n\downarrow0$ と
+  \[
+    \pi_n\!\left(
+      \{(x,y):d(x,y)\leq \Wass_\infty(\mu,\nu)+\varepsilon_n\}
+    \right)=1
+  \]
+  を満たす結合を取る．上と同様に弱極限 $\pi^\star$ を取り，
+  閉集合に対する Portmanteau の定理を使えば
+  \[
+    \pi^\star\!\left(
+      \{(x,y):d(x,y)\leq \Wass_\infty(\mu,\nu)\}
+    \right)=1
+  \]
+  を得る．
+\end{proof}
+
+\section{距離性}
+\label{sec:metric-property}
+
+\begin{lemma}{結合の貼り合わせ}{gs-gluing}
+  $\pi_{12}\in\Couplings(\mu_1,\mu_2)$ と
+  $\pi_{23}\in\Couplings(\mu_2,\mu_3)$ に対し，
+  $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
+  $(x_1,x_2)$ 周辺分布が $\pi_{12}$，
+  $(x_2,x_3)$ 周辺分布が $\pi_{23}$ となるものが存在する．
+\end{lemma}
+
+\begin{proof}
+  Polish 空間上の確率測度は正則条件付き確率をもつ．
+  \[
+    \pi_{12}(\d x_1,\d x_2)
+    =K_{1|2}(x_2,\d x_1)\mu_2(\d x_2),
+    \qquad
+    \pi_{23}(\d x_2,\d x_3)
+    =\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+  \]
+  と分解し，
+  \[
+    \boldsymbol{\pi}(\d x_1,\d x_2,\d x_3)
+    :=
+    K_{1|2}(x_2,\d x_1)\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+  \]
+  とおけばよい．
+\end{proof}
+
+\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
+  \blockmeta{uses=def:gs-wasserstein; prop:gs-optimal-coupling; lem:gs-gluing}
+  $1\leq p\leq\infty$ に対し，
+  $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
+\end{proposition}
+
+\begin{proof}
+  非負性と対称性は定義から明らかである．
+  $\Wass_p(\mu,\nu)=0$ なら，命題~\ref{prop:gs-optimal-coupling}の
+  最適結合 $\pi^\star$ は対角集合
+  $\{(x,x):x\in X\}$ に集中するので $\mu=\nu$ である．
+
+  三角不等式を示す．$\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
+  $\pi_{12},\pi_{23}$ をそれぞれ最適結合とする．
+  補題~\ref{lem:gs-gluing}で得られる $\boldsymbol{\pi}$ の
+  $(x_1,x_3)$ 周辺分布を $\pi_{13}$ と書く．
+  $p<\infty$ なら，距離 $d$ の三角不等式と Minkowski の不等式から
+  \[
+    \begin{aligned}
+      \Wass_p(\mu_1,\mu_3)
+      &\leq
+      \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})} \\
+      &\leq
+      \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})} \\
+      &\leq
+      \Wass_p(\mu_1,\mu_2)+\Wass_p(\mu_2,\mu_3).
+    \end{aligned}
+  \]
+  $p=\infty$ でも同じ議論を本質的上限に対して適用できる．
+\end{proof}
+
+\section{他の距離との比較}
+\label{sec:metric-comparison}
+
+\begin{definition}{有界 Lipschitz 距離}{gs-bounded-lipschitz}
+  実数値関数 $f$ に対し
+  \[
+    \norm{f}_\infty:=\sup_{x\in X}\abs{f(x)},
+    \qquad
+    \Lip(f):=\sup_{x\neq y}\frac{\abs{f(x)-f(y)}}{d(x,y)}
+  \]
+  とおく．確率測度 $\mu,\nu\in\Prob(X)$ の
+  \textbf{有界 Lipschitz 距離}を
+  \[
+    \beta(\mu,\nu)
+    :=
+    \sup_{\norm{f}_\infty+\Lip(f)\leq1}
+    \abs{\int_X f\,\d(\mu-\nu)}
+  \]
+  と定める．$\beta$ は完備な距離であり，弱収束を距離化する．
+\end{definition}
+
+\begin{theorem}{Kantorovich--Rubinstein 双対性}{gs-kr-duality}
+  $\mu,\nu\in\Pp{1}(X)$ に対し
+  \[
+    \Wass_1(\mu,\nu)
+    =
+    \sup_{\Lip(f)\leq1}
+    \abs{\int_X f\,\d(\mu-\nu)}.
+  \]
+\end{theorem}
+
+\begin{remark}{双対性の位置づけ}{gs-kr-proof}
+  原論文はこの定理を既知の結果として引用しているため，本資料でも証明は省略する．
+  右辺では定数の加算が積分値を変えないので，
+  $f(x_0)=0$ という正規化を課しても同じ値になる．
+\end{remark}
+
+\begin{proposition}{$W_p$ の比較}{gs-wp-comparison}
+  \blockmeta{uses=def:gs-bounded-lipschitz; thm:gs-kr-duality}
+  適切な共通定義域上で，次が成り立つ．
+  \begin{enumerate}
+    \item $\beta(\mu,\nu)\leq\Wass_1(\mu,\nu)$．
+    \item $1\leq p\leq q\leq\infty$ なら
+      $\Wass_p(\mu,\nu)\leq\Wass_q(\mu,\nu)$．
+    \item $p\to\infty$ のとき
+      $\Wass_p(\mu,\nu)\to\Wass_\infty(\mu,\nu)$．
+      ただし両辺は拡張実数値を許す．
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  (1) は定義~\ref{def:gs-bounded-lipschitz}の試験関数が
+  定理~\ref{thm:gs-kr-duality}の試験関数に含まれることから従う．
+
+  (2) は任意の結合 $\pi$ に対する確率空間上のノルムの単調性
+  \[
+    \norm{d}_{L^p(\pi)}\leq\norm{d}_{L^q(\pi)}
+  \]
+  を用い，結合について下限を取ればよい．
+
+  (3) では (2) より $L:=\lim_{p\to\infty}\Wass_p(\mu,\nu)$ が存在し，
+  $L\leq\Wass_\infty(\mu,\nu)$ である．
+  各 $p$ の最適結合 $\pi_p$ から弱収束部分列
+  $\pi_{p_k}\rightharpoonup\pi$ を取る．
+  $M<\esssup_\pi d$ とすると開集合 $\{d>M\}$ は正の $\pi$-測度をもち，
+  大きな $k$ で $\pi_{p_k}(\{d>M\})$ も正の下限をもつ．したがって
+  \[
+    \Wass_{p_k}(\mu,\nu)
+    \geq
+    M\,\pi_{p_k}(\{d>M\})^{1/p_k}
+    \longrightarrow M.
+  \]
+  $M\uparrow\esssup_\pi d$ とすれば
+  $L\geq\esssup_\pi d\geq\Wass_\infty(\mu,\nu)$ を得る．
+\end{proof}
+
+\begin{example}{$W_p$ が定める位相は一般に異なる}{gs-distinct-topologies}
+  $X=\R$ とし，$\delta_0$ を原点の Dirac 測度とする．
+  実確率変数 $Z$ の分布を $\mu$ とすれば
+  \[
+    \Wass_p(\mu,\delta_0)=\norm{Z}_{L^p}.
+  \]
+  したがって，$L^p$ では $0$ に収束するが $L^q$ では収束しない
+  確率変数列を取れば，$\Wass_p$ と $\Wass_q$ が異なる位相を定めることが分かる．
+  例えば $q>p$ に対し
+  \[
+    Z_n=n^{1/q}\mathbf{1}_{A_n},
+    \qquad
+    \mathbb{P}(A_n)=n^{-1}
+  \]
+  とおくと，$\norm{Z_n}_{L^p}\to0$ だが
+  $\norm{Z_n}_{L^q}=1$ である．
+\end{example}
+
+\begin{proposition}{有界な台空間上の位相}{gs-bounded-space}
+  \blockmeta{uses=prop:gs-wp-comparison}
+  $(X,d)$ が有界なら，$1\leq p<\infty$ に対して
+  $\Pp{p}(X)=\Prob(X)$ であり，$\Wass_p$ は弱収束の位相を定める．
+\end{proposition}
+
+\begin{proof}
+  $\Wass_p$ 収束が弱収束を導くことは
+  $\beta\leq\Wass_1\leq\Wass_p$ から従う．
+  逆に $\mu_n\rightharpoonup\mu$ とする．Skorokhod の表現定理により，
+  共通の確率空間上に $X_n\sim\mu_n$ と $X\sim\mu$ を取り，
+  $X_n\to X$ を概収束とできる．$d$ は有界なので，
+  有界収束定理から
+  $\mathbb{E}[d(X_n,X)^p]\to0$ である．よって
+  \[
+    \Wass_p(\mu_n,\mu)
+    \leq
+    \mathbb{E}[d(X_n,X)^p]^{1/p}
+    \longrightarrow0.
+  \]
+\end{proof}
+
+\section{\texorpdfstring{$W_\infty$}{W-infinity} と Prokhorov 距離}
+\label{sec:w-infinity}
+
+Borel 集合 $A\subset X$ と $\varepsilon>0$ に対し
+\[
+  A^\varepsilon
+  :=
+  \{x\in X\mid d(x,A)\leq\varepsilon\}
+\]
+を閉 $\varepsilon$-近傍とする．
+
+\begin{proposition}{$W_\infty$ の集合による特徴づけ}{gs-winfty-characterization}
+  $\mu,\nu\in\Pp{\infty}(X)$ に対し
+  \[
+    \Wass_\infty(\mu,\nu)
+    =
+    \inf\left\{
+      \varepsilon>0
+      \;\middle|\;
+      \mu(A)\leq\nu(A^\varepsilon)
+      \quad\forall A\in\Borel(X)
+    \right\}.
+  \]
+\end{proposition}
+
+\begin{proof}
+  $\Wass_\infty(\mu,\nu)\leq\varepsilon$ なら，
+  $d(x,y)\leq\varepsilon$ に集中する結合 $\pi$ が存在する．
+  $x\in A$ なら $y\in A^\varepsilon$ なので
+  \[
+    \mu(A)=\pi(A\times X)\leq\pi(X\times A^\varepsilon)
+    =\nu(A^\varepsilon).
+  \]
+  逆向きは Strassen の結合定理から従う．すなわち，
+  すべての Borel 集合 $A$ に対して上の不等式が成り立つことと，
+  $\{(x,y):d(x,y)\leq\varepsilon\}$ に集中する結合の存在は同値である．
+\end{proof}
+
+\begin{remark}{Prokhorov 距離との違い}{gs-prokhorov}
+  Prokhorov 距離では条件を
+  $\mu(A)\leq\nu(A^\varepsilon)+\varepsilon$ と緩める．
+  右辺の加法的な $\varepsilon$ は，少量の質量が遠くへ移動することを許す．
+  一方 $\Wass_\infty$ は，全質量の移動距離を一様に制御するため，
+  一般に弱収束より強い位相を定める．
+\end{remark}
+
+\section{完備性}
+\label{sec:completeness}
+
+\begin{proposition}{Wasserstein 空間の完備性}{gs-completeness}
+  \blockmeta{uses=prop:gs-wp-metric; prop:gs-wp-comparison; lem:gs-cost-lsc}
+  $(X,d)$ が完備可分なら，
+  $(\Pp{p}(X),\Wass_p)$ は $1\leq p\leq\infty$ に対して完備である．
+\end{proposition}
+
+\begin{proof}
+  $p<\infty$ とし，$(\mu_n)$ を $\Wass_p$-Cauchy 列とする．
+  命題~\ref{prop:gs-wp-comparison}より $\beta$-Cauchy でもあるから，
+  ある $\mu\in\Prob(X)$ へ弱収束する．
+  さらに
+  \[
+    \abs{\Wass_p(\mu_n,\delta_{x_0})
+    -\Wass_p(\mu_m,\delta_{x_0})}
+    \leq\Wass_p(\mu_n,\mu_m)
+  \]
+  より $p$ 次モーメントは一様に有界である．
+  下半連続性から $\mu\in\Pp{p}(X)$ を得る．
+
+  $\varepsilon>0$ に対し，$m,n\geq N$ なら
+  $\Wass_p(\mu_n,\mu_m)<\varepsilon$ となる $N$ を取る．
+  $n\geq N$ を固定し，$\mu_n$ と $\mu_m$ の最適結合から
+  $m\to\infty$ の弱収束部分列を取る．極限は
+  $\mu_n$ と $\mu$ の結合であり，下半連続性から
+  $\Wass_p(\mu_n,\mu)\leq\varepsilon$ となる．
+  よって $\mu_n\to\mu$ in $\Wass_p$ である．
+  $p=\infty$ も，閉集合 $\{d\leq\varepsilon\}$ に集中する結合を
+  弱極限へ移すことで同様に示せる．
+\end{proof}
