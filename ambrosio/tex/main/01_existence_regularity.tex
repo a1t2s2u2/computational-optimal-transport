@@ -20,12 +20,15 @@ Monge の元来の定式化は輸送写像 $\psi \colon X \to X$（$\psi\pushfor
 Kantorovich は，積空間 $X \times X$ 上の確率測度 $\gamma$（輸送計画）で問題を緩和した．
 
 \begin{definition}{Kantorovich 問題 (MK)}{amb-mk}
-  $\pi_0(x,y) := x$，$\pi_1(x,y) := y$ を射影とし，
   \[
-    \Gamma(\mu,\nu) := \bigl\{\,
+    \Gamma(\mu,\nu) := \left\{\,
       \gamma \in \Prob(X \times X)
-      \bigm| \pi_{0\#}\gamma = \mu,\; \pi_{1\#}\gamma = \nu
-    \,\bigr\}
+      \;\middle|\;
+      \begin{aligned}
+        &\gamma(A \times X) = \mu(A) \quad \forall\, A \in \Borel(X) \\
+        &\gamma(X \times B) = \nu(B) \quad \forall\, B \in \Borel(X)
+      \end{aligned}
+    \,\right\}
   \]
   とおく．ボレルコスト関数 $c \colon X \times X \to [0, \infty]$ に対し，
   \[
@@ -71,7 +74,7 @@ $\Gamma(\mu,\nu)$ に属するから，$\Gamma(\mu,\nu) \neq \emptyset$ であ�
 \end{proposition}
 
 \begin{proof}
-  $\psi$ を輸送写像とする．
+  射影 $\pi_0(x,y) := x$，$\pi_1(x,y) := y$ を用いる．
   $\pi_0 \circ (\Id \times \psi) = \Id$ かつ
   $\pi_1 \circ (\Id \times \psi) = \psi$ だから，
   \[
