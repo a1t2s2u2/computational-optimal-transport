@@ -36,13 +36,16 @@
   \[
     \Pp{\infty}(X)
     :=
-    \left\{
-      \mu\in\Prob(X)
-      \;\middle|\;
-      \exists\text{ 有界 Borel 集合 }B\subset X,\ \mu(B)=1
-    \right\}
+    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
   \]
-  とおく．$d(x,o')\leq d(x,o)+d(o,o')$ より，
+  とおく．ここで
+  \[
+    \supp\mu
+    :=
+    \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
+  \]
+  は $\mu$ の台である．
+  また，$d(x,o')\leq d(x,o)+d(o,o')$ より，
   $\Pp{p}(X)$ は点 $o$ の選び方によらない．
 \end{definition}
 
