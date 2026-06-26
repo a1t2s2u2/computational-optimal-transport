@@ -91,22 +91,16 @@ function buildGraph() {
   const connected = new Set();
   GRAPH.edges.forEach(e => { connected.add(e.from); connected.add(e.to); });
 
-  chapters.forEach((ch, i) => {
-    elements.push({
-      data: { id: 'ch::' + ch, label: ch, tint: TINT[i % TINT.length] },
-      classes: 'chapter-group'
-    });
-  });
-
   GRAPH.nodes.forEach(n => {
     const isIsolated = !connected.has(n.id);
+    const chIdx = chapters.indexOf(n.chapter);
     elements.push({
       data: {
         id: n.id,
         label: nodeLabel(n),
         env: n.type,
         chapter: n.chapter,
-        parent: 'ch::' + n.chapter,
+        chapterTint: TINT[chIdx % TINT.length],
         isolated: isIsolated,
       },
       classes: isIsolated ? 'leaf isolated' : 'leaf'
@@ -134,25 +128,6 @@ function buildGraph() {
     maxZoom: 3,
     style: [
       {
-        selector: 'node.chapter-group',
-        style: {
-          'shape': 'round-rectangle',
-          'background-color': 'data(tint)',
-          'background-opacity': 0.3,
-          'border-width': 1,
-          'border-color': lineColor,
-          'label': 'data(label)',
-          'font-family': '"Noto Sans JP", system-ui, sans-serif',
-          'font-size': 14,
-          'font-weight': 700,
-          'color': mutedColor,
-          'text-valign': 'top',
-          'text-halign': 'center',
-          'text-margin-y': 10,
-          'padding': 20,
-        }
-      },
-      {
         selector: 'node.leaf',
         style: {
           'shape': 'round-rectangle',
@@ -160,9 +135,7 @@ function buildGraph() {
           'height': 'label',
           'padding': '12px',
           'background-color': function(ele) {
-            const env = ele.data('env');
-            const color = ENV_COLOR[env] || '#666';
-            return color;
+            return ENV_COLOR[ele.data('env')] || '#666';
           },
           'background-opacity': 0.12,
           'border-width': 2,
@@ -246,11 +219,10 @@ function buildGraph() {
     layout: {
       name: 'dagre',
       rankDir: 'TB',
-      nodeSep: 50,
-      rankSep: 70,
-      edgeSep: 25,
-      padding: 50,
-      spacingFactor: 1.15,
+      nodeSep: 35,
+      rankSep: 55,
+      edgeSep: 15,
+      padding: 40,
     },
   });
 
@@ -272,9 +244,8 @@ function selectNode(id) {
 
   const cyNode = cy.getElementById(id);
   const neighborhood = cyNode.neighborhood().add(cyNode);
-  const parentId = cyNode.data('parent');
 
-  cy.elements().not(neighborhood).not(cy.getElementById(parentId)).addClass('dimmed');
+  cy.elements().not(neighborhood).addClass('dimmed');
   neighborhood.addClass('highlighted');
   cyNode.addClass('selected-node');
 
@@ -332,26 +303,13 @@ function applyFilters() {
     const matchChapter = chapter === 'all' || node.data('chapter') === chapter;
     const matchType = type === 'all' || node.data('env') === type;
     const matchIsolated = !hideIsolated || !node.data('isolated');
-    if (matchChapter && matchType && matchIsolated) {
-      node.style('display', 'element');
-    } else {
-      node.style('display', 'none');
-    }
-  });
-
-  cy.nodes('.chapter-group').forEach(group => {
-    const children = group.children().filter(n => n.style('display') !== 'none');
-    group.style('display', children.length > 0 ? 'element' : 'none');
+    node.style('display', (matchChapter && matchType && matchIsolated) ? 'element' : 'none');
   });
 
   cy.edges().forEach(edge => {
     const src = cy.getElementById(edge.data('source'));
     const tgt = cy.getElementById(edge.data('target'));
-    if (src.style('display') !== 'none' && tgt.style('display') !== 'none') {
-      edge.style('display', 'element');
-    } else {
-      edge.style('display', 'none');
-    }
+    edge.style('display', (src.style('display') !== 'none' && tgt.style('display') !== 'none') ? 'element' : 'none');
   });
 
   cy.fit(cy.elements().filter(e => e.style('display') !== 'none'), 40);
