@@ -89,7 +89,7 @@ const BLOCK_ENVS = {
   claim: ["theorem", "Clm"],
   lemma: ["theorem", "Lem"],
   theorem: ["theorem", "Thm"],
-  proposition: ["theorem", "Prop"],
+  proposition: ["proposition", "Prop"],
   remark: ["fact", "Rem"],
   example: ["fact accent", "Ex"],
   algorithm: ["definition", ""],

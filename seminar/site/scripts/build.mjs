@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -100,7 +100,7 @@ function renderInline(source) {
       (_match, first, second) => {
         const refName = second || first;
         const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex|Lem):\s*(.+)$/.exec(first);
-        const display = typeMatch ? typeMatch[1] : first;
+        const display = typeMatch ? typeMatch[2].trim() : first;
         return `<button type="button" class="ref" data-ref="${refName}" title="${escapeHtml(first)}">${escapeHtml(display)}</button>`;
       }
     );
@@ -265,25 +265,25 @@ function renderMarkdown(markdown) {
     }
     if (spec === "definition") {
       currentBlock = { type: "definition", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block block--def">');
+      html.push('<div class="block block--def"><span class="block__badge">Def</span>');
       stack.push("</div>");
       return;
     }
     if (spec === "theorem") {
       currentBlock = { type: "theorem", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block block--thm">');
+      html.push('<div class="block block--thm"><span class="block__badge">Thm</span>');
       stack.push("</div>");
       return;
     }
     if (spec === "proposition") {
       currentBlock = { type: "proposition", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block block--prop">');
+      html.push('<div class="block block--prop"><span class="block__badge">Prop</span>');
       stack.push("</div>");
       return;
     }
     if (spec === "algorithm") {
       currentBlock = { type: "algorithm", divIndex: html.length, depth: stack.length };
-      html.push('<div class="block block--algo">');
+      html.push('<div class="block block--algo"><span class="block__badge">Algo</span>');
       stack.push("</div>");
       return;
     }
@@ -528,6 +528,7 @@ function siteHeader(sections, currentSection) {
     ? `\n          <span class="site-header__group-label">付録</span>\n${appendixLinks}`
     : "";
 
+  const graphHref = relUrl(curOut, "graph.html");
   return `<header class="site-header">
       <div class="site-header__inner">
         <a href="${escapeHtml(relUrl(curOut, "index.html"))}" class="site-header__home">
@@ -536,6 +537,7 @@ function siteHeader(sections, currentSection) {
         </a>
         <nav class="site-header__nav">
 ${mainLinks}${appendixNav}
+          <a href="${escapeHtml(graphHref)}" class="site-header__link site-header__graph-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg>グラフ</a>
         </nav>
       </div>
     </header>`;
@@ -582,7 +584,7 @@ function chapterTemplate(section, sections, index) {
     <title>${escapeHtml(section.data.title)} — 計算最適輸送</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${relUrl(curOut, "styles.css")}" />
     ${mathJaxScript()}
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -642,6 +644,20 @@ function chapterTemplate(section, sections, index) {
 `;
 }
 
+function chapterBlockStats(chapterId) {
+  const counts = {};
+  for (const b of allBlocks) {
+    if (b.chapter !== chapterId) continue;
+    counts[b.type] = (counts[b.type] || 0) + 1;
+  }
+  const labels = { definition: "定義", theorem: "定理", proposition: "命題", remark: "注意", example: "例", algorithm: "算法" };
+  const parts = [];
+  for (const [type, label] of Object.entries(labels)) {
+    if (counts[type]) parts.push(`${counts[type]} ${label}`);
+  }
+  return parts.join("・");
+}
+
 function landingTemplate(sections) {
   const renderCards = (secs) =>
     secs
@@ -653,9 +669,13 @@ function landingTemplate(sections) {
         const eyebrow = s.data.eyebrow
           ? `\n          <span class="toc-card__eyebrow">${escapeHtml(s.data.eyebrow)}</span>`
           : "";
-        return `        <a href="${escapeHtml(outPathOf(s))}" class="toc-card">
+        const stats = chapterBlockStats(s.data.id);
+        const statsHtml = stats
+          ? `\n          <span class="toc-card__stats">${escapeHtml(stats)}</span>`
+          : "";
+        return `        <a href="${escapeHtml(outPathOf(s))}" class="toc-card" style="animation-delay:${i * 80}ms">
           <span class="toc-card__num">${num}</span>${eyebrow}
-          <h2 class="toc-card__title">${escapeHtml(s.data.title)}</h2>
+          <h2 class="toc-card__title">${escapeHtml(s.data.title)}</h2>${statsHtml}
         </a>`;
       })
       .join("\n");
@@ -682,21 +702,46 @@ ${renderCards(appendixSecs)}
     <title>計算最適輸送セミナー</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="landing">
       <div class="landing__hero">
+        <div class="landing__hero-deco" aria-hidden="true">
+          <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100,350 Q200,100 400,200 T700,150" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M50,300 Q250,50 500,180 T750,100" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M150,380 Q300,150 450,250 T700,200" fill="none" stroke="currentColor" stroke-width="1"/>
+            <circle cx="100" cy="350" r="4" fill="currentColor"/>
+            <circle cx="400" cy="200" r="4" fill="currentColor"/>
+            <circle cx="700" cy="150" r="4" fill="currentColor"/>
+            <circle cx="50" cy="300" r="3" fill="currentColor"/>
+            <circle cx="500" cy="180" r="3" fill="currentColor"/>
+            <circle cx="750" cy="100" r="3" fill="currentColor"/>
+          </svg>
+        </div>
         <h1 class="landing__title">
           計算最適輸送
           <span>セミナー資料</span>
         </h1>
-        <p class="landing__sub">Computational Optimal Transport</p>
+        <p class="landing__sub">Computational Optimal Transport — G. Peyré &amp; M. Cuturi</p>
       </div>
       <nav class="landing__toc">
 ${renderCards(mainSecs)}
       </nav>${appendixBlock}
+      <div class="landing__group">
+        <h2 class="landing__group-title">ツール</h2>
+      </div>
+      <nav class="landing__toc landing__toc--tools">
+        <a href="graph.html" class="toc-card toc-card--graph" style="animation-delay:0ms">
+          <span class="toc-card__num"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg></span>
+          <span class="toc-card__eyebrow">INTERACTIVE</span>
+          <h2 class="toc-card__title">依存グラフ</h2>
+          <span class="toc-card__stats">${allBlocks.length} ブロックの関係を可視化</span>
+        </a>
+      </nav>
+
       <footer class="landing__footer">
         <p>Based on <em>Computational Optimal Transport</em> by G. Peyr&eacute; &amp; M. Cuturi</p>
       </footer>
@@ -704,6 +749,136 @@ ${renderCards(mainSecs)}
   </body>
 </html>
 `;
+}
+
+function graphTemplate(sections) {
+  const chapterFilesMap = {};
+  sections.forEach((s) => {
+    chapterFilesMap[s.data.id] = outPathOf(s);
+  });
+
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+  const navLinks = (secs, labelFn) =>
+    secs.map((s, i) => {
+      const href = outPathOf(s);
+      return `          <a href="${escapeHtml(href)}" class="site-header__link"><span class="site-header__num">${labelFn(i)}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
+    }).join("\n");
+  const appendixNav = appendixSecs.length
+    ? `\n          <span class="site-header__group-label">付録</span>\n${navLinks(appendixSecs, i => String.fromCharCode(65 + i))}`
+    : "";
+
+  return `<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>依存グラフ — 計算最適輸送</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" />
+    ${mathJaxScript()}
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+    <script>
+      window.__chapterFiles = ${JSON.stringify(chapterFilesMap)};
+    </script>
+    <script defer src="./graph.js"></script>
+  </head>
+  <body class="graph-body">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="index.html" class="site-header__home">
+          <span class="site-header__logo">OT</span>
+          <span class="site-header__name">計算最適輸送</span>
+        </a>
+        <nav class="site-header__nav">
+${navLinks(mainSecs, i => i + 1)}${appendixNav}
+          <a href="graph.html" class="site-header__link is-current"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg>グラフ</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="graph-layout">
+      <aside class="graph-sidebar" id="graph-sidebar">
+        <div class="graph-controls">
+          <h3 class="graph-controls__title">フィルタ</h3>
+          <label class="graph-controls__label">
+            章
+            <select id="chapter-filter" class="graph-controls__select">
+              <option value="all">すべて</option>
+            </select>
+          </label>
+          <label class="graph-controls__label">
+            タイプ
+            <select id="type-filter" class="graph-controls__select">
+              <option value="all">すべて</option>
+              <option value="definition">定義</option>
+              <option value="theorem">定理</option>
+              <option value="proposition">命題</option>
+              <option value="remark">注意</option>
+              <option value="example">例</option>
+              <option value="algorithm">算法</option>
+            </select>
+          </label>
+          <label class="graph-controls__label">
+            <input type="checkbox" id="hide-isolated"> 孤立ノードを非表示
+          </label>
+          <button id="fit-btn" class="graph-controls__btn" type="button">全体表示</button>
+        </div>
+
+        <div class="graph-legend">
+          <h3 class="graph-legend__title">凡例</h3>
+          <div class="graph-legend__items">
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--teal)"></span>定義</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--indigo)"></span>定理</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--orange)"></span>命題</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--amber)"></span>算法</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--muted)"></span>注意</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--wine)"></span>例</span>
+          </div>
+        </div>
+
+        <div class="graph-detail" id="graph-detail">
+          <p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>
+        </div>
+      </aside>
+      <main class="graph-canvas" id="cy"></main>
+    </div>
+  </body>
+</html>
+`;
+}
+
+function buildGraphData() {
+  const edges = [];
+  const blocksByName = {};
+  for (const block of allBlocks) {
+    blocksByName[block.name] = block;
+  }
+  for (const block of allBlocks) {
+    const refs = [...block.html.matchAll(/data-ref="([^"]+)"/g)].map(m => m[1]);
+    for (const refName of new Set(refs)) {
+      const target = blocksByName[refName];
+      if (target && target.id !== block.id) {
+        edges.push({ from: block.id, to: target.id });
+      }
+    }
+  }
+  return {
+    nodes: allBlocks.map(b => ({
+      id: b.id,
+      name: b.name,
+      type: b.type,
+      title: b.title,
+      chapter: b.chapter,
+      html: b.html,
+    })),
+    edges,
+  };
 }
 
 /* ==========================================================================
@@ -741,12 +916,18 @@ sections.forEach((section, i) => {
   writeFileSync(path.join(distDir, outPathOf(section)), chapterTemplate(section, sections, i), "utf8");
 });
 
+// グラフデータとグラフページを生成する。
+const graphData = buildGraphData();
+writeFileSync(path.join(distDir, "graph-data.json"), JSON.stringify(graphData), "utf8");
+writeFileSync(path.join(distDir, "graph.html"), graphTemplate(sections), "utf8");
+
 // html から相対参照される静的アセットを dist へコピーする。
-for (const asset of ["styles.css", "app.js"]) {
-  copyFileSync(path.join(siteRoot, asset), path.join(distDir, asset));
+for (const asset of ["styles.css", "app.js", "graph.js"]) {
+  const src = path.join(siteRoot, asset);
+  if (existsSync(src)) copyFileSync(src, path.join(distDir, asset));
 }
 
 const nMain = sections.filter((s) => s.data.group !== "appendix").length;
 console.log(
-  `Built dist/ : index.html + main/(${nMain}) + appendix/(${sections.length - nMain}).`
+  `Built dist/ : index.html + graph.html + main/(${nMain}) + appendix/(${sections.length - nMain}) — ${allBlocks.length} blocks, ${graphData.edges.length} edges.`
 );
