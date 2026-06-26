@@ -125,8 +125,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \subsubsection{離散化}
 
-連続 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）に
-離散測度（定義~\ref{def:sem-discrete-measure}）を代入すると，次の命題が示すとおり行列最適化へ帰着する．
+連続定義~\ref{def:sem-kantorovich}に
+定義~\ref{def:sem-discrete-measure}を代入すると，次の命題が示すとおり行列最適化へ帰着する．
 
 \begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
   $\mathbf{a} \in \Rpos^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \Rpos^m$（$\sum_j b_j = 1$），
@@ -607,7 +607,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \end{example}
 
 \begin{remark}{線形計画と一意性}{sem-lp-uniqueness}
-  離散 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）は線形計画であるため，
+  離散定義~\ref{def:sem-kantorovich}は線形計画であるため，
   非一意性は目的関数の線形性に本質的に起因する：
   2つの異なる最適解 $\mathbf{P}_1, \mathbf{P}_2 \in S^*$ があれば，
   $\inner{\mathbf{C}}{t\mathbf{P}_1 + (1-t)\mathbf{P}_2}
@@ -624,7 +624,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \end{remark}
 
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
-  離散 Kantorovich 問題（定義~\ref{def:sem-kantorovich}）の最適解は一般に一意でないが，
+  離散定義~\ref{def:sem-kantorovich}の最適解は一般に一意でないが，
   \textbf{離散エントロピー}
   \[
     \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)
