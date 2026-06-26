@@ -1630,6 +1630,12 @@ strong {
   min-height: 0;
 }
 
+.graph-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .graph-sidebar {
   background: var(--paper);
   border-right: 1px solid var(--line);
@@ -1643,6 +1649,7 @@ strong {
 .graph-canvas {
   background: var(--bg);
   min-height: 0;
+  flex: 1;
 }
 
 .graph-controls__title,
@@ -1785,6 +1792,137 @@ strong {
   font-family: var(--font-sans);
   font-size: 12px;
   color: var(--muted);
+}
+
+/* ---------- Focus bar ---------- */
+
+.focus-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 16px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--ink-2);
+  min-height: 36px;
+}
+
+.focus-bar__hint {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.focus-bar__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.focus-bar__depth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.focus-bar__slider {
+  width: 60px;
+  accent-color: var(--teal);
+}
+
+.focus-bar__exit {
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+  white-space: nowrap;
+}
+
+.focus-bar__exit:hover {
+  background: var(--teal-bg);
+  border-color: var(--teal);
+}
+
+/* ---------- Graph detail ref buttons ---------- */
+
+.graph-detail__refs {
+  margin-top: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 2;
+}
+
+.graph-detail__ref-btn {
+  display: inline;
+  background: none;
+  border: none;
+  color: var(--teal);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background var(--dur-fast);
+}
+
+.graph-detail__ref-btn:hover {
+  background: var(--teal-bg);
+}
+
+.graph-detail__focus-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 6px 0;
+  border: 1px solid var(--teal);
+  border-radius: 6px;
+  background: var(--teal-bg);
+  color: var(--teal);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+
+.graph-detail__focus-btn:hover {
+  background: var(--teal);
+  color: #fff;
+}
+
+/* ---------- Block graph link icon ---------- */
+
+.block__graph-link {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity var(--dur-fast), color var(--dur-fast);
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+.block:hover .block__graph-link,
+.block__graph-link:focus-visible {
+  opacity: 1;
+}
+
+.block__graph-link:hover {
+  color: var(--teal);
 }
 
 /* ==========================================================================

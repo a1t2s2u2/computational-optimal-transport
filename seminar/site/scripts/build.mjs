@@ -406,6 +406,9 @@ function renderMarkdown(markdown) {
           .replace(/-+/g, "-")
           .replace(/^-|-$/g, "");
         html.push(`<h2 id="sec-${slug}">${renderInline(heading[2])}</h2>`);
+      } else if (level === 3 && currentBlock && GRAPH_TYPES.has(currentBlock.type) && currentBlock.id) {
+        const graphLink = `<a class="block__graph-link" href="__GRAPH_BASE__?focus=${encodeURIComponent(currentBlock.id)}" title="依存グラフで表示"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><line x1="12" y1="7.5" x2="5" y2="16.5"/><line x1="12" y1="7.5" x2="19" y2="16.5"/></svg></a>`;
+        html.push(`<h3>${renderInline(heading[2])}${graphLink}</h3>`);
       } else {
         html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
       }
@@ -572,7 +575,8 @@ function chapterTemplate(section, sections, index) {
         </a>`;
   }
 
-  const blocksJson = JSON.stringify(allBlocks).replace(/<\//g, "<\\/");
+  const graphBase = relUrl(curOut, "graph.html");
+  const blocksJson = JSON.stringify(allBlocks).replaceAll("__GRAPH_BASE__", graphBase).replace(/<\//g, "<\\/");
   const filesJson = JSON.stringify(chapterFilesMap);
 
   return `<!doctype html>
@@ -616,7 +620,7 @@ function chapterTemplate(section, sections, index) {
         </div>
 
         <article class="prose" id="${escapeHtml(section.data.id)}">
-          ${section.html}
+          ${section.html.replaceAll("__GRAPH_BASE__", relUrl(curOut, "graph.html"))}
         </article>
 
         <nav class="chapter-pager">
@@ -840,7 +844,12 @@ ${navLinks(mainSecs, i => i + 1)}${appendixNav}
           <p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>
         </div>
       </aside>
-      <main class="graph-canvas" id="cy"></main>
+      <div class="graph-main">
+        <div class="focus-bar" id="focus-bar">
+          <span class="focus-bar__hint">ダブルクリックでフォーカスモード</span>
+        </div>
+        <main class="graph-canvas" id="cy"></main>
+      </div>
     </div>
   </body>
 </html>
