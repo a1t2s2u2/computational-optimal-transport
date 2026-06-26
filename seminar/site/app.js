@@ -68,7 +68,20 @@ function buildToc() {
     list.appendChild(li);
   });
 
+  const progressBar = document.createElement("div");
+  progressBar.className = "chapter-toc__progress";
+  list.appendChild(progressBar);
+
   toc.appendChild(list);
+
+  const updateTocProgress = () => {
+    const active = list.querySelector(".chapter-toc__link.is-active");
+    if (active && active.parentElement) {
+      const li = active.parentElement;
+      progressBar.style.top = li.offsetTop + "px";
+      progressBar.style.height = li.offsetHeight + "px";
+    }
+  };
 
   const tocObserver = new IntersectionObserver(
     (entries) => {
@@ -82,6 +95,7 @@ function buildToc() {
           link.getAttribute("href") === `#${visible.target.id}`
         );
       });
+      updateTocProgress();
     },
     { rootMargin: "-60px 0px -75% 0px", threshold: 0 }
   );
@@ -281,11 +295,72 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
   }
   if (e.key === "Escape") {
+    if (!kbdOverlay.hidden) {
+      kbdOverlay.hidden = true;
+      return;
+    }
     if (refBody) {
       refBody.innerHTML = '<p class="ref-sidebar__empty">参照リンクをクリックすると<br>ここに定義や定理が表示されます</p>';
     }
     refSheet?.close();
   }
+  if (e.key === "?") {
+    kbdOverlay.hidden = !kbdOverlay.hidden;
+    e.preventDefault();
+  }
+});
+
+/* ---------- Block Scroll Fade-in ---------- */
+
+const fadeObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add("is-visible");
+        fadeObserver.unobserve(e.target);
+      }
+    });
+  },
+  { rootMargin: "0px 0px -60px 0px", threshold: 0.05 }
+);
+
+document.querySelectorAll(".block, .example-band, .margin-note").forEach((el) => {
+  fadeObserver.observe(el);
+});
+
+/* ---------- Ref Click Pulse ---------- */
+
+document.addEventListener("click", (e) => {
+  const ref = e.target.closest(".ref");
+  if (!ref) return;
+  const blocks = window.__blocks || [];
+  const block = blocks.find((b) => b.name === ref.dataset.ref);
+  if (!block) return;
+  const target = document.getElementById(block.id);
+  if (target) {
+    target.classList.remove("is-pulsing");
+    void target.offsetWidth;
+    target.classList.add("is-pulsing");
+    setTimeout(() => target.classList.remove("is-pulsing"), 700);
+  }
+});
+
+/* ---------- Keyboard Shortcut Overlay ---------- */
+
+const kbdOverlay = document.createElement("div");
+kbdOverlay.className = "kbd-overlay";
+kbdOverlay.hidden = true;
+kbdOverlay.innerHTML = `<div class="kbd-overlay__card">
+  <h3>キーボードショートカット</h3>
+  <div class="kbd-overlay__row"><span>次のブロックへ</span><span class="kbd-overlay__key">J</span></div>
+  <div class="kbd-overlay__row"><span>前のブロックへ</span><span class="kbd-overlay__key">K</span></div>
+  <div class="kbd-overlay__row"><span>サイドバーを閉じる</span><span class="kbd-overlay__key">Esc</span></div>
+  <div class="kbd-overlay__row"><span>このヘルプ</span><span class="kbd-overlay__key">?</span></div>
+</div>`;
+document.body.appendChild(kbdOverlay);
+
+kbdOverlay.addEventListener("click", (e) => {
+  if (e.target === kbdOverlay) kbdOverlay.hidden = true;
 });
 
 /* ---------- Mermaid ---------- */

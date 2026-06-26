@@ -8,7 +8,7 @@
 
 \begin{definition}{Kantorovich 問題}{sem-kantorovich}
 \blockmeta{space=polish}
-  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度（定義~\ref{def:sem-probability-measure}）$\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \Rnn$ に対して，
   \textbf{カップリング集合}
   \[
@@ -125,7 +125,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 
 \subsubsection{離散化}
 
-連続 Kantorovich 問題に離散測度を代入すると，次の命題が示すとおり行列最適化へ帰着する．
+連続定義~\ref{def:sem-kantorovich}に
+定義~\ref{def:sem-discrete-measure}を代入すると，次の命題が示すとおり行列最適化へ帰着する．
 
 \begin{proposition}{連続 Kantorovich 問題の離散化}{sem-discrete-kantorovich}
   $\mathbf{a} \in \Rpos^n$（$\sum_i a_i = 1$），$\mathbf{b} \in \Rpos^m$（$\sum_j b_j = 1$），
@@ -152,7 +153,8 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
     = \inf_{\mathbf{P} \in \CouplingsD(\mathbf{a}, \mathbf{b})}
       \inner{\mathbf{C}}{\mathbf{P}}
   \]
-  が成り立つ．ここで $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
+  が成り立つ．ここで $\ones_m, \ones_n$ は全成分 $1$ のベクトル（定義~\ref{def:sem-ones-vector}），
+  $\inner{\mathbf{C}}{\mathbf{P}} \defeq \sum_{i,j} C_{i,j} P_{i,j}$ はフロベニウス内積
   （定義~\ref{def:sem-frobenius-inner}）である．
 \end{proposition}
 \begin{proof}
@@ -515,7 +517,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 と書ける．
 
 \begin{claim}{離散カップリング集合は凸}{sem-coupling-convex}
-  離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸集合である．
+  離散カップリング集合 $\CouplingsD(\mathbf{a}, \mathbf{b})$ は凸集合（定義~\ref{def:sem-convex}）である．
   すなわち $\mathbf{P}, \mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$ と
   $t \in [0,1]$ に対して
   $t\mathbf{P} + (1-t)\mathbf{Q} \in \CouplingsD(\mathbf{a}, \mathbf{b})$．
@@ -605,7 +607,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \end{example}
 
 \begin{remark}{線形計画と一意性}{sem-lp-uniqueness}
-  離散 Kantorovich 問題は線形計画であるため，
+  離散定義~\ref{def:sem-kantorovich}は線形計画であるため，
   非一意性は目的関数の線形性に本質的に起因する：
   2つの異なる最適解 $\mathbf{P}_1, \mathbf{P}_2 \in S^*$ があれば，
   $\inner{\mathbf{C}}{t\mathbf{P}_1 + (1-t)\mathbf{P}_2}
@@ -622,7 +624,7 @@ $\X$ への射影が $\alpha$，$\Y$ への射影が $\beta$ に一致する．}
 \end{remark}
 
 \begin{remark}{エントロピー正則化による一意性の回復}{sem-entropy-uniqueness-preview}
-  離散 Kantorovich 問題の最適解は一般に一意でないが，
+  離散定義~\ref{def:sem-kantorovich}の最適解は一般に一意でないが，
   \textbf{離散エントロピー}
   \[
     \Hb(\mathbf{P}) \defeq -\sum_{i,j} P_{i,j}(\log P_{i,j} - 1)

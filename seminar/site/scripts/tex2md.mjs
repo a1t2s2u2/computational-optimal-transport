@@ -85,11 +85,11 @@ const CHAPTERS = [
 // Named block environments and their markdown mappings.
 // env_name -> [container_class, heading_prefix]
 const BLOCK_ENVS = {
-  definition: ["definition", "Def"],
-  claim: ["theorem", "Clm"],
-  lemma: ["theorem", "Lem"],
-  theorem: ["theorem", "Thm"],
-  proposition: ["theorem", "Prop"],
+  definition: ["definition", ""],
+  claim: ["theorem", ""],
+  lemma: ["theorem", ""],
+  theorem: ["theorem", ""],
+  proposition: ["proposition", ""],
   remark: ["fact", "Rem"],
   example: ["fact accent", "Ex"],
   algorithm: ["definition", ""],
@@ -318,6 +318,29 @@ function convertRefs(text) {
   text = text.replace(/  +/g, " ");
   text = text.replace(/（\s*）/g, "");
   text = text.replace(/\(\s*\)/g, "");
+
+  // "TERM（[ref:...|TITLE]）" → "[ref:...|TITLE]" when TERM matches TITLE
+  text = text.replace(
+    /(.{1,40})（(\[ref:[^|]+\|([^\]]+)\])）/g,
+    (match, pre, fullRef, title) => {
+      const trimmed = pre.trimEnd();
+      if (trimmed.endsWith(title)) {
+        const before = trimmed.slice(0, -title.length);
+        return before + fullRef;
+      }
+      const lastWord = trimmed.match(/(\S+)$/);
+      if (
+        lastWord &&
+        title.startsWith(lastWord[1]) &&
+        lastWord[1].length >= 2 &&
+        title.length - lastWord[1].length <= 2
+      ) {
+        return trimmed.slice(0, -lastWord[1].length) + fullRef;
+      }
+      return match;
+    },
+  );
+
   return text;
 }
 
