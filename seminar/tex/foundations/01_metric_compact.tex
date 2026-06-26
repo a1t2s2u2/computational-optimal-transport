@@ -35,7 +35,7 @@
 \end{definition}
 
 \begin{definition}{開球}{sem-open-ball}
-  距離空間 $(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \Rpos$ に対して，
+  距離空間（定義~\ref{def:sem-metric-space}）$(\Omega, d)$ 上の点 $x \in \Omega$ と半径 $r \in \Rpos$ に対して，
   中心 $x$，半径 $r$ の\textbf{開球}を
   \[
     B_r(x) \defeq \{y \in \Omega \mid d(x, y) < r\}
@@ -197,7 +197,9 @@ $\Omega'$ の外に逃げ，完備でない．}
 
 \begin{definition}{Polish 空間}{sem-polish}
 \blockmeta{space=polish}
-  完備かつ可分な距離空間を\textbf{Polish 空間}という．
+  完備（定義~\ref{def:sem-complete-metric}）かつ
+  可分（定義~\ref{def:sem-separable}）な
+  距離空間（定義~\ref{def:sem-metric-space}）を\textbf{Polish 空間}という．
   例：$\R^d$ はユークリッド距離に関して Polish 空間である
   （$\Q^d$ が可算稠密部分集合を与える）．
 \end{definition}

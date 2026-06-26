@@ -2,14 +2,14 @@
 \label{ch:sem-monge-chapter}
 
 最適割当問題（定義~\ref{def:sem-assignment}）は有限の添字集合 $\range{n}$ と
-均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間
-$\X, \Y$ と任意の確率測度に拡張する：
+均一重み $1/n$ を扱う離散的な輸送問題だった．次の対応で一般の Polish 空間（定義~\ref{def:sem-polish}）
+$\X, \Y$ と任意の確率測度（定義~\ref{def:sem-probability-measure}）に拡張する：
 \begin{center}
   \begin{tabular}{l|ll}
     & 最適割当問題 & Monge 問題 \\ \hline
     source/target & $\range{n}$（重み $1/n$） & $\alpha \in \Mm_+^1(\X)$，$\beta \in \Mm_+^1(\Y)$ \\
     輸送写像 & 置換 $\sigma \in \Perm(n)$ & 可測写像 $T \colon \X \to \Y$ \\
-    全射制約 & $\sigma$ が全単射 & 押し出し $T\pushforward \alpha = \beta$ \\
+    全射制約 & $\sigma$ が全単射 & 押し出し（定義~\ref{def:sem-pushforward}）$T\pushforward \alpha = \beta$ \\
     総コスト & $\frac{1}{n}\sum_i C_{i, \sigma(i)}$ & $\int_\X c(x, T(x))\, \d\alpha(x)$
   \end{tabular}
 \end{center}
@@ -17,7 +17,7 @@ $\X, \Y$ と任意の確率測度に拡張する：
 
 \begin{definition}{Monge 問題}{sem-monge}
 \blockmeta{space=polish}
-  $\X, \Y$ 上の確率測度 $\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
+  $\X, \Y$ 上の確率測度（定義~\ref{def:sem-probability-measure}）$\alpha \in \Mm_+^1(\X)$, $\beta \in \Mm_+^1(\Y)$ と
   可測関数 $c \colon \X \times \Y \to \Rnn$ に対して，
   \textbf{Monge 問題}とは
   \[
@@ -29,7 +29,8 @@ $\X, \Y$ と任意の確率測度に拡張する：
     T\pushforward \alpha = \beta
     \right\}
   \]
-  を求める問題である．
+  を求める問題である．ここで $T\pushforward \alpha$ は
+  押し出し（定義~\ref{def:sem-pushforward}）を表す．
 \end{definition}
 
 $c(x, y)$ を $x$ から $y$ への\textbf{輸送コスト}と解釈すれば，
@@ -97,7 +98,7 @@ Monge 問題の実行可能集合
   \defeq \left\{ T \colon \X \to \Y \;\middle|\;
   T \text{ は可測},\; T\pushforward \alpha = \beta \right\}
 \]
-は一般に\textbf{凸でない}．
+は一般に凸（定義~\ref{def:sem-convex}）でない．
 
 \begin{example}{実行可能集合の非凸性}{sem-nonconvex}
   $\alpha = \beta = \tfrac{1}{2}\delta_{-1} + \tfrac{1}{2}\delta_1$ とし，

@@ -5,7 +5,7 @@
 \label{sec:sem-measurable}
 
 \begin{definition}{$\sigma$-代数}{sem-sigma-algebra}
-  集合 $\Omega$ の部分集合族 $\mathcal{F} \subset 2^{\Omega}$ が
+  集合 $\Omega$ の部分集合族 $\mathcal{F} \subset 2^{\Omega}$（冪集合，定義~\ref{def:sem-power-set}）が
   \textbf{$\sigma$-代数}であるとは，
   以下の3条件を満たすことをいう：
   \begin{enumerate}
@@ -17,7 +17,7 @@
 \end{definition}
 
 \begin{definition}{可測空間}{sem-measurable-space}
-  集合 $\Omega$ と $\Omega$ 上の $\sigma$-代数 $\mathcal{F}$ の組
+  集合 $\Omega$ と $\Omega$ 上の $\sigma$-代数（定義~\ref{def:sem-sigma-algebra}）$\mathcal{F}$ の組
   $(\Omega, \mathcal{F})$ を\textbf{可測空間}という．
   $\mathcal{F}$ の元を\textbf{可測集合}という．
 \end{definition}
@@ -81,7 +81,8 @@
 \end{definition}
 
 \begin{definition}{確率測度}{sem-probability-measure}
-  可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu$ が $\mu(\Omega) = 1$ を満たすとき，
+  可測空間（定義~\ref{def:sem-measurable-space}）$(\Omega, \mathcal{F})$ 上の
+  測度（定義~\ref{def:sem-measure}）$\mu$ が $\mu(\Omega) = 1$ を満たすとき，
   $\mu$ を\textbf{確率測度}という．
   $\Omega$ 上の確率測度の全体を $\Mm_+^1(\Omega)$ と記す．
 \end{definition}
@@ -109,7 +110,8 @@
   \[
     s = \sum_{k=1}^{m} c_k \mathbf{1}_{A_k}
   \]
-  と表せることをいう．
+  と表せることをいう．ここで $\mathbf{1}_{A_k}$ は
+  指示関数（定義~\ref{def:sem-indicator}）である．
 \end{definition}
 
 \begin{definition}{非負可測関数の積分}{sem-nonneg-integral}
@@ -186,7 +188,8 @@
     \end{cases}
     \qquad (\forall\, A \in \mathcal{F})
   \]
-  で定義する．
+  で定義する．すなわち指示関数（定義~\ref{def:sem-indicator}）を用いて
+  $\delta_x(A) = \mathbf{1}_A(x)$ とも書ける．
 \end{definition}
 
 \begin{claim}{Dirac 測度に対する積分}{sem-dirac-integral}
@@ -225,11 +228,12 @@
   \[
     \mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}
   \]
-  と表せることをいう．
+  と表せることをいう．ここで $\delta_{x_i}$ は
+  Dirac 測度（定義~\ref{def:sem-dirac}）である．
 \end{definition}
 
 \begin{claim}{離散測度の表示の一意性}{sem-discrete-measure-uniqueness}
-  離散測度 $\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}$ の表示について
+  離散測度（定義~\ref{def:sem-discrete-measure}）$\mu = \sum_{i=1}^{n} a_i\, \delta_{x_i}$ の表示について
   $a_i = \mu(\{x_i\})$ が成り立ち，
   $n$ および対 $\{(x_i, a_i)\}_{i=1}^{n}$ は $\mu$ から
   添字の入れ替えを除いて一意に定まる．
@@ -253,7 +257,8 @@
 \end{proof}
 
 \begin{definition}{押し出し}{sem-pushforward}
-  可測写像 $T \colon \X \to \Y$ と測度 $\mu \in \Mm_+^1(\X)$ に対して，
+  可測写像（定義~\ref{def:sem-measurable-map}）$T \colon \X \to \Y$ と
+  確率測度（定義~\ref{def:sem-probability-measure}）$\mu \in \Mm_+^1(\X)$ に対して，
   $T$ による $\mu$ の\textbf{押し出し} $T\pushforward \mu \in \Mm_+^1(\Y)$ を
   \[
     (T\pushforward \mu)(A) \defeq \mu(T^{-1}(A))
@@ -263,7 +268,8 @@
 \end{definition}
 
 \begin{proposition}{Dirac 測度と離散測度の押し出し}{sem-dirac-pushforward}
-  可測写像 $T \colon \X \to \Y$ に対して，次が成り立つ．
+  可測写像 $T \colon \X \to \Y$ と
+  押し出し（定義~\ref{def:sem-pushforward}）について，次が成り立つ．
   \begin{enumerate}
     \item[(i)] 任意の点 $x \in \X$ に対して
       $T\pushforward \delta_x = \delta_{T(x)}$．
