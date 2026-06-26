@@ -819,9 +819,6 @@ ${navLinks(mainSecs, i => i + 1)}${appendixNav}
               <option value="definition">定義</option>
               <option value="theorem">定理</option>
               <option value="proposition">命題</option>
-              <option value="remark">注意</option>
-              <option value="example">例</option>
-              <option value="algorithm">算法</option>
             </select>
           </label>
           <label class="graph-controls__label">
@@ -836,9 +833,6 @@ ${navLinks(mainSecs, i => i + 1)}${appendixNav}
             <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--teal)"></span>定義</span>
             <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--indigo)"></span>定理</span>
             <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--orange)"></span>命題</span>
-            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--amber)"></span>算法</span>
-            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--muted)"></span>注意</span>
-            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--wine)"></span>例</span>
           </div>
         </div>
 
@@ -853,13 +847,17 @@ ${navLinks(mainSecs, i => i + 1)}${appendixNav}
 `;
 }
 
+const GRAPH_TYPES = new Set(["definition", "theorem", "proposition"]);
+
 function buildGraphData() {
-  const edges = [];
+  const graphBlocks = allBlocks.filter(b => GRAPH_TYPES.has(b.type));
+  const graphIds = new Set(graphBlocks.map(b => b.id));
   const blocksByName = {};
-  for (const block of allBlocks) {
+  for (const block of graphBlocks) {
     blocksByName[block.name] = block;
   }
-  for (const block of allBlocks) {
+  const edges = [];
+  for (const block of graphBlocks) {
     const refs = [...block.html.matchAll(/data-ref="([^"]+)"/g)].map(m => m[1]);
     for (const refName of new Set(refs)) {
       const target = blocksByName[refName];
@@ -869,7 +867,7 @@ function buildGraphData() {
     }
   }
   return {
-    nodes: allBlocks.map(b => ({
+    nodes: graphBlocks.map(b => ({
       id: b.id,
       name: b.name,
       type: b.type,

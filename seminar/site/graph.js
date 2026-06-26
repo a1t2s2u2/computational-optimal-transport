@@ -81,7 +81,7 @@ function buildChapterFilter() {
 function nodeLabel(n) {
   const prefix = ENV_LABEL[n.type] || n.type;
   const title = n.name || n.title || '';
-  const short = title.length > 20 ? title.slice(0, 18) + '…' : title;
+  const short = title.length > 24 ? title.slice(0, 22) + '…' : title;
   return `${prefix}. ${short}`;
 }
 
@@ -158,7 +158,7 @@ function buildGraph() {
           'shape': 'round-rectangle',
           'width': 'label',
           'height': 'label',
-          'padding': '8px',
+          'padding': '12px',
           'background-color': function(ele) {
             const env = ele.data('env');
             const color = ENV_COLOR[env] || '#666';
@@ -171,13 +171,13 @@ function buildGraph() {
           },
           'label': 'data(label)',
           'font-family': '"Noto Sans JP", system-ui, sans-serif',
-          'font-size': 11,
+          'font-size': 13,
           'font-weight': 600,
           'color': inkColor,
           'text-valign': 'center',
           'text-halign': 'center',
           'text-wrap': 'wrap',
-          'text-max-width': 140,
+          'text-max-width': 160,
           'transition-property': 'opacity, border-width',
           'transition-duration': 200,
         }
@@ -245,12 +245,12 @@ function buildGraph() {
     ],
     layout: {
       name: 'dagre',
-      rankDir: 'BT',
-      nodeSep: 40,
-      rankSep: 60,
-      edgeSep: 20,
+      rankDir: 'TB',
+      nodeSep: 50,
+      rankSep: 70,
+      edgeSep: 25,
       padding: 50,
-      spacingFactor: 1.1,
+      spacingFactor: 1.15,
     },
   });
 
