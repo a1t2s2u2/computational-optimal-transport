@@ -18,18 +18,15 @@
   と定める．すなわち $\Prob(X)$ は $X$ 上の Borel 確率測度全体である．
 \end{definition}
 
-有限 $p$ 次モーメントを定義するため，任意の点 $o\in X$ を一つ選ぶ．
-この点に特別な性質はない．
-
 \begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
-  $1\leq p<\infty$ に対し
+  任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
     \Pp{p}(X)
     :=
     \left\{
       \mu\in\Prob(X)
       \;\middle|\;
-      \int_X d(x,o)^p\,\d\mu(x)<\infty
+      \int_X d(x,x_0)^p\,\d\mu(x)<\infty
     \right\}
   \]
   と定める．また
@@ -38,15 +35,15 @@
     :=
     \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
   \]
-  とおく．ここで
+  とおく．ただし，$\mu$ の\textbf{台}とは
   \[
     \supp\mu
-    :=
+    =
     \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
   \]
-  は $\mu$ の台である．
-  また，$d(x,o')\leq d(x,o)+d(o,o')$ より，
-  $\Pp{p}(X)$ は点 $o$ の選び方によらない．
+  のことである．
+  $d(x,x_0')\leq d(x,x_0)+d(x_0,x_0')$ より，
+  $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
 \end{definition}
 
 \begin{definition}{結合と Wasserstein 距離}{gs-wasserstein}
@@ -84,11 +81,11 @@
 \end{definition}
 
 $\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要である．
-実際，点 $o$ に質量 $1$ を置く確率測度を $\delta_o$ と書けば
+実際，点 $x_0$ に質量 $1$ を置く確率測度を $\delta_{x_0}$ と書けば
 \[
-  \Wass_p(\mu,\delta_o)^p
+  \Wass_p(\mu,\delta_{x_0})^p
   =
-  \int_X d(x,o)^p\,\d\mu(x)
+  \int_X d(x,x_0)^p\,\d\mu(x)
 \]
 となる．
 
@@ -96,7 +93,7 @@ $p<\infty$ のとき，直積結合 $\mu\otimes\nu$ と
 \[
   d(x,y)^p
   \leq
-  2^{p-1}\bigl(d(x,o)^p+d(y,o)^p\bigr)
+  2^{p-1}\bigl(d(x,x_0)^p+d(y,x_0)^p\bigr)
 \]
 を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
 
