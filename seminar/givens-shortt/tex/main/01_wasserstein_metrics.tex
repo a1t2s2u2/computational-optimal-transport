@@ -100,9 +100,24 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \section{最適 coupling の存在}
 \label{sec:optimal-coupling}
 
-確率測度の\textbf{弱収束} $\pi_n\rightharpoonup\pi$ とは，
-すべての有界連続関数 $f$ に対して
-$\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
+\begin{definition}{弱収束}{gs-weak-convergence}
+  確率測度の列 $(\pi_n)$ が $\pi$ に\textbf{弱収束}する
+  （$\pi_n\rightharpoonup\pi$ と書く）とは，
+  すべての有界連続関数 $f$ に対して
+  $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
+\end{definition}
+
+\begin{definition}{Tightness}{gs-tightness}
+  確率測度の族 $\mathcal{F}\subset\Prob(X)$ が\textbf{tight}であるとは，
+  任意の $\varepsilon>0$ に対して，コンパクト集合 $K\subset X$ で
+  $\mu(K)>1-\varepsilon$ がすべての $\mu\in\mathcal{F}$ で成り立つものが存在することをいう．
+\end{definition}
+
+\begin{proposition}{Prokhorov の定理}{gs-prokhorov}
+  Polish 空間上の確率測度の族 $\mathcal{F}\subset\Prob(X)$ について，
+  $\mathcal{F}$ が tight ならば，
+  $\mathcal{F}$ の任意の列は弱収束する部分列をもつ．
+\end{proposition}
 
 \begin{lemma}{輸送コストの下半連続性}{gs-cost-lsc}
   $\pi_n\rightharpoonup\pi$ ならば，$1\leq p<\infty$ に対し
@@ -156,7 +171,7 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
   \textbf{(iii) 下限の達成．}
   $p<\infty$ とする．最小化列
   $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
-  (ii) と Prokhorov の定理により，部分列を取れば
+  (ii) と命題~\ref{prop:gs-prokhorov}（Prokhorov の定理）により，部分列を取れば
   $\pi_{n_k}\rightharpoonup\pi^\star$ とできる．
   弱極限の周辺分布は保たれるから
   $\pi^\star\in\Couplings(\mu,\nu)$ であり，
