@@ -128,7 +128,7 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \begin{proof}
   $p<\infty$ とする．最小化列
   $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
-  固定された周辺分布 $\mu,\nu$ は tight なので，
+  Polish 空間上の Borel 確率測度は tight なので（Ulam の定理），
   $\Couplings(\mu,\nu)$ も tight である．
   Prokhorov の定理により，部分列を取れば
   $\pi_{n_k}\rightharpoonup\pi^\star\in\Couplings(\mu,\nu)$ とできる．
@@ -142,13 +142,13 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
   \]
   を満たす結合を取り，弱収束部分列 $\pi_{n_k}\rightharpoonup\pi^\star$ を取る．
   各 $m$ に対し，十分大きな $k$ で
-  $\pi_{n_k}(\{d\leq\Wass_\infty+1/m\})=1$ である．
+  $\pi_{n_k}(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$ である．
   この集合は閉なので，Portmanteau の定理から
-  $\pi^\star(\{d\leq\Wass_\infty+1/m\})=1$．
+  $\pi^\star(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$．
   $m\to\infty$ とすれば $\pi^\star$ は下限を達成する．
 \end{proof}
 
-\section{Proposition 2：距離性}
+\section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
 \begin{lemma}{結合の貼り合わせ}{gs-gluing}
