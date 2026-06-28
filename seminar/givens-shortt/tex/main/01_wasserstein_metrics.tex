@@ -107,15 +107,15 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \end{definition}
 
-\begin{definition}{Tightness}{gs-tightness}
-  確率測度の族 $\mathcal{F}\subset\Prob(X)$ が\textbf{tight}であるとは，
+\begin{definition}{緊密性}{gs-tightness}
+  確率測度の族 $\mathcal{F}\subset\Prob(X)$ が\textbf{緊密}（tight）であるとは，
   任意の $\varepsilon>0$ に対して，コンパクト集合 $K\subset X$ で
   $\mu(K)>1-\varepsilon$ がすべての $\mu\in\mathcal{F}$ で成り立つものが存在することをいう．
 \end{definition}
 
 \begin{proposition}{Prokhorov の定理}{gs-prokhorov}
   Polish 空間上の確率測度の族 $\mathcal{F}\subset\Prob(X)$ について，
-  $\mathcal{F}$ が tight ならば，
+  $\mathcal{F}$ が緊密ならば，
   $\mathcal{F}$ の任意の列は弱収束する部分列をもつ．
 \end{proposition}
 
@@ -143,7 +143,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \begin{proof}
   以下の3点を示す：
   (i) $\Couplings(\mu,\nu)\neq\emptyset$，
-  (ii) $\Couplings(\mu,\nu)$ は tight，
+  (ii) $\Couplings(\mu,\nu)$ は緊密，
   (iii) 弱極限が下限を達成する．
 
   \textbf{(i) 非空性．}
@@ -153,7 +153,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   を満たすから $\mu\otimes\nu\in\Couplings(\mu,\nu)$．
 
   \textbf{(ii) Tightness．}
-  Polish 空間上の Borel 確率測度は tight である（Ulam の定理）．
+  Polish 空間上の Borel 確率測度は緊密である（Ulam の定理）．
   任意の $\varepsilon>0$ に対し，
   コンパクト集合 $K_1,K_2\subset X$ で
   $\mu(K_1)>1-\varepsilon$，$\nu(K_2)>1-\varepsilon$ なるものを取る．
@@ -166,7 +166,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
     > 1 - 2\varepsilon.
   \]
   $K_1\times K_2$ は $X\times X$ のコンパクト集合だから，
-  $\Couplings(\mu,\nu)$ は tight である．
+  $\Couplings(\mu,\nu)$ は緊密である．
 
   \textbf{(iii) 下限の達成．}
   $p<\infty$ とする．最小化列
