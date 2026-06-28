@@ -35,7 +35,7 @@ from model import Node, Route, SpaceLattice
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-SEMINAR_TEX = os.path.join(REPO_ROOT, "seminar", "tex")
+SEMINAR_TEX = os.path.join(REPO_ROOT, "seminar", "cuturi", "tex")
 OUTPUT_PATH = os.path.join(os.path.dirname(__file__), "out", "graph.json")
 
 # uses/routes の依存として採用する参照接頭辞（ブロックを指すもののみ）。

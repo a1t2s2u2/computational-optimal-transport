@@ -2,13 +2,13 @@
 
 最適輸送のセミナー資料（tex / site）と関連ツールを管理するリポジトリ。
 
-- `seminar/` — Cuturi _Computational Optimal Transport_ に基づく資料（本編4章+付録3章）
-- `givens-shortt/` — Givens–Shortt _A class of Wasserstein metrics for probability distributions_ に基づく資料
+- `seminar/cuturi/` — Cuturi _Computational Optimal Transport_ に基づく資料（本編4章+付録3章）
+- `seminar/givens-shortt/` — Givens–Shortt _A class of Wasserstein metrics for probability distributions_ に基づく資料
 
 ## 参考文献
 
-- [Computational Optimal Transport, G. Peyré & M. Cuturi](https://arxiv.org/abs/1803.00567) → `seminar/`
-- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt](https://doi.org/10.1307/mmj/1029003026) → `givens-shortt/`
+- [Computational Optimal Transport, G. Peyré & M. Cuturi](https://arxiv.org/abs/1803.00567) → `seminar/cuturi/`
+- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt](https://doi.org/10.1307/mmj/1029003026) → `seminar/givens-shortt/`
 
 ## セミナー方針
 

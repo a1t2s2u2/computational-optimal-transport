@@ -1,8 +1,8 @@
 # build output directories
 out/
-seminar/cuturi/translation/out/
-seminar/cuturi/original/out/
-seminar/tex/out/
+seminar/cuturi/reference/translation/out/
+seminar/cuturi/reference/original/out/
+seminar/cuturi/tex/out/
 ambrosio/tex/out/
 
 # LaTeX intermediate files
@@ -17,12 +17,12 @@ ambrosio/tex/out/
 
 # generated PDFs at repo root (cuturi/original の画像は明示的に追跡)
 /main.pdf
-/seminar/cuturi/translation/main.pdf
-/seminar/tex/main.pdf
+/seminar/cuturi/reference/translation/main.pdf
+/seminar/cuturi/tex/main.pdf
 /translated_for_seminar.pdf
 
 # generated site artifacts
-seminar/site/tex-out/
+seminar/cuturi/site/tex-out/
 
 # reference PDFs (original papers)
 /Lecture Notes on Optimal Transport Problems.pdf

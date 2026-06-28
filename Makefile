@@ -5,20 +5,20 @@
 
 .PHONY: site pdf givens-shortt-site givens-shortt-pdf
 
-# --- Cuturi (seminar/) ---
+# --- Cuturi ---
 site:
-	node seminar/site/scripts/tex2md.mjs
-	node seminar/site/scripts/build.mjs
-	@echo "→ seminar/site/dist/index.html をブラウザで開いてください"
+	node seminar/cuturi/site/scripts/tex2md.mjs
+	node seminar/cuturi/site/scripts/build.mjs
+	@echo "→ seminar/cuturi/site/dist/index.html をブラウザで開いてください"
 
 pdf:
-	cd seminar/tex && latexmk
+	cd seminar/cuturi/tex && latexmk
 
 # --- Givens--Shortt ---
 givens-shortt-site:
-	node givens-shortt/site/scripts/tex2md.mjs
-	node givens-shortt/site/scripts/build.mjs
-	@echo "→ givens-shortt/site/dist/index.html をブラウザで開いてください"
+	node seminar/givens-shortt/site/scripts/tex2md.mjs
+	node seminar/givens-shortt/site/scripts/build.mjs
+	@echo "→ seminar/givens-shortt/site/dist/index.html をブラウザで開いてください"
 
 givens-shortt-pdf:
-	cd givens-shortt/tex && latexmk
+	cd seminar/givens-shortt/tex && latexmk

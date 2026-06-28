@@ -13,9 +13,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Configuration
 // ---------------------------------------------------------------------------
 
-const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
-const SEMINAR_DIR = path.join(REPO_ROOT, "seminar", "tex");
-const CONTENT_DIR = path.join(REPO_ROOT, "seminar", "site", "content");
+const REPO_ROOT = path.resolve(__dirname, "..", "..", "..", "..");
+const SEMINAR_DIR = path.join(REPO_ROOT, "seminar", "cuturi", "tex");
+const CONTENT_DIR = path.join(REPO_ROOT, "seminar", "cuturi", "site", "content");
 
 // 本編(main/) と 付録(foundations/) の全 tex を出現順に返す。
 // ラベル写像・章写像の走査対象（preamble.tex / main.tex は含めない）。
