@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -32,7 +32,7 @@ const usedBlockIds = new Set();
 let currentChapterId = null;
 
 function makeBlockId(type, rawName) {
-  const prefixMap = { definition: "def", theorem: "thm", proposition: "prop", remark: "rem", example: "ex" };
+  const prefixMap = { definition: "def", theorem: "thm", proposition: "prop", lemma: "lem", remark: "rem", example: "ex" };
   const prefix = prefixMap[type] || type;
   const slug = rawName
     .replace(/\\\(([^)]*)\\\)/g, (_, tex) =>
@@ -281,6 +281,12 @@ function renderMarkdown(markdown) {
       stack.push("</div>");
       return;
     }
+    if (spec === "lemma") {
+      currentBlock = { type: "lemma", divIndex: html.length, depth: stack.length };
+      html.push('<div class="block block--thm">');
+      stack.push("</div>");
+      return;
+    }
     if (spec === "algorithm") {
       currentBlock = { type: "algorithm", divIndex: html.length, depth: stack.length };
       html.push('<div class="block block--algo">');
@@ -415,6 +421,9 @@ function renderMarkdown(markdown) {
           .replace(/-+/g, "-")
           .replace(/^-|-$/g, "");
         html.push(`<h2 id="sec-${slug}">${renderInline(heading[2])}</h2>`);
+      } else if (level === 3 && currentBlock && GRAPH_TYPES.has(currentBlock.type) && currentBlock.id) {
+        const graphLink = `<a class="block__graph-link" href="__GRAPH_BASE__?focus=${encodeURIComponent(currentBlock.id)}" title="依存グラフで表示"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><line x1="12" y1="7.5" x2="5" y2="16.5"/><line x1="12" y1="7.5" x2="19" y2="16.5"/></svg></a>`;
+        html.push(`<h3>${renderInline(heading[2])}${graphLink}</h3>`);
       } else {
         html.push(`<h${level}>${renderInline(heading[2])}</h${level}>`);
       }
@@ -510,6 +519,7 @@ function siteHeader(sections, currentSection) {
     ? `\n          <span class="site-header__group-label">付録</span>\n${appendixLinks}`
     : "";
 
+  const graphHref = relUrl(curOut, "graph.html");
   return `<header class="site-header">
       <div class="site-header__inner">
         <a href="${escapeHtml(relUrl(curOut, "index.html"))}" class="site-header__home">
@@ -518,6 +528,7 @@ function siteHeader(sections, currentSection) {
         </a>
         <nav class="site-header__nav">
 ${mainLinks}${appendixNav}
+          <a href="${escapeHtml(graphHref)}" class="site-header__link site-header__graph-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg>グラフ</a>
         </nav>
       </div>
     </header>`;
@@ -552,7 +563,8 @@ function chapterTemplate(section, sections, index) {
         </a>`;
   }
 
-  const blocksJson = JSON.stringify(allBlocks).replace(/<\//g, "<\\/");
+  const graphBase = relUrl(curOut, "graph.html");
+  const blocksJson = JSON.stringify(allBlocks).replaceAll("__GRAPH_BASE__", graphBase).replace(/<\//g, "<\\/");
   const filesJson = JSON.stringify(chapterFilesMap);
 
   return `<!doctype html>
@@ -596,7 +608,7 @@ function chapterTemplate(section, sections, index) {
         </div>
 
         <article class="prose" id="${escapeHtml(section.data.id)}">
-          ${section.html}
+          ${section.html.replaceAll("__GRAPH_BASE__", relUrl(curOut, "graph.html"))}
         </article>
 
         <nav class="chapter-pager">
@@ -679,10 +691,158 @@ ${renderCards(appendixSecs)}
       <nav class="landing__toc">
 ${renderCards(mainSecs)}
       </nav>${appendixBlock}
+      <div class="landing__group">
+        <h2 class="landing__group-title">ツール</h2>
+      </div>
+      <nav class="landing__toc landing__toc--tools">
+        <a href="graph.html" class="toc-card toc-card--graph" style="animation-delay:0ms">
+          <span class="toc-card__num"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg></span>
+          <span class="toc-card__eyebrow">INTERACTIVE</span>
+          <h2 class="toc-card__title">依存グラフ</h2>
+          <span class="toc-card__stats">${allBlocks.length} ブロックの関係を可視化</span>
+        </a>
+      </nav>
+
       <footer class="landing__footer">
         <p>Based on <em>A Class of Wasserstein Metrics for Probability Distributions</em> by C. R. Givens and R. M. Shortt</p>
       </footer>
     </main>
+  </body>
+</html>
+`;
+}
+
+const GRAPH_TYPES = new Set(["definition", "theorem", "proposition", "lemma"]);
+
+function buildGraphData() {
+  const graphBlocks = allBlocks.filter(b => GRAPH_TYPES.has(b.type));
+  const graphIds = new Set(graphBlocks.map(b => b.id));
+  const blocksByName = {};
+  for (const block of graphBlocks) {
+    blocksByName[block.name] = block;
+  }
+  const edges = [];
+  for (const block of graphBlocks) {
+    const refs = [...block.html.matchAll(/data-ref="([^"]+)"/g)].map(m => m[1]);
+    for (const refName of new Set(refs)) {
+      const target = blocksByName[refName];
+      if (target && target.id !== block.id) {
+        edges.push({ from: block.id, to: target.id });
+      }
+    }
+  }
+  return {
+    nodes: graphBlocks.map(b => ({
+      id: b.id,
+      name: b.name,
+      type: b.type,
+      title: b.title,
+      chapter: b.chapter,
+      html: b.html,
+    })),
+    edges,
+  };
+}
+
+function graphTemplate(sections) {
+  const chapterFilesMap = {};
+  sections.forEach((s) => {
+    chapterFilesMap[s.data.id] = outPathOf(s);
+  });
+
+  const mainSecs = sections.filter((s) => s.data.group !== "appendix");
+  const appendixSecs = sections.filter((s) => s.data.group === "appendix");
+  const navLinks = (secs, labelFn) =>
+    secs.map((s, i) => {
+      const href = outPathOf(s);
+      return `          <a href="${escapeHtml(href)}" class="site-header__link"><span class="site-header__num">${labelFn(i)}</span>${escapeHtml(s.data.nav ?? s.data.title)}</a>`;
+    }).join("\n");
+  const appendixNav = appendixSecs.length
+    ? `\n          <span class="site-header__group-label">付録</span>\n${navLinks(appendixSecs, i => String.fromCharCode(65 + i))}`
+    : "";
+
+  return `<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>依存グラフ — Givens–Shortt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" />
+    ${mathJaxScript()}
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+    <script>
+      window.__chapterFiles = ${JSON.stringify(chapterFilesMap)};
+      window.__graphData = ${JSON.stringify(graphData).replace(/<\//g, "<\\/")};
+    </script>
+    <script defer src="./graph.js"></script>
+  </head>
+  <body class="graph-body">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="index.html" class="site-header__home">
+          <span class="site-header__logo">OT</span>
+          <span class="site-header__name">最適輸送問題</span>
+        </a>
+        <nav class="site-header__nav">
+${navLinks(mainSecs, i => i + 1)}${appendixNav}
+          <a href="graph.html" class="site-header__link is-current"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="18" r="2.5"/><line x1="8.5" y1="6" x2="15.5" y2="6"/><line x1="6" y1="8.5" x2="6" y2="15.5"/><line x1="8" y1="8" x2="16" y2="16"/></svg>グラフ</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="graph-layout">
+      <aside class="graph-sidebar" id="graph-sidebar">
+        <div class="graph-controls">
+          <h3 class="graph-controls__title">フィルタ</h3>
+          <label class="graph-controls__label">
+            章
+            <select id="chapter-filter" class="graph-controls__select">
+              <option value="all">すべて</option>
+            </select>
+          </label>
+          <label class="graph-controls__label">
+            タイプ
+            <select id="type-filter" class="graph-controls__select">
+              <option value="all">すべて</option>
+              <option value="definition">定義</option>
+              <option value="theorem">定理</option>
+              <option value="proposition">命題</option>
+              <option value="lemma">補題</option>
+            </select>
+          </label>
+          <label class="graph-controls__label">
+            <input type="checkbox" id="hide-isolated"> 孤立ノードを非表示
+          </label>
+          <button id="fit-btn" class="graph-controls__btn" type="button">全体表示</button>
+        </div>
+
+        <div class="graph-legend">
+          <h3 class="graph-legend__title">凡例</h3>
+          <div class="graph-legend__items">
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--teal)"></span>定義</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--indigo)"></span>定理</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:var(--orange)"></span>命題</span>
+            <span class="graph-legend__item"><span class="graph-legend__dot" style="background:#a855f7"></span>補題</span>
+          </div>
+        </div>
+
+        <div class="graph-detail" id="graph-detail">
+          <p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>
+        </div>
+      </aside>
+      <div class="graph-main">
+        <div class="focus-bar" id="focus-bar">
+          <span class="focus-bar__hint">ダブルクリックでフォーカスモード</span>
+        </div>
+        <main class="graph-canvas" id="cy"></main>
+      </div>
+    </div>
   </body>
 </html>
 `;
@@ -724,12 +884,18 @@ sections.forEach((section, i) => {
   writeFileSync(path.join(distDir, outPathOf(section)), chapterTemplate(section, sections, i), "utf8");
 });
 
+// グラフデータとグラフページを生成する。
+const graphData = buildGraphData();
+writeFileSync(path.join(distDir, "graph-data.json"), JSON.stringify(graphData), "utf8");
+writeFileSync(path.join(distDir, "graph.html"), graphTemplate(sections), "utf8");
+
 // html から相対参照される静的アセットを dist へコピーする。
-for (const asset of ["styles.css", "app.js"]) {
-  copyFileSync(path.join(siteRoot, asset), path.join(distDir, asset));
+for (const asset of ["styles.css", "app.js", "graph.js"]) {
+  const src = path.join(siteRoot, asset);
+  if (existsSync(src)) copyFileSync(src, path.join(distDir, asset));
 }
 
 const nMain = sections.filter((s) => s.data.group !== "appendix").length;
 console.log(
-  `Built dist/ : index.html + main/(${nMain}) + appendix/(${sections.length - nMain}).`
+  `Built dist/ : index.html + graph.html + main/(${nMain}) + appendix/(${sections.length - nMain}) — ${allBlocks.length} blocks, ${graphData.edges.length} edges.`
 );
