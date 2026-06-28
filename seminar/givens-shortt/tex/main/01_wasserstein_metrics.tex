@@ -179,30 +179,35 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{lemma}{Coupling の貼り合わせ}{gs-gluing}
-  $\pi_{12}\in\Couplings(\mu_1,\mu_2)$ と
-  $\pi_{23}\in\Couplings(\mu_2,\mu_3)$ に対し，
-  $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
-  $(x_1,x_2)$ 周辺分布が $\pi_{12}$，
-  $(x_2,x_3)$ 周辺分布が $\pi_{23}$ となるものが存在する．
+\begin{lemma}{Coupling の貼り合わせ（Gluing lemma）}{gs-gluing}
+  $\mu,\nu,\rho\in\Prob(X)$ とし，
+  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\rho)$ とする．
+  このとき $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で，
+  次の2条件を同時に満たすものが存在する：
+  \begin{enumerate}
+    \item $(x,y)$ への周辺分布が $\pi$，
+    \item $(y,z)$ への周辺分布が $\sigma$．
+  \end{enumerate}
 \end{lemma}
 
 \begin{proof}
-  正則条件付き確率を用いて
+  正則条件付き確率を用いて $\pi$ と $\sigma$ を
+  共通の周辺 $\nu$ で分解する：
   \[
-    \pi_{12}(\d x_1,\d x_2)
-    =K_{1|2}(x_2,\d x_1)\mu_2(\d x_2),
-    \quad
-    \pi_{23}(\d x_2,\d x_3)
-    =\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+    \pi(\d x,\d y)
+    =K_{\pi}(y,\d x)\,\nu(\d y),
+    \qquad
+    \sigma(\d y,\d z)
+    =\nu(\d y)\,K_{\sigma}(y,\d z).
   \]
-  と分解し，
+  ここで $K_\pi(y,\cdot)$，$K_\sigma(y,\cdot)$ は
+  それぞれ $\pi$，$\sigma$ の $y$ を固定したときの条件付き分布である．
   \[
-    \boldsymbol{\pi}(\d x_1,\d x_2,\d x_3)
+    \boldsymbol{\gamma}(\d x,\d y,\d z)
     :=
-    K_{1|2}(x_2,\d x_1)\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+    K_{\pi}(y,\d x)\,\nu(\d y)\,K_{\sigma}(y,\d z)
   \]
-  とおけばよい．
+  とおけば，$(x,y)$ 周辺は $\pi$，$(y,z)$ 周辺は $\sigma$ となる．
 \end{proof}
 
 \begin{proposition}{Wasserstein 距離は距離である（原論文 Proposition 2）}{gs-wp-metric}
@@ -246,31 +251,31 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
   だから $\mu=\nu$．
 
   \textbf{(4) 三角不等式．}
-  $\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
-  $\pi_{12},\pi_{23}$ をそれぞれの最適 coupling とする．
+  $\mu,\nu,\rho\in\Pp{p}(X)$ とし，
+  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\rho)$
+  をそれぞれの最適 coupling とする．
   補題~\ref{lem:gs-gluing}より，
-  $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
-  $(x_1,x_2)$ 周辺が $\pi_{12}$，
-  $(x_2,x_3)$ 周辺が $\pi_{23}$ であるものが存在する．
-  $\boldsymbol{\pi}$ の $(x_1,x_3)$ 周辺分布を
-  $\pi_{13}$ とおくと $\pi_{13}\in\Couplings(\mu_1,\mu_3)$ だから，
+  $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で
+  $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ であるものが存在する．
+  $\boldsymbol{\gamma}$ の $(x,z)$ 周辺分布を
+  $\tau$ とおくと $\tau\in\Couplings(\mu,\rho)$ だから，
   \[
-    \Wass_p(\mu_1,\mu_3)
-    \leq \norm{d(x_1,x_3)}_{L^p(\pi_{13})}
-    = \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})}.
+    \Wass_p(\mu,\rho)
+    \leq \norm{d(x,z)}_{L^p(\tau)}
+    = \norm{d(x,z)}_{L^p(\boldsymbol{\gamma})}.
   \]
-  距離 $d$ の三角不等式 $d(x_1,x_3)\leq d(x_1,x_2)+d(x_2,x_3)$ と
+  距離 $d$ の三角不等式 $d(x,z)\leq d(x,y)+d(y,z)$ と
   $L^p$ ノルムの単調性から
   \[
-    \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})}
-    \leq \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})}.
+    \norm{d(x,z)}_{L^p(\boldsymbol{\gamma})}
+    \leq \norm{d(x,y)+d(y,z)}_{L^p(\boldsymbol{\gamma})}.
   \]
   Minkowski の不等式を適用し，
-  周辺分布が $\pi_{12},\pi_{23}$ であることから
+  周辺分布が $\pi,\sigma$ であることから
   \[
-    \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})}
-    \leq \norm{d(x_1,x_2)}_{L^p(\pi_{12})}
-    + \norm{d(x_2,x_3)}_{L^p(\pi_{23})}
-    = \Wass_p(\mu_1,\mu_2)+\Wass_p(\mu_2,\mu_3).
+    \norm{d(x,y)+d(y,z)}_{L^p(\boldsymbol{\gamma})}
+    \leq \norm{d(x,y)}_{L^p(\pi)}
+    + \norm{d(y,z)}_{L^p(\sigma)}
+    = \Wass_p(\mu,\nu)+\Wass_p(\nu,\rho).
   \]
 \end{proof}
