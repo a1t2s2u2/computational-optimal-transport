@@ -24,9 +24,6 @@ ambrosio/tex/out/
 # generated site artifacts
 seminar/cuturi/site/tex-out/
 
-# reference PDFs (original papers)
-/Lecture Notes on Optimal Transport Problems.pdf
-
 # uv
 .venv/
 uv.lock
