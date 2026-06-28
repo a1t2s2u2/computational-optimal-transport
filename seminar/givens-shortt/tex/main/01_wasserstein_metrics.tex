@@ -46,8 +46,8 @@
   $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
 \end{definition}
 
-\begin{definition}{結合と Wasserstein 距離}{gs-wasserstein}
-  $\mu,\nu\in\Prob(X)$ の\textbf{結合}の集合を
+\begin{definition}{Coupling と Wasserstein 距離}{gs-wasserstein}
+  $\mu,\nu\in\Prob(X)$ の\textbf{coupling}の集合を
   \[
     \Couplings(\mu,\nu)
     :=
@@ -89,7 +89,7 @@ $\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要で�
 \]
 となる．
 
-$p<\infty$ のとき，直積結合 $\mu\otimes\nu$ と
+$p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \[
   d(x,y)^p
   \leq
@@ -97,7 +97,7 @@ $p<\infty$ のとき，直積結合 $\mu\otimes\nu$ と
 \]
 を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
 
-\section{最適結合の存在}
+\section{最適 coupling の存在}
 \label{sec:optimal-coupling}
 
 確率測度の\textbf{弱収束} $\pi_n\rightharpoonup\pi$ とは，
@@ -119,7 +119,7 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
   Portmanteau の定理から従う．
 \end{proof}
 
-\begin{proposition}{最適結合の存在（原論文 Proposition 1）}{gs-optimal-coupling}
+\begin{proposition}{最適 coupling の存在（原論文 Proposition 1）}{gs-optimal-coupling}
   $1\leq p\leq\infty$ とする．
   $\mu,\nu$ が $\Wass_p$ の定義域に属するならば，
   下限を達成する $\pi^\star\in\Couplings(\mu,\nu)$ が存在する．
@@ -140,7 +140,7 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
     \leq
     \Wass_\infty(\mu,\nu)+\frac1n
   \]
-  を満たす結合を取り，弱収束部分列 $\pi_{n_k}\rightharpoonup\pi^\star$ を取る．
+  を満たす coupling を取り，弱収束部分列 $\pi_{n_k}\rightharpoonup\pi^\star$ を取る．
   各 $m$ に対し，十分大きな $k$ で
   $\pi_{n_k}(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$ である．
   この集合は閉なので，Portmanteau の定理から
@@ -151,7 +151,7 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{lemma}{結合の貼り合わせ}{gs-gluing}
+\begin{lemma}{Coupling の貼り合わせ}{gs-gluing}
   $\pi_{12}\in\Couplings(\mu_1,\mu_2)$ と
   $\pi_{23}\in\Couplings(\mu_2,\mu_3)$ に対し，
   $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
@@ -185,10 +185,10 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \begin{proof}
   非負性と対称性は定義から明らかである．
   $\Wass_p(\mu,\nu)=0$ なら，命題~\ref{prop:gs-optimal-coupling}の
-  最適結合は対角集合に集中するので $\mu=\nu$ である．
+  最適 coupling は対角集合に集中するので $\mu=\nu$ である．
 
   三角不等式を示す．$\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
-  $\pi_{12},\pi_{23}$ を最適結合とする．
+  $\pi_{12},\pi_{23}$ を最適 coupling とする．
   補題~\ref{lem:gs-gluing}でこれらを貼り合わせる．
   $p<\infty$ なら，距離 $d$ の三角不等式と Minkowski の不等式から
   \[
