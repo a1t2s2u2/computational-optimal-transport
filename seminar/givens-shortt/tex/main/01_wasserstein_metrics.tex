@@ -15,7 +15,7 @@
       \mu\mid \mu\text{ は }\Borel(X)\text{ 上の測度で }\mu(X)=1
     \right\}
   \]
-  と定める．すなわち $\Prob(X)$ は $X$ 上の Borel 確率測度全体である．
+  と定める．
 \end{definition}
 
 \begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
@@ -66,7 +66,8 @@
       \end{aligned}
     \right\}
   \]
-  とする．$1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し
+  とする．$1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
+  下限（定義~\ref{def:gs-sup-inf}）を用いて
   \[
     \Wass_p(\mu,\nu)
     :=
@@ -91,31 +92,16 @@
   である．
 \end{definition}
 
-以後は $p=\infty$ の場合も
-$\norm{\,\cdot\,}_{L^\infty(\pi)}$ を本質的上限と解釈し，
-$\Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}
-\norm{d(x,y)}_{L^p(\pi)}$ と書く．
-
-$\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要である．
-$p<\infty$ では，点 $x_0$ に質量 $1$ を置く確率測度を $\delta_{x_0}$ と書けば，
-$\pi\in\Couplings(\mu,\delta_{x_0})$ の第2周辺が $\delta_{x_0}$ に集中するから
-$\pi=\mu\otimes\delta_{x_0}$ に限り，
-\[
-  \Wass_p(\mu,\delta_{x_0})^p
-  =
-  \int_X d(x,x_0)^p\,\d\mu(x)
-\]
-となる．
-
-$p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
-\[
-  d(x,y)^p
-  \leq
-  2^{p-1}\bigl(d(x,x_0)^p+d(y,x_0)^p\bigr)
-\]
-を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
-$p=\infty$ でも，$\mu,\nu$ の台が有界なら直積 coupling によって
-$\Wass_\infty(\mu,\nu)<\infty$ である．
+\begin{remark}{記法と well-definedness}{gs-wp-welldef}
+  以後は $p=\infty$ の場合も
+  $\norm{\,\cdot\,}_{L^\infty(\pi)}$ を本質的上限と解釈し，
+  $\Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}
+  \norm{d(x,y)}_{L^p(\pi)}$ と書く．
+  $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
+  $d(x,y)^p\leq 2^{p-1}(d(x,x_0)^p+d(y,x_0)^p)$
+  を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
+  $p=\infty$ でも，$\mu,\nu$ の台が有界なら同様に有限である．
+\end{remark}
 
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
@@ -127,19 +113,13 @@ $\Wass_\infty(\mu,\nu)<\infty$ である．
     \abs{f(x)-f(y)}\leq Ld(x,y)
     \qquad(\forall x,y\in X)
   \]
-  が成り立つことをいう．このような $L$ の下限を
-  \[
-    \Lip(f):=
-    \sup_{x\neq y}\frac{\abs{f(x)-f(y)}}{d(x,y)}
-  \]
-  と書く．ただし，$X$ が一点集合のときは $\Lip(f)=0$ とする．
-  さらに $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
+  が成り立つことをいう．
+  さらに上限（定義~\ref{def:gs-sup-inf}）の意味で $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
   $f$ は\textbf{有界 Lipschitz 関数}であるという．
 \end{definition}
 
 \begin{lemma}{有界 Lipschitz 関数による測度の判定}{gs-bl-separates}
-  $\mu,\nu\in\Prob(X)$ とする．定義~\ref{def:gs-lipschitz-function}
-  の意味でのすべての有界 Lipschitz 関数 $f\colon X\to\R$ について
+  $\mu,\nu\in\Prob(X)$ とする．すべての有界 Lipschitz 関数 $f\colon X\to\R$ について
   \[
     \int_X f\,\d\mu=\int_X f\,\d\nu
   \]
@@ -209,17 +189,16 @@ $\Wass_\infty(\mu,\nu)<\infty$ である．
   \[
     \norm{d(x,y)}_{L^p(\pi_\varepsilon)}<\varepsilon
   \]
-  となるものを取る．定義~\ref{def:gs-lipschitz-function}
-  の意味での有界 Lipschitz 関数 $f\colon X\to\R$ に対し，
-  Lipschitz 定数を $\Lip(f)$ と書けば
+  となるものを取る．有界 Lipschitz 関数 $f\colon X\to\R$ の
+  Lipschitz 定数を $L$ とすれば
   \[
     \left|\int_X f\,\d\mu-\int_X f\,\d\nu\right|
     =
     \left|\int_{X\times X}(f(x)-f(y))\,\d\pi_\varepsilon(x,y)\right|
     \leq
-    \Lip(f)\norm{d(x,y)}_{L^1(\pi_\varepsilon)}
+    L\norm{d(x,y)}_{L^1(\pi_\varepsilon)}
     \leq
-    \Lip(f)\varepsilon.
+    L\varepsilon.
   \]
   ここで最後の不等式では，確率空間上で
   $\norm{g}_{L^1}\leq\norm{g}_{L^p}$ が成り立つことを用いた．
