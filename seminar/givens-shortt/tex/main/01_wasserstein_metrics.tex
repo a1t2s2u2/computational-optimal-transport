@@ -180,8 +180,8 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \label{sec:metric-property}
 
 \begin{lemma}{Coupling の貼り合わせ（Gluing lemma）}{gs-gluing}
-  $\mu,\nu,\rho\in\Prob(X)$ とし，
-  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\rho)$ とする．
+  $\mu,\nu,\xi\in\Prob(X)$ とし，
+  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$ とする．
   このとき $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で，
   次の2条件を同時に満たすものが存在する：
   \begin{enumerate}
@@ -251,16 +251,16 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
   だから $\mu=\nu$．
 
   \textbf{(4) 三角不等式．}
-  $\mu,\nu,\rho\in\Pp{p}(X)$ とし，
-  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\rho)$
+  $\mu,\nu,\xi\in\Pp{p}(X)$ とし，
+  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$
   をそれぞれの最適 coupling とする．
   補題~\ref{lem:gs-gluing}より，
   $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で
   $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ であるものが存在する．
   $\boldsymbol{\gamma}$ の $(x,z)$ 周辺分布を
-  $\tau$ とおくと $\tau\in\Couplings(\mu,\rho)$ だから，
+  $\tau$ とおくと $\tau\in\Couplings(\mu,\xi)$ だから，
   \[
-    \Wass_p(\mu,\rho)
+    \Wass_p(\mu,\xi)
     \leq \norm{d(x,z)}_{L^p(\tau)}
     = \norm{d(x,z)}_{L^p(\boldsymbol{\gamma})}.
   \]
@@ -276,6 +276,6 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
     \norm{d(x,y)+d(y,z)}_{L^p(\boldsymbol{\gamma})}
     \leq \norm{d(x,y)}_{L^p(\pi)}
     + \norm{d(y,z)}_{L^p(\sigma)}
-    = \Wass_p(\mu,\nu)+\Wass_p(\nu,\rho).
+    = \Wass_p(\mu,\nu)+\Wass_p(\nu,\xi).
   \]
 \end{proof}
