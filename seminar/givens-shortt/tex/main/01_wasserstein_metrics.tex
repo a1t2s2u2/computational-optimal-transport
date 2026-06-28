@@ -126,12 +126,40 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \end{proposition}
 
 \begin{proof}
+  以下の3点を示す：
+  (i) $\Couplings(\mu,\nu)\neq\emptyset$，
+  (ii) $\Couplings(\mu,\nu)$ は tight，
+  (iii) 弱極限が下限を達成する．
+
+  \textbf{(i) 非空性．}
+  直積測度 $\mu\otimes\nu$ は
+  $(\mu\otimes\nu)(A\times X)=\mu(A)$，
+  $(\mu\otimes\nu)(X\times B)=\nu(B)$
+  を満たすから $\mu\otimes\nu\in\Couplings(\mu,\nu)$．
+
+  \textbf{(ii) Tightness．}
+  Polish 空間上の Borel 確率測度は tight である（Ulam の定理）．
+  任意の $\varepsilon>0$ に対し，
+  コンパクト集合 $K_1,K_2\subset X$ で
+  $\mu(K_1)>1-\varepsilon$，$\nu(K_2)>1-\varepsilon$ なるものを取る．
+  任意の $\pi\in\Couplings(\mu,\nu)$ に対し，
+  \[
+    \pi(K_1\times K_2)
+    = 1 - \pi(K_1^c\times X \cup X\times K_2^c)
+    \geq 1 - \pi(K_1^c\times X) - \pi(X\times K_2^c)
+    = 1 - \mu(K_1^c) - \nu(K_2^c)
+    > 1 - 2\varepsilon.
+  \]
+  $K_1\times K_2$ は $X\times X$ のコンパクト集合だから，
+  $\Couplings(\mu,\nu)$ は tight である．
+
+  \textbf{(iii) 下限の達成．}
   $p<\infty$ とする．最小化列
   $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
-  Polish 空間上の Borel 確率測度は tight なので（Ulam の定理），
-  $\Couplings(\mu,\nu)$ も tight である．
-  Prokhorov の定理により，部分列を取れば
-  $\pi_{n_k}\rightharpoonup\pi^\star\in\Couplings(\mu,\nu)$ とできる．
+  (ii) と Prokhorov の定理により，部分列を取れば
+  $\pi_{n_k}\rightharpoonup\pi^\star$ とできる．
+  弱極限の周辺分布は保たれるから
+  $\pi^\star\in\Couplings(\mu,\nu)$ であり，
   補題~\ref{lem:gs-cost-lsc}より $\pi^\star$ は下限を達成する．
 
   $p=\infty$ では
@@ -183,21 +211,66 @@ $\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
 \end{proposition}
 
 \begin{proof}
-  非負性と対称性は定義から明らかである．
-  $\Wass_p(\mu,\nu)=0$ なら，命題~\ref{prop:gs-optimal-coupling}の
-  最適 coupling は対角集合に集中するので $\mu=\nu$ である．
+  距離の公理 (1) 非負性，(2) 対称性，(3) 非退化性，(4) 三角不等式を順に示す．
+  $p<\infty$ の場合を述べ，$p=\infty$ は各段階で本質的上限に置き換えればよい．
 
-  三角不等式を示す．$\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
-  $\pi_{12},\pi_{23}$ を最適 coupling とする．
-  補題~\ref{lem:gs-gluing}でこれらを貼り合わせる．
-  $p<\infty$ なら，距離 $d$ の三角不等式と Minkowski の不等式から
+  \textbf{(1) 非負性．}
+  $d\geq 0$ より $\int d^p\,\d\pi\geq 0$ だから $\Wass_p\geq 0$．
+
+  \textbf{(2) 対称性．}
+  写像 $s\colon(x,y)\mapsto(y,x)$ について，
+  $\pi\in\Couplings(\mu,\nu)$ ならば
+  $s_\#\pi\in\Couplings(\nu,\mu)$ であり，
+  $d(x,y)=d(y,x)$ より輸送コストは等しい．
+  この対応は全単射だから $\Wass_p(\mu,\nu)=\Wass_p(\nu,\mu)$．
+
+  \textbf{(3) 非退化性．}
+  $\Wass_p(\mu,\mu)=0$ は対角 coupling
+  $(\Id,\Id)_\#\mu$ のコストが $0$ であることから従う．
+  逆に $\Wass_p(\mu,\nu)=0$ とする．
+  命題~\ref{prop:gs-optimal-coupling}の最適 coupling $\pi^\star$ は
+  $\int d(x,y)^p\,\d\pi^\star=0$ を満たす．
+  $d^p\geq 0$ より
+  $\pi^\star(\{(x,y)\mid d(x,y)>0\})=0$，
+  すなわち $\pi^\star$ は対角集合
+  $\Delta=\{(x,x)\mid x\in X\}$ に集中する．
+  任意の $A\in\Borel(X)$ に対し
   \[
-    \begin{aligned}
-      \Wass_p(\mu_1,\mu_3)
-      &\leq \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})} \\
-      &\leq \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})} \\
-      &\leq \Wass_p(\mu_1,\mu_2)+\Wass_p(\mu_2,\mu_3).
-    \end{aligned}
+    \mu(A)
+    = \pi^\star(A\times X)
+    = \pi^\star\bigl((A\times X)\cap\Delta\bigr)
+    = \pi^\star\bigl(X\times A)\cap\Delta\bigr)
+    = \pi^\star(X\times A)
+    = \nu(A)
   \]
-  $p=\infty$ でも同じ議論を本質的上限に適用すればよい．
+  だから $\mu=\nu$．
+
+  \textbf{(4) 三角不等式．}
+  $\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
+  $\pi_{12},\pi_{23}$ をそれぞれの最適 coupling とする．
+  補題~\ref{lem:gs-gluing}より，
+  $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
+  $(x_1,x_2)$ 周辺が $\pi_{12}$，
+  $(x_2,x_3)$ 周辺が $\pi_{23}$ であるものが存在する．
+  $\boldsymbol{\pi}$ の $(x_1,x_3)$ 周辺分布を
+  $\pi_{13}$ とおくと $\pi_{13}\in\Couplings(\mu_1,\mu_3)$ だから，
+  \[
+    \Wass_p(\mu_1,\mu_3)
+    \leq \norm{d(x_1,x_3)}_{L^p(\pi_{13})}
+    = \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})}.
+  \]
+  距離 $d$ の三角不等式 $d(x_1,x_3)\leq d(x_1,x_2)+d(x_2,x_3)$ と
+  $L^p$ ノルムの単調性から
+  \[
+    \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})}
+    \leq \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})}.
+  \]
+  Minkowski の不等式を適用し，
+  周辺分布が $\pi_{12},\pi_{23}$ であることから
+  \[
+    \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})}
+    \leq \norm{d(x_1,x_2)}_{L^p(\pi_{12})}
+    + \norm{d(x_2,x_3)}_{L^p(\pi_{23})}
+    = \Wass_p(\mu_1,\mu_2)+\Wass_p(\mu_2,\mu_3).
+  \]
 \end{proof}
