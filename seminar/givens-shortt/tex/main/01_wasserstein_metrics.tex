@@ -130,8 +130,18 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \end{lemma}
 
 \begin{proof}
-  $(x,y)\mapsto d(x,y)^p$ は非負かつ連続なので，
-  Portmanteau の定理から従う．
+  $f(x,y):=d(x,y)^p$ は非負かつ連続だが非有界なので，
+  切断 $f_M(x,y):=\min(d(x,y)^p,\,M)$ を用いる．
+  各 $M>0$ に対し $f_M$ は有界連続だから，
+  弱収束の定義より
+  \[
+    \int_{X\times X} f_M\,\d\pi
+    = \lim_{n\to\infty}\int_{X\times X} f_M\,\d\pi_n
+    \leq \liminf_{n\to\infty}\int_{X\times X} f\,\d\pi_n.
+  \]
+  最右辺は $M$ によらない．
+  $M\to\infty$ で $f_M\nearrow f$ だから，
+  単調収束定理により左辺は $\int_{X\times X} f\,\d\pi$ に収束する．
 \end{proof}
 
 \begin{proposition}{最適 coupling の存在}{gs-optimal-coupling}
