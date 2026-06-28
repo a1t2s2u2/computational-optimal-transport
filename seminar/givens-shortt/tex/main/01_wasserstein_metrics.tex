@@ -134,7 +134,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   Portmanteau の定理から従う．
 \end{proof}
 
-\begin{proposition}{最適 coupling の存在（原論文 Proposition 1）}{gs-optimal-coupling}
+\begin{proposition}{最適 coupling の存在}{gs-optimal-coupling}
   $1\leq p\leq\infty$ とする．
   $\mu,\nu$ が $\Wass_p$ の定義域に属するならば，
   下限を達成する $\pi^\star\in\Couplings(\mu,\nu)$ が存在する．
@@ -194,38 +194,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{lemma}{Coupling の貼り合わせ（Gluing lemma）}{gs-gluing}
-  $\mu,\nu,\xi\in\Prob(X)$ とし，
-  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$ とする．
-  このとき $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で，
-  次の2条件を同時に満たすものが存在する：
-  \begin{enumerate}
-    \item $(x,y)$ への周辺分布が $\pi$，
-    \item $(y,z)$ への周辺分布が $\sigma$．
-  \end{enumerate}
-\end{lemma}
-
-\begin{proof}
-  正則条件付き確率を用いて $\pi$ と $\sigma$ を
-  共通の周辺 $\nu$ で分解する：
-  \[
-    \pi(\d x,\d y)
-    =K_{\pi}(y,\d x)\,\nu(\d y),
-    \qquad
-    \sigma(\d y,\d z)
-    =\nu(\d y)\,K_{\sigma}(y,\d z).
-  \]
-  ここで $K_\pi(y,\cdot)$，$K_\sigma(y,\cdot)$ は
-  それぞれ $\pi$，$\sigma$ の $y$ を固定したときの条件付き分布である．
-  \[
-    \boldsymbol{\gamma}(\d x,\d y,\d z)
-    :=
-    K_{\pi}(y,\d x)\,\nu(\d y)\,K_{\sigma}(y,\d z)
-  \]
-  とおけば，$(x,y)$ 周辺は $\pi$，$(y,z)$ 周辺は $\sigma$ となる．
-\end{proof}
-
-\begin{proposition}{Wasserstein 距離は距離である（原論文 Proposition 2）}{gs-wp-metric}
+\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
   $1\leq p\leq\infty$ に対し，
   $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proposition}
@@ -269,9 +238,17 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   $\mu,\nu,\xi\in\Pp{p}(X)$ とし，
   $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$
   をそれぞれの最適 coupling とする．
-  補題~\ref{lem:gs-gluing}より，
-  $X^3$ 上の確率測度 $\boldsymbol{\gamma}$ で
-  $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ であるものが存在する．
+  正則条件付き確率を用いて
+  $\pi(\d x,\d y)=K_{\pi}(y,\d x)\,\nu(\d y)$，
+  $\sigma(\d y,\d z)=\nu(\d y)\,K_{\sigma}(y,\d z)$
+  と分解し，
+  \[
+    \boldsymbol{\gamma}(\d x,\d y,\d z)
+    :=
+    K_{\pi}(y,\d x)\,\nu(\d y)\,K_{\sigma}(y,\d z)
+  \]
+  とおけば，$X^3$ 上の確率測度で
+  $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ となる．
   $\boldsymbol{\gamma}$ の $(x,z)$ 周辺分布を
   $\tau$ とおくと $\tau\in\Couplings(\mu,\xi)$ だから，
   \[
