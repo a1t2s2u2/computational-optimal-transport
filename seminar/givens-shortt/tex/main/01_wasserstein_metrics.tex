@@ -1,0 +1,203 @@
+\chapter{Wasserstein 距離 \texorpdfstring{$W_p$}{Wp}}
+\label{ch:wasserstein-metrics}
+
+\section{設定と定義}
+\label{sec:wp-definition}
+
+\begin{definition}{確率測度の空間}{gs-probability-space}
+  $(X,d)$ を完備かつ可分な距離空間とする．このような空間を
+  \textbf{Polish 空間}という．
+  $X$ の開集合から生成される $\sigma$-代数を $\Borel(X)$ と書き，
+  \[
+    \Prob(X)
+    :=
+    \left\{
+      \mu\mid \mu\text{ は }\Borel(X)\text{ 上の測度で }\mu(X)=1
+    \right\}
+  \]
+  と定める．すなわち $\Prob(X)$ は $X$ 上の Borel 確率測度全体である．
+\end{definition}
+
+\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
+  任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
+  \[
+    \Pp{p}(X)
+    :=
+    \left\{
+      \mu\in\Prob(X)
+      \;\middle|\;
+      \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+    \right\}
+  \]
+  と定める．また
+  \[
+    \Pp{\infty}(X)
+    :=
+    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
+  \]
+  とおく．ただし，$\mu$ の\textbf{台}とは
+  \[
+    \supp\mu
+    =
+    \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
+  \]
+  のことである．
+  $d(x,x_0')\leq d(x,x_0)+d(x_0,x_0')$ より，
+  $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
+\end{definition}
+
+\begin{definition}{結合と Wasserstein 距離}{gs-wasserstein}
+  $\mu,\nu\in\Prob(X)$ の\textbf{結合}の集合を
+  \[
+    \Couplings(\mu,\nu)
+    :=
+    \left\{
+      \pi\in\Prob(X\times X)
+      \;\middle|\;
+      \begin{aligned}
+        \pi(A\times X)&=\mu(A) &&(\forall A\in\Borel(X)),\\
+        \pi(X\times B)&=\nu(B) &&(\forall B\in\Borel(X))
+      \end{aligned}
+    \right\}
+  \]
+  とする．$1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し
+  \[
+    \Wass_p(\mu,\nu)
+    :=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \left(
+      \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+    \right)^{1/p},
+  \]
+  また $\mu,\nu\in\Pp{\infty}(X)$ に対し
+  \[
+    \Wass_\infty(\mu,\nu)
+    :=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \esssup_{(x,y)\sim\pi}d(x,y)
+  \]
+  と定める．ここで本質的上限は，
+  $\pi(\{(x,y)\mid d(x,y)\leq R\})=1$ となる最小の $R$ である．
+\end{definition}
+
+$\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要である．
+実際，点 $x_0$ に質量 $1$ を置く確率測度を $\delta_{x_0}$ と書けば
+\[
+  \Wass_p(\mu,\delta_{x_0})^p
+  =
+  \int_X d(x,x_0)^p\,\d\mu(x)
+\]
+となる．
+
+$p<\infty$ のとき，直積結合 $\mu\otimes\nu$ と
+\[
+  d(x,y)^p
+  \leq
+  2^{p-1}\bigl(d(x,x_0)^p+d(y,x_0)^p\bigr)
+\]
+を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
+
+\section{最適結合の存在}
+\label{sec:optimal-coupling}
+
+確率測度の\textbf{弱収束} $\pi_n\rightharpoonup\pi$ とは，
+すべての有界連続関数 $f$ に対して
+$\int f\,\d\pi_n\to\int f\,\d\pi$ となることをいう．
+
+\begin{lemma}{輸送コストの下半連続性}{gs-cost-lsc}
+  $\pi_n\rightharpoonup\pi$ ならば，$1\leq p<\infty$ に対し
+  \[
+    \int d(x,y)^p\,\d\pi(x,y)
+    \leq
+    \liminf_{n\to\infty}
+    \int d(x,y)^p\,\d\pi_n(x,y).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $(x,y)\mapsto d(x,y)^p$ は非負かつ連続なので，
+  Portmanteau の定理から従う．
+\end{proof}
+
+\begin{proposition}{最適結合の存在（原論文 Proposition 1）}{gs-optimal-coupling}
+  $1\leq p\leq\infty$ とする．
+  $\mu,\nu$ が $\Wass_p$ の定義域に属するならば，
+  下限を達成する $\pi^\star\in\Couplings(\mu,\nu)$ が存在する．
+\end{proposition}
+
+\begin{proof}
+  $p<\infty$ とする．最小化列
+  $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
+  Polish 空間上の Borel 確率測度は tight なので（Ulam の定理），
+  $\Couplings(\mu,\nu)$ も tight である．
+  Prokhorov の定理により，部分列を取れば
+  $\pi_{n_k}\rightharpoonup\pi^\star\in\Couplings(\mu,\nu)$ とできる．
+  補題~\ref{lem:gs-cost-lsc}より $\pi^\star$ は下限を達成する．
+
+  $p=\infty$ では
+  \[
+    \esssup_{(x,y)\sim\pi_n}d(x,y)
+    \leq
+    \Wass_\infty(\mu,\nu)+\frac1n
+  \]
+  を満たす結合を取り，弱収束部分列 $\pi_{n_k}\rightharpoonup\pi^\star$ を取る．
+  各 $m$ に対し，十分大きな $k$ で
+  $\pi_{n_k}(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$ である．
+  この集合は閉なので，Portmanteau の定理から
+  $\pi^\star(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$．
+  $m\to\infty$ とすれば $\pi^\star$ は下限を達成する．
+\end{proof}
+
+\section{Wasserstein 距離の距離性}
+\label{sec:metric-property}
+
+\begin{lemma}{結合の貼り合わせ}{gs-gluing}
+  $\pi_{12}\in\Couplings(\mu_1,\mu_2)$ と
+  $\pi_{23}\in\Couplings(\mu_2,\mu_3)$ に対し，
+  $X^3$ 上の確率測度 $\boldsymbol{\pi}$ で
+  $(x_1,x_2)$ 周辺分布が $\pi_{12}$，
+  $(x_2,x_3)$ 周辺分布が $\pi_{23}$ となるものが存在する．
+\end{lemma}
+
+\begin{proof}
+  正則条件付き確率を用いて
+  \[
+    \pi_{12}(\d x_1,\d x_2)
+    =K_{1|2}(x_2,\d x_1)\mu_2(\d x_2),
+    \quad
+    \pi_{23}(\d x_2,\d x_3)
+    =\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+  \]
+  と分解し，
+  \[
+    \boldsymbol{\pi}(\d x_1,\d x_2,\d x_3)
+    :=
+    K_{1|2}(x_2,\d x_1)\mu_2(\d x_2)K_{3|2}(x_2,\d x_3)
+  \]
+  とおけばよい．
+\end{proof}
+
+\begin{proposition}{Wasserstein 距離は距離である（原論文 Proposition 2）}{gs-wp-metric}
+  $1\leq p\leq\infty$ に対し，
+  $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
+\end{proposition}
+
+\begin{proof}
+  非負性と対称性は定義から明らかである．
+  $\Wass_p(\mu,\nu)=0$ なら，命題~\ref{prop:gs-optimal-coupling}の
+  最適結合は対角集合に集中するので $\mu=\nu$ である．
+
+  三角不等式を示す．$\mu_1,\mu_2,\mu_3\in\Pp{p}(X)$ とし，
+  $\pi_{12},\pi_{23}$ を最適結合とする．
+  補題~\ref{lem:gs-gluing}でこれらを貼り合わせる．
+  $p<\infty$ なら，距離 $d$ の三角不等式と Minkowski の不等式から
+  \[
+    \begin{aligned}
+      \Wass_p(\mu_1,\mu_3)
+      &\leq \norm{d(x_1,x_3)}_{L^p(\boldsymbol{\pi})} \\
+      &\leq \norm{d(x_1,x_2)+d(x_2,x_3)}_{L^p(\boldsymbol{\pi})} \\
+      &\leq \Wass_p(\mu_1,\mu_2)+\Wass_p(\mu_2,\mu_3).
+    \end{aligned}
+  \]
+  $p=\infty$ でも同じ議論を本質的上限に適用すればよい．
+\end{proof}
