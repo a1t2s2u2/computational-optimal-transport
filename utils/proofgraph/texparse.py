@@ -17,7 +17,7 @@ import glob
 import os
 import re
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SEMINAR_DIR = os.path.join(REPO_ROOT, "seminar", "cuturi", "tex")
 
 # Named block environments and their markdown mappings.

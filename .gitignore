@@ -31,7 +31,7 @@ seminar/cuturi/site/tex-out/
 .venv/
 uv.lock
 # proofgraph はツールなので再現性のため lock を追跡する
-!proofgraph/uv.lock
+!utils/proofgraph/uv.lock
 
 # editor / linter caches
 .ruff_cache/
@@ -40,4 +40,4 @@ __pycache__/
 *.pyc
 
 # proofgraph viewer smoke artifacts
-proofgraph/viewer/_smoke.png
+utils/proofgraph/viewer/_smoke.png
