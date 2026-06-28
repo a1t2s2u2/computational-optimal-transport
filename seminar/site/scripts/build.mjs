@@ -789,6 +789,7 @@ function graphTemplate(sections) {
     <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
     <script>
       window.__chapterFiles = ${JSON.stringify(chapterFilesMap)};
+      window.__graphData = ${JSON.stringify(graphData).replace(/<\//g, "<\\/")};
     </script>
     <script defer src="./graph.js"></script>
   </head>

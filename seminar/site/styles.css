@@ -1634,6 +1634,7 @@ strong {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  height: 100%;
 }
 
 .graph-sidebar {
@@ -1901,6 +1902,108 @@ strong {
 .graph-detail__focus-btn:hover {
   background: var(--teal);
   color: #fff;
+}
+
+/* ---------- Reading pane (focus mode) ---------- */
+
+.graph-layout.is-focus {
+  grid-template-columns: minmax(360px, 480px) 1fr;
+}
+
+.graph-layout.is-focus .graph-controls,
+.graph-layout.is-focus .graph-legend {
+  display: none;
+}
+
+.graph-layout.is-focus .graph-detail {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.reading-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reading-card {
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.65;
+  cursor: pointer;
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.reading-card:hover {
+  border-color: var(--muted);
+}
+
+.reading-card.is-active {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 2px var(--teal-bg);
+}
+
+.reading-card--center {
+  border-color: var(--teal);
+  border-width: 2px;
+  background: var(--teal-bg);
+}
+
+.reading-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.reading-card__type {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.reading-card__link {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.reading-card__link:hover {
+  text-decoration: underline;
+}
+
+.reading-card__body {
+  color: var(--ink-2);
+}
+
+.reading-card__body h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.reading-card__body .math-block {
+  font-size: 13px;
+  overflow-x: auto;
+}
+
+.reading-card__deps {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.reading-card__arrows {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
 /* ---------- Block graph link icon ---------- */

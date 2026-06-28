@@ -12,6 +12,11 @@ let selectedId = null;
 let focusedId = null;
 let UP = {}, DOWN = {};
 
+const TYPE_LABELS = {
+  definition: '定義', theorem: '定理', proposition: '命題',
+  remark: '注意', example: '例', algorithm: '算法'
+};
+
 function readCssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
@@ -39,9 +44,12 @@ async function load() {
     const res = await fetch('graph-data.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
     data = await res.json();
-  } catch (e) {
+  } catch (_) {
+    data = window.__graphData || null;
+  }
+  if (!data) {
     document.getElementById('graph-detail').innerHTML =
-      `<p class="graph-detail__empty">データを読み込めません: ${e.message}</p>`;
+      `<p class="graph-detail__empty">データを読み込めません</p>`;
     return;
   }
   GRAPH = data;
@@ -81,9 +89,8 @@ function buildChapterFilter() {
   document.getElementById('type-filter').addEventListener('change', applyFilters);
   document.getElementById('hide-isolated').addEventListener('change', applyFilters);
   document.getElementById('fit-btn').addEventListener('click', () => {
-    if (focusedId) {
-      exitFocus();
-    } else {
+    if (focusedId) exitFocus();
+    else {
       clearSelection();
       cy.elements().removeClass('dimmed');
       cy.fit(undefined, 40);
@@ -109,11 +116,8 @@ function buildGraph() {
     const chIdx = chapters.indexOf(n.chapter);
     elements.push({
       data: {
-        id: n.id,
-        label: nodeLabel(n),
-        env: n.type,
-        chapter: n.chapter,
-        chapterTint: TINT[chIdx % TINT.length],
+        id: n.id, label: nodeLabel(n), env: n.type,
+        chapter: n.chapter, chapterTint: TINT[chIdx % TINT.length],
         isolated: isIsolated,
       },
       classes: isIsolated ? 'leaf isolated' : 'leaf'
@@ -122,9 +126,7 @@ function buildGraph() {
 
   GRAPH.edges.forEach((e, i) => {
     if (!NODE_BY_ID[e.to] || !NODE_BY_ID[e.from]) return;
-    elements.push({
-      data: { id: 'e' + i, source: e.from, target: e.to }
-    });
+    elements.push({ data: { id: 'e' + i, source: e.from, target: e.to } });
   });
 
   const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -141,27 +143,18 @@ function buildGraph() {
       {
         selector: 'node.leaf',
         style: {
-          'shape': 'round-rectangle',
-          'width': 'label',
-          'height': 'label',
+          'shape': 'round-rectangle', 'width': 'label', 'height': 'label',
           'padding': '12px',
-          'background-color': function(ele) {
-            return ENV_COLOR[ele.data('env')] || '#666';
-          },
+          'background-color': ele => ENV_COLOR[ele.data('env')] || '#666',
           'background-opacity': 0.12,
           'border-width': 2,
-          'border-color': function(ele) {
-            return ENV_COLOR[ele.data('env')] || '#666';
-          },
+          'border-color': ele => ENV_COLOR[ele.data('env')] || '#666',
           'label': 'data(label)',
           'font-family': '"Noto Sans JP", system-ui, sans-serif',
-          'font-size': 13,
-          'font-weight': 600,
+          'font-size': 13, 'font-weight': 600,
           'color': inkColor,
-          'text-valign': 'center',
-          'text-halign': 'center',
-          'text-wrap': 'wrap',
-          'text-max-width': 160,
+          'text-valign': 'center', 'text-halign': 'center',
+          'text-wrap': 'wrap', 'text-max-width': 160,
           'transition-property': 'opacity, border-width',
           'transition-duration': 200,
         }
@@ -170,37 +163,21 @@ function buildGraph() {
         selector: 'edge',
         style: {
           'width': 1.5,
-          'line-color': lineColor,
-          'target-arrow-color': lineColor,
-          'target-arrow-shape': 'triangle',
-          'arrow-scale': 0.8,
-          'curve-style': 'bezier',
-          'opacity': 0.5,
+          'line-color': lineColor, 'target-arrow-color': lineColor,
+          'target-arrow-shape': 'triangle', 'arrow-scale': 0.8,
+          'curve-style': 'bezier', 'opacity': 0.5,
           'transition-property': 'opacity, line-color',
           'transition-duration': 200,
         }
       },
-      {
-        selector: '.dimmed',
-        style: { 'opacity': 0.08 }
-      },
-      {
-        selector: '.highlighted',
-        style: { 'opacity': 1, 'border-width': 3, 'z-index': 10 }
-      },
+      { selector: '.dimmed', style: { 'opacity': 0.08 } },
+      { selector: '.highlighted', style: { 'opacity': 1, 'border-width': 3, 'z-index': 10 } },
       {
         selector: 'edge.highlighted',
         style: {
-          'opacity': 1,
-          'width': 2.5,
-          'line-color': function(ele) {
-            const src = NODE_BY_ID[ele.data('source')];
-            return src ? (ENV_COLOR[src.type] || '#666') : '#666';
-          },
-          'target-arrow-color': function(ele) {
-            const src = NODE_BY_ID[ele.data('source')];
-            return src ? (ENV_COLOR[src.type] || '#666') : '#666';
-          },
+          'opacity': 1, 'width': 2.5,
+          'line-color': ele => { const s = NODE_BY_ID[ele.data('source')]; return s ? (ENV_COLOR[s.type] || '#666') : '#666'; },
+          'target-arrow-color': ele => { const s = NODE_BY_ID[ele.data('source')]; return s ? (ENV_COLOR[s.type] || '#666') : '#666'; },
         }
       },
       {
@@ -208,8 +185,7 @@ function buildGraph() {
         style: {
           'border-width': 4,
           'border-color': readCssVar('--teal') || '#0d9488',
-          'background-opacity': 0.25,
-          'z-index': 20,
+          'background-opacity': 0.25, 'z-index': 20,
         }
       },
       {
@@ -218,81 +194,33 @@ function buildGraph() {
           'border-width': 5,
           'border-color': readCssVar('--teal') || '#0d9488',
           'background-opacity': 0.3,
-          'font-size': 15,
-          'font-weight': 700,
-          'z-index': 30,
+          'font-size': 15, 'font-weight': 700, 'z-index': 30,
         }
       },
-      {
-        selector: 'node.focus-hop1',
-        style: {
-          'opacity': 1,
-          'border-width': 2.5,
-        }
-      },
-      {
-        selector: 'node.focus-hop2',
-        style: {
-          'opacity': 0.6,
-          'border-width': 1.5,
-          'font-size': 11,
-        }
-      },
+      { selector: 'node.focus-hop1', style: { 'opacity': 1, 'border-width': 2.5 } },
+      { selector: 'node.focus-hop2', style: { 'opacity': 0.6, 'border-width': 1.5, 'font-size': 11 } },
       {
         selector: 'edge.focus-edge',
         style: {
-          'opacity': 0.8,
-          'width': 2,
-          'line-color': function(ele) {
-            const src = NODE_BY_ID[ele.data('source')];
-            return src ? (ENV_COLOR[src.type] || '#666') : '#666';
-          },
-          'target-arrow-color': function(ele) {
-            const src = NODE_BY_ID[ele.data('source')];
-            return src ? (ENV_COLOR[src.type] || '#666') : '#666';
-          },
+          'opacity': 0.8, 'width': 2,
+          'line-color': ele => { const s = NODE_BY_ID[ele.data('source')]; return s ? (ENV_COLOR[s.type] || '#666') : '#666'; },
+          'target-arrow-color': ele => { const s = NODE_BY_ID[ele.data('source')]; return s ? (ENV_COLOR[s.type] || '#666') : '#666'; },
         }
       },
       {
         selector: 'node.isolated',
-        style: {
-          'opacity': 0.4,
-          'border-style': 'dashed',
-          'border-width': 1.5,
-        }
+        style: { 'opacity': 0.4, 'border-style': 'dashed', 'border-width': 1.5 }
       }
     ],
     layout: {
-      name: 'dagre',
-      rankDir: 'TB',
-      nodeSep: 35,
-      rankSep: 55,
-      edgeSep: 15,
-      padding: 40,
+      name: 'dagre', rankDir: 'TB',
+      nodeSep: 35, rankSep: 55, edgeSep: 15, padding: 40,
     },
   });
 
-  cy.on('tap', 'node.leaf', (evt) => {
-    if (focusedId) {
-      selectNode(evt.target.id());
-    } else {
-      selectNode(evt.target.id());
-    }
-  });
-
-  cy.on('tap', (evt) => {
-    if (evt.target === cy) {
-      if (focusedId) {
-        clearSelection();
-      } else {
-        clearSelection();
-      }
-    }
-  });
-
-  cy.on('dbltap', 'node.leaf', (evt) => {
-    enterFocus(evt.target.id());
-  });
+  cy.on('tap', 'node.leaf', evt => selectNode(evt.target.id()));
+  cy.on('tap', evt => { if (evt.target === cy) clearSelection(); });
+  cy.on('dbltap', 'node.leaf', evt => enterFocus(evt.target.id()));
 }
 
 /* ---------- Ego-network (focus mode) ---------- */
@@ -305,8 +233,7 @@ function collectNeighbors(centerId, maxDepth) {
     const id = queue.shift();
     const d = visited.get(id);
     if (d >= maxDepth) continue;
-    const neighbors = new Set([...(UP[id] || []), ...(DOWN[id] || [])]);
-    for (const nid of neighbors) {
+    for (const nid of [...(UP[id] || []), ...(DOWN[id] || [])]) {
       if (!visited.has(nid)) {
         visited.set(nid, d + 1);
         queue.push(nid);
@@ -314,6 +241,31 @@ function collectNeighbors(centerId, maxDepth) {
     }
   }
   return visited;
+}
+
+function topoSort(ids, centerId) {
+  const inSubgraph = new Set(ids);
+  const inDeg = {};
+  ids.forEach(id => { inDeg[id] = 0; });
+  ids.forEach(id => {
+    for (const dep of (UP[id] || [])) {
+      if (inSubgraph.has(dep)) inDeg[id]++;
+    }
+  });
+  const queue = ids.filter(id => inDeg[id] === 0);
+  const sorted = [];
+  while (queue.length > 0) {
+    const id = queue.shift();
+    sorted.push(id);
+    for (const child of (DOWN[id] || [])) {
+      if (inSubgraph.has(child)) {
+        inDeg[child]--;
+        if (inDeg[child] === 0) queue.push(child);
+      }
+    }
+  }
+  ids.forEach(id => { if (!sorted.includes(id)) sorted.push(id); });
+  return sorted;
 }
 
 function enterFocus(id, depth) {
@@ -352,20 +304,18 @@ function enterFocus(id, depth) {
 
   const visible = cy.elements().filter(e => e.style('display') !== 'none');
   visible.layout({
-    name: 'concentric',
-    concentric: function(n) {
-      const hop = reachable.get(n.id());
-      return hop === undefined ? 0 : (depth - hop + 1) * 10;
-    },
-    levelWidth: function() { return 1; },
-    minNodeSpacing: 50,
-    padding: 60,
+    name: 'dagre',
+    rankDir: 'TB',
+    nodeSep: 60,
+    rankSep: 70,
+    edgeSep: 25,
+    padding: 50,
     animate: true,
     animationDuration: 400,
   }).run();
 
-  showDetail(node);
   updateFocusUI(true, depth);
+  buildReadingPane(id, reachable);
   history.replaceState(null, '', `?focus=${encodeURIComponent(id)}`);
 }
 
@@ -378,17 +328,15 @@ function exitFocus() {
     .style('display', 'element');
 
   cy.layout({
-    name: 'dagre',
-    rankDir: 'TB',
-    nodeSep: 35,
-    rankSep: 55,
-    edgeSep: 15,
-    padding: 40,
-    animate: true,
-    animationDuration: 400,
+    name: 'dagre', rankDir: 'TB',
+    nodeSep: 35, rankSep: 55, edgeSep: 15, padding: 40,
+    animate: true, animationDuration: 400,
   }).run();
 
   updateFocusUI(false, 2);
+  document.querySelector('.graph-layout').classList.remove('is-focus');
+  document.getElementById('graph-detail').innerHTML =
+    '<p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>';
   applyFilters();
   history.replaceState(null, '', location.pathname);
 }
@@ -410,7 +358,7 @@ function updateFocusUI(active, depth) {
     `;
     bar.classList.add('is-active');
 
-    document.getElementById('focus-depth').addEventListener('input', (e) => {
+    document.getElementById('focus-depth').addEventListener('input', e => {
       const d = parseInt(e.target.value, 10);
       document.getElementById('focus-depth-val').textContent = d;
       enterFocus(focusedId, d);
@@ -419,6 +367,61 @@ function updateFocusUI(active, depth) {
   } else {
     bar.classList.remove('is-active');
     bar.innerHTML = '<span class="focus-bar__hint">ダブルクリックでフォーカスモード</span>';
+  }
+}
+
+/* ---------- Reading pane ---------- */
+
+function buildReadingPane(centerId, reachable) {
+  const layout = document.querySelector('.graph-layout');
+  layout.classList.add('is-focus');
+
+  const detail = document.getElementById('graph-detail');
+  const ids = [...reachable.keys()];
+  const sorted = topoSort(ids, centerId);
+
+  const chapterFiles = window.__chapterFiles || {};
+  const cards = sorted.map(id => {
+    const n = NODE_BY_ID[id];
+    if (!n) return '';
+    const color = ENV_COLOR[n.type] || 'var(--muted)';
+    const typeLabel = TYPE_LABELS[n.type] || n.type;
+    const isCenter = id === centerId;
+    const href = chapterFiles[n.chapter]
+      ? `${chapterFiles[n.chapter]}#${n.id}` : '#';
+
+    const upList = [...(UP[id] || [])].filter(x => reachable.has(x));
+    const downList = [...(DOWN[id] || [])].filter(x => reachable.has(x));
+    const arrowUp = upList.length > 0
+      ? `<span class="reading-card__arrows">← ${upList.map(x => NODE_BY_ID[x]?.name || x).join(', ')}</span>` : '';
+    const arrowDown = downList.length > 0
+      ? `<span class="reading-card__arrows">→ ${downList.map(x => NODE_BY_ID[x]?.name || x).join(', ')}</span>` : '';
+
+    return `
+      <div class="reading-card ${isCenter ? 'reading-card--center' : ''}" data-node="${id}">
+        <div class="reading-card__header">
+          <span class="reading-card__type" style="color:${color}">${typeLabel}</span>
+          <a class="reading-card__link" href="${href}">本文 →</a>
+        </div>
+        <div class="reading-card__body">${n.html}</div>
+        ${arrowUp || arrowDown ? `<div class="reading-card__deps">${arrowUp}${arrowDown}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  detail.innerHTML = `<div class="reading-pane">${cards}</div>`;
+
+  detail.querySelectorAll('.reading-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const nid = card.dataset.node;
+      selectNode(nid);
+      cy.animate({ center: { eles: cy.getElementById(nid) }, duration: 300 });
+      detail.querySelectorAll('.reading-card').forEach(c => c.classList.remove('is-active'));
+      card.classList.add('is-active');
+    });
+  });
+
+  if (window.MathJax?.typesetPromise) {
+    MathJax.typesetPromise([detail]);
   }
 }
 
@@ -441,63 +444,53 @@ function selectNode(id) {
     cyNode.addClass('selected-node');
   }
 
-  showDetail(node);
+  if (!focusedId) showDetail(node);
 }
 
 function clearSelection() {
   selectedId = null;
   if (!focusedId) {
     cy.elements().removeClass('highlighted selected-node dimmed');
+    document.getElementById('graph-detail').innerHTML =
+      '<p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>';
   } else {
     cy.elements().removeClass('selected-node');
   }
-  document.getElementById('graph-detail').innerHTML =
-    '<p class="graph-detail__empty">ノードをクリックすると<br>詳細が表示されます</p>';
 }
 
 function showDetail(node) {
   const detail = document.getElementById('graph-detail');
-  const typeLabels = {
-    definition: '定義', theorem: '定理', proposition: '命題',
-    remark: '注意', example: '例', algorithm: '算法'
-  };
   const typeColor = ENV_COLOR[node.type] || 'var(--muted)';
   const chapterFiles = window.__chapterFiles || {};
   const href = chapterFiles[node.chapter]
-    ? `${chapterFiles[node.chapter]}#${node.id}`
-    : '#';
+    ? `${chapterFiles[node.chapter]}#${node.id}` : '#';
 
   const upList = [...(UP[node.id] || [])].map(id => NODE_BY_ID[id]).filter(Boolean);
   const downList = [...(DOWN[node.id] || [])].map(id => NODE_BY_ID[id]).filter(Boolean);
 
   const makeRefList = (items, label) => {
     if (items.length === 0) return '';
-    const links = items.map(n => {
-      const nId = n.id;
-      return `<button type="button" class="graph-detail__ref-btn" data-node="${nId}">${n.name || n.title}</button>`;
-    }).join(' ');
+    const links = items.map(n =>
+      `<button type="button" class="graph-detail__ref-btn" data-node="${n.id}">${n.name || n.title}</button>`
+    ).join(' ');
     return `<div class="graph-detail__refs"><strong>${label}:</strong> ${links}</div>`;
   };
 
-  const focusBtn = focusedId === node.id ? '' :
-    `<button type="button" class="graph-detail__focus-btn" data-node="${node.id}">このノードでフォーカス</button>`;
-
   detail.innerHTML = `
     <div class="graph-detail__card">
-      <div class="graph-detail__type" style="color:${typeColor}">${typeLabels[node.type] || node.type}</div>
+      <div class="graph-detail__type" style="color:${typeColor}">${TYPE_LABELS[node.type] || node.type}</div>
       <div class="graph-detail__content">${node.html}</div>
-      <a class="graph-detail__link" href="${href}">本文で見る &rarr;</a>
+      <a class="graph-detail__link" href="${href}">本文で見る →</a>
       ${makeRefList(upList, '参照先')}
       ${makeRefList(downList, '参照元')}
-      ${focusBtn}
+      <button type="button" class="graph-detail__focus-btn" data-node="${node.id}">このノードでフォーカス</button>
     </div>`;
 
   detail.querySelectorAll('.graph-detail__ref-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const targetId = btn.dataset.node;
-      if (focusedId) {
-        enterFocus(targetId);
-      } else {
+      if (focusedId) enterFocus(targetId);
+      else {
         selectNode(targetId);
         cy.animate({ center: { eles: cy.getElementById(targetId) }, duration: 300 });
       }
@@ -505,9 +498,7 @@ function showDetail(node) {
   });
 
   const fb = detail.querySelector('.graph-detail__focus-btn');
-  if (fb) {
-    fb.addEventListener('click', () => enterFocus(fb.dataset.node));
-  }
+  if (fb) fb.addEventListener('click', () => enterFocus(fb.dataset.node));
 
   if (window.MathJax?.typesetPromise) {
     MathJax.typesetPromise([detail]);
@@ -536,7 +527,7 @@ function applyFilters() {
   cy.fit(cy.elements().filter(e => e.style('display') !== 'none'), 40);
 }
 
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (focusedId) exitFocus();
     else clearSelection();
