@@ -18,23 +18,6 @@
   と定める．すなわち $\Prob(X)$ は $X$ 上の Borel 確率測度全体である．
 \end{definition}
 
-\begin{definition}{Lipschitz 関数}{gs-lipschitz-function}
-  関数 $f\colon X\to\R$ が\textbf{Lipschitz 関数}であるとは，
-  ある定数 $L\geq0$ が存在して
-  \[
-    \abs{f(x)-f(y)}\leq Ld(x,y)
-    \qquad(\forall x,y\in X)
-  \]
-  が成り立つことをいう．このような $L$ の下限を
-  \[
-    \Lip(f):=
-    \sup_{x\neq y}\frac{\abs{f(x)-f(y)}}{d(x,y)}
-  \]
-  と書く．ただし，$X$ が一点集合のときは $\Lip(f)=0$ とする．
-  さらに $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
-  $f$ は\textbf{有界 Lipschitz 関数}であるという．
-\end{definition}
-
 \begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
   任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
@@ -115,7 +98,8 @@ $\Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}
 
 $\Pp{p}(X)$ への制限は，$\Wass_p$ を有限値にするために必要である．
 $p<\infty$ では，点 $x_0$ に質量 $1$ を置く確率測度を $\delta_{x_0}$ と書けば，
-$\delta_{x_0}$ との coupling は一意なので
+$\pi\in\Couplings(\mu,\delta_{x_0})$ の第2周辺が $\delta_{x_0}$ に集中するから
+$\pi=\mu\otimes\delta_{x_0}$ に限り，
 \[
   \Wass_p(\mu,\delta_{x_0})^p
   =
@@ -135,6 +119,23 @@ $\Wass_\infty(\mu,\nu)<\infty$ である．
 
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
+
+\begin{definition}{Lipschitz 関数}{gs-lipschitz-function}
+  関数 $f\colon X\to\R$ が\textbf{Lipschitz 関数}であるとは，
+  ある定数 $L\geq0$ が存在して
+  \[
+    \abs{f(x)-f(y)}\leq Ld(x,y)
+    \qquad(\forall x,y\in X)
+  \]
+  が成り立つことをいう．このような $L$ の下限を
+  \[
+    \Lip(f):=
+    \sup_{x\neq y}\frac{\abs{f(x)-f(y)}}{d(x,y)}
+  \]
+  と書く．ただし，$X$ が一点集合のときは $\Lip(f)=0$ とする．
+  さらに $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
+  $f$ は\textbf{有界 Lipschitz 関数}であるという．
+\end{definition}
 
 \begin{lemma}{有界 Lipschitz 関数による測度の判定}{gs-bl-separates}
   $\mu,\nu\in\Prob(X)$ とする．定義~\ref{def:gs-lipschitz-function}
