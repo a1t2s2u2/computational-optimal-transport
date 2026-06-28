@@ -450,7 +450,7 @@ class TexParser {
       }
 
       // Section headings
-      let m = stripped.match(/^\\section\{(.+)\}/);
+      let m = stripped.match(/^\\section\*?\{(.+)\}/);
       if (m) {
         this.advance();
         if (!this.atEnd() && this.peek().trim().startsWith("\\label{")) {
@@ -460,7 +460,7 @@ class TexParser {
         continue;
       }
 
-      m = stripped.match(/^\\subsection\{(.+)\}/);
+      m = stripped.match(/^\\subsection\*?\{(.+)\}/);
       if (m) {
         this.advance();
         if (!this.atEnd() && this.peek().trim().startsWith("\\label{")) {
@@ -470,7 +470,7 @@ class TexParser {
         continue;
       }
 
-      m = stripped.match(/^\\subsubsection\{(.+)\}/);
+      m = stripped.match(/^\\subsubsection\*?\{(.+)\}/);
       if (m) {
         this.advance();
         if (!this.atEnd() && this.peek().trim().startsWith("\\label{")) {
