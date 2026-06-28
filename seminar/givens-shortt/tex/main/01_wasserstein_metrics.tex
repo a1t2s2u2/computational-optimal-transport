@@ -122,10 +122,10 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
 \begin{lemma}{輸送コストの下半連続性}{gs-cost-lsc}
   $\pi_n\rightharpoonup\pi$ ならば，$1\leq p<\infty$ に対し
   \[
-    \int d(x,y)^p\,\d\pi(x,y)
+    \int_{X\times X} d(x,y)^p\,\d\pi(x,y)
     \leq
     \liminf_{n\to\infty}
-    \int d(x,y)^p\,\d\pi_n(x,y).
+    \int_{X\times X} d(x,y)^p\,\d\pi_n(x,y).
   \]
 \end{lemma}
 
@@ -162,7 +162,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   $(\mu\otimes\nu)(X\times B)=\nu(B)$
   を満たすから $\mu\otimes\nu\in\Couplings(\mu,\nu)$．
 
-  \textbf{(ii) Tightness．}
+  \textbf{(ii) 緊密性．}
   Polish 空間上の Borel 確率測度は緊密である（Ulam の定理）．
   任意の $\varepsilon>0$ に対し，
   コンパクト集合 $K_1,K_2\subset X$ で
@@ -183,8 +183,13 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   $(\pi_n)\subset\Couplings(\mu,\nu)$ を取る．
   (ii) と命題~\ref{prop:gs-prokhorov}（Prokhorov の定理）により，部分列を取れば
   $\pi_{n_k}\rightharpoonup\pi^\star$ とできる．
-  弱極限の周辺分布は保たれるから
-  $\pi^\star\in\Couplings(\mu,\nu)$ であり，
+  $\pi^\star\in\Couplings(\mu,\nu)$ を確認する：
+  任意の $A\in\Borel(X)$ に対し，
+  $\mathbf{1}_{A\times X}$ の有界連続近似を取れば
+  $\pi^\star(A\times X)
+  =\lim_k\pi_{n_k}(A\times X)
+  =\mu(A)$
+  が従い，$\nu$ 側も同様である．
   補題~\ref{lem:gs-cost-lsc}より $\pi^\star$ は下限を達成する．
 
   $p=\infty$ では
@@ -196,8 +201,10 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   を満たす coupling を取り，弱収束部分列 $\pi_{n_k}\rightharpoonup\pi^\star$ を取る．
   各 $m$ に対し，十分大きな $k$ で
   $\pi_{n_k}(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$ である．
-  この集合は閉なので，Portmanteau の定理から
-  $\pi^\star(\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\})=1$．
+  $F_m:=\{(x,y)\mid d(x,y)\leq\Wass_\infty(\mu,\nu)+1/m\}$ は閉集合である．
+  弱収束の特徴付けにより，閉集合 $F$ に対して
+  $\limsup_k\pi_{n_k}(F)\leq\pi^\star(F)$ が成り立つから，
+  $\pi^\star(F_m)=1$．
   $m\to\infty$ とすれば $\pi^\star$ は下限を達成する．
 \end{proof}
 
@@ -238,7 +245,7 @@ $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
     \mu(A)
     = \pi^\star(A\times X)
     = \pi^\star\bigl((A\times X)\cap\Delta\bigr)
-    = \pi^\star\bigl(X\times A)\cap\Delta\bigr)
+    = \pi^\star\bigl((X\times A)\cap\Delta\bigr)
     = \pi^\star(X\times A)
     = \nu(A)
   \]
