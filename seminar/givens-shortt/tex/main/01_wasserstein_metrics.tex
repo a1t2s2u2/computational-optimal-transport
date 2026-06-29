@@ -254,15 +254,18 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\Wass_p(\mu,\nu)\geq 0$ である．
 
   \textbf{(2) 対称性．}
-  写像 $s\colon(x,y)\mapsto(y,x)$ について，
-  $\pi\in\Couplings(\mu,\nu)$ ならば
-  $s_\#\pi\in\Couplings(\nu,\mu)$ であり，
-  $d(x,y)=d(y,x)$ より輸送コストは等しい．
-  この対応は全単射だから $\Wass_p(\mu,\nu)=\Wass_p(\nu,\mu)$．
+  $\pi\in\Couplings(\mu,\nu)$ に対し，
+  $\pi'(A\times B):=\pi(B\times A)$ と定めれば
+  $\pi'\in\Couplings(\nu,\mu)$ である．
+  $d(x,y)=d(y,x)$ より輸送コストは等しく，
+  この対応 $\pi\mapsto\pi'$ は全単射だから
+  $\Wass_p(\mu,\nu)=\Wass_p(\nu,\mu)$．
 
   \textbf{(3) 非退化性．}
-  $\Wass_p(\mu,\mu)=0$ は対角 coupling
-  $(\Id,\Id)_\#\mu$ のコストが $0$ であることから従う．
+  $\pi^*(A\times B):=\mu(A\cap B)$ と定めれば
+  $\pi^*\in\Couplings(\mu,\mu)$ であり，
+  $\pi^*$ は対角集合 $\{(x,x)\mid x\in X\}$ 上に集中するので
+  $\int d(x,y)^p\,\d\pi^*=0$，すなわち $\Wass_p(\mu,\mu)=0$ である．
   逆に $\Wass_p(\mu,\nu)=0$ とする．
   任意の $\varepsilon>0$ に対して，定義の下限より
   $\pi_\varepsilon\in\Couplings(\mu,\nu)$ で
