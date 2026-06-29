@@ -4,19 +4,18 @@
 \section{設定と定義}
 \label{sec:wp-definition}
 
-\begin{definition}{確率測度の空間}{gs-probability-space}
-  $(X,d)$ を完備かつ可分な距離空間とする．このような空間を
-  \textbf{Polish 空間}という．
-  $X$ の開集合から生成される $\sigma$-代数を $\Borel(X)$ と書き，
-  \[
-    \Prob(X)
-    :=
-    \left\{
-      \mu\mid \mu\text{ は }\Borel(X)\text{ 上の測度で }\mu(X)=1
-    \right\}
-  \]
-  と定める．
-\end{definition}
+$(X,d)$ を完備かつ可分な距離空間（\textbf{Polish 空間}）とする．
+Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
+\[
+  \Prob(X)
+  :=
+  \left\{
+    \mu\colon\Borel(X)\to[0,1]
+    \;\middle|\;
+    \mu\text{ は測度},\;\mu(X)=1
+  \right\}
+\]
+とおく．
 
 \begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
   任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
@@ -35,14 +34,7 @@
     :=
     \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
   \]
-  とおく．ただし，$\mu$ の\textbf{台}とは
-  \[
-    \supp\mu
-    =
-    \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
-  \]
-  のことである．
-  $x_0'\in X$ に対して
+  とおく．$x_0'\in X$ に対して
   \[
     d(x,x_0')^p
     \leq
@@ -51,6 +43,22 @@
   であるから，
   $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
 \end{definition}
+
+\begin{remark}{$\Pp{\infty}(X)$ の動機}{gs-p-infty-motivation}
+  $\Pp{p}(X)$ の条件は
+  \[
+    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}<\infty
+  \]
+  と書き換えられる．一般に $p\to\infty$ で
+  \[
+    \left(\int_X\abs{f(x)}^p\,\d\mu(x)\right)^{1/p}
+    \longrightarrow
+    \inf\{R\geq 0\mid \mu(\{x\mid\abs{f(x)}>R\})=0\}
+  \]
+  が成り立つ．$f(x)=d(x,x_0)$ のとき右辺が有限であることは
+  台が有界であることと同値なので，
+  $\Pp{\infty}(X)$ は $\Pp{p}(X)$ の自然な拡張である．
+\end{remark}
 
 \begin{definition}{Coupling と Wasserstein 距離}{gs-wasserstein}
   $\mu,\nu\in\Prob(X)$ の\textbf{coupling}の集合を
