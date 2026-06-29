@@ -59,11 +59,18 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \leq
     \bigl(d(x,x_0)+d(x_0,x_0')\bigr)^p.
   \]
-  $a,b\geq 0$ に対し凸性から
-  $\bigl(\frac{a+b}{2}\bigr)^p\leq\frac{a^p+b^p}{2}$
-  すなわち $(a+b)^p\leq 2^{p-1}(a^p+b^p)$ なので
+  ここで $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおけば，
+  $f(t)=t^p$ ($p\geq 1$) の凸性から
+  \begin{align*}
+    \text{右辺}
+    = (a+b)^p
+    &= 2^p\left(\frac{a}{2}+\frac{b}{2}\right)^p\\
+    &\leq 2^p\left(\frac{a^p}{2}+\frac{b^p}{2}\right)
+    = 2^{p-1}(a^p+b^p).
+  \end{align*}
+  よって
   \[
-    \bigl(d(x,x_0)+d(x_0,x_0')\bigr)^p
+    d(x,x_0')^p
     \leq
     2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
