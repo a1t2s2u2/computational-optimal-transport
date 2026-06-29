@@ -173,16 +173,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
-  $1\leq p\leq\infty$ に対し，
-  $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
-\end{proposition}
-
-距離の公理を順に示す．
-非負性と対称性は定義から従う．
-本質的なのは非退化性と三角不等式であり，
-それぞれ以下の補助事実を用いる．
-
 \begin{definition}{Lipschitz 関数}{gs-lipschitz-function}
   Polish 空間 $(X,d)$ 上の関数 $f\colon X\to\R$ が\textbf{Lipschitz 関数}であるとは，
   ある定数 $L\geq0$ が存在して
@@ -237,7 +227,13 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   と定めれば，$\gamma$ は求める2つの周辺分布をもつ．
 \end{proof}
 
-\begin{proof}[\textbf{命題~\ref{prop:gs-wp-metric}の証明}]
+\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
+  $1\leq p\leq\infty$ に対し，
+  $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
+\end{proposition}
+
+\begin{proof}
+  距離の公理を順に示す．
 
   \textbf{(1) 非負性．}
   任意の $\pi\in\Couplings(\mu,\nu)$ に対して
