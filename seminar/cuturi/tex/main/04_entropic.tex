@@ -654,6 +654,47 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   $\Hb$ は $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ で唯一の最大値をとる．
 \end{proof}
 
+\begin{lemma}{摂動つき最小化の極限}{sem-perturbed-min-limit}
+  $K$ をコンパクト集合とし，$f, g \colon K \to \mathbb{R}$ を連続関数とする．
+  \[
+    S \defeq \argmin_{x \in K} f(x)
+  \]
+  とおく．
+  また，$\hat{x} \in S$ が $S$ 上で $g$ を最大化する一意な点であるとする．
+
+  $x_\varepsilon \in K$ が
+  \[
+    f(x_\varepsilon) \to \min_K f,
+    \qquad
+    g(x_\varepsilon) \geq g(\hat{x})
+  \]
+  をみたすなら，$x_\varepsilon \to \hat{x}$（$\varepsilon \to 0$）である．
+\end{lemma}
+
+\begin{proof}
+  任意の列 $\varepsilon_k \to 0$ をとる．
+  $K$ はコンパクトだから，必要なら部分列をとって
+  $x_{\varepsilon_k} \to \bar{x}$ とできる．
+
+  $f$ の連続性と $f(x_{\varepsilon_k}) \to \min_K f$ より
+  $f(\bar{x}) = \min_K f$ であり，$\bar{x} \in S$ である．
+  また，仮定より $g(x_{\varepsilon_k}) \geq g(\hat{x})$ だから，
+  $g$ の連続性より $g(\bar{x}) \geq g(\hat{x})$ が従う．
+  一方 $\hat{x}$ は $S$ 上の $g$ の最大点であり $\bar{x} \in S$ だから
+  $g(\bar{x}) \leq g(\hat{x})$．
+  よって $g(\bar{x}) = g(\hat{x})$ であり，
+  最大点の一意性から $\bar{x} = \hat{x}$．
+
+  以上より，$\varepsilon_k \to 0$ の任意の列から
+  とれる収束部分列の極限は必ず $\hat{x}$ である．
+  もし $x_\varepsilon \to \hat{x}$ でないなら，
+  ある $\delta > 0$ と $\varepsilon_k \to 0$ が存在して
+  $\|x_{\varepsilon_k} - \hat{x}\| \geq \delta$ となるが，
+  $K$ のコンパクト性よりこの列は収束部分列を持ち，
+  その極限は $\hat{x}$ でなければならず矛盾する．
+  よって $x_\varepsilon \to \hat{x}$ である．
+\end{proof}
+
 \begin{theorem}{正則化パラメータ $\varepsilon$ の極限による収束}{sem-entropic-convergence-eps-zero}
   各 $\varepsilon > 0$ に対し，$\mathbf{P}_\varepsilon$ を
   $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解とし，
@@ -754,116 +795,61 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   も従う（$\mathbf{P}^* \in S^*$ は任意だった）．
 
   \textbf{(ii).}
-  $S^*$ はコンパクト凸集合であり，$\Hb$ は狭義凹かつ連続だから，
+  $S^*$ はコンパクト凸集合であり，
+  $-\Hb$ は狭義凸（主張~\ref{clm:sem-neg-entropy-strict-convex}）かつ連続だから，
   $\widehat{\mathbf{P}} \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
   は一意に存在する．
   (i) の証明より
   $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
-  であり，また
-  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$
-  が成り立つ．
-  以下 $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$ を示す．
+  であり，また同じく (i) の証明で得た評価より，
+  任意の $\mathbf{R} \in S^*$ に対して
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{R})$ である．
+  特に $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ が成り立つ．
 
-  任意の $\delta > 0$ をとり，
+  したがって，補題~\ref{lem:sem-perturbed-min-limit} を
   \[
-    A_\delta
-    \defeq
-    \bigl\{\, \mathbf{P} \in S^* \bigm|
-      \|\mathbf{P} - \widehat{\mathbf{P}}\| \geq \delta/2
-    \,\bigr\}
+    K = \CouplingsD(\mathbf{a},\mathbf{b}),\qquad
+    f(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}},\qquad
+    g(\mathbf{P}) = \Hb(\mathbf{P})
   \]
-  とおく．$A_\delta$ はコンパクトであり $\widehat{\mathbf{P}} \notin A_\delta$ だから，
-  $\widehat{\mathbf{P}}$ が $S^*$ 上の $\Hb$ の一意な最大点であることより
-  \[
-    \gamma_\delta
-    \defeq
-    \Hb(\widehat{\mathbf{P}}) - \max_{\mathbf{P} \in A_\delta}\Hb(\mathbf{P})
-    > 0.
-  \]
-
-  $\Hb$ はコンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で一様連続だから，
-  ある $\rho_\delta \in (0, \delta/2)$ が存在して
-  \[
-    \|\mathbf{P} - \mathbf{Q}\| < \rho_\delta
-    \quad\Longrightarrow\quad
-    |\Hb(\mathbf{P}) - \Hb(\mathbf{Q})| < \gamma_\delta/2.
-  \]
-
-  次に
-  $B_\delta
-  \defeq
-  \bigl\{\, \mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b}) \bigm|
-    \operatorname{dist}(\mathbf{P}, S^*) \geq \rho_\delta
-  \,\bigr\}$
-  とおく．$B_\delta$ はコンパクトで $B_\delta \cap S^* = \varnothing$ だから
-  \[
-    \eta_\delta
-    \defeq
-    \min_{\mathbf{P} \in B_\delta}
-    \bigl(\inner{\mathbf{C}}{\mathbf{P}} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\bigr)
-    > 0.
-  \]
-  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
-  だから，十分小さい $\varepsilon > 0$ について
-  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}) < \eta_\delta$
-  となり，$\mathbf{P}_\varepsilon \notin B_\delta$．
-  よって $\operatorname{dist}(\mathbf{P}_\varepsilon, S^*) < \rho_\delta$ であり，
-  ある $\mathbf{Q}_\varepsilon \in S^*$ が存在して
-  $\|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\| < \rho_\delta$ となる．
-
-  ここで $\|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\| \geq \delta$ と仮定すると，
-  $\rho_\delta < \delta/2$ より
-  \[
-    \|\mathbf{Q}_\varepsilon - \widehat{\mathbf{P}}\|
-    \geq
-    \|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\|
-    - \|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\|
-    > \delta/2
-  \]
-  だから $\mathbf{Q}_\varepsilon \in A_\delta$ であり，
-  $\Hb(\mathbf{Q}_\varepsilon) \leq \Hb(\widehat{\mathbf{P}}) - \gamma_\delta$．
-  一様連続性と $\|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\| < \rho_\delta$ より
-  \[
-    \Hb(\mathbf{P}_\varepsilon)
-    \leq \Hb(\mathbf{Q}_\varepsilon) + \gamma_\delta/2
-    \leq \Hb(\widehat{\mathbf{P}}) - \gamma_\delta/2
-  \]
-  となり，(i) で得た
-  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ に反する．
-
-  したがって十分小さい $\varepsilon > 0$ について
-  $\|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\| < \delta$ であり，
-  $\delta > 0$ は任意だったから
-  $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$（$\varepsilon \to 0$）を得る．
+  に適用すると，
+  $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}
+  = \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P})$（$\varepsilon \to 0$）を得る．
 
   \textbf{(iii).}
-  目的関数を $\varepsilon$ で割ると，
-  $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の最小化は
-  $\Hb(\mathbf{P}) - \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}$ の最大化と同値である．
-  $\eta \defeq 1/\varepsilon$ とおけば $\varepsilon \to +\infty$ は $\eta \to 0$ に対応し，
-  $\mathbf{P}_\eta$ は
+  $\eta \defeq 1/\varepsilon$ とおく．
+  $\varepsilon \to +\infty$ は $\eta \to 0$ に対応する．
+  また，$\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ を最小化することは，
+  $\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}$ を最大化することと同値である．
+  そこで $\widetilde{\mathbf{P}}_\eta \defeq \mathbf{P}_{1/\eta}$ と書けば，
   \[
+    \widetilde{\mathbf{P}}_\eta
+    \in
     \argmax_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
-    \bigl\{\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}\bigr\}
+    \bigl\{\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}\bigr\}.
   \]
-  の元である．
-  $+\infty$ に発散する正の列 $(\varepsilon_k)$ を任意にとり，
-  $\eta_k \defeq 1/\varepsilon_k \to 0$ とする．
-  収束部分列 $\mathbf{P}_{\eta_{k_j}} \to \mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
-  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対して最大性から
+
+  $\eta_k \to 0$ を任意にとり，コンパクト性より，
+  必要なら部分列をとって
+  $\widetilde{\mathbf{P}}_{\eta_k} \to \mathbf{P}^\infty$ とする．
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対して，
+  $\widetilde{\mathbf{P}}_{\eta_k}$ の最大性より
   \[
-    \Hb(\mathbf{P}_{\eta_{k_j}}) - \eta_{k_j}\inner{\mathbf{C}}{\mathbf{P}_{\eta_{k_j}}}
+    \Hb(\widetilde{\mathbf{P}}_{\eta_k})
+    - \eta_k\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_k}}
     \geq
-    \Hb(\mathbf{Q}) - \eta_{k_j}\inner{\mathbf{C}}{\mathbf{Q}}.
+    \Hb(\mathbf{Q})
+    - \eta_k\inner{\mathbf{C}}{\mathbf{Q}}.
   \]
-  $\inner{\mathbf{C}}{\cdot}$ はコンパクト集合上で有界だから，
-  $\eta_{k_j} \to 0$ で両辺の $\eta$ の項は消えて
+  $\inner{\mathbf{C}}{\cdot}$ はコンパクト集合上で有界であり，
+  $\eta_k \to 0$ だから，極限をとると
   $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ を得る．
-  これがすべての $\mathbf{Q}$ について成り立つから，
-  $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化し，
+  これは任意の $\mathbf{Q}$ について成り立つので，
+  $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する．
   主張~\ref{clm:sem-max-entropy-independent} より
   $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
-  収束する部分列の極限がすべて
-  $\mathbf{a}\mathbf{b}^\top$ に等しいから（主張~\ref{clm:sem-subseq-limit-unique}），
+
+  任意の収束部分列の極限がすべて $\mathbf{a}\mathbf{b}^\top$ に一致するから
+  （主張~\ref{clm:sem-subseq-limit-unique}），
   $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
 \end{proof}
