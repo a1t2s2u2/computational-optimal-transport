@@ -63,6 +63,23 @@ Proposition 2 を目標とする：
   \textbf{単調減少に各点収束する}といい，$f_n\downarrow f$ と書く．
 \end{definition}
 
+\begin{definition}{$L^p$ ノルム}{gs-lp-norm}
+  測度空間 $(\Omega,\mathcal{A},\mu)$ 上の可測関数 $f\colon\Omega\to\R$ に対し，
+  $1\leq p<\infty$ のとき
+  \[
+    \norm{f}_{L^p(\mu)}
+    :=
+    \left(\int_\Omega\abs{f}^p\,\d\mu\right)^{1/p},
+  \]
+  $p=\infty$ のとき
+  \[
+    \norm{f}_{L^\infty(\mu)}
+    :=
+    \inf\{M\geq 0\mid \abs{f}\leq M\;\;\mu\text{-a.e.}\}
+  \]
+  と定める．
+\end{definition}
+
 \begin{theorem}{有界収束定理}{gs-bounded-convergence}
   $(X,\Borel(X),\mu)$ を有限測度空間とする．
   関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，

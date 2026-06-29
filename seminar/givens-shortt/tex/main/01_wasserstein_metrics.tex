@@ -160,10 +160,14 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{definition}
 
 \begin{remark}{記法と well-definedness}{gs-wp-welldef}
-  以後は $p=\infty$ の場合も
-  $\norm{\,\cdot\,}_{L^\infty(\pi)}$ を本質的上限と解釈し，
-  $\Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}
-  \norm{d(x,y)}_{L^p(\pi)}$ と書く．
+  距離関数 $d\colon X\times X\to[0,\infty)$ は
+  $\pi\in\Prob(X\times X)$ 上の可測関数だから，
+  $L^p$ ノルム（定義~\ref{def:gs-lp-norm}）を用いて
+  \[
+    \Wass_p(\mu,\nu)
+    =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
+  \]
+  と書ける．
   $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
   $d(x,y)^p\leq 2^{p-1}(d(x,x_0)^p+d(y,x_0)^p)$
   を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
@@ -250,7 +254,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 
   \textbf{(1) 非負性．}
   任意の $\pi\in\Couplings(\mu,\nu)$ に対して
-  $d\geq 0$ より $\norm{d(x,y)}_{L^p(\pi)}\geq 0$ だから，
+  $d\geq 0$ より $\norm{d}_{L^p(\pi)}\geq 0$ だから，
   $\Wass_p(\mu,\nu)\geq 0$ である．
 
   \textbf{(2) 対称性．}
@@ -270,7 +274,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   任意の $\varepsilon>0$ に対して，定義の下限より
   $\pi_\varepsilon\in\Couplings(\mu,\nu)$ で
   \[
-    \norm{d(x,y)}_{L^p(\pi_\varepsilon)}<\varepsilon
+    \norm{d}_{L^p(\pi_\varepsilon)}<\varepsilon
   \]
   となるものを取れる．
   有界 Lipschitz 関数 $f\colon X\to\R$ の
@@ -286,9 +290,9 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   確率空間上で
   $\norm{g}_{L^1}\leq\norm{g}_{L^p}$ だから
   \[
-    \Lip(f)\norm{d(x,y)}_{L^1(\pi_\varepsilon)}
+    \Lip(f)\norm{d}_{L^1(\pi_\varepsilon)}
     \leq
-    \Lip(f)\norm{d(x,y)}_{L^p(\pi_\varepsilon)}
+    \Lip(f)\norm{d}_{L^p(\pi_\varepsilon)}
     <
     \Lip(f)\,\varepsilon.
   \]
@@ -305,9 +309,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\tau\in\Couplings(\mu,\xi)$ だから，
   \[
     \Wass_p(\mu,\xi)
-    \leq \norm{d(x,z)}_{L^p(\tau)}
-    = \norm{d(x,z)}_{L^p(\gamma)}.
+    \leq \norm{d}_{L^p(\tau)}.
   \]
+  以下 $\gamma$ 上の $L^p$ ノルムでは，
+  $d(x,z)$ 等を $(x,y,z)\mapsto d(x,z)$ の略記とする．
+  $\norm{d}_{L^p(\tau)}=\norm{d(x,z)}_{L^p(\gamma)}$ であり，
   距離 $d$ の三角不等式 $d(x,z)\leq d(x,y)+d(y,z)$ と
   $L^p$ ノルムの単調性から
   \[
@@ -318,8 +324,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   周辺分布が $\pi,\sigma$ であることから
   \[
     \norm{d(x,y)+d(y,z)}_{L^p(\gamma)}
-    \leq \norm{d(x,y)}_{L^p(\pi)}
-    + \norm{d(y,z)}_{L^p(\sigma)}.
+    \leq \norm{d}_{L^p(\pi)}
+    + \norm{d}_{L^p(\sigma)}.
   \]
   これは任意の $\pi,\sigma$ で成り立つので，両辺で下限を取れば
   \[
