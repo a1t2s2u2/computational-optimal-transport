@@ -39,6 +39,27 @@ Proposition 2 を目標とする：
   のことである．
 \end{definition}
 
+\begin{definition}{各点収束}{gs-pointwise-convergence}
+  関数列 $f_n\colon X\to\R$ が $f\colon X\to\R$ に\textbf{各点収束}するとは，
+  すべての $x\in X$ に対して
+  \[
+    \lim_{n\to\infty}f_n(x)=f(x)
+  \]
+  が成り立つことをいう．
+  さらに各 $x$ で $f_1(x)\geq f_2(x)\geq\cdots$ であるとき
+  \textbf{単調減少に各点収束する}といい，$f_n\downarrow f$ と書く．
+\end{definition}
+
+\begin{theorem}{有界収束定理}{gs-bounded-convergence}
+  $(X,\Borel(X),\mu)$ を有限測度空間とする．
+  関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，
+  ある定数 $M<\infty$ で $\abs{f_n(x)}\leq M$（$\forall n,\,\forall x$）が
+  成り立つならば，
+  \[
+    \lim_{n\to\infty}\int_X f_n\,\d\mu=\int_X f\,\d\mu.
+  \]
+\end{theorem}
+
 \section*{記号・用語の読み替え}
 
 本資料では，原論文の記号・用語を

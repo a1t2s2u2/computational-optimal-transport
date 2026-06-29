@@ -198,8 +198,21 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \[
     f_n(x):=\max\{1-n\,d(x,F),\,0\}
   \]
-  とおく．各 $f_n$ は有界 Lipschitz であり，$f_n\downarrow\mathbf{1}_F$ である．
-  仮定と有界収束定理より $\mu(F)=\nu(F)$ が従う．
+  とおく．ここで $d(x,F):=\inf_{y\in F}d(x,y)$ は $x$ と $F$ の距離である．
+  各 $f_n$ は $0\leq f_n\leq 1$ を満たす有界 Lipschitz 関数であり，
+  \[
+    f_n(x)\downarrow\mathbf{1}_F(x)
+    \qquad(\forall x\in X)
+  \]
+  と単調減少に各点収束する（定義~\ref{def:gs-pointwise-convergence}）．
+  仮定より $\int_X f_n\,\d\mu=\int_X f_n\,\d\nu$ が各 $n$ で成り立つから，
+  有界収束定理（定理~\ref{thm:gs-bounded-convergence}）により
+  \[
+    \mu(F)=\int_X\mathbf{1}_F\,\d\mu
+    =\lim_{n\to\infty}\int_X f_n\,\d\mu
+    =\lim_{n\to\infty}\int_X f_n\,\d\nu
+    =\int_X\mathbf{1}_F\,\d\nu=\nu(F).
+  \]
   Borel 確率測度は閉集合上の値で決まるので，$\mu=\nu$ である．
 \end{proof}
 
