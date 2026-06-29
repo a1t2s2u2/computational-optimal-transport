@@ -829,27 +829,45 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
     \bigl\{\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}\bigr\}.
   \]
 
-  $\eta_k \to 0$ を任意にとり，コンパクト性より，
-  必要なら部分列をとって
-  $\widetilde{\mathbf{P}}_{\eta_k} \to \mathbf{P}^\infty$ とする．
-  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ に対して，
-  $\widetilde{\mathbf{P}}_{\eta_k}$ の最大性より
+  $\eta_k \to 0$ となる任意の正の列 $(\eta_k)_k$ をとる．
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ はコンパクトであり，
+  $\widetilde{\mathbf{P}}_{\eta_k} \in \CouplingsD(\mathbf{a},\mathbf{b})$ だから，
+  ある部分列 $(\eta_{k_j})_j$ と
+  $\mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ が存在して
+  $\widetilde{\mathbf{P}}_{\eta_{k_j}} \to \mathbf{P}^\infty$ となる．
+
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
+  $\widetilde{\mathbf{P}}_{\eta_{k_j}}$ の最大性より
   \[
-    \Hb(\widetilde{\mathbf{P}}_{\eta_k})
-    - \eta_k\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_k}}
+    \Hb(\widetilde{\mathbf{P}}_{\eta_{k_j}})
+    - \eta_{k_j}\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_{k_j}}}
     \geq
     \Hb(\mathbf{Q})
-    - \eta_k\inner{\mathbf{C}}{\mathbf{Q}}.
+    - \eta_{k_j}\inner{\mathbf{C}}{\mathbf{Q}}.
   \]
-  $\inner{\mathbf{C}}{\cdot}$ はコンパクト集合上で有界であり，
-  $\eta_k \to 0$ だから，極限をとると
+  ここで $\inner{\mathbf{C}}{\cdot}$ は
+  コンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で有界であり，
+  $\eta_{k_j} \to 0$ だから，
+  \[
+    \eta_{k_j}\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_{k_j}}} \to 0,
+    \qquad
+    \eta_{k_j}\inner{\mathbf{C}}{\mathbf{Q}} \to 0.
+  \]
+  また $\Hb$ は連続なので，極限をとると
   $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ を得る．
-  これは任意の $\mathbf{Q}$ について成り立つので，
-  $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する．
-  主張~\ref{clm:sem-max-entropy-independent} より
+  これは任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$
+  について成り立つ．
+  したがって，$\mathbf{P}^\infty$ は
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する．
+  主張~\ref{clm:sem-max-entropy-independent} より，
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する唯一の元は
+  独立カップリング $\mathbf{a}\mathbf{b}^\top$ であるから，
   $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
 
-  任意の収束部分列の極限がすべて $\mathbf{a}\mathbf{b}^\top$ に一致するから
-  （主張~\ref{clm:sem-subseq-limit-unique}），
+  以上より，$\eta_k \to 0$ となる任意の列に対して，
+  その任意の収束部分列の極限は $\mathbf{a}\mathbf{b}^\top$ に等しい．
+  したがって
+  $\widetilde{\mathbf{P}}_\eta \to \mathbf{a}\mathbf{b}^\top$（$\eta \to 0$）である．
+  $\widetilde{\mathbf{P}}_\eta = \mathbf{P}_{1/\eta}$ だから，
   $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
 \end{proof}
