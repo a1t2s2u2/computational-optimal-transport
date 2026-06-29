@@ -757,26 +757,84 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   $S^*$ はコンパクト凸集合であり，$\Hb$ は狭義凹かつ連続だから，
   $\widehat{\mathbf{P}} \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
   は一意に存在する．
-
   (i) の証明より
   $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
-  である．
-  したがって $\mathbf{P}_\varepsilon$ は $S^*$ に近づく．
-  実際，もし $S^*$ から一定以上離れた点が残るなら，
-  コンパクト性と $\inner{\mathbf{C}}{\cdot}$ の連続性より，
-  その点ではコストが $\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ より
-  正の幅だけ大きくなり，上の収束に反する．
-
-  さらに，(i) の証明で得た不等式より
+  であり，また
   $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$
   が成り立つ．
-  ここで $\widehat{\mathbf{P}}$ は $S^*$ 上の一意なエントロピー最大解だから，
-  $S^*$ の中で $\widehat{\mathbf{P}}$ から離れた点では
-  エントロピーは $\Hb(\widehat{\mathbf{P}})$ より真に小さい．
-  一方 $\mathbf{P}_\varepsilon$ は $S^*$ に近づき，
-  かつ $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ をみたすから，
-  $\mathbf{P}_\varepsilon$ は $\widehat{\mathbf{P}}$ から離れることができない．
-  ゆえに $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$（$\varepsilon \to 0$）を得る．
+  以下 $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$ を示す．
+
+  任意の $\delta > 0$ をとり，
+  \[
+    A_\delta
+    \defeq
+    \bigl\{\, \mathbf{P} \in S^* \bigm|
+      \|\mathbf{P} - \widehat{\mathbf{P}}\| \geq \delta/2
+    \,\bigr\}
+  \]
+  とおく．$A_\delta$ はコンパクトであり $\widehat{\mathbf{P}} \notin A_\delta$ だから，
+  $\widehat{\mathbf{P}}$ が $S^*$ 上の $\Hb$ の一意な最大点であることより
+  \[
+    \gamma_\delta
+    \defeq
+    \Hb(\widehat{\mathbf{P}}) - \max_{\mathbf{P} \in A_\delta}\Hb(\mathbf{P})
+    > 0.
+  \]
+
+  $\Hb$ はコンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で一様連続だから，
+  ある $\rho_\delta \in (0, \delta/2)$ が存在して
+  \[
+    \|\mathbf{P} - \mathbf{Q}\| < \rho_\delta
+    \quad\Longrightarrow\quad
+    |\Hb(\mathbf{P}) - \Hb(\mathbf{Q})| < \gamma_\delta/2.
+  \]
+
+  次に
+  $B_\delta
+  \defeq
+  \bigl\{\, \mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b}) \bigm|
+    \operatorname{dist}(\mathbf{P}, S^*) \geq \rho_\delta
+  \,\bigr\}$
+  とおく．$B_\delta$ はコンパクトで $B_\delta \cap S^* = \varnothing$ だから
+  \[
+    \eta_\delta
+    \defeq
+    \min_{\mathbf{P} \in B_\delta}
+    \bigl(\inner{\mathbf{C}}{\mathbf{P}} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})\bigr)
+    > 0.
+  \]
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
+  だから，十分小さい $\varepsilon > 0$ について
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}) < \eta_\delta$
+  となり，$\mathbf{P}_\varepsilon \notin B_\delta$．
+  よって $\operatorname{dist}(\mathbf{P}_\varepsilon, S^*) < \rho_\delta$ であり，
+  ある $\mathbf{Q}_\varepsilon \in S^*$ が存在して
+  $\|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\| < \rho_\delta$ となる．
+
+  ここで $\|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\| \geq \delta$ と仮定すると，
+  $\rho_\delta < \delta/2$ より
+  \[
+    \|\mathbf{Q}_\varepsilon - \widehat{\mathbf{P}}\|
+    \geq
+    \|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\|
+    - \|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\|
+    > \delta/2
+  \]
+  だから $\mathbf{Q}_\varepsilon \in A_\delta$ であり，
+  $\Hb(\mathbf{Q}_\varepsilon) \leq \Hb(\widehat{\mathbf{P}}) - \gamma_\delta$．
+  一様連続性と $\|\mathbf{P}_\varepsilon - \mathbf{Q}_\varepsilon\| < \rho_\delta$ より
+  \[
+    \Hb(\mathbf{P}_\varepsilon)
+    \leq \Hb(\mathbf{Q}_\varepsilon) + \gamma_\delta/2
+    \leq \Hb(\widehat{\mathbf{P}}) - \gamma_\delta/2
+  \]
+  となり，(i) で得た
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ に反する．
+
+  したがって十分小さい $\varepsilon > 0$ について
+  $\|\mathbf{P}_\varepsilon - \widehat{\mathbf{P}}\| < \delta$ であり，
+  $\delta > 0$ は任意だったから
+  $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$（$\varepsilon \to 0$）を得る．
 
   \textbf{(iii).}
   目的関数を $\varepsilon$ で割ると，
