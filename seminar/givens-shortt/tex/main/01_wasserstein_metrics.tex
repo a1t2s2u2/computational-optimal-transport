@@ -74,11 +74,12 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \leq
     2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
-  両辺を $\mu$ で積分すると
+  両辺を $x$ について $\d\mu(x)$ で積分する．
+  $d(x_0,x_0')^p$ は $x$ によらない定数だから
   \[
-    \int_X d(x,x_0')^p\,\d\mu
+    \int_X d(x,x_0')^p\,\d\mu(x)
     \leq
-    2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu+d(x_0,x_0')^p\right).
+    2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right).
   \]
   右辺の $d(x_0,x_0')^p$ は定数なので，
   $\int_X d(x,x_0)^p\,\d\mu<\infty$ ならば
