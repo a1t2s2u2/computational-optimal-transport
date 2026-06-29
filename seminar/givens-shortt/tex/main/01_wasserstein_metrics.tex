@@ -45,18 +45,24 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{definition}
 
 \begin{remark}{$\Pp{\infty}(X)$ の動機}{gs-p-infty-motivation}
-  $\Pp{p}(X)$ の条件は
+  $M:=\inf\{R\geq 0\mid \mu(\{x\mid d(x,x_0)>R\})=0\}$ とおく．
+  $d(x,x_0)\leq M$ $(\mu\text{-a.e.})$ だから
   \[
-    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}<\infty
+    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}
+    \leq M.
   \]
-  と書き換えられる．一般に $p\to\infty$ で
+  逆に任意の $\varepsilon>0$ に対し
+  $A_\varepsilon:=\{x\mid d(x,x_0)>M-\varepsilon\}$ は
+  $\mu(A_\varepsilon)>0$ を満たすので
   \[
-    \left(\int_X\abs{f(x)}^p\,\d\mu(x)\right)^{1/p}
-    \longrightarrow
-    \inf\{R\geq 0\mid \mu(\{x\mid\abs{f(x)}>R\})=0\}
+    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}
+    \geq (M-\varepsilon)\,\mu(A_\varepsilon)^{1/p}
+    \xrightarrow{p\to\infty} M-\varepsilon.
   \]
-  が成り立つ．$f(x)=d(x,x_0)$ のとき右辺が有限であることは
-  台が有界であることと同値なので，
+  $\varepsilon\downarrow 0$ とすれば
+  $\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}\to M$ が従う．
+  左辺の有限性は $\Pp{p}(X)$ の条件と同値であり，
+  $M<\infty$ は $\supp\mu$ の有界性と同値なので，
   $\Pp{\infty}(X)$ は $\Pp{p}(X)$ の自然な拡張である．
 \end{remark}
 
