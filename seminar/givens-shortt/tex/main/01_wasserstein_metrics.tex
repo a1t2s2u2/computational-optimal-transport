@@ -29,41 +29,45 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \right\}
   \]
   と定める．また
-  \[
+  \begin{align*}
     \Pp{\infty}(X)
-    :=
-    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
-  \]
-  とおく．$x_0'\in X$ に対して
+    &:=
+    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}\\
+    &=
+    \left\{
+      \mu\in\Prob(X)
+      \;\middle|\;
+      \sup_{x\in\supp\mu}d(x,x_0)<\infty
+    \right\}
+  \end{align*}
+  とおく．$x_0'\in X$ に対し，三角不等式と
+  $t\mapsto t^p$ ($p\geq 1$) の凸性から
   \[
     d(x,x_0')^p
     \leq
+    \bigl(d(x,x_0)+d(x_0,x_0')\bigr)^p
+    \leq
     2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr)
   \]
-  であるから，
-  $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
+  が成り立つので，$\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
 \end{definition}
 
-\begin{remark}{$\Pp{\infty}(X)$ の動機}{gs-p-infty-motivation}
-  $M:=\inf\{R\geq 0\mid \mu(\{x\mid d(x,x_0)>R\})=0\}$ とおく．
-  $d(x,x_0)\leq M$ $(\mu\text{-a.e.})$ だから
+\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{gs-p-infty-equiv}
+  $\supp\mu$ が有界とは，ある $R<\infty$ が存在して
   \[
-    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}
-    \leq M.
+    \supp\mu\subset B_R(x_0)
   \]
-  逆に任意の $\varepsilon>0$ に対し
-  $A_\varepsilon:=\{x\mid d(x,x_0)>M-\varepsilon\}$ は
-  $\mu(A_\varepsilon)>0$ を満たすので
+  となることである．これは
   \[
-    \left(\int_X d(x,x_0)^p\,\d\mu(x)\right)^{1/p}
-    \geq (M-\varepsilon)\,\mu(A_\varepsilon)^{1/p}
-    \xrightarrow{p\to\infty} M-\varepsilon.
+    \forall x\in\supp\mu,\quad d(x,x_0)<R
   \]
-  $\varepsilon\downarrow 0$ とすれば
-  $\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}\to M$ が従う．
-  左辺の有限性は $\Pp{p}(X)$ の条件と同値であり，
-  $M<\infty$ は $\supp\mu$ の有界性と同値なので，
-  $\Pp{\infty}(X)$ は $\Pp{p}(X)$ の自然な拡張である．
+  と同値であるから，
+  $\sup_{x\in\supp\mu}d(x,x_0)\leq R<\infty$．したがって
+  \[
+    \supp\mu\text{ が有界}
+    \iff
+    \sup_{x\in\supp\mu}d(x,x_0)<\infty.
+  \]
 \end{remark}
 
 \begin{definition}{Coupling と Wasserstein 距離}{gs-wasserstein}
