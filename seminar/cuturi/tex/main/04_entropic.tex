@@ -754,25 +754,29 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   も従う（$\mathbf{P}^* \in S^*$ は任意だった）．
 
   \textbf{(ii).}
-  $-\Hb$ は凸かつコンパクトな $S^*$ 上で狭義凸かつ連続だから，
-  最大化点 $\mathbf{P}^\star \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
+  $S^*$ はコンパクト凸集合であり，$\Hb$ は狭義凹かつ連続だから，
+  $\widehat{\mathbf{P}} \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
   は一意に存在する．
-  $0$ に収束する正の列 $(\varepsilon_k)$ を任意にとり，
-  $\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^\star$ を示す．
-  主張~\ref{clm:sem-subseq-limit-unique} により，
-  収束する部分列の極限がすべて $\mathbf{P}^\star$ に等しいことを示せば十分である．
-  収束部分列 $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
-  内積の連続性と (i) より
-  $\inner{\mathbf{C}}{\mathbf{Q}}
-  = \lim_{j\to\infty}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}
-  = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
-  だから $\mathbf{Q} \in S^*$．
-  また上の不等式と $\Hb$ の連続性より
-  $\Hb(\mathbf{Q}) \geq \Hb(\mathbf{P}^*)$（$\forall \mathbf{P}^* \in S^*$）
-  となるから，$\mathbf{Q}$ は $S^*$ 上で $\Hb$ を最大化し，
-  一意性より $\mathbf{Q} = \mathbf{P}^\star$．
-  列 $(\varepsilon_k)$ は任意だったから
-  $\mathbf{P}_\varepsilon \to \mathbf{P}^\star$（$\varepsilon \to 0$）を得る．
+
+  (i) の証明より
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
+  である．
+  したがって $\mathbf{P}_\varepsilon$ は $S^*$ に近づく．
+  実際，もし $S^*$ から一定以上離れた点が残るなら，
+  コンパクト性と $\inner{\mathbf{C}}{\cdot}$ の連続性より，
+  その点ではコストが $\MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$ より
+  正の幅だけ大きくなり，上の収束に反する．
+
+  さらに，(i) の証明で得た不等式より
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$
+  が成り立つ．
+  ここで $\widehat{\mathbf{P}}$ は $S^*$ 上の一意なエントロピー最大解だから，
+  $S^*$ の中で $\widehat{\mathbf{P}}$ から離れた点では
+  エントロピーは $\Hb(\widehat{\mathbf{P}})$ より真に小さい．
+  一方 $\mathbf{P}_\varepsilon$ は $S^*$ に近づき，
+  かつ $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ をみたすから，
+  $\mathbf{P}_\varepsilon$ は $\widehat{\mathbf{P}}$ から離れることができない．
+  ゆえに $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}$（$\varepsilon \to 0$）を得る．
 
   \textbf{(iii).}
   目的関数を $\varepsilon$ で割ると，
