@@ -754,14 +754,9 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   も従う（$\mathbf{P}^* \in S^*$ は任意だった）．
 
   \textbf{(ii).}
-  最大エントロピー最適解
-  $\mathbf{P}^\star \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
-  はただ一つに定まる：$S^*$ は凸かつコンパクトであり，
-  $-\Hb$ は連続で狭義凸（主張~\ref{clm:sem-neg-entropy-strict-convex}）だから，
-  Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より
-  $-\Hb$ は $S^*$ 上で最小値を達成し，
-  その最小点は命題~\ref{prop:sem-strict-convex-unique-min} より一意である．
-
+  $-\Hb$ は凸かつコンパクトな $S^*$ 上で狭義凸かつ連続だから，
+  最大化点 $\mathbf{P}^\star \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
+  は一意に存在する．
   $0$ に収束する正の列 $(\varepsilon_k)$ を任意にとり，
   $\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^\star$ を示す．
   主張~\ref{clm:sem-subseq-limit-unique} により，
