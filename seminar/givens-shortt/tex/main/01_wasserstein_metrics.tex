@@ -48,7 +48,9 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{lemma}
 
 \begin{proof}
-  $x_0'\in X$ を任意に取る．三角不等式から
+  $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ を任意に取り，
+  $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定する．
+  三角不等式から
   \[
     d(x,x_0')
     \leq d(x,x_0)+d(x_0,x_0').
@@ -74,18 +76,13 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \leq
     2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
-  両辺を $x$ について $\d\mu(x)$ で積分する．
-  $d(x_0,x_0')^p$ は $x$ によらない定数だから
+  両辺を $\d\mu(x)$ で積分すると
   \[
     \int_X d(x,x_0')^p\,\d\mu(x)
     \leq
-    2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right).
+    2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right)
+    <\infty.
   \]
-  $\mu\in\Pp{p}(X)$（$x_0$ で定義）を仮定すると
-  $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ である．
-  $d(x_0,x_0')^p$ は固定された2点間の距離の $p$ 乗なので有限である．
-  よって右辺は有限となり，左辺 $\int_X d(x,x_0')^p\,\d\mu(x)<\infty$，
-  すなわち $\mu\in\Pp{p}(X)$（$x_0'$ で定義）が従う．
   $x_0$ と $x_0'$ を入れ替えれば逆も成り立つ．
 \end{proof}
 
