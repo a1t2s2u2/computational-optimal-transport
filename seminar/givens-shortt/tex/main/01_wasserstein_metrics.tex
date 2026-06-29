@@ -104,8 +104,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
 \end{remark}
 
-\begin{definition}{Coupling と Wasserstein 距離}{gs-wasserstein}
-  $\mu,\nu\in\Prob(X)$ の\textbf{coupling}の集合を
+\begin{definition}{Coupling 集合}{gs-coupling}
+  $\mu,\nu\in\Prob(X)$ に対して，\textbf{Coupling 集合}を
   \[
     \Couplings(\mu,\nu)
     :=
@@ -118,7 +118,22 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
       \end{aligned}
     \right\}
   \]
-  とする．$1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
+  と定める．
+\end{definition}
+
+\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{gs-sampling-notation}
+  $\pi\in\Prob(X\times X)$ に対し，$(x,y)\sim\pi$ は
+  確率測度 $\pi$ に従う確率変数 $(x,y)$ を表す．
+  たとえば $\int_{X\times X} f(x,y)\,\d\pi(x,y)$ を
+  $\mathbb{E}_{(x,y)\sim\pi}[f(x,y)]$ とも書く．
+
+  性質 $P(x,y)$ が $\pi$\textbf{-a.e.}（almost everywhere）で成り立つとは，
+  $\pi(\{(x,y)\in X\times X\mid P(x,y)\text{ が成り立たない}\})=0$
+  であることをいう．
+\end{remark}
+
+\begin{definition}{Wasserstein 距離}{gs-wasserstein}
+  $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
   下限（定義~\ref{def:gs-sup-inf}）を用いて
   \[
     \Wass_p(\mu,\nu)
@@ -129,19 +144,19 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \right)^{1/p},
   \]
   また $\mu,\nu\in\Pp{\infty}(X)$ に対し
-  \[
+  \begin{align*}
     \Wass_\infty(\mu,\nu)
-    :=
+    &:=
     \inf_{\pi\in\Couplings(\mu,\nu)}
-    \esssup_{(x,y)\sim\pi}d(x,y)
-  \]
-  と定める．ここで本質的上限は，
-  \[
-    \esssup_{(x,y)\sim\pi}d(x,y)
-    =
-    \inf\{R\geq 0\mid \pi(\{(x,y)\mid d(x,y)>R\})=0\}
-  \]
-  である．
+    \esssup_{(x,y)\sim\pi}d(x,y)\\
+    &=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \inf\{R\geq 0\mid \pi(\{(x,y)\in X\times X\mid d(x,y)>R\})=0\}\\
+    &=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \inf\{R\geq 0\mid d(x,y)\leq R\quad\pi\text{-a.e.}\}
+  \end{align*}
+  と定める．
 \end{definition}
 
 \begin{remark}{記法と well-definedness}{gs-wp-welldef}
@@ -169,24 +184,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   さらに上限（定義~\ref{def:gs-sup-inf}）の意味で $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
   $f$ は\textbf{有界 Lipschitz 関数}であるという．
 \end{definition}
-
-\begin{lemma}{有界 Lipschitz 関数による測度の判定}{gs-bl-separates}
-  $\mu,\nu\in\Prob(X)$ とする．すべての有界 Lipschitz 関数 $f\colon X\to\R$ について
-  \[
-    \int_X f\,\d\mu=\int_X f\,\d\nu
-  \]
-  が成り立つならば，$\mu=\nu$ である．
-\end{lemma}
-
-\begin{proof}
-  空でない閉集合 $F\subset X$ に対し
-  \[
-    f_n(x):=\max\{1-n\,d(x,F),\,0\}
-  \]
-  とおく．各 $f_n$ は有界 Lipschitz であり，$f_n\downarrow\mathbf{1}_F$ である．
-  仮定と有界収束定理より $\mu(F)=\nu(F)$ が従う．
-  Borel 確率測度は閉集合上の値で決まるので，$\mu=\nu$ である．
-\end{proof}
 
 \begin{lemma}{三変数 coupling の存在}{gs-gluing}
   $\pi\in\Couplings(\mu,\nu)$，
@@ -256,7 +253,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\norm{g}_{L^1}\leq\norm{g}_{L^p}$ が成り立つことを用いた．
   $\varepsilon\downarrow0$ とすれば，すべての有界 Lipschitz 関数 $f$ で
   $\int f\,\d\mu=\int f\,\d\nu$ となる．
-  補題~\ref{lem:gs-bl-separates}より $\mu=\nu$ である．
+  空でない閉集合 $F\subset X$ に対し
+  $f_n(x):=\max\{1-n\,d(x,F),\,0\}$ とおけば，
+  各 $f_n$ は有界 Lipschitz で $f_n\downarrow\mathbf{1}_F$ だから，
+  有界収束定理より $\mu(F)=\nu(F)$ が従う．
+  Borel 確率測度は閉集合上の値で決まるので $\mu=\nu$ である．
 
   \textbf{(4) 三角不等式．}
   $\mu,\nu,\xi\in\Pp{p}(X)$ とし，
