@@ -817,41 +817,40 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   = \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P})$（$\varepsilon \to 0$）を得る．
 
   \textbf{(iii).}
-  $\eta \defeq 1/\varepsilon$ とおく．
-  $\varepsilon \to +\infty$ は $\eta \to 0$ に対応する．
-  また，$\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ を最小化することは，
-  $\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}$ を最大化することと同値である．
-  そこで $\widetilde{\mathbf{P}}_\eta \defeq \mathbf{P}_{1/\eta}$ と書けば，
+  目的関数を $\varepsilon$ で割ると，
+  $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の最小化は
+  $\Hb(\mathbf{P}) - \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}$
+  の最大化と同値である．
+  すなわち $\mathbf{P}_\varepsilon$ は
   \[
-    \widetilde{\mathbf{P}}_\eta
-    \in
     \argmax_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
-    \bigl\{\Hb(\mathbf{P}) - \eta\inner{\mathbf{C}}{\mathbf{P}}\bigr\}.
+    \bigl\{\Hb(\mathbf{P})
+    - \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}\bigr\}
   \]
+  の元である．
 
-  $\eta_k \to 0$ となる任意の正の列 $(\eta_k)_k$ をとる．
-  $\CouplingsD(\mathbf{a},\mathbf{b})$ はコンパクトであり，
-  $\widetilde{\mathbf{P}}_{\eta_k} \in \CouplingsD(\mathbf{a},\mathbf{b})$ だから，
-  ある部分列 $(\eta_{k_j})_j$ と
+  $\varepsilon_k \to +\infty$ となる任意の正の列 $(\varepsilon_k)_k$ をとる．
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ はコンパクトだから，
+  ある部分列 $(\varepsilon_{k_j})_j$ と
   $\mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ が存在して
-  $\widetilde{\mathbf{P}}_{\eta_{k_j}} \to \mathbf{P}^\infty$ となる．
+  $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$ となる．
 
   任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
-  $\widetilde{\mathbf{P}}_{\eta_{k_j}}$ の最大性より
+  $\mathbf{P}_{\varepsilon_{k_j}}$ の最大性より
   \[
-    \Hb(\widetilde{\mathbf{P}}_{\eta_{k_j}})
-    - \eta_{k_j}\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_{k_j}}}
+    \Hb(\mathbf{P}_{\varepsilon_{k_j}})
+    - \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}
     \geq
     \Hb(\mathbf{Q})
-    - \eta_{k_j}\inner{\mathbf{C}}{\mathbf{Q}}.
+    - \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}}.
   \]
   ここで $\inner{\mathbf{C}}{\cdot}$ は
   コンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で有界であり，
-  $\eta_{k_j} \to 0$ だから，
+  $1/\varepsilon_{k_j} \to 0$ だから，
   \[
-    \eta_{k_j}\inner{\mathbf{C}}{\widetilde{\mathbf{P}}_{\eta_{k_j}}} \to 0,
+    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}} \to 0,
     \qquad
-    \eta_{k_j}\inner{\mathbf{C}}{\mathbf{Q}} \to 0.
+    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}} \to 0.
   \]
   また $\Hb$ は連続なので，極限をとると
   $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ を得る．
@@ -864,10 +863,33 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   独立カップリング $\mathbf{a}\mathbf{b}^\top$ であるから，
   $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
 
-  以上より，$\eta_k \to 0$ となる任意の列に対して，
+  以上より，$\varepsilon_k \to +\infty$ となる任意の列に対して，
   その任意の収束部分列の極限は $\mathbf{a}\mathbf{b}^\top$ に等しい．
   したがって
-  $\widetilde{\mathbf{P}}_\eta \to \mathbf{a}\mathbf{b}^\top$（$\eta \to 0$）である．
-  $\widetilde{\mathbf{P}}_\eta = \mathbf{P}_{1/\eta}$ だから，
   $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
 \end{proof}
+
+\begin{remark}{(iii) の証明で用いた収束の議論}{sem-convergence-technique-iii}
+  (iii) の証明は，以下の概念に基づいている．
+
+  \begin{itemize}
+    \item \textbf{収束列}（定義~\ref{def:sem-convergence}）：
+      列 $(x_n)$ が $x$ に収束するとは，
+      $\|x_n - x\| \to 0$ となることをいう．
+    \item \textbf{コンパクト性}（定義~\ref{def:sem-compact}）：
+      コンパクト集合内の任意の点列は，
+      その集合内の点に収束する部分列を持つ．
+    \item \textbf{部分列の極限の一意性からの収束}
+      （主張~\ref{clm:sem-subseq-limit-unique}）：
+      コンパクト集合内の点列 $(x_k)$ について，
+      収束する部分列の極限がすべて同じ点 $x^\star$ であるならば，
+      $(x_k)$ 自身が $x^\star$ に収束する．
+  \end{itemize}
+
+  (iii) の証明では，まずコンパクト性から
+  $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$
+  となる収束部分列を取り出し，
+  極限 $\mathbf{P}^\infty$ が必ず $\mathbf{a}\mathbf{b}^\top$ になることを示した．
+  この議論は出発点の列 $(\varepsilon_k)$ や部分列の取り方によらないから，
+  3つ目の性質より全体の収束が従う．
+\end{remark}
