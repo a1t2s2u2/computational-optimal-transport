@@ -3,7 +3,7 @@
 # source of truth は各 tex/*.tex のみ。
 # Web 版（site/）の md/html は生成物であり、編集も git 管理もしない。
 
-.PHONY: site pdf givens-shortt-site givens-shortt-pdf
+.PHONY: site pdf wasserstein-site wasserstein-pdf
 
 # --- Cuturi ---
 site:
@@ -14,11 +14,11 @@ site:
 pdf:
 	cd seminar/cuturi/tex && latexmk
 
-# --- Givens--Shortt ---
-givens-shortt-site:
-	node seminar/givens-shortt/site/scripts/tex2md.mjs
-	node seminar/givens-shortt/site/scripts/build.mjs
-	@echo "→ seminar/givens-shortt/site/dist/index.html をブラウザで開いてください"
+# --- Wasserstein ---
+wasserstein-site:
+	node seminar/wasserstein/site/scripts/tex2md.mjs
+	node seminar/wasserstein/site/scripts/build.mjs
+	@echo "→ seminar/wasserstein/site/dist/index.html をブラウザで開いてください"
 
-givens-shortt-pdf:
-	cd seminar/givens-shortt/tex && latexmk
+wasserstein-pdf:
+	cd seminar/wasserstein/tex && latexmk
