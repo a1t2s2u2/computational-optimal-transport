@@ -10,6 +10,37 @@
 \end{definition}
 
 %% ============================================================
+%% 上限・下限
+%% ============================================================
+\section{上限と下限}
+\label{sec:sem-sup-inf}
+
+\begin{definition}{上限と下限}{sem-sup-inf}
+  空でない集合 $A \subset \R$ に対し，次を定める．
+  \begin{itemize}
+    \item $A$ が上に有界であるとき，$A$ の\textbf{上限}を
+      \[
+        \sup A \defeq \min\{M \in \R \mid a \leq M \;\; (\forall a \in A)\}
+      \]
+      と定義する．すなわち $\sup A$ は $A$ の上界のうち最小のものである．
+      $A$ が上に有界でないとき $\sup A \defeq +\infty$ とする．
+    \item $A$ が下に有界であるとき，$A$ の\textbf{下限}を
+      \[
+        \inf A \defeq \max\{m \in \R \mid m \leq a \;\; (\forall a \in A)\}
+      \]
+      と定義する．すなわち $\inf A$ は $A$ の下界のうち最大のものである．
+      $A$ が下に有界でないとき $\inf A \defeq -\infty$ とする．
+  \end{itemize}
+  関数 $f \colon \Omega \to \R$ に対しては，値域の上限・下限として
+  \[
+    \sup_{x \in \Omega} f(x) \defeq \sup\{f(x) \mid x \in \Omega\},
+    \qquad
+    \inf_{x \in \Omega} f(x) \defeq \inf\{f(x) \mid x \in \Omega\}
+  \]
+  と書く．
+\end{definition}
+
+%% ============================================================
 %% 位相空間
 %% ============================================================
 \section{位相空間}

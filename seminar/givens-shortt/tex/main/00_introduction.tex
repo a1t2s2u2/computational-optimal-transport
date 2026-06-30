@@ -90,6 +90,39 @@ Proposition 2 を目標とする：
   \]
 \end{theorem}
 
+\begin{proof}
+  \[
+    g_n(x) := \sup_{k \geq n} \abs{f_k(x) - f(x)}
+  \]
+  とおく．$g_n$ は非負可測であり，$\abs{f_n - f} \leq g_n$ をみたす．
+  また $g_n$ は単調減少（$g_1 \geq g_2 \geq \cdots$）であり，
+  $f_n \to f$ の各点収束から $g_n(x) \to 0$（すべての $x$）である．
+  さらに $\abs{f_k} \leq M$ と $\abs{f} \leq M$ より $g_n \leq 2M$ である．
+
+  $h_n := 2M - g_n$ とおくと，$h_n$ は非負かつ単調増加で
+  $h_n \uparrow 2M$ である．
+  単調収束定理より
+  \[
+    \int_X h_n \, \d\mu
+    \;\uparrow\;
+    \int_X 2M \, \d\mu
+    = 2M \, \mu(X).
+  \]
+  $\mu(X) < \infty$ だから
+  \[
+    \int_X g_n \, \d\mu
+    = 2M \, \mu(X) - \int_X h_n \, \d\mu
+    \;\to\; 0.
+  \]
+  $\abs{f_n - f} \leq g_n$ より
+  \[
+    \left\lvert\int_X f_n \, \d\mu - \int_X f \, \d\mu\right\rvert
+    \leq \int_X \abs{f_n - f} \, \d\mu
+    \leq \int_X g_n \, \d\mu
+    \to 0.  \qedhere
+  \]
+\end{proof}
+
 \section*{記号・用語の読み替え}
 
 本資料では，原論文の記号・用語を

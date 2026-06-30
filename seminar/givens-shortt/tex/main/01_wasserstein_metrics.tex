@@ -198,26 +198,45 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{lemma}
 
 \begin{proof}
-  空でない閉集合 $F\subset X$ に対し
+  $\mu, \nu \in \Prob(X)$ とし，
+  すべての有界 Lipschitz 関数 $f \colon X \to \R$ について
+  $\int_X f \, \d\mu = \int_X f \, \d\nu$
+  が成り立つと仮定する．
+
+  任意の空でない閉集合 $F \subset X$ をとる．
+  $d(x, F) := \inf_{y \in F} d(x, y)$ とおき，各 $n \in \N$ で
   \[
-    f_n(x):=\max\{1-n\,d(x,F),\,0\}
+    f_n(x) := \max\{1 - n \, d(x, F),\; 0\}
   \]
-  とおく．ここで $d(x,F):=\inf_{y\in F}d(x,y)$ は $x$ と $F$ の距離である．
-  各 $f_n$ は $0\leq f_n\leq 1$ を満たす有界 Lipschitz 関数であり，
+  を定める．
+  $f_n$ は $0 \leq f_n \leq 1$ をみたす有界 Lipschitz 関数である．
+  したがって仮定より，各 $n$ について
   \[
-    f_n(x)\downarrow\mathbf{1}_F(x)
-    \qquad(\forall x\in X)
+    \int_X f_n \, \d\mu = \int_X f_n \, \d\nu
   \]
-  と単調減少に各点収束する（定義~\ref{def:gs-pointwise-convergence}）．
-  仮定より $\int_X f_n\,\d\mu=\int_X f_n\,\d\nu$ が各 $n$ で成り立つから，
+  が成り立つ．
+
+  ここで $F$ は閉集合だから，
+  $d(x, F) = 0 \Leftrightarrow x \in F$ である．
+  \begin{itemize}
+    \item $x \in F$ のとき：$d(x, F) = 0$ より $f_n(x) = 1$．
+    \item $x \notin F$ のとき：$d(x, F) > 0$ より，
+      十分大きい $n$ で $n \, d(x, F) \geq 1$ となり $f_n(x) = 0$．
+  \end{itemize}
+  よって $f_n(x) \to \mathbf{1}_F(x)$（すべての $x \in X$）である．
+  さらに $0 \leq f_n \leq 1$ なので，
   有界収束定理（定理~\ref{thm:gs-bounded-convergence}）により
   \[
-    \mu(F)=\int_X\mathbf{1}_F\,\d\mu
-    =\lim_{n\to\infty}\int_X f_n\,\d\mu
-    =\lim_{n\to\infty}\int_X f_n\,\d\nu
-    =\int_X\mathbf{1}_F\,\d\nu=\nu(F).
+    \mu(F)
+    = \int_X \mathbf{1}_F \, \d\mu
+    = \lim_{n \to \infty} \int_X f_n \, \d\mu
+    = \lim_{n \to \infty} \int_X f_n \, \d\nu
+    = \int_X \mathbf{1}_F \, \d\nu
+    = \nu(F).
   \]
-  Borel 確率測度は閉集合上の値で決まるので，$\mu=\nu$ である．
+  $F$ は任意の閉集合だったから，$\mu$ と $\nu$ はすべての閉集合上で一致する．
+  閉集合族は Borel $\sigma$-代数 $\Borel(X)$ を生成するので，
+  有限測度の一致定理により $\mu = \nu$ である．
 \end{proof}
 
 \begin{lemma}{三変数 coupling の存在（gluing lemma）}{gs-gluing}
