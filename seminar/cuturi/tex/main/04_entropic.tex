@@ -654,10 +654,56 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   $\Hb$ は $\mathbf{P} = \mathbf{a}\mathbf{b}^\top$ で唯一の最大値をとる．
 \end{proof}
 
+\begin{lemma}{摂動つき最小化の極限}{sem-perturbed-min-limit}
+  $K$ をコンパクト集合とし，$f, g \colon K \to \mathbb{R}$ を連続関数とする．
+  \[
+    S \defeq \argmin_{x \in K} f(x)
+  \]
+  とおく．
+  また，$\hat{x} \in S$ が $S$ 上で $g$ を最大化する一意な点であるとする．
+
+  $x_\varepsilon \in K$ が
+  \[
+    f(x_\varepsilon) \to \min_K f,
+    \qquad
+    g(x_\varepsilon) \geq g(\hat{x})
+  \]
+  をみたすなら，$x_\varepsilon \to \hat{x}$（$\varepsilon \to 0$）である．
+\end{lemma}
+
+\begin{proof}
+  任意の列 $\varepsilon_k \to 0$ をとる．
+  $K$ はコンパクトだから，必要なら部分列をとって
+  $x_{\varepsilon_k} \to \bar{x}$ とできる．
+
+  $f$ の連続性と $f(x_{\varepsilon_k}) \to \min_K f$ より
+  $f(\bar{x}) = \min_K f$ であり，$\bar{x} \in S$ である．
+  また，仮定より $g(x_{\varepsilon_k}) \geq g(\hat{x})$ だから，
+  $g$ の連続性より $g(\bar{x}) \geq g(\hat{x})$ が従う．
+  一方 $\hat{x}$ は $S$ 上の $g$ の最大点であり $\bar{x} \in S$ だから
+  $g(\bar{x}) \leq g(\hat{x})$．
+  よって $g(\bar{x}) = g(\hat{x})$ であり，
+  最大点の一意性から $\bar{x} = \hat{x}$．
+
+  以上より，$\varepsilon_k \to 0$ の任意の列から
+  とれる収束部分列の極限は必ず $\hat{x}$ である．
+  もし $x_\varepsilon \to \hat{x}$ でないなら，
+  ある $\delta > 0$ と $\varepsilon_k \to 0$ が存在して
+  $\|x_{\varepsilon_k} - \hat{x}\| \geq \delta$ となるが，
+  $K$ のコンパクト性よりこの列は収束部分列を持ち，
+  その極限は $\hat{x}$ でなければならず矛盾する．
+  よって $x_\varepsilon \to \hat{x}$ である．
+\end{proof}
+
 \begin{theorem}{正則化パラメータ $\varepsilon$ の極限による収束}{sem-entropic-convergence-eps-zero}
   各 $\varepsilon > 0$ に対し，$\mathbf{P}_\varepsilon$ を
-  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解とする．
-  このとき，以下が成り立つ．
+  $\MKD_{\mathbf{C}}^\varepsilon(\mathbf{a}, \mathbf{b})$ の一意解とし，
+  非正則化問題の最適解集合を
+  \[
+    S^* \defeq \bigl\{ \mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b}) \bigm|
+      \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}) \bigr\}
+  \]
+  とおく．このとき，以下が成り立つ．
 
   \begin{enumerate}
     \item[(i)]
@@ -670,31 +716,26 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
       $
     \item[(ii)]
       $\varepsilon \to 0$ のとき，$\mathbf{P}_\varepsilon$ は
-      非正則化最適解の中でエントロピー $\Hb$ を最大化する
+      $S^*$ の中でエントロピー $\Hb$ を最大化する
       一意な解に収束する：
       \[
-        \mathbf{P}_\varepsilon
-        \;\xrightarrow{\varepsilon \to 0}\;
+        \lim_{\varepsilon \to 0} \mathbf{P}_\varepsilon
+        =
         \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P}).
       \]
     \item[(iii)]
       $\varepsilon \to +\infty$ のとき，$\mathbf{P}_\varepsilon$ は
       独立カップリングに収束する：
       \[
-        \mathbf{P}_\varepsilon
-        \;\xrightarrow{\varepsilon \to +\infty}\;
+        \lim_{\varepsilon \to +\infty} \mathbf{P}_\varepsilon
+        =
         \mathbf{a}\mathbf{b}^\top = (a_i b_j)_{i,j}.
       \]
   \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-  最適解集合
-  \[
-    S^* = \bigl\{ \mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b}) \bigm|
-      \inner{\mathbf{C}}{\mathbf{P}} = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}) \bigr\}
-  \]
-  （主張~\ref{clm:sem-optimal-face}）を用いる．
+  $S^*$ は凸かつコンパクト（主張~\ref{clm:sem-optimal-face}）である．
   $\CouplingsD(\mathbf{a},\mathbf{b})$ はコンパクト
   （主張~\ref{clm:sem-discrete-kantorovich-existence} の証明）であり，
   内積 $\inner{\mathbf{C}}{\cdot}$ は線形ゆえ連続
@@ -746,9 +787,7 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
     \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
   \]
   となり (i) を得る．
-  なお上の挟み撃ちの両端から
-  $0 \leq \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon) - \Hb(\mathbf{P}^*)\bigr)$
-  となり，$\varepsilon > 0$ で割れば，後で用いる
+  なお上の挟み撃ちの左辺は非負だから，$\varepsilon > 0$ で割ると
   \[
     \Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{P}^*)
     \qquad (\forall \mathbf{P}^* \in S^*,\ \forall \varepsilon > 0)
@@ -756,65 +795,134 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   も従う（$\mathbf{P}^* \in S^*$ は任意だった）．
 
   \textbf{(ii).}
-  最大エントロピー最適解 $\mathbf{P}^\star \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
-  はただ一つに定まる：$S^*$ は凸かつコンパクト（主張~\ref{clm:sem-optimal-face}），
-  $-\Hb$ は連続で狭義凸（主張~\ref{clm:sem-neg-entropy-strict-convex}）だから，
-  Weierstrass の定理（定理~\ref{thm:sem-weierstrass}）より $-\Hb$ は $S^*$ 上で最小値を達成し，
-  その最小点は命題~\ref{prop:sem-strict-convex-unique-min} より一意である．
-
-  $0$ に収束する正の列 $(\varepsilon_k)$ を任意にとり，$\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^\star$ を示す．
-  主張~\ref{clm:sem-subseq-limit-unique} により，
-  $(\mathbf{P}_{\varepsilon_k})$ の収束する部分列の極限がすべて $\mathbf{P}^\star$ に等しいことを示せば十分である．
-  そこで収束部分列 $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
-  内積の連続性と (i) より
+  $S^*$ はコンパクト凸集合であり，
+  $-\Hb$ は狭義凸（主張~\ref{clm:sem-neg-entropy-strict-convex}）かつ連続だから，
+  $\widehat{\mathbf{P}} \defeq \argmax_{\mathbf{P} \in S^*}\Hb(\mathbf{P})$
+  は一意に存在する．
+  (i) の証明より
+  $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
+  である．
+  また (i) の挟み撃ちの不等式
   \[
-    \inner{\mathbf{C}}{\mathbf{Q}}
-    = \lim_{j\to\infty}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}
-    = \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b}),
+    0
+    \leq
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
+    \leq
+    \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon) - \Hb(\mathbf{R})\bigr)
+    \qquad (\forall \mathbf{R} \in S^*)
   \]
-  すなわち $\mathbf{Q} \in S^*$．また (i) で得た不等式より任意の $\mathbf{P}^* \in S^*$ について
-  $\Hb(\mathbf{P}_{\varepsilon_{k_j}}) \geq \Hb(\mathbf{P}^*)$ だから，
-  $\Hb$ の連続性より $j\to\infty$ として $\Hb(\mathbf{Q}) \geq \Hb(\mathbf{P}^*)$．
-  ゆえに $\mathbf{Q}$ は $S^*$ 上で $\Hb$ を最大化し，一意性より $\mathbf{Q} = \mathbf{P}^\star$．
-  よって主張~\ref{clm:sem-subseq-limit-unique} から $\mathbf{P}_{\varepsilon_k} \to \mathbf{P}^\star$ であり，
-  列 $(\varepsilon_k)$ は任意だったから $\mathbf{P}_\varepsilon \to \mathbf{P}^\star$（$\varepsilon \to 0$）を得る．
+  において，左辺 $\geq 0$ かつ $\varepsilon > 0$ だから
+  $\varepsilon$ で割ると
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{R})$
+  が任意の $\mathbf{R} \in S^*$ に対して成り立つ．
+  特に $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ である．
+
+  したがって，補題~\ref{lem:sem-perturbed-min-limit} を
+  \[
+    K = \CouplingsD(\mathbf{a},\mathbf{b}),\qquad
+    f(\mathbf{P}) = \inner{\mathbf{C}}{\mathbf{P}},\qquad
+    g(\mathbf{P}) = \Hb(\mathbf{P})
+  \]
+  に適用すると，
+  $\mathbf{P}_\varepsilon \to \widehat{\mathbf{P}}
+  = \argmax_{\mathbf{P} \in S^*} \Hb(\mathbf{P})$（$\varepsilon \to 0$）を得る．
 
   \textbf{(iii).}
-  $\varepsilon > 0$ で目的関数を割れば，$\mathbf{P}_\varepsilon$ は
+  目的関数を $\varepsilon$ で割ると，
+  $\inner{\mathbf{C}}{\mathbf{P}} - \varepsilon\Hb(\mathbf{P})$ の最小化は
+  $\Hb(\mathbf{P}) - \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}$
+  の最大化と同値である．
+  すなわち $\mathbf{P}_\varepsilon$ は
   \[
-    \mathbf{P}_\varepsilon
-    = \argmin_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
-      \left( \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}} - \Hb(\mathbf{P}) \right)
+    \argmax_{\mathbf{P} \in \CouplingsD(\mathbf{a},\mathbf{b})}
+    \bigl\{\Hb(\mathbf{P})
+    - \tfrac{1}{\varepsilon}\inner{\mathbf{C}}{\mathbf{P}}\bigr\}
   \]
-  の最小元でもある．$+\infty$ に発散する正の列 $(\varepsilon_k)$ を任意にとり，
-  (ii) と同様に，$(\mathbf{P}_{\varepsilon_k})$ の収束する部分列の極限がすべて
-  $\mathbf{a}\mathbf{b}^\top$ に等しいことを示す．
-  収束部分列 $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとると，
-  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について最小性から
-  \[
-    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}} - \Hb(\mathbf{P}_{\varepsilon_{k_j}})
-    \leq
-    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}} - \Hb(\mathbf{Q})
-  \]
-  が成り立つ．ここで $j \to \infty$ とする．コスト $\inner{\mathbf{C}}{\cdot}$ は
-  コンパクト集合上で有界だから，$\varepsilon_{k_j} \to +\infty$ より両辺のコスト項
-  $\tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}$,
-  $\tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}}$ はともに $0$ に収束する．
-  また $\Hb$ の連続性と $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$ より
-  $\Hb(\mathbf{P}_{\varepsilon_{k_j}}) \to \Hb(\mathbf{P}^\infty)$．
-  よって不等式は極限で
-  \[
-    -\Hb(\mathbf{P}^\infty) \leq -\Hb(\mathbf{Q}),
-    \qquad\text{すなわち}\qquad
-    \Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})
-  \]
-  となり，これがすべての $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ について成り立つ．
-  ゆえに $\mathbf{P}^\infty$ は $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化し，
-  主張~\ref{clm:sem-max-entropy-independent} より $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
+  の元である．
 
-  以上で $(\mathbf{P}_{\varepsilon_k})$ の収束する部分列の極限がすべて
-  $\mathbf{a}\mathbf{b}^\top$ に等しいとわかった．よって主張~\ref{clm:sem-subseq-limit-unique} より
-  列全体が $\mathbf{P}_{\varepsilon_k} \to \mathbf{a}\mathbf{b}^\top$ と収束する．
-  この列 $(\varepsilon_k)$ は $+\infty$ に発散する任意の列だったから，
+  $\varepsilon_k \to +\infty$ となる任意の正の列 $(\varepsilon_k)_{k \geq 1}$ をとる．
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ はコンパクトだから，
+  ある部分列 $(\varepsilon_{k_j})_j$ と
+  $\mathbf{P}^\infty \in \CouplingsD(\mathbf{a},\mathbf{b})$ が存在して
+  $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$ となる．
+
+  任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$ をとる．
+  $\mathbf{P}_{\varepsilon_{k_j}}$ の最大性より
+  \[
+    \Hb(\mathbf{P}_{\varepsilon_{k_j}})
+    - \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}}
+    \geq
+    \Hb(\mathbf{Q})
+    - \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}}.
+  \]
+  ここで $\inner{\mathbf{C}}{\cdot}$ は
+  コンパクト集合 $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で有界であり，
+  $1/\varepsilon_{k_j} \to 0$ だから，
+  \[
+    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{P}_{\varepsilon_{k_j}}} \to 0,
+    \qquad
+    \tfrac{1}{\varepsilon_{k_j}}\inner{\mathbf{C}}{\mathbf{Q}} \to 0.
+  \]
+  また $\Hb$ は連続なので，極限をとると
+  $\Hb(\mathbf{P}^\infty) \geq \Hb(\mathbf{Q})$ を得る．
+  これは任意の $\mathbf{Q} \in \CouplingsD(\mathbf{a},\mathbf{b})$
+  について成り立つ．
+  したがって，$\mathbf{P}^\infty$ は
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する．
+  主張~\ref{clm:sem-max-entropy-independent} より，
+  $\CouplingsD(\mathbf{a},\mathbf{b})$ 上で $\Hb$ を最大化する唯一の元は
+  独立カップリング $\mathbf{a}\mathbf{b}^\top$ であるから，
+  $\mathbf{P}^\infty = \mathbf{a}\mathbf{b}^\top$．
+
+  以上より，$\varepsilon_k \to +\infty$ となる任意の列に対して，
+  その任意の収束部分列の極限は $\mathbf{a}\mathbf{b}^\top$ に等しい．
+  したがって
   $\mathbf{P}_\varepsilon \to \mathbf{a}\mathbf{b}^\top$（$\varepsilon \to +\infty$）を得る．
 \end{proof}
+
+\begin{remark}{(iii) の証明で用いた収束の議論}{sem-convergence-technique-iii}
+  (iii) の証明は，以下の概念に基づいている．
+
+  \begin{itemize}
+    \item \textbf{収束列}（定義~\ref{def:sem-convergence}）：
+      列 $(x_n)$ が $x$ に収束するとは，
+      $\|x_n - x\| \to 0$ となることをいう．
+    \item \textbf{コンパクト性}（定義~\ref{def:sem-compact}）：
+      コンパクト集合内の任意の点列は，
+      その集合内の点に収束する部分列を持つ．
+    \item \textbf{部分列の極限の一意性からの収束}
+      （主張~\ref{clm:sem-subseq-limit-unique}）：
+      コンパクト集合内の点列 $(x_k)$ について，
+      収束する部分列の極限がすべて同じ点 $x^\star$ であるならば，
+      $(x_k)$ 自身が $x^\star$ に収束する．
+  \end{itemize}
+
+  (iii) の証明では，まずコンパクト性から
+  $\mathbf{P}_{\varepsilon_{k_j}} \to \mathbf{P}^\infty$
+  となる収束部分列を取り出し，
+  極限 $\mathbf{P}^\infty$ が必ず $\mathbf{a}\mathbf{b}^\top$ になることを示した．
+  この議論は出発点の列 $(\varepsilon_k)$ や部分列の取り方によらないから，
+  3つ目の性質より全体の収束が従う．
+\end{remark}
+
+\begin{remark}{正則化パラメータ $\varepsilon$ の役割}{sem-eps-role}
+  (ii) と (iii) は，$\varepsilon$ がコスト最小化とエントロピー最大化の
+  バランスを制御していることを示している．
+
+  $\varepsilon$ が小さいとき，コスト項 $\inner{\mathbf{C}}{\mathbf{P}}$ が支配的であり，
+  $\mathbf{P}_\varepsilon$ は非正則化問題の最適解に近づく．
+  ただし非正則化問題の最適解は一般に複数存在しうるが，
+  (ii) はその中からエントロピー最大の解が自然に選ばれることを述べている．
+  つまりエントロピー正則化は，最適輸送問題の解の不定性を
+  解消する選択原理としても機能する．
+
+  一方 $\varepsilon$ が大きいとき，エントロピー項 $-\varepsilon\Hb(\mathbf{P})$ が支配的であり，
+  $\mathbf{P}_\varepsilon$ はコスト構造を無視してエントロピーのみを最大化する方向に向かう．
+  (iii) はその極限が独立カップリング $\mathbf{a}\mathbf{b}^\top$，
+  すなわち輸送の情報が完全に失われた状態であることを示している．
+
+  実用上は，$\varepsilon$ を小さくとるほど元の最適輸送問題に忠実な解が得られるが，
+  計算上の利点（Sinkhorn アルゴリズムの適用など）は
+  $\varepsilon$ がある程度大きいほうが顕著になるため，
+  両者の兼ね合いで $\varepsilon$ を選ぶ必要がある．
+\end{remark}

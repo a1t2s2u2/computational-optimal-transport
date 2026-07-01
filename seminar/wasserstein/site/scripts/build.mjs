@@ -673,7 +673,7 @@ ${renderCards(appendixSecs)}
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Wasserstein 距離セミナー — Givens–Shortt</title>
+    <title>Wasserstein 距離セミナー</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -686,7 +686,7 @@ ${renderCards(appendixSecs)}
           最適輸送問題
           <span>セミナー資料</span>
         </h1>
-        <p class="landing__sub">A Class of Wasserstein Metrics for Probability Distributions — C. R. Givens &amp; R. M. Shortt</p>
+        <p class="landing__sub">Wasserstein 距離の理論と性質</p>
       </div>
       <nav class="landing__toc">
 ${renderCards(mainSecs)}
@@ -704,7 +704,7 @@ ${renderCards(mainSecs)}
       </nav>
 
       <footer class="landing__footer">
-        <p>Based on <em>A Class of Wasserstein Metrics for Probability Distributions</em> by C. R. Givens and R. M. Shortt</p>
+        <p>参考文献: Givens–Shortt (1984), Villani (2009), 桑江 (2024)</p>
       </footer>
     </main>
   </body>
@@ -766,7 +766,7 @@ function graphTemplate(sections) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>依存グラフ — Givens–Shortt</title>
+    <title>依存グラフ — Wasserstein 距離</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">

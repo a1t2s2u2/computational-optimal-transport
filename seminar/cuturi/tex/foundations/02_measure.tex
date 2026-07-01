@@ -146,6 +146,58 @@
   \end{enumerate}
 \end{proposition}
 
+\begin{definition}{各点収束}{sem-pointwise-convergence}
+  可測空間 $(\Omega, \mathcal{F})$ 上の関数列 $(f_n)_{n \geq 1}$ と
+  関数 $f$ に対し，$(f_n)$ が $f$ に\textbf{各点収束}するとは，
+  すべての $x \in \Omega$ で $f_n(x) \to f(x)$（$n \to \infty$）となることをいう．
+\end{definition}
+
+\begin{theorem}{有界収束定理}{sem-bounded-convergence}
+  $(\Omega, \mathcal{F})$ を可測空間，$\mu$ を有限測度
+  （$\mu(\Omega) < \infty$）とする．
+  可測関数列 $(f_n)_{n \geq 1}$ が可測関数 $f$ に各点収束
+  （定義~\ref{def:sem-pointwise-convergence}）し，
+  かつある定数 $M > 0$ が存在してすべての $n$ と $x$ について
+  $|f_n(x)| \leq M$ をみたすならば，
+  \[
+    \lim_{n \to \infty} \int_\Omega f_n \, \d\mu
+    = \int_\Omega f \, \d\mu.
+  \]
+\end{theorem}
+
+\begin{proof}
+  \[
+    g_n(x) \defeq \sup_{k \geq n} |f_k(x) - f(x)|
+  \]
+  とおく．$g_n$ は非負可測であり，$|f_n - f| \leq g_n$ をみたす．
+  また $g_n$ は単調減少（$g_1 \geq g_2 \geq \cdots$）であり，
+  $f_n \to f$ の各点収束から $g_n(x) \to 0$（すべての $x$）である．
+  さらに $|f_k| \leq M$ と $|f| \leq M$ より $g_n \leq 2M$ である．
+
+  $h_n \defeq 2M - g_n$ とおくと，$h_n$ は非負かつ単調増加で
+  $h_n \uparrow 2M$ である．
+  単調収束定理（命題~\ref{prop:sem-mct}）より
+  \[
+    \int_\Omega h_n \, \d\mu
+    \;\uparrow\;
+    \int_\Omega 2M \, \d\mu
+    = 2M \, \mu(\Omega).
+  \]
+  $\mu(\Omega) < \infty$ だから
+  \[
+    \int_\Omega g_n \, \d\mu
+    = 2M \, \mu(\Omega) - \int_\Omega h_n \, \d\mu
+    \;\to\; 0.
+  \]
+  $|f_n - f| \leq g_n$ より
+  \[
+    \left|\int_\Omega f_n \, \d\mu - \int_\Omega f \, \d\mu\right|
+    \leq \int_\Omega |f_n - f| \, \d\mu
+    \leq \int_\Omega g_n \, \d\mu
+    \to 0.  \qedhere
+  \]
+\end{proof}
+
 \begin{proposition}{積分の測度に関する線形性}{sem-measure-linearity}
   可測空間 $(\Omega, \mathcal{F})$ 上の測度 $\mu_1, \ldots, \mu_n$，
   非負係数 $a_1, \ldots, a_n \geq 0$，および非負可測関数
