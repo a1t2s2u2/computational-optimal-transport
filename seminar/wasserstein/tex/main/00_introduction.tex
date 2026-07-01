@@ -15,18 +15,20 @@ Proposition 2 を目標とする：
 
 \begin{definition}{上限と下限}{gs-sup-inf}
   $A\subset\R$ を空でない集合とする．
-  $A$ の\textbf{上限}（supremum）とは，$A$ の上界全体の最小値
-  \[
-    \sup A := \min\{M\in\R\mid a\leq M\;\;\forall a\in A\}
-  \]
-  のことである．
-  同様に $A$ の\textbf{下限}（infimum）とは，$A$ の下界全体の最大値
-  \[
-    \inf A := \max\{m\in\R\mid m\leq a\;\;\forall a\in A\}
-  \]
-  のことである．
-  $A$ が上に有界でないとき $\sup A=+\infty$，
-  下に有界でないとき $\inf A=-\infty$ と定める．
+  \begin{itemize}
+    \item $A$ が上に有界であるとき，$A$ の\textbf{上限}（supremum）を
+      \[
+        \sup A := \min\{M\in\R\mid a\leq M\;\;(\forall a\in A)\}
+      \]
+      と定義する．すなわち $\sup A$ は $A$ の上界のうち最小のものである．
+      $A$ が上に有界でないとき $\sup A := +\infty$ とする．
+    \item $A$ が下に有界であるとき，$A$ の\textbf{下限}（infimum）を
+      \[
+        \inf A := \max\{m\in\R\mid m\leq a\;\;(\forall a\in A)\}
+      \]
+      と定義する．すなわち $\inf A$ は $A$ の下界のうち最大のものである．
+      $A$ が下に有界でないとき $\inf A := -\infty$ とする．
+  \end{itemize}
 \end{definition}
 
 \begin{definition}{測度の台}{gs-support}
