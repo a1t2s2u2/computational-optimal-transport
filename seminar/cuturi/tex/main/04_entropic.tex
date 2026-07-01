@@ -801,10 +801,21 @@ $\varepsilon \to +\infty$ では周辺分布のみで定まる独立カップリ
   は一意に存在する．
   (i) の証明より
   $\inner{\mathbf{C}}{\mathbf{P}_\varepsilon} \to \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})$
-  であり，また同じく (i) の証明で得た評価より，
-  任意の $\mathbf{R} \in S^*$ に対して
-  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{R})$ である．
-  特に $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ が成り立つ．
+  である．
+  また (i) の挟み撃ちの不等式
+  \[
+    0
+    \leq
+    \inner{\mathbf{C}}{\mathbf{P}_\varepsilon} - \MKD_{\mathbf{C}}(\mathbf{a},\mathbf{b})
+    \leq
+    \varepsilon\bigl(\Hb(\mathbf{P}_\varepsilon) - \Hb(\mathbf{R})\bigr)
+    \qquad (\forall \mathbf{R} \in S^*)
+  \]
+  において，左辺 $\geq 0$ かつ $\varepsilon > 0$ だから
+  $\varepsilon$ で割ると
+  $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\mathbf{R})$
+  が任意の $\mathbf{R} \in S^*$ に対して成り立つ．
+  特に $\Hb(\mathbf{P}_\varepsilon) \geq \Hb(\widehat{\mathbf{P}})$ である．
 
   したがって，補題~\ref{lem:sem-perturbed-min-limit} を
   \[
