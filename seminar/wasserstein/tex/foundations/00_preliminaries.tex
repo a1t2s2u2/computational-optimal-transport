@@ -1,38 +1,147 @@
 \chapter{距離空間と測度の準備}
 \label{ch:found-preliminaries}
 
-本編で用いる実数・距離空間・測度論の準備をまとめる．
+本編で用いる実数・距離空間・測度論の道具をまとめる．
+本資料では，使う用語はすべて定義し，
+証明なしに用いる標準定理はステートメントを明示したうえで文献を挙げる
+（単調収束定理・一致定理・Fubini--Tonelli の定理・分解定理など）．
+それ以外の主張にはすべて証明を付ける．
+証明を省略した定理については，
+例えば伊藤清三『ルベーグ積分入門』，
+Dudley \emph{Real Analysis and Probability} (2002)，
+Villani \emph{Optimal Transport} (2009) 第1章を参照．
 
 \section{実数の上限・下限}
 
 \begin{definition}{上限と下限}{meas-sup-inf}
-  $A\subset\R$ を空でない集合とする．
+  $A\subset\R$ とする．
+  $M\in\R$ が $A$ の\textbf{上界}であるとは，
+  すべての $a\in A$ で $a\leq M$ が成り立つことをいい，
+  上界が存在するとき $A$ は\textbf{上に有界}であるという．
   \begin{itemize}
-    \item $A$ が上に有界であるとき，$A$ の\textbf{上限}（supremum）を
-      \[
-        \sup A := \min\{M\in\R\mid a\leq M\;\;(\forall a\in A)\}
-      \]
-      と定義する．すなわち $\sup A$ は $A$ の上界のうち最小のものである．
-      $A$ が上に有界でないとき $\sup A := +\infty$ とする．
-    \item $A$ が下に有界であるとき，$A$ の\textbf{下限}（infimum）を
-      \[
-        \inf A := \max\{m\in\R\mid m\leq a\;\;(\forall a\in A)\}
-      \]
-      と定義する．すなわち $\inf A$ は $A$ の下界のうち最大のものである．
-      $A$ が下に有界でないとき $\inf A := -\infty$ とする．
+    \item $A$ が空でなく上に有界であるとき，
+      $A$ の上界のうち最小のものがただ一つ存在する
+      （実数の連続性公理．本資料では証明せず認める）．
+      これを $A$ の\textbf{上限}（supremum）とよび，$\sup A$ と書く．
+    \item $A$ が上に有界でないとき $\sup A:=+\infty$，
+      $A=\emptyset$ のとき $\sup\emptyset:=-\infty$ と約束する．
+  \end{itemize}
+  \textbf{下界}・\textbf{下に有界}も同様に定め，
+  $A$ が空でなく下に有界であるとき，最大の下界を
+  $A$ の\textbf{下限}（infimum）とよび，$\inf A$ と書く．
+  $A$ が下に有界でないとき $\inf A:=-\infty$，
+  $A=\emptyset$ のとき $\inf\emptyset:=+\infty$ と約束する．
+\end{definition}
+
+\section{距離空間}
+
+\begin{definition}{距離空間}{meas-metric-space}
+  集合 $M$ 上の関数 $d\colon M\times M\to[0,\infty)$ が
+  次の3条件をみたすとき，$d$ を $M$ 上の\textbf{距離}，
+  組 $(M,d)$ を\textbf{距離空間}という．
+  \begin{enumerate}
+    \item （一致の公理）$d(x,y)=0\iff x=y$，
+    \item （対称性）$d(x,y)=d(y,x)$，
+    \item （三角不等式）$d(x,z)\leq d(x,y)+d(y,z)$．
+  \end{enumerate}
+  値域を $[0,\infty)$ としたことに注意する：
+  距離の値は非負かつ有限である．
+\end{definition}
+
+\begin{definition}{開球・開集合・有界集合}{meas-open-ball}
+  距離空間 $(X,d)$，$x\in X$，$r>0$ に対し
+  \[
+    B_r(x):=\{y\in X\mid d(x,y)<r\}
+  \]
+  を $x$ を中心とする半径 $r$ の\textbf{開球}という．
+  \begin{itemize}
+    \item $U\subset X$ が\textbf{開集合}であるとは，
+      任意の $x\in U$ に対しある $r>0$ で $B_r(x)\subset U$
+      となることをいう．
+      $x$ を含む開集合を $x$ の\textbf{開近傍}という．
+      補集合が開集合である集合を\textbf{閉集合}という．
+    \item $A\subset X$ が\textbf{有界}であるとは，
+      ある開球 $B_r(x)$ で $A\subset B_r(x)$ となることをいう．
   \end{itemize}
 \end{definition}
 
-\section{測度の台と指示関数}
+\begin{definition}{可分・完備・Polish 空間}{meas-polish}
+  距離空間 $(X,d)$ について：
+  \begin{itemize}
+    \item $D\subset X$ が\textbf{稠密}であるとは，
+      任意の $x\in X$ と $r>0$ で $B_r(x)\cap D\neq\emptyset$
+      となることをいう．
+      可算な稠密部分集合が存在するとき，$X$ は\textbf{可分}であるという．
+    \item 点列 $(x_n)_{n\in\N}$ が \textbf{Cauchy 列}であるとは，
+      任意の $\varepsilon>0$ に対しある $N\in\N$ が存在して
+      $m,n\geq N$ ならば $d(x_m,x_n)<\varepsilon$ となることをいう．
+      すべての Cauchy 列が $X$ 内の点に収束するとき，
+      $X$ は\textbf{完備}であるという．
+    \item 完備かつ可分な距離空間を \textbf{Polish 空間}という．
+  \end{itemize}
+\end{definition}
+
+\section{測度と可測関数}
+
+$\sigma$-代数・可測空間・測度・可測関数・Lebesgue 積分の定義と，
+積分の基本性質（線形性，単調性，可算劣加法性，
+零集合上の積分が $0$ であること，
+したがって $\mu$-a.e.（定義~\ref{def:meas-ae}）で成り立つ不等式・等式が
+積分に遺伝すること）は既知とする．
+
+距離空間 $X$ の開集合全体を含む最小の $\sigma$-代数を
+\textbf{Borel $\sigma$-代数} $\Borel(X)$ とよび，その元を Borel 集合という．
+一般に，集合族 $\mathcal{C}$ を含む最小の $\sigma$-代数を
+$\mathcal{C}$ が\textbf{生成する} $\sigma$-代数とよび，$\sigma(\mathcal{C})$ と書く．
+$\Borel(X)$ 上の測度を Borel 測度といい，
+全測度が $\mu(\Omega)=1$ の測度を\textbf{確率測度}，
+$\mu(\Omega)<\infty$ の測度を\textbf{有限測度}という
+（このとき $(\Omega,\mathcal{A},\mu)$ を有限測度空間という）．
+$X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
+
+\begin{remark}{可測関数の基本操作（前提とする事実）}{meas-measurable-ops}
+  次はいずれも測度論の標準的な事実であり，本資料では証明なしに用いる．
+  \begin{itemize}
+    \item 連続関数は Borel 可測である．
+      可測関数どうしの和・積・絶対値は可測である．
+      可測写像の合成は可測である．
+    \item 可測関数列 $(f_n)$ に対し，
+      $\sup_n f_n$，$\inf_n f_n$，および各点極限 $\lim_n f_n$
+      （存在するとき）は可測である．
+    \item 非負可測関数 $f$ に対し，非負単関数
+      （可測集合の指示関数の非負線形結合）の列 $(s_n)$ で
+      $s_n\uparrow f$（各点）となるものが存在する．
+  \end{itemize}
+\end{remark}
+
+\begin{theorem}{有限測度の一致定理}{meas-uniqueness}
+  集合 $\Omega$ 上の集合族 $\mathcal{C}$ が
+  \textbf{$\pi$-系}であるとは，空でなく，
+  $A,B\in\mathcal{C}$ ならば $A\cap B\in\mathcal{C}$
+  が成り立つことをいう．
+
+  $\mathcal{C}$ を $\Omega$ 上の $\pi$-系とし，
+  $\mu,\nu$ を $(\Omega,\sigma(\mathcal{C}))$ 上の有限測度とする．
+  $\mu(\Omega)=\nu(\Omega)$ かつ，すべての $A\in\mathcal{C}$ で
+  $\mu(A)=\nu(A)$ ならば，$\sigma(\mathcal{C})$ 上で $\mu=\nu$ である．
+
+  （Dynkin の $\pi$-$\lambda$ 定理から従う標準的な結果．証明は省略する．）
+\end{theorem}
+
+\section{測度の台・指示関数・a.e.}
 
 \begin{definition}{測度の台}{meas-support}
-  確率測度 $\mu$ の\textbf{台}とは
+  距離空間 $X$ 上の Borel 確率測度 $\mu$ の\textbf{台}とは
   \[
     \supp\mu
     =
     \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
   \]
   のことである．
+  定義から，$X\setminus\supp\mu$ は
+  「測度 $0$ の開近傍をもつ点」の全体であり，開集合である
+  （そのような開近傍の各点はまた同じ開近傍をもつ）．
+  したがって $\supp\mu$ は閉集合であり，特に Borel 集合である．
 \end{definition}
 
 \begin{definition}{指示関数}{meas-indicator}
@@ -44,9 +153,57 @@
       0 & (x\notin A)
     \end{cases}
   \]
-  と定める．$\mu$ が確率測度のとき
+  と定める．$\mu$ が確率測度で $A$ が可測のとき
   $\int_X\mathbf{1}_A\,\d\mu=\mu(A)$ が成り立つ．
 \end{definition}
+
+\begin{definition}{ほとんど至るところ（a.e.）}{meas-ae}
+  測度空間 $(\Omega,\mathcal{A},\mu)$ において，
+  点 $\omega\in\Omega$ に関する性質 $P(\omega)$ が
+  $\mu$\textbf{-a.e.}（almost everywhere）で成り立つとは，
+  \[
+    \mu(\{\omega\in\Omega\mid P(\omega)\text{ が成り立たない}\})=0
+  \]
+  であることをいう（例外集合が可測であることを含めて要請する）．
+\end{definition}
+
+\begin{lemma}{台は全測度をもつ}{meas-support-full}
+  $X$ を可分距離空間，$\mu$ を $X$ 上の Borel 確率測度とすると，
+  $\mu(\supp\mu)=1$ である．
+\end{lemma}
+
+\begin{proof}
+  $N:=X\setminus\supp\mu$ とおく．
+  定義より $x\in N$ であることは，
+  ある開近傍 $U\ni x$ で $\mu(U)=0$ となることと同値であり，
+  さらに $U$ はある開球 $B_r(x)\subset U$ を含むから，
+  ある $r>0$ で $\mu(B_r(x))=0$ となることとも同値である．
+
+  $X$ は可分なので，可算な稠密集合 $D=\{x_1,x_2,\dots\}$ が取れる．
+  可算族
+  \[
+    \mathcal{B}
+    :=
+    \{B_q(x_i)\mid i\in\N,\;q\in\mathbb{Q},\;q>0,\;\mu(B_q(x_i))=0\}
+  \]
+  に対して $N=\bigcup\mathcal{B}$ を示す．
+  \begin{itemize}
+    \item （$\supset$）$y\in B_q(x_i)\in\mathcal{B}$ とすると，
+      $B_q(x_i)$ は $y$ の開近傍で $\mu(B_q(x_i))=0$ だから $y\in N$．
+    \item （$\subset$）$x\in N$ とし，$\mu(B_r(x))=0$ なる $r>0$ を取る．
+      $D$ の稠密性から $d(x,x_i)<r/3$ なる $x_i$ が取れ，
+      有理数 $q$ を $r/3<q<2r/3$ に取る．
+      このとき $d(x_i,x)<r/3<q$ より $x\in B_q(x_i)$ であり，
+      $z\in B_q(x_i)$ ならば
+      $d(x,z)\leq d(x,x_i)+d(x_i,z)<r/3+2r/3=r$
+      だから $B_q(x_i)\subset B_r(x)$．
+      よって $\mu(B_q(x_i))\leq\mu(B_r(x))=0$ となり
+      $B_q(x_i)\in\mathcal{B}$，すなわち $x\in\bigcup\mathcal{B}$．
+  \end{itemize}
+  したがって $N$ は測度 $0$ の可算個の開球の合併であり，
+  可算劣加法性から $\mu(N)=0$．
+  ゆえに $\mu(\supp\mu)=1-\mu(N)=1$ である．
+\end{proof}
 
 \section{収束定理}
 
@@ -59,30 +216,45 @@
   が成り立つことをいう．
   さらに各 $x$ で $f_1(x)\geq f_2(x)\geq\cdots$ であるとき
   \textbf{単調減少に各点収束する}といい，$f_n\downarrow f$ と書く．
+  同様に，各 $x$ で $f_1(x)\leq f_2(x)\leq\cdots$ であるとき
+  \textbf{単調増加に各点収束する}といい，$f_n\uparrow f$ と書く．
 \end{definition}
+
+\begin{theorem}{単調収束定理}{meas-mct}
+  測度空間 $(\Omega,\mathcal{A},\mu)$ 上の非負可測関数列 $(f_n)$ が
+  $f_n\uparrow f$（各点）をみたすならば，
+  \[
+    \lim_{n\to\infty}\int_\Omega f_n\,\d\mu=\int_\Omega f\,\d\mu.
+  \]
+  （Lebesgue 積分論の基本定理．証明は省略する．）
+\end{theorem}
 
 \begin{theorem}{有界収束定理}{meas-bounded-convergence}
   $(X,\Borel(X),\mu)$ を有限測度空間とする．
-  関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，
+  可測関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，
   ある定数 $M<\infty$ で $\abs{f_n(x)}\leq M$（$\forall n,\,\forall x$）が
-  成り立つならば，
+  成り立つならば，$f$ も可測で，
   \[
     \lim_{n\to\infty}\int_X f_n\,\d\mu=\int_X f\,\d\mu.
   \]
 \end{theorem}
 
 \begin{proof}
+  $f$ は可測関数列の各点極限だから可測である
+  （注意~\ref{rem:meas-measurable-ops}）．
   \[
     g_n(x) := \sup_{k \geq n} \abs{f_k(x) - f(x)}
   \]
-  とおく．$g_n$ は非負可測であり，$\abs{f_n - f} \leq g_n$ をみたす．
+  とおく．$g_n$ は可算個の可測関数の sup だから可測
+  （注意~\ref{rem:meas-measurable-ops}）で非負であり，
+  $\abs{f_n - f} \leq g_n$ をみたす．
   また $g_n$ は単調減少（$g_1 \geq g_2 \geq \cdots$）であり，
   $f_n \to f$ の各点収束から $g_n(x) \to 0$（すべての $x$）である．
   さらに $\abs{f_k} \leq M$ と $\abs{f} \leq M$ より $g_n \leq 2M$ である．
 
-  $h_n := 2M - g_n$ とおくと，$h_n$ は非負かつ単調増加で
+  $h_n := 2M - g_n$ とおくと，$h_n$ は非負可測かつ単調増加で
   $h_n \uparrow 2M$ である．
-  単調収束定理より
+  単調収束定理（定理~\ref{thm:meas-mct}）より
   \[
     \int_X h_n \, \d\mu
     \;\uparrow\;
@@ -120,5 +292,375 @@
     :=
     \inf\{M\geq 0\mid \abs{f}\leq M\;\;\mu\text{-a.e.}\}
   \]
-  と定める．
+  と定める（右辺の集合が空のときは
+  $\inf\emptyset=+\infty$ と読む：定義~\ref{def:meas-sup-inf}）．
+  $\norm{f}_{L^\infty(\mu)}$ を
+  $\esssup_\mu\,\abs{f}$（本質的上限）とも書く．
 \end{definition}
+
+\begin{claim}{$L^\infty$ ノルムは a.e. の上界である}{meas-esssup-ae}
+  可測関数 $f$ に対し，
+  $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ が $\mu$-a.e. で成り立つ．
+\end{claim}
+
+\begin{proof}
+  $\norm{f}_{L^\infty(\mu)}=\infty$ なら自明である．
+  $m:=\norm{f}_{L^\infty(\mu)}<\infty$ とする．
+  下限の定義から，各 $n\in\N$ に対し
+  $m\leq M_n<m+1/n$ かつ $\abs{f}\leq M_n$ $\mu$-a.e. なる $M_n$ が取れる．
+  例外集合を $N_n$（$\mu(N_n)=0$）とすると，
+  $N:=\bigcup_n N_n$ は可算劣加法性より $\mu(N)=0$ であり，
+  $\omega\notin N$ では $\abs{f(\omega)}\leq M_n<m+1/n$（$\forall n$），
+  すなわち $\abs{f(\omega)}\leq m$ である．
+\end{proof}
+
+\begin{claim}{$L^p$ ノルムの単調性}{meas-lp-monotone}
+  可測関数 $f,g$ が $\abs{f}\leq\abs{g}$ $\mu$-a.e. をみたすならば，
+  $1\leq p\leq\infty$ に対し
+  $\norm{f}_{L^p(\mu)}\leq\norm{g}_{L^p(\mu)}$ である．
+\end{claim}
+
+\begin{proof}
+  $p<\infty$ のとき：$\abs{f}^p\leq\abs{g}^p$ $\mu$-a.e. だから，
+  積分の単調性より
+  $\int\abs{f}^p\,\d\mu\leq\int\abs{g}^p\,\d\mu$．
+  両辺の $1/p$ 乗を取ればよい．
+
+  $p=\infty$ のとき：主張~\ref{clm:meas-esssup-ae}より
+  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. だから，
+  仮定と合わせて $\abs{f}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e.．
+  よって $\norm{g}_{L^\infty(\mu)}$ は
+  $\norm{f}_{L^\infty(\mu)}$ を定める集合の元であり，
+  下限の性質から
+  $\norm{f}_{L^\infty(\mu)}\leq\norm{g}_{L^\infty(\mu)}$．
+\end{proof}
+
+\begin{theorem}{Hölder の不等式}{meas-holder}
+  $1<p,q<\infty$，$1/p+1/q=1$ とする．
+  可測関数 $f,g$ に対し
+  \[
+    \int_\Omega\abs{fg}\,\d\mu
+    \leq
+    \norm{f}_{L^p(\mu)}\,\norm{g}_{L^q(\mu)}.
+  \]
+  （標準的な結果．証明は省略する．）
+\end{theorem}
+
+\begin{claim}{確率空間では $L^1$ ノルムは $L^p$ ノルム以下}{meas-l1-lp}
+  $\mu$ を確率測度とすると，可測関数 $g$ と $1\leq p\leq\infty$ に対し
+  \[
+    \norm{g}_{L^1(\mu)}\leq\norm{g}_{L^p(\mu)}.
+  \]
+\end{claim}
+
+\begin{proof}
+  $p=1$ は自明．
+  $1<p<\infty$ のとき，Hölder の不等式（定理~\ref{thm:meas-holder}）を
+  $f=g$，$g=1$（定数関数）に適用すると，$q=p/(p-1)$ として
+  \[
+    \norm{g}_{L^1(\mu)}
+    =\int_\Omega\abs{g\cdot 1}\,\d\mu
+    \leq\norm{g}_{L^p(\mu)}\left(\int_\Omega 1\,\d\mu\right)^{1/q}
+    =\norm{g}_{L^p(\mu)},
+  \]
+  最後の等号で $\mu(\Omega)=1$ を用いた．
+  $p=\infty$ のとき，主張~\ref{clm:meas-esssup-ae}より
+  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. だから
+  \[
+    \norm{g}_{L^1(\mu)}
+    \leq\int_\Omega\norm{g}_{L^\infty(\mu)}\,\d\mu
+    =\norm{g}_{L^\infty(\mu)}.  \qedhere
+  \]
+\end{proof}
+
+\begin{theorem}{Minkowski の不等式}{meas-minkowski}
+  可測関数 $f,g$ と $1\leq p\leq\infty$ に対し
+  \[
+    \norm{f+g}_{L^p(\mu)}
+    \leq
+    \norm{f}_{L^p(\mu)}+\norm{g}_{L^p(\mu)}.
+  \]
+\end{theorem}
+
+\begin{proof}
+  $1\leq p<\infty$ の場合は Hölder の不等式から従う標準的な結果であり，
+  証明は文献に譲る（本資料ではこの場合を認めて用いる）．
+
+  $p=\infty$ の場合を示す．右辺が有限のときを考えればよい．
+  主張~\ref{clm:meas-esssup-ae}より
+  $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ $\mu$-a.e. かつ
+  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. であり，
+  2つの例外集合（いずれも零集合）の合併の外側で
+  \[
+    \abs{f+g}\leq\abs{f}+\abs{g}
+    \leq\norm{f}_{L^\infty(\mu)}+\norm{g}_{L^\infty(\mu)}
+  \]
+  が成り立つ．零集合の合併は零集合だから，この不等式は $\mu$-a.e. で成り立ち，
+  $L^\infty$ ノルムの定義（下限）より
+  $\norm{f+g}_{L^\infty(\mu)}
+  \leq\norm{f}_{L^\infty(\mu)}+\norm{g}_{L^\infty(\mu)}$ である．
+\end{proof}
+
+\section{押し出し測度}
+
+\begin{definition}{押し出し測度}{meas-pushforward}
+  可測空間 $(\Omega,\mathcal{A})$，$(\Omega',\mathcal{A}')$ と
+  可測写像 $T\colon\Omega\to\Omega'$，
+  $(\Omega,\mathcal{A})$ 上の測度 $\mu$ に対し，
+  \[
+    (T\pushforward\mu)(B):=\mu(T^{-1}(B))
+    \qquad(B\in\mathcal{A}')
+  \]
+  と定める．$T\pushforward\mu$ を $T$ による $\mu$ の
+  \textbf{押し出し測度}（像測度）という．
+  逆像は互いに素な可算合併を互いに素な可算合併に写すから，
+  $T\pushforward\mu$ の $\sigma$-加法性は $\mu$ のそれから従い，
+  $T\pushforward\mu$ は $(\Omega',\mathcal{A}')$ 上の測度である．
+  $\mu$ が確率測度なら
+  $(T\pushforward\mu)(\Omega')=\mu(\Omega)=1$ より
+  $T\pushforward\mu$ も確率測度である．
+\end{definition}
+
+\begin{lemma}{変数変換公式}{meas-change-of-variables}
+  $T\colon\Omega\to\Omega'$ を可測写像，$\mu$ を $\Omega$ 上の測度とする．
+  非負可測関数 $f\colon\Omega'\to[0,\infty)$ に対し
+  \[
+    \int_{\Omega'}f\,\d(T\pushforward\mu)
+    =
+    \int_\Omega f\circ T\,\d\mu
+  \]
+  が成り立つ．また可測な $f\colon\Omega'\to\R$ については，
+  一方の積分が絶対収束すれば他方もそうであり，同じ等式が成り立つ．
+\end{lemma}
+
+\begin{proof}
+  $f=\mathbf{1}_B$（$B\in\mathcal{A}'$）のとき：
+  $\mathbf{1}_B\circ T=\mathbf{1}_{T^{-1}(B)}$ だから
+  \[
+    \int_{\Omega'}\mathbf{1}_B\,\d(T\pushforward\mu)
+    =(T\pushforward\mu)(B)
+    =\mu(T^{-1}(B))
+    =\int_\Omega\mathbf{1}_B\circ T\,\d\mu.
+  \]
+  $f$ が非負単関数のとき：指示関数の非負線形結合だから，
+  積分の線形性より従う．
+  $f$ が非負可測のとき：非負単関数列 $s_n\uparrow f$ を取れば
+  （注意~\ref{rem:meas-measurable-ops}），
+  $s_n\circ T\uparrow f\circ T$（各点）であり，
+  単調収束定理（定理~\ref{thm:meas-mct}）を両辺に適用して
+  \[
+    \int f\,\d(T\pushforward\mu)
+    =\lim_n\int s_n\,\d(T\pushforward\mu)
+    =\lim_n\int s_n\circ T\,\d\mu
+    =\int f\circ T\,\d\mu.
+  \]
+  一般の可測な $f$ のとき：$f=f^+-f^-$（正部分・負部分）と分解すると，
+  非負の場合から
+  $\int f^\pm\,\d(T\pushforward\mu)=\int f^\pm\circ T\,\d\mu$ であり，
+  絶対収束の条件も両辺で一致する．差を取れば等式を得る．
+\end{proof}
+
+\begin{corollary}{押し出しは $L^p$ ノルムを保つ}{meas-pf-lp}
+  $1\leq p\leq\infty$，$T\colon\Omega\to\Omega'$ 可測，
+  $\mu$ を $\Omega$ 上の測度，$f\colon\Omega'\to\R$ を可測とすると，
+  \[
+    \norm{f}_{L^p(T\pushforward\mu)}
+    =
+    \norm{f\circ T}_{L^p(\mu)}.
+  \]
+\end{corollary}
+
+\begin{proof}
+  $p<\infty$ のとき：変数変換公式（補題~\ref{lem:meas-change-of-variables}）を
+  非負可測関数 $\abs{f}^p$ に適用すればよい．
+  $p=\infty$ のとき：任意の $M\geq0$ に対し
+  \[
+    (T\pushforward\mu)(\{\abs{f}>M\})
+    =\mu(T^{-1}\{\abs{f}>M\})
+    =\mu(\{\abs{f\circ T}>M\})
+  \]
+  だから，「$\abs{f}\leq M$ $(T\pushforward\mu)$-a.e.」と
+  「$\abs{f\circ T}\leq M$ $\mu$-a.e.」は同値であり，
+  両ノルムを定める集合が一致する．
+\end{proof}
+
+\begin{claim}{押し出しの合成則}{meas-pf-compose}
+  可測写像 $T\colon\Omega\to\Omega'$，$S\colon\Omega'\to\Omega''$ と
+  測度 $\mu$ に対し
+  $(S\circ T)\pushforward\mu=S\pushforward(T\pushforward\mu)$ である．
+\end{claim}
+
+\begin{proof}
+  任意の可測集合 $B\subset\Omega''$ に対し
+  \[
+    ((S\circ T)\pushforward\mu)(B)
+    =\mu(T^{-1}(S^{-1}(B)))
+    =(T\pushforward\mu)(S^{-1}(B))
+    =(S\pushforward(T\pushforward\mu))(B).  \qedhere
+  \]
+\end{proof}
+
+\begin{lemma}{周辺分布と周辺積分公式}{meas-marginal-integral}
+  $X,Y$ を距離空間，$\pi\in\Prob(X\times Y)$ とし，
+  第1座標への射影を $\mathrm{pr}_1\colon(x,y)\mapsto x$ とする
+  （$\mathrm{pr}_1$ は連続ゆえ可測）．
+  $\mu\in\Prob(X)$ について，次は同値である：
+  \begin{enumerate}
+    \item $\pi(A\times Y)=\mu(A)$（$\forall A\in\Borel(X)$），
+    \item ${\mathrm{pr}_1}\pushforward\pi=\mu$．
+  \end{enumerate}
+  このとき（$\mu$ を $\pi$ の\textbf{第1周辺分布}という），
+  非負可測または $\mu$-可積分な $f\colon X\to\R$ に対して
+  \[
+    \int_{X\times Y}f(x)\,\d\pi(x,y)=\int_X f\,\d\mu,
+    \qquad
+    \norm{f(x)}_{L^p(\pi)}=\norm{f}_{L^p(\mu)}
+    \quad(1\leq p\leq\infty)
+  \]
+  が成り立つ（左辺の $f(x)$ は $(x,y)\mapsto f(x)$ の略記）．
+  第2座標についても同様である．
+\end{lemma}
+
+\begin{proof}
+  同値性：$\mathrm{pr}_1^{-1}(A)=A\times Y$ だから
+  $({\mathrm{pr}_1}\pushforward\pi)(A)=\pi(A\times Y)$ であり，
+  両条件はともに「すべての $A\in\Borel(X)$ でこの値が $\mu(A)$」を意味する．
+  積分公式：$(x,y)\mapsto f(x)$ は $f\circ\mathrm{pr}_1$ だから，
+  変数変換公式（補題~\ref{lem:meas-change-of-variables}）と
+  系~\ref{cor:meas-pf-lp}を
+  $T=\mathrm{pr}_1$，$T\pushforward\pi=\mu$ に適用すればよい．
+\end{proof}
+
+\section{直積測度と測度の分解}
+
+$X,Y$ を可分距離空間とする．
+直積 $X\times Y$ には距離
+$d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
+を入れる（稠密可算集合の直積が稠密なので，$X\times Y$ も可分である）．
+
+\begin{remark}{直積空間の Borel $\sigma$-代数（前提とする事実）}{meas-borel-product}
+  $X,Y$ が可分距離空間のとき，
+  $\Borel(X\times Y)$ は矩形集合
+  $\{A\times B\mid A\in\Borel(X),\,B\in\Borel(Y)\}$
+  の生成する $\sigma$-代数
+  $\Borel(X)\otimes\Borel(Y)$ と一致する（証明は省略する）．
+  なお矩形集合の族は
+  $(A\times B)\cap(A'\times B')=(A\cap A')\times(B\cap B')$
+  より $\pi$-系である．
+\end{remark}
+
+\begin{theorem}{直積測度と Fubini--Tonelli の定理}{meas-product}
+  $\mu,\nu$ をそれぞれ可分距離空間 $X,Y$ 上の Borel 確率測度とする．
+  $\Borel(X\times Y)$ 上の確率測度 $\mu\otimes\nu$ で
+  \[
+    (\mu\otimes\nu)(A\times B)=\mu(A)\,\nu(B)
+    \qquad(A\in\Borel(X),\;B\in\Borel(Y))
+  \]
+  をみたすものがただ一つ存在する（\textbf{直積測度}）．
+  さらに非負可測関数 $f\colon X\times Y\to[0,\infty)$ に対し
+  \[
+    \int_{X\times Y}f\,\d(\mu\otimes\nu)
+    =\int_X\!\!\int_Y f(x,y)\,\d\nu(y)\,\d\mu(x)
+    =\int_Y\!\!\int_X f(x,y)\,\d\mu(x)\,\d\nu(y)
+  \]
+  が成り立つ（内側の積分は可測関数を定める）．
+  有限個の確率測度の直積 $\mu_1\otimes\cdots\otimes\mu_n$ についても同様である．
+  （標準的な結果．証明は省略する．一意性は
+  注意~\ref{rem:meas-borel-product}の $\pi$-系と
+  一致定理（定理~\ref{thm:meas-uniqueness}）からも従う．）
+\end{theorem}
+
+\begin{claim}{直積測度の周辺分布}{meas-product-marginals}
+  $\mu\in\Prob(X)$，$\nu\in\Prob(Y)$ に対し，
+  $\mu\otimes\nu$ の第1周辺分布は $\mu$，第2周辺分布は $\nu$ である．
+\end{claim}
+
+\begin{proof}
+  任意の $A\in\Borel(X)$ に対し
+  $(\mu\otimes\nu)(A\times Y)=\mu(A)\,\nu(Y)=\mu(A)$．
+  第2周辺も同様である．
+\end{proof}
+
+\begin{theorem}{分解定理（正則条件付き確率）}{meas-disintegration}
+  $X,Y$ を Polish 空間，$\pi\in\Prob(X\times Y)$ とし，
+  $\nu$ を $\pi$ の第2周辺分布とする．
+  このとき写像 $K\colon Y\times\Borel(X)\to[0,1]$ で
+  次をみたすものが存在する：
+  \begin{enumerate}
+    \item 各 $y\in Y$ で $K(y,\cdot)\in\Prob(X)$，
+    \item 各 $A\in\Borel(X)$ で $y\mapsto K(y,A)$ は可測，
+    \item すべての $A\in\Borel(X)$，$B\in\Borel(Y)$ に対し
+      \[
+        \pi(A\times B)=\int_B K(y,A)\,\d\nu(y).
+      \]
+  \end{enumerate}
+  (i)(ii) をみたす $K$ を（$Y$ から $X$ への）\textbf{Markov 核}といい，
+  (iii) を $\pi(\d x,\d y)=K(y,\d x)\,\nu(\d y)$ と書く．
+  $K$ は $\nu$-a.e. の意味で一意である．
+  （Polish 空間上の標準的な結果．証明は省略する．
+  Dudley (2002) Chapter 10，Villani (2009) Chapter 1 参照．）
+\end{theorem}
+
+\begin{theorem}{Markov 核による測度の貼り合わせ（前提とする事実）}{meas-kernel-composition}
+  $X,Y,Z$ を Polish 空間，$\nu\in\Prob(Y)$ とし，
+  $K_1$ を $Y$ から $X$ への，$K_2$ を $Y$ から $Z$ への Markov 核とする．
+  このとき $\Borel(X\times Y\times Z)$ 上の確率測度 $\gamma$ で
+  \[
+    \gamma(A\times B\times C)
+    =\int_B K_1(y,A)\,K_2(y,C)\,\d\nu(y)
+    \qquad(A\in\Borel(X),\,B\in\Borel(Y),\,C\in\Borel(Z))
+  \]
+  をみたすものがただ一つ存在する．
+  これを $\gamma(\d x,\d y,\d z)=K_1(y,\d x)\,\nu(\d y)\,K_2(y,\d z)$ と書く．
+  （直積測度の構成と同様の標準的な手順（単調族論法）による．
+  証明は省略する．一意性は矩形集合が $\pi$-系をなすことと
+  一致定理（定理~\ref{thm:meas-uniqueness}）から従う．）
+\end{theorem}
+
+\section{$\R^n$ 上の Lebesgue 積分}
+
+$\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
+（区間の体積を拡張した $\Borel(\R^n)$ 上の測度）は既知とする．
+
+\begin{definition}{密度をもつ測度}{meas-density}
+  非負可測関数 $\rho\colon\R^n\to[0,\infty)$ が
+  $\int_{\R^n}\rho\,\d\lambda_n=1$ をみたすとき，
+  \[
+    \mu(B):=\int_B\rho\,\d\lambda_n
+    =\int_{\R^n}\mathbf{1}_B\,\rho\,\d\lambda_n
+    \qquad(B\in\Borel(\R^n))
+  \]
+  は $\R^n$ 上の Borel 確率測度を定める
+  （$\sigma$-加法性は単調収束定理~\ref{thm:meas-mct}による）．
+  $\rho$ を $\mu$ の\textbf{密度}といい，
+  $\mu=\rho\,\d\lambda_n$ と書く．
+  このとき非負可測な $f$ に対し
+  \[
+    \int_{\R^n}f\,\d\mu=\int_{\R^n}f\rho\,\d\lambda_n
+  \]
+  が成り立つ（指示関数では定義そのもので，
+  あとは変数変換公式（補題~\ref{lem:meas-change-of-variables}）の証明と同じく
+  単関数近似と単調収束定理で従う）．
+\end{definition}
+
+\begin{theorem}{アフィン変数変換公式（前提とする事実）}{meas-affine-cov}
+  $T\in\R^{n\times n}$ を可逆行列，$b\in\R^n$ とし，
+  $\ell(x):=Tx+b$ とおく．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
+  \[
+    \int_{\R^n}f(y)\,\d\lambda_n(y)
+    =\abs{\det T}\int_{\R^n}f(Tx+b)\,\d\lambda_n(x)
+  \]
+  が成り立つ．すなわち
+  $\ell\pushforward\lambda_n=\abs{\det T}^{-1}\lambda_n$ である．
+  （変数変換公式の標準的な場合．証明は省略する．）
+\end{theorem}
+
+\begin{theorem}{2次元極座標変換（前提とする事実）}{meas-polar}
+  非負可測関数 $f\colon\R^2\to[0,\infty)$ に対し
+  \[
+    \int_{\R^2}f\,\d\lambda_2
+    =\int_0^\infty\!\!\int_0^{2\pi}
+      f(r\cos\theta,\,r\sin\theta)\,r\,\d\theta\,\d r
+  \]
+  が成り立つ．（証明は省略する．）
+\end{theorem}
