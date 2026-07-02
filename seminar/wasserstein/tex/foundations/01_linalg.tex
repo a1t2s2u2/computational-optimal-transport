@@ -108,8 +108,13 @@
 \end{claim}
 
 \begin{proof}
-  (i)：$R_j$ は対称行列の和ゆえ対称で，
-  $\nu_j$ の固有ベクトル $u_i$ に対し $R_ju_i=u_i\neq0$ だから零でない．
+  (i)：まず各固有値 $\nu_j$ は対角成分 $\lambda_1,\dots,\lambda_n$ の
+  いずれかに現れる：$Mv=\nu_jv$（$v\neq0$）なら $v=\sum_ic_iu_i$ と
+  基底で展開して $\sum_ic_i(\lambda_i-\nu_j)u_i=0$，
+  一次独立性から $c_i(\lambda_i-\nu_j)=0$（$\forall i$）であり，
+  ある $c_i\neq0$ だから $\nu_j\in\{\lambda_1,\dots,\lambda_n\}$ である．
+  $R_j$ は対称行列の和ゆえ対称で，
+  $\lambda_i=\nu_j$ なる $u_i$ に対し $R_ju_i=u_i\neq0$ だから零でない．
   $\sum_jR_j=\sum_iu_iu_i^\top=I$
   （正規直交基底による展開 $x=\sum_iu_i\inner{u_i}{x}$），
   $M=\sum_j\nu_jR_j$ は分解のまとめ直しそのもの，そして正規直交性から
@@ -337,14 +342,17 @@
   よって $\operatorname{ran}A=\operatorname{span}\{u_1,\dots,u_{r'}\}$ で，
   正規直交系の一次独立性（主張~\ref{clm:la-onb-extension}内の注意）から
   $\rank A=r'$，すなわち $r'=r$ である．
-  最後に，$\{v_i\}$ の正規直交性から
+  最後に，$\{u_i\}$ の正規直交性から
   \[
     A^\top A
     =\Bigl(\sum_id_iv_iu_i^\top\Bigr)\Bigl(\sum_jd_ju_jv_j^\top\Bigr)
     =\sum_{i,j}d_id_jv_i\inner{u_i}{u_j}v_j^\top
     =\sum_{i=1}^rd_i^2\,v_iv_i^\top
   \]
-  であり，$AA^\top=\sum_id_i^2u_iu_i^\top$ は構成そのものである．
+  であり，$AA^\top=\sum_id_i^2\,u_iu_i^\top$ も
+  $\{v_i\}$ の正規直交性から同様の計算で従う
+  （したがってこの2式は，上で構成した SVD に限らず
+  $A=\sum_id_iu_iv_i^\top$ の形の任意の表示について成り立つ）．
 \end{proof}
 
 \begin{definition}{特異値}{la-singular}
