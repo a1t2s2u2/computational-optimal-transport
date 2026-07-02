@@ -58,6 +58,7 @@ const BLOCK_ENVS = {
   lemma: ["theorem", "Lem"],
   theorem: ["theorem", "Thm"],
   proposition: ["theorem", "Prop"],
+  corollary: ["theorem", "Cor"],
   remark: ["fact", "Rem"],
   example: ["fact accent", "Ex"],
   algorithm: ["definition", ""],
@@ -69,6 +70,7 @@ const LABEL_PREFIX_MAP = {
   lem: "Lem",
   thm: "Thm",
   prop: "Prop",
+  cor: "Cor",
   rem: "Rem",
   ex: "Ex",
 };
@@ -76,6 +78,7 @@ const LABEL_PREFIX_MAP = {
 const JP_TO_ABBREV = {
   "定義": "Def", "主張": "Clm", "命題": "Prop",
   "定理": "Thm", "例": "Ex", "注意": "Rem", "補題": "Lem", "Claim": "Clm",
+  "系": "Cor",
 };
 
 const ENV_TO_PREFIX = {
@@ -84,6 +87,7 @@ const ENV_TO_PREFIX = {
   lemma: "lem",
   theorem: "thm",
   proposition: "prop",
+  corollary: "cor",
   remark: "rem",
   example: "ex",
 };
@@ -249,7 +253,7 @@ function convertRefs(text) {
   text = text.replace(/図~?\\ref\{fig:[^}]*\}/g, "図");
 
   text = text.replace(
-    /(定義|主張|命題|定理|例|注意|補題|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
+    /(定義|主張|命題|定理|例|注意|補題|系|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
     (_, g1, label) => {
       const title = LABEL_MAP[label];
       if (!title) {
