@@ -53,6 +53,11 @@ const CHAPTERS = [
     nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",
     title: "距離空間と測度の準備",
   }],
+  ["foundations/01_linalg.tex", "A1-linalg.md", {
+    id: "found-linalg", group: "appendix",
+    nav: "線形代数", eyebrow: "付録 B. Linear Algebra",
+    title: "線形代数の準備",
+  }],
 ];
 
 // Named block environments and their markdown mappings.

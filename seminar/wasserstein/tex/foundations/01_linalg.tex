@@ -1,0 +1,462 @@
+\chapter{線形代数の準備}
+\label{ch:found-linalg}
+
+第2章（Gaussian 測度の $W_2$）で用いる線形代数の道具をまとめる．
+ベクトルは $\R^n$ の列ベクトルとし，
+内積を $\inner{u}{v}:=u^\top v$，ノルムを $\norm{u}:=\sqrt{\inner{u}{u}}$ と書く．
+行列・転置 $A^\top$・逆行列・固有値・固有ベクトル・階数 $\rank A$ などの
+基本概念は既知とする．
+本章で証明なしに認めるのはスペクトル分解
+（定理~\ref{thm:la-spectral}）のみで，それ以外の主張には証明を付ける．
+
+\section{対称行列と半正定値性}
+
+\begin{definition}{対称行列・直交行列}{la-symmetric}
+  $A\in\R^{n\times n}$ が\textbf{対称}であるとは $A^\top=A$ をみたすことをいう．
+  $U\in\R^{n\times n}$ が\textbf{直交行列}であるとは
+  $U^\top U=UU^\top=I$（$I$ は単位行列）をみたすことをいう．
+  直交行列はノルムを保つ：
+  $\norm{Ux}^2=x^\top U^\top Ux=\norm{x}^2$．
+\end{definition}
+
+\begin{theorem}{スペクトル分解}{la-spectral}
+  対称行列 $A\in\R^{n\times n}$ に対し，直交行列 $U$ と
+  実対角行列 $\Lambda=\diag(\lambda_1,\dots,\lambda_n)$ が存在して
+  \[
+    A=U\Lambda U^\top
+  \]
+  と書ける．$U$ の第 $i$ 列 $u_i$ は $Au_i=\lambda_iu_i$ をみたす
+  固有ベクトルで，$u_1,\dots,u_n$ は $\R^n$ の正規直交基底をなす．
+  外積の形では
+  \[
+    A=\sum_{i=1}^n\lambda_i\,u_iu_i^\top
+  \]
+  である．（線形代数の標準的な定理．証明は省略する．）
+\end{theorem}
+
+\begin{definition}{半正定値行列}{la-psd}
+  対称行列 $A$ が\textbf{半正定値}であるとは，
+  どの方向 $u\in\R^n$ でも二次形式が非負，すなわち
+  \[
+    u^\top Au\geq0\qquad(\forall u\in\R^n)
+  \]
+  が成り立つことをいい，$A\succeq0$ と書く．
+  $u\neq0$ で常に $u^\top Au>0$ のとき\textbf{正定値}といい，$A\succ0$ と書く．
+\end{definition}
+
+\begin{claim}{半正定値性と固有値}{la-psd-eigen}
+  対称行列 $A=\sum_i\lambda_iu_iu_i^\top$（スペクトル分解）について，
+  $A\succeq0$ と「すべての固有値 $\lambda_i\geq0$」は同値である．
+\end{claim}
+
+\begin{proof}
+  $A\succeq0$ ならば $\lambda_i=u_i^\top Au_i\geq0$．
+  逆にすべての $\lambda_i\geq0$ ならば，任意の $u$ で
+  $u^\top Au=\sum_i\lambda_i\inner{u_i}{u}^2\geq0$ である．
+\end{proof}
+
+\begin{claim}{合同変換は半正定値性を保つ}{la-congruence}
+  $A\in\R^{n\times n}$ が対称で $A\succeq0$，$L\in\R^{k\times n}$ ならば，
+  $LAL^\top\in\R^{k\times k}$ は対称かつ $LAL^\top\succeq0$ である．
+\end{claim}
+
+\begin{proof}
+  $(LAL^\top)^\top=LA^\top L^\top=LAL^\top$ で対称．
+  任意の $x\in\R^k$ で
+  $x^\top(LAL^\top)x=(L^\top x)^\top A(L^\top x)\geq0$ である．
+\end{proof}
+
+\section{半正定値平方根}
+
+\begin{theorem}{半正定値平方根の存在と一意性}{la-sqrt}
+  $\Sigma\succeq0$ に対し，
+  $B^2=\Sigma$ をみたす対称行列 $B\succeq0$ がただ一つ存在する．
+  これを $\Sigma^{1/2}$ と書く．
+\end{theorem}
+
+\begin{proof}
+  \textbf{存在．}
+  スペクトル分解（定理~\ref{thm:la-spectral}）で
+  $\Sigma=U\Lambda U^\top$ と書くと，
+  主張~\ref{clm:la-psd-eigen}よりすべての $\lambda_i\geq0$ である．
+  $\Lambda^{1/2}:=\diag(\sqrt{\lambda_1},\dots,\sqrt{\lambda_n})$ として
+  $B:=U\Lambda^{1/2}U^\top$ とおけば，$B$ は対称で，
+  固有値 $\sqrt{\lambda_i}\geq0$ より $B\succeq0$
+  （主張~\ref{clm:la-psd-eigen}），かつ
+  $B^2=U\Lambda^{1/2}U^\top U\Lambda^{1/2}U^\top=U\Lambda U^\top=\Sigma$ である．
+
+  \textbf{一意性．}
+  $B\succeq0$ が対称で $B^2=\Sigma$ をみたすとする．
+  $B$ の相異なる固有値を $\mu_1,\dots,\mu_m$（$\geq0$），
+  対応する固有空間 $\ker(B-\mu_jI)$ への直交射影を $Q_j$ とすると，
+  スペクトル分解を固有値ごとにまとめて
+  \[
+    B=\sum_{j=1}^m\mu_jQ_j,
+    \qquad
+    Q_jQ_l=\delta_{jl}Q_j,
+    \qquad
+    \sum_{j=1}^mQ_j=I
+  \]
+  と書ける（$Q_j$ は $\lambda_i=\mu_j$ なる $u_iu_i^\top$ の和）．
+  このとき
+  \[
+    \Sigma=B^2=\sum_{j=1}^m\mu_j^2\,Q_j
+  \]
+  であり，$\mu_j\geq0$ が相異なることから $\mu_j^2$ も相異なる．
+  よって右辺は $\Sigma$ の「相異なる固有値と固有空間への直交射影」による
+  分解であり，$\Sigma$ の固有値 $\mu_j^2$ と
+  固有空間 $\ker(\Sigma-\mu_j^2I)=\operatorname{ran}Q_j$ は
+  $\Sigma$ だけから定まる．
+  したがって各 $Q_j$ と $\mu_j=\sqrt{\mu_j^2}$（非負の平方根）も
+  $\Sigma$ だけから定まり，$B=\sum_j\mu_jQ_j$ は一意である．
+\end{proof}
+
+\section{作用素ノルムと Cauchy--Schwarz の不等式}
+
+\begin{lemma}{半正定値形式の Cauchy--Schwarz}{la-psd-cs}
+  $A\succeq0$ と $a,b\in\R^n$ に対し
+  \[
+    (a^\top Ab)^2\leq(a^\top Aa)(b^\top Ab).
+  \]
+  特に $A=I$ として，通常の Cauchy--Schwarz の不等式
+  $\inner{a}{b}^2\leq\norm{a}^2\norm{b}^2$ を得る．
+\end{lemma}
+
+\begin{proof}
+  $A$ は対称だから $b^\top Aa=a^\top Ab$ であり，任意の $t\in\R$ で
+  \[
+    0\leq(a+tb)^\top A(a+tb)
+    =a^\top Aa+2t\,(a^\top Ab)+t^2\,(b^\top Ab).
+  \]
+  $b^\top Ab>0$ のとき：$t$ の2次式が常に非負だから判別式は非正，
+  すなわち $(a^\top Ab)^2\leq(a^\top Aa)(b^\top Ab)$．
+  $b^\top Ab=0$ のとき：$0\leq a^\top Aa+2t\,(a^\top Ab)$ が
+  すべての $t$ で成り立つには $a^\top Ab=0$ が必要
+  （さもなくば $t\to\pm\infty$ の一方で右辺が $-\infty$）．
+  このとき両辺とも $0$ 以上・以下で不等式は成り立つ．
+\end{proof}
+
+\begin{definition}{作用素ノルム}{la-opnorm}
+  $C\in\R^{k\times n}$ の\textbf{作用素ノルム}を
+  \[
+    \norm{C}_{\mathrm{op}}
+    :=
+    \sup\{\norm{Cu}\mid u\in\R^n,\ \norm{u}\leq1\}
+  \]
+  と定める（$C$ が単位球をどれだけ引き伸ばすかの最大倍率）．
+  成分ごとの Cauchy--Schwarz（補題~\ref{lem:la-psd-cs}）から
+  $\norm{Cu}^2\leq\bigl(\sum_{i,j}c_{ij}^2\bigr)\norm{u}^2$ となるので，
+  この上限は有限である．
+  定義から $\norm{Cu}\leq\norm{C}_{\mathrm{op}}\norm{u}$（$\forall u$）であり，
+  直交行列 $U$ はノルムを保つ（定義~\ref{def:la-symmetric}）から
+  $\norm{U}_{\mathrm{op}}=1$ である．
+\end{definition}
+
+\section{特異値分解とトレース}
+
+\begin{definition}{トレース}{la-trace}
+  $A\in\R^{n\times n}$ の\textbf{トレース}を
+  $\tr A:=\sum_{i=1}^na_{ii}$（対角成分の和）と定める．
+\end{definition}
+
+\begin{claim}{トレースの基本性質}{la-trace-basic}
+  \begin{enumerate}
+    \item $\tr$ は線形で，$\tr A^\top=\tr A$．
+    \item （巡回性）$A\in\R^{k\times n}$，$B\in\R^{n\times k}$ に対し
+      $\tr(AB)=\tr(BA)$．
+    \item $u,v\in\R^n$ に対し $\tr(uv^\top)=\inner{u}{v}$．
+    \item スペクトル分解 $A=U\Lambda U^\top$ に対し
+      $\tr A=\sum_i\lambda_i$（固有値の和）．
+  \end{enumerate}
+\end{claim}
+
+\begin{proof}
+  (i) は定義から明らか．(ii) は
+  \[
+    \tr(AB)=\sum_{i=1}^k\sum_{j=1}^na_{ij}b_{ji}
+    =\sum_{j=1}^n\sum_{i=1}^kb_{ji}a_{ij}=\tr(BA).
+  \]
+  (iii) は $\tr(uv^\top)=\sum_iu_iv_i=\inner{u}{v}$．
+  (iv) は (ii) より
+  $\tr(U\Lambda U^\top)=\tr(\Lambda U^\top U)=\tr\Lambda=\sum_i\lambda_i$．
+\end{proof}
+
+\begin{lemma}{特異値分解（SVD）}{la-svd}
+  $A\in\R^{k\times n}$，$r:=\rank A$ とする．
+  正数 $d_1\geq\cdots\geq d_r>0$ と，
+  正規直交系 $u_1,\dots,u_r\in\R^k$，$v_1,\dots,v_r\in\R^n$ が存在して
+  \[
+    A=\sum_{i=1}^rd_i\,u_iv_i^\top
+  \]
+  と書ける．さらにこのとき
+  \[
+    AA^\top=\sum_{i=1}^rd_i^2\,u_iu_i^\top,
+    \qquad
+    A^\top A=\sum_{i=1}^rd_i^2\,v_iv_i^\top
+  \]
+  である．
+\end{lemma}
+
+\begin{proof}
+  $AA^\top\in\R^{k\times k}$ は対称であり，
+  $x^\top AA^\top x=\norm{A^\top x}^2\geq0$ より半正定値である．
+  スペクトル分解（定理~\ref{thm:la-spectral}）で
+  $AA^\top=\sum_{i=1}^k\lambda_iu_iu_i^\top$（$\{u_i\}$ は $\R^k$ の正規直交基底，
+  $\lambda_1\geq\cdots\geq\lambda_k\geq0$：主張~\ref{clm:la-psd-eigen}）とし，
+  $r':=\#\{i\mid\lambda_i>0\}$，$d_i:=\sqrt{\lambda_i}$（$i\leq r'$）とおく．
+
+  $i\leq r'$ に対し $v_i:=A^\top u_i/d_i$ と定めると
+  \[
+    \inner{v_i}{v_j}
+    =\frac{u_i^\top AA^\top u_j}{d_id_j}
+    =\frac{\lambda_j\inner{u_i}{u_j}}{d_id_j}
+    =\delta_{ij}
+  \]
+  だから $\{v_i\}_{i\leq r'}$ は正規直交系である．
+  $A':=\sum_{i\leq r'}d_iu_iv_i^\top$ とおいて $A=A'$ を示す．
+  正規直交基底 $\{u_i\}_{i=1}^k$ 上で転置を比較すると，
+  $i\leq r'$ では
+  \[
+    A'^\top u_i=\sum_{j\leq r'}d_jv_j\inner{u_j}{u_i}=d_iv_i=A^\top u_i,
+  \]
+  $i>r'$ では $\norm{A^\top u_i}^2=u_i^\top AA^\top u_i=\lambda_i=0$ より
+  $A^\top u_i=0=A'^\top u_i$．
+  よって $A^\top=A'^\top$，すなわち $A=A'$ である．
+
+  このとき $\operatorname{ran}A^\top$ は
+  $\{A^\top u_i\}_{i=1}^k=\{d_iv_i\}_{i\leq r'}\cup\{0\}$ の張る空間だから
+  $\rank A=\rank A^\top=r'$，すなわち $r'=r$ である．
+  最後に，$\{v_i\}$ の正規直交性から
+  \[
+    A^\top A
+    =\Bigl(\sum_id_iv_iu_i^\top\Bigr)\Bigl(\sum_jd_ju_jv_j^\top\Bigr)
+    =\sum_{i,j}d_id_jv_i\inner{u_i}{u_j}v_j^\top
+    =\sum_{i=1}^rd_i^2\,v_iv_i^\top
+  \]
+  であり，$AA^\top=\sum_id_i^2u_iu_i^\top$ は構成そのものである．
+\end{proof}
+
+\begin{definition}{特異値}{la-singular}
+  補題~\ref{lem:la-svd}の $d_1\geq\cdots\geq d_r>0$ に
+  $0$ を並べて $\min\{k,n\}$ 個にしたものを $A$ の\textbf{特異値}とよび，
+  $\sigma_1(A)\geq\cdots\geq\sigma_{\min\{k,n\}}(A)\geq0$ と書く．
+  補題~\ref{lem:la-svd}より，非零の特異値の2乗は
+  $AA^\top$ の非零固有値とも $A^\top A$ の非零固有値とも一致する．
+  特に $\sigma_i(A)=\sigma_i(A^\top)$ である．
+\end{definition}
+
+\begin{lemma}{特異値の和とトレース}{la-trace-norm}
+  $A\in\R^{k\times n}$ に対し
+  \[
+    \sum_i\sigma_i(A)
+    =\tr\bigl((A^\top A)^{1/2}\bigr)
+    =\tr\bigl((AA^\top)^{1/2}\bigr).
+  \]
+\end{lemma}
+
+\begin{proof}
+  SVD（補題~\ref{lem:la-svd}）の記号で，
+  $B:=\sum_{i=1}^rd_i\,v_iv_i^\top$ とおく．
+  $B$ は対称で，固有値は $d_i>0$ と $0$ だから $B\succeq0$
+  （主張~\ref{clm:la-psd-eigen}），かつ正規直交性より
+  \[
+    B^2=\sum_{i,j}d_id_j\,v_i\inner{v_i}{v_j}v_j^\top
+    =\sum_{i=1}^rd_i^2\,v_iv_i^\top=A^\top A.
+  \]
+  平方根の一意性（定理~\ref{thm:la-sqrt}）より
+  $(A^\top A)^{1/2}=B$ であり，
+  主張~\ref{clm:la-trace-basic}(iii) から
+  \[
+    \tr\bigl((A^\top A)^{1/2}\bigr)
+    =\sum_{i=1}^rd_i\,\tr(v_iv_i^\top)
+    =\sum_{i=1}^rd_i\,\norm{v_i}^2
+    =\sum_{i=1}^rd_i
+    =\sum_i\sigma_i(A).
+  \]
+  $AA^\top$ についても同様である（$u_i$ を用いる）．
+\end{proof}
+
+\begin{lemma}{von Neumann 型トレース不等式}{la-vn-trace}
+  $A,C\in\R^{n\times n}$，$\norm{C}_{\mathrm{op}}\leq1$ ならば
+  \[
+    \tr(CA)\leq\sum_i\sigma_i(A).
+  \]
+\end{lemma}
+
+\begin{proof}
+  SVD（補題~\ref{lem:la-svd}）で $A=\sum_{i=1}^rd_iu_iv_i^\top$ と書くと，
+  トレースの線形性と巡回性（主張~\ref{clm:la-trace-basic}）から
+  \[
+    \tr(CA)
+    =\sum_{i=1}^rd_i\,\tr(Cu_iv_i^\top)
+    =\sum_{i=1}^rd_i\,\tr(v_i^\top Cu_i)
+    =\sum_{i=1}^rd_i\,\inner{v_i}{Cu_i}.
+  \]
+  Cauchy--Schwarz（補題~\ref{lem:la-psd-cs}）と作用素ノルムの性質から
+  \[
+    \inner{v_i}{Cu_i}
+    \leq\norm{v_i}\,\norm{Cu_i}
+    \leq\norm{C}_{\mathrm{op}}\norm{u_i}
+    \leq1
+  \]
+  だから，$\tr(CA)\leq\sum_id_i=\sum_i\sigma_i(A)$ である．
+\end{proof}
+
+\section{ブロック行列の半正定値性}
+
+\begin{lemma}{ブロック半正定値行列の特徴づけ}{la-block-psd}
+  $\Sigma_1,\Sigma_2\succeq0$（$n\times n$），$K\in\R^{n\times n}$ とする．
+  次は同値である：
+  \begin{enumerate}
+    \item $2n\times2n$ の対称行列
+      $M:=\begin{pmatrix}\Sigma_1&K\\K^\top&\Sigma_2\end{pmatrix}$
+      が半正定値である．
+    \item ある $C\in\R^{n\times n}$，$\norm{C}_{\mathrm{op}}\leq1$ が存在して
+      $K=\Sigma_1^{1/2}C\,\Sigma_2^{1/2}$ と書ける．
+  \end{enumerate}
+  逆行列を使わないこの特徴づけにより，
+  $\Sigma_1,\Sigma_2$ が特異（正則でない）場合も一様に扱える．
+\end{lemma}
+
+\begin{proof}
+  $u,v\in\R^n$ に対し $w:=(u,v)\in\R^{2n}$ とおくと
+  \[
+    w^\top Mw
+    =u^\top\Sigma_1u+2\,u^\top Kv+v^\top\Sigma_2v
+  \]
+  である（$v^\top K^\top u=u^\top Kv$ を用いた）．
+
+  \textbf{(ii) $\Rightarrow$ (i)．}
+  $a:=\Sigma_1^{1/2}u$，$b:=\Sigma_2^{1/2}v$ とおくと，
+  $\Sigma_i^{1/2}$ の対称性から
+  $u^\top Kv=u^\top\Sigma_1^{1/2}C\Sigma_2^{1/2}v=\inner{a}{Cb}$ であり，
+  Cauchy--Schwarz（補題~\ref{lem:la-psd-cs}）と
+  $\norm{Cb}\leq\norm{b}$ から
+  \[
+    w^\top Mw
+    =\norm{a}^2+2\inner{a}{Cb}+\norm{b}^2
+    \geq\norm{a}^2-2\norm{a}\,\norm{b}+\norm{b}^2
+    =(\norm{a}-\norm{b})^2
+    \geq0.
+  \]
+
+  \textbf{(i) $\Rightarrow$ (ii)．}
+  $M\succeq0$ に Cauchy--Schwarz（補題~\ref{lem:la-psd-cs}）を
+  ベクトル $(u,0)$，$(0,v)\in\R^{2n}$ に対して適用すると，
+  $(u,0)^\top M(0,v)=u^\top Kv$，
+  $(u,0)^\top M(u,0)=u^\top\Sigma_1u=\norm{\Sigma_1^{1/2}u}^2$，
+  $(0,v)^\top M(0,v)=\norm{\Sigma_2^{1/2}v}^2$ だから
+  \[
+    (u^\top Kv)^2
+    \leq
+    \norm{\Sigma_1^{1/2}u}^2\,\norm{\Sigma_2^{1/2}v}^2
+    \tag{$*$}
+  \]
+  を得る．
+
+  $V_1:=\operatorname{ran}\Sigma_1^{1/2}$，
+  $V_2:=\operatorname{ran}\Sigma_2^{1/2}$ とおき，
+  $V_1\times V_2$ 上の関数 $\beta$ を
+  \[
+    \beta(\Sigma_1^{1/2}u,\;\Sigma_2^{1/2}v):=u^\top Kv
+  \]
+  で定める．これは well-defined である：
+  $\Sigma_1^{1/2}u=\Sigma_1^{1/2}u'$ ならば（$*$）を $u-u'$ と $v$ に適用して
+  $((u-u')^\top Kv)^2\leq\norm{\Sigma_1^{1/2}(u-u')}^2\norm{\Sigma_2^{1/2}v}^2=0$，
+  すなわち $u^\top Kv=u'^\top Kv$ であり，$v$ 側も同様だからである．
+  $\beta$ は双線形で，（$*$）より
+  $\abs{\beta(a,b)}\leq\norm{a}\,\norm{b}$（$a\in V_1$，$b\in V_2$）をみたす．
+
+  $V_1$ の正規直交基底 $e_1,\dots,e_m$ を取り，$b\in V_2$ に対し
+  \[
+    c(b):=\sum_{l=1}^m\beta(e_l,b)\,e_l\in V_1
+  \]
+  とおくと，$c$ は $b$ について線形で，$a\in V_1$ に対し
+  $\inner{a}{c(b)}=\beta(a,b)$ をみたす（$a$ を基底で展開すればよい）．
+  また
+  \[
+    \norm{c(b)}^2=\inner{c(b)}{c(b)}=\beta(c(b),b)
+    \leq\norm{c(b)}\,\norm{b}
+  \]
+  より $\norm{c(b)}\leq\norm{b}$ である．
+  $P$ を $V_2$ への直交射影として $C:=c\circ P$
+  （$w\mapsto c(Pw)$ を表す行列）とおけば，
+  $\norm{Cw}=\norm{c(Pw)}\leq\norm{Pw}\leq\norm{w}$ より
+  $\norm{C}_{\mathrm{op}}\leq1$ である．
+
+  最後に $K=\Sigma_1^{1/2}C\Sigma_2^{1/2}$ を確かめる．
+  任意の $u,v$ に対し，$\Sigma_2^{1/2}v\in V_2$ と
+  $\Sigma_1^{1/2}u\in V_1$ から
+  \[
+    u^\top\bigl(\Sigma_1^{1/2}C\Sigma_2^{1/2}\bigr)v
+    =\inner{\Sigma_1^{1/2}u}{\,c(\Sigma_2^{1/2}v)}
+    =\beta(\Sigma_1^{1/2}u,\;\Sigma_2^{1/2}v)
+    =u^\top Kv
+  \]
+  であり，$u,v$ は任意だから両行列は一致する．
+\end{proof}
+
+\section{可換な半正定値行列}
+
+\begin{lemma}{平方根は元の行列の多項式}{la-sqrt-poly}
+  $\Sigma\succeq0$ に対し，実係数多項式 $p$ で
+  $\Sigma^{1/2}=p(\Sigma)$ となるものが存在する．
+\end{lemma}
+
+\begin{proof}
+  $\Sigma$ の相異なる固有値を $\mu_1,\dots,\mu_m\geq0$，
+  固有空間への直交射影を $Q_j$ とし，
+  $\Sigma=\sum_j\mu_jQ_j$（$Q_jQ_l=\delta_{jl}Q_j$，$\sum_jQ_j=I$）と書く．
+  Lagrange 補間で $p(\mu_j)=\sqrt{\mu_j}$（$j=1,\dots,m$）をみたす
+  多項式 $p$ を取る．
+  $\Sigma^k=\sum_j\mu_j^kQ_j$（$k\geq1$）と $\sum_jQ_j=I$ から，
+  多項式の線形結合として
+  \[
+    p(\Sigma)=\sum_jp(\mu_j)\,Q_j=\sum_j\sqrt{\mu_j}\,Q_j
+  \]
+  である．右辺は対称で，固有値 $\sqrt{\mu_j}\geq0$ より半正定値，
+  さらに2乗すると $\sum_j\mu_jQ_j=\Sigma$ になるから，
+  平方根の一意性（定理~\ref{thm:la-sqrt}）より
+  $p(\Sigma)=\Sigma^{1/2}$ である．
+\end{proof}
+
+\begin{corollary}{可換な半正定値行列の平方根}{la-commuting-sqrt}
+  $\Sigma_1,\Sigma_2\succeq0$ が $\Sigma_1\Sigma_2=\Sigma_2\Sigma_1$ をみたすならば：
+  \begin{enumerate}
+    \item $\Sigma_1^{1/2}$ と $\Sigma_2^{1/2}$ も可換である．
+    \item $S:=\Sigma_1^{1/2}\Sigma_2^{1/2}$ は対称かつ半正定値である．
+    \item $\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}
+      =\Sigma_1^{1/2}\Sigma_2^{1/2}$．
+  \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+  (i)：補題~\ref{lem:la-sqrt-poly}より
+  $\Sigma_1^{1/2}=p(\Sigma_1)$，$\Sigma_2^{1/2}=q(\Sigma_2)$ と書ける．
+  $\Sigma_1\Sigma_2=\Sigma_2\Sigma_1$ ならば
+  $\Sigma_1$ と $\Sigma_2$ の任意の多項式どうしも可換だから，
+  $\Sigma_1^{1/2}\Sigma_2^{1/2}=\Sigma_2^{1/2}\Sigma_1^{1/2}$ である．
+
+  (ii)：対称性は (i) より
+  $S^\top=\Sigma_2^{1/2}\Sigma_1^{1/2}=\Sigma_1^{1/2}\Sigma_2^{1/2}=S$．
+  半正定値性：$\Sigma_2^{1/4}:=(\Sigma_2^{1/2})^{1/2}$ とおくと，
+  補題~\ref{lem:la-sqrt-poly}を2回使って $\Sigma_2^{1/4}$ は
+  $\Sigma_2$ の多項式だから $\Sigma_1^{1/2}$ と可換であり，
+  \[
+    S=\Sigma_1^{1/2}\Sigma_2^{1/4}\Sigma_2^{1/4}
+    =\Sigma_2^{1/4}\,\Sigma_1^{1/2}\,\Sigma_2^{1/4}
+    \succeq0
+  \]
+  （最後は合同変換：主張~\ref{clm:la-congruence}，
+  $\Sigma_2^{1/4}$ は対称）．
+
+  (iii)：(i) を繰り返し使うと
+  \[
+    S^2
+    =\Sigma_1^{1/2}\Sigma_2^{1/2}\Sigma_1^{1/2}\Sigma_2^{1/2}
+    =\Sigma_1^{1/2}\Sigma_2^{1/2}\Sigma_2^{1/2}\Sigma_1^{1/2}
+    =\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}
+  \]
+  であり，(ii) と平方根の一意性（定理~\ref{thm:la-sqrt}）から
+  $S=\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}$ である．
+\end{proof}
