@@ -20,8 +20,11 @@
 \end{definition}
 
 \begin{claim}{正規直交基底への延長}{la-onb-extension}
-  $\R^n$ の正規直交系 $v_1,\dots,v_r$（$r<n$）は，
+  $\R^n$ の正規直交系 $v_1,\dots,v_r$（$r\leq n$）は，
   正規直交基底 $v_1,\dots,v_n$ に延長できる．
+  （$r=n$ のときは何もすることがない：正規直交系は一次独立
+  （$\sum_ic_iv_i=0$ の両辺と $v_j$ の内積を取ると $c_j=0$）なので，
+  $n$ 本あれば既に基底である．）
 \end{claim}
 
 \begin{proof}
@@ -81,6 +84,63 @@
   $x^\top(LAL^\top)x=(L^\top x)^\top A(L^\top x)\geq0$ である．
 \end{proof}
 
+\begin{claim}{固有値ごとにまとめたスペクトル分解}{la-spectral-grouped}
+  対称行列 $M\in\R^{n\times n}$ について：
+  \begin{enumerate}
+    \item （存在）$M$ の相異なる固有値を $\nu_1,\dots,\nu_m$ とし，
+      スペクトル分解 $M=\sum_i\lambda_iu_iu_i^\top$
+      （定理~\ref{thm:la-spectral}）において
+      $R_j:=\sum_{i:\lambda_i=\nu_j}u_iu_i^\top$ とおくと，
+      各 $R_j$ は零でない対称行列で
+      \[
+        M=\sum_{j=1}^m\nu_jR_j,\qquad
+        R_jR_l=\delta_{jl}R_j,\qquad
+        \sum_{j=1}^mR_j=I.
+      \]
+    \item （一意性）逆に，相異なる実数 $\nu_1,\dots,\nu_m$ と
+      零でない対称行列 $R_1,\dots,R_m$ が (i) の3条件をみたすならば，
+      $\nu_1,\dots,\nu_m$ の全体は $M$ の固有値の全体と一致し，
+      $\ker(M-\nu_jI)=\operatorname{ran}R_j
+      :=\{R_jz\mid z\in\R^n\}$ であり，
+      さらに各 $R_j$ は「$x$ をその $\ker(M-\nu_jI)$ 成分に写す行列」
+      として $M$ だけから一意に定まる．
+  \end{enumerate}
+\end{claim}
+
+\begin{proof}
+  (i)：$R_j$ は対称行列の和ゆえ対称で，
+  $\nu_j$ の固有ベクトル $u_i$ に対し $R_ju_i=u_i\neq0$ だから零でない．
+  $\sum_jR_j=\sum_iu_iu_i^\top=I$
+  （正規直交基底による展開 $x=\sum_iu_i\inner{u_i}{x}$），
+  $M=\sum_j\nu_jR_j$ は分解のまとめ直しそのもの，そして正規直交性から
+  \[
+    R_jR_l
+    =\sum_{i:\lambda_i=\nu_j}\;\sum_{i':\lambda_{i'}=\nu_l}
+      u_i\inner{u_i}{u_{i'}}u_{i'}^\top
+    =\delta_{jl}R_j.
+  \]
+
+  (ii)：まず $MR_j=\sum_l\nu_lR_lR_j=\nu_jR_j$ だから
+  $\operatorname{ran}R_j\subset\ker(M-\nu_jI)$ である．
+  逆に $Mx=\nu_jx$ とすると
+  $0=(M-\nu_jI)x=\sum_l(\nu_l-\nu_j)R_lx$ であり，
+  両辺に左から $R_{l'}$ を掛けると
+  $(\nu_{l'}-\nu_j)R_{l'}x=0$，すなわち $l'\neq j$ で $R_{l'}x=0$．
+  よって $x=\sum_lR_lx=R_jx\in\operatorname{ran}R_j$ となり，
+  $\ker(M-\nu_jI)=\operatorname{ran}R_j$ が従う．
+  同じ計算により，$Mx=\nu x$（$x\neq0$，$\nu\notin\{\nu_1,\dots,\nu_m\}$）
+  ならすべての $l'$ で $R_{l'}x=0$，よって $x=\sum_lR_lx=0$ となり矛盾．
+  各 $\nu_j$ が実際に固有値であることは $R_j\neq0$ と
+  $\operatorname{ran}R_j\subset\ker(M-\nu_jI)$ から従うので，
+  $M$ の固有値の全体は $\{\nu_1,\dots,\nu_m\}$ である．
+  最後に，$x=\sum_ly_l$（$y_l\in\ker(M-\nu_lI)=\operatorname{ran}R_l$）と
+  書けたとすると，$y_l=R_lz_l$ の形だから
+  $R_jx=\sum_lR_jR_lz_l=R_jz_j=y_j$．
+  すなわち $R_jx$ は $x$ の $\ker(M-\nu_jI)$ 成分として
+  （$M$ の固有空間だけから）一意に決まるので，
+  $R_j$ は $M$ だけから定まる．
+\end{proof}
+
 \section{半正定値平方根}
 
 \begin{theorem}{半正定値平方根の存在と一意性}{la-sqrt}
@@ -102,9 +162,10 @@
 
   \textbf{一意性．}
   $B\succeq0$ が対称で $B^2=\Sigma$ をみたすとする．
-  $B$ の相異なる固有値を $\mu_1,\dots,\mu_m$（$\geq0$），
-  対応する固有空間 $\ker(B-\mu_jI)$ への直交射影を $Q_j$ とすると，
-  スペクトル分解を固有値ごとにまとめて
+  主張~\ref{clm:la-spectral-grouped}(i) より，
+  $B$ の相異なる固有値 $\mu_1,\dots,\mu_m$
+  （$B\succeq0$ より $\mu_j\geq0$：主張~\ref{clm:la-psd-eigen}）と
+  零でない対称行列 $Q_j$ で
   \[
     B=\sum_{j=1}^m\mu_jQ_j,
     \qquad
@@ -112,19 +173,35 @@
     \qquad
     \sum_{j=1}^mQ_j=I
   \]
-  と書ける（$Q_j$ は $\lambda_i=\mu_j$ なる $u_iu_i^\top$ の和）．
-  このとき
+  なるものが取れる．このとき
   \[
-    \Sigma=B^2=\sum_{j=1}^m\mu_j^2\,Q_j
+    \Sigma=B^2
+    =\sum_{j,l}\mu_j\mu_l\,Q_jQ_l
+    =\sum_{j=1}^m\mu_j^2\,Q_j
   \]
   であり，$\mu_j\geq0$ が相異なることから $\mu_j^2$ も相異なる．
-  よって右辺は $\Sigma$ の「相異なる固有値と固有空間への直交射影」による
-  分解であり，$\Sigma$ の固有値 $\mu_j^2$ と
-  固有空間 $\ker(\Sigma-\mu_j^2I)=\operatorname{ran}Q_j$ は
-  $\Sigma$ だけから定まる．
-  したがって各 $Q_j$ と $\mu_j=\sqrt{\mu_j^2}$（非負の平方根）も
-  $\Sigma$ だけから定まり，$B=\sum_j\mu_jQ_j$ は一意である．
+  よって組 $\{(\mu_j^2,\,Q_j)\}_j$ は $\Sigma$ に対して
+  主張~\ref{clm:la-spectral-grouped}(ii) の仮定をみたし，
+  $\mu_j^2$（$=\Sigma$ の固有値の全体）と $Q_j$ は
+  $\Sigma$ だけから一意に定まる．
+  したがって $\mu_j=\sqrt{\mu_j^2}$（非負の平方根）も定まり，
+  $B=\sum_j\mu_jQ_j$ は $\Sigma$ だけから一意に決まる．
 \end{proof}
+
+\begin{remark}{正定値行列の逆平方根}{la-inv-sqrt}
+  $\Sigma\succ0$ のとき，固有値はすべて正
+  （$\lambda_i=u_i^\top\Sigma u_i>0$）なので，
+  $\Sigma^{1/2}=U\Lambda^{1/2}U^\top$ の固有値 $\sqrt{\lambda_i}$ も
+  すべて正であり，$\Sigma^{1/2}$ は正則である．その逆行列を
+  \[
+    \Sigma^{-1/2}
+    :=\bigl(\Sigma^{1/2}\bigr)^{-1}
+    =U\Lambda^{-1/2}U^\top
+    \qquad(\Lambda^{-1/2}:=\diag(1/\sqrt{\lambda_1},\dots,1/\sqrt{\lambda_n}))
+  \]
+  と書く（右の表示は $U\Lambda^{1/2}U^\top\cdot U\Lambda^{-1/2}U^\top=I$
+  の直接計算による）．$\Sigma^{-1/2}$ は対称かつ正定値である．
+\end{remark}
 
 \section{作用素ノルムと Cauchy--Schwarz の不等式}
 
@@ -253,9 +330,13 @@
   $A^\top u_i=0=A'^\top u_i$．
   よって $A^\top=A'^\top$，すなわち $A=A'$ である．
 
-  このとき $\operatorname{ran}A^\top$ は
-  $\{A^\top u_i\}_{i=1}^k=\{d_iv_i\}_{i\leq r'}\cup\{0\}$ の張る空間だから
-  $\rank A=\rank A^\top=r'$，すなわち $r'=r$ である．
+  このとき $A=A'$ の表示から
+  $Ax=\sum_{i\leq r'}d_i\inner{v_i}{x}\,u_i$ なので
+  $\operatorname{ran}A\subset\operatorname{span}\{u_i\mid i\leq r'\}$，
+  逆に $Av_i=d_iu_i$ より各 $u_i\in\operatorname{ran}A$（$i\leq r'$）．
+  よって $\operatorname{ran}A=\operatorname{span}\{u_1,\dots,u_{r'}\}$ で，
+  正規直交系の一次独立性（主張~\ref{clm:la-onb-extension}内の注意）から
+  $\rank A=r'$，すなわち $r'=r$ である．
   最後に，$\{v_i\}$ の正規直交性から
   \[
     A^\top A
@@ -270,8 +351,14 @@
   補題~\ref{lem:la-svd}の $d_1\geq\cdots\geq d_r>0$ に
   $0$ を並べて $\min\{k,n\}$ 個にしたものを $A$ の\textbf{特異値}とよび，
   $\sigma_1(A)\geq\cdots\geq\sigma_{\min\{k,n\}}(A)\geq0$ と書く．
-  補題~\ref{lem:la-svd}より，非零の特異値の2乗は
-  $AA^\top$ の非零固有値とも $A^\top A$ の非零固有値とも一致する．
+  この定義は SVD の取り方によらない：
+  補題~\ref{lem:la-svd}より $AA^\top=\sum_{i\leq r}d_i^2\,u_iu_i^\top$ で，
+  $\{u_i\}$ を正規直交基底に延長（主張~\ref{clm:la-onb-extension}）すれば
+  これは $AA^\top$ のスペクトル分解になるから，
+  $d_i^2$ は重複度込みで $AA^\top$ の非零固有値と一致し
+  （固有値が分解の係数に尽きることは
+  主張~\ref{clm:la-spectral-grouped}(ii)），$A$ だけから定まる．
+  同様に非零の特異値の2乗は $A^\top A$ の非零固有値とも一致するので，
   特に $\sigma_i(A)=\sigma_i(A^\top)$ である．
 \end{definition}
 
@@ -287,8 +374,9 @@
 \begin{proof}
   SVD（補題~\ref{lem:la-svd}）の記号で，
   $B:=\sum_{i=1}^rd_i\,v_iv_i^\top$ とおく．
-  $B$ は対称で，固有値は $d_i>0$ と $0$ だから $B\succeq0$
-  （主張~\ref{clm:la-psd-eigen}），かつ正規直交性より
+  $B$ は対称で，
+  $x^\top Bx=\sum_id_i\inner{v_i}{x}^2\geq0$ より $B\succeq0$，
+  かつ正規直交性より
   \[
     B^2=\sum_{i,j}d_id_j\,v_i\inner{v_i}{v_j}v_j^\top
     =\sum_{i=1}^rd_i^2\,v_iv_i^\top=A^\top A.
@@ -384,8 +472,24 @@
   \]
   を得る．
 
-  $V_1:=\operatorname{ran}\Sigma_1^{1/2}$，
-  $V_2:=\operatorname{ran}\Sigma_2^{1/2}$ とおき，
+  $V_1:=\operatorname{ran}\Sigma_1^{1/2}:=\{\Sigma_1^{1/2}u\mid u\in\R^n\}$，
+  $V_2:=\operatorname{ran}\Sigma_2^{1/2}$ とおく．
+  スペクトル分解 $\Sigma_1^{1/2}=\sum_i\sqrt{\lambda_i}\,u_iu_i^\top$ から
+  $V_1=\operatorname{span}\{u_i\mid\lambda_i>0\}$ である
+  （$\subset$ は表示から，$\supset$ は $\lambda_i>0$ のとき
+  $u_i=\Sigma_1^{1/2}(u_i/\sqrt{\lambda_i})$ から）．
+  よって $\lambda_i>0$ に対応する $u_i$ たちが
+  $V_1$ の正規直交基底 $e_1,\dots,e_m$ を与える．
+  同様に $V_2$ の正規直交基底 $f_1,\dots,f_{m'}$ を取り，
+  $V_2$ への\textbf{直交射影}を $P:=\sum_{j=1}^{m'}f_jf_j^\top$ と定める．
+  定義から $Pw\in V_2$，$w\in V_2$ なら基底で展開して $Pw=w$，
+  また Bessel の不等式（主張~\ref{clm:la-bessel}）より
+  $\norm{Pw}^2=\bigl\lVert\sum_j\inner{f_j}{w}f_j\bigr\rVert^2
+  =\sum_j\inner{f_j}{w}^2\leq\norm{w}^2$ である．
+  なお $V_1=\{0\}$ または $V_2=\{0\}$ のときは，
+  （$*$）ですべての $u,v$ について $u^\top Kv=0$，すなわち $K=O$ となり，
+  $C=O$ が求める行列になるから，以下いずれも $\{0\}$ でないとする．
+
   $V_1\times V_2$ 上の関数 $\beta$ を
   \[
     \beta(\Sigma_1^{1/2}u,\;\Sigma_2^{1/2}v):=u^\top Kv
@@ -394,29 +498,33 @@
   $\Sigma_1^{1/2}u=\Sigma_1^{1/2}u'$ ならば（$*$）を $u-u'$ と $v$ に適用して
   $((u-u')^\top Kv)^2\leq\norm{\Sigma_1^{1/2}(u-u')}^2\norm{\Sigma_2^{1/2}v}^2=0$，
   すなわち $u^\top Kv=u'^\top Kv$ であり，$v$ 側も同様だからである．
-  $\beta$ は双線形で，（$*$）より
+  $\beta$ は双線形（$u^\top Kv$ が $u,v$ について線形で，
+  値が代表 $u,v$ の取り方によらないことから）で，（$*$）より
   $\abs{\beta(a,b)}\leq\norm{a}\,\norm{b}$（$a\in V_1$，$b\in V_2$）をみたす．
 
-  $V_1$ の正規直交基底 $e_1,\dots,e_m$ を取り，$b\in V_2$ に対し
+  $b\in V_2$ に対し
   \[
     c(b):=\sum_{l=1}^m\beta(e_l,b)\,e_l\in V_1
   \]
   とおくと，$c$ は $b$ について線形で，$a\in V_1$ に対し
   $\inner{a}{c(b)}=\beta(a,b)$ をみたす（$a$ を基底で展開すればよい）．
-  また
+  また $c(b)=0$ なら $\norm{c(b)}\leq\norm{b}$ は自明であり，
+  $c(b)\neq0$ なら
   \[
     \norm{c(b)}^2=\inner{c(b)}{c(b)}=\beta(c(b),b)
     \leq\norm{c(b)}\,\norm{b}
   \]
   より $\norm{c(b)}\leq\norm{b}$ である．
-  $P$ を $V_2$ への直交射影として $C:=c\circ P$
-  （$w\mapsto c(Pw)$ を表す行列）とおけば，
+  $C:=c\circ P$（$w\mapsto c(Pw)$；$c$ と $P$ は線形なので行列で表せる）
+  とおけば，
   $\norm{Cw}=\norm{c(Pw)}\leq\norm{Pw}\leq\norm{w}$ より
   $\norm{C}_{\mathrm{op}}\leq1$ である．
 
   最後に $K=\Sigma_1^{1/2}C\Sigma_2^{1/2}$ を確かめる．
-  任意の $u,v$ に対し，$\Sigma_2^{1/2}v\in V_2$ と
-  $\Sigma_1^{1/2}u\in V_1$ から
+  任意の $u,v$ に対し，$\Sigma_2^{1/2}v\in V_2$ だから
+  $P(\Sigma_2^{1/2}v)=\Sigma_2^{1/2}v$，すなわち
+  $C(\Sigma_2^{1/2}v)=c(\Sigma_2^{1/2}v)$ であり，
+  $\Sigma_1^{1/2}u\in V_1$ と合わせて
   \[
     u^\top\bigl(\Sigma_1^{1/2}C\Sigma_2^{1/2}\bigr)v
     =\inner{\Sigma_1^{1/2}u}{\,c(\Sigma_2^{1/2}v)}
@@ -434,9 +542,11 @@
 \end{lemma}
 
 \begin{proof}
-  $\Sigma$ の相異なる固有値を $\mu_1,\dots,\mu_m\geq0$，
-  固有空間への直交射影を $Q_j$ とし，
-  $\Sigma=\sum_j\mu_jQ_j$（$Q_jQ_l=\delta_{jl}Q_j$，$\sum_jQ_j=I$）と書く．
+  主張~\ref{clm:la-spectral-grouped}(i) より
+  $\Sigma=\sum_j\mu_jQ_j$
+  （$\mu_1,\dots,\mu_m$ は相異なる固有値で
+  主張~\ref{clm:la-psd-eigen}より $\geq0$，
+  $Q_jQ_l=\delta_{jl}Q_j$，$\sum_jQ_j=I$）と書ける．
   Lagrange 補間で $p(\mu_j)=\sqrt{\mu_j}$（$j=1,\dots,m$）をみたす
   多項式 $p$ を取る．
   $\Sigma^k=\sum_j\mu_j^kQ_j$（$k\geq1$）と $\sum_jQ_j=I$ から，
@@ -488,5 +598,7 @@
     =\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}
   \]
   であり，(ii) と平方根の一意性（定理~\ref{thm:la-sqrt}）から
-  $S=\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}$ である．
+  $S=\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}$ である
+  （左辺の行列が $\succeq0$ で平方根をもつことは
+  主張~\ref{clm:la-congruence}による）．
 \end{proof}

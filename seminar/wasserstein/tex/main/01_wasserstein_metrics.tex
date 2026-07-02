@@ -68,7 +68,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   ここで $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおけば，
   $f(t)=t^p$（$p\geq 1$）が $[0,\infty)$ 上で凸であること
-  （微積分の標準的な事実として認める）から
+  （注意~\ref{rem:meas-real-facts}）から
   \begin{align*}
     \text{右辺}
     = (a+b)^p
@@ -96,6 +96,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \begin{remark}{$\Pp{\infty}(X)$ の言い換え}{wp-p-infty-equiv}
   定義~\ref{def:wp-p-space}の $\Pp{\infty}(X)$ の2つの表示が
   一致することを確かめる．
+  なお $X$ は可分で $\mu$ は確率測度だから
+  $\mu(\supp\mu)=1$（補題~\ref{lem:meas-support-full}），
+  特に $\supp\mu\neq\emptyset$ であり，
+  上限が $\sup\emptyset=-\infty$ になることはない．
   \begin{itemize}
     \item $\supp\mu$ が有界，すなわちある開球 $B_r(z)$ に含まれるとする．
       三角不等式より $\supp\mu\subset B_{r+d(z,x_0)}(x_0)$ だから，
@@ -179,15 +183,27 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
   と統一的に書ける．
-  また主張~\ref{clm:meas-esssup-ae}より，$\norm{d}_{L^\infty(\pi)}$ 自身が
+  また主張~\ref{clm:meas-esssup-ae}より，$\norm{d}_{L^\infty(\pi)}$ が
+  有限のとき（すぐ後の補題~\ref{lem:wp-finite}により
+  $\mu,\nu\in\Pp{\infty}(X)$ の coupling では常に有限），それ自身が
   「$d(x,y)\leq R$ が $\pi$-a.e. で成り立つ」をみたす最小の $R\geq0$ であり，
   これは $\esssup_{(x,y)\sim\pi}d(x,y)$ とも書かれる．
+  さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
+  $p<\infty$ では下限と $p$ 乗が交換でき，
+  \[
+    \Wass_p(\mu,\nu)^p
+    =\inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+  \]
+  とも書ける．
 \end{remark}
 
 \begin{lemma}{$\Wass_p$ の有限性}{wp-finite}
   $1\leq p\leq\infty$，$\mu,\nu\in\Pp{p}(X)$ とすると，
   $\Couplings(\mu,\nu)\neq\emptyset$ であり，
-  $\Wass_p(\mu,\nu)<\infty$ である．
+  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
+  $\norm{d}_{L^p(\pi)}<\infty$ である．
+  特に $\Wass_p(\mu,\nu)<\infty$ である．
 \end{lemma}
 
 \begin{proof}
@@ -196,20 +212,18 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   第1周辺分布 $\mu$・第2周辺分布 $\nu$ をもつから，
   $\mu\otimes\nu\in\Couplings(\mu,\nu)$，
   特に $\Couplings(\mu,\nu)\neq\emptyset$ である．
-  下限の定義から
-  $\Wass_p(\mu,\nu)\leq\norm{d}_{L^p(\mu\otimes\nu)}$
-  なので，右辺が有限であることを示せばよい．
 
+  次に $\pi\in\Couplings(\mu,\nu)$ を任意に取る．
   各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(x_0,y)$ に，
   $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}）と
   Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用し，
   さらに周辺積分公式（補題~\ref{lem:meas-marginal-integral}の $L^p$ 版）で
-  各項を周辺測度の積分に落とすと，$1\leq p\leq\infty$ で一括して
+  各項を周辺測度のノルムに落とすと，$1\leq p\leq\infty$ で一括して
   \[
-    \norm{d(x,y)}_{L^p(\mu\otimes\nu)}
+    \norm{d(x,y)}_{L^p(\pi)}
     \leq
-    \norm{d(x,x_0)}_{L^p(\mu\otimes\nu)}
-    +\norm{d(x_0,y)}_{L^p(\mu\otimes\nu)}
+    \norm{d(x,x_0)}_{L^p(\pi)}
+    +\norm{d(x_0,y)}_{L^p(\pi)}
     =
     \norm{d(\cdot,x_0)}_{L^p(\mu)}
     +\norm{d(\cdot,x_0)}_{L^p(\nu)}
@@ -278,7 +292,9 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \abs{d(x,F)-d(y,F)}\leq d(x,y)
   \]
   であり，さらに $s,t\geq0$ に対し
-  $\abs{\max\{1-ns,0\}-\max\{1-nt,0\}}\leq n\abs{s-t}$ だから
+  $\abs{\max\{1-ns,0\}-\max\{1-nt,0\}}\leq n\abs{s-t}$
+  （$t\mapsto\max\{t,0\}$ が 1-Lipschitz であることの，
+  場合分けによる帰結）だから
   \[
     \abs{f_n(x)-f_n(y)}
     \leq n\,\abs{d(x,F)-d(y,F)}
@@ -291,7 +307,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   が成り立つ．
 
   ここで $F$ は空でない閉集合だから，
-  $d(x, F) = 0 \Leftrightarrow x \in F$ である．
+  $d(x, F) = 0 \Leftrightarrow x \in F$ である
+  （$\Leftarrow$ は明らか．$\Rightarrow$ の対偶：$x\notin F$ なら
+  $X\setminus F$ は開集合なので $B_r(x)\subset X\setminus F$ なる
+  $r>0$ が取れ，任意の $z\in F$ で $d(x,z)\geq r$，
+  よって $d(x,F)\geq r>0$）．
   \begin{itemize}
     \item $x \in F$ のとき：$d(x, F) = 0$ より $f_n(x) = 1$．
     \item $x \notin F$ のとき：$d(x, F) > 0$ より，
@@ -313,8 +333,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   閉集合の全体 $\mathcal{C}$ は，$X\in\mathcal{C}$ であり，
   2つの閉集合の共通部分が閉集合であることから
   $\pi$-系である（定理~\ref{thm:meas-uniqueness}）．
-  開集合は閉集合の補集合だから，
-  $\mathcal{C}$ が生成する $\sigma$-代数は $\Borel(X)$ に一致する．
+  閉集合は開集合の補集合として Borel 集合だから
+  $\sigma(\mathcal{C})\subset\Borel(X)$，
+  逆に開集合は閉集合の補集合として $\sigma(\mathcal{C})$ に属するから
+  $\Borel(X)\subset\sigma(\mathcal{C})$，
+  よって $\sigma(\mathcal{C})=\Borel(X)$ である．
   $\mu(X)=\nu(X)=1$ だから，
   一致定理（定理~\ref{thm:meas-uniqueness}）より $\mu = \nu$ である．
 \end{proof}
@@ -327,7 +350,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   であるものが存在する．
   ここで $(x,y)$-周辺分布とは，射影
   $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$ による押し出し
-  ${\mathrm{pr}_{12}}\pushforward\gamma$ のことをいう（$(y,z)$ も同様）．
+  ${\mathrm{pr}_{12}}\pushforward\gamma$ のことをいう（$(y,z)$ も同様．
+  $X^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
 \end{lemma}
 
 \begin{proof}

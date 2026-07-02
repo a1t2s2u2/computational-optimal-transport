@@ -43,7 +43,8 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \begin{remark}{$\R^n$ は Polish 空間}{gauss-rn-polish}
   $(\R^n,\norm{\cdot})$ は完備かつ可分（定義~\ref{def:meas-polish}）である．
   実際，$\R^n$ の Cauchy 列は各座標が $\R$ の Cauchy 列であり，
-  実数の完備性（既知とする）から各座標が収束するので全体も収束する．
+  実数の完備性（注意~\ref{rem:meas-real-facts}）から各座標が収束するので
+  全体も収束する．
   また $\mathbb{Q}^n$ は可算で，各座標を有理数で近似すれば稠密である．
   したがって第\ref{ch:wasserstein-metrics}章の理論がそのまま使える．
   以下，基点を $x_0=0$ に取り（補題~\ref{lem:wp-p-indep}），
@@ -52,6 +53,12 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     =\Bigl\{\mu\in\Prob(\R^n)\;\Bigm|\;\int_{\R^n}\norm{x}^2\,\d\mu(x)<\infty\Bigr\}
   \]
   とする．
+  なお直積 $\R^n\times\R^n$ に付録Aの $\max$ 距離を入れたものと
+  $\R^{2n}$ の Euclid 距離は，
+  $\max\{\norm{x},\norm{y}\}\leq\norm{(x,y)}\leq\sqrt{2}\max\{\norm{x},\norm{y}\}$
+  より開集合が一致し，Borel $\sigma$-代数も一致する
+  （$\Borel(\R^n\times\R^n)=\Borel(\R^{2n})$）．
+  以下この同一視を断りなく用いる．
 \end{remark}
 
 \section{平均と共分散}
@@ -139,8 +146,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 
 \begin{proof}
   $I:=\int_\R e^{-t^2/2}\,\d\lambda_1$ とおく．
-  Fubini--Tonelli の定理（定理~\ref{thm:meas-product}）と
-  極座標変換（定理~\ref{thm:meas-polar}）から
+  $\lambda_2=\lambda_1\otimes\lambda_1$ と
+  Fubini--Tonelli の定理（いずれも定理~\ref{thm:meas-product}），
+  および極座標変換（定理~\ref{thm:meas-polar}）から
   \[
     I^2
     =\int_{\R^2}e^{-(s^2+t^2)/2}\,\d\lambda_2
@@ -151,8 +159,10 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   \]
   であり，$I>0$ だから $I=\sqrt{2\pi}$，すなわち $\int\varphi\,\d\lambda_1=1$．
 
-  次に $\int_0^\infty t\varphi(t)\,\d t=\varphi(0)<\infty$ だから
-  $t\varphi(t)$ は可積分である．
+  次に $\abs{t}\varphi(t)$ は偶関数で，
+  $\int_0^\infty t\varphi(t)\,\d t=\varphi(0)$ だから
+  $\int_\R\abs{t}\varphi(t)\,\d\lambda_1\leq2\varphi(0)<\infty$，
+  すなわち $t\varphi(t)$ は可積分である．
   鏡映 $r(t):=-t$ は $\abs{\det(-1)}=1$ のアフィン写像なので
   $r\pushforward\lambda_1=\lambda_1$（定理~\ref{thm:meas-affine-cov}），
   変数変換公式（補題~\ref{lem:meas-change-of-variables}）と
@@ -180,7 +190,8 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   補題~\ref{lem:gauss-integral}より
   $\varphi_n(x):=(2\pi)^{-n/2}e^{-\norm{x}^2/2}$ は
   $\int_{\R^n}\varphi_n\,\d\lambda_n=1$ をみたす
-  （Fubini--Tonelli の定理~\ref{thm:meas-product}で座標ごとに分解）．
+  （$\lambda_n=\lambda_1\otimes\cdots\otimes\lambda_1$ と
+  Fubini--Tonelli の定理~\ref{thm:meas-product}で座標ごとに分解）．
   そこで密度をもつ測度（定義~\ref{def:meas-density}）として
   \[
     \gamma_n:=\varphi_n\,\d\lambda_n\in\Prob(\R^n)
@@ -191,9 +202,10 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \begin{claim}{$\gamma_n$ の直積構造とモーメント}{gauss-standard-moments}
   \begin{enumerate}
     \item $\gamma_n=\gamma_1\otimes\cdots\otimes\gamma_1$（$n$ 個の直積）であり，
-      $1\leq r<n$ のとき，最初の $r$ 座標への射影
+      $1\leq r\leq n$ のとき，最初の $r$ 座標への射影
       $\mathrm{pr}_r(x_1,\dots,x_n):=(x_1,\dots,x_r)$ について
-      ${\mathrm{pr}_r}\pushforward\gamma_n=\gamma_r$ である．
+      ${\mathrm{pr}_r}\pushforward\gamma_n=\gamma_r$ である
+      （$r=n$ では $\mathrm{pr}_n$ は恒等写像で自明）．
     \item $\gamma_n\in\Pp{2}(\R^n)$ で，平均 $0$，共分散 $I_n$，
       $\int\norm{x}^2\,\d\gamma_n=n$ である．
   \end{enumerate}
@@ -210,10 +222,11 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   \]
   であり，これは $\gamma_1^{\otimes n}$ と一致する．
   矩形集合の全体は $\pi$-系で $\Borel(\R^n)$ を生成する
-  （注意~\ref{rem:meas-borel-product}を繰り返し使う）から，
+  （注意~\ref{rem:meas-borel-product}）から，
   一致定理（定理~\ref{thm:meas-uniqueness}）より
   $\gamma_n=\gamma_1^{\otimes n}$ である．
-  同様に $\gamma_n=\gamma_r\otimes\gamma_{n-r}$ だから，
+  射影については，$r=n$ なら $\mathrm{pr}_n$ は恒等写像で自明．
+  $r<n$ のときは同様に $\gamma_n=\gamma_r\otimes\gamma_{n-r}$ だから，
   直積測度の周辺分布（主張~\ref{clm:meas-product-marginals}）より
   \[
     ({\mathrm{pr}_r}\pushforward\gamma_n)(A)
@@ -230,9 +243,11 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $\int x_i\,\d\gamma_n=\int t\varphi\,\d\lambda_1=0$，
   すなわち平均は $0$ である．
   共分散の $(i,j)$ 成分は $\int x_ix_j\,\d\gamma_n$ で，
-  $i=j$ なら $\int t^2\varphi\,\d\lambda_1=1$，
-  $i\neq j$ なら Fubini の定理で
-  $\bigl(\int t\varphi\,\d\lambda_1\bigr)^2\cdot1=0$ となり，
+  $i=j$ なら $\int t^2\varphi\,\d\lambda_1=1$．
+  $i\neq j$ なら，$\abs{x_ix_j}\leq\frac{1}{2}(x_i^2+x_j^2)$ と
+  前半より $x_ix_j$ は可積分なので，Fubini の定理で
+  $\int x_ix_j\,\d\gamma_n
+  =\bigl(\int t\varphi\,\d\lambda_1\bigr)^2=0$ となり，
   共分散は $I_n$ である．
 \end{proof}
 
@@ -269,13 +284,17 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 
   $r:=\rank A$ とし，SVD（補題~\ref{lem:la-svd}）で
   $A=\sum_{i=1}^rd_iu_iv_i^\top$ と書く．
-  $r=0$（$A=O$）のときは両辺とも $\delta_0$（$0$ への押し出し）で等しいから，
-  $r\geq1$ とする．
+  $r=0$（$A=O$）のときは，$O^2=O$ と平方根の一意性
+  （定理~\ref{thm:la-sqrt}）から $(AA^\top)^{1/2}=O^{1/2}=O$ であり，
+  両辺とも定値写像 $0$ による押し出しで一致するから，$r\geq1$ とする．
   正規直交系 $\{v_i\}_{i\leq r}$，$\{u_i\}_{i\leq r}$ をそれぞれ
   $\R^n$，$\R^k$ の正規直交基底 $\{v_i\}_{i=1}^n$，$\{u_i\}_{i=1}^k$ に
-  延長し（主張~\ref{clm:la-onb-extension}），
-  $V:=[v_1,\dots,v_n]$，$U:=[u_1,\dots,u_k]$ とおくと，
-  列が正規直交基底なので $V,U$ は直交行列である．
+  延長し（主張~\ref{clm:la-onb-extension}；$r=n$ や $r=k$ のときは
+  延長は不要），
+  $V:=[v_1,\dots,v_n]$，$U:=[u_1,\dots,u_k]$ とおく．
+  列の正規直交性から $V^\top V=I$ で，$V$ は正方だから
+  $V^{-1}=V^\top$，よって $VV^\top=I$ も成り立ち，
+  $V$（同様に $U$）は直交行列である．
 
   ここで写像 $D\colon\R^n\to\R^k$ と $D'\colon\R^k\to\R^k$ を
   \[
@@ -290,8 +309,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     =Ax,
   \]
   すなわち $A=U\circ D\circ V^\top$ である．
-  また $B:=\sum_{i=1}^rd_iu_iu_i^\top$ は対称で固有値 $d_i>0$ と $0$ をもつので
-  半正定値，かつ $B^2=\sum_id_i^2u_iu_i^\top=AA^\top$
+  また $B:=\sum_{i=1}^rd_iu_iu_i^\top$ は対称で，
+  $x^\top Bx=\sum_id_i\inner{u_i}{x}^2\geq0$ より半正定値，
+  かつ $B^2=\sum_id_i^2u_iu_i^\top=AA^\top$
   （補題~\ref{lem:la-svd}）だから，平方根の一意性
   （定理~\ref{thm:la-sqrt}）より $(AA^\top)^{1/2}=B$ であり，
   同じ計算で $B=U\circ D'\circ U^\top$ である．
@@ -313,7 +333,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $D'=\iota\circ D_r\circ\mathrm{pr}_r'$
   （$\mathrm{pr}_r,\mathrm{pr}_r'$ はそれぞれ $\R^n,\R^k$ から
   最初の $r$ 座標への射影）と書ける．
-  主張~\ref{clm:gauss-standard-moments}(i) より
+  主張~\ref{clm:gauss-standard-moments}(i)（$r\leq n$，$r\leq k$）より
   ${\mathrm{pr}_r}\pushforward\gamma_n=\gamma_r={\mathrm{pr}_r'}\pushforward\gamma_k$
   だから，合成則より
   \[
@@ -397,8 +417,10 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   （$\ell(x)=m+\Sigma^{1/2}x$）だから，
   アフィン像の平均・共分散（主張~\ref{clm:gauss-cov-basic}(iii)）より
   $\Normal(m,\Sigma)\in\Pp{2}(\R^n)$ で，平均は $m$，共分散は
-  $\Sigma^{1/2}I_n\Sigma^{1/2}=\Sigma$ である．
-  最後の等式は主張~\ref{clm:gauss-cov-basic}(ii) による．
+  $\Sigma^{1/2}I_n\Sigma^{1/2}=\Sigma$
+  （平方根の定義：定理~\ref{thm:la-sqrt}）である．
+  主張文中の $\int\norm{x}^2\,\d\Normal(m,\Sigma)=\norm{m}^2+\tr\Sigma$ は
+  主張~\ref{clm:gauss-cov-basic}(ii) による．
 \end{proof}
 
 \begin{memo*}
@@ -468,7 +490,10 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     +\norm{m_\mu-m_\nu}^2.
   \]
   対応 $\pi\mapsto T\pushforward\pi$ は全単射だから，
-  両辺の下限を取れば主張の等式を得る．
+  両辺で下限を取り，
+  $\Wass_2(\mu,\nu)^2=\inf_\pi\int\norm{x-y}^2\,\d\pi$
+  （下限と2乗の交換：注意~\ref{rem:wp-welldef}）を使えば
+  主張の等式を得る．
 \end{proof}
 
 \section{Coupling のコストと相互共分散}
@@ -619,7 +644,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     \tr\Sigma_1+\tr\Sigma_2
     -2\tr\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}.
   \]
-  $\pi$ について下限を取れば結論を得る．
+  $\pi$ について下限を取れば
+  （$\Wass_2^2=\inf_\pi\int\norm{x-y}^2\,\d\pi$：注意~\ref{rem:wp-welldef}）
+  結論を得る．
 \end{proof}
 
 \section{主定理}
@@ -712,7 +739,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $\Sigma_1\succ0$ のときは，最適な輸送を\textbf{写像}で書ける．
   $M:=\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}$，
   $T:=\Sigma_1^{-1/2}M^{1/2}\Sigma_1^{-1/2}$
-  （合同変換なので $T\succeq0$：主張~\ref{clm:la-congruence}），
+  （逆平方根 $\Sigma_1^{-1/2}$ は注意~\ref{rem:la-inv-sqrt}．
+  $\Sigma_1^{-1/2}$ は対称だから $T$ は合同変換の形で
+  $T\succeq0$：主張~\ref{clm:la-congruence}），
   $\phi(x):=m_2+T(x-m_1)$ とおくと：
   \begin{itemize}
     \item $T\Sigma_1T
@@ -861,9 +890,13 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   （定義~\ref{def:gauss-def}）で，主定理より
   $\Wass_2(\delta_{m_1},\delta_{m_2})=\norm{m_1-m_2}$ となる．
   これは直接の計算とも合う：
-  $\Couplings(\delta_{m_1},\delta_{m_2})=\{\delta_{(m_1,m_2)}\}$
-  （coupling の全測度は $\{m_1\}\times\{m_2\}$ に集中する）だから
-  コストは常に $\norm{m_1-m_2}^2$ である．
+  $\pi\in\Couplings(\delta_{m_1},\delta_{m_2})$ なら
+  $\pi(\{m_1\}\times\R^n)=1$ かつ $\pi(\R^n\times\{m_2\})=1$ で，
+  全測度をもつ2つの集合の共通部分 $\{(m_1,m_2)\}$ も全測度をもつ
+  （補集合は零集合2つの合併）から，
+  $\pi=\delta_{(m_1,m_2)}$ に限る．
+  このとき被積分関数 $\norm{x-y}^2$ は $\pi$-a.e. で定数
+  $\norm{m_1-m_2}^2$ に等しく，コストはその値である．
   共分散が特異な場合を許した定式化の恩恵が最も端的に現れる例である．
 \end{example}
 

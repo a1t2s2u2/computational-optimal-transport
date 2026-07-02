@@ -33,6 +33,16 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
   $A=\emptyset$ のとき $\inf\emptyset:=+\infty$ と約束する．
 \end{definition}
 
+\begin{remark}{実数についての前提とする事実}{meas-real-facts}
+  次の2つは微積分の標準的事実であり，本資料では証明なしに用いる．
+  \begin{itemize}
+    \item $\R$ は完備である（Cauchy 列は収束する．連続性公理から従う）．
+    \item $p\geq1$ に対し $t\mapsto t^p$ は $[0,\infty)$ 上で
+      単調増加かつ凸である．特に
+      $\bigl(\frac{a+b}{2}\bigr)^p\leq\frac{a^p+b^p}{2}$（$a,b\geq0$）．
+  \end{itemize}
+\end{remark}
+
 \section{距離空間}
 
 \begin{definition}{距離空間}{meas-metric-space}
@@ -326,7 +336,8 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   $\int\abs{f}^p\,\d\mu\leq\int\abs{g}^p\,\d\mu$．
   両辺の $1/p$ 乗を取ればよい．
 
-  $p=\infty$ のとき：主張~\ref{clm:meas-esssup-ae}より
+  $p=\infty$ のとき：$\norm{g}_{L^\infty(\mu)}=\infty$ なら自明なので，
+  $\norm{g}_{L^\infty(\mu)}<\infty$ とする．主張~\ref{clm:meas-esssup-ae}より
   $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. だから，
   仮定と合わせて $\abs{f}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e.．
   よって $\norm{g}_{L^\infty(\mu)}$ は
@@ -500,6 +511,28 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   \]
 \end{proof}
 
+$X,Y$ を可分距離空間とする．
+直積 $X\times Y$ には距離
+$d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
+を入れる（稠密可算集合の直積が稠密なので，$X\times Y$ も可分である）．
+3個以上の有限個の直積 $X_1\times\cdots\times X_k$ にも
+同様に $\max$ 距離を入れ，可分性は保たれる．
+
+\begin{remark}{直積空間の Borel $\sigma$-代数（前提とする事実）}{meas-borel-product}
+  $X,Y$ が可分距離空間のとき，
+  $\Borel(X\times Y)$ は矩形集合
+  $\{A\times B\mid A\in\Borel(X),\,B\in\Borel(Y)\}$
+  の生成する $\sigma$-代数
+  $\Borel(X)\otimes\Borel(Y)$ と一致する（証明は省略する）．
+  なお矩形集合の族は
+  $(A\times B)\cap(A'\times B')=(A\cap A')\times(B\cap B')$
+  より $\pi$-系である．
+  有限個の直積 $X_1\times\cdots\times X_k$ についても同様に，
+  矩形集合 $A_1\times\cdots\times A_k$ の全体は $\pi$-系をなし，
+  $\Borel(X_1\times\cdots\times X_k)$ を生成する
+  （2因子の場合を繰り返せばよい）．
+\end{remark}
+
 \begin{lemma}{周辺分布と周辺積分公式}{meas-marginal-integral}
   $X,Y$ を距離空間，$\pi\in\Prob(X\times Y)$ とし，
   第1座標への射影を $\mathrm{pr}_1\colon(x,y)\mapsto x$ とする
@@ -533,30 +566,18 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 
 \section{直積測度と測度の分解}
 
-$X,Y$ を可分距離空間とする．
-直積 $X\times Y$ には距離
-$d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
-を入れる（稠密可算集合の直積が稠密なので，$X\times Y$ も可分である）．
-
-\begin{remark}{直積空間の Borel $\sigma$-代数（前提とする事実）}{meas-borel-product}
-  $X,Y$ が可分距離空間のとき，
-  $\Borel(X\times Y)$ は矩形集合
-  $\{A\times B\mid A\in\Borel(X),\,B\in\Borel(Y)\}$
-  の生成する $\sigma$-代数
-  $\Borel(X)\otimes\Borel(Y)$ と一致する（証明は省略する）．
-  なお矩形集合の族は
-  $(A\times B)\cap(A'\times B')=(A\cap A')\times(B\cap B')$
-  より $\pi$-系である．
-\end{remark}
-
 \begin{theorem}{直積測度と Fubini--Tonelli の定理}{meas-product}
-  $\mu,\nu$ をそれぞれ可分距離空間 $X,Y$ 上の Borel 確率測度とする．
-  $\Borel(X\times Y)$ 上の確率測度 $\mu\otimes\nu$ で
+  $\mu,\nu$ をそれぞれ可分距離空間 $X,Y$ 上の
+  $\sigma$-有限な Borel 測度
+  （空間が測度有限な可算個の Borel 集合で覆える測度．
+  確率測度と Lebesgue 測度 $\lambda_n$ はこれに当たる）とする．
+  $\Borel(X\times Y)$ 上の測度 $\mu\otimes\nu$ で
   \[
     (\mu\otimes\nu)(A\times B)=\mu(A)\,\nu(B)
     \qquad(A\in\Borel(X),\;B\in\Borel(Y))
   \]
   をみたすものがただ一つ存在する（\textbf{直積測度}）．
+  $\mu,\nu$ が確率測度なら $\mu\otimes\nu$ も確率測度である．
   さらに非負可測関数 $f\colon X\times Y\to[0,\infty)$ に対し
   \[
     \int_{X\times Y}f\,\d(\mu\otimes\nu)
@@ -567,8 +588,14 @@ $d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
   また $f$ が $\mu\otimes\nu$-可積分
   （$\int\abs{f}\,\d(\mu\otimes\nu)<\infty$）のときも，
   同じ逐次積分の等式が成り立つ（Fubini の定理）．
-  有限個の確率測度の直積 $\mu_1\otimes\cdots\otimes\mu_n$ についても同様である．
-  （標準的な結果．証明は省略する．一意性は
+  有限個の $\sigma$-有限測度の直積
+  $\mu_1\otimes\cdots\otimes\mu_n$ についても同様である．
+  特に Lebesgue 測度について
+  $\lambda_{m+n}=\lambda_m\otimes\lambda_n$，
+  すなわち $\lambda_n=\lambda_1\otimes\cdots\otimes\lambda_1$ である
+  （区間の直積上で体積が積に分解することによる）．
+  （いずれも標準的な結果．証明は省略する．
+  確率測度の場合の一意性は
   注意~\ref{rem:meas-borel-product}の $\pi$-系と
   一致定理（定理~\ref{thm:meas-uniqueness}）からも従う．）
 \end{theorem}
