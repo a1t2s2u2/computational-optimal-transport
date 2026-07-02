@@ -38,9 +38,9 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 \section*{本資料の構成}
 
 \begin{itemize}
-  \item 第1章：
+  \item 第\ref{ch:wasserstein-metrics}章：
     $\Pp{p}(X)$，coupling，$\Wass_p$ を定義し，目標1を証明する．
-  \item 第2章：$\R^n$ 上の Gaussian 測度を押し出しで定義し，
+  \item 第\ref{ch:gaussian}章：$\R^n$ 上の Gaussian 測度を押し出しで定義し，
     目標2を証明する（特異な共分散行列も含めた一般の場合を扱う）．
   \item 付録A：
     距離空間と測度論の準備．
@@ -51,8 +51,8 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 \end{itemize}
 
 前提知識は付録に集約し，本文からは参照でリンクする．
-まず第1章を読み，参照された定義・補題を必要に応じて付録で確認する読み方を
-想定している．
+まず本編を順に読み，参照された定義・補題を必要に応じて
+付録で確認する読み方を想定している．
 
 \section*{主な記号}
 
@@ -68,7 +68,8 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
   \item $\norm{f}_{L^p(\mu)}$：$L^p$ ノルム（定義~\ref{def:meas-lp-norm}）．
   \item $T\pushforward\mu$：押し出し測度（定義~\ref{def:meas-pushforward}）．
   \item $\mu\otimes\nu$：直積測度（定理~\ref{thm:meas-product}）．
-  \item $\Normal(m,\Sigma)$：平均 $m$，共分散 $\Sigma$ の Gaussian 測度（第2章）．
+  \item $\Normal(m,\Sigma)$：平均 $m$，共分散 $\Sigma$ の Gaussian 測度
+    （第\ref{ch:gaussian}章）．
   \item $\tr A$，$\Sigma^{1/2}$，$A\succeq0$：
     トレース・半正定値行列の平方根・半正定値性（付録B）．
 \end{itemize}
