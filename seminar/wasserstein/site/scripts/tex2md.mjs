@@ -45,8 +45,13 @@ const CHAPTERS = [
   }],
   ["main/01_wasserstein_metrics.tex", "01-wasserstein-metrics.md", {
     id: "wasserstein-metrics", group: "main",
-    nav: "Proposition 2", eyebrow: "1. Proposition 2",
+    nav: "Wₚ の距離性", eyebrow: "1. The Metric Wₚ",
     title: "Wasserstein 距離 Wₚ",
+  }],
+  ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
+    id: "found-preliminaries", group: "appendix",
+    nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",
+    title: "距離空間と測度の準備",
   }],
 ];
 
