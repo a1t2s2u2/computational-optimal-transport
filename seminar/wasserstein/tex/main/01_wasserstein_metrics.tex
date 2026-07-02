@@ -124,6 +124,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \right\}
   \]
   と定める．
+  $\pi\in\Couplings(\mu,\nu)$ は $\mu,\nu$ の
+  \textbf{coupling}（結合分布）あるいは\textbf{輸送計画}とよばれる．
   この条件は「$\pi$ の第1周辺分布が $\mu$，第2周辺分布が $\nu$」，
   すなわち射影による押し出しで
   ${\mathrm{pr}_1}\pushforward\pi=\mu$，${\mathrm{pr}_2}\pushforward\pi=\nu$
@@ -198,44 +200,34 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\Wass_p(\mu,\nu)\leq\norm{d}_{L^p(\mu\otimes\nu)}$
   なので，右辺が有限であることを示せばよい．
 
-  $1\leq p<\infty$ のとき．
-  補題~\ref{lem:wp-p-indep}の証明と同じ凸性の評価から，各点で
+  各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(x_0,y)$ に，
+  $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}）と
+  Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用し，
+  さらに周辺積分公式（補題~\ref{lem:meas-marginal-integral}の $L^p$ 版）で
+  各項を周辺測度の積分に落とすと，$1\leq p\leq\infty$ で一括して
   \[
-    d(x,y)^p
-    \leq\bigl(d(x,x_0)+d(x_0,y)\bigr)^p
-    \leq2^{p-1}\bigl(d(x,x_0)^p+d(y,x_0)^p\bigr)
-  \]
-  が成り立つ．周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
-  \[
-    \int_{X\times X}d(x,x_0)^p\,\d(\mu\otimes\nu)
-    =\int_X d(x,x_0)^p\,\d\mu(x),
-    \qquad
-    \int_{X\times X}d(y,x_0)^p\,\d(\mu\otimes\nu)
-    =\int_X d(y,x_0)^p\,\d\nu(y)
-  \]
-  だから，積分の単調性と合わせて
-  \[
-    \int_{X\times X}d(x,y)^p\,\d(\mu\otimes\nu)
+    \norm{d(x,y)}_{L^p(\mu\otimes\nu)}
     \leq
-    2^{p-1}\left(
-      \int_X d(x,x_0)^p\,\d\mu+\int_X d(y,x_0)^p\,\d\nu
-    \right)
-    <\infty.
+    \norm{d(x,x_0)}_{L^p(\mu\otimes\nu)}
+    +\norm{d(x_0,y)}_{L^p(\mu\otimes\nu)}
+    =
+    \norm{d(\cdot,x_0)}_{L^p(\mu)}
+    +\norm{d(\cdot,x_0)}_{L^p(\nu)}
   \]
+  を得る．あとは右辺の各項が有限であることを確かめればよい．
 
-  $p=\infty$ のとき．
-  $R_\mu:=\sup_{x\in\supp\mu}d(x,x_0)$，
-  $R_\nu:=\sup_{y\in\supp\nu}d(y,x_0)$ とおくと，
-  $\mu,\nu\in\Pp{\infty}(X)$ よりいずれも有限である．
-  $X$ は可分だから台は全測度をもち（補題~\ref{lem:meas-support-full}），
-  \[
-    (\mu\otimes\nu)(\supp\mu\times\supp\nu)
-    =\mu(\supp\mu)\,\nu(\supp\nu)=1.
-  \]
-  $\supp\mu\times\supp\nu$ 上では三角不等式より
-  $d(x,y)\leq d(x,x_0)+d(x_0,y)\leq R_\mu+R_\nu$ だから，
-  「$d\leq R_\mu+R_\nu$」は $(\mu\otimes\nu)$-a.e. で成り立つ．
-  よって $\norm{d}_{L^\infty(\mu\otimes\nu)}\leq R_\mu+R_\nu<\infty$ である．
+  $1\leq p<\infty$ のとき，
+  $\norm{d(\cdot,x_0)}_{L^p(\mu)}
+  =\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
+  は $\mu\in\Pp{p}(X)$ の定義そのものである（$\nu$ も同様）．
+
+  $p=\infty$ のとき，$R_\mu:=\sup_{x\in\supp\mu}d(x,x_0)$ とおくと
+  $\mu\in\Pp{\infty}(X)$ より $R_\mu<\infty$ である．
+  $X$ は可分だから台は全測度をもち（補題~\ref{lem:meas-support-full}）
+  $\mu(\supp\mu)=1$，かつ $\supp\mu$ 上で $d(\cdot,x_0)\leq R_\mu$ だから，
+  「$d(\cdot,x_0)\leq R_\mu$」は $\mu$-a.e. で成り立つ．
+  よって $\norm{d(\cdot,x_0)}_{L^\infty(\mu)}\leq R_\mu<\infty$ である
+  （$\nu$ も同様）．
 \end{proof}
 
 \section{Wasserstein 距離の距離性}
@@ -327,7 +319,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   一致定理（定理~\ref{thm:meas-uniqueness}）より $\mu = \nu$ である．
 \end{proof}
 
-\begin{lemma}{三変数 coupling の存在（gluing lemma）}{wp-gluing}
+\begin{lemma}{接着補題（gluing lemma）}{wp-gluing}
   $\mu,\nu,\xi\in\Prob(X)$，$\pi\in\Couplings(\mu,\nu)$，
   $\sigma\in\Couplings(\nu,\xi)$ とする．
   このとき $X^3$ 上の確率測度 $\gamma$ で，
@@ -548,3 +540,18 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 
   以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proof}
+
+\begin{remark}{文献との対応}{wp-metric-references}
+  命題~\ref{prop:wp-metric}は Givens--Shortt (1984) の Proposition 2 である．
+  原論文の三角不等式の証明は，最適 coupling の存在
+  （同論文 Proposition 1：$\Couplings(\mu,\nu)$ の弱位相での
+  コンパクト性による）を使って下限を達成する coupling を取るが，
+  本資料では $\varepsilon$-近最適な coupling で置き換え，
+  弱収束の理論を使わずに証明した．
+  接着補題（補題~\ref{lem:wp-gluing}）の構成は
+  桑江ほか『最適輸送理論とリッチ曲率』
+  （Encounter with Mathematics 第63回，2015）の補題 1.33，
+  および Villani (2009) Chapter 1 の Gluing Lemma に対応する．
+  $\Wass_p(\mu,\nu)=0\Rightarrow\mu=\nu$ を有界 Lipschitz 関数で示す論法は
+  Villani (2009) に倣った．
+\end{remark}
