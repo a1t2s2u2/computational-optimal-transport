@@ -564,6 +564,9 @@ $d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
     =\int_Y\!\!\int_X f(x,y)\,\d\mu(x)\,\d\nu(y)
   \]
   が成り立つ（内側の積分は可測関数を定める）．
+  また $f$ が $\mu\otimes\nu$-可積分
+  （$\int\abs{f}\,\d(\mu\otimes\nu)<\infty$）のときも，
+  同じ逐次積分の等式が成り立つ（Fubini の定理）．
   有限個の確率測度の直積 $\mu_1\otimes\cdots\otimes\mu_n$ についても同様である．
   （標準的な結果．証明は省略する．一意性は
   注意~\ref{rem:meas-borel-product}の $\pi$-系と
@@ -622,6 +625,8 @@ $d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
 
 $\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
 （区間の体積を拡張した $\Borel(\R^n)$ 上の測度）は既知とする．
+また，連続関数の（広義）Riemann 積分と Lebesgue 積分の一致，
+および微積分学の基本定理・部分積分も既知として用いる．
 
 \begin{definition}{密度をもつ測度}{meas-density}
   非負可測関数 $\rho\colon\R^n\to[0,\infty)$ が

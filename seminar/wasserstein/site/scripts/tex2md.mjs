@@ -48,6 +48,11 @@ const CHAPTERS = [
     nav: "Wₚ の距離性", eyebrow: "1. The Metric Wₚ",
     title: "Wasserstein 距離 Wₚ",
   }],
+  ["main/02_gaussian.tex", "02-gaussian.md", {
+    id: "gaussian", group: "main",
+    nav: "Gaussian の W₂", eyebrow: "2. Gaussian Measures",
+    title: "W₂ と Gaussian 測度",
+  }],
   ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
     id: "found-preliminaries", group: "appendix",
     nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",

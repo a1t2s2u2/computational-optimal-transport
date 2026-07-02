@@ -19,6 +19,21 @@
   $\norm{Ux}^2=x^\top U^\top Ux=\norm{x}^2$．
 \end{definition}
 
+\begin{claim}{正規直交基底への延長}{la-onb-extension}
+  $\R^n$ の正規直交系 $v_1,\dots,v_r$（$r<n$）は，
+  正規直交基底 $v_1,\dots,v_n$ に延長できる．
+\end{claim}
+
+\begin{proof}
+  $r<n$ のとき $S:=\operatorname{span}\{v_1,\dots,v_r\}\neq\R^n$ だから
+  $w\notin S$ が取れる．
+  $w':=w-\sum_{i=1}^r\inner{v_i}{w}\,v_i$ とおくと，
+  $w'=0$ なら $w\in S$ となり矛盾するから $w'\neq0$ であり，
+  $\inner{v_i}{w'}=\inner{v_i}{w}-\inner{v_i}{w}=0$（$i\leq r$）．
+  よって $v_{r+1}:=w'/\norm{w'}$ を加えれば正規直交系のまま
+  1本延長できる．これを $n$ 本になるまで繰り返せばよい．
+\end{proof}
+
 \begin{theorem}{スペクトル分解}{la-spectral}
   対称行列 $A\in\R^{n\times n}$ に対し，直交行列 $U$ と
   実対角行列 $\Lambda=\diag(\lambda_1,\dots,\lambda_n)$ が存在して
@@ -134,6 +149,21 @@
   すべての $t$ で成り立つには $a^\top Ab=0$ が必要
   （さもなくば $t\to\pm\infty$ の一方で右辺が $-\infty$）．
   このとき両辺とも $0$ 以上・以下で不等式は成り立つ．
+\end{proof}
+
+\begin{claim}{Bessel の不等式}{la-bessel}
+  $u_1,\dots,u_r$ を $\R^n$ の正規直交系とすると，任意の $w\in\R^n$ で
+  \[
+    \sum_{i=1}^r\inner{u_i}{w}^2\leq\norm{w}^2.
+  \]
+\end{claim}
+
+\begin{proof}
+  正規直交性から
+  \[
+    0\leq\Bigl\lVert w-\sum_{i=1}^r\inner{u_i}{w}\,u_i\Bigr\rVert^2
+    =\norm{w}^2-\sum_{i=1}^r\inner{u_i}{w}^2.  \qedhere
+  \]
 \end{proof}
 
 \begin{definition}{作用素ノルム}{la-opnorm}
