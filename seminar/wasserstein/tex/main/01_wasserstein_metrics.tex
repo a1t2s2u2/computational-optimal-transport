@@ -17,7 +17,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \]
 とおく．
 
-\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
+\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{wp-p-space}
   任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
     \Pp{p}(X)
@@ -43,7 +43,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   とおく．
 \end{definition}
 
-\begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{gs-p-indep}
+\begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
   $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
 \end{lemma}
 
@@ -86,7 +86,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $x_0$ と $x_0'$ を入れ替えれば逆も成り立つ．
 \end{proof}
 
-\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{gs-p-infty-equiv}
+\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{wp-p-infty-equiv}
   $\supp\mu$ が有界とは，ある $R<\infty$ が存在して
   \[
     \supp\mu\subset B_R(x_0)
@@ -104,7 +104,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
 \end{remark}
 
-\begin{definition}{Coupling 集合}{gs-coupling}
+\begin{definition}{Coupling 集合}{wp-coupling}
   $\mu,\nu\in\Prob(X)$ に対して，\textbf{Coupling 集合}を
   \[
     \Couplings(\mu,\nu)
@@ -121,7 +121,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   と定める．
 \end{definition}
 
-\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{gs-sampling-notation}
+\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{wp-sampling-notation}
   $\pi\in\Prob(X\times X)$ に対し，$(x,y)\sim\pi$ は
   確率測度 $\pi$ に従う確率変数 $(x,y)$ を表す．
   たとえば $\int_{X\times X} f(x,y)\,\d\pi(x,y)$ を
@@ -132,9 +132,9 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   であることをいう．
 \end{remark}
 
-\begin{definition}{Wasserstein 距離}{gs-wasserstein}
+\begin{definition}{Wasserstein 距離}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
-  下限（定義~\ref{def:gs-sup-inf}）を用いて
+  下限（定義~\ref{def:meas-sup-inf}）を用いて
   \[
     \Wass_p(\mu,\nu)
     :=
@@ -159,10 +159,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   と定める．
 \end{definition}
 
-\begin{remark}{記法と well-definedness}{gs-wp-welldef}
+\begin{remark}{記法と well-definedness}{wp-welldef}
   距離関数 $d\colon X\times X\to[0,\infty)$ は
   $\pi\in\Prob(X\times X)$ 上の可測関数だから，
-  $L^p$ ノルム（定義~\ref{def:gs-lp-norm}）を用いて
+  $L^p$ ノルム（定義~\ref{def:meas-lp-norm}）を用いて
   \[
     \Wass_p(\mu,\nu)
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
@@ -177,7 +177,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{definition}{Lipschitz 関数}{gs-lipschitz-function}
+\begin{definition}{Lipschitz 関数}{wp-lipschitz-function}
   Polish 空間 $(X,d)$ 上の関数 $f\colon X\to\R$ が\textbf{Lipschitz 関数}であるとは，
   ある定数 $L\geq0$ が存在して
   \[
@@ -185,11 +185,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \qquad(\forall x,y\in X)
   \]
   が成り立つことをいう．
-  さらに上限（定義~\ref{def:gs-sup-inf}）の意味で $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
+  さらに上限（定義~\ref{def:meas-sup-inf}）の意味で $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
   $f$ は\textbf{有界 Lipschitz 関数}であるという．
 \end{definition}
 
-\begin{lemma}{有界 Lipschitz 関数による測度の判定}{gs-bl-separates}
+\begin{lemma}{有界 Lipschitz 関数による測度の判定}{wp-bl-separates}
   $\mu,\nu\in\Prob(X)$ とする．すべての有界 Lipschitz 関数 $f\colon X\to\R$ について
   \[
     \int_X f\,\d\mu=\int_X f\,\d\nu
@@ -225,7 +225,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \end{itemize}
   よって $f_n(x) \to \mathbf{1}_F(x)$（すべての $x \in X$）である．
   さらに $0 \leq f_n \leq 1$ なので，
-  有界収束定理（定理~\ref{thm:gs-bounded-convergence}）により
+  有界収束定理（定理~\ref{thm:meas-bounded-convergence}）により
   \[
     \mu(F)
     = \int_X \mathbf{1}_F \, \d\mu
@@ -239,7 +239,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   有限測度の一致定理により $\mu = \nu$ である．
 \end{proof}
 
-\begin{lemma}{三変数 coupling の存在（gluing lemma）}{gs-gluing}
+\begin{lemma}{三変数 coupling の存在（gluing lemma）}{wp-gluing}
   $\pi\in\Couplings(\mu,\nu)$，
   $\sigma\in\Couplings(\nu,\xi)$ とする．このとき $X^3$ 上の確率測度
   $\gamma$ で，$(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
@@ -263,7 +263,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   と定めれば，$\gamma$ は求める2つの周辺分布をもつ．
 \end{proof}
 
-\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
+\begin{proposition}{Wasserstein 距離は距離である}{wp-metric}
   $1\leq p\leq\infty$ に対し，
   $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proposition}
@@ -317,12 +317,12 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   $\varepsilon\downarrow0$ とすれば，すべての有界 Lipschitz 関数 $f$ で
   $\int f\,\d\mu=\int f\,\d\nu$ となる．
-  補題~\ref{lem:gs-bl-separates}より $\mu=\nu$ である．
+  補題~\ref{lem:wp-bl-separates}より $\mu=\nu$ である．
 
   \textbf{(4) 三角不等式．}
   $\mu,\nu,\xi\in\Pp{p}(X)$ とし，
   $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$
-  を任意に取る．補題~\ref{lem:gs-gluing}により，$X^3$ 上の確率測度
+  を任意に取る．補題~\ref{lem:wp-gluing}により，$X^3$ 上の確率測度
   $\gamma$ で $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ であるものが取れる．
   $\gamma$ の $(x,z)$ 周辺分布を $\tau$ とおくと
   $\tau\in\Couplings(\mu,\xi)$ だから，

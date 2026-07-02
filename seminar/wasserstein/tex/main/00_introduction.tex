@@ -13,7 +13,7 @@ Proposition 2 を目標とする：
 
 \section*{準備}
 
-\begin{definition}{上限と下限}{gs-sup-inf}
+\begin{definition}{上限と下限}{meas-sup-inf}
   $A\subset\R$ を空でない集合とする．
   \begin{itemize}
     \item $A$ が上に有界であるとき，$A$ の\textbf{上限}（supremum）を
@@ -31,7 +31,7 @@ Proposition 2 を目標とする：
   \end{itemize}
 \end{definition}
 
-\begin{definition}{測度の台}{gs-support}
+\begin{definition}{測度の台}{meas-support}
   確率測度 $\mu$ の\textbf{台}とは
   \[
     \supp\mu
@@ -41,7 +41,7 @@ Proposition 2 を目標とする：
   のことである．
 \end{definition}
 
-\begin{definition}{指示関数}{gs-indicator}
+\begin{definition}{指示関数}{meas-indicator}
   集合 $A\subset X$ の\textbf{指示関数} $\mathbf{1}_A\colon X\to\{0,1\}$ を
   \[
     \mathbf{1}_A(x):=
@@ -54,7 +54,7 @@ Proposition 2 を目標とする：
   $\int_X\mathbf{1}_A\,\d\mu=\mu(A)$ が成り立つ．
 \end{definition}
 
-\begin{definition}{各点収束}{gs-pointwise-convergence}
+\begin{definition}{各点収束}{meas-pointwise-convergence}
   関数列 $f_n\colon X\to\R$ が $f\colon X\to\R$ に\textbf{各点収束}するとは，
   すべての $x\in X$ に対して
   \[
@@ -65,7 +65,7 @@ Proposition 2 を目標とする：
   \textbf{単調減少に各点収束する}といい，$f_n\downarrow f$ と書く．
 \end{definition}
 
-\begin{definition}{$L^p$ ノルム}{gs-lp-norm}
+\begin{definition}{$L^p$ ノルム}{meas-lp-norm}
   測度空間 $(\Omega,\mathcal{A},\mu)$ 上の可測関数 $f\colon\Omega\to\R$ に対し，
   $1\leq p<\infty$ のとき
   \[
@@ -82,7 +82,7 @@ Proposition 2 を目標とする：
   と定める．
 \end{definition}
 
-\begin{theorem}{有界収束定理}{gs-bounded-convergence}
+\begin{theorem}{有界収束定理}{meas-bounded-convergence}
   $(X,\Borel(X),\mu)$ を有限測度空間とする．
   関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，
   ある定数 $M<\infty$ で $\abs{f_n(x)}\leq M$（$\forall n,\,\forall x$）が
