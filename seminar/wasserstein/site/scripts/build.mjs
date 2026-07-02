@@ -483,6 +483,7 @@ function mathJaxScript() {
             rank: "\\\\operatorname{rank}",
             Cov: "\\\\operatorname{Cov}",
             Law: "\\\\mathcal{L}",
+            Normal: "\\\\mathcal{N}",
             Id: "\\\\mathrm{Id}",
             Wass: "W",
             pushforward: "{_\\\\#}",
