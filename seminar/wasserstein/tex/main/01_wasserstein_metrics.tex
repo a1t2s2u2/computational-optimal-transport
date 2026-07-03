@@ -4,7 +4,8 @@
 \section{設定と定義}
 \label{sec:wp-definition}
 
-$(X,d)$ を完備かつ可分な距離空間（\textbf{Polish 空間}）とする．
+$(X,d)$ を Polish 空間
+（完備かつ可分な距離空間：定義~\ref{def:meas-polish}）とする．
 Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \[
   \Prob(X)
@@ -17,7 +18,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \]
 とおく．
 
-\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{gs-p-space}
+\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{wp-p-space}
   任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
     \Pp{p}(X)
@@ -40,11 +41,15 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
       \sup_{x\in\supp\mu}d(x,x_0)<\infty
     \right\}
   \end{align*}
-  とおく．
+  とおく（台 $\supp\mu$ は定義~\ref{def:meas-support}，
+  有界集合は定義~\ref{def:meas-open-ball}を参照．
+  2つの表示の一致は注意~\ref{rem:wp-p-infty-equiv}で確かめる）．
 \end{definition}
 
-\begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{gs-p-indep}
-  $\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
+\begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
+  $1\leq p<\infty$ のとき，$\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
+  （$p=\infty$ の場合，第1の表示（台の有界性）が $x_0$ に言及しないので，
+  非依存性は明らかである．）
 \end{lemma}
 
 \begin{proof}
@@ -62,7 +67,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \bigl(d(x,x_0)+d(x_0,x_0')\bigr)^p.
   \]
   ここで $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおけば，
-  $f(t)=t^p$ ($p\geq 1$) の凸性から
+  $f(t)=t^p$（$p\geq 1$）が $[0,\infty)$ 上で凸であること
+  （注意~\ref{rem:meas-real-facts}）から
   \begin{align*}
     \text{右辺}
     = (a+b)^p
@@ -77,6 +83,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
   両辺を $\d\mu(x)$ で積分すると
+  （右辺第2項は定数なので，$\mu(X)=1$ より積分値は $d(x_0,x_0')^p$）
   \[
     \int_X d(x,x_0')^p\,\d\mu(x)
     \leq
@@ -86,25 +93,27 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $x_0$ と $x_0'$ を入れ替えれば逆も成り立つ．
 \end{proof}
 
-\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{gs-p-infty-equiv}
-  $\supp\mu$ が有界とは，ある $R<\infty$ が存在して
-  \[
-    \supp\mu\subset B_R(x_0)
-  \]
-  となることである．これは
-  \[
-    \forall x\in\supp\mu,\quad d(x,x_0)<R
-  \]
-  と同値であるから，
-  $\sup_{x\in\supp\mu}d(x,x_0)\leq R<\infty$．したがって
-  \[
-    \supp\mu\text{ が有界}
-    \iff
-    \sup_{x\in\supp\mu}d(x,x_0)<\infty.
-  \]
+\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{wp-p-infty-equiv}
+  定義~\ref{def:wp-p-space}の $\Pp{\infty}(X)$ の2つの表示が
+  一致することを確かめる．
+  なお $X$ は可分で $\mu$ は確率測度だから
+  $\mu(\supp\mu)=1$（補題~\ref{lem:meas-support-full}），
+  特に $\supp\mu\neq\emptyset$ であり，
+  上限が $\sup\emptyset=-\infty$ になることはない．
+  \begin{itemize}
+    \item $\supp\mu$ が有界，すなわちある開球 $B_r(z)$ に含まれるとする．
+      三角不等式より $\supp\mu\subset B_{r+d(z,x_0)}(x_0)$ だから，
+      $R:=r+d(z,x_0)$ とおけば，すべての $x\in\supp\mu$ で
+      $d(x,x_0)<R$，よって
+      $\sup_{x\in\supp\mu}d(x,x_0)\leq R<\infty$ である．
+    \item 逆に $S:=\sup_{x\in\supp\mu}d(x,x_0)<\infty$ とすると，
+      すべての $x\in\supp\mu$ で $d(x,x_0)\leq S<S+1$，
+      すなわち $\supp\mu\subset B_{S+1}(x_0)$ だから
+      $\supp\mu$ は有界である．
+  \end{itemize}
 \end{remark}
 
-\begin{definition}{Coupling 集合}{gs-coupling}
+\begin{definition}{Coupling 集合}{wp-coupling}
   $\mu,\nu\in\Prob(X)$ に対して，\textbf{Coupling 集合}を
   \[
     \Couplings(\mu,\nu)
@@ -119,22 +128,27 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \right\}
   \]
   と定める．
+  $\pi\in\Couplings(\mu,\nu)$ は $\mu,\nu$ の
+  \textbf{coupling}（結合分布）あるいは\textbf{輸送計画}とよばれる．
+  この条件は「$\pi$ の第1周辺分布が $\mu$，第2周辺分布が $\nu$」，
+  すなわち射影による押し出しで
+  ${\mathrm{pr}_1}\pushforward\pi=\mu$，${\mathrm{pr}_2}\pushforward\pi=\nu$
+  と言い換えられる（補題~\ref{lem:meas-marginal-integral}）．
 \end{definition}
 
-\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{gs-sampling-notation}
+\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{wp-sampling-notation}
   $\pi\in\Prob(X\times X)$ に対し，$(x,y)\sim\pi$ は
-  確率測度 $\pi$ に従う確率変数 $(x,y)$ を表す．
-  たとえば $\int_{X\times X} f(x,y)\,\d\pi(x,y)$ を
-  $\mathbb{E}_{(x,y)\sim\pi}[f(x,y)]$ とも書く．
-
-  性質 $P(x,y)$ が $\pi$\textbf{-a.e.}（almost everywhere）で成り立つとは，
-  $\pi(\{(x,y)\in X\times X\mid P(x,y)\text{ が成り立たない}\})=0$
-  であることをいう．
+  「確率測度 $\pi$ に従って選ばれた点対 $(x,y)$」を表す文献の記法で，
+  $\int_{X\times X} f(x,y)\,\d\pi(x,y)$ は
+  $\mathbb{E}_{(x,y)\sim\pi}[f(x,y)]$ とも書かれる
+  （本資料では積分記法を用いる）．
+  性質が $\pi$-a.e. で成り立つ，の意味は
+  定義~\ref{def:meas-ae}の通りである．
 \end{remark}
 
-\begin{definition}{Wasserstein 距離}{gs-wasserstein}
+\begin{definition}{Wasserstein 距離}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
-  下限（定義~\ref{def:gs-sup-inf}）を用いて
+  下限（定義~\ref{def:meas-sup-inf}）を用いて
   \[
     \Wass_p(\mu,\nu)
     :=
@@ -143,53 +157,114 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
       \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
     \right)^{1/p},
   \]
-  また $\mu,\nu\in\Pp{\infty}(X)$ に対し
-  \begin{align*}
+  また $\mu,\nu\in\Pp{\infty}(X)$ に対し，
+  $L^\infty$ ノルム（定義~\ref{def:meas-lp-norm}）を用いて
+  \[
     \Wass_\infty(\mu,\nu)
-    &:=
+    :=
     \inf_{\pi\in\Couplings(\mu,\nu)}
-    \esssup_{(x,y)\sim\pi}d(x,y)\\
-    &=
-    \inf_{\pi\in\Couplings(\mu,\nu)}
-    \inf\{R\geq 0\mid \pi(\{(x,y)\in X\times X\mid d(x,y)>R\})=0\}\\
-    &=
-    \inf_{\pi\in\Couplings(\mu,\nu)}
-    \inf\{R\geq 0\mid d(x,y)\leq R\quad\pi\text{-a.e.}\}
-  \end{align*}
+    \norm{d}_{L^\infty(\pi)}
+  \]
   と定める．
 \end{definition}
 
-\begin{remark}{記法と well-definedness}{gs-wp-welldef}
-  距離関数 $d\colon X\times X\to[0,\infty)$ は
-  $\pi\in\Prob(X\times X)$ 上の可測関数だから，
-  $L^p$ ノルム（定義~\ref{def:gs-lp-norm}）を用いて
+\begin{remark}{記法と可測性}{wp-welldef}
+  距離関数 $d\colon X\times X\to[0,\infty)$ は，三角不等式から従う評価
+  \[
+    \abs{d(x,y)-d(x',y')}\leq d(x,x')+d(y,y')
+  \]
+  により連続，したがって Borel 可測である
+  （注意~\ref{rem:meas-measurable-ops}）．
+  $d\geq0$ より $1\leq p<\infty$ では
+  $\norm{d}_{L^p(\pi)}=\bigl(\int d^p\,\d\pi\bigr)^{1/p}$ だから，
+  $1\leq p\leq\infty$ を通じて
   \[
     \Wass_p(\mu,\nu)
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
-  と書ける．
-  $p<\infty$ のとき，直積 coupling $\mu\otimes\nu$ と
-  $d(x,y)^p\leq 2^{p-1}(d(x,x_0)^p+d(y,x_0)^p)$
-  を用いれば，$\mu,\nu\in\Pp{p}(X)$ に対して $\Wass_p(\mu,\nu)<\infty$ が分かる．
-  $p=\infty$ でも，$\mu,\nu$ の台が有界なら同様に有限である．
+  と統一的に書ける．
+  また主張~\ref{clm:meas-esssup-ae}より，$\norm{d}_{L^\infty(\pi)}$ が
+  有限のとき（すぐ後の補題~\ref{lem:wp-finite}により
+  $\mu,\nu\in\Pp{\infty}(X)$ の coupling では常に有限），それ自身が
+  「$d(x,y)\leq R$ が $\pi$-a.e. で成り立つ」をみたす最小の $R\geq0$ であり，
+  これは $\esssup_{(x,y)\sim\pi}d(x,y)$ とも書かれる．
+  さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
+  $p<\infty$ では下限と $p$ 乗が交換でき，
+  \[
+    \Wass_p(\mu,\nu)^p
+    =\inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+  \]
+  とも書ける．
 \end{remark}
+
+\begin{lemma}{$\Wass_p$ の有限性}{wp-finite}
+  $1\leq p\leq\infty$，$\mu,\nu\in\Pp{p}(X)$ とすると，
+  $\Couplings(\mu,\nu)\neq\emptyset$ であり，
+  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
+  $\norm{d}_{L^p(\pi)}<\infty$ である．
+  特に $\Wass_p(\mu,\nu)<\infty$ である．
+\end{lemma}
+
+\begin{proof}
+  直積測度 $\mu\otimes\nu$（定理~\ref{thm:meas-product}）は，
+  主張~\ref{clm:meas-product-marginals}より
+  第1周辺分布 $\mu$・第2周辺分布 $\nu$ をもつから，
+  $\mu\otimes\nu\in\Couplings(\mu,\nu)$，
+  特に $\Couplings(\mu,\nu)\neq\emptyset$ である．
+
+  次に $\pi\in\Couplings(\mu,\nu)$ を任意に取る．
+  各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(x_0,y)$ に，
+  $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}）と
+  Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用し，
+  さらに周辺積分公式（補題~\ref{lem:meas-marginal-integral}の $L^p$ 版）で
+  各項を周辺測度のノルムに落とすと，$1\leq p\leq\infty$ で一括して
+  \[
+    \norm{d(x,y)}_{L^p(\pi)}
+    \leq
+    \norm{d(x,x_0)}_{L^p(\pi)}
+    +\norm{d(x_0,y)}_{L^p(\pi)}
+    =
+    \norm{d(\cdot,x_0)}_{L^p(\mu)}
+    +\norm{d(\cdot,x_0)}_{L^p(\nu)}
+  \]
+  を得る．あとは右辺の各項が有限であることを確かめればよい．
+
+  $1\leq p<\infty$ のとき，
+  $\norm{d(\cdot,x_0)}_{L^p(\mu)}
+  =\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
+  は $\mu\in\Pp{p}(X)$ の定義そのものである（$\nu$ も同様）．
+
+  $p=\infty$ のとき，$R_\mu:=\sup_{x\in\supp\mu}d(x,x_0)$ とおくと
+  $\mu\in\Pp{\infty}(X)$ より $R_\mu<\infty$ である．
+  $X$ は可分だから台は全測度をもち（補題~\ref{lem:meas-support-full}）
+  $\mu(\supp\mu)=1$，かつ $\supp\mu$ 上で $d(\cdot,x_0)\leq R_\mu$ だから，
+  「$d(\cdot,x_0)\leq R_\mu$」は $\mu$-a.e. で成り立つ．
+  よって $\norm{d(\cdot,x_0)}_{L^\infty(\mu)}\leq R_\mu<\infty$ である
+  （$\nu$ も同様）．
+\end{proof}
 
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
 
-\begin{definition}{Lipschitz 関数}{gs-lipschitz-function}
-  Polish 空間 $(X,d)$ 上の関数 $f\colon X\to\R$ が\textbf{Lipschitz 関数}であるとは，
-  ある定数 $L\geq0$ が存在して
+\begin{definition}{Lipschitz 関数}{wp-lipschitz-function}
+  距離空間 $(X,d)$ 上の関数 $f\colon X\to\R$ が
+  \textbf{Lipschitz 関数}であるとは，ある定数 $L\geq0$ が存在して
   \[
     \abs{f(x)-f(y)}\leq Ld(x,y)
     \qquad(\forall x,y\in X)
   \]
   が成り立つことをいう．
-  さらに上限（定義~\ref{def:gs-sup-inf}）の意味で $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
+  この条件をみたす $L$ 全体の下限 $L^*$ もまた条件をみたす
+  （条件をみたす列 $L_n\downarrow L^*$ を取り，
+  各 $x,y$ で両辺の極限を取ればよい）ので，$L^*$ は最小値である．
+  これを $f$ の \textbf{Lipschitz 定数}とよび $\Lip(f)$ と書く．
+  さらに上限（定義~\ref{def:meas-sup-inf}）の意味で
+  $\sup_{x\in X}\abs{f(x)}<\infty$ であるとき，
   $f$ は\textbf{有界 Lipschitz 関数}であるという．
 \end{definition}
 
-\begin{lemma}{有界 Lipschitz 関数による測度の判定}{gs-bl-separates}
+\begin{lemma}{有界 Lipschitz 関数による測度の判定}{wp-bl-separates}
   $\mu,\nu\in\Prob(X)$ とする．すべての有界 Lipschitz 関数 $f\colon X\to\R$ について
   \[
     \int_X f\,\d\mu=\int_X f\,\d\nu
@@ -198,34 +273,54 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{lemma}
 
 \begin{proof}
-  $\mu, \nu \in \Prob(X)$ とし，
-  すべての有界 Lipschitz 関数 $f \colon X \to \R$ について
-  $\int_X f \, \d\mu = \int_X f \, \d\nu$
-  が成り立つと仮定する．
+  方針：閉集合の指示関数を Lipschitz 関数で上から近似し，
+  有界収束定理で「すべての閉集合上で $\mu=\nu$」に落とす．
 
-  任意の空でない閉集合 $F \subset X$ をとる．
+  閉集合 $F\subset X$ を任意に取る．
+  $F=\emptyset$ のときは $\mu(\emptyset)=0=\nu(\emptyset)$ だから，
+  以下 $F\neq\emptyset$ とする．
   $d(x, F) := \inf_{y \in F} d(x, y)$ とおき，各 $n \in \N$ で
   \[
     f_n(x) := \max\{1 - n \, d(x, F),\; 0\}
   \]
   を定める．
-  $f_n$ は $0 \leq f_n \leq 1$ をみたす有界 Lipschitz 関数である．
+  $f_n$ は $0 \leq f_n \leq 1$ をみたす有界 Lipschitz 関数である．実際，
+  任意の $z\in F$ で $d(x,F)\leq d(x,z)\leq d(x,y)+d(y,z)$ だから
+  $z$ について下限を取れば $d(x,F)\leq d(x,y)+d(y,F)$，
+  $x$ と $y$ を入れ替えて
+  \[
+    \abs{d(x,F)-d(y,F)}\leq d(x,y)
+  \]
+  であり，さらに $s,t\geq0$ に対し
+  $\abs{\max\{1-ns,0\}-\max\{1-nt,0\}}\leq n\abs{s-t}$
+  （$t\mapsto\max\{t,0\}$ が 1-Lipschitz であることの，
+  場合分けによる帰結）だから
+  \[
+    \abs{f_n(x)-f_n(y)}
+    \leq n\,\abs{d(x,F)-d(y,F)}
+    \leq n\,d(x,y).
+  \]
   したがって仮定より，各 $n$ について
   \[
     \int_X f_n \, \d\mu = \int_X f_n \, \d\nu
   \]
   が成り立つ．
 
-  ここで $F$ は閉集合だから，
-  $d(x, F) = 0 \Leftrightarrow x \in F$ である．
+  ここで $F$ は空でない閉集合だから，
+  $d(x, F) = 0 \Leftrightarrow x \in F$ である
+  （$\Leftarrow$ は明らか．$\Rightarrow$ の対偶：$x\notin F$ なら
+  $X\setminus F$ は開集合なので $B_r(x)\subset X\setminus F$ なる
+  $r>0$ が取れ，任意の $z\in F$ で $d(x,z)\geq r$，
+  よって $d(x,F)\geq r>0$）．
   \begin{itemize}
     \item $x \in F$ のとき：$d(x, F) = 0$ より $f_n(x) = 1$．
     \item $x \notin F$ のとき：$d(x, F) > 0$ より，
       十分大きい $n$ で $n \, d(x, F) \geq 1$ となり $f_n(x) = 0$．
   \end{itemize}
   よって $f_n(x) \to \mathbf{1}_F(x)$（すべての $x \in X$）である．
-  さらに $0 \leq f_n \leq 1$ なので，
-  有界収束定理（定理~\ref{thm:gs-bounded-convergence}）により
+  さらに $0 \leq f_n \leq 1$，$f_n$ は連続ゆえ可測，
+  $\mu$ は有限測度（確率測度）だから，
+  有界収束定理（定理~\ref{thm:meas-bounded-convergence}）により
   \[
     \mu(F)
     = \int_X \mathbf{1}_F \, \d\mu
@@ -235,122 +330,252 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     = \nu(F).
   \]
   $F$ は任意の閉集合だったから，$\mu$ と $\nu$ はすべての閉集合上で一致する．
-  閉集合族は Borel $\sigma$-代数 $\Borel(X)$ を生成するので，
-  有限測度の一致定理により $\mu = \nu$ である．
+  閉集合の全体 $\mathcal{C}$ は，$X\in\mathcal{C}$ であり，
+  2つの閉集合の共通部分が閉集合であることから
+  $\pi$-系である（定理~\ref{thm:meas-uniqueness}）．
+  閉集合は開集合の補集合として Borel 集合だから
+  $\sigma(\mathcal{C})\subset\Borel(X)$，
+  逆に開集合は閉集合の補集合として $\sigma(\mathcal{C})$ に属するから
+  $\Borel(X)\subset\sigma(\mathcal{C})$，
+  よって $\sigma(\mathcal{C})=\Borel(X)$ である．
+  $\mu(X)=\nu(X)=1$ だから，
+  一致定理（定理~\ref{thm:meas-uniqueness}）より $\mu = \nu$ である．
 \end{proof}
 
-\begin{lemma}{三変数 coupling の存在（gluing lemma）}{gs-gluing}
-  $\pi\in\Couplings(\mu,\nu)$，
-  $\sigma\in\Couplings(\nu,\xi)$ とする．このとき $X^3$ 上の確率測度
-  $\gamma$ で，$(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
+\begin{lemma}{接着補題（gluing lemma）}{wp-gluing}
+  $\mu,\nu,\xi\in\Prob(X)$，$\pi\in\Couplings(\mu,\nu)$，
+  $\sigma\in\Couplings(\nu,\xi)$ とする．
+  このとき $X^3$ 上の確率測度 $\gamma$ で，
+  $(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
   であるものが存在する．
+  ここで $(x,y)$-周辺分布とは，射影
+  $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$ による押し出し
+  ${\mathrm{pr}_{12}}\pushforward\gamma$ のことをいう（$(y,z)$ も同様．
+  $X^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
 \end{lemma}
 
 \begin{proof}
-  $X$ は Polish 空間なので正則条件付き確率が存在する．
-  $\pi$ を第2成分について，$\sigma$ を第1成分について分解し，
+  方針：$\pi$ と $\sigma$ がともにもつ周辺分布 $\nu$ を軸に，
+  $y$ で条件付けた2つの Markov 核を貼り合わせる．
+
+  $X$ は Polish 空間だから，
+  分解定理（定理~\ref{thm:meas-disintegration}）が使える．
+  $\pi$ の第2周辺分布は $\nu$ だから，Markov 核 $K_\pi$ で
   \[
-    \pi(\d x,\d y)=K_\pi(y,\d x)\,\nu(\d y),
-    \qquad
-    \sigma(\d y,\d z)=\nu(\d y)\,K_\sigma(y,\d z)
+    \pi(A\times B)=\int_B K_\pi(y,A)\,\d\nu(y)
+    \qquad(A,B\in\Borel(X))
   \]
-  と書く．
+  をみたすものが取れる．
+  次に $s(y,z):=(z,y)$ とおくと（連続ゆえ可測），
+  $(s\pushforward\sigma)(C\times B)
+  =\sigma(s^{-1}(C\times B))=\sigma(B\times C)$ だから，
+  $s\pushforward\sigma$ の第2周辺分布は $\sigma$ の第1周辺分布，
+  すなわち $\nu$ である．
+  再び分解定理を $s\pushforward\sigma$ に適用して，Markov 核 $K_\sigma$ で
+  \[
+    \sigma(B\times C)
+    =(s\pushforward\sigma)(C\times B)
+    =\int_B K_\sigma(y,C)\,\d\nu(y)
+    \qquad(B,C\in\Borel(X))
+  \]
+  をみたすものが取れる．
+
+  定理~\ref{thm:meas-kernel-composition}により，$X^3$ 上の確率測度
   \[
     \gamma(\d x,\d y,\d z)
     :=
-    K_\pi(y,\d x)\,\nu(\d y)\,K_\sigma(y,\d z)
+    K_\pi(y,\d x)\,\nu(\d y)\,K_\sigma(y,\d z),
   \]
-  と定めれば，$\gamma$ は求める2つの周辺分布をもつ．
+  すなわち
+  $\gamma(A\times B\times C)=\int_B K_\pi(y,A)\,K_\sigma(y,C)\,\d\nu(y)$
+  をみたす $\gamma$ が存在する．
+  2つの周辺分布を検証する．
+  ${\mathrm{pr}_{12}}^{-1}(A\times B)=A\times B\times X$ と
+  $K_\sigma(y,X)=1$（Markov 核の値は確率測度）から，
+  任意の $A,B\in\Borel(X)$ に対し
+  \[
+    ({\mathrm{pr}_{12}}\pushforward\gamma)(A\times B)
+    =\gamma(A\times B\times X)
+    =\int_B K_\pi(y,A)\,K_\sigma(y,X)\,\d\nu(y)
+    =\int_B K_\pi(y,A)\,\d\nu(y)
+    =\pi(A\times B).
+  \]
+  矩形集合の全体は $\Borel(X\times X)$ を生成する $\pi$-系だから
+  （注意~\ref{rem:meas-borel-product}），
+  一致定理（定理~\ref{thm:meas-uniqueness}）より
+  ${\mathrm{pr}_{12}}\pushforward\gamma=\pi$ である．
+  同様に $K_\pi(y,X)=1$ より
+  \[
+    ({\mathrm{pr}_{23}}\pushforward\gamma)(B\times C)
+    =\gamma(X\times B\times C)
+    =\int_B K_\pi(y,X)\,K_\sigma(y,C)\,\d\nu(y)
+    =\int_B K_\sigma(y,C)\,\d\nu(y)
+    =\sigma(B\times C)
+  \]
+  だから ${\mathrm{pr}_{23}}\pushforward\gamma=\sigma$ である．
 \end{proof}
 
-\begin{proposition}{Wasserstein 距離は距離である}{gs-wp-metric}
+\begin{proposition}{Wasserstein 距離は距離である}{wp-metric}
   $1\leq p\leq\infty$ に対し，
   $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proposition}
 
 \begin{proof}
-  距離の公理を順に示す．
+  距離の公理（定義~\ref{def:meas-metric-space}）を順に確かめる．
+  以下，統一記法
+  $\Wass_p(\mu,\nu)=\inf_{\pi}\norm{d}_{L^p(\pi)}$
+  （注意~\ref{rem:wp-welldef}）を $1\leq p\leq\infty$ で共通に用いる．
 
-  \textbf{(1) 非負性．}
-  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
-  $d\geq 0$ より $\norm{d}_{L^p(\pi)}\geq 0$ だから，
-  $\Wass_p(\mu,\nu)\geq 0$ である．
+  \textbf{(0) 非負性と有限性．}
+  任意の $\pi\in\Couplings(\mu,\nu)$ で $\norm{d}_{L^p(\pi)}\geq0$ だから
+  $\Wass_p(\mu,\nu)\geq0$，
+  また補題~\ref{lem:wp-finite}より
+  $\Couplings(\mu,\nu)\neq\emptyset$ かつ $\Wass_p(\mu,\nu)<\infty$．
+  よって $\Wass_p$ は $\Pp{p}(X)$ 上の $[0,\infty)$ に値をもつ関数である．
 
-  \textbf{(2) 対称性．}
-  $\pi\in\Couplings(\mu,\nu)$ に対し，
-  $\pi'(A\times B):=\pi(B\times A)$ と定めれば
-  $\pi'\in\Couplings(\nu,\mu)$ である．
-  $d(x,y)=d(y,x)$ より輸送コストは等しく，
-  この対応 $\pi\mapsto\pi'$ は全単射だから
-  $\Wass_p(\mu,\nu)=\Wass_p(\nu,\mu)$．
+  \textbf{(1) 対称性．}
+  $s(x,y):=(y,x)$ とおく（連続ゆえ可測）．
+  $\pi\in\Couplings(\mu,\nu)$ に対し $\pi':=s\pushforward\pi$ とおくと，
+  \[
+    \pi'(B\times X)=\pi(s^{-1}(B\times X))=\pi(X\times B)=\nu(B),
+    \qquad
+    \pi'(X\times A)=\pi(A\times X)=\mu(A)
+  \]
+  だから $\pi'\in\Couplings(\nu,\mu)$ である．
+  コストは，系~\ref{cor:meas-pf-lp}と $d$ の対称性（$d\circ s=d$）より
+  \[
+    \norm{d}_{L^p(\pi')}
+    =\norm{d\circ s}_{L^p(\pi)}
+    =\norm{d}_{L^p(\pi)}.
+  \]
+  $s\circ s=\Id$ と合成則（主張~\ref{clm:meas-pf-compose}）より，
+  対応 $\pi\mapsto s\pushforward\pi$ は
+  $\Couplings(\mu,\nu)$ から $\Couplings(\nu,\mu)$ への全単射だから，
+  両辺の下限を取って $\Wass_p(\mu,\nu)=\Wass_p(\nu,\mu)$ である．
 
-  \textbf{(3) 非退化性．}
-  $\pi^*(A\times B):=\mu(A\cap B)$ と定めれば
-  $\pi^*\in\Couplings(\mu,\mu)$ であり，
-  $\pi^*$ は対角集合 $\{(x,x)\mid x\in X\}$ 上に集中するので
-  $\int d(x,y)^p\,\d\pi^*=0$，すなわち $\Wass_p(\mu,\mu)=0$ である．
+  \textbf{(2) 一致の公理．}
+  まず $\Wass_p(\mu,\mu)=0$ を示す．
+  対角写像 $\iota(x):=(x,x)$（連続ゆえ可測）による押し出し
+  $\pi^*:=\iota\pushforward\mu$ は，$\iota^{-1}(A\times B)=A\cap B$ より
+  \[
+    \pi^*(A\times X)=\mu(A\cap X)=\mu(A),
+    \qquad
+    \pi^*(X\times B)=\mu(B)
+  \]
+  をみたすから $\pi^*\in\Couplings(\mu,\mu)$ である．
+  $d\circ\iota\equiv0$ だから，系~\ref{cor:meas-pf-lp}より
+  $1\leq p\leq\infty$ で一括して
+  \[
+    \norm{d}_{L^p(\pi^*)}=\norm{d\circ\iota}_{L^p(\mu)}=0,
+  \]
+  よって $\Wass_p(\mu,\mu)=0$ である．
+
   逆に $\Wass_p(\mu,\nu)=0$ とする．
-  任意の $\varepsilon>0$ に対して，定義の下限より
+  任意の $\varepsilon>0$ に対し，下限の性質から
   $\pi_\varepsilon\in\Couplings(\mu,\nu)$ で
   \[
     \norm{d}_{L^p(\pi_\varepsilon)}<\varepsilon
   \]
   となるものを取れる．
-  有界 Lipschitz 関数 $f\colon X\to\R$ の
-  Lipschitz 定数を $\Lip(f)$ とすると，
-  $\abs{f(x)-f(y)}\leq\Lip(f)\,d(x,y)$ だから
+  有界 Lipschitz 関数 $f\colon X\to\R$ を任意に取る．
+  周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  $\int_X f\,\d\mu=\int f(x)\,\d\pi_\varepsilon$，
+  $\int_X f\,\d\nu=\int f(y)\,\d\pi_\varepsilon$ だから，
+  $\abs{f(x)-f(y)}\leq\Lip(f)\,d(x,y)$ と合わせて
   \[
     \left|\int_X f\,\d\mu-\int_X f\,\d\nu\right|
     =
     \left|\int_{X\times X}(f(x)-f(y))\,\d\pi_\varepsilon\right|
     \leq
-    \Lip(f)\int_{X\times X}d(x,y)\,\d\pi_\varepsilon.
+    \Lip(f)\int_{X\times X}d(x,y)\,\d\pi_\varepsilon
+    =
+    \Lip(f)\,\norm{d}_{L^1(\pi_\varepsilon)}.
   \]
-  確率空間上で
-  $\norm{g}_{L^1}\leq\norm{g}_{L^p}$ だから
+  確率測度上では $\norm{d}_{L^1}\leq\norm{d}_{L^p}$
+  （主張~\ref{clm:meas-l1-lp}，$p=\infty$ を含む）だから
   \[
-    \Lip(f)\norm{d}_{L^1(\pi_\varepsilon)}
+    \left|\int_X f\,\d\mu-\int_X f\,\d\nu\right|
     \leq
-    \Lip(f)\norm{d}_{L^p(\pi_\varepsilon)}
-    <
+    \Lip(f)\,\norm{d}_{L^p(\pi_\varepsilon)}
+    \leq
     \Lip(f)\,\varepsilon.
   \]
-  $\varepsilon\downarrow0$ とすれば，すべての有界 Lipschitz 関数 $f$ で
-  $\int f\,\d\mu=\int f\,\d\nu$ となる．
-  補題~\ref{lem:gs-bl-separates}より $\mu=\nu$ である．
+  $\varepsilon>0$ は任意だったから，すべての有界 Lipschitz 関数 $f$ で
+  $\int f\,\d\mu=\int f\,\d\nu$ となり，
+  補題~\ref{lem:wp-bl-separates}より $\mu=\nu$ である．
 
-  \textbf{(4) 三角不等式．}
-  $\mu,\nu,\xi\in\Pp{p}(X)$ とし，
-  $\pi\in\Couplings(\mu,\nu)$，$\sigma\in\Couplings(\nu,\xi)$
-  を任意に取る．補題~\ref{lem:gs-gluing}により，$X^3$ 上の確率測度
-  $\gamma$ で $(x,y)$ 周辺が $\pi$，$(y,z)$ 周辺が $\sigma$ であるものが取れる．
-  $\gamma$ の $(x,z)$ 周辺分布を $\tau$ とおくと
-  $\tau\in\Couplings(\mu,\xi)$ だから，
+  \textbf{(3) 三角不等式．}
+  方針：ほぼ最適な $\pi,\sigma$ を gluing lemma で貼り合わせ，
+  $(x,z)$-周辺分布を $\mu$ から $\xi$ への coupling として使う．
+
+  $\mu,\nu,\xi\in\Pp{p}(X)$ と $\varepsilon>0$ を任意に取る．
+  下限の性質から，$\pi\in\Couplings(\mu,\nu)$ と
+  $\sigma\in\Couplings(\nu,\xi)$ で
+  \[
+    \norm{d}_{L^p(\pi)}<\Wass_p(\mu,\nu)+\varepsilon,
+    \qquad
+    \norm{d}_{L^p(\sigma)}<\Wass_p(\nu,\xi)+\varepsilon
+  \]
+  なるものを取れる（(0) よりいずれの $\Wass_p$ も有限であることに注意）．
+  補題~\ref{lem:wp-gluing}により，$X^3$ 上の確率測度 $\gamma$ で
+  ${\mathrm{pr}_{12}}\pushforward\gamma=\pi$，
+  ${\mathrm{pr}_{23}}\pushforward\gamma=\sigma$
+  なるものが取れる．
+  $\tau:={\mathrm{pr}_{13}}\pushforward\gamma$ とおくと，
+  \[
+    \tau(A\times X)=\gamma(A\times X\times X)=\pi(A\times X)=\mu(A),
+    \qquad
+    \tau(X\times C)=\gamma(X\times X\times C)=\sigma(X\times C)=\xi(C)
+  \]
+  だから $\tau\in\Couplings(\mu,\xi)$ であり，
   \[
     \Wass_p(\mu,\xi)
     \leq \norm{d}_{L^p(\tau)}.
   \]
-  以下 $\gamma$ 上の $L^p$ ノルムでは，
+  以下，$\gamma$ 上の $L^p$ ノルムでは，
   $d(x,z)$ 等を $(x,y,z)\mapsto d(x,z)$ の略記とする．
-  $\norm{d}_{L^p(\tau)}=\norm{d(x,z)}_{L^p(\gamma)}$ であり，
-  距離 $d$ の三角不等式 $d(x,z)\leq d(x,y)+d(y,z)$ と
-  $L^p$ ノルムの単調性から
+  系~\ref{cor:meas-pf-lp}（$T=\mathrm{pr}_{13}$）より
+  \[
+    \norm{d}_{L^p(\tau)}=\norm{d(x,z)}_{L^p(\gamma)}
+  \]
+  であり，距離の三角不等式 $d(x,z)\leq d(x,y)+d(y,z)$（各点）と
+  $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}），
+  続いて Minkowski の不等式（定理~\ref{thm:meas-minkowski}）から
   \[
     \norm{d(x,z)}_{L^p(\gamma)}
-    \leq \norm{d(x,y)+d(y,z)}_{L^p(\gamma)}.
+    \leq \norm{d(x,y)+d(y,z)}_{L^p(\gamma)}
+    \leq \norm{d(x,y)}_{L^p(\gamma)}+\norm{d(y,z)}_{L^p(\gamma)}.
   \]
-  Minkowski の不等式を適用し，
-  周辺分布が $\pi,\sigma$ であることから
+  再び系~\ref{cor:meas-pf-lp}（$T=\mathrm{pr}_{12}$ と $T=\mathrm{pr}_{23}$）より
+  $\norm{d(x,y)}_{L^p(\gamma)}=\norm{d}_{L^p(\pi)}$，
+  $\norm{d(y,z)}_{L^p(\gamma)}=\norm{d}_{L^p(\sigma)}$ だから，まとめて
   \[
-    \norm{d(x,y)+d(y,z)}_{L^p(\gamma)}
-    \leq \norm{d}_{L^p(\pi)}
-    + \norm{d}_{L^p(\sigma)}.
+    \Wass_p(\mu,\xi)
+    \leq\norm{d}_{L^p(\pi)}+\norm{d}_{L^p(\sigma)}
+    <\Wass_p(\mu,\nu)+\Wass_p(\nu,\xi)+2\varepsilon.
   \]
-  これは任意の $\pi,\sigma$ で成り立つので，両辺で下限を取れば
+  $\varepsilon>0$ は任意だったから
   \[
     \Wass_p(\mu,\xi)
     \leq
     \Wass_p(\mu,\nu)+\Wass_p(\nu,\xi)
   \]
   が従う．
+
+  以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proof}
+
+\begin{remark}{文献との対応}{wp-metric-references}
+  命題~\ref{prop:wp-metric}は Givens--Shortt (1984) の Proposition 2 である．
+  原論文の三角不等式の証明は，最適 coupling の存在
+  （同論文 Proposition 1：$\Couplings(\mu,\nu)$ の弱位相での
+  コンパクト性による）を使って下限を達成する coupling を取るが，
+  本資料では $\varepsilon$-近最適な coupling で置き換え，
+  弱収束の理論を使わずに証明した．
+  接着補題（補題~\ref{lem:wp-gluing}）の構成は
+  桑江ほか『最適輸送理論とリッチ曲率』
+  （Encounter with Mathematics 第63回，2015）の補題 1.33，
+  および Villani (2009) Chapter 1 の Gluing Lemma に対応する．
+  $\Wass_p(\mu,\nu)=0\Rightarrow\mu=\nu$ を有界 Lipschitz 関数で示す論法は
+  Villani (2009) に倣った．
+\end{remark}

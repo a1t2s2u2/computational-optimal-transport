@@ -17,7 +17,7 @@
 
 - [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt (1984)](https://doi.org/10.1307/mmj/1029003026) — 骨格となる定義・命題の出典
 - [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9) — 現代的記法・証明の補完
-- [確率測度の空間における最適輸送問題, 桑江 (2024)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完
+- [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
 記法は Villani / Peyré–Cuturi に準拠し、Givens–Shortt 原論文の記号は読み替え表で対応する。
 文献間で定義が異なる場合は、最も一般的な定義を採用し、差異を注意として記載する。

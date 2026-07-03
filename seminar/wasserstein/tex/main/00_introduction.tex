@@ -1,149 +1,103 @@
 \chapter{導入}
 \label{ch:introduction}
 
-Givens–Shortt の論文
+本資料は，Wasserstein 距離の定義から出発し，次の2つの結果を目標とする．
+主たる文献は Givens--Shortt の論文
 \emph{A class of Wasserstein metrics for probability distributions}
-（Michigan Math.\ J.\ \textbf{31} (1984), 231–240）の
-Proposition 2 を目標とする：
-\[
-  1\leq p\leq\infty
-  \quad\Longrightarrow\quad
-  \Wass_p\text{ は }\Pp{p}(X)\text{ 上の距離である．}
-\]
+（Michigan Math.\ J.\ \textbf{31} (1984), 231--240）であり，
+記法と証明は
+Villani（\emph{Optimal Transport}, 2009）・
+Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
+に倣って現代的に再構成する．
+日本語の解説としては
+桑江ほか『最適輸送理論とリッチ曲率』
+（Encounter with Mathematics 第63回，中央大学，2015）の §1.4 を参照し，
+測度分解定理・接着補題などの用語と構成はこれに合わせた．
 
-\section*{準備}
+\begin{itemize}
+  \item \textbf{目標1（距離性；原論文 Proposition 2）}：
+    Polish 空間 $X$ 上で
+    \[
+      1\leq p\leq\infty
+      \quad\Longrightarrow\quad
+      \Wass_p\text{ は }\Pp{p}(X)\text{ 上の距離である．}
+    \]
+  \item \textbf{目標2（Gaussian 測度の閉形式；原論文 Proposition 7）}：
+    $\R^n$ 上の Gaussian 測度に対して
+    \[
+      \Wass_2\bigl(\Normal(m_1,\Sigma_1),\,\Normal(m_2,\Sigma_2)\bigr)^2
+      =
+      \norm{m_1-m_2}^2
+      +\tr\Bigl(\Sigma_1+\Sigma_2
+        -2\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}\Bigr).
+    \]
+    右辺は平均のずれと共分散のずれに分離した明示公式であり，
+    Wasserstein 距離が閉形式で計算できる数少ない例である．
+\end{itemize}
 
-\begin{definition}{上限と下限}{gs-sup-inf}
-  $A\subset\R$ を空でない集合とする．
-  \begin{itemize}
-    \item $A$ が上に有界であるとき，$A$ の\textbf{上限}（supremum）を
-      \[
-        \sup A := \min\{M\in\R\mid a\leq M\;\;(\forall a\in A)\}
-      \]
-      と定義する．すなわち $\sup A$ は $A$ の上界のうち最小のものである．
-      $A$ が上に有界でないとき $\sup A := +\infty$ とする．
-    \item $A$ が下に有界であるとき，$A$ の\textbf{下限}（infimum）を
-      \[
-        \inf A := \max\{m\in\R\mid m\leq a\;\;(\forall a\in A)\}
-      \]
-      と定義する．すなわち $\inf A$ は $A$ の下界のうち最大のものである．
-      $A$ が下に有界でないとき $\inf A := -\infty$ とする．
-  \end{itemize}
-\end{definition}
+\section*{本資料の構成}
 
-\begin{definition}{測度の台}{gs-support}
-  確率測度 $\mu$ の\textbf{台}とは
-  \[
-    \supp\mu
-    =
-    \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
-  \]
-  のことである．
-\end{definition}
+\begin{itemize}
+  \item 第\ref{ch:wasserstein-metrics}章：
+    $\Pp{p}(X)$，coupling，$\Wass_p$ を定義し，目標1を証明する．
+  \item 第\ref{ch:gaussian}章：$\R^n$ 上の Gaussian 測度を押し出しで定義し，
+    目標2を証明する（特異な共分散行列も含めた一般の場合を扱う）．
+  \item 付録A：
+    距離空間と測度論の準備．
+    本編で用いる定義と補題をすべて揃え，
+    証明なしで認める標準定理（単調収束定理・一致定理・分解定理など）は
+    ステートメントを明示して文献を挙げる．
+  \item 付録B：線形代数の準備（半正定値行列・平方根・特異値分解など）．
+\end{itemize}
 
-\begin{definition}{指示関数}{gs-indicator}
-  集合 $A\subset X$ の\textbf{指示関数} $\mathbf{1}_A\colon X\to\{0,1\}$ を
-  \[
-    \mathbf{1}_A(x):=
-    \begin{cases}
-      1 & (x\in A),\\
-      0 & (x\notin A)
-    \end{cases}
-  \]
-  と定める．$\mu$ が確率測度のとき
-  $\int_X\mathbf{1}_A\,\d\mu=\mu(A)$ が成り立つ．
-\end{definition}
+前提知識は付録に集約し，本文からは参照でリンクする．
+まず本編を順に読み，参照された定義・補題を必要に応じて
+付録で確認する読み方を想定している．
 
-\begin{definition}{各点収束}{gs-pointwise-convergence}
-  関数列 $f_n\colon X\to\R$ が $f\colon X\to\R$ に\textbf{各点収束}するとは，
-  すべての $x\in X$ に対して
-  \[
-    \lim_{n\to\infty}f_n(x)=f(x)
-  \]
-  が成り立つことをいう．
-  さらに各 $x$ で $f_1(x)\geq f_2(x)\geq\cdots$ であるとき
-  \textbf{単調減少に各点収束する}といい，$f_n\downarrow f$ と書く．
-\end{definition}
+\section*{主な記号}
 
-\begin{definition}{$L^p$ ノルム}{gs-lp-norm}
-  測度空間 $(\Omega,\mathcal{A},\mu)$ 上の可測関数 $f\colon\Omega\to\R$ に対し，
-  $1\leq p<\infty$ のとき
-  \[
-    \norm{f}_{L^p(\mu)}
-    :=
-    \left(\int_\Omega\abs{f}^p\,\d\mu\right)^{1/p},
-  \]
-  $p=\infty$ のとき
-  \[
-    \norm{f}_{L^\infty(\mu)}
-    :=
-    \inf\{M\geq 0\mid \abs{f}\leq M\;\;\mu\text{-a.e.}\}
-  \]
-  と定める．
-\end{definition}
-
-\begin{theorem}{有界収束定理}{gs-bounded-convergence}
-  $(X,\Borel(X),\mu)$ を有限測度空間とする．
-  関数列 $f_n\colon X\to\R$ が $f$ に各点収束し，
-  ある定数 $M<\infty$ で $\abs{f_n(x)}\leq M$（$\forall n,\,\forall x$）が
-  成り立つならば，
-  \[
-    \lim_{n\to\infty}\int_X f_n\,\d\mu=\int_X f\,\d\mu.
-  \]
-\end{theorem}
-
-\begin{proof}
-  \[
-    g_n(x) := \sup_{k \geq n} \abs{f_k(x) - f(x)}
-  \]
-  とおく．$g_n$ は非負可測であり，$\abs{f_n - f} \leq g_n$ をみたす．
-  また $g_n$ は単調減少（$g_1 \geq g_2 \geq \cdots$）であり，
-  $f_n \to f$ の各点収束から $g_n(x) \to 0$（すべての $x$）である．
-  さらに $\abs{f_k} \leq M$ と $\abs{f} \leq M$ より $g_n \leq 2M$ である．
-
-  $h_n := 2M - g_n$ とおくと，$h_n$ は非負かつ単調増加で
-  $h_n \uparrow 2M$ である．
-  単調収束定理より
-  \[
-    \int_X h_n \, \d\mu
-    \;\uparrow\;
-    \int_X 2M \, \d\mu
-    = 2M \, \mu(X).
-  \]
-  $\mu(X) < \infty$ だから
-  \[
-    \int_X g_n \, \d\mu
-    = 2M \, \mu(X) - \int_X h_n \, \d\mu
-    \;\to\; 0.
-  \]
-  $\abs{f_n - f} \leq g_n$ より
-  \[
-    \left\lvert\int_X f_n \, \d\mu - \int_X f \, \d\mu\right\rvert
-    \leq \int_X \abs{f_n - f} \, \d\mu
-    \leq \int_X g_n \, \d\mu
-    \to 0.  \qedhere
-  \]
-\end{proof}
+\begin{itemize}
+  \item $\Prob(X)$：$X$ 上の Borel 確率測度全体．
+  \item $\Pp{p}(X)$：有限 $p$ 次モーメントをもつ確率測度全体
+    （定義~\ref{def:wp-p-space}）．
+  \item $\Couplings(\mu,\nu)$：$\mu,\nu$ の coupling 全体
+    （定義~\ref{def:wp-coupling}）．
+  \item $\Wass_p(\mu,\nu)$：Wasserstein 距離（定義~\ref{def:wp-wasserstein}）．
+  \item $\supp\mu$：測度の台（定義~\ref{def:meas-support}）．
+  \item $\mathbf{1}_A$：指示関数（定義~\ref{def:meas-indicator}）．
+  \item $\norm{f}_{L^p(\mu)}$：$L^p$ ノルム（定義~\ref{def:meas-lp-norm}）．
+  \item $T\pushforward\mu$：押し出し測度（定義~\ref{def:meas-pushforward}）．
+  \item $\mu\otimes\nu$：直積測度（定理~\ref{thm:meas-product}）．
+  \item $\Normal(m,\Sigma)$：平均 $m$，共分散 $\Sigma$ の Gaussian 測度
+    （第\ref{ch:gaussian}章）．
+  \item $\tr A$，$\Sigma^{1/2}$，$A\succeq0$：
+    トレース・半正定値行列の平方根・半正定値性（付録B）．
+\end{itemize}
 
 \section*{記号・用語の読み替え}
 
-本資料では，原論文の記号・用語を
-Villani（\emph{Optimal Transport}, 2009）や
-Peyré–Cuturi（\emph{Computational Optimal Transport}, 2019）
-に倣い現代的な記法に統一する．
+原論文（Givens--Shortt 1984）と本資料の記号の対応を挙げる．
+特に原論文は $S\times S$ 上の同時分布（本資料の coupling）を
+$\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する．
+原論文を併読する場合は注意されたい．
 
-\begin{center}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{lcc}
-  \hline
-  & \textbf{原論文} & \textbf{本資料} \\
-  \hline
-  距離空間         & $(S,\,d)$                      & $(X,\,d)$ \\
-  基点             & $0$                            & $x_0$ \\
-  確率測度の空間   & $\mathfrak{M}_p(S)$            & $\Pp{p}(X)$ \\
-  確率測度         & $P_1,\,P_2$（law）             & $\mu,\,\nu$ \\
-  coupling の集合  & $D(P_1,P_2)$                   & $\Couplings(\mu,\nu)$ \\
-  Wasserstein 距離 & $W_p(P_1,P_2)$                 & $W_p(\mu,\nu)$ \\
-  \hline
-\end{tabular}
-\end{center}
+\begin{itemize}
+  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(X,\,d)$．
+  \item 基点：原論文 $0$ ── 本資料 $x_0$．
+  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(X)$．
+  \item 確率測度（law）：原論文 $P_1,\,P_2$ ── 本資料 $\mu,\,\nu$．
+  \item coupling の集合：原論文 $D(P_1,P_2)$ ── 本資料 $\Couplings(\mu,\nu)$．
+  \item coupling（$S\times S$ 上の同時分布）：原論文 $\mu,\,\mu_{12},\,\mu_{23}$
+    ── 本資料 $\pi,\,\sigma$．
+  \item 3変数の貼り合わせ測度（$S_1\times S_2\times S_3$ 上）：原論文 $\mu$
+    ── 本資料 $\gamma$．
+  \item Wasserstein 距離：原論文 $W_p(P_1,P_2)$ ── 本資料 $\Wass_p(\mu,\nu)$．
+  \item Gaussian 測度の平均：原論文 $\bar m_1,\,\bar m_2$ ── 本資料 $m_1,\,m_2$．
+  \item Gaussian 測度の共分散行列：原論文 $M_1,\,M_2$ ── 本資料 $\Sigma_1,\,\Sigma_2$．
+\end{itemize}
+
+なお原論文は Wasserstein 距離を
+$W_p=\bigl(\inf_\pi\int d^p\,\d\pi\bigr)^{1/p}$
+（冪が下限の外側）と定義するが，
+$t\mapsto t^{1/p}$ は単調増加かつ連続なので下限と交換でき，
+本資料の定義（定義~\ref{def:wp-wasserstein}）と一致する．

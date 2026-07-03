@@ -45,8 +45,23 @@ const CHAPTERS = [
   }],
   ["main/01_wasserstein_metrics.tex", "01-wasserstein-metrics.md", {
     id: "wasserstein-metrics", group: "main",
-    nav: "Proposition 2", eyebrow: "1. Proposition 2",
+    nav: "Wₚ の距離性", eyebrow: "1. The Metric Wₚ",
     title: "Wasserstein 距離 Wₚ",
+  }],
+  ["main/02_gaussian.tex", "02-gaussian.md", {
+    id: "gaussian", group: "main",
+    nav: "Gaussian の W₂", eyebrow: "2. Gaussian Measures",
+    title: "W₂ と Gaussian 測度",
+  }],
+  ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
+    id: "found-preliminaries", group: "appendix",
+    nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",
+    title: "距離空間と測度の準備",
+  }],
+  ["foundations/01_linalg.tex", "A1-linalg.md", {
+    id: "found-linalg", group: "appendix",
+    nav: "線形代数", eyebrow: "付録 B. Linear Algebra",
+    title: "線形代数の準備",
   }],
 ];
 
@@ -58,6 +73,7 @@ const BLOCK_ENVS = {
   lemma: ["theorem", "Lem"],
   theorem: ["theorem", "Thm"],
   proposition: ["theorem", "Prop"],
+  corollary: ["theorem", "Cor"],
   remark: ["fact", "Rem"],
   example: ["fact accent", "Ex"],
   algorithm: ["definition", ""],
@@ -69,6 +85,7 @@ const LABEL_PREFIX_MAP = {
   lem: "Lem",
   thm: "Thm",
   prop: "Prop",
+  cor: "Cor",
   rem: "Rem",
   ex: "Ex",
 };
@@ -76,6 +93,7 @@ const LABEL_PREFIX_MAP = {
 const JP_TO_ABBREV = {
   "定義": "Def", "主張": "Clm", "命題": "Prop",
   "定理": "Thm", "例": "Ex", "注意": "Rem", "補題": "Lem", "Claim": "Clm",
+  "系": "Cor",
 };
 
 const ENV_TO_PREFIX = {
@@ -84,6 +102,7 @@ const ENV_TO_PREFIX = {
   lemma: "lem",
   theorem: "thm",
   proposition: "prop",
+  corollary: "cor",
   remark: "rem",
   example: "ex",
 };
@@ -249,7 +268,7 @@ function convertRefs(text) {
   text = text.replace(/図~?\\ref\{fig:[^}]*\}/g, "図");
 
   text = text.replace(
-    /(定義|主張|命題|定理|例|注意|補題|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
+    /(定義|主張|命題|定理|例|注意|補題|系|Claim|正則化問題)~?\\ref\{([^}]+)\}/g,
     (_, g1, label) => {
       const title = LABEL_MAP[label];
       if (!title) {
