@@ -705,7 +705,7 @@ ${renderCards(mainSecs)}
       </nav>
 
       <footer class="landing__footer">
-        <p>参考文献: Givens–Shortt (1984), Villani (2009), 桑江 (2024)</p>
+        <p>参考文献: Givens–Shortt (1984), Villani (2009), Peyré–Cuturi (2019), 桑江ほか (2015)</p>
       </footer>
     </main>
   </body>
