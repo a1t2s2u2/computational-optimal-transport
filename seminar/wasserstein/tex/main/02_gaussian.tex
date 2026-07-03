@@ -59,6 +59,11 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   より開集合が一致し，Borel $\sigma$-代数も一致する
   （$\Borel(\R^n\times\R^n)=\Borel(\R^{2n})$）．
   以下この同一視を断りなく用いる．
+  また本章では，行列 $A\in\R^{k\times n}$ を線形写像 $x\mapsto Ax$ と
+  同一視し，その像測度（定義~\ref{def:meas-pushforward}）を
+  $\gamma_n\circ A^{-1}$ のように書く．
+  ここで $A^{-1}(B)$ は\textbf{逆像}であり，$A$ の正則性は仮定しない
+  （$A$ が正則なら逆行列による逆像と一致するので，記号に矛盾はない）．
 \end{remark}
 
 \section{平均と共分散}
@@ -88,7 +93,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
       より一般に $L\in\R^{k\times n}$ に対し
       $\displaystyle\int_{\R^n}\norm{L(x-m_\mu)}^2\,\d\mu=\tr(L\Sigma_\mu L^\top)$．
     \item （アフィン像の平均・共分散）$L\in\R^{k\times n}$，$b\in\R^k$，
-      $\ell(x):=Lx+b$ とすると，$\nu:=\ell\pushforward\mu\in\Pp{2}(\R^k)$ で
+      $\ell(x):=Lx+b$ とすると，$\nu:=\mu\circ\ell^{-1}\in\Pp{2}(\R^k)$ で
       \[
         m_\nu=Lm_\mu+b,
         \qquad
@@ -164,7 +169,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $\int_\R\abs{t}\varphi(t)\,\d\lambda_1\leq2\varphi(0)<\infty$，
   すなわち $t\varphi(t)$ は可積分である．
   鏡映 $r(t):=-t$ は $\abs{\det(-1)}=1$ のアフィン写像なので
-  $r\pushforward\lambda_1=\lambda_1$（定理~\ref{thm:meas-affine-cov}），
+  $\lambda_1\circ r^{-1}=\lambda_1$（定理~\ref{thm:meas-affine-cov}），
   変数変換公式（補題~\ref{lem:meas-change-of-variables}）と
   $\varphi(-t)=\varphi(t)$ から
   \[
@@ -204,7 +209,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     \item $\gamma_n=\gamma_1\otimes\cdots\otimes\gamma_1$（$n$ 個の直積）であり，
       $1\leq r\leq n$ のとき，最初の $r$ 座標への射影
       $\mathrm{pr}_r(x_1,\dots,x_n):=(x_1,\dots,x_r)$ について
-      ${\mathrm{pr}_r}\pushforward\gamma_n=\gamma_r$ である
+      $\gamma_n\circ\mathrm{pr}_r^{-1}=\gamma_r$ である
       （$r=n$ では $\mathrm{pr}_n$ は恒等写像で自明）．
     \item $\gamma_n\in\Pp{2}(\R^n)$ で，平均 $0$，共分散 $I_n$，
       $\int\norm{x}^2\,\d\gamma_n=n$ である．
@@ -229,7 +234,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $r<n$ のときは同様に $\gamma_n=\gamma_r\otimes\gamma_{n-r}$ だから，
   直積測度の周辺分布（主張~\ref{clm:meas-product-marginals}）より
   \[
-    ({\mathrm{pr}_r}\pushforward\gamma_n)(A)
+    (\gamma_n\circ\mathrm{pr}_r^{-1})(A)
     =\gamma_n(A\times\R^{n-r})
     =\gamma_r(A)
     \qquad(A\in\Borel(\R^r)).
@@ -253,7 +258,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 
 \begin{lemma}{直交不変性}{gauss-rotation}
   $U\in\R^{n\times n}$ が直交行列ならば
-  $U\pushforward\gamma_n=\gamma_n$ である．
+  $\gamma_n\circ U^{-1}=\gamma_n$ である．
 \end{lemma}
 
 \begin{proof}
@@ -268,13 +273,13 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
     =\int\mathbf{1}_{U^{-1}B}(x)\,\varphi_n(x)\,\d\lambda_n(x),
   \]
   ここで $\norm{Ux}=\norm{x}$ より $\varphi_n(Ux)=\varphi_n(x)$ を用いた．
-  右辺は $\gamma_n(U^{-1}B)=(U\pushforward\gamma_n)(B)$ である．
+  右辺は $\gamma_n(U^{-1}B)=(\gamma_n\circ U^{-1})(B)$ である．
 \end{proof}
 
-\begin{lemma}{線形押し出しの標準形（鍵補題）}{gauss-linear-pf}
+\begin{lemma}{標準 Gaussian の線形像（鍵補題）}{gauss-linear-pf}
   任意の $A\in\R^{k\times n}$ に対し
   \[
-    A\pushforward\gamma_n=(AA^\top)^{1/2}\pushforward\gamma_k.
+    \gamma_n\circ A^{-1}=\gamma_k\circ\bigl((AA^\top)^{1/2}\bigr)^{-1}.
   \]
 \end{lemma}
 
@@ -286,7 +291,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   $A=\sum_{i=1}^rd_iu_iv_i^\top$ と書く．
   $r=0$（$A=O$）のときは，$O^2=O$ と平方根の一意性
   （定理~\ref{thm:la-sqrt}）から $(AA^\top)^{1/2}=O^{1/2}=O$ であり，
-  両辺とも定値写像 $0$ による押し出しで一致するから，$r\geq1$ とする．
+  両辺とも定値写像 $0$ による像測度で一致するから，$r\geq1$ とする．
   正規直交系 $\{v_i\}_{i\leq r}$，$\{u_i\}_{i\leq r}$ をそれぞれ
   $\R^n$，$\R^k$ の正規直交基底 $\{v_i\}_{i=1}^n$，$\{u_i\}_{i=1}^k$ に
   延長し（主張~\ref{clm:la-onb-extension}；$r=n$ や $r=k$ のときは
@@ -316,17 +321,20 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   （定理~\ref{thm:la-sqrt}）より $(AA^\top)^{1/2}=B$ であり，
   同じ計算で $B=U\circ D'\circ U^\top$ である．
 
-  押し出しの合成則（主張~\ref{clm:meas-pf-compose}）と
+  像測度の合成則（主張~\ref{clm:meas-pf-compose}）と
   直交不変性（補題~\ref{lem:gauss-rotation}；$V^\top,U^\top$ も直交行列）より
   \[
-    A\pushforward\gamma_n
-    =U\pushforward\bigl(D\pushforward({V^\top}\pushforward\gamma_n)\bigr)
-    =U\pushforward(D\pushforward\gamma_n),
+    \gamma_n\circ A^{-1}
+    =\gamma_n\circ(V^\top)^{-1}\circ D^{-1}\circ U^{-1}
+    =\gamma_n\circ D^{-1}\circ U^{-1},
     \qquad
-    B\pushforward\gamma_k
-    =U\pushforward(D'\pushforward\gamma_k)
+    \gamma_k\circ B^{-1}
+    =\gamma_k\circ(D')^{-1}\circ U^{-1}
   \]
-  だから，$D\pushforward\gamma_n=D'\pushforward\gamma_k$ を示せばよい．
+  だから（1つ目と3つ目の等号は合成則の繰り返し．
+  3つ目ではさらに直交不変性 $\gamma_k\circ(U^\top)^{-1}=\gamma_k$ を，
+  2つ目では $\gamma_n\circ(V^\top)^{-1}=\gamma_n$ を使った），
+  $\gamma_n\circ D^{-1}=\gamma_k\circ(D')^{-1}$ を示せばよい．
   $\iota\colon\R^r\to\R^k$，$\iota(z):=(z_1,\dots,z_r,0,\dots,0)$ と
   $D_r:=\diag(d_1,\dots,d_r)\colon\R^r\to\R^r$ を使うと
   $D=\iota\circ D_r\circ\mathrm{pr}_r$，
@@ -334,20 +342,22 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   （$\mathrm{pr}_r,\mathrm{pr}_r'$ はそれぞれ $\R^n,\R^k$ から
   最初の $r$ 座標への射影）と書ける．
   主張~\ref{clm:gauss-standard-moments}(i)（$r\leq n$，$r\leq k$）より
-  ${\mathrm{pr}_r}\pushforward\gamma_n=\gamma_r={\mathrm{pr}_r'}\pushforward\gamma_k$
+  $\gamma_n\circ\mathrm{pr}_r^{-1}=\gamma_r=\gamma_k\circ(\mathrm{pr}_r')^{-1}$
   だから，合成則より
   \[
-    D\pushforward\gamma_n
-    =\iota\pushforward\bigl({D_r}\pushforward\gamma_r\bigr)
-    =D'\pushforward\gamma_k.  \qedhere
+    \gamma_n\circ D^{-1}
+    =\gamma_n\circ\mathrm{pr}_r^{-1}\circ D_r^{-1}\circ\iota^{-1}
+    =\gamma_r\circ D_r^{-1}\circ\iota^{-1}
+    =\gamma_k\circ(\mathrm{pr}_r')^{-1}\circ D_r^{-1}\circ\iota^{-1}
+    =\gamma_k\circ(D')^{-1}.  \qedhere
   \]
 \end{proof}
 
 \begin{definition}{Gaussian 測度}{gauss-def}
   $m\in\R^n$ と $\Sigma\succeq0$ に対し，
-  アフィン写像 $\ell(x):=m+\Sigma^{1/2}x$（連続ゆえ可測）による押し出し
+  アフィン写像 $\ell(x):=m+\Sigma^{1/2}x$（連続ゆえ可測）による像測度
   \[
-    \Normal(m,\Sigma):=\ell\pushforward\gamma_n
+    \Normal(m,\Sigma):=\gamma_n\circ\ell^{-1}
   \]
   を，平均 $m$・共分散 $\Sigma$ の \textbf{Gaussian 測度}
   （正規分布）とよぶ
@@ -359,9 +369,10 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \end{definition}
 
 \begin{lemma}{Gaussian 測度のアフィン像}{gauss-affine}
-  $L\in\R^{k\times n}$，$b\in\R^k$ に対し
+  $L\in\R^{k\times n}$，$b\in\R^k$ とし，
+  アフィン写像 $g(x):=Lx+b$ をとると
   \[
-    (x\mapsto Lx+b)\pushforward\Normal(m,\Sigma)
+    \Normal(m,\Sigma)\circ g^{-1}
     =\Normal(Lm+b,\;L\Sigma L^\top).
   \]
   （右辺は $L\Sigma L^\top\succeq0$（主張~\ref{clm:la-congruence}）
@@ -369,19 +380,29 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \end{lemma}
 
 \begin{proof}
-  押し出しの合成則（主張~\ref{clm:meas-pf-compose}）より，左辺は
-  合成写像 $x\mapsto L(m+\Sigma^{1/2}x)+b=(Lm+b)+(L\Sigma^{1/2})x$ による
-  $\gamma_n$ の押し出しである．
-  $A:=L\Sigma^{1/2}$ とおくと $AA^\top=L\Sigma L^\top$ だから，
-  鍵補題（補題~\ref{lem:gauss-linear-pf}）と合成則より
+  像測度の合成則（主張~\ref{clm:meas-pf-compose}）より
+  \[
+    \Normal(m,\Sigma)\circ g^{-1}
+    =(\gamma_n\circ\ell^{-1})\circ g^{-1}
+    =\gamma_n\circ(g\circ\ell)^{-1},
+    \qquad
+    (g\circ\ell)(x)=L(m+\Sigma^{1/2}x)+b=(Lm+b)+Ax
+  \]
+  である（$A:=L\Sigma^{1/2}$ とおいた）．
+  平行移動 $t(y):=(Lm+b)+y$ を使うと $g\circ\ell=t\circ A$ と分解でき，
+  $AA^\top=L\Sigma L^\top$ だから，
+  合成則と鍵補題（補題~\ref{lem:gauss-linear-pf}）より
   \begin{align*}
-    (x\mapsto(Lm+b)+Ax)\pushforward\gamma_n
-    &=(y\mapsto(Lm+b)+y)\pushforward\bigl(A\pushforward\gamma_n\bigr)\\
-    &=(y\mapsto(Lm+b)+y)\pushforward
-      \bigl((L\Sigma L^\top)^{1/2}\pushforward\gamma_k\bigr)\\
-    &=\bigl(y\mapsto(Lm+b)+(L\Sigma L^\top)^{1/2}y\bigr)\pushforward\gamma_k
-    =\Normal(Lm+b,\;L\Sigma L^\top).  \qedhere
+    \gamma_n\circ(t\circ A)^{-1}
+    &=(\gamma_n\circ A^{-1})\circ t^{-1}
+    =\bigl(\gamma_k\circ((L\Sigma L^\top)^{1/2})^{-1}\bigr)\circ t^{-1}\\
+    &=\gamma_k\circ\bigl(t\circ(L\Sigma L^\top)^{1/2}\bigr)^{-1}
+    =\Normal(Lm+b,\;L\Sigma L^\top).
   \end{align*}
+  最後の等号は，$t\circ(L\Sigma L^\top)^{1/2}$ が
+  $x\mapsto(Lm+b)+(L\Sigma L^\top)^{1/2}x$，すなわち
+  $\Normal(Lm+b,L\Sigma L^\top)$ を定義する写像
+  そのものであることによる．
 \end{proof}
 
 \begin{corollary}{結合 Gaussian 測度の周辺分布}{gauss-marginal}
@@ -399,7 +420,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   による線形写像であり，
   $P_1(m_1,m_2)=m_1$，$P_1AP_1^\top=\Sigma_1$（ブロック計算）だから，
   補題~\ref{lem:gauss-affine}より
-  ${\mathrm{pr}_1}\pushforward\Normal((m_1,m_2),A)=\Normal(m_1,\Sigma_1)$．
+  $\Normal((m_1,m_2),A)\circ\mathrm{pr}_1^{-1}=\Normal(m_1,\Sigma_1)$．
   第2周辺も同様である．
 \end{proof}
 
@@ -413,7 +434,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \begin{proof}
   $\gamma_n\in\Pp{2}(\R^n)$ は平均 $0$・共分散 $I_n$ をもつ
   （主張~\ref{clm:gauss-standard-moments}）．
-  $\Normal(m,\Sigma)=\ell\pushforward\gamma_n$
+  $\Normal(m,\Sigma)=\gamma_n\circ\ell^{-1}$
   （$\ell(x)=m+\Sigma^{1/2}x$）だから，
   アフィン像の平均・共分散（主張~\ref{clm:gauss-cov-basic}(iii)）より
   $\Normal(m,\Sigma)\in\Pp{2}(\R^n)$ で，平均は $m$，共分散は
@@ -431,7 +452,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   \]
   をもつ（アフィン変数変換公式から従う）．
   本資料ではこの表示は使わないため，証明は省略する．
-  押し出しによる定義（定義~\ref{def:gauss-def}）の利点は，
+  像測度による定義（定義~\ref{def:gauss-def}）の利点は，
   $\Sigma$ が特異で密度が存在しない場合も同じ定義がそのまま通ることにある．
 \end{memo*}
 
@@ -440,8 +461,8 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 
 \begin{lemma}{平均の分離}{gauss-centering}
   $\mu,\nu\in\Pp{2}(\R^n)$ とし，平行移動で中心化した測度を
-  $\tilde\mu:=(x\mapsto x-m_\mu)\pushforward\mu$，
-  $\tilde\nu:=(y\mapsto y-m_\nu)\pushforward\nu$ とおく
+  $\tilde\mu:=\mu\circ(x\mapsto x-m_\mu)^{-1}$，
+  $\tilde\nu:=\nu\circ(y\mapsto y-m_\nu)^{-1}$ とおく
   （主張~\ref{clm:gauss-cov-basic}(iii) より
   $\tilde\mu,\tilde\nu\in\Pp{2}(\R^n)$ は平均 $0$ で，
   共分散は $\Sigma_\mu,\Sigma_\nu$ のまま変わらない）．このとき
@@ -455,9 +476,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
 \begin{proof}
   $T(x,y):=(x-m_\mu,\,y-m_\nu)$ とおく（アフィンゆえ可測）．
   $\pi\in\Couplings(\mu,\nu)$ に対し
-  $T\pushforward\pi\in\Couplings(\tilde\mu,\tilde\nu)$ である：実際
+  $\pi\circ T^{-1}\in\Couplings(\tilde\mu,\tilde\nu)$ である：実際
   \[
-    (T\pushforward\pi)(A\times\R^n)
+    (\pi\circ T^{-1})(A\times\R^n)
     =\pi\bigl((A+m_\mu)\times\R^n\bigr)
     =\mu(A+m_\mu)
     =\tilde\mu(A)
@@ -465,7 +486,7 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   （$A+m_\mu:=\{a+m_\mu\mid a\in A\}$），第2周辺も同様だからである．
   逆向きの平行移動 $T^{-1}(x,y)=(x+m_\mu,\,y+m_\nu)$ も同じ形なので，
   合成則（主張~\ref{clm:meas-pf-compose}）より対応
-  $\pi\mapsto T\pushforward\pi$ は
+  $\pi\mapsto \pi\circ T^{-1}$ は
   $\Couplings(\mu,\nu)$ と $\Couplings(\tilde\mu,\tilde\nu)$ の間の
   全単射である．
 
@@ -483,13 +504,13 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   だから，交差項は積分すると消える．また変数変換公式
   （補題~\ref{lem:meas-change-of-variables}）より
   $\int\norm{\tilde x-\tilde y}^2\,\d\pi
-  =\int\norm{x'-y'}^2\,\d(T\pushforward\pi)$ である．よって
+  =\int\norm{x'-y'}^2\,\d(\pi\circ T^{-1})$ である．よって
   \[
     \int\norm{x-y}^2\,\d\pi
-    =\int\norm{x'-y'}^2\,\d(T\pushforward\pi)
+    =\int\norm{x'-y'}^2\,\d(\pi\circ T^{-1})
     +\norm{m_\mu-m_\nu}^2.
   \]
-  対応 $\pi\mapsto T\pushforward\pi$ は全単射だから，
+  対応 $\pi\mapsto \pi\circ T^{-1}$ は全単射だから，
   両辺で下限を取り，
   $\Wass_2(\mu,\nu)^2=\inf_\pi\int\norm{x-y}^2\,\d\pi$
   （下限と2乗の交換：注意~\ref{rem:wp-welldef}）を使えば
@@ -679,9 +700,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
   アフィン像（補題~\ref{lem:gauss-affine}）より
   \[
     \int\norm{x-y}^2\,\d\gamma^*
-    =\int\norm{z}^2\,\d\bigl(L\pushforward\gamma^*\bigr)(z),
+    =\int\norm{z}^2\,\d\bigl(\gamma^*\circ L^{-1}\bigr)(z),
     \qquad
-    L\pushforward\gamma^*
+    \gamma^*\circ L^{-1}
     =\Normal\bigl(m_1-m_2,\;LA^*L^\top\bigr).
   \]
   Gaussian 測度のモーメント（主張~\ref{clm:gauss-moments}）より
@@ -749,9 +770,9 @@ Lagrange 乗数法・Courant--Fischer の定理を用いる．
         M^{1/2}\Sigma_1^{-1/2}
       =\Sigma_1^{-1/2}M\Sigma_1^{-1/2}=\Sigma_2$ だから，
       アフィン像（補題~\ref{lem:gauss-affine}）より
-      $\phi\pushforward\Normal(m_1,\Sigma_1)=\Normal(m_2,\Sigma_2)$．
+      $\Normal(m_1,\Sigma_1)\circ\phi^{-1}=\Normal(m_2,\Sigma_2)$．
     \item $(\Id,\phi)(x):=(x,\phi(x))$ もアフィン写像で，
-      $\pi_\phi:=(\Id,\phi)\pushforward\Normal(m_1,\Sigma_1)$ は
+      $\pi_\phi:=\Normal(m_1,\Sigma_1)\circ(\Id,\phi)^{-1}$ は
       coupling になる（$\mathrm{pr}_1\circ(\Id,\phi)=\Id$，
       $\mathrm{pr}_2\circ(\Id,\phi)=\phi$ と合成則）．
     \item そのコストは，$x-\phi(x)=(I-T)(x-m_1)+(m_1-m_2)$ と
