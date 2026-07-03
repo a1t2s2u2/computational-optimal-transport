@@ -412,31 +412,37 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   \leq\norm{f}_{L^\infty(\mu)}+\norm{g}_{L^\infty(\mu)}$ である．
 \end{proof}
 
-\section{押し出し測度}
+\section{像測度}
 
-\begin{definition}{押し出し測度}{meas-pushforward}
+\begin{definition}{像測度}{meas-pushforward}
   可測空間 $(\Omega,\mathcal{A})$，$(\Omega',\mathcal{A}')$ と
   可測写像 $T\colon\Omega\to\Omega'$，
   $(\Omega,\mathcal{A})$ 上の測度 $\mu$ に対し，
   \[
-    (T\pushforward\mu)(B):=\mu(T^{-1}(B))
+    T(\mu)(B):=\mu(T^{-1}(B))
     \qquad(B\in\mathcal{A}')
   \]
-  と定める．$T\pushforward\mu$ を $T$ による $\mu$ の
-  \textbf{押し出し測度}（像測度）という．
+  と定める．$T(\mu)$ を $T$ による $\mu$ の\textbf{像測度}という．
+  ここで $T^{-1}(B):=\{\omega\in\Omega\mid T(\omega)\in B\}$ は
+  集合 $B$ の\textbf{逆像}であり，$T$ の可逆性は仮定しない．
+  直感的には，$T(\mu)$ は
+  「$\mu$ に従って分布する点 $\omega$ を $T$ で送ったときの，
+  $T(\omega)$ の分布」である．
   逆像は互いに素な可算合併を互いに素な可算合併に写すから，
-  $T\pushforward\mu$ の $\sigma$-加法性は $\mu$ のそれから従い，
-  $T\pushforward\mu$ は $(\Omega',\mathcal{A}')$ 上の測度である．
+  $T(\mu)$ の $\sigma$-加法性は $\mu$ のそれから従い，
+  $T(\mu)$ は $(\Omega',\mathcal{A}')$ 上の測度である．
   $\mu$ が確率測度なら
-  $(T\pushforward\mu)(\Omega')=\mu(\Omega)=1$ より
-  $T\pushforward\mu$ も確率測度である．
+  $T(\mu)(\Omega')=\mu(\Omega)=1$ より
+  $T(\mu)$ も確率測度である．
+  なお文献では像測度を $T_\#\mu$，$T_*\mu$，$\mu\circ T^{-1}$ とも書き，
+  押し出し測度ともよぶ（Villani 2009，桑江ほか 2015 は $T_\#\mu$）．
 \end{definition}
 
 \begin{lemma}{変数変換公式}{meas-change-of-variables}
   $T\colon\Omega\to\Omega'$ を可測写像，$\mu$ を $\Omega$ 上の測度とする．
   非負可測関数 $f\colon\Omega'\to[0,\infty)$ に対し
   \[
-    \int_{\Omega'}f\,\d(T\pushforward\mu)
+    \int_{\Omega'}f\,\d(T(\mu))
     =
     \int_\Omega f\circ T\,\d\mu
   \]
@@ -448,8 +454,8 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   $f=\mathbf{1}_B$（$B\in\mathcal{A}'$）のとき：
   $\mathbf{1}_B\circ T=\mathbf{1}_{T^{-1}(B)}$ だから
   \[
-    \int_{\Omega'}\mathbf{1}_B\,\d(T\pushforward\mu)
-    =(T\pushforward\mu)(B)
+    \int_{\Omega'}\mathbf{1}_B\,\d(T(\mu))
+    =(T(\mu))(B)
     =\mu(T^{-1}(B))
     =\int_\Omega\mathbf{1}_B\circ T\,\d\mu.
   \]
@@ -460,22 +466,22 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   $s_n\circ T\uparrow f\circ T$（各点）であり，
   単調収束定理（定理~\ref{thm:meas-mct}）を両辺に適用して
   \[
-    \int f\,\d(T\pushforward\mu)
-    =\lim_n\int s_n\,\d(T\pushforward\mu)
+    \int f\,\d(T(\mu))
+    =\lim_n\int s_n\,\d(T(\mu))
     =\lim_n\int s_n\circ T\,\d\mu
     =\int f\circ T\,\d\mu.
   \]
   一般の可測な $f$ のとき：$f=f^+-f^-$（正部分・負部分）と分解すると，
   非負の場合から
-  $\int f^\pm\,\d(T\pushforward\mu)=\int f^\pm\circ T\,\d\mu$ であり，
+  $\int f^\pm\,\d(T(\mu))=\int f^\pm\circ T\,\d\mu$ であり，
   絶対収束の条件も両辺で一致する．差を取れば等式を得る．
 \end{proof}
 
-\begin{corollary}{押し出しは $L^p$ ノルムを保つ}{meas-pf-lp}
+\begin{corollary}{像測度は $L^p$ ノルムを保つ}{meas-pf-lp}
   $1\leq p\leq\infty$，$T\colon\Omega\to\Omega'$ 可測，
   $\mu$ を $\Omega$ 上の測度，$f\colon\Omega'\to\R$ を可測とすると，
   \[
-    \norm{f}_{L^p(T\pushforward\mu)}
+    \norm{f}_{L^p(T(\mu))}
     =
     \norm{f\circ T}_{L^p(\mu)}.
   \]
@@ -486,28 +492,30 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   非負可測関数 $\abs{f}^p$ に適用すればよい．
   $p=\infty$ のとき：任意の $M\geq0$ に対し
   \[
-    (T\pushforward\mu)(\{\abs{f}>M\})
+    (T(\mu))(\{\abs{f}>M\})
     =\mu(T^{-1}\{\abs{f}>M\})
     =\mu(\{\abs{f\circ T}>M\})
   \]
-  だから，「$\abs{f}\leq M$ $(T\pushforward\mu)$-a.e.」と
+  だから，「$\abs{f}\leq M$ $(T(\mu))$-a.e.」と
   「$\abs{f\circ T}\leq M$ $\mu$-a.e.」は同値であり，
   両ノルムを定める集合が一致する．
 \end{proof}
 
-\begin{claim}{押し出しの合成則}{meas-pf-compose}
+\begin{claim}{像測度の合成則}{meas-pf-compose}
   可測写像 $T\colon\Omega\to\Omega'$，$S\colon\Omega'\to\Omega''$ と
   測度 $\mu$ に対し
-  $(S\circ T)\pushforward\mu=S\pushforward(T\pushforward\mu)$ である．
+  $(S\circ T)(\mu)=S(T(\mu))$ である
+  （記号の見た目通り，「$T$ で送ってから $S$ で送る」ことと
+  「$S\circ T$ で一度に送る」ことは同じ）．
 \end{claim}
 
 \begin{proof}
   任意の可測集合 $B\subset\Omega''$ に対し
   \[
-    ((S\circ T)\pushforward\mu)(B)
+    ((S\circ T)(\mu))(B)
     =\mu(T^{-1}(S^{-1}(B)))
-    =(T\pushforward\mu)(S^{-1}(B))
-    =(S\pushforward(T\pushforward\mu))(B).  \qedhere
+    =(T(\mu))(S^{-1}(B))
+    =(S(T(\mu)))(B).  \qedhere
   \]
 \end{proof}
 
@@ -540,7 +548,7 @@ $d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
   $\mu\in\Prob(X)$ について，次は同値である：
   \begin{enumerate}
     \item $\pi(A\times Y)=\mu(A)$（$\forall A\in\Borel(X)$），
-    \item ${\mathrm{pr}_1}\pushforward\pi=\mu$．
+    \item $\mathrm{pr}_1(\pi)=\mu$．
   \end{enumerate}
   このとき（$\mu$ を $\pi$ の\textbf{第1周辺分布}という），
   非負可測または $\mu$-可積分な $f\colon X\to\R$ に対して
@@ -556,12 +564,12 @@ $d_{X\times Y}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
 
 \begin{proof}
   同値性：$\mathrm{pr}_1^{-1}(A)=A\times Y$ だから
-  $({\mathrm{pr}_1}\pushforward\pi)(A)=\pi(A\times Y)$ であり，
+  $(\mathrm{pr}_1(\pi))(A)=\pi(A\times Y)$ であり，
   両条件はともに「すべての $A\in\Borel(X)$ でこの値が $\mu(A)$」を意味する．
   積分公式：$(x,y)\mapsto f(x)$ は $f\circ\mathrm{pr}_1$ だから，
   変数変換公式（補題~\ref{lem:meas-change-of-variables}）と
   系~\ref{cor:meas-pf-lp}を
-  $T=\mathrm{pr}_1$，$T\pushforward\pi=\mu$ に適用すればよい．
+  $T=\mathrm{pr}_1$，$T(\pi)=\mu$ に適用すればよい．
 \end{proof}
 
 \section{直積測度と測度の分解}
@@ -685,7 +693,7 @@ $\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
     =\abs{\det T}\int_{\R^n}f(Tx+b)\,\d\lambda_n(x)
   \]
   が成り立つ．すなわち
-  $\ell\pushforward\lambda_n=\abs{\det T}^{-1}\lambda_n$ である．
+  $\ell(\lambda_n)=\abs{\det T}^{-1}\lambda_n$ である．
   （変数変換公式の標準的な場合．証明は省略する．）
 \end{theorem}
 
