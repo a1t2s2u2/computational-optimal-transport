@@ -481,8 +481,6 @@ function mathJaxScript() {
             tr: "\\\\operatorname{tr}",
             diag: "\\\\operatorname{diag}",
             rank: "\\\\operatorname{rank}",
-            Cov: "\\\\operatorname{Cov}",
-            Law: "\\\\mathcal{L}",
             Normal: "\\\\mathcal{N}",
             Id: "\\\\mathrm{Id}",
             Wass: "W",
@@ -491,8 +489,6 @@ function mathJaxScript() {
             abs: ["\\\\lvert #1\\\\rvert", 1],
             norm: ["\\\\lVert #1\\\\rVert", 1],
             inner: ["\\\\langle #1,\\\\,#2\\\\rangle", 2],
-            argmin: "\\\\operatorname*{arg\\\\,min}",
-            argmax: "\\\\operatorname*{arg\\\\,max}",
           }
         },
         svg: { fontCache: "global" }
