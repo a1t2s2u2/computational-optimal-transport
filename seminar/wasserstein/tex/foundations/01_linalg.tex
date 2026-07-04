@@ -4,8 +4,17 @@
 第2章（Gaussian 測度の $W_2$）で用いる線形代数の道具をまとめる．
 ベクトルは $\R^n$ の列ベクトルとし，
 内積を $\inner{u}{v}:=u^\top v$，ノルムを $\norm{u}:=\sqrt{\inner{u}{u}}$ と書く．
-行列・転置 $A^\top$・逆行列・固有値・固有ベクトル・階数 $\rank A$ などの
-基本概念は既知とする．
+行列・転置 $A^\top$・逆行列・行列式 $\det A$・
+対角行列 $\diag(\lambda_1,\dots,\lambda_n)$・
+固有値・固有ベクトル・固有値の重複度・階数 $\rank A$・
+基底・一次独立・線形包 $\operatorname{span}$・核 $\ker A$ などの
+基本概念は既知とする
+（例えば齋藤正彦『線型代数入門』（東京大学出版会），
+Horn--Johnson \emph{Matrix Analysis} (2nd ed., 2013) を参照）．
+互いに直交する単位ベクトルの組を\textbf{正規直交系}，
+それが $n$ 本そろったものを $\R^n$ の\textbf{正規直交基底}とよぶ．
+また Kronecker のデルタを
+$\delta_{jl}$（$j=l$ のとき $1$，それ以外のとき $0$）と書く．
 本章で証明なしに認めるのはスペクトル分解
 （定理~\ref{thm:la-spectral}）のみで，それ以外の主張には証明を付ける．
 
@@ -49,7 +58,8 @@
   \[
     A=\sum_{i=1}^n\lambda_i\,u_iu_i^\top
   \]
-  である．（線形代数の標準的な定理．証明は省略する．）
+  である．（線形代数の標準的な定理．証明は省略する．
+  Horn--Johnson (2013) \S4.1，齋藤『線型代数入門』参照．）
 \end{theorem}
 
 \begin{definition}{半正定値行列}{la-psd}
@@ -556,7 +566,11 @@
   主張~\ref{clm:la-psd-eigen}より $\geq0$，
   $Q_jQ_l=\delta_{jl}Q_j$，$\sum_jQ_j=I$）と書ける．
   Lagrange 補間で $p(\mu_j)=\sqrt{\mu_j}$（$j=1,\dots,m$）をみたす
-  多項式 $p$ を取る．
+  多項式 $p$ を取る（$\mu_j$ は相異なるので
+  \[
+    p(t):=\sum_{j=1}^m\sqrt{\mu_j}\prod_{l\neq j}\frac{t-\mu_l}{\mu_j-\mu_l}
+  \]
+  と明示的に書ける）．
   $\Sigma^k=\sum_j\mu_j^kQ_j$（$k\geq1$）と $\sum_jQ_j=I$ から，
   多項式の線形結合として
   \[

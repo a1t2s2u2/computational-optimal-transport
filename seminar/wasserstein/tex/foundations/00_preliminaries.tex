@@ -415,7 +415,8 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 
 \begin{proof}
   $1\leq p<\infty$ の場合は Hölder の不等式から従う標準的な結果であり，
-  証明は文献に譲る（本資料ではこの場合を認めて用いる）．
+  証明は文献に譲る（例えば Dudley (2002) \S5.1．
+  本資料ではこの場合を認めて用いる）．
 
   $p=\infty$ の場合を示す．右辺が有限のときを考えればよい．
   主張~\ref{clm:meas-esssup-ae}より
@@ -713,7 +714,8 @@ $\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
 
 \begin{theorem}{アフィン変数変換公式（前提とする事実）}{meas-affine-cov}
   $T\in\R^{n\times n}$ を可逆行列，$b\in\R^n$ とし，
-  $\ell(x):=Tx+b$ とおく．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
+  $\ell(x):=Tx+b$ とおく
+  （この形の写像を\textbf{アフィン写像}とよぶ）．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
   \[
     \int_{\R^n}f(y)\,\d\lambda_n(y)
     =\abs{\det T}\int_{\R^n}f(Tx+b)\,\d\lambda_n(x)
