@@ -9,7 +9,7 @@ Wasserstein 距離の理論と性質。複数の文献を横断的に参照し�
 - [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9) — 現代的記法・証明の補完
 - [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
-原論文 PDF は `reference/` にある（givens-shortt-1984.pdf, chuo-EwM63resume.pdf）。
+原論文 PDF は `reference/` にある（givens-shortt-1984.pdf, kuwae-etal-2015.pdf）。
 
 ## 記法
 
