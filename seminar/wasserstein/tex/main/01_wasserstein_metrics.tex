@@ -264,6 +264,17 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $f$ は\textbf{有界 Lipschitz 関数}であるという．
 \end{definition}
 
+\begin{remark}{記法 $L_n\downarrow L^*$}{wp-monotone-limit-notation}
+  実数列 $(L_n)$ が単調非増加（$L_1\geq L_2\geq\cdots$）かつ
+  $\lim_{n\to\infty}L_n=L^*$ をみたすことを $L_n\downarrow L^*$ と書く
+  （単調非減少のときは $L_n\uparrow L^*$）．解析学で標準的な記法である．
+  下限 $L^*$ に対してこのような列が取れることは，
+  下限の定義（各 $n$ で $L^*\leq L_n<L^*+1/n$ なる $L_n$ が存在し，
+  必要なら $\min\{L_1,\dots,L_n\}$ に置き換えて単調にできる）による．
+  関数列に対する同じ記法 $f_n\downarrow f$（単調減少な各点収束）は
+  定義~\ref{def:meas-pointwise-convergence}を参照．
+\end{remark}
+
 \begin{lemma}{有界 Lipschitz 関数による測度の判定}{wp-bl-separates}
   $\mu,\nu\in\Prob(X)$ とする．すべての有界 Lipschitz 関数 $f\colon X\to\R$ について
   \[
