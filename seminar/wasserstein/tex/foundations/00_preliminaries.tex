@@ -308,6 +308,26 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   $\esssup_\mu\,\abs{f}$（本質的上限）とも書く．
 \end{definition}
 
+\begin{remark}{記法 $\norm{f}_{L^p(\mu)}$}{meas-lp-norm-notation}
+  添字 $L^p(\mu)$ は，冪 $p$ と積分に用いる測度 $\mu$ の指定である：
+  \[
+    \norm{f}_{L^2(\mu)}=\left(\int_\Omega\abs{f}^2\,\d\mu\right)^{1/2},
+    \qquad
+    \norm{f}_{L^1(\nu)}=\int_\Omega\abs{f}\,\d\nu .
+  \]
+  同じ $f$ でも測度が異なれば値は異なる．
+  本編では coupling $\pi\in\Couplings(\mu,\nu)$ に対する
+  \[
+    \norm{d}_{L^p(\pi)}
+    =\left(\int_{X\times X}d(x,y)^p\,\d\pi(x,y)\right)^{1/p}
+  \]
+  の形で用い，$1\leq p\leq\infty$ を通じて
+  \[
+    \Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
+  \]
+  と統一的に書ける（注意~\ref{rem:wp-welldef}）．
+\end{remark}
+
 \begin{claim}{$L^\infty$ ノルムは a.e. の上界である}{meas-esssup-ae}
   可測関数 $f$ に対し，
   $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ が $\mu$-a.e. で成り立つ．
@@ -395,7 +415,8 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 
 \begin{proof}
   $1\leq p<\infty$ の場合は Hölder の不等式から従う標準的な結果であり，
-  証明は文献に譲る（本資料ではこの場合を認めて用いる）．
+  証明は文献に譲る（例えば Dudley (2002) \S5.1．
+  本資料ではこの場合を認めて用いる）．
 
   $p=\infty$ の場合を示す．右辺が有限のときを考えればよい．
   主張~\ref{clm:meas-esssup-ae}より
@@ -693,7 +714,8 @@ $\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
 
 \begin{theorem}{アフィン変数変換公式（前提とする事実）}{meas-affine-cov}
   $T\in\R^{n\times n}$ を可逆行列，$b\in\R^n$ とし，
-  $\ell(x):=Tx+b$ とおく．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
+  $\ell(x):=Tx+b$ とおく
+  （この形の写像を\textbf{アフィン写像}とよぶ）．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
   \[
     \int_{\R^n}f(y)\,\d\lambda_n(y)
     =\abs{\det T}\int_{\R^n}f(Tx+b)\,\d\lambda_n(x)

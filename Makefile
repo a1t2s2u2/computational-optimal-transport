@@ -3,15 +3,15 @@
 # source of truth は各 tex/*.tex のみ。
 # Web 版（site/）の md/html は生成物であり、編集も git 管理もしない。
 
-.PHONY: site pdf wasserstein-site wasserstein-pdf
+.PHONY: cuturi-site cuturi-pdf wasserstein-site wasserstein-pdf
 
 # --- Cuturi ---
-site:
+cuturi-site:
 	node seminar/cuturi/site/scripts/tex2md.mjs
 	node seminar/cuturi/site/scripts/build.mjs
 	@echo "→ seminar/cuturi/site/dist/index.html をブラウザで開いてください"
 
-pdf:
+cuturi-pdf:
 	cd seminar/cuturi/tex && latexmk
 
 # --- Wasserstein ---
