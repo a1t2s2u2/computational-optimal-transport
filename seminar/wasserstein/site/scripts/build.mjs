@@ -99,9 +99,11 @@ function renderInline(source) {
       /\[ref:([^|\]]+?)(?:\|([^\]]+))?\]/g,
       (_match, first, second) => {
         const refName = second || first;
-        const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex|Lem):\s*(.+)$/.exec(first);
-        const display = typeMatch ? typeMatch[1] : first;
-        return `<button type="button" class="ref" data-ref="${refName}" title="${escapeHtml(first)}">${escapeHtml(display)}</button>`;
+        // 旧形式「Lem: タイトル」は種別だけに短縮。新形式「補題 2.2.3」はそのまま。
+        // ツールチップには参照先のタイトルを出す。
+        const typeMatch = /^(Def|Clm|Thm|Prop|Rem|Ex|Lem|Cor)(\s+[0-9A-Z.]+)?:\s*(.+)$/.exec(first);
+        const display = typeMatch ? `${typeMatch[1]}${typeMatch[2] ?? ""}` : first;
+        return `<button type="button" class="ref" data-ref="${refName}" title="${escapeHtml(refName)}">${escapeHtml(display)}</button>`;
       }
     );
 
@@ -404,7 +406,9 @@ function renderMarkdown(markdown) {
       const level = heading[1].length;
       if (currentBlock && level === 3 && !currentBlock.name) {
         const rawTitle = heading[2];
-        const nameMatch = /^(?:Def|Clm|Thm|Prop|Rem|Ex|Lem):\s*(.+)$/.exec(rawTitle);
+        // 見出しは「Lem 2.2.3: タイトル」（番号付き）と「Lem: タイトル」の両形式を許す。
+        // name（参照キー）は番号を含まないタイトル部分。
+        const nameMatch = /^(?:Def|Clm|Thm|Prop|Rem|Ex|Lem|Cor)(?:\s+[0-9A-Z.]+)?:\s*(.+)$/.exec(rawTitle);
         const name = nameMatch ? nameMatch[1].trim() : rawTitle.trim();
         const id = makeBlockId(currentBlock.type, name);
         currentBlock.name = name;
