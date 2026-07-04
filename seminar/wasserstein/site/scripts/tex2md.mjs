@@ -109,6 +109,7 @@ const ENV_TO_PREFIX = {
 
 let LABEL_MAP = {};
 let CHAPTER_MAP = {};
+let NUMBER_MAP = {};
 
 // ---------------------------------------------------------------------------
 // Lint: 未変換マクロ・未解決参照を表面化させる（無警告の素通りを防ぐ）
@@ -229,6 +230,52 @@ function buildLabelMap() {
   return labelMap;
 }
 
+// PDF（LaTeX）と同一の定理番号「章.節.通し番号」を再現する。
+// 規則は preamble.tex の tcolorbox 設定に対応する：
+//   - 全定理環境が definition のカウンタを共有（use counter from）
+//   - カウンタは節ごとにリセット（number within=section）
+//   - 章番号は本編 1,2,…、付録 A,B,…（main.tex の \appendix による）
+//   - \section*（星付き）は節番号を進めない
+// 返り値は 'prefix:label' -> '2.1.4' の写像。
+function buildNumberMap() {
+  const map = {};
+  let mainNo = 0;
+  let appendixNo = 0;
+  for (const [texRel, , meta] of CHAPTERS) {
+    const texPath = path.join(SEMINAR_DIR, texRel);
+    if (!existsSync(texPath)) continue;
+    let chapterNo;
+    if (meta.group === "appendix") {
+      appendixNo += 1;
+      chapterNo = String.fromCharCode(64 + appendixNo); // 1->A, 2->B, ...
+    } else {
+      mainNo += 1;
+      chapterNo = String(mainNo);
+    }
+    const content = readFileSync(texPath, "utf-8");
+    let sectionNo = 0;
+    let counter = 0;
+    for (const m of content.matchAll(/\\section\{|\\begin\{(\w+)\}/g)) {
+      if (m[0] === "\\section{") {
+        sectionNo += 1;
+        counter = 0;
+        continue;
+      }
+      const envName = m[1];
+      if (!(envName in ENV_TO_PREFIX)) continue;
+      const pos = m.index + m[0].length;
+      const titleResult = extractBraceArg(content, pos);
+      if (titleResult === null) continue;
+      const labelResult = extractBraceArg(content, titleResult[1]);
+      if (labelResult === null) continue;
+      counter += 1;
+      map[`${ENV_TO_PREFIX[envName]}:${labelResult[0]}`] =
+        `${chapterNo}.${sectionNo}.${counter}`;
+    }
+  }
+  return map;
+}
+
 // \texorpdfstring{A}{B} -> A など、章タイトル中の表示用整形を除く。
 function cleanChapterTitle(title) {
   const nested = "(?:[^{}]|\\{[^{}]*\\})*";
@@ -286,7 +333,10 @@ function convertRefs(text) {
         });
       }
       const abbrev = LABEL_PREFIX_MAP[prefix] || (JP_TO_ABBREV[g1] ?? g1);
-      return `[ref:${abbrev}: ${title}|${title}]`;
+      // PDF と同じ番号があれば「補題 2.2.3」の形で短く示す（クリックで右に本文）。
+      const num = NUMBER_MAP[label];
+      const display = num ? `${g1} ${num}` : `${abbrev}: ${title}`;
+      return `[ref:${display}|${title}]`;
     },
   );
 
@@ -298,7 +348,10 @@ function convertRefs(text) {
     }
     const prefix = label.includes(":") ? label.split(":")[0] : "";
     const typeName = LABEL_PREFIX_MAP[prefix] || "";
-    const display = typeName ? `${typeName}: ${title}` : title;
+    const num = NUMBER_MAP[label];
+    const display = num
+      ? `${typeName} ${num}`.trim()
+      : typeName ? `${typeName}: ${title}` : title;
     return `[ref:${display}|${title}]`;
   });
 
@@ -494,13 +547,13 @@ class TexParser {
       if (m && m[1] in BLOCK_ENVS) {
         const envName = m[1];
         const title = m[2];
-        // label = m[3]  -- not used in output
+        const label = m[3]; // 見出しの定理番号（NUMBER_MAP）の引き当てに使う
         this.advance();
         const blockNodes = [];
         this.parseBody(blockNodes, envName);
         // Check if next thing is a proof that belongs to this block
         const proofNodes = this.tryParseProof();
-        nodes.push(["block", envName, title, blockNodes, proofNodes]);
+        nodes.push(["block", envName, title, blockNodes, proofNodes, label]);
         continue;
       }
 
@@ -825,12 +878,13 @@ function renderNodes(nodes) {
     }
 
     if (kind === "block") {
-      const [, envName, title, bodyNodes, proofNodes] = node;
+      const [, envName, title, bodyNodes, proofNodes, label] = node;
       const [containerClass, prefix] = BLOCK_ENVS[envName];
       output.push(`:::${containerClass}`);
+      const num = label ? NUMBER_MAP[`${ENV_TO_PREFIX[envName]}:${label}`] : undefined;
       let heading;
       if (prefix) {
-        heading = `### ${prefix}: ${applyInlineConversions(title)}`;
+        heading = `### ${prefix}${num ? ` ${num}` : ""}: ${applyInlineConversions(title)}`;
       } else {
         heading = `### ${applyInlineConversions(title)}`;
       }
@@ -1091,6 +1145,10 @@ function processChapter(texFilename, mdFilename, frontmatter) {
 function main() {
   LABEL_MAP = buildLabelMap();
   CHAPTER_MAP = buildChapterMap();
+  NUMBER_MAP = buildNumberMap();
+  if (process.env.TEX2MD_DUMP_NUMBERS) {
+    console.log(JSON.stringify(NUMBER_MAP, null, 2));
+  }
   console.log(
     `Built label map with ${Object.keys(LABEL_MAP).length} entries, ` +
     `chapter map with ${Object.keys(CHAPTER_MAP).length} entries`,
