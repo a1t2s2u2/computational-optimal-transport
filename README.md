@@ -40,8 +40,8 @@ seminar/
 
 ```sh
 # Cuturi
-make site              # Web サイト生成
-make pdf               # PDF 生成
+make cuturi-site        # Web サイト生成
+make cuturi-pdf         # PDF 生成
 
 # Wasserstein
 make wasserstein-site   # Web サイト生成
