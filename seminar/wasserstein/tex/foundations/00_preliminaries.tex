@@ -308,6 +308,26 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   $\esssup_\mu\,\abs{f}$（本質的上限）とも書く．
 \end{definition}
 
+\begin{remark}{記法 $\norm{f}_{L^p(\mu)}$}{meas-lp-norm-notation}
+  添字 $L^p(\mu)$ は，冪 $p$ と積分に用いる測度 $\mu$ の指定である：
+  \[
+    \norm{f}_{L^2(\mu)}=\left(\int_\Omega\abs{f}^2\,\d\mu\right)^{1/2},
+    \qquad
+    \norm{f}_{L^1(\nu)}=\int_\Omega\abs{f}\,\d\nu .
+  \]
+  同じ $f$ でも測度が異なれば値は異なる．
+  本編では coupling $\pi\in\Couplings(\mu,\nu)$ に対する
+  \[
+    \norm{d}_{L^p(\pi)}
+    =\left(\int_{X\times X}d(x,y)^p\,\d\pi(x,y)\right)^{1/p}
+  \]
+  の形で用い，$1\leq p\leq\infty$ を通じて
+  \[
+    \Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
+  \]
+  と統一的に書ける（注意~\ref{rem:wp-welldef}）．
+\end{remark}
+
 \begin{claim}{$L^\infty$ ノルムは a.e. の上界である}{meas-esssup-ae}
   可測関数 $f$ に対し，
   $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ が $\mu$-a.e. で成り立つ．
