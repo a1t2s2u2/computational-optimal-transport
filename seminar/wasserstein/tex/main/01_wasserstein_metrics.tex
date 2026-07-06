@@ -263,19 +263,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \textbf{最適 coupling}または\textbf{最適輸送計画}という．
 \end{theorem}
 
-\begin{remark}{Villani の存在定理との関係}{wp-optimal-coupling-villani}
-  $1\leq p<\infty$ の場合，定理~\ref{thm:wp-optimal-coupling-existence}は
-  Villani (2009) Theorem 4.1 の特殊例である．
-  実際，Villani の定理は2つの Polish 確率空間 $(S,\mu)$，
-  $(T,\nu)$ と下半連続コスト
-  $c\colon S\times T\to\R\cup\{+\infty\}$ を扱い，
-  $c(x,y)\geq a(x)+b(y)$ となる可積分な下界があれば
-  $\int c\,\d\pi$ を最小にする coupling が存在すると述べる．
-  本資料では $S=T=X$，$c(x,y)=d(x,y)^p\geq0$ とすればよい．
-  なお $p=\infty$ は積分型コストではなく本質的上限を最小化するので，
-  下の証明で別に扱う．
-\end{remark}
-
 \begin{proof}
   直積 $X\times X$ は Polish 空間である
   （付録Aの直積距離の注意を参照）．まず
@@ -384,6 +371,19 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $R$ は下限なので逆向きの不等式も成り立ち，
   $\norm{d}_{L^\infty(\pi^*)}=R=\Wass_\infty(\mu,\nu)$ である．
 \end{proof}
+
+\begin{remark}{Villani の存在定理との関係}{wp-optimal-coupling-villani}
+  $1\leq p<\infty$ の場合，定理~\ref{thm:wp-optimal-coupling-existence}は
+  Villani (2009) Theorem 4.1 の特殊例である．
+  実際，Villani の定理は2つの Polish 確率空間 $(S,\mu)$，
+  $(T,\nu)$ と下半連続コスト
+  $c\colon S\times T\to\R\cup\{+\infty\}$ を扱い，
+  $c(x,y)\geq a(x)+b(y)$ となる可積分な下界があれば
+  $\int c\,\d\pi$ を最小にする coupling が存在すると述べる．
+  本資料では $S=T=X$，$c(x,y)=d(x,y)^p\geq0$ とすればよい．
+  なお $p=\infty$ は積分型コストではなく本質的上限を最小化するので，
+  上の証明で別に扱った．
+\end{remark}
 
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
