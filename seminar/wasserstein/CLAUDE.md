@@ -10,6 +10,7 @@ Wasserstein 距離の理論と性質。複数の文献を横断的に参照し�
 - [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
 原論文 PDF は `reference/` にある（givens-shortt-1984.pdf, kuwae-etal-2015.pdf）。
+Villani の該当ページのスキャンは `reference/old_and_new/` にある（optimal_coupling: Th.4.1 まわり pp.43, 49／wasserstein_distance: Ch.6 pp.93–95。著作権のため git 追跡対象外）。
 
 ## 記法
 
@@ -22,7 +23,8 @@ Wasserstein 距離の理論と性質。複数の文献を横断的に参照し�
 ## 方針
 
 - 前提知識は付録（`tex/foundations/`）で全網羅し、本文からは参照でリンクする
-- 弱収束・Prokhorov の定理・最適 coupling の存在定理は使わない（$\varepsilon$-近最適 coupling と明示構成で回避する設計）
+- 最適 coupling の存在定理は Villani (2009) Theorem 4.1 の形で証明し、距離性（三角不等式・一致の公理）の証明に用いる
+- Prokhorov の定理・Portmanteau 定理は証明なしで認める（ステートメントと引用元のみ明示。Villani Ch.4 / Billingsley 1999）
 - 証明なしで認める標準定理はステートメントを明示して文献を挙げる
 
 ## サイト
