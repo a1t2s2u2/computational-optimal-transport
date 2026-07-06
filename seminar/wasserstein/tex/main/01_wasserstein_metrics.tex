@@ -114,16 +114,17 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{remark}
 
 \begin{definition}{Coupling 集合}{wp-coupling}
-  $\mu,\nu\in\Prob(X)$ に対して，\textbf{Coupling 集合}を
+  距離空間 $S,T$ 上の確率測度 $\mu\in\Prob(S)$，
+  $\nu\in\Prob(T)$ に対して，\textbf{Coupling 集合}を
   \[
     \Couplings(\mu,\nu)
     :=
     \left\{
-      \pi\in\Prob(X\times X)
+      \pi\in\Prob(S\times T)
       \;\middle|\;
       \begin{aligned}
-        \pi(A\times X)&=\mu(A) &&(\forall A\in\Borel(X)),\\
-        \pi(X\times B)&=\nu(B) &&(\forall B\in\Borel(X))
+        \pi(A\times T)&=\mu(A) &&(\forall A\in\Borel(S)),\\
+        \pi(S\times B)&=\nu(B) &&(\forall B\in\Borel(T))
       \end{aligned}
     \right\}
   \]
@@ -245,6 +246,118 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{proof}
 
 \begin{theorem}{最適 coupling の存在}{wp-optimal-coupling-existence}
+  $(S,\mu)$，$(T,\nu)$ を2つの Polish 確率空間とする．
+  $a\colon S\to\R\cup\{-\infty\}$，
+  $b\colon T\to\R\cup\{-\infty\}$ を上半連続関数とし，
+  $a\in L^1(\mu)$，$b\in L^1(\nu)$ とする．
+  また，$c\colon S\times T\to\R\cup\{+\infty\}$ を下半連続関数とし，
+  すべての $x\in S$，$y\in T$ で
+  \[
+    c(x,y)\geq a(x)+b(y)
+  \]
+  が成り立つとする．このとき，ある coupling
+  $\pi^*\in\Couplings(\mu,\nu)$ が存在して
+  \[
+    \int_{S\times T}c\,\d\pi^*
+    =
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{S\times T}c\,\d\pi
+  \]
+  をみたす．このような $\pi^*$ をコスト $c$ に関する
+  \textbf{最適 coupling}または\textbf{最適輸送計画}という．
+\end{theorem}
+
+\begin{proof}
+  直積 $S\times T$ は Polish 空間である
+  （付録Aの直積距離の注意を参照）．まず
+  $\Couplings(\mu,\nu)$ が tight であることを示す．
+  $\varepsilon>0$ を任意に取る．Prokhorov の定理
+  （定理~\ref{thm:meas-prokhorov}）より $\mu,\nu$ は tight だから，
+  compact 集合 $K_1\subset S$，$K_2\subset T$ で
+  \[
+    \mu(K_1)\geq 1-\frac{\varepsilon}{2},
+    \qquad
+    \nu(K_2)\geq 1-\frac{\varepsilon}{2}
+  \]
+  なるものが取れる．このとき $K_1\times K_2$ は compact であり，
+  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
+  \[
+    \pi\bigl((K_1\times K_2)^c\bigr)
+    \leq
+    \pi(K_1^c\times T)+\pi(S\times K_2^c)
+    =
+    \mu(K_1^c)+\nu(K_2^c)
+    \leq \varepsilon.
+  \]
+  よって $\Couplings(\mu,\nu)$ は tight である．
+
+  次に，$\Couplings(\mu,\nu)$ は弱収束で閉じていることを確認する．
+  $\pi_n\in\Couplings(\mu,\nu)$，$\pi_n\Rightarrow\pi$ とする．
+  任意の $\varphi\in C_b(S)$ に対し，
+  $\varphi\circ\mathrm{pr}_1\in C_b(S\times T)$ だから，
+  弱収束と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  \[
+    \int_S\varphi\,\d(\pi\circ\mathrm{pr}_1^{-1})
+    =
+    \int_{S\times T}\varphi(x)\,\d\pi(x,y)
+    =
+    \lim_{n\to\infty}\int_{S\times T}\varphi(x)\,\d\pi_n(x,y)
+    =
+    \int_S\varphi\,\d\mu.
+  \]
+  有界連続関数による測度の判定
+  （定理~\ref{thm:meas-cb-determines}）より
+  $\pi\circ\mathrm{pr}_1^{-1}=\mu$ である．同様に
+  $\pi\circ\mathrm{pr}_2^{-1}=\nu$ である．したがって
+  $\pi\in\Couplings(\mu,\nu)$ である．
+
+  \[
+    I:=
+    \inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{S\times T}c\,\d\pi
+  \]
+  とおく．下界条件と周辺積分公式より，この下限は $-\infty$ ではない．
+  $I=+\infty$ のときは，たとえば $\mu\otimes\nu$ が最小値を達成する．
+  以下 $I<+\infty$ とする．下限の性質から，
+  $\pi_n\in\Couplings(\mu,\nu)$ で
+  \[
+    \int c\,\d\pi_n\leq I+\frac1n
+  \]
+  をみたすものを取れる．先ほど示した tightness と Prokhorov の定理により，
+  ある部分列 $(\pi_{n_k})$ と $\pi^*\in\Prob(S\times T)$ が存在して
+  $\pi_{n_k}\Rightarrow\pi^*$ となる．弱閉性から
+  $\pi^*\in\Couplings(\mu,\nu)$ である．
+
+  $h(x,y):=c(x,y)-a(x)-b(y)$ とおく．
+  $c$ は下半連続，$a,b$ は上半連続だから，$h$ は非負下半連続である．
+  また任意の $\pi\in\Couplings(\mu,\nu)$ に対し，周辺積分公式より
+  \[
+    \int h\,\d\pi
+    =
+    \int c\,\d\pi
+    -\int_S a\,\d\mu
+    -\int_T b\,\d\nu
+  \]
+  である．Portmanteau 型の下半連続性
+  （定理~\ref{thm:meas-portmanteau}）を $h$ に適用すると
+  \[
+    \int h\,\d\pi^*
+    \leq
+    \liminf_{k\to\infty}\int h\,\d\pi_{n_k}
+  \]
+  であり，両辺に
+  $\int_Sa\,\d\mu+\int_Tb\,\d\nu$ を加えれば
+  \[
+    \int c\,\d\pi^*
+    \leq
+    \liminf_{k\to\infty}\int c\,\d\pi_{n_k}
+    \leq I.
+  \]
+  一方，$I$ は下限なので逆向きの不等式も成り立つ．
+  よって $\pi^*$ は最小値を達成する．
+\end{proof}
+
+\begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
   $1\leq p\leq\infty$，$\mu,\nu\in\Pp{p}(X)$ とする．
   このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して，
   $1\leq p<\infty$ なら
@@ -259,88 +372,14 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     =
     \norm{d}_{L^\infty(\pi^*)}
   \]
-  をみたす．このような $\pi^*$ を $\mu$ から $\nu$ への
-  \textbf{最適 coupling}または\textbf{最適輸送計画}という．
-\end{theorem}
+  をみたす．
+\end{corollary}
 
 \begin{proof}
-  直積 $X\times X$ は Polish 空間である
-  （付録Aの直積距離の注意を参照）．まず
-  $\Couplings(\mu,\nu)$ が tight であることを示す．
-  $\varepsilon>0$ を任意に取る．Prokhorov の定理
-  （定理~\ref{thm:meas-prokhorov}）より $\mu,\nu$ は tight だから，
-  compact 集合 $K_1,K_2\subset X$ で
-  \[
-    \mu(K_1)\geq 1-\frac{\varepsilon}{2},
-    \qquad
-    \nu(K_2)\geq 1-\frac{\varepsilon}{2}
-  \]
-  なるものが取れる．このとき $K_1\times K_2$ は compact であり，
-  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
-  \[
-    \pi\bigl((K_1\times K_2)^c\bigr)
-    \leq
-    \pi(K_1^c\times X)+\pi(X\times K_2^c)
-    =
-    \mu(K_1^c)+\nu(K_2^c)
-    \leq \varepsilon.
-  \]
-  よって $\Couplings(\mu,\nu)$ は tight である．
+  $1\leq p<\infty$ なら，定理~\ref{thm:wp-optimal-coupling-existence}を
+  $S=T=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい．
 
-  次に，$\Couplings(\mu,\nu)$ は弱収束で閉じていることを確認する．
-  $\pi_n\in\Couplings(\mu,\nu)$，$\pi_n\Rightarrow\pi$ とする．
-  任意の $\varphi\in C_b(X)$ に対し，
-  $\varphi\circ\mathrm{pr}_1\in C_b(X\times X)$ だから，
-  弱収束と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
-  \[
-    \int_X\varphi\,\d(\pi\circ\mathrm{pr}_1^{-1})
-    =
-    \int_{X\times X}\varphi(x)\,\d\pi(x,y)
-    =
-    \lim_{n\to\infty}\int_{X\times X}\varphi(x)\,\d\pi_n(x,y)
-    =
-    \int_X\varphi\,\d\mu.
-  \]
-  有界連続関数による測度の判定
-  （定理~\ref{thm:meas-cb-determines}）より
-  $\pi\circ\mathrm{pr}_1^{-1}=\mu$ である．同様に
-  $\pi\circ\mathrm{pr}_2^{-1}=\nu$ である．したがって
-  $\pi\in\Couplings(\mu,\nu)$ である．
-
-  $1\leq p<\infty$ の場合を示す．
-  \[
-    I:=\inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
-  \]
-  とおく．補題~\ref{lem:wp-finite}より $I<\infty$ である．
-  下限の性質から，$\pi_n\in\Couplings(\mu,\nu)$ で
-  \[
-    \int d(x,y)^p\,\d\pi_n(x,y)\leq I+\frac1n
-  \]
-  をみたすものを取れる．先ほど示した tightness と Prokhorov の定理により，
-  ある部分列 $(\pi_{n_k})$ と $\pi^*\in\Prob(X\times X)$ が存在して
-  $\pi_{n_k}\Rightarrow\pi^*$ となる．弱閉性から
-  $\pi^*\in\Couplings(\mu,\nu)$ である．
-  関数 $(x,y)\mapsto d(x,y)^p$ は非負連続，したがって下半連続なので，
-  Portmanteau 型の下半連続性（定理~\ref{thm:meas-portmanteau}）より
-  \[
-    \int d(x,y)^p\,\d\pi^*(x,y)
-    \leq
-    \liminf_{k\to\infty}
-    \int d(x,y)^p\,\d\pi_{n_k}(x,y)
-    \leq I.
-  \]
-  一方，$I$ は $\Couplings(\mu,\nu)$ 上の下限だから逆向きの不等式も成り立つ．
-  よって $\pi^*$ は下限を達成する．注意~\ref{rem:wp-welldef}より，
-  これは
-  \[
-    \Wass_p(\mu,\nu)^p
-    =
-    \int d(x,y)^p\,\d\pi^*(x,y)
-  \]
-  を意味する．
-
-  最後に $p=\infty$ の場合を示す．
+  $p=\infty$ の場合を示す．
   $R:=\Wass_\infty(\mu,\nu)$ とおく．補題~\ref{lem:wp-finite}より
   $R<\infty$ である．下限の性質から，$\pi_n\in\Couplings(\mu,\nu)$ で
   \[
@@ -371,19 +410,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $R$ は下限なので逆向きの不等式も成り立ち，
   $\norm{d}_{L^\infty(\pi^*)}=R=\Wass_\infty(\mu,\nu)$ である．
 \end{proof}
-
-\begin{remark}{Villani の存在定理との関係}{wp-optimal-coupling-villani}
-  $1\leq p<\infty$ の場合，定理~\ref{thm:wp-optimal-coupling-existence}は
-  Villani (2009) Theorem 4.1 の特殊例である．
-  実際，Villani の定理は2つの Polish 確率空間 $(S,\mu)$，
-  $(T,\nu)$ と下半連続コスト
-  $c\colon S\times T\to\R\cup\{+\infty\}$ を扱い，
-  $c(x,y)\geq a(x)+b(y)$ となる可積分な下界があれば
-  $\int c\,\d\pi$ を最小にする coupling が存在すると述べる．
-  本資料では $S=T=X$，$c(x,y)=d(x,y)^p\geq0$ とすればよい．
-  なお $p=\infty$ は積分型コストではなく本質的上限を最小化するので，
-  上の証明で別に扱った．
-\end{remark}
 
 \section{Wasserstein 距離の距離性}
 \label{sec:metric-property}
@@ -518,7 +544,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   よって $\Wass_p(\mu,\mu)=0$ である．
 
   逆に $\Wass_p(\mu,\nu)=0$ とする．
-  定理~\ref{thm:wp-optimal-coupling-existence}より，最適 coupling
+  系~\ref{cor:wp-wasserstein-optimal-coupling}より，最適 coupling
   $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
   $1\leq p<\infty$ なら
   \[
@@ -553,7 +579,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $(x,z)$-周辺分布を $\mu$ から $\xi$ への coupling として使う．
 
   $\mu,\nu,\xi\in\Pp{p}(X)$ を任意に取る．
-  定理~\ref{thm:wp-optimal-coupling-existence}より，
+  系~\ref{cor:wp-wasserstein-optimal-coupling}より，
   最適 coupling $\pi\in\Couplings(\mu,\nu)$ と
   $\sigma\in\Couplings(\nu,\xi)$ が取れる．
   補題~\ref{lem:wp-gluing}により，$X^3$ 上の確率測度 $\gamma$ で
@@ -610,9 +636,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $d(x,z)\leq d(x,y)+d(y,z)$ と Minkowski の不等式を用いる．
   本資料でもこの形に合わせるため，
   Prokhorov の定理と Portmanteau 型の下半連続性を標準結果として認めたうえで，
-  定理~\ref{thm:wp-optimal-coupling-existence}として
-  Villani (2009) Theorem 4.1 の特殊例にあたる最適 coupling の存在を
-  先に証明した．
+  Villani (2009) Theorem 4.1 と同じ形の最適 coupling 存在定理
+  （定理~\ref{thm:wp-optimal-coupling-existence}）を先に証明し，
+  その $W_p$ への適用を系~\ref{cor:wp-wasserstein-optimal-coupling}として
+  述べた．
   $\Pp{p}(X)$ 上での有限性は，Villani (2009) Definition 6.4 直後の
   \[
     d(x,y)^p\leq 2^{p-1}\bigl(d(x,x_0)^p+d(x_0,y)^p\bigr)
