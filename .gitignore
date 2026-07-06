@@ -21,6 +21,9 @@ ambrosio/tex/out/
 /seminar/cuturi/tex/main.pdf
 /translated_for_seminar.pdf
 
+# local copyrighted/reference scans (do not publish)
+seminar/wasserstein/reference/old_and_new/
+
 # generated site artifacts
 seminar/cuturi/site/tex-out/
 
