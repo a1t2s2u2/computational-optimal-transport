@@ -113,7 +113,9 @@ $\sigma$-代数・可測空間・測度・可測関数・Lebesgue 積分の定�
 積分の基本性質（線形性，単調性，可算劣加法性，
 零集合上の積分が $0$ であること，
 したがって $\mu$-a.e.（定義~\ref{def:meas-ae}）で成り立つ不等式・等式が
-積分に遺伝すること）は既知とする．
+積分に遺伝すること，
+および非負可測関数の積分が $0$ ならば
+その関数が $\mu$-a.e. で $0$ であること）は既知とする．
 
 距離空間 $X$ の開集合全体を含む最小の $\sigma$-代数を
 \textbf{Borel $\sigma$-代数} $\Borel(X)$ とよび，その元を Borel 集合という．
@@ -384,9 +386,14 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
       すなわち，ある部分列 $(\eta_{n_k})$ と $\eta\in\Prob(S)$ が存在して
       $\eta_{n_k}\Rightarrow\eta$ となる．
   \end{enumerate}
-  （Polish 空間上の確率測度についての標準定理．証明は省略する．
-  Villani (2009) Chapter 4 では，弱位相での precompactness と
-  tightness の同値として述べられている．）
+  （証明は省略する．Villani (2009) Chapter 4 では
+  「$S$ が Polish 空間のとき，$\mathcal{F}\subset\Prob(S)$ が
+  弱位相で precompact であることと tight であることは同値」
+  という形で引用されており，古典的な証明は
+  Billingsley \emph{Convergence of Probability Measures}
+  (2nd ed., 1999) Theorems 5.1, 5.2 にある．
+  第1の主張は，1点集合が常に precompact であることから
+  「precompact ならば tight」の側の帰結である．）
 \end{theorem}
 
 \begin{definition}{下半連続関数と上半連続関数}{meas-lsc}
@@ -399,6 +406,25 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   また，関数 $g\colon S\to[-\infty,+\infty)$ が
   \textbf{上半連続}であるとは，$-g$ が下半連続であることをいう．
 \end{definition}
+
+\begin{remark}{半連続関数の基本性質}{meas-lsc-facts}
+  次はいずれも定義から直ちに従う．
+  \begin{itemize}
+    \item 下半連続関数は Borel 可測である
+      （$\{f>a\}$ が開集合，したがって Borel 集合だから）．
+      上半連続関数も同様である．
+    \item 連続写像 $T\colon S'\to S$ と下半連続な $f$ に対し，
+      $f\circ T$ は下半連続である
+      （$\{f\circ T>a\}=T^{-1}(\{f>a\})$ は開集合）．
+    \item $f,g\colon S\to(-\infty,+\infty]$ が下半連続ならば
+      $f+g$ も下半連続である．実際，
+      \[
+        \{f+g>a\}
+        =\bigcup_{q\in\mathbb{Q}}\bigl(\{f>q\}\cap\{g>a-q\}\bigr)
+      \]
+      は開集合である．
+  \end{itemize}
+\end{remark}
 
 \begin{theorem}{Portmanteau 型の下半連続性}{meas-portmanteau}
   $S$ を距離空間とし，$\eta_n,\eta\in\Prob(S)$ が
@@ -415,7 +441,9 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
         \limsup_{n\to\infty}\eta_n(F)\leq\eta(F).
       \]
   \end{enumerate}
-  （Portmanteau 定理の一部である．証明は省略する．）
+  （Portmanteau 定理の一部である．証明は省略する．
+  第1の主張は Villani (2009) Lemma 4.3 に対応し，
+  第2の主張は Billingsley (1999) Theorem 2.1 の一部である．）
 \end{theorem}
 
 \section{$L^p$ ノルムと積分不等式}
@@ -578,8 +606,6 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   と定める．$\mu\circ T^{-1}$ を $T$ による $\mu$ の\textbf{像測度}という．
   ここで $T^{-1}(B):=\{\omega\in\Omega\mid T(\omega)\in B\}$ は
   集合 $B$ の\textbf{逆像}であり，$T$ の可逆性は仮定しない．
-  記号 $\mu\circ T^{-1}$ は「$B$ の逆像を取ってから $\mu$ で測る」
-  という定義そのものを表している．
   直感的には，$\mu\circ T^{-1}$ は
   「$\mu$ に従って分布する点 $\omega$ を $T$ で送ったときの，
   $T(\omega)$ の分布」である．
