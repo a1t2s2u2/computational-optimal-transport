@@ -30,57 +30,31 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \right\}
   \]
   と定める．また
-  \begin{align*}
+  \[
     \Pp{\infty}(X)
-    &:=
-    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}\\
-    &=
-    \left\{
-      \mu\in\Prob(X)
-      \;\middle|\;
-      \sup_{x\in\supp\mu}d(x,x_0)<\infty
-    \right\}
-  \end{align*}
+    :=
+    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
+  \]
   とおく（台 $\supp\mu$ は定義~\ref{def:meas-support}，
-  有界集合は定義~\ref{def:meas-open-ball}を参照．
-  2つの表示の一致は注意~\ref{rem:wp-p-infty-equiv}で確かめる）．
+  有界集合は定義~\ref{def:meas-open-ball}を参照）．
 \end{definition}
 
 \begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
   $1\leq p<\infty$ のとき，$\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
-  （$p=\infty$ の場合，第1の表示（台の有界性）が $x_0$ に言及しないので，
-  非依存性は明らかである．）
 \end{lemma}
 
 \begin{proof}
   $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ を任意に取り，
   $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定する．
-  三角不等式から
-  \[
-    d(x,x_0')
-    \leq d(x,x_0)+d(x_0,x_0').
-  \]
-  両辺 $0$ 以上なので $p$ 乗して
+  $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおくと，三角不等式
+  $d(x,x_0')\leq a+b$ と，$t\mapsto t^p$（$p\geq1$）が
+  $[0,\infty)$ 上で凸であること（注意~\ref{rem:meas-real-facts}）から
   \[
     d(x,x_0')^p
-    \leq
-    \bigl(d(x,x_0)+d(x_0,x_0')\bigr)^p.
-  \]
-  ここで $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおけば，
-  $f(t)=t^p$（$p\geq 1$）が $[0,\infty)$ 上で凸であること
-  （注意~\ref{rem:meas-real-facts}）から
-  \begin{align*}
-    \text{右辺}
-    = (a+b)^p
-    &= 2^p\left(\frac{a}{2}+\frac{b}{2}\right)^p\\
-    &\leq 2^p\left(\frac{a^p}{2}+\frac{b^p}{2}\right)
-    = 2^{p-1}(a^p+b^p).
-  \end{align*}
-  よって
-  \[
-    d(x,x_0')^p
-    \leq
-    2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
+    \leq (a+b)^p
+    = 2^p\left(\frac{a}{2}+\frac{b}{2}\right)^p
+    \leq 2^p\cdot\frac{a^p+b^p}{2}
+    = 2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
   両辺を $\d\mu(x)$ で積分すると
   （右辺第2項は定数なので，$\mu(X)=1$ より積分値は $d(x_0,x_0')^p$）
@@ -92,26 +66,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   $x_0$ と $x_0'$ を入れ替えれば逆も成り立つ．
 \end{proof}
-
-\begin{remark}{$\Pp{\infty}(X)$ の言い換え}{wp-p-infty-equiv}
-  定義~\ref{def:wp-p-space}の $\Pp{\infty}(X)$ の2つの表示が
-  一致することを確かめる．
-  なお $X$ は可分で $\mu$ は確率測度だから
-  $\mu(\supp\mu)=1$（補題~\ref{lem:meas-support-full}），
-  特に $\supp\mu\neq\emptyset$ であり，
-  上限が $\sup\emptyset=-\infty$ になることはない．
-  \begin{itemize}
-    \item $\supp\mu$ が有界，すなわちある開球 $B_r(z)$ に含まれるとする．
-      三角不等式より $\supp\mu\subset B_{r+d(z,x_0)}(x_0)$ だから，
-      $R:=r+d(z,x_0)$ とおけば，すべての $x\in\supp\mu$ で
-      $d(x,x_0)<R$，よって
-      $\sup_{x\in\supp\mu}d(x,x_0)\leq R<\infty$ である．
-    \item 逆に $S:=\sup_{x\in\supp\mu}d(x,x_0)<\infty$ とすると，
-      すべての $x\in\supp\mu$ で $d(x,x_0)\leq S<S+1$，
-      すなわち $\supp\mu\subset B_{S+1}(x_0)$ だから
-      $\supp\mu$ は有界である．
-  \end{itemize}
-\end{remark}
 
 \begin{definition}{Coupling 集合}{wp-coupling}
   距離空間 $S,T$ 上の確率測度 $\mu\in\Prob(S)$，
@@ -136,16 +90,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\pi\circ\mathrm{pr}_1^{-1}=\mu$，$\pi\circ\mathrm{pr}_2^{-1}=\nu$
   と言い換えられる（補題~\ref{lem:meas-marginal-integral}）．
 \end{definition}
-
-\begin{remark}{記法：$(x,y)\sim\pi$ と a.e.}{wp-sampling-notation}
-  $\pi\in\Prob(X\times X)$ に対し，$(x,y)\sim\pi$ は
-  「確率測度 $\pi$ に従って選ばれた点対 $(x,y)$」を表す文献の記法で，
-  $\int_{X\times X} f(x,y)\,\d\pi(x,y)$ は
-  $\mathbb{E}_{(x,y)\sim\pi}[f(x,y)]$ とも書かれる
-  （本資料では積分記法を用いる）．
-  性質が $\pi$-a.e. で成り立つ，の意味は
-  定義~\ref{def:meas-ae}の通りである．
-\end{remark}
 
 \begin{definition}{Wasserstein 距離}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
@@ -184,11 +128,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
   と統一的に書ける．
-  また主張~\ref{clm:meas-esssup-ae}より，$\norm{d}_{L^\infty(\pi)}$ が
-  有限のとき（すぐ後の補題~\ref{lem:wp-finite}により
-  $\mu,\nu\in\Pp{\infty}(X)$ の coupling では常に有限），それ自身が
-  「$d(x,y)\leq R$ が $\pi$-a.e. で成り立つ」をみたす最小の $R\geq0$ であり，
-  これは $\esssup_{(x,y)\sim\pi}d(x,y)$ とも書かれる．
   さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
   $p<\infty$ では下限と $p$ 乗が交換でき，
   \[
@@ -236,17 +175,27 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   =\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
   は $\mu\in\Pp{p}(X)$ の定義そのものである（$\nu$ も同様）．
 
-  $p=\infty$ のとき，$R_\mu:=\sup_{x\in\supp\mu}d(x,x_0)$ とおくと
-  $\mu\in\Pp{\infty}(X)$ より $R_\mu<\infty$ である．
-  $X$ は可分だから台は全測度をもち（補題~\ref{lem:meas-support-full}）
-  $\mu(\supp\mu)=1$，かつ $\supp\mu$ 上で $d(\cdot,x_0)\leq R_\mu$ だから，
-  「$d(\cdot,x_0)\leq R_\mu$」は $\mu$-a.e. で成り立つ．
-  よって $\norm{d(\cdot,x_0)}_{L^\infty(\mu)}\leq R_\mu<\infty$ である
+  $p=\infty$ のとき，$\mu\in\Pp{\infty}(X)$ より $\supp\mu$ は
+  ある開球 $B_r(z)$ に含まれ，$x\in\supp\mu$ ならば三角不等式より
+  \[
+    d(x,x_0)\leq d(x,z)+d(z,x_0)<r+d(z,x_0)=:R_\mu<\infty
+  \]
+  である．$X$ は可分だから台は全測度をもち
+  （補題~\ref{lem:meas-support-full}）$\mu(\supp\mu)=1$，
+  よって「$d(\cdot,x_0)\leq R_\mu$」は $\mu$-a.e. で成り立ち，
+  $\norm{d(\cdot,x_0)}_{L^\infty(\mu)}\leq R_\mu<\infty$ である
   （$\nu$ も同様）．
 \end{proof}
 
+\section{最適 coupling の存在}
+\label{sec:wp-existence}
+
+下限 $\Wass_p(\mu,\nu)$ を達成する coupling が存在することを，
+Villani (2009) Theorem 4.1 の形で示す．
+
 \begin{theorem}{最適 coupling の存在}{wp-optimal-coupling-existence}
-  $(S,\mu)$，$(T,\nu)$ を2つの Polish 確率空間とする．
+  $(S,\mu)$，$(T,\nu)$ を2つの Polish 確率空間
+  （Polish 空間とその上の Borel 確率測度の組をいう）とする．
   $a\colon S\to\R\cup\{-\infty\}$，
   $b\colon T\to\R\cup\{-\infty\}$ を上半連続関数とし，
   $a\in L^1(\mu)$，$b\in L^1(\nu)$ とする．
@@ -264,13 +213,27 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \int_{S\times T}c\,\d\pi
   \]
   をみたす．このような $\pi^*$ をコスト $c$ に関する
-  \textbf{最適 coupling}または\textbf{最適輸送計画}という．
+  \textbf{最適 coupling}という．
 \end{theorem}
 
+\begin{remark}{下界条件の役割}{wp-cost-lower-bound}
+  仮定 $c\geq a+b$ により，任意の $\pi\in\Couplings(\mu,\nu)$ で
+  $c$ の負部分 $c^-:=\max\{-c,0\}$ は
+  $c^-\leq(a+b)^-\leq\abs{a(x)}+\abs{b(y)}$ をみたし，
+  周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  $\pi$-可積分である
+  （$c$ の可測性は半連続性による：注意~\ref{rem:meas-lsc-facts}）．
+  したがって $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まる
+  （Villani (2009) Remark 4.2）．
+\end{remark}
+
 \begin{proof}
-  直積 $S\times T$ は Polish 空間である
-  （付録Aの直積距離の注意を参照）．まず
-  $\Couplings(\mu,\nu)$ が tight であることを示す．
+  直積 $S\times T$ は Polish 空間であり
+  （付録Aの直積距離の注意を参照），
+  $\mu\otimes\nu\in\Couplings(\mu,\nu)$
+  （主張~\ref{clm:meas-product-marginals}）だから
+  $\Couplings(\mu,\nu)\neq\emptyset$ である．
+  まず $\Couplings(\mu,\nu)$ が tight であることを示す．
   $\varepsilon>0$ を任意に取る．Prokhorov の定理
   （定理~\ref{thm:meas-prokhorov}）より $\mu,\nu$ は tight だから，
   compact 集合 $K_1\subset S$，$K_2\subset T$ で
@@ -316,8 +279,16 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \inf_{\pi\in\Couplings(\mu,\nu)}
     \int_{S\times T}c\,\d\pi
   \]
-  とおく．下界条件と周辺積分公式より，この下限は $-\infty$ ではない．
-  $I=+\infty$ のときは，たとえば $\mu\otimes\nu$ が最小値を達成する．
+  とおく．任意の $\pi\in\Couplings(\mu,\nu)$ に対し，
+  $c\geq a+b$ と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  \[
+    \int_{S\times T}c\,\d\pi
+    \geq\int_{S\times T}\bigl(a(x)+b(y)\bigr)\,\d\pi(x,y)
+    =\int_S a\,\d\mu+\int_T b\,\d\nu
+    >-\infty
+  \]
+  だから，$I>-\infty$ である．
+  $I=+\infty$ のときはすべての coupling が最小値を達成する．
   以下 $I<+\infty$ とする．下限の性質から，
   $\pi_n\in\Couplings(\mu,\nu)$ で
   \[
@@ -329,7 +300,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\pi^*\in\Couplings(\mu,\nu)$ である．
 
   $h(x,y):=c(x,y)-a(x)-b(y)$ とおく．
-  $c$ は下半連続，$a,b$ は上半連続だから，$h$ は非負下半連続である．
+  $-a(x)$，$-b(y)$ は下半連続関数と連続な射影の合成だから下半連続，
+  したがって和 $h$ も下半連続である（注意~\ref{rem:meas-lsc-facts}．
+  $a$ または $b$ が $-\infty$ の点では $h=+\infty$ と読む）．
+  また $c\geq a+b$ より $h\geq0$ である．
   また任意の $\pi\in\Couplings(\mu,\nu)$ に対し，周辺積分公式より
   \[
     \int h\,\d\pi
@@ -385,9 +359,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \[
     \norm{d}_{L^\infty(\pi_n)}<R+\frac1n
   \]
-  をみたすものを取れる．同じく Prokhorov の定理により，部分列を取って
-  $\pi_{n_k}\Rightarrow\pi^*$ とでき，弱閉性から
-  $\pi^*\in\Couplings(\mu,\nu)$ である．
+  をみたすものを取れる．
+  定理~\ref{thm:wp-optimal-coupling-existence}の証明で示した
+  $\Couplings(\mu,\nu)$ の tightness と Prokhorov の定理により，
+  部分列を取って $\pi_{n_k}\Rightarrow\pi^*$ とでき，
+  同じく証明中で示した弱閉性から $\pi^*\in\Couplings(\mu,\nu)$ である．
   任意の $\delta>0$ に対し，$k$ が十分大きければ
   $R+1/n_k<R+\delta$ である．このとき
   主張~\ref{clm:meas-esssup-ae}より
@@ -421,8 +397,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
   であるものが存在する．
   ここで $(x,y)$-周辺分布とは，射影
-  $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$
-  （添字 $12$ は「第1・第2成分を残す」の意）による像測度
+  $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$ による像測度
   $\gamma\circ\mathrm{pr}_{12}^{-1}$ のことをいう（$(y,z)$ も同様．
   $X^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
 \end{lemma}
@@ -503,8 +478,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   任意の $\pi\in\Couplings(\mu,\nu)$ で $\norm{d}_{L^p(\pi)}\geq0$ だから
   $\Wass_p(\mu,\nu)\geq0$，
   また補題~\ref{lem:wp-finite}より
-  $\Couplings(\mu,\nu)\neq\emptyset$ かつ $\Wass_p(\mu,\nu)<\infty$．
-  よって $\Wass_p$ は $\Pp{p}(X)$ 上の $[0,\infty)$ に値をもつ関数である．
+  $\Couplings(\mu,\nu)\neq\emptyset$ かつ $\Wass_p(\mu,\nu)<\infty$ である．
 
   \textbf{(1) 対称性．}
   $s(x,y):=(y,x)$ とおく（連続ゆえ可測）．
@@ -556,7 +530,9 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \norm{d}_{L^\infty(\pi^*)}
     =\Wass_\infty(\mu,\nu)=0
   \]
-  である．いずれの場合も $d(x,y)=0$ が $\pi^*$-a.e. で成り立つ．
+  である．いずれの場合も $d(x,y)=0$ が $\pi^*$-a.e. で成り立つ
+  （$p<\infty$ では非負可測関数の積分が $0$ ならば a.e. で $0$
+  であること，$p=\infty$ では主張~\ref{clm:meas-esssup-ae}による）．
   距離の公理よりこれは $x=y$ と同値なので，対角集合
   \[
     \Delta:=\{(x,x)\mid x\in X\}
@@ -626,31 +602,16 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 
 \begin{remark}{文献との対応}{wp-metric-references}
   命題~\ref{prop:wp-metric}は Givens--Shortt (1984) の Proposition 2 である．
-  Villani (2009) Definition 6.1, 6.4 では，$1\leq p<\infty$ に対して
-  まず $\Prob(X)$ 上に $\Wass_p$ を定義し，その後
-  $\Pp{p}(X)=\{\mu\in\Prob(X)\mid \int d(x_0,x)^p\,\d\mu(x)<\infty\}$
-  に制限すれば有限値の距離になる，という順序で述べている．
-  三角不等式の証明は Villani (2009) Chapter 6 の ``Proof that
-  $W_p$ satisfies the axioms of a distance'' と同じく，
-  接着補題で2つの最適 coupling を $X^3$ 上に貼り合わせ，
-  $d(x,z)\leq d(x,y)+d(y,z)$ と Minkowski の不等式を用いる．
-  本資料でもこの形に合わせるため，
-  Prokhorov の定理と Portmanteau 型の下半連続性を標準結果として認めたうえで，
-  Villani (2009) Theorem 4.1 と同じ形の最適 coupling 存在定理
-  （定理~\ref{thm:wp-optimal-coupling-existence}）を先に証明し，
-  その $W_p$ への適用を系~\ref{cor:wp-wasserstein-optimal-coupling}として
-  述べた．
-  $\Pp{p}(X)$ 上での有限性は，Villani (2009) Definition 6.4 直後の
-  \[
-    d(x,y)^p\leq 2^{p-1}\bigl(d(x,x_0)^p+d(x_0,y)^p\bigr)
-  \]
-  による確認に対応する．
-  接着補題（補題~\ref{lem:wp-gluing}）の構成は
-  桑江ほか『最適輸送理論とリッチ曲率』
-  （Encounter with Mathematics 第63回，2015）の補題 1.33，
-  および Villani (2009) Chapter 1 の Gluing Lemma に対応する．
-  $\Wass_p(\mu,\nu)=0\Rightarrow\mu=\nu$ については，
-  Villani の同箇所と同じく，対角集合に集中する最適輸送計画を用いて示した．
-  なお Villani の定義は $1\leq p<\infty$ であるが，本資料では
-  Givens--Shortt (1984) に合わせて $p=\infty$ も同時に扱う．
+  最適 coupling の存在定理（定理~\ref{thm:wp-optimal-coupling-existence}）は
+  Villani (2009) Theorem 4.1，距離の公理の証明は
+  同 Chapter 6 の ``Proof that $W_p$ satisfies the axioms of a distance''
+  に従った．
+  接着補題（補題~\ref{lem:wp-gluing}）は
+  Villani (2009) Chapter 1 の Gluing Lemma，
+  桑江ほか (2015) の補題 1.33 に対応する．
+  なお Villani (2009) Definition 6.1, 6.4 は $1\leq p<\infty$ に対して
+  まず $\Prob(X)$ 上に $\Wass_p$ を定義し，
+  その後 $\Pp{p}(X)$ に制限して有限値の距離とするが，
+  本資料は Givens--Shortt (1984) に合わせて
+  はじめから $\Pp{p}(X)$ 上で定義し，$p=\infty$ も同時に扱う．
 \end{remark}
