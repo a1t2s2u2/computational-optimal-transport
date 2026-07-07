@@ -59,21 +59,16 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
   距離の値は非負かつ有限である．
 \end{definition}
 
-\begin{definition}{開球・開集合・有界集合}{meas-open-ball}
+\begin{definition}{開球と開集合}{meas-open-ball}
   距離空間 $(X,d)$，$x\in X$，$r>0$ に対し
   \[
     B_r(x):=\{y\in X\mid d(x,y)<r\}
   \]
   を $x$ を中心とする半径 $r$ の\textbf{開球}という．
-  \begin{itemize}
-    \item $U\subset X$ が\textbf{開集合}であるとは，
-      任意の $x\in U$ に対しある $r>0$ で $B_r(x)\subset U$
-      となることをいう．
-      $x$ を含む開集合を $x$ の\textbf{開近傍}という．
-      補集合が開集合である集合を\textbf{閉集合}という．
-    \item $A\subset X$ が\textbf{有界}であるとは，
-      ある開球 $B_r(x)$ で $A\subset B_r(x)$ となることをいう．
-  \end{itemize}
+  $U\subset X$ が\textbf{開集合}であるとは，
+  任意の $x\in U$ に対しある $r>0$ で $B_r(x)\subset U$
+  となることをいう．
+  補集合が開集合である集合を\textbf{閉集合}という．
 \end{definition}
 
 \begin{definition}{連続写像と compact 集合}{meas-continuous-compact}
@@ -156,21 +151,7 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   （Dynkin の $\pi$-$\lambda$ 定理から従う標準的な結果．証明は省略する．）
 \end{theorem}
 
-\section{測度の台・指示関数・a.e.}
-
-\begin{definition}{測度の台}{meas-support}
-  距離空間 $X$ 上の Borel 確率測度 $\mu$ の\textbf{台}とは
-  \[
-    \supp\mu
-    =
-    \left\{x\in X\mid x\text{ の任意の開近傍 }U\text{ に対して }\mu(U)>0\right\}
-  \]
-  のことである．
-  定義から，$X\setminus\supp\mu$ は
-  「測度 $0$ の開近傍をもつ点」の全体であり，開集合である
-  （そのような開近傍の各点はまた同じ開近傍をもつ）．
-  したがって $\supp\mu$ は閉集合であり，特に Borel 集合である．
-\end{definition}
+\section{指示関数と a.e.}
 
 \begin{definition}{指示関数}{meas-indicator}
   集合 $A\subset X$ の\textbf{指示関数} $\mathbf{1}_A\colon X\to\{0,1\}$ を
@@ -194,44 +175,6 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   \]
   であることをいう（例外集合が可測であることを含めて要請する）．
 \end{definition}
-
-\begin{lemma}{台は全測度をもつ}{meas-support-full}
-  $X$ を可分距離空間，$\mu$ を $X$ 上の Borel 確率測度とすると，
-  $\mu(\supp\mu)=1$ である．
-\end{lemma}
-
-\begin{proof}
-  $N:=X\setminus\supp\mu$ とおく．
-  定義より $x\in N$ であることは，
-  ある開近傍 $U\ni x$ で $\mu(U)=0$ となることと同値であり，
-  さらに $U$ はある開球 $B_r(x)\subset U$ を含むから，
-  ある $r>0$ で $\mu(B_r(x))=0$ となることとも同値である．
-
-  $X$ は可分なので，可算な稠密集合 $D=\{x_1,x_2,\dots\}$ が取れる．
-  可算族
-  \[
-    \mathcal{B}
-    :=
-    \{B_q(x_i)\mid i\in\N,\;q\in\mathbb{Q},\;q>0,\;\mu(B_q(x_i))=0\}
-  \]
-  に対して $N=\bigcup\mathcal{B}$ を示す．
-  \begin{itemize}
-    \item （$\supset$）$y\in B_q(x_i)\in\mathcal{B}$ とすると，
-      $B_q(x_i)$ は $y$ の開近傍で $\mu(B_q(x_i))=0$ だから $y\in N$．
-    \item （$\subset$）$x\in N$ とし，$\mu(B_r(x))=0$ なる $r>0$ を取る．
-      $D$ の稠密性から $d(x,x_i)<r/3$ なる $x_i$ が取れ，
-      有理数 $q$ を $r/3<q<2r/3$ に取る．
-      このとき $d(x_i,x)<r/3<q$ より $x\in B_q(x_i)$ であり，
-      $z\in B_q(x_i)$ ならば
-      $d(x,z)\leq d(x,x_i)+d(x_i,z)<r/3+2r/3=r$
-      だから $B_q(x_i)\subset B_r(x)$．
-      よって $\mu(B_q(x_i))\leq\mu(B_r(x))=0$ となり
-      $B_q(x_i)\in\mathcal{B}$，すなわち $x\in\bigcup\mathcal{B}$．
-  \end{itemize}
-  したがって $N$ は測度 $0$ の可算個の開球の合併であり，
-  可算劣加法性から $\mu(N)=0$．
-  ゆえに $\mu(\supp\mu)=1-\mu(N)=1$ である．
-\end{proof}
 
 \section{収束定理}
 
@@ -452,23 +395,14 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 \section{$L^p$ ノルムと積分不等式}
 
 \begin{definition}{$L^p$ ノルム}{meas-lp-norm}
-  測度空間 $(\Omega,\mathcal{A},\mu)$ 上の可測関数 $f\colon\Omega\to\R$ に対し，
-  $1\leq p<\infty$ のとき
+  測度空間 $(\Omega,\mathcal{A},\mu)$ 上の可測関数 $f\colon\Omega\to\R$ と
+  $1\leq p<\infty$ に対し
   \[
     \norm{f}_{L^p(\mu)}
     :=
-    \left(\int_\Omega\abs{f}^p\,\d\mu\right)^{1/p},
+    \left(\int_\Omega\abs{f}^p\,\d\mu\right)^{1/p}
   \]
-  $p=\infty$ のとき
-  \[
-    \norm{f}_{L^\infty(\mu)}
-    :=
-    \inf\{M\geq 0\mid \abs{f}\leq M\;\;\mu\text{-a.e.}\}
-  \]
-  と定める（右辺の集合が空のときは
-  $\inf\emptyset=+\infty$ と読む：定義~\ref{def:meas-sup-inf}）．
-  $\norm{f}_{L^\infty(\mu)}$ を
-  $\esssup_\mu\,\abs{f}$（本質的上限）とも書く．
+  と定める．
 \end{definition}
 
 \begin{remark}{記法 $\norm{f}_{L^p(\mu)}$}{meas-lp-norm-notation}
@@ -484,117 +418,36 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
     \norm{d}_{L^p(\pi)}
     =\left(\int_{X\times X}d(x,y)^p\,\d\pi(x,y)\right)^{1/p}
   \]
-  の形で用い，$1\leq p\leq\infty$ を通じて
+  の形で用い，
   \[
     \Wass_p(\mu,\nu)=\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
-  と統一的に書ける（注意~\ref{rem:wp-welldef}）．
+  と書ける（注意~\ref{rem:wp-welldef}）．
 \end{remark}
-
-\begin{claim}{$L^\infty$ ノルムは a.e. の上界である}{meas-esssup-ae}
-  可測関数 $f$ に対し，
-  $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ が $\mu$-a.e. で成り立つ．
-\end{claim}
-
-\begin{proof}
-  $\norm{f}_{L^\infty(\mu)}=\infty$ なら自明である．
-  $m:=\norm{f}_{L^\infty(\mu)}<\infty$ とする．
-  下限の定義から，各 $n\in\N$ に対し
-  $m\leq M_n<m+1/n$ かつ $\abs{f}\leq M_n$ $\mu$-a.e. なる $M_n$ が取れる．
-  例外集合を $N_n$（$\mu(N_n)=0$）とすると，
-  $N:=\bigcup_n N_n$ は可算劣加法性より $\mu(N)=0$ であり，
-  $\omega\notin N$ では $\abs{f(\omega)}\leq M_n<m+1/n$（$\forall n$），
-  すなわち $\abs{f(\omega)}\leq m$ である．
-\end{proof}
 
 \begin{claim}{$L^p$ ノルムの単調性}{meas-lp-monotone}
   可測関数 $f,g$ が $\abs{f}\leq\abs{g}$ $\mu$-a.e. をみたすならば，
-  $1\leq p\leq\infty$ に対し
+  $1\leq p<\infty$ に対し
   $\norm{f}_{L^p(\mu)}\leq\norm{g}_{L^p(\mu)}$ である．
 \end{claim}
 
 \begin{proof}
-  $p<\infty$ のとき：$\abs{f}^p\leq\abs{g}^p$ $\mu$-a.e. だから，
+  $\abs{f}^p\leq\abs{g}^p$ $\mu$-a.e. だから，
   積分の単調性より
   $\int\abs{f}^p\,\d\mu\leq\int\abs{g}^p\,\d\mu$．
   両辺の $1/p$ 乗を取ればよい．
-
-  $p=\infty$ のとき：$\norm{g}_{L^\infty(\mu)}=\infty$ なら自明なので，
-  $\norm{g}_{L^\infty(\mu)}<\infty$ とする．主張~\ref{clm:meas-esssup-ae}より
-  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. だから，
-  仮定と合わせて $\abs{f}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e.．
-  よって $\norm{g}_{L^\infty(\mu)}$ は
-  $\norm{f}_{L^\infty(\mu)}$ を定める集合の元であり，
-  下限の性質から
-  $\norm{f}_{L^\infty(\mu)}\leq\norm{g}_{L^\infty(\mu)}$．
-\end{proof}
-
-\begin{theorem}{Hölder の不等式}{meas-holder}
-  $1<p,q<\infty$，$1/p+1/q=1$ とする．
-  可測関数 $f,g$ に対し
-  \[
-    \int_\Omega\abs{fg}\,\d\mu
-    \leq
-    \norm{f}_{L^p(\mu)}\,\norm{g}_{L^q(\mu)}.
-  \]
-  （標準的な結果．証明は省略する．）
-\end{theorem}
-
-\begin{claim}{確率空間では $L^1$ ノルムは $L^p$ ノルム以下}{meas-l1-lp}
-  $\mu$ を確率測度とすると，可測関数 $g$ と $1\leq p\leq\infty$ に対し
-  \[
-    \norm{g}_{L^1(\mu)}\leq\norm{g}_{L^p(\mu)}.
-  \]
-\end{claim}
-
-\begin{proof}
-  $p=1$ は自明．
-  $1<p<\infty$ のとき，Hölder の不等式（定理~\ref{thm:meas-holder}）を
-  $f=g$，$g=1$（定数関数）に適用すると，$q=p/(p-1)$ として
-  \[
-    \norm{g}_{L^1(\mu)}
-    =\int_\Omega\abs{g\cdot 1}\,\d\mu
-    \leq\norm{g}_{L^p(\mu)}\left(\int_\Omega 1\,\d\mu\right)^{1/q}
-    =\norm{g}_{L^p(\mu)},
-  \]
-  最後の等号で $\mu(\Omega)=1$ を用いた．
-  $p=\infty$ のとき，主張~\ref{clm:meas-esssup-ae}より
-  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. だから
-  \[
-    \norm{g}_{L^1(\mu)}
-    \leq\int_\Omega\norm{g}_{L^\infty(\mu)}\,\d\mu
-    =\norm{g}_{L^\infty(\mu)}.  \qedhere
-  \]
 \end{proof}
 
 \begin{theorem}{Minkowski の不等式}{meas-minkowski}
-  可測関数 $f,g$ と $1\leq p\leq\infty$ に対し
+  可測関数 $f,g$ と $1\leq p<\infty$ に対し
   \[
     \norm{f+g}_{L^p(\mu)}
     \leq
     \norm{f}_{L^p(\mu)}+\norm{g}_{L^p(\mu)}.
   \]
+  （Hölder の不等式から従う標準的な結果．証明は省略する．
+  例えば Dudley (2002) \S5.1 参照．）
 \end{theorem}
-
-\begin{proof}
-  $1\leq p<\infty$ の場合は Hölder の不等式から従う標準的な結果であり，
-  証明は文献に譲る（例えば Dudley (2002) \S5.1．
-  本資料ではこの場合を認めて用いる）．
-
-  $p=\infty$ の場合を示す．右辺が有限のときを考えればよい．
-  主張~\ref{clm:meas-esssup-ae}より
-  $\abs{f}\leq\norm{f}_{L^\infty(\mu)}$ $\mu$-a.e. かつ
-  $\abs{g}\leq\norm{g}_{L^\infty(\mu)}$ $\mu$-a.e. であり，
-  2つの例外集合（いずれも零集合）の合併の外側で
-  \[
-    \abs{f+g}\leq\abs{f}+\abs{g}
-    \leq\norm{f}_{L^\infty(\mu)}+\norm{g}_{L^\infty(\mu)}
-  \]
-  が成り立つ．零集合の合併は零集合だから，この不等式は $\mu$-a.e. で成り立ち，
-  $L^\infty$ ノルムの定義（下限）より
-  $\norm{f+g}_{L^\infty(\mu)}
-  \leq\norm{f}_{L^\infty(\mu)}+\norm{g}_{L^\infty(\mu)}$ である．
-\end{proof}
 
 \section{像測度}
 
@@ -662,7 +515,7 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 \end{proof}
 
 \begin{corollary}{像測度は $L^p$ ノルムを保つ}{meas-pf-lp}
-  $1\leq p\leq\infty$，$T\colon\Omega\to\Omega'$ 可測，
+  $1\leq p<\infty$，$T\colon\Omega\to\Omega'$ 可測，
   $\mu$ を $\Omega$ 上の測度，$f\colon\Omega'\to\R$ を可測とすると，
   \[
     \norm{f}_{L^p(\mu\circ T^{-1})}
@@ -672,17 +525,8 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 \end{corollary}
 
 \begin{proof}
-  $p<\infty$ のとき：変数変換公式（補題~\ref{lem:meas-change-of-variables}）を
+  変数変換公式（補題~\ref{lem:meas-change-of-variables}）を
   非負可測関数 $\abs{f}^p$ に適用すればよい．
-  $p=\infty$ のとき：任意の $M\geq0$ に対し
-  \[
-    (\mu\circ T^{-1})(\{\abs{f}>M\})
-    =\mu(T^{-1}\{\abs{f}>M\})
-    =\mu(\{\abs{f\circ T}>M\})
-  \]
-  だから，「$\abs{f}\leq M$ $(\mu\circ T^{-1})$-a.e.」と
-  「$\abs{f\circ T}\leq M$ $\mu$-a.e.」は同値であり，
-  両ノルムを定める集合が一致する．
 \end{proof}
 
 \begin{claim}{像測度の合成則}{meas-pf-compose}
@@ -746,7 +590,7 @@ $X,Y$ が Polish 空間なら $X\times Y$ も Polish 空間である．
     \int_{X\times Y}f(x)\,\d\pi(x,y)=\int_X f\,\d\mu,
     \qquad
     \norm{f(x)}_{L^p(\pi)}=\norm{f}_{L^p(\mu)}
-    \quad(1\leq p\leq\infty)
+    \quad(1\leq p<\infty)
   \]
   が成り立つ（左辺の $f(x)$ は $(x,y)\mapsto f(x)$ の略記）．
   第2座標についても同様である．

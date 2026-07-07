@@ -29,14 +29,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
       \int_X d(x,x_0)^p\,\d\mu(x)<\infty
     \right\}
   \]
-  と定める．また
-  \[
-    \Pp{\infty}(X)
-    :=
-    \left\{\mu\in\Prob(X)\mid \supp\mu\text{ は有界}\right\}
-  \]
-  とおく（台 $\supp\mu$ は定義~\ref{def:meas-support}，
-  有界集合は定義~\ref{def:meas-open-ball}を参照）．
+  と定める．
 \end{definition}
 
 \begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
@@ -100,15 +93,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \inf_{\pi\in\Couplings(\mu,\nu)}
     \left(
       \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
-    \right)^{1/p},
-  \]
-  また $\mu,\nu\in\Pp{\infty}(X)$ に対し，
-  $L^\infty$ ノルム（定義~\ref{def:meas-lp-norm}）を用いて
-  \[
-    \Wass_\infty(\mu,\nu)
-    :=
-    \inf_{\pi\in\Couplings(\mu,\nu)}
-    \norm{d}_{L^\infty(\pi)}
+    \right)^{1/p}
   \]
   と定める．
 \end{definition}
@@ -120,14 +105,14 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   により連続，したがって Borel 可測である
   （注意~\ref{rem:meas-measurable-ops}）．
-  $d\geq0$ より $1\leq p<\infty$ では
-  $\norm{d}_{L^p(\pi)}=\bigl(\int d^p\,\d\pi\bigr)^{1/p}$ だから，
-  $1\leq p\leq\infty$ を通じて
+  $d\geq0$ より
+  $\norm{d}_{L^p(\pi)}=\bigl(\int d^p\,\d\pi\bigr)^{1/p}$
+  （$L^p$ ノルムは定義~\ref{def:meas-lp-norm}）だから，
   \[
     \Wass_p(\mu,\nu)
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
-  と統一的に書ける．
+  と書ける．
   さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
   $p<\infty$ では下限と $p$ 乗が交換でき，
   \[
@@ -139,7 +124,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{remark}
 
 \begin{lemma}{$\Wass_p$ の有限性}{wp-finite}
-  $1\leq p\leq\infty$，$\mu,\nu\in\Pp{p}(X)$ とすると，
+  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(X)$ とすると，
   $\Couplings(\mu,\nu)\neq\emptyset$ であり，
   任意の $\pi\in\Couplings(\mu,\nu)$ に対して
   $\norm{d}_{L^p(\pi)}<\infty$ である．
@@ -158,7 +143,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}）と
   Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用し，
   さらに周辺積分公式（補題~\ref{lem:meas-marginal-integral}の $L^p$ 版）で
-  各項を周辺測度のノルムに落とすと，$1\leq p\leq\infty$ で一括して
+  各項を周辺測度のノルムに落とすと
   \[
     \norm{d(x,y)}_{L^p(\pi)}
     \leq
@@ -168,23 +153,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \norm{d(\cdot,x_0)}_{L^p(\mu)}
     +\norm{d(\cdot,x_0)}_{L^p(\nu)}
   \]
-  を得る．あとは右辺の各項が有限であることを確かめればよい．
-
-  $1\leq p<\infty$ のとき，
+  を得る．ここで
   $\norm{d(\cdot,x_0)}_{L^p(\mu)}
   =\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
   は $\mu\in\Pp{p}(X)$ の定義そのものである（$\nu$ も同様）．
-
-  $p=\infty$ のとき，$\mu\in\Pp{\infty}(X)$ より $\supp\mu$ は
-  ある開球 $B_r(z)$ に含まれ，$x\in\supp\mu$ ならば三角不等式より
-  \[
-    d(x,x_0)\leq d(x,z)+d(z,x_0)<r+d(z,x_0)=:R_\mu<\infty
-  \]
-  である．$X$ は可分だから台は全測度をもち
-  （補題~\ref{lem:meas-support-full}）$\mu(\supp\mu)=1$，
-  よって「$d(\cdot,x_0)\leq R_\mu$」は $\mu$-a.e. で成り立ち，
-  $\norm{d(\cdot,x_0)}_{L^\infty(\mu)}\leq R_\mu<\infty$ である
-  （$\nu$ も同様）．
 \end{proof}
 
 \section{最適 coupling の存在}
@@ -335,59 +307,20 @@ Villani (2009) Theorem 4.1 の形で示す．
 \end{proof}
 
 \begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
-  $1\leq p\leq\infty$，$\mu,\nu\in\Pp{p}(X)$ とする．
-  このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して，
-  $1\leq p<\infty$ なら
+  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(X)$ とする．
+  このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して
   \[
     \Wass_p(\mu,\nu)^p
     =
-    \int_{X\times X}d(x,y)^p\,\d\pi^*(x,y),
-  \]
-  $p=\infty$ なら
-  \[
-    \Wass_\infty(\mu,\nu)
-    =
-    \norm{d}_{L^\infty(\pi^*)}
+    \int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
   \]
   をみたす．
 \end{corollary}
 
 \begin{proof}
-  $1\leq p<\infty$ なら，定理~\ref{thm:wp-optimal-coupling-existence}を
-  $S=T=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい．
-
-  $p=\infty$ の場合を示す．
-  $R:=\Wass_\infty(\mu,\nu)$ とおく．補題~\ref{lem:wp-finite}より
-  $R<\infty$ である．下限の性質から，$\pi_n\in\Couplings(\mu,\nu)$ で
-  \[
-    \norm{d}_{L^\infty(\pi_n)}<R+\frac1n
-  \]
-  をみたすものを取れる．
-  定理~\ref{thm:wp-optimal-coupling-existence}の証明で示した
-  $\Couplings(\mu,\nu)$ の tightness と Prokhorov の定理により，
-  部分列を取って $\pi_{n_k}\Rightarrow\pi^*$ とでき，
-  同じく証明中で示した弱閉性から $\pi^*\in\Couplings(\mu,\nu)$ である．
-  任意の $\delta>0$ に対し，$k$ が十分大きければ
-  $R+1/n_k<R+\delta$ である．このとき
-  主張~\ref{clm:meas-esssup-ae}より
-  \[
-    d(x,y)\leq \norm{d}_{L^\infty(\pi_{n_k})}<R+\delta
-    \qquad \pi_{n_k}\text{-a.e.}
-  \]
-  であるから，閉集合
-  \[
-    F_\delta:=\{(x,y)\in X\times X\mid d(x,y)\leq R+\delta\}
-  \]
-  について $\pi_{n_k}(F_\delta)=1$ が十分大きい $k$ で成り立つ．
-  Portmanteau 型の閉集合評価（定理~\ref{thm:meas-portmanteau}）より
-  $\pi^*(F_\delta)=1$ である．$\delta=1/m$ として $m\to\infty$ とすれば，
-  測度の上からの連続性により
-  \[
-    \pi^*(\{(x,y)\mid d(x,y)\leq R\})=1.
-  \]
-  したがって $\norm{d}_{L^\infty(\pi^*)}\leq R$ である．
-  $R$ は下限なので逆向きの不等式も成り立ち，
-  $\norm{d}_{L^\infty(\pi^*)}=R=\Wass_\infty(\mu,\nu)$ である．
+  定理~\ref{thm:wp-optimal-coupling-existence}を
+  $S=T=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい
+  （$c$ は連続ゆえ下半連続である）．
 \end{proof}
 
 \section{Wasserstein 距離の距離性}
@@ -467,15 +400,15 @@ Villani (2009) Theorem 4.1 の形で示す．
 \end{proof}
 
 \begin{proposition}{Wasserstein 距離は距離である}{wp-metric}
-  $1\leq p\leq\infty$ に対し，
+  $1\leq p<\infty$ に対し，
   $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
 \end{proposition}
 
 \begin{proof}
   距離の公理（定義~\ref{def:meas-metric-space}）を順に確かめる．
-  以下，統一記法
+  以下，記法
   $\Wass_p(\mu,\nu)=\inf_{\pi}\norm{d}_{L^p(\pi)}$
-  （注意~\ref{rem:wp-welldef}）を $1\leq p\leq\infty$ で共通に用いる．
+  （注意~\ref{rem:wp-welldef}）を用いる．
 
   \textbf{(0) 非負性と有限性．}
   任意の $\pi\in\Couplings(\mu,\nu)$ で $\norm{d}_{L^p(\pi)}\geq0$ だから
@@ -514,7 +447,6 @@ Villani (2009) Theorem 4.1 の形で示す．
   \]
   をみたすから $\pi^*\in\Couplings(\mu,\mu)$ である．
   $d\circ\iota\equiv0$ だから，系~\ref{cor:meas-pf-lp}より
-  $1\leq p\leq\infty$ で一括して
   \[
     \norm{d}_{L^p(\pi^*)}=\norm{d\circ\iota}_{L^p(\mu)}=0,
   \]
@@ -523,19 +455,12 @@ Villani (2009) Theorem 4.1 の形で示す．
   逆に $\Wass_p(\mu,\nu)=0$ とする．
   系~\ref{cor:wp-wasserstein-optimal-coupling}より，最適 coupling
   $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
-  $1\leq p<\infty$ なら
   \[
     \int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
-    =\Wass_p(\mu,\nu)^p=0,
+    =\Wass_p(\mu,\nu)^p=0
   \]
-  であり，$p=\infty$ なら
-  \[
-    \norm{d}_{L^\infty(\pi^*)}
-    =\Wass_\infty(\mu,\nu)=0
-  \]
-  である．いずれの場合も $d(x,y)=0$ が $\pi^*$-a.e. で成り立つ
-  （$p<\infty$ では非負可測関数の積分が $0$ ならば a.e. で $0$
-  であること，$p=\infty$ では主張~\ref{clm:meas-esssup-ae}による）．
+  だから，非負可測関数の積分が $0$ ならばその関数が a.e. で $0$
+  であることより，$d(x,y)=0$ が $\pi^*$-a.e. で成り立つ．
   距離の公理よりこれは $x=y$ と同値なので，対角集合
   \[
     \Delta:=\{(x,x)\mid x\in X\}
@@ -604,7 +529,8 @@ Villani (2009) Theorem 4.1 の形で示す．
 \end{proof}
 
 \begin{remark}{文献との対応}{wp-metric-references}
-  命題~\ref{prop:wp-metric}は Givens--Shortt (1984) の Proposition 2 である．
+  命題~\ref{prop:wp-metric}は Givens--Shortt (1984) の
+  Proposition 2（$1\leq p<\infty$ の場合）である．
   最適 coupling の存在定理（定理~\ref{thm:wp-optimal-coupling-existence}）は
   Villani (2009) Theorem 4.1，距離の公理の証明は
   同 Chapter 6 の ``Proof that $W_p$ satisfies the axioms of a distance''
@@ -616,5 +542,7 @@ Villani (2009) Theorem 4.1 の形で示す．
   まず $\Prob(X)$ 上に $\Wass_p$ を定義し，
   その後 $\Pp{p}(X)$ に制限して有限値の距離とするが，
   本資料は Givens--Shortt (1984) に合わせて
-  はじめから $\Pp{p}(X)$ 上で定義し，$p=\infty$ も同時に扱う．
+  はじめから $\Pp{p}(X)$ 上で定義する
+  （同論文は $p=\infty$ の $\Wass_\infty$ も扱うが，
+  本資料は Villani に合わせて $1\leq p<\infty$ のみ扱う）．
 \end{remark}

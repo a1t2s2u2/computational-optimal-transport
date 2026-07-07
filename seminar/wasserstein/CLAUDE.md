@@ -23,6 +23,7 @@ Villani の該当ページのスキャンは `reference/old_and_new/` にある�
 ## 方針
 
 - 前提知識は付録（`tex/foundations/`）で全網羅し、本文からは参照でリンクする
+- $W_p$ は Villani (Definition 6.1) に合わせて $1\leq p<\infty$ のみ扱う（$W_\infty$ と $L^\infty$ 系の道具は導入しない）
 - 最適 coupling の存在定理は Villani (2009) Theorem 4.1 の形で証明し、距離性（三角不等式・一致の公理）の証明に用いる
 - Prokhorov の定理・Portmanteau 定理は証明なしで認める（ステートメントと引用元のみ明示。Villani Ch.4 / Billingsley 1999）
 - 証明なしで認める標準定理はステートメントを明示して文献を挙げる
