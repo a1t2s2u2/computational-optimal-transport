@@ -70,43 +70,29 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{proof}
 
 \begin{definition}{Coupling}{wp-coupling}
-  距離空間 $S,T$ 上の確率測度 $\mu\in\Prob(S)$，
-  $\nu\in\Prob(T)$ に対し，$\pi\in\Prob(S\times T)$ が
+  距離空間 $\mathcal{X},\mathcal{Y}$ 上の確率測度
+  $\mu\in\Prob(\mathcal{X})$，$\nu\in\Prob(\mathcal{Y})$ に対し，
+  $\pi\in\Prob(\mathcal{X}\times\mathcal{Y})$ が
   $\mu$ と $\nu$ の \textbf{coupling}（結合分布，輸送計画）であるとは，
   $\pi$ が $\mu$ と $\nu$ をそれぞれ第1・第2の
   \textbf{周辺分布}としてもつこと，すなわち
   \[
-    \pi(A\times T)=\mu(A)\quad(\forall A\in\Borel(S)),
+    \pi(A\times\mathcal{Y})=\mu(A)\quad(\forall A\in\Borel(\mathcal{X})),
     \qquad
-    \pi(S\times B)=\nu(B)\quad(\forall B\in\Borel(T))
+    \pi(\mathcal{X}\times B)=\nu(B)\quad(\forall B\in\Borel(\mathcal{Y}))
   \]
   が成り立つことをいう．coupling の全体を
   \[
     \Couplings(\mu,\nu)
     :=
     \left\{
-      \pi\in\Prob(S\times T)
+      \pi\in\Prob(\mathcal{X}\times\mathcal{Y})
       \mid
       \pi\text{ は }\mu\text{ と }\nu\text{ の coupling}
     \right\}
   \]
-  と書く．周辺分布の条件は，射影の像測度として
-  $\pi\circ\mathrm{pr}_1^{-1}=\mu$，$\pi\circ\mathrm{pr}_2^{-1}=\nu$
-  と言い換えられる（補題~\ref{lem:meas-marginal-integral}）．
+  と書く．
 \end{definition}
-
-\begin{remark}{文献との対応（coupling）}{wp-coupling-villani}
-  定義~\ref{def:wp-coupling}は Villani (2009) Definition 1.1 の
-  測度論的定式化（$\mu$ と $\nu$ を周辺分布としてもつ
-  $S\times T$ 上の確率測度 $\pi$ を構成すること）を定義として採用したものである．
-  同 Definition 1.1 は本来，ある確率空間上の確率変数の組 $(X,Y)$ で
-  $\mathrm{law}(X)=\mu$，$\mathrm{law}(Y)=\nu$ をみたすものとして
-  coupling を定義し，その同時分布 $\mathrm{law}(X,Y)$ も
-  （言葉の濫用として）coupling とよぶ．
-  $\mu,\nu$ 以外の分布が現れない問題では確率空間を
-  $S\times T$ 自身に取ってよく，このとき $(X,Y)$ は座標への射影，
-  同時分布は上の $\pi$ に当たる．
-\end{remark}
 
 \begin{definition}{Wasserstein 距離}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
@@ -190,26 +176,28 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 Villani (2009) Theorem 4.1 の形で示す．
 
 \begin{theorem}{最適 coupling の存在}{wp-optimal-coupling-existence}
-  $(S,\mu)$，$(T,\nu)$ を2つの Polish 確率空間
+  $(\mathcal{X},\mu)$，$(\mathcal{Y},\nu)$ を2つの Polish 確率空間
   （Polish 空間とその上の Borel 確率測度の組をいう）とする．
-  $a\colon S\to\R\cup\{-\infty\}$，
-  $b\colon T\to\R\cup\{-\infty\}$ を上半連続関数とし，
+  $a\colon \mathcal{X}\to\R\cup\{-\infty\}$，
+  $b\colon \mathcal{Y}\to\R\cup\{-\infty\}$ を上半連続関数とし，
   $a\in L^1(\mu)$，$b\in L^1(\nu)$，すなわち
-  $\int_S\abs{a}\,\d\mu<\infty$，$\int_T\abs{b}\,\d\nu<\infty$ とする
+  $\int_{\mathcal{X}}\abs{a}\,\d\mu<\infty$，
+  $\int_{\mathcal{Y}}\abs{b}\,\d\nu<\infty$ とする
   （$\abs{-\infty}:=+\infty$ と読む．
   特に $a$ は $\mu$-a.e. で，$b$ は $\nu$-a.e. で有限値である）．
-  また，$c\colon S\times T\to\R\cup\{+\infty\}$ を下半連続関数とし，
-  すべての $x\in S$，$y\in T$ で
+  また，$c\colon \mathcal{X}\times\mathcal{Y}\to\R\cup\{+\infty\}$
+  を下半連続関数とし，
+  すべての $x\in\mathcal{X}$，$y\in\mathcal{Y}$ で
   \[
     c(x,y)\geq a(x)+b(y)
   \]
   が成り立つとする．このとき，ある coupling
   $\pi^*\in\Couplings(\mu,\nu)$ が存在して
   \[
-    \int_{S\times T}c\,\d\pi^*
+    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi^*
     =
     \inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{S\times T}c\,\d\pi
+    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
   \]
   をみたす．このような $\pi^*$ をコスト $c$ に関する
   \textbf{最適 coupling}という．
@@ -227,7 +215,7 @@ Villani (2009) Theorem 4.1 の形で示す．
 \end{remark}
 
 \begin{proof}
-  直積 $S\times T$ は Polish 空間であり
+  直積 $\mathcal{X}\times\mathcal{Y}$ は Polish 空間であり
   （付録Aの直積距離の注意を参照），
   $\mu\otimes\nu\in\Couplings(\mu,\nu)$
   （主張~\ref{clm:meas-product-marginals}）だから
@@ -235,7 +223,7 @@ Villani (2009) Theorem 4.1 の形で示す．
   まず $\Couplings(\mu,\nu)$ が tight であることを示す．
   $\varepsilon>0$ を任意に取る．Prokhorov の定理
   （定理~\ref{thm:meas-prokhorov}）より $\mu,\nu$ は tight だから，
-  compact 集合 $K_1\subset S$，$K_2\subset T$ で
+  compact 集合 $K_1\subset\mathcal{X}$，$K_2\subset\mathcal{Y}$ で
   \[
     \mu(K_1)\geq 1-\frac{\varepsilon}{2},
     \qquad
@@ -246,7 +234,7 @@ Villani (2009) Theorem 4.1 の形で示す．
   \[
     \pi\bigl((K_1\times K_2)^c\bigr)
     \leq
-    \pi(K_1^c\times T)+\pi(S\times K_2^c)
+    \pi(K_1^c\times\mathcal{Y})+\pi(\mathcal{X}\times K_2^c)
     =
     \mu(K_1^c)+\nu(K_2^c)
     \leq \varepsilon.
@@ -255,17 +243,17 @@ Villani (2009) Theorem 4.1 の形で示す．
 
   次に，$\Couplings(\mu,\nu)$ は弱収束で閉じていることを確認する．
   $\pi_n\in\Couplings(\mu,\nu)$，$\pi_n\Rightarrow\pi$ とする．
-  任意の $\varphi\in C_b(S)$ に対し，
-  $\varphi\circ\mathrm{pr}_1\in C_b(S\times T)$ だから，
+  任意の $\varphi\in C_b(\mathcal{X})$ に対し，
+  $\varphi\circ\mathrm{pr}_1\in C_b(\mathcal{X}\times\mathcal{Y})$ だから，
   弱収束と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
   \[
-    \int_S\varphi\,\d(\pi\circ\mathrm{pr}_1^{-1})
+    \int_{\mathcal{X}}\varphi\,\d(\pi\circ\mathrm{pr}_1^{-1})
     =
-    \int_{S\times T}\varphi(x)\,\d\pi(x,y)
+    \int_{\mathcal{X}\times\mathcal{Y}}\varphi(x)\,\d\pi(x,y)
     =
-    \lim_{n\to\infty}\int_{S\times T}\varphi(x)\,\d\pi_n(x,y)
+    \lim_{n\to\infty}\int_{\mathcal{X}\times\mathcal{Y}}\varphi(x)\,\d\pi_n(x,y)
     =
-    \int_S\varphi\,\d\mu.
+    \int_{\mathcal{X}}\varphi\,\d\mu.
   \]
   有界連続関数による測度の判定
   （定理~\ref{thm:meas-cb-determines}）より
@@ -276,14 +264,14 @@ Villani (2009) Theorem 4.1 の形で示す．
   \[
     I:=
     \inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{S\times T}c\,\d\pi
+    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
   \]
   とおく．任意の $\pi\in\Couplings(\mu,\nu)$ に対し，
   $c\geq a+b$ と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
   \[
-    \int_{S\times T}c\,\d\pi
-    \geq\int_{S\times T}\bigl(a(x)+b(y)\bigr)\,\d\pi(x,y)
-    =\int_S a\,\d\mu+\int_T b\,\d\nu
+    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
+    \geq\int_{\mathcal{X}\times\mathcal{Y}}\bigl(a(x)+b(y)\bigr)\,\d\pi(x,y)
+    =\int_{\mathcal{X}} a\,\d\mu+\int_{\mathcal{Y}} b\,\d\nu
     >-\infty
   \]
   だから，$I>-\infty$ である．
@@ -294,7 +282,8 @@ Villani (2009) Theorem 4.1 の形で示す．
     \int c\,\d\pi_n\leq I+\frac1n
   \]
   をみたすものを取れる．先ほど示した tightness と Prokhorov の定理により，
-  ある部分列 $(\pi_{n_k})$ と $\pi^*\in\Prob(S\times T)$ が存在して
+  ある部分列 $(\pi_{n_k})$ と
+  $\pi^*\in\Prob(\mathcal{X}\times\mathcal{Y})$ が存在して
   $\pi_{n_k}\Rightarrow\pi^*$ となる．弱閉性から
   $\pi^*\in\Couplings(\mu,\nu)$ である．
 
@@ -308,8 +297,8 @@ Villani (2009) Theorem 4.1 の形で示す．
     \int h\,\d\pi
     =
     \int c\,\d\pi
-    -\int_S a\,\d\mu
-    -\int_T b\,\d\nu
+    -\int_{\mathcal{X}} a\,\d\mu
+    -\int_{\mathcal{Y}} b\,\d\nu
   \]
   である．Portmanteau 型の下半連続性
   （定理~\ref{thm:meas-portmanteau}）を $h$ に適用すると
@@ -319,7 +308,7 @@ Villani (2009) Theorem 4.1 の形で示す．
     \liminf_{k\to\infty}\int h\,\d\pi_{n_k}
   \]
   であり，両辺に
-  $\int_Sa\,\d\mu+\int_Tb\,\d\nu$ を加えれば
+  $\int_{\mathcal{X}}a\,\d\mu+\int_{\mathcal{Y}}b\,\d\nu$ を加えれば
   \[
     \int c\,\d\pi^*
     \leq
@@ -343,7 +332,7 @@ Villani (2009) Theorem 4.1 の形で示す．
 
 \begin{proof}
   定理~\ref{thm:wp-optimal-coupling-existence}を
-  $S=T=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい
+  $\mathcal{X}=\mathcal{Y}=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい
   （$c$ は連続ゆえ下半連続である）．
 \end{proof}
 
