@@ -17,14 +17,16 @@ Villani の該当ページのスキャンは `reference/old_and_new/` にある�
 - Givens–Shortt 原論文の記号は導入の読み替え表で対応する
 - 文献間で定義が異なる場合は、最も一般的な定義を採用し、差異を注意として記載する
 - 押し出し記法 $T_\sharp\mu$ は使わず、像測度 $\mu\circ T^{-1}$ と書く（定義箇所に文献との対応を注記済み）
+- 空間は Villani に合わせて calligraphy で書く: $W_p$ の基礎空間は $(\mathcal{X},d)$、coupling・存在定理の2空間は $\mathcal{X},\mathcal{Y}$。付録の一般論の空間記号は $X,Y$ のまま
 - 定着した名称のない補題は、内容を説明する日本語タイトルを付ける
 - 記法の初出箇所には「記法 …」の注意を置く（例: $L_n\downarrow L^*$、$\norm{f}_{L^p(\mu)}$）
 
 ## 方針
 
 - 前提知識は付録（`tex/foundations/`）で全網羅し、本文からは参照でリンクする
-- 最適 coupling の存在定理は Villani (2009) Theorem 4.1 の形で証明し、距離性（三角不等式・一致の公理）の証明に用いる
-- Prokhorov の定理・Portmanteau 定理は証明なしで認める（ステートメントと引用元のみ明示。Villani Ch.4 / Billingsley 1999）
+- $W_p$ は Villani (Definition 6.1) に合わせて $1\leq p<\infty$ のみ扱う（$W_\infty$ と $L^\infty$ 系の道具は導入しない）
+- 最適 coupling の存在定理は Villani (2009) の構成（Lemma 4.3 コスト汎関数の下半連続性・Lemma 4.4 輸送計画の tightness → Theorem 4.1）どおりに証明し、距離性（三角不等式・一致の公理）の証明に用いる
+- Prokhorov の定理は証明なしで認める（ステートメントと引用元のみ明示。Villani Ch.4 / Billingsley 1999 Th 5.1, 5.2）
 - 証明なしで認める標準定理はステートメントを明示して文献を挙げる
 
 ## サイト

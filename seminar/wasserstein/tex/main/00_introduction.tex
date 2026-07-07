@@ -16,11 +16,11 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 
 \begin{itemize}
   \item \textbf{目標1（距離性；原論文 Proposition 2）}：
-    Polish 空間 $X$ 上で
+    Polish 空間 $\mathcal{X}$ 上で
     \[
-      1\leq p\leq\infty
+      1\leq p<\infty
       \quad\Longrightarrow\quad
-      \Wass_p\text{ は }\Pp{p}(X)\text{ 上の距離である．}
+      \Wass_p\text{ は }\Pp{p}(\mathcal{X})\text{ 上の距離である．}
     \]
   \item \textbf{目標2（Gaussian 測度の閉形式；原論文 Proposition 7）}：
     $\R^n$ 上の Gaussian 測度に対して
@@ -39,7 +39,7 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 
 \begin{itemize}
   \item 第\ref{ch:wasserstein-metrics}章：
-    $\Pp{p}(X)$，coupling，$\Wass_p$ を定義し，
+    $\Pp{p}(\mathcal{X})$，coupling，$\Wass_p$ を定義し，
     最適 coupling の存在定理（Villani (2009) Theorem 4.1）を経て
     目標1を証明する．
   \item 第\ref{ch:gaussian}章：$\R^n$ 上の Gaussian 測度を像測度として定義し，
@@ -58,13 +58,12 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 \section*{主な記号}
 
 \begin{itemize}
-  \item $\Prob(X)$：$X$ 上の Borel 確率測度全体．
-  \item $\Pp{p}(X)$：有限 $p$ 次モーメントをもつ確率測度全体
+  \item $\Prob(\mathcal{X})$：$\mathcal{X}$ 上の Borel 確率測度全体．
+  \item $\Pp{p}(\mathcal{X})$：有限 $p$ 次モーメントをもつ確率測度全体
     （定義~\ref{def:wp-p-space}）．
   \item $\Couplings(\mu,\nu)$：$\mu,\nu$ の coupling 全体
     （定義~\ref{def:wp-coupling}）．
   \item $\Wass_p(\mu,\nu)$：Wasserstein 距離（定義~\ref{def:wp-wasserstein}）．
-  \item $\supp\mu$：測度の台（定義~\ref{def:meas-support}）．
   \item $\mathbf{1}_A$：指示関数（定義~\ref{def:meas-indicator}）．
   \item $\norm{f}_{L^p(\mu)}$：$L^p$ ノルム（定義~\ref{def:meas-lp-norm}）．
   \item $\mu\circ T^{-1}$：写像 $T$ による $\mu$ の像測度（定義~\ref{def:meas-pushforward}）．
@@ -84,9 +83,9 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 $\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する．
 
 \begin{itemize}
-  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(X,\,d)$．
+  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(\mathcal{X},\,d)$．
   \item 基点：原論文 $0$ ── 本資料 $x_0$．
-  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(X)$．
+  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(\mathcal{X})$．
   \item 確率測度（law）：原論文 $P_1,\,P_2$ ── 本資料 $\mu,\,\nu$．
   \item coupling の集合：原論文 $D(P_1,P_2)$ ── 本資料 $\Couplings(\mu,\nu)$．
   \item coupling（$S\times S$ 上の同時分布）：原論文 $\mu,\,\mu_{12},\,\mu_{23}$
@@ -94,9 +93,6 @@ $\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する�
   \item 3変数の貼り合わせ測度（$S_1\times S_2\times S_3$ 上）：原論文 $\mu$
     ── 本資料 $\gamma$．
   \item Wasserstein 距離：原論文 $W_p(P_1,P_2)$ ── 本資料 $\Wass_p(\mu,\nu)$．
-  \item $\mu$ に関する $L^\infty$ ノルム：原論文 $\norm{\cdot}_\infty^{(\mu)}$
-    ── 本資料 $\norm{\cdot}_{L^\infty(\mu)}$
-    （注意~\ref{rem:meas-lp-norm-notation}）．
   \item Gaussian 測度の平均：原論文 $\bar m_1,\,\bar m_2$ ── 本資料 $m_1,\,m_2$．
   \item Gaussian 測度の共分散行列：原論文 $M_1,\,M_2$ ── 本資料 $\Sigma_1,\,\Sigma_2$．
 \end{itemize}
@@ -104,5 +100,5 @@ $\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する�
 なお原論文は Wasserstein 距離を
 $W_p=\bigl(\inf_\pi\int d^p\,\d\pi\bigr)^{1/p}$
 （冪が下限の外側）と定義するが，
-本資料の定義（定義~\ref{def:wp-wasserstein}）と一致する
-（下限と冪の交換：注意~\ref{rem:wp-welldef}）．
+$t\mapsto t^{1/p}$ が単調な全単射なので下限と冪は交換でき，
+本資料の定義（定義~\ref{def:wp-wasserstein}）と一致する．

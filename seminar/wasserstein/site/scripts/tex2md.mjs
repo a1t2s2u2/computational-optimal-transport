@@ -1100,7 +1100,12 @@ function processChapter(texFilename, mdFilename, frontmatter) {
     return null;
   }
 
-  const rawContent = readFileSync(texPath, "utf-8");
+  // \qedhere は PDF 専用の証明終端記号（数式内にも現れる）。
+  // KaTeX は解釈できないため、変換前に除去する。
+  const rawContent = readFileSync(texPath, "utf-8").replace(
+    /\\qedhere\b/g,
+    "",
+  );
   let rawLines = rawContent.split("\n");
   // readlines() は末尾の空要素を生まない。ファイルが改行で終わる場合に合わせる。
   if (rawLines.length > 0 && rawLines[rawLines.length - 1] === "") {
