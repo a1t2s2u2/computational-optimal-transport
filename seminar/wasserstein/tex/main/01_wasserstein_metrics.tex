@@ -4,8 +4,7 @@
 \section{設定と定義}
 \label{sec:wp-definition}
 
-$(X,d)$ を Polish 空間
-（完備かつ可分な距離空間：定義~\ref{def:meas-polish}）とする．
+$(X,d)$ を Polish 空間（定義~\ref{def:meas-polish}）とする．
 Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \[
   \Prob(X)
@@ -48,7 +47,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定して，
   もう一方の積分が有限であることを示す．
   $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおくと，三角不等式
-  $d(x,x_0')\leq a+b$ と，$t\mapsto t^p$（$p\geq1$）が
+  $d(x,x_0')\leq a+b$ と，$t\mapsto t^p$ が
   $[0,\infty)$ 上で凸であること（注意~\ref{rem:meas-real-facts}）から
   \[
     d(x,x_0')^p
@@ -71,27 +70,21 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 
 \begin{definition}{Coupling}{wp-coupling}
   距離空間 $\mathcal{X},\mathcal{Y}$ 上の確率測度
-  $\mu\in\Prob(\mathcal{X})$，$\nu\in\Prob(\mathcal{Y})$ に対し，
-  $\pi\in\Prob(\mathcal{X}\times\mathcal{Y})$ が
-  $\mu$ と $\nu$ の \textbf{coupling}（結合分布，輸送計画）であるとは，
-  $\pi$ が $\mu$ と $\nu$ をそれぞれ第1・第2の
-  \textbf{周辺分布}としてもつこと，すなわち
-  \[
-    \pi(A\times\mathcal{Y})=\mu(A)\quad(\forall A\in\Borel(\mathcal{X})),
-    \qquad
-    \pi(\mathcal{X}\times B)=\nu(B)\quad(\forall B\in\Borel(\mathcal{Y}))
-  \]
-  が成り立つことをいう．coupling の全体を
+  $\mu\in\Prob(\mathcal{X})$，$\nu\in\Prob(\mathcal{Y})$ に対し
   \[
     \Couplings(\mu,\nu)
     :=
     \left\{
       \pi\in\Prob(\mathcal{X}\times\mathcal{Y})
-      \mid
-      \pi\text{ は }\mu\text{ と }\nu\text{ の coupling}
+      \;\middle|\;
+      \begin{aligned}
+        \pi(A\times\mathcal{Y})&=\mu(A) &&(\forall A\in\Borel(\mathcal{X})),\\
+        \pi(\mathcal{X}\times B)&=\nu(B) &&(\forall B\in\Borel(\mathcal{Y}))
+      \end{aligned}
     \right\}
   \]
-  と書く．
+  と定め，$\pi\in\Couplings(\mu,\nu)$ を $\mu$ と $\nu$ の
+  \textbf{coupling} という．
 \end{definition}
 
 \begin{definition}{Wasserstein 距離}{wp-wasserstein}
@@ -124,7 +117,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   と書ける．
   さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
-  $p<\infty$ では下限と $p$ 乗が交換でき，
+  下限と $p$ 乗が交換でき，
   \[
     \Wass_p(\mu,\nu)^p
     =\inf_{\pi\in\Couplings(\mu,\nu)}
@@ -183,8 +176,7 @@ Villani (2009) Theorem 4.1 の形で示す．
   $a\in L^1(\mu)$，$b\in L^1(\nu)$，すなわち
   $\int_{\mathcal{X}}\abs{a}\,\d\mu<\infty$，
   $\int_{\mathcal{Y}}\abs{b}\,\d\nu<\infty$ とする
-  （$\abs{-\infty}:=+\infty$ と読む．
-  特に $a$ は $\mu$-a.e. で，$b$ は $\nu$-a.e. で有限値である）．
+  （$\abs{-\infty}:=+\infty$ と読む）．
   また，$c\colon \mathcal{X}\times\mathcal{Y}\to\R\cup\{+\infty\}$
   を下半連続関数とし，
   すべての $x\in\mathcal{X}$，$y\in\mathcal{Y}$ で
