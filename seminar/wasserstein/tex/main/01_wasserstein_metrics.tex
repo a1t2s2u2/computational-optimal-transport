@@ -69,29 +69,44 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   $x_0$ と $x_0'$ を入れ替えれば逆向きの含意も同様に従う．
 \end{proof}
 
-\begin{definition}{Coupling 集合}{wp-coupling}
+\begin{definition}{Coupling}{wp-coupling}
   距離空間 $S,T$ 上の確率測度 $\mu\in\Prob(S)$，
-  $\nu\in\Prob(T)$ に対して，\textbf{Coupling 集合}を
+  $\nu\in\Prob(T)$ に対し，$\pi\in\Prob(S\times T)$ が
+  $\mu$ と $\nu$ の \textbf{coupling}（結合分布，輸送計画）であるとは，
+  $\pi$ が $\mu$ と $\nu$ をそれぞれ第1・第2の
+  \textbf{周辺分布}としてもつこと，すなわち
+  \[
+    \pi(A\times T)=\mu(A)\quad(\forall A\in\Borel(S)),
+    \qquad
+    \pi(S\times B)=\nu(B)\quad(\forall B\in\Borel(T))
+  \]
+  が成り立つことをいう．coupling の全体を
   \[
     \Couplings(\mu,\nu)
     :=
     \left\{
       \pi\in\Prob(S\times T)
-      \;\middle|\;
-      \begin{aligned}
-        \pi(A\times T)&=\mu(A) &&(\forall A\in\Borel(S)),\\
-        \pi(S\times B)&=\nu(B) &&(\forall B\in\Borel(T))
-      \end{aligned}
+      \mid
+      \pi\text{ は }\mu\text{ と }\nu\text{ の coupling}
     \right\}
   \]
-  と定める．
-  $\pi\in\Couplings(\mu,\nu)$ は $\mu,\nu$ の
-  \textbf{coupling}（結合分布）あるいは\textbf{輸送計画}とよばれる．
-  この条件は「$\pi$ の第1周辺分布が $\mu$，第2周辺分布が $\nu$」，
-  すなわち射影の像測度として
+  と書く．周辺分布の条件は，射影の像測度として
   $\pi\circ\mathrm{pr}_1^{-1}=\mu$，$\pi\circ\mathrm{pr}_2^{-1}=\nu$
   と言い換えられる（補題~\ref{lem:meas-marginal-integral}）．
 \end{definition}
+
+\begin{remark}{文献との対応（coupling）}{wp-coupling-villani}
+  定義~\ref{def:wp-coupling}は Villani (2009) Definition 1.1 の
+  測度論的定式化（$\mu$ と $\nu$ を周辺分布としてもつ
+  $S\times T$ 上の確率測度 $\pi$ を構成すること）を定義として採用したものである．
+  同 Definition 1.1 は本来，ある確率空間上の確率変数の組 $(X,Y)$ で
+  $\mathrm{law}(X)=\mu$，$\mathrm{law}(Y)=\nu$ をみたすものとして
+  coupling を定義し，その同時分布 $\mathrm{law}(X,Y)$ も
+  （言葉の濫用として）coupling とよぶ．
+  $\mu,\nu$ 以外の分布が現れない問題では確率空間を
+  $S\times T$ 自身に取ってよく，このとき $(X,Y)$ は座標への射影，
+  同時分布は上の $\pi$ に当たる．
+\end{remark}
 
 \begin{definition}{Wasserstein 距離}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
