@@ -5,7 +5,7 @@
 本資料では，使う用語はすべて定義し，
 証明なしに用いる標準定理はステートメントを明示したうえで文献を挙げる
 （単調収束定理・一致定理・Fubini--Tonelli の定理・分解定理・
-Prokhorov の定理・Portmanteau 定理など）．
+Prokhorov の定理など）．
 それ以外の主張にはすべて証明を付ける．
 証明を省略した定理については，
 例えば伊藤清三『ルベーグ積分入門』，
@@ -193,7 +193,9 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 
 \begin{theorem}{単調収束定理}{meas-mct}
   測度空間 $(\Omega,\mathcal{A},\mu)$ 上の非負可測関数列 $(f_n)$ が
-  $f_n\uparrow f$（各点）をみたすならば，
+  $f\colon\Omega\to[0,+\infty]$ に単調増加に各点収束する
+  （$f_n\uparrow f$ と書く．$f(x)=+\infty$ の点では
+  $f_n(x)\to+\infty$ の意味に読む）ならば，
   \[
     \lim_{n\to\infty}\int_\Omega f_n\,\d\mu=\int_\Omega f\,\d\mu.
   \]
@@ -372,25 +374,50 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   \end{itemize}
 \end{remark}
 
-\begin{theorem}{Portmanteau 型の下半連続性}{meas-portmanteau}
-  $S$ を距離空間とし，$\eta_n,\eta\in\Prob(S)$ が
-  $\eta_n\Rightarrow\eta$ をみたすとする．
-  \begin{enumerate}
-    \item $f\colon S\to[0,+\infty]$ が下半連続ならば
-      \[
-        \int_S f\,\d\eta
-        \leq
-        \liminf_{n\to\infty}\int_S f\,\d\eta_n.
-      \]
-    \item $F\subset S$ が閉集合ならば
-      \[
-        \limsup_{n\to\infty}\eta_n(F)\leq\eta(F).
-      \]
-  \end{enumerate}
-  （Portmanteau 定理の一部である．証明は省略する．
-  第1の主張は Villani (2009) Lemma 4.3 に対応し，
-  第2の主張は Billingsley (1999) Theorem 2.1 の一部である．）
-\end{theorem}
+\begin{lemma}{下半連続関数の単調連続近似}{meas-lsc-approx}
+  $S$ を距離空間，$f\colon S\to[0,+\infty]$ を下半連続関数とする．
+  各 $\ell\in\N$ に対し
+  \[
+    f_\ell(x):=\inf_{z\in S}\bigl\{\min\{f(z),\ell\}+\ell\,d(x,z)\bigr\}
+  \]
+  とおくと，各 $f_\ell$ は $0\leq f_\ell\leq\ell$ をみたす連続関数で，
+  $f_\ell\uparrow f$（各点）となる．
+\end{lemma}
+
+\begin{proof}
+  各項が非負だから $f_\ell\geq0$，また $z=x$ を取れば
+  $f_\ell(x)\leq\min\{f(x),\ell\}\leq\ell$ である．
+
+  連続性：任意の $x,x',z\in S$ に対し，三角不等式より
+  \[
+    \min\{f(z),\ell\}+\ell\,d(x,z)
+    \leq
+    \min\{f(z),\ell\}+\ell\,d(x',z)+\ell\,d(x,x')
+  \]
+  だから，$z$ について下限を取って
+  $f_\ell(x)\leq f_\ell(x')+\ell\,d(x,x')$．
+  $x$ と $x'$ を入れ替えれば
+  $\abs{f_\ell(x)-f_\ell(x')}\leq\ell\,d(x,x')$ となり，
+  $f_\ell$ は連続である．
+
+  単調性：各 $z$ で
+  $\min\{f(z),\ell\}+\ell\,d(x,z)
+  \leq\min\{f(z),\ell+1\}+(\ell+1)\,d(x,z)$
+  だから，下限を取って $f_\ell\leq f_{\ell+1}$ である．
+
+  各点収束：$f_\ell(x)\leq f(x)$ は上で見た．
+  $\alpha<f(x)$ を任意に取る．$f$ の下半連続性より，ある $r>0$ で
+  「$d(z,x)<r\implies f(z)>\alpha$」となる．このとき
+  $d(z,x)<r$ なら
+  $\min\{f(z),\ell\}+\ell\,d(x,z)\geq\min\{\alpha,\ell\}$，
+  $d(z,x)\geq r$ なら
+  $\min\{f(z),\ell\}+\ell\,d(x,z)\geq\ell r$ だから，
+  \[
+    f_\ell(x)\geq\min\{\alpha,\,\ell,\,\ell r\}.
+  \]
+  $\ell\to\infty$ とすれば $\lim_\ell f_\ell(x)\geq\alpha$ であり，
+  $\alpha<f(x)$ は任意だから $f_\ell(x)\uparrow f(x)$ である．
+\end{proof}
 
 \section{$L^p$ ノルムと積分不等式}
 
@@ -477,7 +504,7 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
 
 \begin{lemma}{変数変換公式}{meas-change-of-variables}
   $T\colon\Omega\to\Omega'$ を可測写像，$\mu$ を $\Omega$ 上の測度とする．
-  非負可測関数 $f\colon\Omega'\to[0,\infty)$ に対し
+  非負可測関数 $f\colon\Omega'\to[0,+\infty]$ に対し
   \[
     \int_{\Omega'}f\,\d(\mu\circ T^{-1})
     =
@@ -585,7 +612,8 @@ $X,Y$ が Polish 空間なら $X\times Y$ も Polish 空間である．
     \item $\pi\circ\mathrm{pr}_1^{-1}=\mu$．
   \end{enumerate}
   このとき（$\mu$ を $\pi$ の\textbf{第1周辺分布}という），
-  非負可測または $\mu$-可積分な $f\colon X\to\R$ に対して
+  非負可測な $f\colon X\to[0,+\infty]$ または
+  $\mu$-可積分な $f\colon X\to\R$ に対して
   \[
     \int_{X\times Y}f(x)\,\d\pi(x,y)=\int_X f\,\d\mu,
     \qquad
