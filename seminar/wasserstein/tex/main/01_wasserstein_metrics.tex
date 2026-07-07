@@ -34,11 +34,19 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 
 \begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
   $1\leq p<\infty$ のとき，$\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
+  すなわち，任意の $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ に対して
+  \[
+    \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+    \iff
+    \int_X d(x,x_0')^p\,\d\mu(x)<\infty
+  \]
+  が成り立つ．
 \end{lemma}
 
 \begin{proof}
   $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ を任意に取り，
-  $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定する．
+  $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定して，
+  もう一方の積分が有限であることを示す．
   $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおくと，三角不等式
   $d(x,x_0')\leq a+b$ と，$t\mapsto t^p$（$p\geq1$）が
   $[0,\infty)$ 上で凸であること（注意~\ref{rem:meas-real-facts}）から
@@ -55,9 +63,10 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     \int_X d(x,x_0')^p\,\d\mu(x)
     \leq
     2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right)
-    <\infty.
+    <\infty
   \]
-  $x_0$ と $x_0'$ を入れ替えれば逆も成り立つ．
+  を得る（第1項は仮定より，第2項は距離の値が有限であることより有限）．
+  $x_0$ と $x_0'$ を入れ替えれば逆向きの含意も同様に従う．
 \end{proof}
 
 \begin{definition}{Coupling 集合}{wp-coupling}
