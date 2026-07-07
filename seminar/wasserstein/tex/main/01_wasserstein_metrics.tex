@@ -116,14 +116,6 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     =\inf_{\pi\in\Couplings(\mu,\nu)}\norm{d}_{L^p(\pi)}
   \]
   と書ける．
-  さらに $t\mapsto t^{1/p}$ が $[0,\infty)$ 上の単調な全単射であることから，
-  下限と $p$ 乗が交換でき，
-  \[
-    \Wass_p(\mu,\nu)^p
-    =\inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
-  \]
-  とも書ける．
 \end{remark}
 
 \begin{lemma}{$\Wass_p$ の有限性}{wp-finite}
@@ -324,8 +316,18 @@ Villani (2009) Theorem 4.1 の形で示す．
 
 \begin{proof}
   定理~\ref{thm:wp-optimal-coupling-existence}を
-  $\mathcal{X}=\mathcal{Y}=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すればよい
-  （$c$ は連続ゆえ下半連続である）．
+  $\mathcal{X}=\mathcal{Y}=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すると
+  （$c$ は連続ゆえ下半連続である），
+  $\int d^p\,\d\pi$ を最小化する $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
+  $t\mapsto t^{1/p}$ は $[0,\infty)$ 上の単調な全単射だから
+  下限と $p$ 乗は交換でき，
+  \[
+    \Wass_p(\mu,\nu)^p
+    =\inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+    =\int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
+  \]
+  である．
 \end{proof}
 
 \section{Wasserstein 距離の距離性}
