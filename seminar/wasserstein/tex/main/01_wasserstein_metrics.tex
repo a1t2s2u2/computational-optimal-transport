@@ -4,47 +4,47 @@
 \section{設定と定義}
 \label{sec:wp-definition}
 
-$(X,d)$ を Polish 空間（定義~\ref{def:meas-polish}）とする．
-Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
+$(\mathcal{X},d)$ を Polish 空間（定義~\ref{def:meas-polish}）とする．
+Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 \[
-  \Prob(X)
+  \Prob(\mathcal{X})
   :=
   \left\{
-    \mu\colon\Borel(X)\to[0,1]
+    \mu\colon\Borel(\mathcal{X})\to[0,1]
     \;\middle|\;
-    \mu\text{ は測度},\;\mu(X)=1
+    \mu\text{ は測度},\;\mu(\mathcal{X})=1
   \right\}
 \]
 とおく．
 
 \begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{wp-p-space}
-  任意に点 $x_0\in X$ を一つ固定する．$1\leq p<\infty$ に対し
+  任意に点 $x_0\in \mathcal{X}$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
-    \Pp{p}(X)
+    \Pp{p}(\mathcal{X})
     :=
     \left\{
-      \mu\in\Prob(X)
+      \mu\in\Prob(\mathcal{X})
       \;\middle|\;
-      \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+      \int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)<\infty
     \right\}
   \]
   と定める．
 \end{definition}
 
-\begin{lemma}{$\Pp{p}(X)$ の $x_0$ 非依存性}{wp-p-indep}
-  $1\leq p<\infty$ のとき，$\Pp{p}(X)$ は点 $x_0$ の選び方によらない．
-  すなわち，任意の $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ に対して
+\begin{lemma}{$\Pp{p}(\mathcal{X})$ の $x_0$ 非依存性}{wp-p-indep}
+  $1\leq p<\infty$ のとき，$\Pp{p}(\mathcal{X})$ は点 $x_0$ の選び方によらない．
+  すなわち，任意の $x_0,x_0'\in \mathcal{X}$ と $\mu\in\Prob(\mathcal{X})$ に対して
   \[
-    \int_X d(x,x_0)^p\,\d\mu(x)<\infty
+    \int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)<\infty
     \iff
-    \int_X d(x,x_0')^p\,\d\mu(x)<\infty
+    \int_\mathcal{X} d(x,x_0')^p\,\d\mu(x)<\infty
   \]
   が成り立つ．
 \end{lemma}
 
 \begin{proof}
-  $x_0,x_0'\in X$ と $\mu\in\Prob(X)$ を任意に取り，
-  $\int_X d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定して，
+  $x_0,x_0'\in \mathcal{X}$ と $\mu\in\Prob(\mathcal{X})$ を任意に取り，
+  $\int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)<\infty$ を仮定して，
   もう一方の積分が有限であることを示す．
   $a:=d(x,x_0)$，$b:=d(x_0,x_0')$ とおくと，三角不等式
   $d(x,x_0')\leq a+b$ と，$t\mapsto t^p$ が
@@ -57,11 +57,11 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
     = 2^{p-1}\bigl(d(x,x_0)^p+d(x_0,x_0')^p\bigr).
   \]
   両辺を $\d\mu(x)$ で積分すると
-  （右辺第2項は定数なので，$\mu(X)=1$ より積分値は $d(x_0,x_0')^p$）
+  （右辺第2項は定数なので，$\mu(\mathcal{X})=1$ より積分値は $d(x_0,x_0')^p$）
   \[
-    \int_X d(x,x_0')^p\,\d\mu(x)
+    \int_\mathcal{X} d(x,x_0')^p\,\d\mu(x)
     \leq
-    2^{p-1}\left(\int_X d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right)
+    2^{p-1}\left(\int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right)
     <\infty
   \]
   を得る（第1項は仮定より，第2項は距離の値が有限であることより有限）．
@@ -88,21 +88,20 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{definition}
 
 \begin{definition}{Wasserstein 距離}{wp-wasserstein}
-  $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(X)$ に対し，
-  下限（定義~\ref{def:meas-sup-inf}）を用いて
+  $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(\mathcal{X})$ に対し
   \[
     \Wass_p(\mu,\nu)
     :=
     \inf_{\pi\in\Couplings(\mu,\nu)}
     \left(
-      \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
+      \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi(x,y)
     \right)^{1/p}
   \]
   と定める．
 \end{definition}
 
 \begin{remark}{記法と可測性}{wp-welldef}
-  距離関数 $d\colon X\times X\to[0,\infty)$ は，三角不等式から従う評価
+  距離関数 $d\colon \mathcal{X}\times \mathcal{X}\to[0,\infty)$ は，三角不等式から従う評価
   \[
     \abs{d(x,y)-d(x',y')}\leq d(x,x')+d(y,y')
   \]
@@ -119,7 +118,7 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
 \end{remark}
 
 \begin{lemma}{$\Wass_p$ の有限性}{wp-finite}
-  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(X)$ とすると，
+  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とすると，
   $\Couplings(\mu,\nu)\neq\emptyset$ であり，
   任意の $\pi\in\Couplings(\mu,\nu)$ に対して
   $\norm{d}_{L^p(\pi)}<\infty$ である．
@@ -150,8 +149,8 @@ Borel $\sigma$-代数 $\Borel(X)$ 上の確率測度全体を
   \]
   を得る．ここで
   $\norm{d(\cdot,x_0)}_{L^p(\mu)}
-  =\bigl(\int_X d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
-  は $\mu\in\Pp{p}(X)$ の定義そのものである（$\nu$ も同様）．
+  =\bigl(\int_\mathcal{X} d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
+  は $\mu\in\Pp{p}(\mathcal{X})$ の定義そのものである（$\nu$ も同様）．
 \end{proof}
 
 \section{最適 coupling の存在}
@@ -304,19 +303,19 @@ Villani (2009) Theorem 4.1 の形で示す．
 \end{proof}
 
 \begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
-  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(X)$ とする．
+  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とする．
   このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して
   \[
     \Wass_p(\mu,\nu)^p
     =
-    \int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
+    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
   \]
   をみたす．
 \end{corollary}
 
 \begin{proof}
   定理~\ref{thm:wp-optimal-coupling-existence}を
-  $\mathcal{X}=\mathcal{Y}=X$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すると
+  $\mathcal{Y}=\mathcal{X}$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すると
   （$c$ は連続ゆえ下半連続である），
   $\int d^p\,\d\pi$ を最小化する $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
   $t\mapsto t^{1/p}$ は $[0,\infty)$ 上の単調な全単射だから
@@ -324,8 +323,8 @@ Villani (2009) Theorem 4.1 の形で示す．
   \[
     \Wass_p(\mu,\nu)^p
     =\inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{X\times X}d(x,y)^p\,\d\pi(x,y)
-    =\int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
+    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi(x,y)
+    =\int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
   \]
   である．
 \end{proof}
@@ -334,27 +333,27 @@ Villani (2009) Theorem 4.1 の形で示す．
 \label{sec:metric-property}
 
 \begin{lemma}{接着補題（gluing lemma）}{wp-gluing}
-  $\mu,\nu,\xi\in\Prob(X)$，$\pi\in\Couplings(\mu,\nu)$，
+  $\mu,\nu,\xi\in\Prob(\mathcal{X})$，$\pi\in\Couplings(\mu,\nu)$，
   $\sigma\in\Couplings(\nu,\xi)$ とする．
-  このとき $X^3$ 上の確率測度 $\gamma$ で，
+  このとき $\mathcal{X}^3$ 上の確率測度 $\gamma$ で，
   $(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
   であるものが存在する．
   ここで $(x,y)$-周辺分布とは，射影
   $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$ による像測度
   $\gamma\circ\mathrm{pr}_{12}^{-1}$ のことをいう（$(y,z)$ も同様．
-  $X^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
+  $\mathcal{X}^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
 \end{lemma}
 
 \begin{proof}
   方針：$\pi$ と $\sigma$ がともにもつ周辺分布 $\nu$ を軸に，
   $y$ で条件付けた2つの Markov 核を貼り合わせる．
 
-  $X$ は Polish 空間だから，
+  $\mathcal{X}$ は Polish 空間だから，
   分解定理（定理~\ref{thm:meas-disintegration}）が使える．
   $\pi$ の第2周辺分布は $\nu$ だから，Markov 核 $K_\pi$ で
   \[
     \pi(A\times B)=\int_B K_\pi(y,A)\,\d\nu(y)
-    \qquad(A,B\in\Borel(X))
+    \qquad(A,B\in\Borel(\mathcal{X}))
   \]
   をみたすものが取れる．
   次に $s(y,z):=(z,y)$ とおくと（連続ゆえ可測），
@@ -367,11 +366,11 @@ Villani (2009) Theorem 4.1 の形で示す．
     \sigma(B\times C)
     =(\sigma\circ s^{-1})(C\times B)
     =\int_B K_\sigma(y,C)\,\d\nu(y)
-    \qquad(B,C\in\Borel(X))
+    \qquad(B,C\in\Borel(\mathcal{X}))
   \]
   をみたすものが取れる．
 
-  定理~\ref{thm:meas-kernel-composition}により，$X^3$ 上の確率測度
+  定理~\ref{thm:meas-kernel-composition}により，$\mathcal{X}^3$ 上の確率測度
   \[
     \gamma(\d x,\d y,\d z)
     :=
@@ -381,25 +380,25 @@ Villani (2009) Theorem 4.1 の形で示す．
   $\gamma(A\times B\times C)=\int_B K_\pi(y,A)\,K_\sigma(y,C)\,\d\nu(y)$
   をみたす $\gamma$ が存在する．
   2つの周辺分布を検証する．
-  ${\mathrm{pr}_{12}}^{-1}(A\times B)=A\times B\times X$ と
-  $K_\sigma(y,X)=1$（Markov 核の値は確率測度）から，
-  任意の $A,B\in\Borel(X)$ に対し
+  ${\mathrm{pr}_{12}}^{-1}(A\times B)=A\times B\times \mathcal{X}$ と
+  $K_\sigma(y,\mathcal{X})=1$（Markov 核の値は確率測度）から，
+  任意の $A,B\in\Borel(\mathcal{X})$ に対し
   \[
     (\gamma\circ\mathrm{pr}_{12}^{-1})(A\times B)
-    =\gamma(A\times B\times X)
-    =\int_B K_\pi(y,A)\,K_\sigma(y,X)\,\d\nu(y)
+    =\gamma(A\times B\times \mathcal{X})
+    =\int_B K_\pi(y,A)\,K_\sigma(y,\mathcal{X})\,\d\nu(y)
     =\int_B K_\pi(y,A)\,\d\nu(y)
     =\pi(A\times B).
   \]
-  矩形集合の全体は $\Borel(X\times X)$ を生成する $\pi$-系だから
+  矩形集合の全体は $\Borel(\mathcal{X}\times \mathcal{X})$ を生成する $\pi$-系だから
   （注意~\ref{rem:meas-borel-product}），
   一致定理（定理~\ref{thm:meas-uniqueness}）より
   $\gamma\circ\mathrm{pr}_{12}^{-1}=\pi$ である．
-  同様に $K_\pi(y,X)=1$ より
+  同様に $K_\pi(y,\mathcal{X})=1$ より
   \[
     (\gamma\circ\mathrm{pr}_{23}^{-1})(B\times C)
-    =\gamma(X\times B\times C)
-    =\int_B K_\pi(y,X)\,K_\sigma(y,C)\,\d\nu(y)
+    =\gamma(\mathcal{X}\times B\times C)
+    =\int_B K_\pi(y,\mathcal{X})\,K_\sigma(y,C)\,\d\nu(y)
     =\int_B K_\sigma(y,C)\,\d\nu(y)
     =\sigma(B\times C)
   \]
@@ -408,7 +407,7 @@ Villani (2009) Theorem 4.1 の形で示す．
 
 \begin{proposition}{Wasserstein 距離は距離である}{wp-metric}
   $1\leq p<\infty$ に対し，
-  $\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
+  $\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
 \end{proposition}
 
 \begin{proof}
@@ -427,9 +426,9 @@ Villani (2009) Theorem 4.1 の形で示す．
   $s(x,y):=(y,x)$ とおく（連続ゆえ可測）．
   $\pi\in\Couplings(\mu,\nu)$ に対し $\pi':=\pi\circ s^{-1}$ とおくと，
   \[
-    \pi'(B\times X)=\pi(s^{-1}(B\times X))=\pi(X\times B)=\nu(B),
+    \pi'(B\times \mathcal{X})=\pi(s^{-1}(B\times \mathcal{X}))=\pi(\mathcal{X}\times B)=\nu(B),
     \qquad
-    \pi'(X\times A)=\pi(A\times X)=\mu(A)
+    \pi'(\mathcal{X}\times A)=\pi(A\times \mathcal{X})=\mu(A)
   \]
   だから $\pi'\in\Couplings(\nu,\mu)$ である．
   コストは，系~\ref{cor:meas-pf-lp}と $d$ の対称性（$d\circ s=d$）より
@@ -448,9 +447,9 @@ Villani (2009) Theorem 4.1 の形で示す．
   対角写像 $\iota(x):=(x,x)$（連続ゆえ可測）による像測度
   $\pi^*:=\mu\circ\iota^{-1}$ は，$\iota^{-1}(A\times B)=A\cap B$ より
   \[
-    \pi^*(A\times X)=\mu(A\cap X)=\mu(A),
+    \pi^*(A\times \mathcal{X})=\mu(A\cap \mathcal{X})=\mu(A),
     \qquad
-    \pi^*(X\times B)=\mu(B)
+    \pi^*(\mathcal{X}\times B)=\mu(B)
   \]
   をみたすから $\pi^*\in\Couplings(\mu,\mu)$ である．
   $d\circ\iota\equiv0$ だから，系~\ref{cor:meas-pf-lp}より
@@ -463,24 +462,24 @@ Villani (2009) Theorem 4.1 の形で示す．
   系~\ref{cor:wp-wasserstein-optimal-coupling}より，最適 coupling
   $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
   \[
-    \int_{X\times X}d(x,y)^p\,\d\pi^*(x,y)
+    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
     =\Wass_p(\mu,\nu)^p=0
   \]
   だから，非負可測関数の積分が $0$ ならばその関数が a.e. で $0$
   であることより，$d(x,y)=0$ が $\pi^*$-a.e. で成り立つ．
   距離の公理よりこれは $x=y$ と同値なので，対角集合
   \[
-    \Delta:=\{(x,x)\mid x\in X\}
-    =\{(x,y)\in X\times X\mid d(x,y)=0\}
+    \Delta:=\{(x,x)\mid x\in \mathcal{X}\}
+    =\{(x,y)\in \mathcal{X}\times \mathcal{X}\mid d(x,y)=0\}
   \]
-  は $\pi^*$ の全質量をもつ．よって任意の $A\in\Borel(X)$ に対し，
-  対角上では $A\times X$ と $X\times A$ が一致することから
+  は $\pi^*$ の全質量をもつ．よって任意の $A\in\Borel(\mathcal{X})$ に対し，
+  対角上では $A\times \mathcal{X}$ と $\mathcal{X}\times A$ が一致することから
   \[
     \mu(A)
-    =\pi^*(A\times X)
-    =\pi^*((A\times X)\cap\Delta)
-    =\pi^*((X\times A)\cap\Delta)
-    =\pi^*(X\times A)
+    =\pi^*(A\times \mathcal{X})
+    =\pi^*((A\times \mathcal{X})\cap\Delta)
+    =\pi^*((\mathcal{X}\times A)\cap\Delta)
+    =\pi^*(\mathcal{X}\times A)
     =\nu(A).
   \]
   したがって $\mu=\nu$ である．
@@ -489,19 +488,19 @@ Villani (2009) Theorem 4.1 の形で示す．
   方針：最適 coupling $\pi,\sigma$ を gluing lemma で貼り合わせ，
   $(x,z)$-周辺分布を $\mu$ から $\xi$ への coupling として使う．
 
-  $\mu,\nu,\xi\in\Pp{p}(X)$ を任意に取る．
+  $\mu,\nu,\xi\in\Pp{p}(\mathcal{X})$ を任意に取る．
   系~\ref{cor:wp-wasserstein-optimal-coupling}より，
   最適 coupling $\pi\in\Couplings(\mu,\nu)$ と
   $\sigma\in\Couplings(\nu,\xi)$ が取れる．
-  補題~\ref{lem:wp-gluing}により，$X^3$ 上の確率測度 $\gamma$ で
+  補題~\ref{lem:wp-gluing}により，$\mathcal{X}^3$ 上の確率測度 $\gamma$ で
   $\gamma\circ\mathrm{pr}_{12}^{-1}=\pi$，
   $\gamma\circ\mathrm{pr}_{23}^{-1}=\sigma$
   なるものが取れる．
   $\tau:=\gamma\circ\mathrm{pr}_{13}^{-1}$ とおくと，
   \[
-    \tau(A\times X)=\gamma(A\times X\times X)=\pi(A\times X)=\mu(A),
+    \tau(A\times \mathcal{X})=\gamma(A\times \mathcal{X}\times \mathcal{X})=\pi(A\times \mathcal{X})=\mu(A),
     \qquad
-    \tau(X\times C)=\gamma(X\times X\times C)=\sigma(X\times C)=\xi(C)
+    \tau(\mathcal{X}\times C)=\gamma(\mathcal{X}\times \mathcal{X}\times C)=\sigma(\mathcal{X}\times C)=\xi(C)
   \]
   だから $\tau\in\Couplings(\mu,\xi)$ であり，
   \[
@@ -532,7 +531,7 @@ Villani (2009) Theorem 4.1 の形で示す．
   \]
   が従う．
 
-  以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(X)$ 上の距離である．
+  以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
 \end{proof}
 
 \begin{remark}{文献との対応}{wp-metric-references}
@@ -546,10 +545,10 @@ Villani (2009) Theorem 4.1 の形で示す．
   Villani (2009) Chapter 1 の Gluing Lemma，
   桑江ほか (2015) の補題 1.33 に対応する．
   なお Villani (2009) Definition 6.1, 6.4 は $1\leq p<\infty$ に対して
-  まず $\Prob(X)$ 上に $\Wass_p$ を定義し，
-  その後 $\Pp{p}(X)$ に制限して有限値の距離とするが，
+  まず $\Prob(\mathcal{X})$ 上に $\Wass_p$ を定義し，
+  その後 $\Pp{p}(\mathcal{X})$ に制限して有限値の距離とするが，
   本資料は Givens--Shortt (1984) に合わせて
-  はじめから $\Pp{p}(X)$ 上で定義する
+  はじめから $\Pp{p}(\mathcal{X})$ 上で定義する
   （同論文は $p=\infty$ の $\Wass_\infty$ も扱うが，
   本資料は Villani に合わせて $1\leq p<\infty$ のみ扱う）．
 \end{remark}

@@ -16,11 +16,11 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 
 \begin{itemize}
   \item \textbf{目標1（距離性；原論文 Proposition 2）}：
-    Polish 空間 $X$ 上で
+    Polish 空間 $\mathcal{X}$ 上で
     \[
       1\leq p<\infty
       \quad\Longrightarrow\quad
-      \Wass_p\text{ は }\Pp{p}(X)\text{ 上の距離である．}
+      \Wass_p\text{ は }\Pp{p}(\mathcal{X})\text{ 上の距離である．}
     \]
   \item \textbf{目標2（Gaussian 測度の閉形式；原論文 Proposition 7）}：
     $\R^n$ 上の Gaussian 測度に対して
@@ -39,7 +39,7 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 
 \begin{itemize}
   \item 第\ref{ch:wasserstein-metrics}章：
-    $\Pp{p}(X)$，coupling，$\Wass_p$ を定義し，
+    $\Pp{p}(\mathcal{X})$，coupling，$\Wass_p$ を定義し，
     最適 coupling の存在定理（Villani (2009) Theorem 4.1）を経て
     目標1を証明する．
   \item 第\ref{ch:gaussian}章：$\R^n$ 上の Gaussian 測度を像測度として定義し，
@@ -58,8 +58,8 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 \section*{主な記号}
 
 \begin{itemize}
-  \item $\Prob(X)$：$X$ 上の Borel 確率測度全体．
-  \item $\Pp{p}(X)$：有限 $p$ 次モーメントをもつ確率測度全体
+  \item $\Prob(\mathcal{X})$：$\mathcal{X}$ 上の Borel 確率測度全体．
+  \item $\Pp{p}(\mathcal{X})$：有限 $p$ 次モーメントをもつ確率測度全体
     （定義~\ref{def:wp-p-space}）．
   \item $\Couplings(\mu,\nu)$：$\mu,\nu$ の coupling 全体
     （定義~\ref{def:wp-coupling}）．
@@ -83,9 +83,9 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
 $\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する．
 
 \begin{itemize}
-  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(X,\,d)$．
+  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(\mathcal{X},\,d)$．
   \item 基点：原論文 $0$ ── 本資料 $x_0$．
-  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(X)$．
+  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(\mathcal{X})$．
   \item 確率測度（law）：原論文 $P_1,\,P_2$ ── 本資料 $\mu,\,\nu$．
   \item coupling の集合：原論文 $D(P_1,P_2)$ ── 本資料 $\Couplings(\mu,\nu)$．
   \item coupling（$S\times S$ 上の同時分布）：原論文 $\mu,\,\mu_{12},\,\mu_{23}$

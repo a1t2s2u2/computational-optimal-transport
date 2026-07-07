@@ -17,7 +17,7 @@ Villani の該当ページのスキャンは `reference/old_and_new/` にある�
 - Givens–Shortt 原論文の記号は導入の読み替え表で対応する
 - 文献間で定義が異なる場合は、最も一般的な定義を採用し、差異を注意として記載する
 - 押し出し記法 $T_\sharp\mu$ は使わず、像測度 $\mu\circ T^{-1}$ と書く（定義箇所に文献との対応を注記済み）
-- 一般の2空間（coupling・存在定理）は Villani に合わせて $\mathcal{X},\mathcal{Y}$ と書く。$W_p$ の基礎空間（Polish 距離空間）は $X$ のまま
+- 空間は Villani に合わせて calligraphy で書く: $W_p$ の基礎空間は $(\mathcal{X},d)$、coupling・存在定理の2空間は $\mathcal{X},\mathcal{Y}$。付録の一般論の空間記号は $X,Y$ のまま
 - 定着した名称のない補題は、内容を説明する日本語タイトルを付ける
 - 記法の初出箇所には「記法 …」の注意を置く（例: $L_n\downarrow L^*$、$\norm{f}_{L^p(\mu)}$）
 
