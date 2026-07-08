@@ -80,7 +80,7 @@
 \section{Talagrand 型不等式}
 \label{sec:tc-tp}
 
-\begin{definition}{$T_p$ 不等式}{tc-tp}
+\begin{definition}{$T_p$ 不等式（Villani Def 22.1）}{tc-tp}
   $1\leq p<\infty$，$\nu\in\Pp{p}(\mathcal{X})$，$\lambda>0$ とする．
   $\nu$ が\textbf{定数 $\lambda$ の $T_p$ 不等式}
   （$T_p(\lambda)$ と書く）をみたすとは，
@@ -94,7 +94,7 @@
   （後者の呼称は $p=2$ の場合に限ることもある）．
 \end{definition}
 
-\begin{remark}{$p$ についての強さ}{tc-tp-order}
+\begin{remark}{$p$ についての強さ（Villani Rem 22.2）}{tc-tp-order}
   $1\leq p\leq q<\infty$ のとき $\Wass_p\leq\Wass_q$
   （補題~\ref{lem:wt-order}）だから，
   $\nu\in\Pp{q}(\mathcal{X})$ が $T_q(\lambda)$ をみたせば，
@@ -176,7 +176,7 @@
   であり，$\pi$ について下限を取ればよい．
 \end{proof}
 
-\begin{theorem}{$T_p$ 不等式は集中を導く}{tc-concentration}
+\begin{theorem}{$T_p$ 不等式は集中を導く（Villani Thm 22.10）}{tc-concentration}
   $1\leq p<\infty$ とし，$\nu\in\Pp{p}(\mathcal{X})$ が
   $T_p(\lambda)$ をみたすとする．
   このとき，$\nu(A)\geq1/2$ なる任意の
@@ -228,7 +228,7 @@
   $\nu(A^r)=1-\nu(B)\geq1-e^{-\lambda r^2/8}$ である．
 \end{proof}
 
-\begin{corollary}{Lipschitz 関数の集中}{tc-lipschitz-concentration}
+\begin{corollary}{Lipschitz 関数の集中（Villani Thm 22.10）}{tc-lipschitz-concentration}
   定理~\ref{thm:tc-concentration}の仮定のもとで，
   Lipschitz 連続な $f\colon\mathcal{X}\to\R$
   （定義~\ref{def:meas-lipschitz}，$0<\norm{f}_{\Lip}$）と
@@ -338,7 +338,7 @@ $d(x,y):=\norm{x-y}$ を入れる
   \]
 \end{proof}
 
-\begin{theorem}{Talagrand の不等式}{tc-talagrand}
+\begin{theorem}{Talagrand の不等式（Villani Ex 22.15）}{tc-talagrand}
   標準 Gaussian 測度 $\gamma^{(N)}$ は，
   次元 $N$ によらない定数 $\lambda=1$ で $T_2(1)$ をみたす：
   \[
