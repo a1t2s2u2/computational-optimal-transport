@@ -34,6 +34,24 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
   $A=\emptyset$ のとき $\inf\emptyset:=+\infty$ と約束する．
 \end{definition}
 
+\begin{definition}{実数列の上極限と下極限}{meas-limsup}
+  実数列 $(a_k)$ に対し
+  \[
+    \limsup_{k\to\infty}a_k
+    :=\inf_{n\in\N}\,\sup_{k\geq n}a_k,
+    \qquad
+    \liminf_{k\to\infty}a_k
+    :=\sup_{n\in\N}\,\inf_{k\geq n}a_k
+  \]
+  と定める（値は $[-\infty,+\infty]$ に取る）．
+  つねに $\liminf_ka_k\leq\limsup_ka_k$ であり，
+  両者が一致することと $(a_k)$ が（その共通値に）収束することは
+  同値である．また
+  $k_1<k_2<\cdots$ に対し $(a_{k_j})_{j\in\N}$ を $(a_k)$ の
+  \textbf{部分列}という．
+  （これらの基本性質は微積分の標準的事実として証明なしに用いる．）
+\end{definition}
+
 \begin{remark}{実数についての前提とする事実}{meas-real-facts}
   次の2つは微積分の標準的事実であり，本資料では証明なしに用いる．
   \begin{itemize}
@@ -381,6 +399,8 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
     C_b(\mathcal{X})
     :=
     \{f\colon \mathcal{X}\to\R\mid f\text{ は連続かつ有界}\}
+    \quad(\text{有界とは，ある }M<\infty\text{ で }
+    \abs{f}\leq M\text{ となること})
   \]
   と書く．
 \end{definition}
@@ -645,8 +665,9 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
 \end{claim}
 
 \begin{proof}
-  $p=q$ は明らかである．$p<q$ のとき，$r:=q/p>1$ とその共役指数
-  $r'$ に対し，Hölder の不等式（定理~\ref{thm:meas-holder}）を
+  $p=q$ は明らかである．$p<q$ のとき，$r:=q/p>1$ と
+  $1/r+1/r'=1$ なる $r'$ に対し，
+  Hölder の不等式（定理~\ref{thm:meas-holder}）を
   $\abs{f}^p$ と定数関数 $1$ に適用して
   \[
     \int_\Omega\abs{f}^p\,\d\mu
