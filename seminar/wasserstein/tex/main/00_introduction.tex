@@ -1,56 +1,35 @@
 \chapter{導入}
 \label{ch:introduction}
 
-本資料は，Wasserstein 距離の定義から出発し，次の2つの結果を目標とする．
+本資料は，Wasserstein 距離の定義から出発し，
+\textbf{目標（距離性；Villani (2009) Chapter 6）}：
+Polish 空間 $\mathcal{X}$ 上で
+\[
+  1\leq p<\infty
+  \quad\Longrightarrow\quad
+  \Wass_p\text{ は }\Pp{p}(\mathcal{X})\text{ 上の距離である}
+\]
+を，最適 coupling の存在定理（Villani (2009) Theorem 4.1）を経て証明する．
 主たる文献は Villani
 \emph{Optimal Transport: Old and New}
 （Grundlehren der mathematischen Wissenschaften 338, Springer, 2009）であり，
 定義・記法・証明はこれに従う．
-Gaussian 測度の閉形式（目標2）は Givens--Shortt の論文
-\emph{A class of Wasserstein metrics for probability distributions}
-（Michigan Math.\ J.\ \textbf{31} (1984), 231--240）を原論文とする．
 日本語の解説としては
 桑江ほか『最適輸送理論とリッチ曲率』
 （Encounter with Mathematics 第63回，中央大学，2015）の §1.4 を参照し，
 測度分解定理・接着補題などの用語はこれに合わせた．
-
-\begin{itemize}
-  \item \textbf{目標1（距離性；Villani (2009) Chapter 6）}：
-    Polish 空間 $\mathcal{X}$ 上で
-    \[
-      1\leq p<\infty
-      \quad\Longrightarrow\quad
-      \Wass_p\text{ は }\Pp{p}(\mathcal{X})\text{ 上の距離である．}
-    \]
-  \item \textbf{目標2（Gaussian 測度の閉形式；Givens--Shortt (1984)
-    Proposition 7）}：
-    $\R^n$ 上の Gaussian 測度に対して
-    \[
-      \Wass_2\bigl(\Normal(m_1,\Sigma_1),\,\Normal(m_2,\Sigma_2)\bigr)^2
-      =
-      \norm{m_1-m_2}^2
-      +\tr\Bigl(\Sigma_1+\Sigma_2
-        -2\bigl(\Sigma_1^{1/2}\Sigma_2\Sigma_1^{1/2}\bigr)^{1/2}\Bigr).
-    \]
-    右辺は平均のずれと共分散のずれに分離しており，
-    Wasserstein 距離が閉形式で計算できる数少ない例である．
-\end{itemize}
 
 \section*{本資料の構成}
 
 \begin{itemize}
   \item 第\ref{ch:wasserstein-metrics}章：
     $\Pp{p}(\mathcal{X})$，coupling，$\Wass_p$ を定義し，
-    最適 coupling の存在定理（Villani (2009) Theorem 4.1）を経て
-    目標1を証明する．
-  \item 第\ref{ch:gaussian}章：$\R^n$ 上の Gaussian 測度を像測度として定義し，
-    目標2を証明する（特異な共分散行列も含めた一般の場合を扱う）．
+    最適 coupling の存在定理を経て目標を証明する．
   \item 付録A：
     距離空間と測度論の準備．
     本編で用いる定義と補題をすべて揃え，
     証明なしで認める標準定理（単調収束定理・一致定理・分解定理など）は
     ステートメントを明示して文献を挙げる．
-  \item 付録B：線形代数の準備（半正定値行列・平方根・特異値分解など）．
 \end{itemize}
 
 まず本編を順に読み，参照された定義・補題を必要に応じて
@@ -71,9 +50,5 @@ Gaussian 測度の閉形式（目標2）は Givens--Shortt の論文
   \item $\mathrm{pr}_1,\ \mathrm{pr}_{12}$ など：座標への射影（projection）．
     添字は残す成分の番号（例：$\mathrm{pr}_{12}(x,y,z)=(x,y)$）．
   \item $\mu\otimes\nu$：直積測度（定理~\ref{thm:meas-product}）．
-  \item $\Normal(m,\Sigma)$：平均 $m$，共分散 $\Sigma$ の Gaussian 測度
-    （第\ref{ch:gaussian}章）．
-  \item $\tr A$，$\Sigma^{1/2}$，$A\succeq0$：
-    トレース・半正定値行列の平方根・半正定値性（付録B）．
 \end{itemize}
 

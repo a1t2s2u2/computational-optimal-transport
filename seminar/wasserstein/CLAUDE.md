@@ -1,15 +1,14 @@
 ## seminar/wasserstein
 
-Wasserstein 距離の理論と性質。複数の文献を横断的に参照し、現代的な記法で再構成する。
-目標は (1) $W_p$ の距離性、(2) Gaussian 測度間の $W_2$ の閉形式（本編3章+付録2章）。
+Wasserstein 距離の理論と性質。Villani (2009) を主たる文献とし、これに従って構成する。
+目標は、最適 coupling の存在定理を経た $W_p$ の距離性（本編2章+付録1章）。
 
 ## 参考文献
 
 - [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9) — **主たる文献**。定義・記法・証明はこれに従う
-- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt (1984)](https://doi.org/10.1307/mmj/1029003026) — 第2章 Gaussian 閉形式（Proposition 7）の原論文
 - [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
-原論文 PDF は `reference/` にある（givens-shortt-1984.pdf, kuwae-etal-2015.pdf）。
+参照 PDF は `reference/` にある（kuwae-etal-2015.pdf）。
 Villani の該当ページのスキャンは `reference/old_and_new/` にある（optimal_coupling: Th.4.1 まわり pp.43, 49／wasserstein_distance: Ch.6 pp.93–95。著作権のため git 追跡対象外）。
 
 ## 記法

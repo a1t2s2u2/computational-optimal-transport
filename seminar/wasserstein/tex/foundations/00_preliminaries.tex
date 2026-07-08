@@ -633,8 +633,7 @@ $\mathcal{X},\mathcal{Y}$ が Polish 空間なら $\mathcal{X}\times \mathcal{Y}
   $\mu,\nu$ をそれぞれ可分距離空間 $\mathcal{X},\mathcal{Y}$ 上の
   $\sigma$-有限な Borel 測度
   （空間が測度有限な可算個の Borel 集合で覆える測度．
-  確率測度と，後の節で導入する Lebesgue 測度 $\lambda_n$ は
-  これに当たる）とする．
+  確率測度はこれに当たる）とする．
   $\Borel(\mathcal{X}\times \mathcal{Y})$ 上の測度 $\mu\otimes\nu$ で
   \[
     (\mu\otimes\nu)(A\times B)=\mu(A)\,\nu(B)
@@ -654,10 +653,6 @@ $\mathcal{X},\mathcal{Y}$ が Polish 空間なら $\mathcal{X}\times \mathcal{Y}
   同じ逐次積分の等式が成り立つ（Fubini の定理）．
   有限個の $\sigma$-有限測度の直積
   $\mu_1\otimes\cdots\otimes\mu_n$ についても同様である．
-  特に Lebesgue 測度について
-  $\lambda_{m+n}=\lambda_m\otimes\lambda_n$，
-  すなわち $\lambda_n=\lambda_1\otimes\cdots\otimes\lambda_1$ である
-  （区間の直積上で体積が積に分解することによる）．
   （いずれも標準的な結果．証明は省略する．
   確率測度の場合の一意性は
   注意~\ref{rem:meas-borel-product}の $\pi$-系と
@@ -710,55 +705,4 @@ $\mathcal{X},\mathcal{Y}$ が Polish 空間なら $\mathcal{X}\times \mathcal{Y}
   （直積測度の構成と同様の標準的な手順（単調族論法）による．
   証明は省略する．一意性は矩形集合が $\pi$-系をなすことと
   一致定理（定理~\ref{thm:meas-uniqueness}）から従う．）
-\end{theorem}
-
-\section{$\R^n$ 上の Lebesgue 積分}
-
-$\R^n$ 上の \textbf{Lebesgue 測度} $\lambda_n$
-（区間の体積を拡張した $\Borel(\R^n)$ 上の測度）は既知とする．
-また，連続関数の（広義）Riemann 積分と Lebesgue 積分の一致，
-および微積分学の基本定理・部分積分も既知として用いる．
-
-\begin{definition}{密度をもつ測度}{meas-density}
-  非負可測関数 $\rho\colon\R^n\to[0,\infty)$ が
-  $\int_{\R^n}\rho\,\d\lambda_n=1$ をみたすとき，
-  \[
-    \mu(B):=\int_B\rho\,\d\lambda_n
-    =\int_{\R^n}\mathbf{1}_B\,\rho\,\d\lambda_n
-    \qquad(B\in\Borel(\R^n))
-  \]
-  は $\R^n$ 上の Borel 確率測度を定める
-  （$\sigma$-加法性は単調収束定理~\ref{thm:meas-mct}による）．
-  $\rho$ を $\mu$ の\textbf{密度}といい，
-  $\mu=\rho\,\d\lambda_n$ と書く．
-  このとき非負可測な $f$ に対し
-  \[
-    \int_{\R^n}f\,\d\mu=\int_{\R^n}f\rho\,\d\lambda_n
-  \]
-  が成り立つ（指示関数では定義そのもので，
-  あとは変数変換公式（補題~\ref{lem:meas-change-of-variables}）の証明と同じく
-  単関数近似と単調収束定理で従う）．
-\end{definition}
-
-\begin{theorem}{アフィン変数変換公式（前提とする事実）}{meas-affine-cov}
-  $T\in\R^{n\times n}$ を可逆行列，$b\in\R^n$ とし，
-  $\ell(x):=Tx+b$ とおく
-  （この形の写像を\textbf{アフィン写像}とよぶ）．非負可測関数 $f\colon\R^n\to[0,\infty)$ に対し
-  \[
-    \int_{\R^n}f(y)\,\d\lambda_n(y)
-    =\abs{\det T}\int_{\R^n}f(Tx+b)\,\d\lambda_n(x)
-  \]
-  が成り立つ．すなわち
-  $\lambda_n\circ\ell^{-1}=\abs{\det T}^{-1}\lambda_n$ である．
-  （変数変換公式の標準的な場合．証明は省略する．）
-\end{theorem}
-
-\begin{theorem}{2次元極座標変換（前提とする事実）}{meas-polar}
-  非負可測関数 $f\colon\R^2\to[0,\infty)$ に対し
-  \[
-    \int_{\R^2}f\,\d\lambda_2
-    =\int_0^\infty\!\!\int_0^{2\pi}
-      f(r\cos\theta,\,r\sin\theta)\,r\,\d\theta\,\d r
-  \]
-  が成り立つ．（証明は省略する．）
 \end{theorem}

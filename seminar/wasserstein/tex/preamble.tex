@@ -1,7 +1,6 @@
 % ============================================================
 %  preamble.tex — Wasserstein 距離セミナー用 共通設定
-%  複数文献（Givens–Shortt / Villani / Peyré–Cuturi / 桑江ほか）を
-%  横断参照し、現代的な最適輸送の記法に統一する
+%  Villani (2009) を主たる文献とし、記法もこれに合わせる
 % ============================================================
 
 % --- 基本パッケージ ---
@@ -73,22 +72,14 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\abs}[1]{\lvert #1 \rvert}
 \newcommand{\norm}[1]{\lVert #1 \rVert}
-\newcommand{\inner}[2]{\langle #1,\, #2 \rangle}
 
-% --- 現代的な最適輸送の記法 ---
+% --- 最適輸送の記法（Villani 準拠）---
 \newcommand{\Borel}{\mathcal{B}}
 \newcommand{\Prob}{\mathcal{P}}
 \newcommand{\Pp}[1]{\mathcal{P}_{#1}}
 \newcommand{\Couplings}{\Pi}
 \newcommand{\Wass}{W}
-\newcommand{\Normal}{\mathcal{N}}
 \newcommand{\Id}{\mathrm{Id}}
-\DeclareMathOperator{\Lip}{Lip}
-\DeclareMathOperator{\supp}{supp}
-\DeclareMathOperator{\esssup}{ess\,sup}
-\DeclareMathOperator{\tr}{tr}
-\DeclareMathOperator{\diag}{diag}
-\DeclareMathOperator{\rank}{rank}
 \renewcommand{\d}{\mathrm{d}}               % 積分の d
 
 % --- サイト用デモブロック指示（PDF では無効，tex2md が :::demo に変換する）---
