@@ -53,12 +53,21 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
 \end{definition}
 
 \begin{remark}{実数についての前提とする事実}{meas-real-facts}
-  次の2つは微積分の標準的事実であり，本資料では証明なしに用いる．
+  次はいずれも微積分の標準的事実であり，本資料では証明なしに用いる．
   \begin{itemize}
     \item $\R$ は完備である（Cauchy 列は収束する．連続性公理から従う）．
     \item $p\geq1$ に対し $t\mapsto t^p$ は $[0,\infty)$ 上で
       単調増加かつ凸である．特に
       $\bigl(\frac{a+b}{2}\bigr)^p\leq\frac{a^p+b^p}{2}$（$a,b\geq0$）．
+    \item $e^x\geq1+x$（$\forall x\in\R$）．特に $t>0$ で
+      $\log t\leq t-1$ であり，これを $t=1/u$（$u>0$）に適用して
+      両辺に $-u<0$ を掛ければ，$u>0$ で
+      $u\log u\geq u-1$ を得る（$u=0$ でも，
+      $u\log u$ の $u=0$ での値を $0$ と約束すれば
+      $0\geq-1$ として成立する）．
+    \item 任意の $p\geq0$ に対し
+      $\sup_{t\in\R}\abs{t}^pe^{-t^2/4}<\infty$
+      （多項式は Gauss 核より増大が遅い）．
   \end{itemize}
 \end{remark}
 
@@ -237,6 +246,38 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
 
   （Dynkin の $\pi$-$\lambda$ 定理から従う標準的な結果．証明は省略する．）
 \end{theorem}
+
+\begin{claim}{測度の単調連続性}{meas-monotone-continuity}
+  測度空間 $(\Omega,\mathcal{A},\mu)$ と可測集合列 $(A_n)$ について：
+  \begin{enumerate}
+    \item $A_1\subset A_2\subset\cdots$ ならば
+      $\mu\bigl(\bigcup_nA_n\bigr)=\lim_{n\to\infty}\mu(A_n)$．
+    \item $A_1\supset A_2\supset\cdots$ かつ $\mu(A_1)<\infty$ ならば
+      $\mu\bigl(\bigcap_nA_n\bigr)=\lim_{n\to\infty}\mu(A_n)$．
+  \end{enumerate}
+\end{claim}
+
+\begin{proof}
+  (1)：$B_1:=A_1$，$B_n:=A_n\setminus A_{n-1}$（$n\geq2$）とおくと，
+  $(B_n)$ は互いに素で
+  $\bigcup_{k\leq n}B_k=A_n$，$\bigcup_kB_k=\bigcup_nA_n$ だから，
+  $\sigma$-加法性より
+  \[
+    \mu\Bigl(\bigcup_nA_n\Bigr)
+    =\sum_{k=1}^\infty\mu(B_k)
+    =\lim_{n\to\infty}\sum_{k=1}^n\mu(B_k)
+    =\lim_{n\to\infty}\mu(A_n).
+  \]
+  (2)：$(A_1\setminus A_n)_n$ は増大列で，その合併は
+  $A_1\setminus\bigcap_nA_n$ である．
+  $\mu(A_1)<\infty$ より，$B\subset A_1$ に対して
+  $\mu(A_1\setminus B)=\mu(A_1)-\mu(B)$ が使えるから，(1) より
+  \[
+    \mu(A_1)-\mu\Bigl(\bigcap_nA_n\Bigr)
+    =\lim_{n\to\infty}\bigl(\mu(A_1)-\mu(A_n)\bigr)
+  \]
+  であり，両辺から $\mu(A_1)$ を引いて符号を変えればよい．
+\end{proof}
 
 \section{指示関数と a.e.}
 
@@ -878,6 +919,50 @@ $\mathcal{X},\mathcal{Y}$ が Polish 空間なら $\mathcal{X}\times \mathcal{Y}
   系~\ref{cor:meas-pf-lp}を
   $T=\mathrm{pr}_1$，$\pi\circ T^{-1}=\mu$ に適用すればよい．
 \end{proof}
+
+\section{密度をもつ測度と Lebesgue 測度}
+
+\begin{definition}{密度をもつ測度}{meas-density}
+  測度空間 $(\Omega,\mathcal{A},\nu)$ 上の非負可測関数 $\rho$ が
+  $\int_\Omega\rho\,\d\nu=1$ をみたすとき，
+  \[
+    (\rho\nu)(B):=\int_B\rho\,\d\nu
+    =\int_\Omega\mathbf{1}_B\,\rho\,\d\nu
+    \qquad(B\in\mathcal{A})
+  \]
+  は確率測度を定める（$\sigma$-加法性は，互いに素な $(B_k)$ に対し
+  $\mathbf{1}_{\cup_kB_k}\,\rho=\lim_n\sum_{k\leq n}\mathbf{1}_{B_k}\rho$
+  （単調増加）と単調収束定理~\ref{thm:meas-mct}による）．
+  $\rho$ を $\rho\nu$ の（$\nu$ に関する）\textbf{密度}という．
+  このとき非負可測な $f\colon\Omega\to[0,+\infty]$ に対し
+  \[
+    \int_\Omega f\,\d(\rho\nu)=\int_\Omega f\rho\,\d\nu
+  \]
+  が成り立つ（指示関数では定義そのもの，非負単関数へは積分の線形性，
+  非負可測関数へは単関数近似（注意~\ref{rem:meas-measurable-ops}）と
+  単調収束定理で拡張される）．
+\end{definition}
+
+\begin{claim}{密度の一意性}{meas-density-unique}
+  $\rho_1\nu=\rho_2\nu$ ならば $\rho_1=\rho_2$ $\nu$-a.e. である．
+\end{claim}
+
+\begin{proof}
+  $E:=\{\rho_1>\rho_2\}$ とおくと，
+  $\int_E\rho_1\,\d\nu=\int_E\rho_2\,\d\nu\leq1<\infty$ だから
+  $\int_E(\rho_1-\rho_2)\,\d\nu=0$ であり，
+  被積分関数 $\mathbf{1}_E(\rho_1-\rho_2)$ は非負なので
+  $\nu(E)=0$，すなわち $\rho_1\leq\rho_2$ $\nu$-a.e. である
+  （非負可測関数の積分が $0$ ならその関数は a.e. $0$）．
+  $\rho_1$ と $\rho_2$ を入れ替えれば逆向きも成り立つ．
+\end{proof}
+
+$\R$ 上の \textbf{Lebesgue 測度} $\lambda_1$
+（区間の長さ $\lambda_1((a,b])=b-a$ を拡張した
+$\Borel(\R)$ 上の測度）は既知とする．
+また，連続関数の（広義）Riemann 積分と Lebesgue 積分の一致，
+および微積分学の基本定理も既知として用いる．
+$\lambda_1$ は $\sigma$-有限である（$\R=\bigcup_n[-n,n]$）．
 
 \section{直積測度と測度の分解}
 
