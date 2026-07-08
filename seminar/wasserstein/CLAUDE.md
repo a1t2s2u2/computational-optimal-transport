@@ -5,8 +5,8 @@ Wasserstein 距離の理論と性質。複数の文献を横断的に参照し�
 
 ## 参考文献
 
-- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt (1984)](https://doi.org/10.1307/mmj/1029003026) — 骨格となる定義・命題の出典
-- [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9) — 現代的記法・証明の補完
+- [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9) — **主たる文献**。定義・記法・証明はこれに従う
+- [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt (1984)](https://doi.org/10.1307/mmj/1029003026) — 第2章 Gaussian 閉形式（Proposition 7）の原論文
 - [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
 原論文 PDF は `reference/` にある（givens-shortt-1984.pdf, kuwae-etal-2015.pdf）。
@@ -15,7 +15,6 @@ Villani の該当ページのスキャンは `reference/old_and_new/` にある�
 ## 記法
 
 - **記号は原則として Villani (2009) に合わせる**。ただし記号の濫用は採用しない（例: Villani が積分域 $\mathcal{X}\times\mathcal{X}$ を $\int_{\mathcal{X}}$ と略す箇所は、正確に $\int_{\mathcal{X}\times\mathcal{X}}$ と書く）
-- Givens–Shortt 原論文の記号は導入の読み替え表で対応する
 - 文献間で定義が異なる場合は、最も一般的な定義を採用し、差異を注意として記載する
 - 押し出し記法 $T_\sharp\mu$ は使わず、像測度 $\mu\circ T^{-1}$ と書く（定義箇所に文献との対応を注記済み）
 - 空間記号は付録も含め Villani に合わせて calligraphy（$\mathcal{X},\mathcal{Y},\mathcal{Z}$）で書く。例外は抽象的な測度空間 $\Omega,\Omega'$ と、距離の公理の台集合 $M$（$P_p(\mathcal{X})$ 等にも適用するため中立の記号を維持）

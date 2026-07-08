@@ -2,27 +2,28 @@
 \label{ch:introduction}
 
 本資料は，Wasserstein 距離の定義から出発し，次の2つの結果を目標とする．
-主たる文献は Givens--Shortt の論文
+主たる文献は Villani
+\emph{Optimal Transport: Old and New}
+（Grundlehren der mathematischen Wissenschaften 338, Springer, 2009）であり，
+定義・記法・証明はこれに従う．
+Gaussian 測度の閉形式（目標2）は Givens--Shortt の論文
 \emph{A class of Wasserstein metrics for probability distributions}
-（Michigan Math.\ J.\ \textbf{31} (1984), 231--240）であり，
-記法と証明は
-Villani（\emph{Optimal Transport}, 2009）・
-Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
-に倣って現代的に再構成する．
+（Michigan Math.\ J.\ \textbf{31} (1984), 231--240）を原論文とする．
 日本語の解説としては
 桑江ほか『最適輸送理論とリッチ曲率』
 （Encounter with Mathematics 第63回，中央大学，2015）の §1.4 を参照し，
-測度分解定理・接着補題などの用語と構成はこれに合わせた．
+測度分解定理・接着補題などの用語はこれに合わせた．
 
 \begin{itemize}
-  \item \textbf{目標1（距離性；原論文 Proposition 2）}：
+  \item \textbf{目標1（距離性；Villani (2009) Chapter 6）}：
     Polish 空間 $\mathcal{X}$ 上で
     \[
       1\leq p<\infty
       \quad\Longrightarrow\quad
       \Wass_p\text{ は }\Pp{p}(\mathcal{X})\text{ 上の距離である．}
     \]
-  \item \textbf{目標2（Gaussian 測度の閉形式；原論文 Proposition 7）}：
+  \item \textbf{目標2（Gaussian 測度の閉形式；Givens--Shortt (1984)
+    Proposition 7）}：
     $\R^n$ 上の Gaussian 測度に対して
     \[
       \Wass_2\bigl(\Normal(m_1,\Sigma_1),\,\Normal(m_2,\Sigma_2)\bigr)^2
@@ -76,29 +77,3 @@ Peyré--Cuturi（\emph{Computational Optimal Transport}, 2019）
     トレース・半正定値行列の平方根・半正定値性（付録B）．
 \end{itemize}
 
-\section*{記号・用語の読み替え}
-
-原論文（Givens--Shortt 1984）と本資料の記号の対応を挙げる．
-特に原論文は $S\times S$ 上の同時分布（本資料の coupling）を
-$\mu$ と書くため，本資料の周辺測度の記号 $\mu$ と衝突する．
-
-\begin{itemize}
-  \item 距離空間：原論文 $(S,\,d)$ ── 本資料 $(\mathcal{X},\,d)$．
-  \item 基点：原論文 $0$ ── 本資料 $x_0$．
-  \item 確率測度の空間：原論文 $\mathfrak{M}_p(S)$ ── 本資料 $\Pp{p}(\mathcal{X})$．
-  \item 確率測度（law）：原論文 $P_1,\,P_2$ ── 本資料 $\mu,\,\nu$．
-  \item coupling の集合：原論文 $D(P_1,P_2)$ ── 本資料 $\Couplings(\mu,\nu)$．
-  \item coupling（$S\times S$ 上の同時分布）：原論文 $\mu,\,\mu_{12},\,\mu_{23}$
-    ── 本資料 $\pi,\,\sigma$．
-  \item 3変数の貼り合わせ測度（$S_1\times S_2\times S_3$ 上）：原論文 $\mu$
-    ── 本資料 $\gamma$．
-  \item Wasserstein 距離：原論文 $W_p(P_1,P_2)$ ── 本資料 $\Wass_p(\mu,\nu)$．
-  \item Gaussian 測度の平均：原論文 $\bar m_1,\,\bar m_2$ ── 本資料 $m_1,\,m_2$．
-  \item Gaussian 測度の共分散行列：原論文 $M_1,\,M_2$ ── 本資料 $\Sigma_1,\,\Sigma_2$．
-\end{itemize}
-
-なお原論文は Wasserstein 距離を
-$W_p=\bigl(\inf_\pi\int d^p\,\d\pi\bigr)^{1/p}$
-（冪が下限の外側）と定義するが，
-$t\mapsto t^{1/p}$ が単調な全単射なので下限と冪は交換でき，
-本資料の定義（定義~\ref{def:wp-wasserstein}）と一致する．
