@@ -31,4 +31,5 @@ Villani の該当ページのスキャンは `reference/old_and_new/` にある�
 ## サイト
 
 - tex が source of truth。`make wasserstein-site` で content/md → dist/html を生成（生成物は追跡外）
-- 定理番号は tex2md が LaTeX のカウンタ規則を再現して PDF と同期させている
+- **PDF は生成しない**（`wasserstein-pdf` ターゲットは 2026-07-08 に削除。tex は site の source としてのみ使う）
+- 定理番号は tex2md が LaTeX のカウンタ規則を再現して振っている
