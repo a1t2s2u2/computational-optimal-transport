@@ -53,6 +53,11 @@ const CHAPTERS = [
     nav: "空間の位相", eyebrow: "2. Topology of Pₚ",
     title: "Wasserstein 空間の位相",
   }],
+  ["main/03_concentration.tex", "03-concentration.md", {
+    id: "concentration", group: "main",
+    nav: "Gaussian と集中", eyebrow: "3. Concentration",
+    title: "Talagrand の不等式と Gaussian 測度の集中",
+  }],
   ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
     id: "found-preliminaries", group: "appendix",
     nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",

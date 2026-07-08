@@ -10,7 +10,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
 \section{準備：$W_p$ の比較と Dirac 測度}
 \label{sec:wt-preliminaries}
 
-\begin{lemma}{$W_p$ の順序単調性}{wt-order}
+\begin{lemma}{$W_p$ の順序単調性（Villani Rem 6.6）}{wt-order}
   $1\leq p\leq q<\infty$ とすると，
   $\Pp{q}(\mathcal{X})\subset\Pp{p}(\mathcal{X})$ であり，
   $\mu,\nu\in\Pp{q}(\mathcal{X})$ に対し
@@ -103,7 +103,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
 \section{$W_p$ の Cauchy 列の tightness}
 \label{sec:wt-cauchy}
 
-\begin{lemma}{$W_p$ の Cauchy 列は tight}{wt-cauchy-tight}
+\begin{lemma}{$W_p$ の Cauchy 列は tight（Villani Lem 6.14）}{wt-cauchy-tight}
   $(\mu_k)$ を $(\Pp{p}(\mathcal{X}),\Wass_p)$ の Cauchy 列とすると，
   族 $\{\mu_k\mid k\in\N\}$ は tight である．
 \end{lemma}
@@ -203,7 +203,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
 \section{$\Pp{p}(\mathcal{X})$ における弱収束と $W_p$}
 \label{sec:wt-convergence}
 
-\begin{definition}{$\Pp{p}(\mathcal{X})$ における弱収束}{wt-weak-pp}
+\begin{definition}{$\Pp{p}(\mathcal{X})$ における弱収束（Villani Def 6.8）}{wt-weak-pp}
   点 $x_0\in\mathcal{X}$ を任意に固定する．
   $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$ が
   $\mu\in\Pp{p}(\mathcal{X})$ に
@@ -219,7 +219,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   $x_0$ の取り方によらない）．
 \end{definition}
 
-\begin{lemma}{$\Pp{p}$ 弱収束の同値な言い換え}{wt-weak-pp-equiv}
+\begin{lemma}{$\Pp{p}$ 弱収束の同値な言い換え（Villani Def 6.8）}{wt-weak-pp-equiv}
   $(\mu_k)$ を $\Pp{p}(\mathcal{X})$ の列，
   $\mu\in\Pp{p}(\mathcal{X})$ とし，$\mu_k\Rightarrow\mu$ とする．
   $x_0\in\mathcal{X}$ に対し，次は同値である．
@@ -300,7 +300,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   対称性より逆も成り立つ．
 \end{proof}
 
-\begin{lemma}{$W_p$ の弱収束に関する下半連続性}{wt-wp-lsc}
+\begin{lemma}{$W_p$ の弱収束に関する下半連続性（Villani Rem 6.12）}{wt-wp-lsc}
   $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$，$(\nu_k)$ と
   $\mu,\nu\in\Pp{p}(\mathcal{X})$ が
   $\mu_k\Rightarrow\mu$，$\nu_k\Rightarrow\nu$（弱収束）をみたすとする．
@@ -347,7 +347,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   \]
 \end{proof}
 
-\begin{theorem}{最適性の弱極限での保存}{wt-stability}
+\begin{theorem}{最適性の弱極限での保存（Villani Thm 5.20）}{wt-stability}
   $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$，$(\nu_k)$ と
   $\mu,\nu\in\Pp{p}(\mathcal{X})$ が
   $\mu_k\Rightarrow\mu$，$\nu_k\Rightarrow\nu$（弱収束）をみたし，
@@ -358,7 +358,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   （証明は省略する．Villani (2009) Theorem 5.20 の特別な場合である．）
 \end{theorem}
 
-\begin{theorem}{$W_p$ は $\Pp{p}$ の弱収束を距離化する}{wt-metrize}
+\begin{theorem}{$W_p$ は $\Pp{p}$ の弱収束を距離化する（Villani Thm 6.9）}{wt-metrize}
   $(\mu_k)$ を $\Pp{p}(\mathcal{X})$ の列，
   $\mu\in\Pp{p}(\mathcal{X})$ とすると，次は同値である．
   \begin{enumerate}
@@ -498,7 +498,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   よって $\Wass_p(\mu_k,\mu)\to0$ である．
 \end{proof}
 
-\begin{corollary}{$W_p$ の連続性}{wt-continuity}
+\begin{corollary}{$W_p$ の連続性（Villani Cor 6.11）}{wt-continuity}
   $\mu_k\to\mu$，$\nu_k\to\nu$（いずれも
   $\Pp{p}(\mathcal{X})$ の意味の弱収束）ならば
   $\Wass_p(\mu_k,\nu_k)\to\Wass_p(\mu,\nu)$ である．
@@ -564,7 +564,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   \]
 \end{proof}
 
-\begin{theorem}{Wasserstein 空間の位相的性質}{wt-polish}
+\begin{theorem}{Wasserstein 空間の位相的性質（Villani Thm 6.18）}{wt-polish}
   $\mathcal{X}$ を Polish 空間，$1\leq p<\infty$ とすると，
   Wasserstein 空間 $(\Pp{p}(\mathcal{X}),\Wass_p)$
   （定義~\ref{def:wp-wasserstein-space}）は Polish 空間である．

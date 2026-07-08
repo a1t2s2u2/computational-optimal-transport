@@ -17,7 +17,7 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 \]
 とおく．
 
-\begin{definition}{有限 $p$ 次モーメントをもつ確率測度}{wp-p-space}
+\begin{definition}{有限 $p$ 次モーメントをもつ確率測度（Villani Def 6.4）}{wp-p-space}
   任意に点 $x_0\in \mathcal{X}$ を一つ固定する．$1\leq p<\infty$ に対し
   \[
     \Pp{p}(\mathcal{X})
@@ -32,7 +32,7 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
   $\mu$ の（$x_0$ を基点とする）\textbf{$p$ 次モーメント}という．
 \end{definition}
 
-\begin{lemma}{$\Pp{p}(\mathcal{X})$ の $x_0$ 非依存性}{wp-p-indep}
+\begin{lemma}{$\Pp{p}(\mathcal{X})$ の $x_0$ 非依存性（Villani Def 6.4）}{wp-p-indep}
   $1\leq p<\infty$ のとき，$\Pp{p}(\mathcal{X})$ は点 $x_0$ の選び方によらない．
   すなわち，任意の $x_0,x_0'\in \mathcal{X}$ と $\mu\in\Prob(\mathcal{X})$ に対して
   \[
@@ -69,7 +69,7 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
   $x_0$ と $x_0'$ を入れ替えれば逆向きの含意も同様に従う．
 \end{proof}
 
-\begin{definition}{Coupling}{wp-coupling}
+\begin{definition}{Coupling（Villani Def 1.1）}{wp-coupling}
   距離空間 $\mathcal{X},\mathcal{Y}$ 上の確率測度
   $\mu\in\Prob(\mathcal{X})$，$\nu\in\Prob(\mathcal{Y})$ に対し
   \[
@@ -88,7 +88,7 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
   \textbf{coupling} という．
 \end{definition}
 
-\begin{definition}{Wasserstein 距離}{wp-wasserstein}
+\begin{definition}{Wasserstein 距離（Villani Def 6.1）}{wp-wasserstein}
   $1\leq p<\infty$ と $\mu,\nu\in\Pp{p}(\mathcal{X})$ に対し
   \[
     \Wass_p(\mu,\nu)
@@ -168,7 +168,7 @@ Villani (2009) Theorem 4.1 の形で示す．
 $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 （$\abs{-\infty}:=+\infty$ と読む）．
 
-\begin{lemma}{コスト汎関数の下半連続性}{wp-cost-lsc}
+\begin{lemma}{コスト汎関数の下半連続性（Villani Lem 4.3）}{wp-cost-lsc}
   $\mathcal{X},\mathcal{Y}$ を Polish 空間，
   $c\colon\mathcal{X}\times\mathcal{Y}\to\R\cup\{+\infty\}$
   を下半連続関数，
@@ -222,7 +222,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   \]
 \end{proof}
 
-\begin{lemma}{輸送計画の tightness}{wp-plans-tight}
+\begin{lemma}{輸送計画の tightness（Villani Lem 4.4）}{wp-plans-tight}
   $\mathcal{X},\mathcal{Y}$ を Polish 空間とし，
   $\mathcal{P}\subset\Prob(\mathcal{X})$，
   $\mathcal{Q}\subset\Prob(\mathcal{Y})$ を
@@ -264,7 +264,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   $\Couplings(\mathcal{P},\mathcal{Q})$ は tight である．
 \end{proof}
 
-\begin{theorem}{最適 coupling の存在}{wp-optimal-coupling-existence}
+\begin{theorem}{最適 coupling の存在（Villani Thm 4.1）}{wp-optimal-coupling-existence}
   $(\mathcal{X},\mu)$，$(\mathcal{Y},\nu)$ を2つの Polish 確率空間とする．
   $a\colon \mathcal{X}\to\R\cup\{-\infty\}$，
   $b\colon \mathcal{Y}\to\R\cup\{-\infty\}$ を
@@ -362,7 +362,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   よって $\pi^*$ は最小値を達成する．
 \end{proof}
 
-\begin{remark}{下界条件の役割}{wp-cost-lower-bound}
+\begin{remark}{下界条件の役割（Villani Rem 4.2）}{wp-cost-lower-bound}
   仮定 $c\geq a+b$ により，任意の $\pi\in\Couplings(\mu,\nu)$ で
   $c$ の負部分 $c^-:=\max\{-c,0\}$ は
   $c^-\leq(a+b)^-\leq\abs{a(x)}+\abs{b(y)}$ をみたし，
@@ -605,7 +605,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
 \end{proof}
 
-\begin{definition}{Wasserstein 空間}{wp-wasserstein-space}
+\begin{definition}{Wasserstein 空間（Villani Def 6.4）}{wp-wasserstein-space}
   距離 $\Wass_p$ を備えた距離空間
   $(\Pp{p}(\mathcal{X}),\Wass_p)$ を
   $p$ 次の \textbf{Wasserstein 空間}という．
