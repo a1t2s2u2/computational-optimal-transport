@@ -28,7 +28,8 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
       \int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)<\infty
     \right\}
   \]
-  と定める．
+  と定める．積分 $\int_{\mathcal{X}}d(x,x_0)^p\,\d\mu(x)$ を
+  $\mu$ の（$x_0$ を基点とする）\textbf{$p$ 次モーメント}という．
 \end{definition}
 
 \begin{lemma}{$\Pp{p}(\mathcal{X})$ の $x_0$ 非依存性}{wp-p-indep}
@@ -603,6 +604,12 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 
   以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
 \end{proof}
+
+\begin{definition}{Wasserstein 空間}{wp-wasserstein-space}
+  距離 $\Wass_p$ を備えた距離空間
+  $(\Pp{p}(\mathcal{X}),\Wass_p)$ を
+  $p$ 次の \textbf{Wasserstein 空間}という．
+\end{definition}
 
 \begin{remark}{文献との対応}{wp-metric-references}
   最適 coupling の存在定理（定理~\ref{thm:wp-optimal-coupling-existence}）は
