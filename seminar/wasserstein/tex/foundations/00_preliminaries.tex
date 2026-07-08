@@ -322,26 +322,19 @@ $X$ 上の Borel 確率測度全体を $\Prob(X)$ と書く．
   が成り立つことをいう．
 \end{definition}
 
-\begin{theorem}{Prokhorov の定理（本資料で用いる形）}{meas-prokhorov}
-  $S$ を Polish 空間とする．
+\begin{theorem}{Prokhorov の定理}{meas-prokhorov}
+  $S$ を Polish 空間とする．$\mathcal{P}\subset\Prob(S)$ に対し，
+  次は同値である．
   \begin{enumerate}
-    \item 任意の $\eta\in\Prob(S)$ に対し，1点族 $\{\eta\}$ は tight である．
-    \item $\mathcal{F}\subset\Prob(S)$ が tight ならば，
-      $\mathcal{F}$ の任意の列 $(\eta_n)$ は弱収束する部分列をもつ．
-      すなわち，ある部分列 $(\eta_{n_k})$ と $\eta\in\Prob(S)$ が存在して
-      $\eta_{n_k}\Rightarrow\eta$ となる．
+    \item $\mathcal{P}$ は弱位相で precompact である．
+      すなわち，$\mathcal{P}$ の任意の列は，$\Prob(S)$ のある元に
+      弱収束する部分列をもつ．
+    \item $\mathcal{P}$ は tight である．
   \end{enumerate}
-  （証明は省略する．Villani (2009) Chapter 4 では
-  「$S$ が Polish 空間のとき，$\mathcal{F}\subset\Prob(S)$ が
-  弱位相で precompact であることと tight であることは同値」
-  という形で引用されている
-  （precompact とは相対 compact，すなわち閉包が compact のことで，
-  第2の主張の「弱収束する部分列をもつ」はその列による言い換えである）．
-  古典的な証明は
+  （証明は省略する．Villani (2009) Chapter 4 で
+  同じ形で引用されている古典的な定理であり，証明は
   Billingsley \emph{Convergence of Probability Measures}
-  (2nd ed., 1999) Theorems 5.1, 5.2 にある．
-  第1の主張は，1点集合が常に precompact であることから
-  「precompact ならば tight」の側の帰結である．）
+  (2nd ed., 1999) Theorems 5.1, 5.2 にある．）
 \end{theorem}
 
 \begin{definition}{下半連続関数と上半連続関数}{meas-lsc}

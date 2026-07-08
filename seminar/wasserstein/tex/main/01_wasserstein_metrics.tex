@@ -299,9 +299,10 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{theorem}
 
 \begin{proof}
-  $\mathcal{X}$ は Polish 空間だから，Prokhorov の定理
-  （定理~\ref{thm:meas-prokhorov}）の第1の主張より
-  $\{\mu\}$ は tight であり，$\{\nu\}$ も同様である．
+  1点集合 $\{\mu\}$ は弱位相で precompact
+  （定数列 $\mu,\mu,\dots$ は $\mu$ 自身に弱収束する）だから，
+  Prokhorov の定理（定理~\ref{thm:meas-prokhorov}）より
+  tight であり，$\{\nu\}$ も同様である．
   よって補題~\ref{lem:wp-plans-tight}より，$\Couplings(\mu,\nu)$ は
   $\Prob(\mathcal{X}\times\mathcal{Y})$ で tight である
   （直積 $\mathcal{X}\times\mathcal{Y}$ は Polish 空間：
@@ -318,7 +319,8 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
     \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
     \qquad(k\to\infty)
   \]
-  となる列を取れる．tightness と Prokhorov の定理（第2の主張）より，
+  となる列を取れる．$\Couplings(\mu,\nu)$ は tight だから，
+  Prokhorov の定理より弱位相で precompact であり，
   部分列に移って，ある
   $\pi^*\in\Prob(\mathcal{X}\times\mathcal{Y})$ に
   $\pi_k\Rightarrow\pi^*$ としてよい．
