@@ -48,6 +48,11 @@ const CHAPTERS = [
     nav: "Wₚ の距離性", eyebrow: "1. The Metric Wₚ",
     title: "Wasserstein 距離 Wₚ",
   }],
+  ["main/02_topology.tex", "02-topology.md", {
+    id: "topology", group: "main",
+    nav: "空間の位相", eyebrow: "2. Topology of Pₚ",
+    title: "Wasserstein 空間の位相",
+  }],
   ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
     id: "found-preliminaries", group: "appendix",
     nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",

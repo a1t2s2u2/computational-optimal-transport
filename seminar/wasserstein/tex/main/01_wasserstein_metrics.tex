@@ -189,21 +189,8 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{lemma}
 
 \begin{proof}
-  まず $c\geq0$ の場合に示す．
-  補題~\ref{lem:meas-lsc-approx}より，有界連続関数の非減少列
-  $0\leq c_\ell\uparrow c$（各点）が取れる．
-  各 $\ell$ で，弱収束と $c_\ell\leq c$ より
-  \[
-    \int c_\ell\,\d\pi
-    =\lim_{k\to\infty}\int c_\ell\,\d\pi_k
-    \leq\liminf_{k\to\infty}\int c\,\d\pi_k
-  \]
-  であり，単調収束定理（定理~\ref{thm:meas-mct}）より
-  \[
-    \int c\,\d\pi
-    =\lim_{\ell\to\infty}\int c_\ell\,\d\pi
-    \leq\liminf_{k\to\infty}\int c\,\d\pi_k.
-  \]
+  $c\geq0$ の場合は，空間 $\mathcal{X}\times\mathcal{Y}$ 上で
+  補題~\ref{lem:meas-weak-lsc}を $f=c$ に適用すればよい．
 
   一般の場合は，$c$ を $c-h$ に置き換えて $c\geq0$ の場合に帰着する．
   $-h$ は $(-\infty,+\infty]$ に値をもつ下半連続関数だから，
