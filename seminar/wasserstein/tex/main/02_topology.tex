@@ -1,0 +1,719 @@
+\chapter{Wasserstein 空間の位相}
+\label{ch:topology}
+
+本章では，$W_p$ が $\Pp{p}(\mathcal{X})$ の弱収束を距離化すること
+（Villani (2009) Theorem 6.9），および
+$(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
+（同 Theorem 6.18）を示す．
+本章でも $(\mathcal{X},d)$ を Polish 空間とし，$1\leq p<\infty$ とする．
+
+\section{準備：$W_p$ の比較と Dirac 測度}
+\label{sec:wt-preliminaries}
+
+\begin{lemma}{$W_p$ の順序単調性}{wt-order}
+  $1\leq p\leq q<\infty$ とすると，
+  $\Pp{q}(\mathcal{X})\subset\Pp{p}(\mathcal{X})$ であり，
+  $\mu,\nu\in\Pp{q}(\mathcal{X})$ に対し
+  \[
+    \Wass_p(\mu,\nu)\leq\Wass_q(\mu,\nu).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $\mu\in\Pp{q}(\mathcal{X})$ に対し，$L^p$ ノルムの単調性
+  （主張~\ref{clm:meas-lp-order}）を $f=d(\cdot,x_0)$ に適用すると
+  \[
+    \Bigl(\int_{\mathcal{X}}d(x,x_0)^p\,\d\mu\Bigr)^{1/p}
+    =\norm{d(\cdot,x_0)}_{L^p(\mu)}
+    \leq\norm{d(\cdot,x_0)}_{L^q(\mu)}<\infty
+  \]
+  だから $\mu\in\Pp{p}(\mathcal{X})$ である．
+  また任意の $\pi\in\Couplings(\mu,\nu)$ に対し，同じ単調性より
+  $\norm{d}_{L^p(\pi)}\leq\norm{d}_{L^q(\pi)}$ であり，
+  $\pi$ について下限を取れば
+  $\Wass_p(\mu,\nu)\leq\Wass_q(\mu,\nu)$ である．
+\end{proof}
+
+\begin{lemma}{Dirac 測度との $W_p$}{wt-dirac}
+  $x_0\in\mathcal{X}$，$\mu\in\Prob(\mathcal{X})$ とすると
+  $\Couplings(\delta_{x_0},\mu)=\{\delta_{x_0}\otimes\mu\}$ である．
+  特に $\delta_{x_0}\in\Pp{p}(\mathcal{X})$ であり，
+  $\mu\in\Pp{p}(\mathcal{X})$ に対し
+  \[
+    \Wass_p(\delta_{x_0},\mu)^p
+    =\int_{\mathcal{X}}d(x_0,x)^p\,\d\mu(x).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $\pi\in\Couplings(\delta_{x_0},\mu)$ と
+  $A\in\Borel(\mathcal{X})$，$B\in\Borel(\mathcal{X})$ を取る．
+  $x_0\notin A$ のときは
+  $\pi(A\times B)\leq\pi(A\times\mathcal{X})=\delta_{x_0}(A)=0$，
+  $x_0\in A$ のときは
+  $\pi((\mathcal{X}\setminus A)\times B)=0$（前段より）から
+  $\pi(A\times B)=\pi(\mathcal{X}\times B)=\mu(B)$ であり，
+  いずれの場合も
+  $\pi(A\times B)=\delta_{x_0}(A)\,\mu(B)
+  =(\delta_{x_0}\otimes\mu)(A\times B)$ である．
+  矩形集合は $\Borel(\mathcal{X}\times\mathcal{X})$ を生成する
+  $\pi$-系だから（注意~\ref{rem:meas-borel-product}），一致定理
+  （定理~\ref{thm:meas-uniqueness}）より
+  $\pi=\delta_{x_0}\otimes\mu$ である．
+
+  $\delta_{x_0}$ のモーメントは
+  $\int d(x,x_0)^p\,\d\delta_{x_0}(x)=d(x_0,x_0)^p=0<\infty$
+  （主張~\ref{clm:meas-dirac-integral}）だから
+  $\delta_{x_0}\in\Pp{p}(\mathcal{X})$ である．
+  また $T(y):=(x_0,y)$ とおくと，$\mu\circ T^{-1}$ は矩形集合上で
+  $\delta_{x_0}\otimes\mu$ と一致するから（一致定理より）等しく，
+  変数変換公式（補題~\ref{lem:meas-change-of-variables}）より
+  \[
+    \Wass_p(\delta_{x_0},\mu)^p
+    =\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p
+      \,\d(\delta_{x_0}\otimes\mu)(x,y)
+    =\int_{\mathcal{X}}d(x_0,y)^p\,\d\mu(y).  \qedhere
+  \]
+\end{proof}
+
+\begin{lemma}{Lipschitz 関数による $W_1$ の評価}{wt-lipschitz-test}
+  $\mu,\nu\in\Pp{1}(\mathcal{X})$ と Lipschitz 連続な
+  $\psi\colon\mathcal{X}\to\R$（定義~\ref{def:meas-lipschitz}）に対し
+  \[
+    \Bigl|\int_{\mathcal{X}}\psi\,\d\mu-\int_{\mathcal{X}}\psi\,\d\nu\Bigr|
+    \leq\norm{\psi}_{\Lip}\,\Wass_1(\mu,\nu).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $\abs{\psi(x)}\leq\abs{\psi(x_0)}+\norm{\psi}_{\Lip}\,d(x_0,x)$ と
+  $\mu,\nu\in\Pp{1}(\mathcal{X})$ より，両積分は絶対収束する．
+  任意の $\pi\in\Couplings(\mu,\nu)$ に対し，
+  周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  \[
+    \Bigl|\int\psi\,\d\mu-\int\psi\,\d\nu\Bigr|
+    =\Bigl|\int_{\mathcal{X}\times\mathcal{X}}
+      \bigl(\psi(x)-\psi(y)\bigr)\,\d\pi(x,y)\Bigr|
+    \leq\norm{\psi}_{\Lip}
+      \int_{\mathcal{X}\times\mathcal{X}}d(x,y)\,\d\pi(x,y)
+  \]
+  であり，$\pi$ について下限を取ればよい．
+\end{proof}
+
+\section{$W_p$ の Cauchy 列の tightness}
+\label{sec:wt-cauchy}
+
+\begin{lemma}{$W_p$ の Cauchy 列は tight}{wt-cauchy-tight}
+  $(\mu_k)$ を $(\Pp{p}(\mathcal{X}),\Wass_p)$ の Cauchy 列とすると，
+  族 $\{\mu_k\mid k\in\N\}$ は tight である．
+\end{lemma}
+
+\begin{proof}
+  $\Wass_1\leq\Wass_p$（補題~\ref{lem:wt-order}）より，
+  $(\mu_k)$ は $\Wass_1$ の意味でも Cauchy 列である．
+  $\varepsilon>0$ を任意に取る．
+
+  \textbf{(1) 有限個の測度への $\varepsilon^2$-近似．}
+  Cauchy 性から，$N\in\N$ で
+  \[
+    k\geq N\implies\Wass_1(\mu_N,\mu_k)<\varepsilon^2
+  \]
+  なるものを取れる．このとき任意の $k\in\N$ に対し，ある
+  $j\in\{1,\dots,N\}$ で $\Wass_1(\mu_j,\mu_k)<\varepsilon^2$ となる
+  （$k\geq N$ なら $j=N$，$k<N$ なら $j=k$）．
+
+  \textbf{(2) 有限族の tightness と有限被覆．}
+  各 $\{\mu_j\}$ は tight（Prokhorov の定理：
+  定理~\ref{thm:meas-prokhorov}）だから，compact 集合
+  $K_j$ で $\mu_j(K_j)\geq1-\varepsilon$ なるものが取れ，
+  $K:=K_1\cup\cdots\cup K_N$ は compact
+  （定義~\ref{def:meas-continuous-compact}）で
+  $\mu_j(K)\geq1-\varepsilon$（$\forall j\leq N$）をみたす．
+  compact 性より，有限個の点 $x_1,\dots,x_m\in\mathcal{X}$ で
+  $K\subset B_\varepsilon(x_1)\cup\cdots\cup B_\varepsilon(x_m)$
+  となるものが取れる．
+
+  \textbf{(3) Lipschitz テスト関数による一様評価．}
+  $U:=B_\varepsilon(x_1)\cup\cdots\cup B_\varepsilon(x_m)$，
+  $d(x,U):=\inf_{u\in U}d(x,u)$，
+  \[
+    U_\varepsilon:=\{x\in\mathcal{X}\mid d(x,U)<\varepsilon\},
+    \qquad
+    \phi(x):=\max\Bigl\{1-\frac{d(x,U)}{\varepsilon},\,0\Bigr\}
+  \]
+  とおく．三角不等式より $\abs{d(x,U)-d(y,U)}\leq d(x,y)$ だから，
+  $\phi$ は $\norm{\phi}_{\Lip}\leq1/\varepsilon$ の
+  Lipschitz 連続関数で，
+  $\mathbf{1}_U\leq\phi\leq\mathbf{1}_{U_\varepsilon}$ をみたす．
+  また $d(x,U)<\varepsilon$ なら，ある $u\in U$ と $i$ で
+  $d(x,u)<\varepsilon$，$d(u,x_i)<\varepsilon$ だから
+  \[
+    U_\varepsilon\subset
+    B_{2\varepsilon}(x_1)\cup\cdots\cup B_{2\varepsilon}(x_m)
+  \]
+  である．任意の $k$ に対し，(1) の $j$ を取ると，
+  補題~\ref{lem:wt-lipschitz-test}より
+  \[
+    \mu_k(U_\varepsilon)
+    \geq\int\phi\,\d\mu_k
+    \geq\int\phi\,\d\mu_j-\frac{\Wass_1(\mu_j,\mu_k)}{\varepsilon}
+    \geq\mu_j(U)-\varepsilon
+    \geq(1-\varepsilon)-\varepsilon
+    =1-2\varepsilon
+  \]
+  を得る（$\mu_j(U)\geq\mu_j(K)\geq1-\varepsilon$ を用いた）．
+  すなわち，任意の $\varepsilon>0$ に対し有限個の点
+  $x_1,\dots,x_m$ が存在して，すべての $k$ で
+  $\mu_k\bigl(B_{2\varepsilon}(x_1)\cup\cdots\cup
+  B_{2\varepsilon}(x_m)\bigr)\geq1-2\varepsilon$ となる．
+
+  \textbf{(4) スケールを刻んで compact 集合を作る．}
+  各 $\ell\in\N$ に対し，(3) を $\varepsilon$ の代わりに
+  $2^{-(\ell+1)}\varepsilon$ に適用すると，有限個の点
+  $x^{(\ell)}_1,\dots,x^{(\ell)}_{m(\ell)}$ で
+  \[
+    \mu_k\Bigl(\mathcal{X}\setminus
+    \bigcup_{i\leq m(\ell)}B_{2^{-\ell}\varepsilon}\bigl(x^{(\ell)}_i\bigr)
+    \Bigr)\leq2^{-\ell}\varepsilon
+    \qquad(\forall k)
+  \]
+  なるものが取れる．閉集合
+  \[
+    S:=\bigcap_{\ell\in\N}\ \bigcup_{i\leq m(\ell)}
+    \bigl\{x\in\mathcal{X}\bigm|
+    d\bigl(x^{(\ell)}_i,x\bigr)\leq2^{-\ell}\varepsilon\bigr\}
+  \]
+  （有限個の閉集合の合併と，その可算個の共通部分は閉集合）に対し，
+  可算劣加法性より
+  \[
+    \mu_k(\mathcal{X}\setminus S)
+    \leq\sum_{\ell\in\N}2^{-\ell}\varepsilon
+    =\varepsilon
+    \qquad(\forall k)
+  \]
+  である．また任意の $\delta>0$ に対し，$2^{-\ell}\varepsilon<\delta$
+  なる $\ell$ を取れば
+  $S\subset\bigcup_{i\leq m(\ell)}B_\delta\bigl(x^{(\ell)}_i\bigr)$
+  だから，$S$ は全有界（定義~\ref{def:meas-totally-bounded}）である．
+  $\mathcal{X}$ は完備だから，compact 性の判定
+  （定理~\ref{thm:meas-compact-criterion}）より $S$ は compact であり，
+  $\{\mu_k\}$ は tight である．
+\end{proof}
+
+\section{$\Pp{p}(\mathcal{X})$ における弱収束と $W_p$}
+\label{sec:wt-convergence}
+
+\begin{definition}{$\Pp{p}(\mathcal{X})$ における弱収束}{wt-weak-pp}
+  点 $x_0\in\mathcal{X}$ を任意に固定する．
+  $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$ が
+  $\mu\in\Pp{p}(\mathcal{X})$ に
+  \textbf{$\Pp{p}(\mathcal{X})$ の意味で弱収束}するとは，
+  \[
+    \mu_k\Rightarrow\mu
+    \quad\text{かつ}\quad
+    \int_{\mathcal{X}}d(x_0,x)^p\,\d\mu_k(x)
+    \to\int_{\mathcal{X}}d(x_0,x)^p\,\d\mu(x)
+  \]
+  が成り立つことをいう
+  （補題~\ref{lem:wt-weak-pp-equiv}により，この条件は
+  $x_0$ の取り方によらない）．
+\end{definition}
+
+\begin{lemma}{$\Pp{p}$ 弱収束の同値な言い換え}{wt-weak-pp-equiv}
+  $(\mu_k)$ を $\Pp{p}(\mathcal{X})$ の列，
+  $\mu\in\Pp{p}(\mathcal{X})$ とし，$\mu_k\Rightarrow\mu$ とする．
+  $x_0\in\mathcal{X}$ に対し，次は同値である．
+  \begin{enumerate}
+    \item $\displaystyle
+      \int d(x_0,x)^p\,\d\mu_k(x)\to\int d(x_0,x)^p\,\d\mu(x)$．
+    \item $\displaystyle
+      \limsup_{k\to\infty}\int d(x_0,x)^p\,\d\mu_k(x)
+      \leq\int d(x_0,x)^p\,\d\mu(x)$．
+    \item $\displaystyle
+      \lim_{R\to\infty}\limsup_{k\to\infty}
+      \int_{d(x_0,x)\geq R}d(x_0,x)^p\,\d\mu_k(x)=0$．
+  \end{enumerate}
+  さらに，条件 (3) の成立は $x_0$ の取り方によらない．
+\end{lemma}
+
+\begin{proof}
+  以下 $f_R(x):=\min\{d(x_0,x),R\}^p$ とおく．
+  $t\mapsto\min\{t,R\}$ は 1-Lipschitz だから，$f_R$ は
+  有界連続関数であり，$R\to\infty$（$R\in\N$）で
+  $f_R\uparrow d(x_0,\cdot)^p$（各点）となる．
+
+  (1)$\Rightarrow$(3)：$R'>0$ を取る．
+  $d(x_0,x)\geq2R'$ のとき
+  $R'^p\leq d(x_0,x)^p/2^p$ だから
+  \[
+    d(x_0,x)^p-f_{R'}(x)
+    =d(x_0,x)^p-R'^p
+    \geq(1-2^{-p})\,d(x_0,x)^p
+  \]
+  であり，$d(x_0,x)^p-f_{R'}\geq0$（各点）と合わせて
+  \[
+    \int_{d(x_0,x)\geq2R'}d(x_0,x)^p\,\d\mu_k
+    \leq\frac{1}{1-2^{-p}}
+    \int_{\mathcal{X}}\bigl(d(x_0,x)^p-f_{R'}\bigr)\,\d\mu_k
+  \]
+  を得る．(1) と弱収束（$f_{R'}$ は有界連続）より，右辺の
+  $k\to\infty$ での極限は
+  $\frac{1}{1-2^{-p}}\int(d(x_0,x)^p-f_{R'})\,\d\mu$ であり，
+  単調収束定理（定理~\ref{thm:meas-mct}）より
+  この量は $R'\to\infty$ で $0$ に収束する
+  （$\mu\in\Pp{p}(\mathcal{X})$ より $\int d(x_0,x)^p\,\d\mu<\infty$）．
+  左辺の tail は $R$ について単調減少だから，(3) が従う．
+
+  (3)$\Rightarrow$(2)：各 $R>0$ で
+  \[
+    \int d(x_0,x)^p\,\d\mu_k
+    =\int f_R\,\d\mu_k
+    +\int\bigl(d(x_0,x)^p-f_R\bigr)\,\d\mu_k
+    \leq\int f_R\,\d\mu_k
+    +\int_{d(x_0,x)\geq R}d(x_0,x)^p\,\d\mu_k
+  \]
+  だから（第2の被積分関数は $\{d(x_0,x)<R\}$ 上で $0$），
+  $k\to\infty$ の limsup を取り，$f_R\leq d(x_0,\cdot)^p$ より
+  \[
+    \limsup_{k\to\infty}\int d(x_0,x)^p\,\d\mu_k
+    \leq\int d(x_0,x)^p\,\d\mu
+    +\limsup_{k\to\infty}
+    \int_{d(x_0,x)\geq R}d(x_0,x)^p\,\d\mu_k
+  \]
+  を得る．$R\to\infty$ とすれば (3) より (2) が従う．
+
+  (2)$\Rightarrow$(1)：$d(x_0,\cdot)^p$ は非負連続，特に下半連続だから，
+  補題~\ref{lem:meas-weak-lsc}より
+  $\int d(x_0,x)^p\,\d\mu\leq\liminf_k\int d(x_0,x)^p\,\d\mu_k$
+  であり，(2) と合わせて (1) を得る．
+
+  最後に，(3) が $x_0$ によらないことを示す．
+  $x_0'\in\mathcal{X}$ とし，$R\geq2\,d(x_0,x_0')$ とする．
+  $d(x_0',x)\geq R$ のとき，三角不等式より
+  $d(x_0,x)\geq d(x_0',x)-d(x_0,x_0')\geq R/2$ かつ
+  $d(x_0',x)\leq d(x_0,x)+d(x_0,x_0')\leq2\,d(x_0,x)$ だから，
+  \[
+    \int_{d(x_0',x)\geq R}d(x_0',x)^p\,\d\mu_k
+    \leq2^p\int_{d(x_0,x)\geq R/2}d(x_0,x)^p\,\d\mu_k
+  \]
+  である．よって $x_0$ での (3) から $x_0'$ での (3) が従い，
+  対称性より逆も成り立つ．
+\end{proof}
+
+\begin{lemma}{$W_p$ の弱収束に関する下半連続性}{wt-wp-lsc}
+  $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$，$(\nu_k)$ と
+  $\mu,\nu\in\Pp{p}(\mathcal{X})$ が
+  $\mu_k\Rightarrow\mu$，$\nu_k\Rightarrow\nu$（弱収束）をみたすとする．
+  このとき
+  \[
+    \Wass_p(\mu,\nu)\leq\liminf_{k\to\infty}\Wass_p(\mu_k,\nu_k).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $L:=\liminf_k\Wass_p(\mu_k,\nu_k)$ とおく．
+  $L=\infty$ なら示すことはないので $L<\infty$ とし，部分列
+  $(k_j)$ で $\Wass_p(\mu_{k_j},\nu_{k_j})\to L$ なるものを取る．
+  各 $j$ で最適 coupling
+  $\pi_j\in\Couplings(\mu_{k_j},\nu_{k_j})$ を取る
+  （系~\ref{cor:wp-wasserstein-optimal-coupling}）．
+  族 $\{\mu_k\}\cup\{\mu\}$ と $\{\nu_k\}\cup\{\nu\}$ は tight
+  （補題~\ref{lem:meas-convergent-tight}）だから，
+  補題~\ref{lem:wp-plans-tight}より $(\pi_j)$ は tight であり，
+  Prokhorov の定理（定理~\ref{thm:meas-prokhorov}）より
+  部分列に移って $\pi_j\Rightarrow\tilde\pi$ としてよい．
+
+  周辺分布の条件は弱収束で極限に移る：
+  任意の $\varphi\in C_b(\mathcal{X})$ に対し
+  \[
+    \int_{\mathcal{X}}\varphi\,\d(\tilde\pi\circ\mathrm{pr}_1^{-1})
+    =\lim_{j\to\infty}
+    \int_{\mathcal{X}\times\mathcal{X}}\varphi(x)\,\d\pi_j(x,y)
+    =\lim_{j\to\infty}\int_{\mathcal{X}}\varphi\,\d\mu_{k_j}
+    =\int_{\mathcal{X}}\varphi\,\d\mu
+  \]
+  だから（周辺積分公式と $\mu_k\Rightarrow\mu$），
+  有界連続関数による測度の判定（定理~\ref{thm:meas-cb-determines}）
+  より $\tilde\pi\circ\mathrm{pr}_1^{-1}=\mu$，同様に
+  $\tilde\pi\circ\mathrm{pr}_2^{-1}=\nu$，すなわち
+  $\tilde\pi\in\Couplings(\mu,\nu)$ である．
+  コスト汎関数の下半連続性（補題~\ref{lem:wp-cost-lsc}，$h=0$）より
+  \[
+    \Wass_p(\mu,\nu)^p
+    \leq\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\tilde\pi
+    \leq\liminf_{j\to\infty}
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_j
+    =L^p.  \qedhere
+  \]
+\end{proof}
+
+\begin{theorem}{最適性の弱極限での保存}{wt-stability}
+  $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$，$(\nu_k)$ と
+  $\mu,\nu\in\Pp{p}(\mathcal{X})$ が
+  $\mu_k\Rightarrow\mu$，$\nu_k\Rightarrow\nu$（弱収束）をみたし，
+  各 $k$ で $\pi_k\in\Couplings(\mu_k,\nu_k)$ をコスト
+  $d^p$ の最適 coupling とする．
+  $\pi_k\Rightarrow\pi$ ならば，$\pi$ は $(\mu,\nu)$ のコスト
+  $d^p$ の最適 coupling である．
+  （証明は省略する．Villani (2009) Theorem 5.20 の特別な場合である．）
+\end{theorem}
+
+\begin{theorem}{$W_p$ は $\Pp{p}$ の弱収束を距離化する}{wt-metrize}
+  $(\mu_k)$ を $\Pp{p}(\mathcal{X})$ の列，
+  $\mu\in\Pp{p}(\mathcal{X})$ とすると，次は同値である．
+  \begin{enumerate}
+    \item $\Wass_p(\mu_k,\mu)\to0$．
+    \item $\mu_k$ は $\mu$ に $\Pp{p}(\mathcal{X})$ の意味で弱収束する．
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \textbf{(1)$\Rightarrow$(2)．}
+  まず通常の弱収束 $\mu_k\Rightarrow\mu$ を示す．
+  三角不等式より $(\mu_k)$ は $\Wass_p$ の Cauchy 列だから，
+  補題~\ref{lem:wt-cauchy-tight}より $\{\mu_k\}$ は tight である．
+  $(\mu_k)$ の任意の部分列に対し，Prokhorov の定理より
+  弱収束するさらなる部分列 $\mu_{k_j}\Rightarrow\tilde\mu$ が取れる．
+  ここで $\tilde\mu\in\Pp{p}(\mathcal{X})$ である：実際，
+  補題~\ref{lem:meas-weak-lsc}と補題~\ref{lem:wt-dirac}より
+  \[
+    \int d(x_0,x)^p\,\d\tilde\mu
+    \leq\liminf_{j\to\infty}\int d(x_0,x)^p\,\d\mu_{k_j}
+    =\liminf_{j\to\infty}\Wass_p(\delta_{x_0},\mu_{k_j})^p
+  \]
+  であり，右辺は三角不等式と (1) より有限である．
+  $W_p$ の下半連続性（補題~\ref{lem:wt-wp-lsc}，
+  $\nu_k\equiv\mu$）より
+  \[
+    \Wass_p(\tilde\mu,\mu)
+    \leq\liminf_{j\to\infty}\Wass_p(\mu_{k_j},\mu)=0
+  \]
+  だから $\tilde\mu=\mu$ である．
+  すなわち弱収束する部分列の極限はすべて $\mu$ だから，
+  弱収束の部分列判定（補題~\ref{lem:meas-subseq-weak}）より
+  $\mu_k\Rightarrow\mu$ である．
+
+  次にモーメントの条件を示す．$\varepsilon>0$ を取る．
+  冪の摂動不等式（主張~\ref{clm:meas-power-perturb}）と三角不等式
+  $d(x_0,x)\leq d(x_0,y)+d(y,x)$ より，
+  すべての $x,y\in\mathcal{X}$ で
+  \[
+    d(x_0,x)^p
+    \leq(1+\varepsilon)\,d(x_0,y)^p+C_\varepsilon\,d(x,y)^p
+  \]
+  が成り立つ．各 $k$ で最適 coupling
+  $\pi_k\in\Couplings(\mu_k,\mu)$ を取り
+  （系~\ref{cor:wp-wasserstein-optimal-coupling}），
+  この不等式を $\pi_k$ で積分して周辺積分公式を使うと
+  \[
+    \int d(x_0,x)^p\,\d\mu_k
+    \leq(1+\varepsilon)\int d(x_0,y)^p\,\d\mu
+    +C_\varepsilon\,\Wass_p(\mu_k,\mu)^p
+  \]
+  を得る．(1) より
+  \[
+    \limsup_{k\to\infty}\int d(x_0,x)^p\,\d\mu_k
+    \leq(1+\varepsilon)\int d(x_0,y)^p\,\d\mu
+  \]
+  であり，$\varepsilon\to0$ とすれば
+  補題~\ref{lem:wt-weak-pp-equiv}の条件 (2)，したがって
+  モーメントの収束 (1) が従う．
+
+  \textbf{(2)$\Rightarrow$(1)．}
+  各 $k$ で最適 coupling $\pi_k\in\Couplings(\mu_k,\mu)$ を取る．
+  族 $\{\mu_k\}\cup\{\mu\}$ は tight
+  （補題~\ref{lem:meas-convergent-tight}）だから，
+  補題~\ref{lem:wp-plans-tight}より $(\pi_k)$ も tight である．
+
+  対角写像 $\iota(x):=(x,x)$ による像測度
+  $\pi^*:=\mu\circ\iota^{-1}$ とおき，
+  $\pi_k\Rightarrow\pi^*$ を示す．
+  $(\pi_k)$ の弱収束する任意の部分列 $\pi_{k_j}\Rightarrow\tilde\pi$
+  を取ると，補題~\ref{lem:wt-wp-lsc}の証明と同じ周辺分布の極限移行で
+  $\tilde\pi\in\Couplings(\mu,\mu)$ であり，最適性の保存
+  （定理~\ref{thm:wt-stability}）より $\tilde\pi$ は
+  $(\mu,\mu)$ の最適 coupling である．よって
+  \[
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\tilde\pi
+    =\Wass_p(\mu,\mu)^p=0
+  \]
+  だから，$d(x,y)=0$ すなわち $x=y$ が $\tilde\pi$-a.e. で成り立ち，
+  対角集合 $\Delta:=\{(x,x)\mid x\in\mathcal{X}\}$ は
+  $\tilde\pi$ の全質量をもつ．
+  $(A\times B)\cap\Delta=\bigl((A\cap B)\times\mathcal{X}\bigr)\cap\Delta$
+  だから
+  \[
+    \tilde\pi(A\times B)
+    =\tilde\pi\bigl((A\cap B)\times\mathcal{X}\bigr)
+    =\mu(A\cap B)
+    =\pi^*(A\times B)
+    \qquad(A,B\in\Borel(\mathcal{X}))
+  \]
+  であり，一致定理より $\tilde\pi=\pi^*$ である．
+  弱収束する部分列の極限がすべて $\pi^*$ だから，
+  補題~\ref{lem:meas-subseq-weak}より
+  $\pi_k\Rightarrow\pi^*$ である．
+
+  $R>0$ を取る．$d(x,y)\geq R$ のとき，
+  $d(x,x_0)$ と $d(x_0,y)$ の大きい方は $R/2$ 以上かつ
+  $d(x,y)/2$ 以上だから，
+  \[
+    \bigl[d(x,y)^p-R^p\bigr]_+
+    \leq2^p\,d(x,x_0)^p\,\mathbf{1}_{d(x,x_0)\geq R/2}
+    +2^p\,d(x_0,y)^p\,\mathbf{1}_{d(x_0,y)\geq R/2}
+  \]
+  がすべての $(x,y)$ で成り立つ
+  （左辺は $d(x,y)<R$ で $0$，$d(x,y)\geq R$ では
+  $d(x,y)^p\leq2^p\max\{d(x,x_0),d(x_0,y)\}^p$ による）．
+  $f_R(x,y):=\min\{d(x,y),R\}^p$ は有界連続で，
+  $d^p-f_R=[d^p-R^p]_+$ だから，周辺積分公式より
+  \[
+    \Wass_p(\mu_k,\mu)^p
+    =\int f_R\,\d\pi_k
+    +\int\bigl[d^p-R^p\bigr]_+\d\pi_k
+    \leq\int f_R\,\d\pi_k
+    +2^p\!\!\int_{d(x_0,x)\geq R/2}\!\!d(x_0,x)^p\,\d\mu_k
+    +2^p\!\!\int_{d(x_0,y)\geq R/2}\!\!d(x_0,y)^p\,\d\mu
+  \]
+  を得る．$k\to\infty$ とすると，$\pi_k\Rightarrow\pi^*$ と
+  変数変換公式より
+  \[
+    \int f_R\,\d\pi_k
+    \to\int f_R\,\d\pi^*
+    =\int_{\mathcal{X}}\min\{d(x,x),R\}^p\,\d\mu(x)
+    =0
+  \]
+  だから
+  \[
+    \limsup_{k\to\infty}\Wass_p(\mu_k,\mu)^p
+    \leq2^p\limsup_{k\to\infty}
+    \int_{d(x_0,x)\geq R/2}d(x_0,x)^p\,\d\mu_k
+    +2^p\int_{d(x_0,y)\geq R/2}d(x_0,y)^p\,\d\mu
+  \]
+  である．$R\to\infty$ とすると，第1項は
+  補題~\ref{lem:wt-weak-pp-equiv}の条件 (3) より $0$ に収束し，
+  第2項も同じ条件 (3) を定数列 $\mu_k\equiv\mu$
+  （弱収束もモーメントの収束も自明に成り立つ）に適用して
+  $0$ に収束する．
+  よって $\Wass_p(\mu_k,\mu)\to0$ である．
+\end{proof}
+
+\begin{corollary}{$W_p$ の連続性}{wt-continuity}
+  $\mu_k\to\mu$，$\nu_k\to\nu$（いずれも
+  $\Pp{p}(\mathcal{X})$ の意味の弱収束）ならば
+  $\Wass_p(\mu_k,\nu_k)\to\Wass_p(\mu,\nu)$ である．
+\end{corollary}
+
+\begin{proof}
+  定理~\ref{thm:wt-metrize}より
+  $\Wass_p(\mu_k,\mu)\to0$，$\Wass_p(\nu_k,\nu)\to0$ である．
+  三角不等式を2回使うと
+  \[
+    \abs{\Wass_p(\mu_k,\nu_k)-\Wass_p(\mu,\nu)}
+    \leq\Wass_p(\mu_k,\mu)+\Wass_p(\nu_k,\nu)
+    \to0.  \qedhere
+  \]
+\end{proof}
+
+\section{Wasserstein 空間は Polish 空間}
+\label{sec:wt-polish}
+
+\begin{lemma}{有限台測度の係数の摂動}{wt-discrete-perturb}
+  $x_0,\dots,x_N\in\mathcal{X}$ とし，
+  $a_0,\dots,a_N\geq0$，$b_0,\dots,b_N\geq0$ は
+  $\sum_ja_j=\sum_jb_j=1$ をみたすとする．
+  $D:=\max_{j,k}d(x_j,x_k)$ とおくと，
+  $\mu:=\sum_ja_j\delta_{x_j}$，$\nu:=\sum_jb_j\delta_{x_j}$ は
+  $\Pp{p}(\mathcal{X})$ の元であり，
+  \[
+    \Wass_p(\mu,\nu)^p
+    \leq D^p\cdot\frac12\sum_{j=0}^N\abs{a_j-b_j}.
+  \]
+\end{lemma}
+
+\begin{proof}
+  $\mu,\nu$ は測度の非負有限線形結合として確率測度であり
+  （主張~\ref{clm:meas-dirac-integral}），
+  モーメントも同主張より
+  $\int d(x_0,x)^p\,\d\mu=\sum_ja_j\,d(x_0,x_j)^p<\infty$，
+  すなわち $\mu,\nu\in\Pp{p}(\mathcal{X})$ である．
+
+  $m_j:=\min\{a_j,b_j\}$，$s:=1-\sum_jm_j$ とおく．
+  $a_j-m_j=(a_j-b_j)_+$ と $\sum_ja_j=\sum_jb_j$ より
+  \[
+    s=\sum_j(a_j-b_j)_+
+    =\sum_j(b_j-a_j)_+
+    =\frac12\sum_j\abs{a_j-b_j}
+  \]
+  である．$s=0$ なら $\mu=\nu$ で主張は明らかなので $s>0$ とする．
+  \[
+    \pi:=\sum_jm_j\,\delta_{(x_j,x_j)}
+    +\frac1s\sum_{j,k}(a_j-m_j)(b_k-m_k)\,\delta_{(x_j,x_k)}
+  \]
+  とおくと，$\pi$ は $\mathcal{X}\times\mathcal{X}$ 上の非負測度で，
+  第1周辺分布は
+  $\sum_j\bigl(m_j+(a_j-m_j)\bigr)\delta_{x_j}=\mu$
+  （$\sum_k(b_k-m_k)=s$ による），同様に第2周辺分布は $\nu$ だから，
+  $\pi\in\Couplings(\mu,\nu)$ である．
+  コストは，主張~\ref{clm:meas-dirac-integral}より，対角項が $0$ で
+  \[
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi
+    =\frac1s\sum_{j,k}(a_j-m_j)(b_k-m_k)\,d(x_j,x_k)^p
+    \leq\frac{D^p}{s}\cdot s\cdot s
+    =D^p s.  \qedhere
+  \]
+\end{proof}
+
+\begin{theorem}{Wasserstein 空間の位相的性質}{wt-polish}
+  $\mathcal{X}$ を Polish 空間，$1\leq p<\infty$ とすると，
+  $(\Pp{p}(\mathcal{X}),\Wass_p)$ は Polish 空間
+  （完備かつ可分な距離空間）である．
+\end{theorem}
+
+\begin{proof}
+  距離空間であることは命題~\ref{prop:wp-metric}で示した．
+
+  \textbf{可分性．}
+  $D\subset\mathcal{X}$ を可算な稠密集合とし，
+  \[
+    \mathcal{D}
+    :=\Bigl\{\textstyle\sum_{j=0}^Nb_j\delta_{x_j}
+    \Bigm|N\in\N,\ x_j\in D,\ b_j\in\mathbb{Q},\ b_j\geq0,\
+    \textstyle\sum_jb_j=1\Bigr\}
+  \]
+  とおく．$D$ の有限列と有理数係数の組は可算個だから
+  $\mathcal{D}$ は可算である．
+  $\mu\in\Pp{p}(\mathcal{X})$ と $\varepsilon>0$ を任意に取り，
+  $x_0\in D$ を固定する．
+
+  $\{\mu\}$ は tight（定理~\ref{thm:meas-prokhorov}）であり，
+  $d(x_0,\cdot)^p$ は $\mu$-可積分だから，積分の絶対連続性
+  （主張~\ref{clm:meas-abs-continuity}）と合わせて，compact 集合
+  $K\subset\mathcal{X}$ で
+  \[
+    \int_{\mathcal{X}\setminus K}d(x_0,x)^p\,\d\mu(x)
+    \leq\varepsilon^p
+  \]
+  なるものが取れる．
+  $K$ の compact 性と $D$ の稠密性より，有限個の
+  $x_1,\dots,x_N\in D$ で
+  $K\subset B_\varepsilon(x_1)\cup\cdots\cup B_\varepsilon(x_N)$
+  となるものが取れる
+  （$K$ を半径 $\varepsilon/2$ の開球の有限個で覆い，
+  各中心を距離 $\varepsilon/2$ 未満の $D$ の点に取り替えればよい）．
+  \[
+    B'_k:=B_\varepsilon(x_k)\setminus
+    \bigcup_{j<k}B_\varepsilon(x_j)
+    \qquad(k=1,\dots,N)
+  \]
+  とおくと，$B'_k$ は互いに素な Borel 集合で，その合併は
+  $\bigcup_kB_\varepsilon(x_k)\supset K$ である．写像
+  $f\colon\mathcal{X}\to\{x_0,x_1,\dots,x_N\}$ を
+  \[
+    f:=x_k\ \text{on}\ B'_k\ (k=1,\dots,N),
+    \qquad
+    f:=x_0\ \text{on}\
+    E:=\mathcal{X}\setminus\textstyle\bigcup_kB'_k
+  \]
+  と定めると，$f$ は可測（各値の逆像が Borel 集合）で，
+  $x\in B'_k$ では $d(x,f(x))<\varepsilon$，
+  $E\subset\mathcal{X}\setminus K$ 上では $d(x,f(x))=d(x,x_0)$ である．
+
+  $(\Id,f)\colon\mathcal{X}\to\mathcal{X}\times\mathcal{X}$ は可測
+  （主張~\ref{clm:meas-pair-measurable}）だから，像測度
+  $\pi:=\mu\circ(\Id,f)^{-1}$ が定まり，合成則
+  （主張~\ref{clm:meas-pf-compose}）より周辺分布は
+  $\mu$ と $\mu\circ f^{-1}$，すなわち
+  $\pi\in\Couplings(\mu,\,\mu\circ f^{-1})$ である．
+  変数変換公式（補題~\ref{lem:meas-change-of-variables}）より
+  \[
+    \Wass_p(\mu,\,\mu\circ f^{-1})^p
+    \leq\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi
+    =\int_{\mathcal{X}}d\bigl(x,f(x)\bigr)^p\,\d\mu(x)
+    \leq\varepsilon^p
+    +\int_{\mathcal{X}\setminus K}d(x,x_0)^p\,\d\mu
+    \leq2\varepsilon^p
+  \]
+  である．また
+  $\mu\circ f^{-1}
+  =\sum_{k=1}^N\mu(B'_k)\,\delta_{x_k}+\mu(E)\,\delta_{x_0}$
+  は $\{x_0,\dots,x_N\}\subset D$ に台をもつ有限結合である．
+
+  最後に係数を有理数に取り替える．
+  $a_k:=\mu(B'_k)$（$k\geq1$），$a_0:=\mu(E)$ とおき，
+  $k\geq1$ に対し $b_k\in\mathbb{Q}$ を
+  $0\leq b_k\leq a_k$ かつ $a_k-b_k\leq\eta$ に取り，
+  $b_0:=1-\sum_{k\geq1}b_k\geq a_0\geq0$ とおくと，
+  $\sum_k\abs{a_k-b_k}\leq2N\eta$ である．
+  補題~\ref{lem:wt-discrete-perturb}より，$\eta$ を十分小さく取れば
+  \[
+    \Wass_p\Bigl(\mu\circ f^{-1},\,
+    \textstyle\sum_kb_k\delta_{x_k}\Bigr)\leq\varepsilon
+  \]
+  とでき，$\sum_kb_k\delta_{x_k}\in\mathcal{D}$ である．
+  三角不等式より
+  $\Wass_p(\mu,\sum_kb_k\delta_{x_k})
+  \leq2^{1/p}\varepsilon+\varepsilon\leq3\varepsilon$ であり，
+  $\varepsilon>0$ は任意だから $\mathcal{D}$ は
+  $\Pp{p}(\mathcal{X})$ で稠密である．
+
+  \textbf{完備性．}
+  $(\mu_k)$ を $(\Pp{p}(\mathcal{X}),\Wass_p)$ の Cauchy 列とする．
+  補題~\ref{lem:wt-cauchy-tight}より $\{\mu_k\}$ は tight だから，
+  Prokhorov の定理より部分列 $\mu_{k'}\Rightarrow\mu$
+  （弱収束）が取れる．
+
+  $\mu\in\Pp{p}(\mathcal{X})$ を確かめる．
+  Cauchy 列は有界だから，ある $C<\infty$ で
+  $\Wass_p(\mu_1,\mu_k)\leq C$（$\forall k$）である．
+  補題~\ref{lem:wt-dirac}と三角不等式より
+  \[
+    \int d(x_0,x)^p\,\d\mu_k
+    =\Wass_p(\delta_{x_0},\mu_k)^p
+    \leq\bigl(\Wass_p(\delta_{x_0},\mu_1)+C\bigr)^p
+    \qquad(\forall k)
+  \]
+  であり，補題~\ref{lem:meas-weak-lsc}より
+  $\int d(x_0,x)^p\,\d\mu
+  \leq\liminf_{k'}\int d(x_0,x)^p\,\d\mu_{k'}<\infty$，
+  すなわち $\mu\in\Pp{p}(\mathcal{X})$ である．
+
+  $W_p$ の下半連続性（補題~\ref{lem:wt-wp-lsc}，
+  第2引数は定数列 $\mu_\ell$）より，各 $\ell$ で
+  \[
+    \Wass_p(\mu,\mu_\ell)
+    \leq\liminf_{k'\to\infty}\Wass_p(\mu_{k'},\mu_\ell)
+  \]
+  である．$\eta>0$ を取ると，Cauchy 性より，ある $N$ で
+  $k',\ell\geq N\implies\Wass_p(\mu_{k'},\mu_\ell)<\eta$ だから，
+  $\ell\geq N$ で $\Wass_p(\mu,\mu_\ell)\leq\eta$ である．
+  よって $\Wass_p(\mu,\mu_\ell)\to0$，すなわち
+  $(\mu_k)$ は $\Wass_p$ で $\mu$ に収束する．
+\end{proof}
+
+\begin{remark}{文献との対応}{wt-references}
+  定義~\ref{def:wt-weak-pp}と補題~\ref{lem:wt-weak-pp-equiv}は
+  Villani (2009) Definition 6.8 の条件 (i)--(iii) に当たる
+  （同 (iv) は本資料では使わないため省略した）．
+  Villani は (i)--(iv) の同値性の証明を文献
+  （Villani, \emph{Topics in Optimal Transportation}, 2003,
+  Theorem 7.12）に譲るが，本資料では証明を付けた．
+  定理~\ref{thm:wt-metrize}は Theorem 6.9，
+  系~\ref{cor:wt-continuity}は Corollary 6.11，
+  補題~\ref{lem:wt-wp-lsc}は Remark 6.12 の主張，
+  補題~\ref{lem:wt-cauchy-tight}は Lemma 6.14，
+  定理~\ref{thm:wt-polish}は Theorem 6.18 である．
+  補題~\ref{lem:wt-order}は Remark 6.6，
+  補題~\ref{lem:wt-dirac}は同書 p.~99 の評価
+  $\int d(x_0,x)^p\,\d\mu_k=W_p(\delta_{x_0},\mu_k)^p$ に当たる．
+  証明上の置き換えは2つある：
+  Lemma 6.14 の証明で Villani は Kantorovich--Rubinstein 双対性
+  （同 (6.3)）を用いるが，本資料では coupling の定義から直接従う
+  片側の評価（補題~\ref{lem:wt-lipschitz-test}）で置き換えた．
+  Theorem 6.18 の可分性の証明で Villani は Theorem 6.15
+  （重み付き全変動による評価）を用いるが，本資料では
+  補題~\ref{lem:wt-discrete-perturb}の明示的な coupling の構成で
+  置き換えた．
+  また定理~\ref{thm:wt-stability}（Villani Theorem 5.20 の
+  特別な場合）は証明なしで認めた．
+\end{remark}
