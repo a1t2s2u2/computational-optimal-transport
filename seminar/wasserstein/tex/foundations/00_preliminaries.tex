@@ -746,6 +746,23 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
   例えば Dudley (2002) §5.1 参照．）
 \end{theorem}
 
+\begin{corollary}{有限和の Minkowski の不等式}{meas-minkowski-finite}
+  $1\leq p<\infty$ と $a_i,b_i\geq0$（$i=1,\dots,D$）に対し
+  \[
+    \Bigl(\sum_{i=1}^D(a_i+b_i)^p\Bigr)^{1/p}
+    \leq\Bigl(\sum_{i=1}^Da_i^p\Bigr)^{1/p}
+    +\Bigl(\sum_{i=1}^Db_i^p\Bigr)^{1/p}.
+  \]
+\end{corollary}
+
+\begin{proof}
+  $\mu:=\sum_{i=1}^D\delta_i$（$\R$ 上の Dirac 測度の和）は
+  主張~\ref{clm:meas-dirac-integral}より測度で，非負可測な $f$ に対し
+  $\int f\,\d\mu=\sum_if(i)$ である．
+  $f(i)=a_i$，$g(i)=b_i$（他の点では $0$）として
+  Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用すればよい．
+\end{proof}
+
 \section{像測度}
 
 \begin{definition}{像測度}{meas-pushforward}
@@ -854,7 +871,8 @@ $d_{\mathcal{X}\times \mathcal{Y}}((x,y),(x',y')):=\max\{d_X(x,x'),d_Y(y,y')\}$
 また $\mathcal{X},\mathcal{Y}$ が完備なら $\mathcal{X}\times \mathcal{Y}$ も完備であるから，
 $\mathcal{X},\mathcal{Y}$ が Polish 空間なら $\mathcal{X}\times \mathcal{Y}$ も Polish 空間である．
 3個以上の有限個の直積 $\mathcal{X}_1\times\cdots\times\mathcal{X}_k$ にも
-同様に $\max$ 距離を入れ，可分性は保たれる．
+同様に $\max$ 距離を入れ，可分性・完備性は保たれる
+（2因子の場合の繰り返し）．
 
 \begin{remark}{直積空間の Borel $\sigma$-代数（前提とする事実）}{meas-borel-product}
   $\mathcal{X},\mathcal{Y}$ が可分距離空間のとき，
@@ -1043,3 +1061,38 @@ $\lambda_1$ は $\sigma$-有限である（$\R=\bigcup_n[-n,n]$）．
   証明は省略する．一意性は矩形集合が $\pi$-系をなすことと
   一致定理（定理~\ref{thm:meas-uniqueness}）から従う．）
 \end{theorem}
+
+\begin{claim}{Markov 核による混合測度}{meas-kernel-mixture}
+  $(\Theta,\mathcal{A})$ を可測空間，$\mathcal{X}$ を距離空間，
+  $K$ を $\Theta$ から $\mathcal{X}$ への Markov 核
+  （定理~\ref{thm:meas-disintegration}の (i)(ii) をみたす写像），
+  $P$ を $(\Theta,\mathcal{A})$ 上の確率測度とする．このとき
+  \[
+    (K_*P)(B):=\int_\Theta K(\theta,B)\,\d P(\theta)
+    \qquad(B\in\Borel(\mathcal{X}))
+  \]
+  は $\mathcal{X}$ 上の確率測度（$K$ による $P$ の\textbf{混合測度}）を定め，
+  非負可測な $f\colon\mathcal{X}\to[0,+\infty]$ に対し
+  \[
+    \int_{\mathcal{X}}f\,\d(K_*P)
+    =\int_\Theta\Bigl(\int_{\mathcal{X}}f(x)\,K(\theta,\d x)\Bigr)\d P(\theta)
+  \]
+  が成り立つ（内側の積分は $\theta$ の可測関数を定める）．
+\end{claim}
+
+\begin{proof}
+  互いに素な $(B_k)$ に対し，各 $K(\theta,\cdot)$ の
+  $\sigma$-加法性より
+  $K(\theta,\bigcup_kB_k)=\lim_n\sum_{k\leq n}K(\theta,B_k)$
+  （単調増加）だから，単調収束定理（定理~\ref{thm:meas-mct}）より
+  $(K_*P)(\bigcup_kB_k)=\sum_k(K_*P)(B_k)$ である．
+  全測度は $(K_*P)(\mathcal{X})=\int1\,\d P=1$ である．
+
+  積分公式は，$f=\mathbf{1}_B$ では定義そのもので，
+  非負単関数へは積分の線形性で拡張される．
+  非負可測な $f$ には，非負単関数列 $s_n\uparrow f$ を取り
+  （注意~\ref{rem:meas-measurable-ops}），両辺に単調収束定理を
+  適用すればよい（$\theta\mapsto\int s_n\,\d K(\theta,\cdot)$ は
+  $K(\theta,B)$ の線形結合として可測であり，その各点極限
+  $\theta\mapsto\int f\,\d K(\theta,\cdot)$ も可測である）．
+\end{proof}

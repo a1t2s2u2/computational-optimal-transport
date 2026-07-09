@@ -58,6 +58,11 @@ const CHAPTERS = [
     nav: "Gaussian と集中", eyebrow: "3. Concentration",
     title: "Talagrand の不等式と Gaussian 測度の集中",
   }],
+  ["main/04_latent.tex", "04-latent.md", {
+    id: "latent", group: "main",
+    nav: "潜在空間への応用", eyebrow: "4. Latent OT",
+    title: "応用：潜在空間の最適輸送幾何",
+  }],
   ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {
     id: "found-preliminaries", group: "appendix",
     nav: "距離空間と測度", eyebrow: "付録 A. Metric Spaces & Measures",
