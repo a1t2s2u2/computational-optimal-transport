@@ -89,9 +89,6 @@
     \Wass_p(\mu,\nu)\leq\sqrt{\frac{2\,H_\nu(\mu)}{\lambda}}
   \]
   が成り立つことをいう．
-  この形の不等式は\textbf{輸送コスト不等式}あるいは
-  \textbf{Talagrand 型不等式}とよばれる
-  （後者の呼称は $p=2$ の場合に限ることもある）．
 \end{definition}
 
 \begin{remark}{$p$ についての強さ（Villani Rem 22.2）}{tc-tp-order}
@@ -100,8 +97,7 @@
   $\nu\in\Pp{q}(\mathcal{X})$ が $T_q(\lambda)$ をみたせば，
   任意の $\mu\in\Pp{q}(\mathcal{X})$ で
   $\Wass_p(\mu,\nu)\leq\sqrt{2H_\nu(\mu)/\lambda}$ も成り立つ．
-  すなわち $T_p$ 不等式は $p$ が大きいほど強い
-  （Villani (2009) Remark 22.2）．
+  すなわち $T_p$ 不等式は $p$ が大きいほど強い．
 \end{remark}
 
 \section{Marton の方法による集中不等式}
@@ -270,9 +266,7 @@ $d(x,y):=\norm{x-y}$ を入れる
   実数の完備性（注意~\ref{rem:meas-real-facts}）から
   各座標が収束するので全体も収束する．
   また $\mathbb{Q}^N$ は可算な稠密集合である．
-  よって $\R^N$ は Polish 空間であり，
-  第\ref{ch:wasserstein-metrics}章--第\ref{ch:topology}章と
-  本章前節までの理論がそのまま適用できる．
+  よって $\R^N$ は Polish 空間である．
   なお，付録の直積距離（$\max$ 距離）と Euclid 距離は
   \[
     \max_i\abs{x_i-y_i}\leq\norm{x-y}\leq\sqrt{N}\max_i\abs{x_i-y_i}
@@ -392,8 +386,6 @@ $d(x,y):=\norm{x-y}$ を入れる
   同定理の他の同値条件は $T_p$ の双対定式化
   （Proposition 22.3．Villani Chapter 5 の双対性定理
   Theorem 5.26 に依存）を要するため扱わない．
-  定理~\ref{thm:tc-talagrand}は本資料で唯一証明を省略した主結果であり，
-  出典は定理中に記した．
   なお系~\ref{cor:tc-gaussian-concentration}の定数 $1/8$ は
   最良ではない（最良の Gaussian 集中は $e^{-r^2/2}$：
   Villani (2009) (22.1)--(22.2)）．

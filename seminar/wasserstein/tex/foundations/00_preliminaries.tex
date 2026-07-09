@@ -71,19 +71,6 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
   \end{itemize}
 \end{remark}
 
-\begin{claim}{実数列の部分列原理}{meas-subseq-principle}
-  実数列 $(a_k)$ と $a\in\R$ について，
-  $(a_k)$ の任意の部分列が，$a$ に収束するさらなる部分列をもつならば，
-  $a_k\to a$ である．
-\end{claim}
-
-\begin{proof}
-  $a_k\to a$ でないとすると，ある $\varepsilon>0$ と部分列 $(a_{k_j})$ で，
-  すべての $j$ において $\abs{a_{k_j}-a}\geq\varepsilon$
-  となるものが取れる．この部分列のどの部分列も $a$ に収束しないから，
-  仮定に反する．
-\end{proof}
-
 \begin{claim}{冪の摂動不等式}{meas-power-perturb}
   $p\geq1$ と $\varepsilon>0$ に対し，定数 $C_\varepsilon>0$ が存在して，
   すべての $a,b\geq0$ で
@@ -122,8 +109,6 @@ Villani \emph{Optimal Transport} (2009) 第1章を参照．
     \item （対称性）$d(x,y)=d(y,x)$，
     \item （三角不等式）$d(x,z)\leq d(x,y)+d(y,z)$．
   \end{enumerate}
-  値域を $[0,\infty)$ としたことに注意する：
-  距離の値は非負かつ有限である．
 \end{definition}
 
 \begin{definition}{開球と開集合}{meas-open-ball}
@@ -546,12 +531,15 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
 
 \begin{proof}
   $f\in C_b(\mathcal{X})$ を任意に取り，$a_k:=\int f\,\d\eta_k$ とおく．
-  $(a_k)$ の任意の部分列 $(a_{k_j})$ に対し，tightness と
-  Prokhorov の定理より $(\eta_{k_j})$ は弱収束する部分列をもち，
-  その極限は仮定より $\eta$ だから，対応する $(a_{k_j})$ の部分列は
-  $\int f\,\d\eta$ に収束する．
-  部分列原理（主張~\ref{clm:meas-subseq-principle}）より
-  $a_k\to\int f\,\d\eta$，すなわち $\eta_k\Rightarrow\eta$ である．
+  $a_k\to\int f\,\d\eta$ でないとすると，ある $\varepsilon>0$ と
+  部分列 $(a_{k_j})$ で，すべての $j$ において
+  $\abs{a_{k_j}-\int f\,\d\eta}\geq\varepsilon$ となるものが取れる．
+  一方，tightness と Prokhorov の定理より
+  $(\eta_{k_j})$ は弱収束する部分列をもち，その極限は仮定より
+  $\eta$ だから，対応する $(a_{k_j})$ の部分列は
+  $\int f\,\d\eta$ に収束する．これは矛盾である．
+  よって $a_k\to\int f\,\d\eta$，
+  すなわち $\eta_k\Rightarrow\eta$ である．
 \end{proof}
 
 \begin{definition}{下半連続関数と上半連続関数}{meas-lsc}
@@ -776,9 +764,6 @@ $\mathcal{X}$ 上の Borel 確率測度全体を $\Prob(\mathcal{X})$ と書く�
   と定める．$\mu\circ T^{-1}$ を $T$ による $\mu$ の\textbf{像測度}という．
   ここで $T^{-1}(B):=\{\omega\in\Omega\mid T(\omega)\in B\}$ は
   集合 $B$ の\textbf{逆像}であり，$T$ の可逆性は仮定しない．
-  直感的には，$\mu\circ T^{-1}$ は
-  「$\mu$ に従って分布する点 $\omega$ を $T$ で送ったときの，
-  $T(\omega)$ の分布」である．
   逆像は互いに素な可算合併を互いに素な可算合併に写すから，
   $\mu\circ T^{-1}$ の $\sigma$-加法性は $\mu$ のそれから従い，
   $\mu\circ T^{-1}$ は $(\Omega',\mathcal{A}')$ 上の測度である．
@@ -980,7 +965,6 @@ $\R$ 上の \textbf{Lebesgue 測度} $\lambda_1$
 $\Borel(\R)$ 上の測度）は既知とする．
 また，連続関数の（広義）Riemann 積分と Lebesgue 積分の一致，
 および微積分学の基本定理も既知として用いる．
-$\lambda_1$ は $\sigma$-有限である（$\R=\bigcup_n[-n,n]$）．
 
 \section{直積測度と測度の分解}
 

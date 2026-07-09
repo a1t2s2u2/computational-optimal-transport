@@ -65,8 +65,7 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
     2^{p-1}\left(\int_\mathcal{X} d(x,x_0)^p\,\d\mu(x)+d(x_0,x_0')^p\right)
     <\infty
   \]
-  を得る（第1項は仮定より，第2項は距離の値が有限であることより有限）．
-  $x_0$ と $x_0'$ を入れ替えれば逆向きの含意も同様に従う．
+  を得る．$x_0$ と $x_0'$ を入れ替えれば逆向きの含意も同様に従う．
 \end{proof}
 
 \begin{definition}{Coupling（Villani Def 1.1）}{wp-coupling}
@@ -127,11 +126,9 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 \end{lemma}
 
 \begin{proof}
-  直積測度 $\mu\otimes\nu$（定理~\ref{thm:meas-product}）は，
-  主張~\ref{clm:meas-product-marginals}より
-  第1周辺分布 $\mu$・第2周辺分布 $\nu$ をもつから，
-  $\mu\otimes\nu\in\Couplings(\mu,\nu)$，
-  特に $\Couplings(\mu,\nu)\neq\emptyset$ である．
+  $\mu\otimes\nu\in\Couplings(\mu,\nu)$
+  （定理~\ref{thm:meas-product}，主張~\ref{clm:meas-product-marginals}）
+  より $\Couplings(\mu,\nu)\neq\emptyset$ である．
 
   次に $\pi\in\Couplings(\mu,\nu)$ を任意に取る．
   各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(x_0,y)$ に，
@@ -287,10 +284,9 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{theorem}
 
 \begin{proof}
-  1点集合 $\{\mu\}$ は弱位相で precompact
-  （定数列 $\mu,\mu,\dots$ は $\mu$ 自身に弱収束する）だから，
-  Prokhorov の定理（定理~\ref{thm:meas-prokhorov}）より
-  tight であり，$\{\nu\}$ も同様である．
+  1点集合 $\{\mu\}$，$\{\nu\}$ は tight である
+  （Prokhorov の定理~\ref{thm:meas-prokhorov}．
+  1点集合は明らかに precompact）．
   よって補題~\ref{lem:wp-plans-tight}より，$\Couplings(\mu,\nu)$ は
   $\Prob(\mathcal{X}\times\mathcal{Y})$ で tight である
   （直積 $\mathcal{X}\times\mathcal{Y}$ は Polish 空間：
@@ -369,8 +365,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
   $\pi$-可積分である
   （$c$ の可測性は半連続性による：注意~\ref{rem:meas-lsc-facts}）．
-  したがって $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まる
-  （Villani (2009) Remark 4.2）．
+  したがって $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まる．
 \end{remark}
 
 \begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
@@ -601,8 +596,6 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
     =\Wass_p(\mu,\nu)+\Wass_p(\nu,\xi)
   \]
   が従う．
-
-  以上 (0)--(3) より，$\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
 \end{proof}
 
 \begin{definition}{Wasserstein 空間（Villani Def 6.4）}{wp-wasserstein-space}
@@ -612,10 +605,9 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{definition}
 
 \begin{remark}{文献との対応}{wp-metric-references}
-  最適 coupling の存在定理（定理~\ref{thm:wp-optimal-coupling-existence}）は
-  Villani (2009) Theorem 4.1 であり，
-  補題~\ref{lem:wp-cost-lsc}，\ref{lem:wp-plans-tight}は
-  それぞれ同 Lemma 4.3，4.4，証明も同書のものに従った．
+  定理~\ref{thm:wp-optimal-coupling-existence}と
+  補題~\ref{lem:wp-cost-lsc}，\ref{lem:wp-plans-tight}の証明は
+  Villani (2009) に従った．
   距離性（命題~\ref{prop:wp-metric}）の証明は
   同 Chapter 6 の ``Proof that $W_p$ satisfies the axioms of a distance''
   に従い，接着補題（補題~\ref{lem:wp-gluing}）は
