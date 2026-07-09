@@ -19,8 +19,7 @@ Symmetry and Geometry in Neural Representations）の枠組みを，
 
 \begin{definition}{デコーダ・エンコーダ・集約事後分布}{lt-vae}
   \textbf{デコーダ}とは，$Z$ から $\mathcal{X}$ への Markov 核
-  $K$（各 $z$ で $K(z,\cdot)\in\Prob(\mathcal{X})$，
-  各 $B$ で $z\mapsto K(z,B)$ が可測）のことをいい，
+  $K$（定理~\ref{thm:meas-disintegration}の (i)(ii)）のことをいい，
   $K(z,\cdot)$ を潜在点 $z$ の\textbf{デコーダ分布}とよぶ．
   prior $\gamma^{(d)}$（標準 Gaussian 測度：
   定義~\ref{def:tc-gaussian}）に対し，混合測度
@@ -78,7 +77,7 @@ $\int_{\mathcal{X}}H_{\gamma^{(d)}}\bigl(Q(x,\cdot)\bigr)\,\d P(x)$
     \int_\Theta\rho(\theta,x)\log\rho(\theta,x)\,\d P(\theta)
     \geq\bar\rho(x)\log\bar\rho(x)
   \]
-  を示す（$u\log u$ の $u=0$ での値は $0$）．
+  を示す．
   $m:=\bar\rho(x)>0$ のとき：$t\log t\geq t-1$
   （注意~\ref{rem:meas-real-facts}）を $t=u/m$ に適用して
   $m$ 倍すれば，$u\geq0$ で
@@ -161,7 +160,7 @@ $\int_{\mathcal{X}}H_{\gamma^{(d)}}\bigl(Q(x,\cdot)\bigr)\,\d P(x)$
 \label{sec:lt-1d}
 
 Roy--Hauberg のアルゴリズムは，画素ごとの1次元分布に対する
-$W_1$ の閉形式に基づく．次の定理は証明なしで認める．
+$W_1$ の閉形式に基づく．
 
 \begin{theorem}{1次元の最適輸送（Villani (2003) Thm 2.18）}{lt-1d}
   $\mu,\nu\in\Prob(\R)$（$\R$ は Euclid 距離）の
@@ -309,6 +308,14 @@ $(\mathcal{X},d_p)$ は Polish 空間で，$\Borel(\mathcal{X})$ は
 \section{引き戻し擬距離と曲線の長さ}
 \label{sec:lt-pullback}
 
+\begin{definition}{擬距離}{lt-pseudometric}
+  集合 $M$ 上の関数 $\rho\colon M\times M\to[0,\infty)$ が
+  対称性・三角不等式（定義~\ref{def:meas-metric-space}の (2)(3)）と
+  $\rho(z,z)=0$（$\forall z\in M$）をみたすとき，
+  $\rho$ を $M$ 上の\textbf{擬距離}という
+  （距離との違いは，$z\neq z'$ でも $\rho(z,z')=0$ があり得る点である）．
+\end{definition}
+
 \begin{definition}{デコーダによる引き戻し擬距離}{lt-pullback}
   $1\leq p<\infty$ とし，デコーダ $K$ は各 $z\in Z$ で
   $K(z,\cdot)\in\Pp{p}(\mathcal{X})$ をみたすとする
@@ -333,8 +340,12 @@ $(\mathcal{X},d_p)$ は Polish 空間で，$\Borel(\mathcal{X})$ は
   一致の公理は，$\rho_K(z,z')=0\iff K(z,\cdot)=K(z',\cdot)$ による．
 \end{proof}
 
-\begin{definition}{曲線の長さと内在距離}{lt-length}
-  集合 $M$ 上の擬距離 $\rho$ と写像 $\gamma\colon[0,1]\to M$，
+\begin{definition}{曲線の長さと内在擬距離}{lt-length}
+  $(M,\rho)$ を擬距離空間とする．
+  写像 $\gamma\colon[0,1]\to M$ が \textbf{$\rho$-連続}であるとは，
+  各 $t\in[0,1]$ で $s\to t$ のとき
+  $\rho(\gamma(s),\gamma(t))\to0$ となることをいう．
+  $\rho$-連続な $\gamma$ と
   分割 $\Delta\colon0=t_0<t_1<\cdots<t_K=1$ に対し
   \[
     S(\gamma;\Delta):=\sum_{k=1}^K
@@ -342,22 +353,22 @@ $(\mathcal{X},d_p)$ は Polish 空間で，$\Borel(\mathcal{X})$ は
     \qquad
     L(\gamma):=\sup_\Delta S(\gamma;\Delta)\in[0,+\infty]
   \]
-  とおき，$L(\gamma)$ を $\gamma$ の\textbf{長さ}という．
-  また
+  とおき，$L(\gamma)$ を $\gamma$ の\textbf{長さ}という．また
   \[
     \hat\rho(z,z')
     :=\inf\bigl\{L(\gamma)\bigm|
-    \gamma\colon[0,1]\to M,\ \gamma(0)=z,\ \gamma(1)=z'\bigr\}
+    \gamma\colon[0,1]\to M\text{ は }\rho\text{-連続},\
+    \gamma(0)=z,\ \gamma(1)=z'\bigr\}
   \]
-  を $\rho$ の定める\textbf{内在擬距離}という．
+  を $\rho$ の定める\textbf{内在擬距離}という
+  （結ぶ曲線がないときは $\inf\emptyset=+\infty$：
+  定義~\ref{def:meas-sup-inf}）．
 \end{definition}
 
 \begin{claim}{長さの基本性質}{lt-length-props}
   \begin{enumerate}
     \item 分割 $\Delta'$ が $\Delta$ の細分ならば
       $S(\gamma;\Delta)\leq S(\gamma;\Delta')$ である．
-      特に，任意の分割列に沿った $S(\gamma;\cdot)$ の値は
-      つねに $L(\gamma)$ 以下である．
     \item $L(\gamma)\geq\rho\bigl(\gamma(0),\gamma(1)\bigr)$，
       したがって $\hat\rho\geq\rho$ である．
   \end{enumerate}
@@ -373,12 +384,47 @@ $(\mathcal{X},d_p)$ は Polish 空間で，$\Borel(\mathcal{X})$ は
   曲線について下限を取れば $\hat\rho\geq\rho$ である．
 \end{proof}
 
-Roy--Hauberg の式 (3)(7) は，一様分割
+\begin{claim}{内在擬距離は三角不等式をみたす}{lt-intrinsic}
+  $\hat\rho$ は対称で，$\hat\rho(z,z)=0$，かつ
+  \[
+    \hat\rho(z,z'')\leq\hat\rho(z,z')+\hat\rho(z',z'')
+    \qquad(\forall z,z',z''\in M)
+  \]
+  をみたす（値は $[0,+\infty]$ に取る）．
+\end{claim}
+
+\begin{proof}
+  定数曲線は $\rho$-連続で長さ $0$ だから $\hat\rho(z,z)=0$，
+  時間反転 $t\mapsto\gamma(1-t)$ は $\rho$-連続性と分割和を保つ
+  （$\rho$ の対称性）から $\hat\rho$ は対称である．
+  三角不等式を示す．右辺が $+\infty$ なら明らかなので，
+  $\rho$-連続な $\gamma_1$（$z$ から $z'$）と
+  $\gamma_2$（$z'$ から $z''$）を任意に取る．連結
+  \[
+    \gamma(t):=
+    \begin{cases}
+      \gamma_1(2t)&(0\leq t\leq1/2),\\
+      \gamma_2(2t-1)&(1/2\leq t\leq1)
+    \end{cases}
+  \]
+  は $\rho$-連続である（$t=1/2$ では
+  $\gamma_1(1)=\gamma_2(0)=z'$ による）．
+  任意の分割 $\Delta$ に対し，$1/2$ を加えた細分の和は
+  主張~\ref{clm:lt-length-props} (1) より $S(\gamma;\Delta)$ 以上で，
+  $1/2$ で二分すると $\gamma_1,\gamma_2$ の分割和の和になるから
+  $S(\gamma;\Delta)\leq L(\gamma_1)+L(\gamma_2)$ である．
+  分割について上限を取って
+  $L(\gamma)\leq L(\gamma_1)+L(\gamma_2)$，
+  さらに $\gamma_1,\gamma_2$ について下限を取ればよい．
+\end{proof}
+
+Roy--Hauberg の式 (7) は，$\rho=\rho_K$（$p=1$）に対する一様分割
 $\Delta_K\colon t_k=k/K$ に沿った和 $S(\gamma;\Delta_K)$ の
 $K\to\infty$ での極限として潜在空間の曲線の「長さ」を定め，
-その最小化元（3次スプラインでパラメータ付けして数値最適化する）を
-\textbf{測地線}とよぶ．主張~\ref{clm:lt-length-props} (1) より，
-これらの和はつねに本定義の長さ $L(\gamma)$ を下から近似する．
+その最小化元（実装上は曲線を3次スプラインでパラメータ付けし，
+曲線エネルギーを数値最適化する）を\textbf{測地線}とよぶ．
+長さの定義（分割和の上限）より，式 (7) の和はつねに
+$L(\gamma)$ 以下である．
 
 \begin{remark}{文献との対応と展望}{lt-references}
   本章は Roy--Hauberg（2022，前掲）の数学的基盤の定式化である．
@@ -389,10 +435,9 @@ $K\to\infty$ での極限として潜在空間の曲線の「長さ」を定め�
   （式 (2)(3) の Fisher--Rao/KL 幾何は本資料の範囲外である）．
   なお同論文の prior は一般の $p(z)$ だが，本章は
   系~\ref{cor:lt-elbo-w2}で用いるため標準 Gaussian に固定した．
-  集約事後分布も同論文にはない本章の補足概念である．
-  系~\ref{cor:lt-elbo-w2}は同論文にはない補足であり，
-  ELBO の正則化項が潜在空間の輸送的ずれを制御することを，
-  第\ref{ch:concentration}章の Talagrand の不等式から導いた．
+  集約事後分布と系~\ref{cor:lt-elbo-w2}
+  （第\ref{ch:concentration}章の Talagrand の不等式による）は
+  同論文にはない本章の補足である．
 
   残る整備項目：
   (a) 一様分割の和の極限が $L(\gamma)$ に一致すること
