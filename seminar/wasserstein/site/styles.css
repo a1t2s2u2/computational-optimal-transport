@@ -24,7 +24,7 @@
   --orange: #ea580c;
   --orange-bg: #fff7ed;
 
-  --font-serif: "STIX Two Text", "Times New Roman", Times, "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-sans: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif;
   --font-mono: "SF Mono", "Fira Code", ui-monospace, monospace;
 
@@ -476,7 +476,7 @@ input {
 }
 
 .chapter-hero__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(24px, 3.5vw, 34px);
   font-weight: 800;
   line-height: 1.2;
@@ -495,7 +495,7 @@ input {
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   line-height: 1.35;
   margin: 0;
@@ -653,7 +653,7 @@ strong {
 
 .proof summary {
   cursor: pointer;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
   color: var(--muted);
@@ -709,7 +709,7 @@ strong {
 .fold summary {
   cursor: pointer;
   padding: 12px 16px;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 15px;
   color: var(--ink);
@@ -1221,7 +1221,7 @@ strong {
 }
 
 .landing__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: clamp(36px, 7vw, 64px);
   font-weight: 900;
   line-height: 1.1;
@@ -1294,7 +1294,7 @@ strong {
 }
 
 .toc-card__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 18px;
   margin: 6px 0 0;

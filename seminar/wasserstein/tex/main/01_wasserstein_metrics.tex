@@ -156,9 +156,6 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 
 下限 $\Wass_p(\mu,\nu)$ を達成する coupling が存在することを，
 Villani (2009) Theorem 4.1 の形で示す．
-鍵は，弱収束の位相に関する
-(a) コスト汎関数の下半連続性（補題~\ref{lem:wp-cost-lsc}）と
-(b) coupling 全体の tightness（補題~\ref{lem:wp-plans-tight}）である．
 以下，Polish 空間とその上の Borel 確率測度の組を
 \textbf{Polish 確率空間}とよぶ．
 また拡張実数値関数 $a$ に対し，$a\in L^1(\mu)$ は
@@ -358,16 +355,6 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   よって $\pi^*$ は最小値を達成する．
 \end{proof}
 
-\begin{remark}{下界条件の役割（Villani Rem 4.2）}{wp-cost-lower-bound}
-  仮定 $c\geq a+b$ により，任意の $\pi\in\Couplings(\mu,\nu)$ で
-  $c$ の負部分 $c^-:=\max\{-c,0\}$ は
-  $c^-\leq(a+b)^-\leq\abs{a(x)}+\abs{b(y)}$ をみたし，
-  周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
-  $\pi$-可積分である
-  （$c$ の可測性は半連続性による：注意~\ref{rem:meas-lsc-facts}）．
-  したがって $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まる．
-\end{remark}
-
 \begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
   $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とする．
   このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して
@@ -551,9 +538,6 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   したがって $\mu=\nu$ である．
 
   \textbf{(3) 三角不等式．}
-  方針：最適 coupling $\pi,\sigma$ を gluing lemma で貼り合わせ，
-  $(x,z)$-周辺分布を $\mu$ から $\xi$ への coupling として使う．
-
   $\mu,\nu,\xi\in\Pp{p}(\mathcal{X})$ を任意に取る．
   系~\ref{cor:wp-wasserstein-optimal-coupling}より，
   最適 coupling $\pi\in\Couplings(\mu,\nu)$ と

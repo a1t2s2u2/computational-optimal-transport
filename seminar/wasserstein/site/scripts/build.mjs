@@ -494,9 +494,6 @@ function mathJaxScript() {
             inner: ["\\\\langle #1,\\\\,#2\\\\rangle", 2],
           }
         },
-        // Villani (Springer Grundlehren) の Times 系組版に合わせ、
-        // 数式フォントは TeX Gyre Termes（Times クローン）を使う
-        output: { font: "mathjax-termes" },
         svg: { fontCache: "global" }
       };
     </script>`;
@@ -582,7 +579,7 @@ function chapterTemplate(section, sections, index) {
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${relUrl(curOut, "styles.css")}" />
     ${mathJaxScript()}
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <script>
       window.__blocks = ${blocksJson};
@@ -775,7 +772,7 @@ function graphTemplate(sections) {
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css" />
     ${mathJaxScript()}
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-svg.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
