@@ -498,23 +498,6 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   よって $\Wass_p(\mu_k,\mu)\to0$ である．
 \end{proof}
 
-\begin{corollary}{$W_p$ の連続性（Villani Cor 6.11）}{wt-continuity}
-  $\mu_k\to\mu$，$\nu_k\to\nu$（いずれも
-  $\Pp{p}(\mathcal{X})$ の意味の弱収束）ならば
-  $\Wass_p(\mu_k,\nu_k)\to\Wass_p(\mu,\nu)$ である．
-\end{corollary}
-
-\begin{proof}
-  定理~\ref{thm:wt-metrize}より
-  $\Wass_p(\mu_k,\mu)\to0$，$\Wass_p(\nu_k,\nu)\to0$ である．
-  三角不等式を2回使うと
-  \[
-    \abs{\Wass_p(\mu_k,\nu_k)-\Wass_p(\mu,\nu)}
-    \leq\Wass_p(\mu_k,\mu)+\Wass_p(\nu_k,\nu)
-    \to0.  \qedhere
-  \]
-\end{proof}
-
 \section{Wasserstein 空間は Polish 空間}
 \label{sec:wt-polish}
 
@@ -710,4 +693,6 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   置き換えた．
   また定理~\ref{thm:wt-stability}（Villani Theorem 5.20 の
   特別な場合）は証明なしで認めた．
+  Corollary 6.11（$W_p$ の $2$ 変数連続性）は
+  本資料では用いないため扱わない．
 \end{remark}
