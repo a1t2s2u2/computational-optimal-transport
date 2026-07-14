@@ -190,33 +190,78 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{lemma}
 
 \begin{proof}
-  $c\geq0$ の場合は，空間 $\mathcal{X}\times\mathcal{Y}$ 上で
-  補題~\ref{lem:meas-weak-lsc}を $f=c$ に適用すればよい．
-
-  一般の場合は，$c$ を $c-h$ に置き換えて $c\geq0$ の場合に帰着する．
+  $g:=c-h$ とおく（$h=-\infty$ の点では $g:=+\infty$ と読む）．
   $-h$ は $(-\infty,+\infty]$ に値をもつ下半連続関数だから，
-  $c-h$ は非負下半連続である（注意~\ref{rem:meas-lsc-facts}．
-  $h=-\infty$ の点では $c-h=+\infty$ と読む）．
-  $h$ は $\pi$-a.e. で有限（$h\in L^1(\pi)$）だから
-  $c=(c-h)+h$ が $\pi$-a.e. で成り立つ．
+  $g$ は非負下半連続である（注意~\ref{rem:meas-lsc-facts}）．
+
+  $\mathcal{Z}:=\mathcal{X}\times\mathcal{Y}$ に直積距離 $\rho$（付録A）を
+  入れ，各 $n\in\N$ に対し
+  \[
+    g_n(z):=\inf_{w\in\mathcal{Z}}\bigl\{\min\{g(w),n\}+n\,\rho(z,w)\bigr\}
+    \qquad(z\in\mathcal{Z})
+  \]
+  とおく．$g_n$ は $0\leq g_n\leq n$ をみたす連続関数で，
+  $g_n\leq g$，$g_n\uparrow g$（各点）となる．実際：
+
+  非負性と上界：各項が非負だから $g_n\geq0$，
+  また $w=z$ を取れば $g_n(z)\leq\min\{g(z),n\}$ であり，
+  これは $n$ でも $g(z)$ でも上から押さえられる．
+
+  連続性：任意の $z,z',w\in\mathcal{Z}$ に対し，$\rho$ の三角不等式より
+  \[
+    \min\{g(w),n\}+n\,\rho(z,w)
+    \leq
+    \min\{g(w),n\}+n\,\rho(z',w)+n\,\rho(z,z')
+  \]
+  だから，$w$ について下限を取って
+  $g_n(z)\leq g_n(z')+n\,\rho(z,z')$．
+  $z$ と $z'$ を入れ替えれば
+  $\abs{g_n(z)-g_n(z')}\leq n\,\rho(z,z')$ となり，$g_n$ は連続である．
+
+  単調性と各点収束：各 $w$ で
+  $\min\{g(w),n\}+n\,\rho(z,w)$ は $n$ について非減少だから
+  $g_n\leq g_{n+1}$ である．
+  $\alpha<g(z)$ を任意に取ると，$g$ の下半連続性より，ある $r>0$ で
+  「$\rho(w,z)<r\implies g(w)>\alpha$」となる．このとき
+  $\rho(w,z)<r$ なら
+  $\min\{g(w),n\}+n\,\rho(z,w)\geq\min\{\alpha,n\}$，
+  $\rho(w,z)\geq r$ なら $\geq nr$ だから
+  $g_n(z)\geq\min\{\alpha,\,n,\,nr\}$ であり，
+  $n\to\infty$ として $\lim_ng_n(z)\geq\alpha$，
+  よって $g_n(z)\uparrow g(z)$ である．
+
+  各 $n$ で，$g_n$ は有界連続だから，弱収束 $\pi_k\Rightarrow\pi$ と
+  $g_n\leq g$ より
+  \[
+    \int g_n\,\d\pi
+    =\lim_{k\to\infty}\int g_n\,\d\pi_k
+    \leq\liminf_{k\to\infty}\int g\,\d\pi_k
+  \]
+  であり，$n\to\infty$ とすると，単調収束定理（定理~\ref{thm:meas-mct}）より
+  \[
+    \int g\,\d\pi
+    \leq\liminf_{k\to\infty}\int g\,\d\pi_k.
+  \]
+
+  次に，$h$ は $\pi$-a.e. で有限（$h\in L^1(\pi)$）だから
+  $c=g+h$ が $\pi$-a.e. で成り立つ．
   また $c^-\leq\abs{h}\in L^1(\pi)$ より
   $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まり，
   \[
-    \int c\,\d\pi=\int(c-h)\,\d\pi+\int h\,\d\pi
+    \int c\,\d\pi=\int g\,\d\pi+\int h\,\d\pi
   \]
-  が成り立つ：$\int(c-h)\,\d\pi<\infty$ のときは
-  $\abs{c}\leq(c-h)+\abs{h}$（$\pi$-a.e.）より $c\in L^1(\pi)$ で，
+  が成り立つ：$\int g\,\d\pi<\infty$ のときは
+  $\abs{c}\leq g+\abs{h}$（$\pi$-a.e.）より $c\in L^1(\pi)$ で，
   積分の線形性から従う．
-  $\int(c-h)\,\d\pi=+\infty$ のときは
-  $c-h\leq c^++\abs{h}$（$\pi$-a.e.）より $\int c^+\,\d\pi=+\infty$，
+  $\int g\,\d\pi=+\infty$ のときは
+  $g\leq c^++\abs{h}$（$\pi$-a.e.）より $\int c^+\,\d\pi=+\infty$，
   すなわち両辺とも $+\infty$ である．
   各 $\pi_k$ についても同様である．
-  よって $c\geq0$ の場合の結果と
-  $\int h\,\d\pi_k\to\int h\,\d\pi$ から
+  よって $\int h\,\d\pi_k\to\int h\,\d\pi$ と合わせて
   \[
     \int c\,\d\pi
-    =\int(c-h)\,\d\pi+\int h\,\d\pi
-    \leq\liminf_{k\to\infty}\int(c-h)\,\d\pi_k
+    =\int g\,\d\pi+\int h\,\d\pi
+    \leq\liminf_{k\to\infty}\int g\,\d\pi_k
     +\lim_{k\to\infty}\int h\,\d\pi_k
     =\liminf_{k\to\infty}\int c\,\d\pi_k.  \qedhere
   \]
