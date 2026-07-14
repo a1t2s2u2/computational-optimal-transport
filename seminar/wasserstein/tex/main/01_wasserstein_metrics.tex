@@ -387,14 +387,18 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 
 \begin{lemma}{接着補題（gluing lemma）}{wp-gluing}
   $\mu,\nu,\xi\in\Prob(\mathcal{X})$，$\pi\in\Couplings(\mu,\nu)$，
-  $\sigma\in\Couplings(\nu,\xi)$ とする．
+  $\sigma\in\Couplings(\nu,\xi)$ とする
+  （$\mathcal{X}^3$ には付録Aの直積距離を入れる）．
   このとき $\mathcal{X}^3$ 上の確率測度 $\gamma$ で，
-  $(x,y)$-周辺分布が $\pi$，$(y,z)$-周辺分布が $\sigma$
-  であるものが存在する．
-  ここで $(x,y)$-周辺分布とは，射影
-  $\mathrm{pr}_{12}\colon(x,y,z)\mapsto(x,y)$ による像測度
-  $\gamma\circ\mathrm{pr}_{12}^{-1}$ のことをいう（$(y,z)$ も同様．
-  $\mathcal{X}^3$ には付録Aの直積距離を入れ，射影は連続ゆえ可測である）．
+  任意の $A,B,C\in\Borel(\mathcal{X})$ に対し
+  \[
+    \gamma(A\times B\times \mathcal{X})=\pi(A\times B),
+    \qquad
+    \gamma(\mathcal{X}\times B\times C)=\sigma(B\times C)
+  \]
+  をみたすものが存在する．
+  すなわち，$\gamma$ の第 $1,2$ 成分の周辺分布が $\pi$ に，
+  第 $2,3$ 成分の周辺分布が $\sigma$ に一致する．
 \end{lemma}
 
 \begin{proof}
@@ -432,7 +436,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   すなわち
   $\gamma(A\times B\times C)=\int_B K_\pi(y,A)\,K_\sigma(y,C)\,\d\nu(y)$
   をみたす $\gamma$ が存在する．
-  2つの周辺分布を検証する．
+  2つの周辺分布を検証する（射影 $\mathrm{pr}_{12},\mathrm{pr}_{23}$ は連続ゆえ可測）．
   ${\mathrm{pr}_{12}}^{-1}(A\times B)=A\times B\times \mathcal{X}$ と
   $K_\sigma(y,\mathcal{X})=1$（Markov 核の値は確率測度）から，
   任意の $A,B\in\Borel(\mathcal{X})$ に対し
