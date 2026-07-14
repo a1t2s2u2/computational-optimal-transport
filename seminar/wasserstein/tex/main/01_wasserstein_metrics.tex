@@ -281,13 +281,10 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 \end{theorem}
 
 \begin{proof}
-  1点集合 $\{\mu\}$，$\{\nu\}$ は tight である
-  （Prokhorov の定理~\ref{thm:meas-prokhorov}．
-  1点集合は明らかに precompact）．
+  1点集合 $\{\mu\}$，$\{\nu\}$ は明らかに precompact だから，
+  Prokhorov の定理（定理~\ref{thm:meas-prokhorov}）より tight である．
   よって補題~\ref{lem:wp-plans-tight}より，$\Couplings(\mu,\nu)$ は
-  $\Prob(\mathcal{X}\times\mathcal{Y})$ で tight である
-  （直積 $\mathcal{X}\times\mathcal{Y}$ は Polish 空間：
-  付録Aの直積距離の注意を参照）．
+  $\Prob(\mathcal{X}\times\mathcal{Y})$ で tight である．
   また $\mu\otimes\nu\in\Couplings(\mu,\nu)$
   （主張~\ref{clm:meas-product-marginals}）だから
   $\Couplings(\mu,\nu)\neq\emptyset$ である．
@@ -300,8 +297,10 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
     \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
     \qquad(k\to\infty)
   \]
-  となる列を取れる．$\Couplings(\mu,\nu)$ は tight だから，
-  Prokhorov の定理より弱位相で precompact であり，
+  となる列を取れる．
+  直積距離（付録A）のもとで $\mathcal{X}\times\mathcal{Y}$ も
+  Polish 空間だから，再び Prokhorov の定理より，
+  tight な $\Couplings(\mu,\nu)$ は弱位相で precompact であり，
   部分列に移って，ある
   $\pi^*\in\Prob(\mathcal{X}\times\mathcal{Y})$ に
   $\pi_k\Rightarrow\pi^*$ としてよい．
@@ -325,10 +324,10 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   $\pi^*\circ\mathrm{pr}_2^{-1}=\nu$ である．
   したがって $\pi^*\in\Couplings(\mu,\nu)$ である．
 
-  $h(x,y):=a(x)+b(y)$ とおくと，$h$ は上半連続で
-  （$-a(x)$，$-b(y)$ は下半連続関数と連続な射影の合成，
-  その和も下半連続：注意~\ref{rem:meas-lsc-facts}），
-  仮定より $c\geq h$ である．
+  $h(x,y):=a(x)+b(y)$ とおくと，
+  $-h=(-a)\circ\mathrm{pr}_1+(-b)\circ\mathrm{pr}_2$ は下半連続
+  （連続写像との合成と和：注意~\ref{rem:meas-lsc-facts}）だから，
+  $h$ は上半連続で，仮定より $c\geq h$ である．
   また $\abs{h(x,y)}\leq\abs{a(x)}+\abs{b(y)}$ と周辺積分公式より，
   任意の $\sigma\in\Couplings(\mu,\nu)$ に対し
   \[
@@ -339,8 +338,9 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
     \int h\,\d\sigma
     =\int_{\mathcal{X}}a\,\d\mu+\int_{\mathcal{Y}}b\,\d\nu
   \]
-  である（拡張実数値の $a$ には，周辺積分公式の非負版を
-  正部分・負部分 $a^\pm$ に適用して差を取る．$b$ も同様）．特に $h\in L^1(\pi_k)$（$\forall k$），$h\in L^1(\pi^*)$ で，
+  である（拡張実数値の $a,b$ には，周辺積分公式の非負版を
+  正部分・負部分 $a^\pm,b^\pm$ に適用して差を取る）．
+  特に $h\in L^1(\pi_k)$（$\forall k$），$h\in L^1(\pi^*)$ で，
   $\int h\,\d\pi_k$ は $k$ によらない定数として
   $\int h\,\d\pi^*$ に収束する．
   よって補題~\ref{lem:wp-cost-lsc}より
