@@ -10,7 +10,7 @@ Wasserstein 距離の理論と性質。Villani (2009) を主たる文献とし�
 - [Optimal Latent Transport, Roy & Hauberg (NeurIPS 2022 WS)](https://openreview.net/pdf?id=ZxRYWTerLVq) — 応用章（第4章）の対象論文
 - [最適輸送理論とリッチ曲率, 桑江ほか (Encounter with Mathematics 第63回, 2015)](https://www.math.chuo-u.ac.jp/ENCwMATH/EwM63resume.pdf) — 日本語の解説、定義の補完（§1.4 が Wasserstein 距離）
 
-参照 PDF は `reference/` にある（kuwae-etal-2015.pdf）。
+参照 PDF は `reference/` にある（kuwae-etal-2015.pdf、Billingsley-2eme-edition.pdf［Prokhorov の出典 Th 5.1。著作権のため git 追跡対象外］）。
 Villani の該当ページのスキャンは `reference/old_and_new/pNNN.jpg` にある（**ファイル名＝ページ番号**。現在 pp.43–46, 49, 93–111, 379–383, 567–600、ほかに Definition 1.1 の切り抜き `def1-1_coupling.jpg`。著作権のため git 追跡対象外。追加時も同じ命名にする）。
 
 ## 記法
