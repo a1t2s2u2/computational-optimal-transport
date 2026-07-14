@@ -316,7 +316,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   $(k_j)$ で $\Wass_p(\mu_{k_j},\nu_{k_j})\to L$ なるものを取る．
   各 $j$ で最適 coupling
   $\pi_j\in\Couplings(\mu_{k_j},\nu_{k_j})$ を取る
-  （系~\ref{cor:wp-wasserstein-optimal-coupling}）．
+  （定理~\ref{thm:wp-optimal-coupling-existence}）．
   族 $\{\mu_k\}\cup\{\mu\}$ と $\{\nu_k\}\cup\{\nu\}$ は tight
   （補題~\ref{lem:meas-convergent-tight}）だから，
   補題~\ref{lem:wp-plans-tight}より $(\pi_j)$ は tight であり，
@@ -337,7 +337,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   より $\tilde\pi\circ\mathrm{pr}_1^{-1}=\mu$，同様に
   $\tilde\pi\circ\mathrm{pr}_2^{-1}=\nu$，すなわち
   $\tilde\pi\in\Couplings(\mu,\nu)$ である．
-  コスト汎関数の下半連続性（補題~\ref{lem:wp-cost-lsc}，$h=0$）より
+  $p$ 次輸送コストの下半連続性（補題~\ref{lem:wp-cost-lsc}）より
   \[
     \Wass_p(\mu,\nu)^p
     \leq\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\tilde\pi
@@ -351,10 +351,10 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   $\Pp{p}(\mathcal{X})$ の列 $(\mu_k)$，$(\nu_k)$ と
   $\mu,\nu\in\Pp{p}(\mathcal{X})$ が
   $\mu_k\Rightarrow\mu$，$\nu_k\Rightarrow\nu$（弱収束）をみたし，
-  各 $k$ で $\pi_k\in\Couplings(\mu_k,\nu_k)$ をコスト
-  $d^p$ の最適 coupling とする．
-  $\pi_k\Rightarrow\pi$ ならば，$\pi$ は $(\mu,\nu)$ のコスト
-  $d^p$ の最適 coupling である．
+  各 $k$ で $\pi_k\in\Couplings(\mu_k,\nu_k)$ を
+  最適 coupling とする．
+  $\pi_k\Rightarrow\pi$ ならば，$\pi$ は $(\mu,\nu)$ の
+  最適 coupling である．
   （証明は省略する．Villani (2009) Theorem 5.20 の特別な場合である．）
 \end{theorem}
 
@@ -403,7 +403,7 @@ $(\Pp{p}(\mathcal{X}),\Wass_p)$ が Polish 空間になること
   \]
   が成り立つ．各 $k$ で最適 coupling
   $\pi_k\in\Couplings(\mu_k,\mu)$ を取り
-  （系~\ref{cor:wp-wasserstein-optimal-coupling}），
+  （定理~\ref{thm:wp-optimal-coupling-existence}），
   この不等式を $\pi_k$ で積分して周辺積分公式を使うと
   \[
     \int d(x_0,x)^p\,\d\mu_k
