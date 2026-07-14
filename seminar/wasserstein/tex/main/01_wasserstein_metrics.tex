@@ -119,36 +119,42 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 
 \begin{lemma}{$\Wass_p$ の有限性（Villani Def 6.4）}{wp-finite}
   $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とすると，
-  $\Couplings(\mu,\nu)\neq\emptyset$ であり，
-  任意の $\pi\in\Couplings(\mu,\nu)$ に対して
-  $\norm{d}_{L^p(\pi)}<\infty$ である．
-  特に $\Wass_p(\mu,\nu)<\infty$ である．
+  $\Wass_p(\mu,\nu)<\infty$ である．
 \end{lemma}
 
 \begin{proof}
-  $\mu\otimes\nu\in\Couplings(\mu,\nu)$
-  （定理~\ref{thm:meas-product}，主張~\ref{clm:meas-product-marginals}）
-  より $\Couplings(\mu,\nu)\neq\emptyset$ である．
+  $\pi_0:=\mu\otimes\nu$ とおくと，$\pi_0$ は $\mu$，$\nu$ を周辺分布にもつ
+  （定理~\ref{thm:meas-product}，主張~\ref{clm:meas-product-marginals}）から
+  $\pi_0\in\Couplings(\mu,\nu)$ である．
 
-  次に $\pi\in\Couplings(\mu,\nu)$ を任意に取る．
-  各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(x_0,y)$ に，
+  $x_0\in\mathcal{X}$ を定義~\ref{def:wp-p-space}の基点とする．
+  各点で成り立つ三角不等式 $d(x,y)\leq d(x,x_0)+d(y,x_0)$ に
   $L^p$ ノルムの単調性（主張~\ref{clm:meas-lp-monotone}）と
-  Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用し，
-  さらに周辺積分公式（補題~\ref{lem:meas-marginal-integral}の $L^p$ 版）で
-  各項を周辺測度のノルムに落とすと
+  Minkowski の不等式（定理~\ref{thm:meas-minkowski}）を適用すると
   \[
-    \norm{d(x,y)}_{L^p(\pi)}
+    \Bigl(\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_0\Bigr)^{1/p}
     \leq
-    \norm{d(x,x_0)}_{L^p(\pi)}
-    +\norm{d(x_0,y)}_{L^p(\pi)}
-    =
-    \norm{d(\cdot,x_0)}_{L^p(\mu)}
-    +\norm{d(\cdot,x_0)}_{L^p(\nu)}
+    \Bigl(\int_{\mathcal{X}\times\mathcal{X}}d(x,x_0)^p\,\d\pi_0\Bigr)^{1/p}
+    +\Bigl(\int_{\mathcal{X}\times\mathcal{X}}d(y,x_0)^p\,\d\pi_0\Bigr)^{1/p}
   \]
-  を得る．ここで
-  $\norm{d(\cdot,x_0)}_{L^p(\mu)}
-  =\bigl(\int_\mathcal{X} d(x,x_0)^p\,\d\mu\bigr)^{1/p}<\infty$
-  は $\mu\in\Pp{p}(\mathcal{X})$ の定義そのものである（$\nu$ も同様）．
+  を得る．右辺の被積分関数はそれぞれ $x$ のみ，$y$ のみの
+  非負可測関数だから，周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
+  \[
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,x_0)^p\,\d\pi_0
+    =\int_{\mathcal{X}}d(x,x_0)^p\,\d\mu(x)<\infty,
+    \qquad
+    \int_{\mathcal{X}\times\mathcal{X}}d(y,x_0)^p\,\d\pi_0
+    =\int_{\mathcal{X}}d(y,x_0)^p\,\d\nu(y)<\infty
+  \]
+  である（有限性は $\mu,\nu\in\Pp{p}(\mathcal{X})$ の定義）．
+  したがって $\Wass_p$ の定義より
+  \[
+    \Wass_p(\mu,\nu)
+    \leq
+    \Bigl(\int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_0\Bigr)^{1/p}
+    <\infty
+  \]
+  である．
 \end{proof}
 
 \section{最適 coupling の存在}
@@ -476,8 +482,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   \textbf{(0) 非負性と有限性．}
   任意の $\pi\in\Couplings(\mu,\nu)$ で $\norm{d}_{L^p(\pi)}\geq0$ だから
   $\Wass_p(\mu,\nu)\geq0$，
-  また補題~\ref{lem:wp-finite}より
-  $\Couplings(\mu,\nu)\neq\emptyset$ かつ $\Wass_p(\mu,\nu)<\infty$ である．
+  また補題~\ref{lem:wp-finite}より $\Wass_p(\mu,\nu)<\infty$ である．
 
   \textbf{(1) 対称性．}
   $s(x,y):=(y,x)$ とおく（連続ゆえ可測）．
