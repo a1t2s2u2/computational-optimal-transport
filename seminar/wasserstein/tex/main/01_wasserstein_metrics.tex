@@ -161,109 +161,45 @@ Borel $\sigma$-代数 $\Borel(\mathcal{X})$ 上の確率測度全体を
 \label{sec:wp-existence}
 
 下限 $\Wass_p(\mu,\nu)$ を達成する coupling が存在することを，
-Villani (2009) Theorem 4.1 の形で示す．
-以下，Polish 空間とその上の Borel 確率測度の組を
-\textbf{Polish 確率空間}とよぶ．
-また拡張実数値関数 $a$ に対し，$a\in L^1(\mu)$ は
-$\int\abs{a}\,\d\mu<\infty$ の意味で用いる
-（$\abs{-\infty}:=+\infty$ と読む）．
+Villani (2009) Theorem 4.1 をコスト $d^p$ に特殊化した形で示す．
 
-\begin{lemma}{コスト汎関数の下半連続性（Villani Lem 4.3）}{wp-cost-lsc}
-  $\mathcal{X},\mathcal{Y}$ を Polish 空間，
-  $c\colon\mathcal{X}\times\mathcal{Y}\to\R\cup\{+\infty\}$
-  を下半連続関数，
-  $h\colon\mathcal{X}\times\mathcal{Y}\to\R\cup\{-\infty\}$ を
-  $c\geq h$ をみたす上半連続関数とする．
-  $\mathcal{X}\times\mathcal{Y}$ 上の確率測度の列 $(\pi_k)$ が
-  $\pi\in\Prob(\mathcal{X}\times\mathcal{Y})$ に弱収束し，
-  $h\in L^1(\pi_k)$（$\forall k$），$h\in L^1(\pi)$，かつ
+\begin{lemma}{$p$ 次輸送コストの下半連続性（Villani Lem 4.3）}{wp-cost-lsc}
+  $1\leq p<\infty$ とする．
+  $\Prob(\mathcal{X}\times\mathcal{X})$ の列 $(\pi_k)$ が
+  $\pi\in\Prob(\mathcal{X}\times\mathcal{X})$ に弱収束
+  （定義~\ref{def:meas-weak-convergence}）するならば，
   \[
-    \int h\,\d\pi_k\to\int h\,\d\pi
-    \qquad(k\to\infty)
-  \]
-  をみたすとする．このとき
-  \[
-    \int c\,\d\pi
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi(x,y)
     \leq
-    \liminf_{k\to\infty}\int c\,\d\pi_k.
+    \liminf_{k\to\infty}
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_k(x,y).
   \]
 \end{lemma}
 
 \begin{proof}
-  $g:=c-h$ とおく（$h=-\infty$ の点では $g:=+\infty$ と読む）．
-  $-h$ は $(-\infty,+\infty]$ に値をもつ下半連続関数だから，
-  $g$ は非負下半連続である（注意~\ref{rem:meas-lsc-facts}）．
-
-  $\mathcal{Z}:=\mathcal{X}\times\mathcal{Y}$ に直積距離 $\rho$（付録A）を
-  入れ，各 $n\in\N$ に対し
+  各 $m\in\N$ に対し
   \[
-    g_n(z):=\inf_{w\in\mathcal{Z}}\bigl\{\min\{g(w),n\}+n\,\rho(z,w)\bigr\}
-    \qquad(z\in\mathcal{Z})
+    c_m(x,y):=\min\{d(x,y)^p,\,m\}
   \]
-  とおく．$g_n$ は $0\leq g_n\leq n$ をみたす連続関数で，
-  $g_n\leq g$，$g_n\uparrow g$（各点）となる．実際：
-
-  非負性と上界：各項が非負だから $g_n\geq0$，
-  また $w=z$ を取れば $g_n(z)\leq\min\{g(z),n\}$ であり，
-  これは $n$ でも $g(z)$ でも上から押さえられる．
-
-  連続性：任意の $z,z',w\in\mathcal{Z}$ に対し，$\rho$ の三角不等式より
+  とおく．$d$ は連続（注意~\ref{rem:wp-welldef}）だから，
+  $c_m$ は $\mathcal{X}\times\mathcal{X}$ 上の有界連続関数であり，
+  弱収束の定義と $0\leq c_m\leq d^p$ より
   \[
-    \min\{g(w),n\}+n\,\rho(z,w)
+    \int_{\mathcal{X}\times\mathcal{X}}c_m\,\d\pi
+    =\lim_{k\to\infty}\int_{\mathcal{X}\times\mathcal{X}}c_m\,\d\pi_k
     \leq
-    \min\{g(w),n\}+n\,\rho(z',w)+n\,\rho(z,z')
+    \liminf_{k\to\infty}
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_k(x,y)
   \]
-  だから，$w$ について下限を取って
-  $g_n(z)\leq g_n(z')+n\,\rho(z,z')$．
-  $z$ と $z'$ を入れ替えれば
-  $\abs{g_n(z)-g_n(z')}\leq n\,\rho(z,z')$ となり，$g_n$ は連続である．
-
-  単調性と各点収束：各 $w$ で
-  $\min\{g(w),n\}+n\,\rho(z,w)$ は $n$ について非減少だから
-  $g_n\leq g_{n+1}$ である．
-  $\alpha<g(z)$ を任意に取ると，$g$ の下半連続性より，ある $r>0$ で
-  「$\rho(w,z)<r\implies g(w)>\alpha$」となる．このとき
-  $\rho(w,z)<r$ なら
-  $\min\{g(w),n\}+n\,\rho(z,w)\geq\min\{\alpha,n\}$，
-  $\rho(w,z)\geq r$ なら $\geq nr$ だから
-  $g_n(z)\geq\min\{\alpha,\,n,\,nr\}$ であり，
-  $n\to\infty$ として $\lim_ng_n(z)\geq\alpha$，
-  よって $g_n(z)\uparrow g(z)$ である．
-
-  各 $n$ で，$g_n$ は有界連続だから，弱収束 $\pi_k\Rightarrow\pi$ と
-  $g_n\leq g$ より
+  である．$c_m\uparrow d^p$（$m\to\infty$，各点）だから，
+  単調収束定理（定理~\ref{thm:meas-mct}）より
   \[
-    \int g_n\,\d\pi
-    =\lim_{k\to\infty}\int g_n\,\d\pi_k
-    \leq\liminf_{k\to\infty}\int g\,\d\pi_k
-  \]
-  であり，$n\to\infty$ とすると，単調収束定理（定理~\ref{thm:meas-mct}）より
-  \[
-    \int g\,\d\pi
-    \leq\liminf_{k\to\infty}\int g\,\d\pi_k.
-  \]
-
-  次に，$h$ は $\pi$-a.e. で有限（$h\in L^1(\pi)$）だから
-  $c=g+h$ が $\pi$-a.e. で成り立つ．
-  また $c^-\leq\abs{h}\in L^1(\pi)$ より
-  $\int c\,\d\pi$ は $\R\cup\{+\infty\}$ の元として定まり，
-  \[
-    \int c\,\d\pi=\int g\,\d\pi+\int h\,\d\pi
-  \]
-  が成り立つ：$\int g\,\d\pi<\infty$ のときは
-  $\abs{c}\leq g+\abs{h}$（$\pi$-a.e.）より $c\in L^1(\pi)$ で，
-  積分の線形性から従う．
-  $\int g\,\d\pi=+\infty$ のときは
-  $g\leq c^++\abs{h}$（$\pi$-a.e.）より $\int c^+\,\d\pi=+\infty$，
-  すなわち両辺とも $+\infty$ である．
-  各 $\pi_k$ についても同様である．
-  よって $\int h\,\d\pi_k\to\int h\,\d\pi$ と合わせて
-  \[
-    \int c\,\d\pi
-    =\int g\,\d\pi+\int h\,\d\pi
-    \leq\liminf_{k\to\infty}\int g\,\d\pi_k
-    +\lim_{k\to\infty}\int h\,\d\pi_k
-    =\liminf_{k\to\infty}\int c\,\d\pi_k.  \qedhere
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi(x,y)
+    =\lim_{m\to\infty}\int_{\mathcal{X}\times\mathcal{X}}c_m\,\d\pi
+    \leq
+    \liminf_{k\to\infty}
+    \int_{\mathcal{X}\times\mathcal{X}}d(x,y)^p\,\d\pi_k(x,y).
+    \qedhere
   \]
 \end{proof}
 
@@ -309,63 +245,55 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   $\Couplings(\mathcal{P},\mathcal{Q})$ は tight である．
 \end{proof}
 
-\begin{theorem}{最適 coupling の存在（Villani Thm 4.1）}{wp-optimal-coupling-existence}
-  $(\mathcal{X},\mu)$，$(\mathcal{Y},\nu)$ を2つの Polish 確率空間とする．
-  $a\colon \mathcal{X}\to\R\cup\{-\infty\}$，
-  $b\colon \mathcal{Y}\to\R\cup\{-\infty\}$ を
-  $a\in L^1(\mu)$，$b\in L^1(\nu)$ をみたす上半連続関数とし，
-  $c\colon \mathcal{X}\times\mathcal{Y}\to\R\cup\{+\infty\}$ を，
-  すべての $x\in\mathcal{X}$，$y\in\mathcal{Y}$ で
+\begin{theorem}{$\Wass_p$ の最適 coupling の存在（Villani Thm 4.1）}{wp-optimal-coupling-existence}
+  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とすると，
+  ある $\pi^*\in\Couplings(\mu,\nu)$ が存在して
   \[
-    c(x,y)\geq a(x)+b(y)
-  \]
-  をみたす下半連続関数とする．このとき，ある coupling
-  $\pi^*\in\Couplings(\mu,\nu)$ が存在して
-  \[
-    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi^*
+    \Wass_p(\mu,\nu)^p
     =
-    \inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
+    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
   \]
-  をみたす．このような $\pi^*$ をコスト $c$ に関する
+  をみたす．このような $\pi^*$ を $\Wass_p$ の
   \textbf{最適 coupling}という．
 \end{theorem}
 
 \begin{proof}
+  $t\mapsto t^{1/p}$ は $[0,\infty)$ 上の単調な全単射だから
+  下限と $p$ 乗は交換でき，
+  \[
+    \Wass_p(\mu,\nu)^p
+    =\inf_{\pi\in\Couplings(\mu,\nu)}
+    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi(x,y)
+    =:I
+  \]
+  である．以下，$I$ を達成する coupling を構成する．
+
   1点集合 $\{\mu\}$，$\{\nu\}$ は明らかに precompact だから，
   Prokhorov の定理（定理~\ref{thm:meas-prokhorov}）より tight である．
   よって補題~\ref{lem:wp-plans-tight}より，$\Couplings(\mu,\nu)$ は
-  $\Prob(\mathcal{X}\times\mathcal{Y})$ で tight である．
+  $\Prob(\mathcal{X}\times\mathcal{X})$ で tight である．
   また $\mu\otimes\nu\in\Couplings(\mu,\nu)$
   （主張~\ref{clm:meas-product-marginals}）だから
-  $\Couplings(\mu,\nu)\neq\emptyset$ である．
-
+  $\Couplings(\mu,\nu)\neq\emptyset$ であり，
   下限の性質から，$\pi_k\in\Couplings(\mu,\nu)$ で
-  \[
-    \int c\,\d\pi_k
-    \to
-    I:=\inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{\mathcal{X}\times\mathcal{Y}}c\,\d\pi
-    \qquad(k\to\infty)
-  \]
-  となる列を取れる．
-  直積距離（付録A）のもとで $\mathcal{X}\times\mathcal{Y}$ も
+  $\int d^p\,\d\pi_k\to I$（$k\to\infty$）となる列を取れる．
+  直積距離（付録A）のもとで $\mathcal{X}\times\mathcal{X}$ も
   Polish 空間だから，再び Prokhorov の定理より，
   tight な $\Couplings(\mu,\nu)$ は弱位相で precompact であり，
   部分列に移って，ある
-  $\pi^*\in\Prob(\mathcal{X}\times\mathcal{Y})$ に
+  $\pi^*\in\Prob(\mathcal{X}\times\mathcal{X})$ に
   $\pi_k\Rightarrow\pi^*$ としてよい．
 
   周辺分布の条件は弱収束で極限に移る：
   任意の $\varphi\in C_b(\mathcal{X})$ に対し，
-  $\varphi\circ\mathrm{pr}_1\in C_b(\mathcal{X}\times\mathcal{Y})$ だから，
+  $\varphi\circ\mathrm{pr}_1\in C_b(\mathcal{X}\times\mathcal{X})$ だから，
   弱収束と周辺積分公式（補題~\ref{lem:meas-marginal-integral}）より
   \[
     \int_{\mathcal{X}}\varphi\,\d(\pi^*\circ\mathrm{pr}_1^{-1})
     =
-    \int_{\mathcal{X}\times\mathcal{Y}}\varphi(x)\,\d\pi^*(x,y)
+    \int_{\mathcal{X}\times\mathcal{X}}\varphi(x)\,\d\pi^*(x,y)
     =
-    \lim_{k\to\infty}\int_{\mathcal{X}\times\mathcal{Y}}\varphi(x)\,\d\pi_k(x,y)
+    \lim_{k\to\infty}\int_{\mathcal{X}\times\mathcal{X}}\varphi(x)\,\d\pi_k(x,y)
     =
     \int_{\mathcal{X}}\varphi\,\d\mu
   \]
@@ -375,62 +303,16 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   $\pi^*\circ\mathrm{pr}_2^{-1}=\nu$ である．
   したがって $\pi^*\in\Couplings(\mu,\nu)$ である．
 
-  $h(x,y):=a(x)+b(y)$ とおくと，
-  $-h=(-a)\circ\mathrm{pr}_1+(-b)\circ\mathrm{pr}_2$ は下半連続
-  （連続写像との合成と和：注意~\ref{rem:meas-lsc-facts}）だから，
-  $h$ は上半連続で，仮定より $c\geq h$ である．
-  また $\abs{h(x,y)}\leq\abs{a(x)}+\abs{b(y)}$ と周辺積分公式より，
-  任意の $\sigma\in\Couplings(\mu,\nu)$ に対し
+  $p$ 次輸送コストの下半連続性（補題~\ref{lem:wp-cost-lsc}）より
   \[
-    \int\abs{h}\,\d\sigma
-    \leq\int_{\mathcal{X}}\abs{a}\,\d\mu
-    +\int_{\mathcal{Y}}\abs{b}\,\d\nu<\infty,
-    \qquad
-    \int h\,\d\sigma
-    =\int_{\mathcal{X}}a\,\d\mu+\int_{\mathcal{Y}}b\,\d\nu
-  \]
-  である（拡張実数値の $a,b$ には，周辺積分公式の非負版を
-  正部分・負部分 $a^\pm,b^\pm$ に適用して差を取る）．
-  特に $h\in L^1(\pi_k)$（$\forall k$），$h\in L^1(\pi^*)$ で，
-  $\int h\,\d\pi_k$ は $k$ によらない定数として
-  $\int h\,\d\pi^*$ に収束する．
-  よって補題~\ref{lem:wp-cost-lsc}より
-  \[
-    \int c\,\d\pi^*
+    \int_{\mathcal{X}\times\mathcal{X}}d^p\,\d\pi^*
     \leq
-    \liminf_{k\to\infty}\int c\,\d\pi_k
+    \liminf_{k\to\infty}\int_{\mathcal{X}\times\mathcal{X}}d^p\,\d\pi_k
     =I
   \]
   であり，$\pi^*\in\Couplings(\mu,\nu)$ より
   逆向きの不等式も成り立つ．
-  よって $\pi^*$ は最小値を達成する．
-\end{proof}
-
-\begin{corollary}{Wasserstein 距離の最適 coupling}{wp-wasserstein-optimal-coupling}
-  $1\leq p<\infty$，$\mu,\nu\in\Pp{p}(\mathcal{X})$ とする．
-  このとき $\pi^*\in\Couplings(\mu,\nu)$ が存在して
-  \[
-    \Wass_p(\mu,\nu)^p
-    =
-    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
-  \]
-  をみたす．
-\end{corollary}
-
-\begin{proof}
-  定理~\ref{thm:wp-optimal-coupling-existence}を
-  $\mathcal{Y}=\mathcal{X}$，$c(x,y)=d(x,y)^p$，$a=b=0$ に適用すると
-  （$c$ は連続ゆえ下半連続である），
-  $\int d^p\,\d\pi$ を最小化する $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
-  $t\mapsto t^{1/p}$ は $[0,\infty)$ 上の単調な全単射だから
-  下限と $p$ 乗は交換でき，
-  \[
-    \Wass_p(\mu,\nu)^p
-    =\inf_{\pi\in\Couplings(\mu,\nu)}
-    \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi(x,y)
-    =\int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
-  \]
-  である．
+  よって $\pi^*$ は $I=\Wass_p(\mu,\nu)^p$ を達成する．
 \end{proof}
 
 \section{Wasserstein 距離の距離性}
@@ -566,7 +448,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
   よって $\Wass_p(\mu,\mu)=0$ である．
 
   逆に $\Wass_p(\mu,\nu)=0$ とする．
-  系~\ref{cor:wp-wasserstein-optimal-coupling}より，最適 coupling
+  定理~\ref{thm:wp-optimal-coupling-existence}より，最適 coupling
   $\pi^*\in\Couplings(\mu,\nu)$ が取れる．
   \[
     \int_{\mathcal{X}\times \mathcal{X}}d(x,y)^p\,\d\pi^*(x,y)
@@ -593,7 +475,7 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 
   \textbf{(3) 三角不等式．}
   $\mu,\nu,\xi\in\Pp{p}(\mathcal{X})$ を任意に取る．
-  系~\ref{cor:wp-wasserstein-optimal-coupling}より，
+  定理~\ref{thm:wp-optimal-coupling-existence}より，
   最適 coupling $\pi\in\Couplings(\mu,\nu)$ と
   $\sigma\in\Couplings(\nu,\xi)$ が取れる．
   補題~\ref{lem:wp-gluing}により，$\mathcal{X}^3$ 上の確率測度 $\gamma$ で
@@ -644,7 +526,12 @@ $\int\abs{a}\,\d\mu<\infty$ の意味で用いる
 
 \begin{remark}{文献との対応}{wp-metric-references}
   定理~\ref{thm:wp-optimal-coupling-existence}と
-  補題~\ref{lem:wp-cost-lsc}，\ref{lem:wp-plans-tight}の証明は
+  補題~\ref{lem:wp-cost-lsc}は，それぞれ
+  Villani (2009) Theorem 4.1・Lemma 4.3
+  （一般の下半連続コストに対する形）を
+  コスト $d^p$ に特殊化したものである
+  （同 Remark 4.2 にいう $a=b=0$ の場合）．
+  その証明と補題~\ref{lem:wp-plans-tight}の証明は
   Villani (2009) に従った．
   距離性（命題~\ref{prop:wp-metric}）の証明は
   同 Chapter 6 の ``Proof that $W_p$ satisfies the axioms of a distance''
