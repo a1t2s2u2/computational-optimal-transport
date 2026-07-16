@@ -336,6 +336,13 @@ $\int d^p\,\d\pi$ と略記する．
   \]
 \end{proof}
 
+\begin{definition}{Wasserstein 空間（Villani Def 6.4）}{wp-wasserstein-space}
+  $1\leq p<\infty$ に対し，$\Pp{p}(\mathcal{X})$ に関数 $\Wass_p$ を備えた組
+  $(\Pp{p}(\mathcal{X}),\Wass_p)$ を
+  $p$ 次の \textbf{Wasserstein 空間}という．
+  次の命題により，これは実際に距離空間である．
+\end{definition}
+
 \begin{proposition}{Wasserstein 距離は距離である（Villani Def 6.4）}{wp-metric}
   $1\leq p<\infty$ に対し，
   $\Wass_p$ は $\Pp{p}(\mathcal{X})$ 上の距離である．
@@ -415,13 +422,8 @@ $\int d^p\,\d\pi$ と略記する．
     &=\norm{d}_{L^p(\pi)}+\norm{d}_{L^p(\sigma)}\\
     &=\Wass_p(\mu,\nu)+\Wass_p(\nu,\xi).
   \end{align*}
+  以上で距離の公理がすべて示された．
 \end{proof}
-
-\begin{definition}{Wasserstein 空間（Villani Def 6.4）}{wp-wasserstein-space}
-  距離 $\Wass_p$ を備えた距離空間
-  $(\Pp{p}(\mathcal{X}),\Wass_p)$ を
-  $p$ 次の \textbf{Wasserstein 空間}という．
-\end{definition}
 
 \begin{remark}{文献との対応}{wp-metric-references}
   存在定理は Villani (2009) Theorem 4.1 をコスト $d^p$ に特殊化したものであり，
