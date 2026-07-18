@@ -80,6 +80,29 @@
 \section{Talagrand 型不等式}
 \label{sec:tc-tp}
 
+\begin{lemma}{$W_p$ の順序単調性（Villani Rem 6.6）}{tc-wp-order}
+  $1\leq p\leq q<\infty$ とすると，
+  $\Pp{q}(\mathcal{X})\subset\Pp{p}(\mathcal{X})$ であり，
+  $\mu,\nu\in\Pp{q}(\mathcal{X})$ に対し
+  \[
+    \Wass_p(\mu,\nu)\leq\Wass_q(\mu,\nu).
+  \]
+\end{lemma}
+
+\begin{proof}
+  $\mu\in\Pp{q}(\mathcal{X})$ に対し，確率測度上の $L^p$ ノルムの単調性
+  （主張~\ref{clm:meas-lp-order}）を $d(\cdot,x_0)$ に適用すると
+  \[
+    \left(\int d(x,x_0)^p\,\d\mu(x)\right)^{1/p}
+    \leq
+    \left(\int d(x,x_0)^q\,\d\mu(x)\right)^{1/q}<\infty
+  \]
+  だから $\mu\in\Pp{p}(\mathcal{X})$ である．また任意の
+  $\pi\in\Couplings(\mu,\nu)$ に同じ単調性を適用すると
+  $\norm{d}_{L^p(\pi)}\leq\norm{d}_{L^q(\pi)}$ である．
+  $\pi$ について下限を取れば結論を得る．
+\end{proof}
+
 \begin{definition}{$T_p$ 不等式（Villani Def 22.1）}{tc-tp}
   $1\leq p<\infty$，$\nu\in\Pp{p}(\mathcal{X})$，$\lambda>0$ とする．
   $\nu$ が\textbf{定数 $\lambda$ の $T_p$ 不等式}
@@ -93,7 +116,7 @@
 
 \begin{remark}{$p$ についての強さ（Villani Rem 22.2）}{tc-tp-order}
   $1\leq p\leq q<\infty$ のとき $\Wass_p\leq\Wass_q$
-  （補題~\ref{lem:wt-order}）だから，
+  （補題~\ref{lem:tc-wp-order}）だから，
   $\nu\in\Pp{q}(\mathcal{X})$ が $T_q(\lambda)$ をみたせば，
   任意の $\mu\in\Pp{q}(\mathcal{X})$ で
   $\Wass_p(\mu,\nu)\leq\sqrt{2H_\nu(\mu)/\lambda}$ も成り立つ．
@@ -189,7 +212,7 @@
   条件付き測度 $\nu_A,\nu_B$ は $\Pp{p}(\mathcal{X})$ の元だから
   （補題~\ref{lem:tc-conditional}），$T_p(\lambda)$ と
   $H_\nu(\nu_A)=\log(1/\nu(A))$，
-  $\Wass_1\leq\Wass_p$（補題~\ref{lem:wt-order}）より
+  $\Wass_1\leq\Wass_p$（補題~\ref{lem:tc-wp-order}）より
   \[
     \Wass_1(\nu_A,\nu)\leq\sqrt{\frac{2}{\lambda}\log\frac{1}{\nu(A)}}
     \leq\sqrt{\frac{2\log2}{\lambda}},

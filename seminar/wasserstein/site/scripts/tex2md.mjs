@@ -48,19 +48,14 @@ const CHAPTERS = [
     nav: "Wₚ の距離性", eyebrow: "1. The Metric Wₚ",
     title: "Wasserstein 距離 Wₚ",
   }],
-  ["main/02_topology.tex", "02-topology.md", {
-    id: "topology", group: "main",
-    nav: "空間の位相", eyebrow: "2. Topology of Pₚ",
-    title: "Wasserstein 空間の位相",
-  }],
-  ["main/03_concentration.tex", "03-concentration.md", {
+  ["main/03_concentration.tex", "02-concentration.md", {
     id: "concentration", group: "main",
-    nav: "Gaussian と集中", eyebrow: "3. Concentration",
+    nav: "Gaussian と集中", eyebrow: "2. Concentration",
     title: "Talagrand の不等式と Gaussian 測度の集中",
   }],
-  ["main/04_latent.tex", "04-latent.md", {
+  ["main/04_latent.tex", "03-latent.md", {
     id: "latent", group: "main",
-    nav: "潜在空間への応用", eyebrow: "4. Latent OT",
+    nav: "潜在空間への応用", eyebrow: "3. Latent OT",
     title: "応用：潜在空間の最適輸送幾何",
   }],
   ["foundations/00_preliminaries.tex", "A0-preliminaries.md", {

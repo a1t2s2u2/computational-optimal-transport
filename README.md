@@ -16,7 +16,7 @@ Peyré–Cuturi の教科書に沿い、最適輸送の計算的側面を扱う�
 Wasserstein 距離の定義・距離性の証明から W₂ における Gaussian 測度の話題までを目標とする。
 複数の文献を横断的に参照し、現代的な記法で再構成する。
 
-- 本編 3 章（導入 / Wₚ の定義と距離性 / W₂ と Gaussian 測度）+ 付録 2 章（距離空間と測度 / 線形代数）
+- 本編 4 章（導入 / Wₚ の定義と距離性 / Gaussian 集中 / 潜在空間への応用）+ 付録 1 章（距離空間と測度）
 - 参考文献:
   - [A class of Wasserstein metrics for probability distributions, C. R. Givens & R. M. Shortt (1984)](https://doi.org/10.1307/mmj/1029003026)
   - [Optimal Transport: Old and New, C. Villani (2009)](https://doi.org/10.1007/978-3-540-71050-9)
